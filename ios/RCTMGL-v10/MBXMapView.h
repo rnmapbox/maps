@@ -30,6 +30,18 @@
 - (void)setOnMapChange:(RCTBubblingEventBlock)callback;
 
 - (void)takeSnap:(BOOL)writeToDisk resolve:(RCTPromiseResolveBlock)resolve;
+- (void)clearData:(RCTPromiseResolveBlock)resolve reject:(RCTPromiseRejectBlock)reject;
+- (void)getCenter:(RCTPromiseResolveBlock)resolve reject:(RCTPromiseRejectBlock)reject;
+- (void)getCoordinateFromView:(CGPoint)point resolve:(RCTPromiseResolveBlock)resolve reject:(RCTPromiseRejectBlock)reject;
+- (void)getPointInView:(NSArray<NSNumber*>*)point resolve:(RCTPromiseResolveBlock)resolve reject:(RCTPromiseRejectBlock)reject;
+- (void)getVisibleBounds:(RCTPromiseResolveBlock)resolve;
+- (void)getZoom:(RCTPromiseResolveBlock)resolve reject:(RCTPromiseRejectBlock)reject;
+- (void)queryRenderedFeaturesAtPoint:(NSArray<NSNumber*>*)point withFilter:(NSArray<id>* _Nullable)filter withLayerIDs:(NSArray<NSString*>* _Nullable)layerIDs resolve:(RCTPromiseResolveBlock _Nonnull )resolve reject:(RCTPromiseRejectBlock _Nonnull )reject;
+- (void)queryRenderedFeaturesInRect:(NSArray<NSNumber*>* _Nonnull)bbox withFilter:(NSArray<id>* _Nullable)filter withLayerIDs:(NSArray<NSString*>* _Nullable)layerIDs resolve:(RCTPromiseResolveBlock _Nonnull )resolve reject:(RCTPromiseRejectBlock _Nonnull )reject;
+- (void)queryTerrainElevation:(NSArray<NSNumber*>* _Nonnull)coordinates resolve:(RCTPromiseResolveBlock _Nonnull )resolve reject:(RCTPromiseRejectBlock _Nonnull )reject;
+- (void)setHandledMapChangedEvents:(NSArray<NSString*>* _Nonnull)events resolve:(RCTPromiseResolveBlock _Nonnull )resolve reject:(RCTPromiseRejectBlock _Nonnull )reject;
+- (void)setSourceVisibility:(BOOL)visible sourceId:(NSString* _Nonnull)sourceId sourceLayerId:(NSString* _Nullable)sourceLayerId resolve:(RCTPromiseResolveBlock _Nonnull )resolve reject:(RCTPromiseRejectBlock _Nonnull )reject;
+- (void)querySourceFeatures:sourceId:(NSString* _Nonnull)sourceId withFilter:(NSArray<id>* _Nullable)filter withSourceLayerIDs:(NSArray<NSString*>* _Nullable)sourceLayerIDs resolve:(RCTPromiseResolveBlock _Nonnull )resolve reject:(RCTPromiseRejectBlock _Nonnull )reject;
 
 @end
 

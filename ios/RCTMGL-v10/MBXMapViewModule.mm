@@ -28,63 +28,94 @@ RCT_EXPORT_MODULE();
 
 - (void)takeSnap:(NSNumber*)viewRef writeToDisk:(BOOL)writeToDisk resolve:(RCTPromiseResolveBlock)resolve reject:(RCTPromiseRejectBlock)reject
 {
-    [self withMapComponentView:viewRef block:^(MBXMapViewComponentView* view){
+    [self withMapComponentView:viewRef block:^(MBXMapViewComponentView* view) {
         [view takeSnap:writeToDisk resolve:resolve];
     } reject:reject];
 }
 
-- (void)clearData:(double)viewRef resolve:(RCTPromiseResolveBlock)resolve reject:(RCTPromiseRejectBlock)reject {
-    reject(@"clearData", @"not implemented yet", nil);
+- (void)clearData:(NSNumber*)viewRef resolve:(RCTPromiseResolveBlock)resolve reject:(RCTPromiseRejectBlock)reject {
+    [self withMapComponentView:viewRef block:^(MBXMapViewComponentView* view) {
+        [view clearData:resolve reject:reject];
+    } reject:reject];
 }
 
 
-- (void)getCenter:(double)viewRef resolve:(RCTPromiseResolveBlock)resolve reject:(RCTPromiseRejectBlock)reject {
-    reject(@"getCenter", @"not implemented yet", nil);
+- (void)getCenter:(NSNumber*)viewRef resolve:(RCTPromiseResolveBlock)resolve reject:(RCTPromiseRejectBlock)reject {
+    [self withMapComponentView:viewRef block:^(MBXMapViewComponentView* view) {
+        [view getCenter:resolve reject:reject];
+    } reject:reject];
 }
 
 
-- (void)getCoordinateFromView:(double)viewRef atPoint:(NSArray *)atPoint resolve:(RCTPromiseResolveBlock)resolve reject:(RCTPromiseRejectBlock)reject {
-    reject(@"getCoordinateFromView", @"not implemented yet", nil);
+- (void)getCoordinateFromView:(NSNumber*)viewRef atPoint:(NSArray *)atPoint resolve:(RCTPromiseResolveBlock)resolve reject:(RCTPromiseRejectBlock)reject {
+    [self withMapComponentView:viewRef block:^(MBXMapViewComponentView* view) {
+        NSNumber* a = [atPoint objectAtIndex:0];
+        NSNumber* b = [atPoint objectAtIndex:1];
+        
+        [view getCoordinateFromView:CGPointMake(a.floatValue, b.floatValue) resolve:resolve reject:reject];
+    } reject:reject];
 }
 
 
-- (void)getPointInView:(double)viewRef atCoordinate:(NSArray *)atCoordinate resolve:(RCTPromiseResolveBlock)resolve reject:(RCTPromiseRejectBlock)reject {
-    reject(@"getPointInView", @"not implemented yet", nil);
+- (void)getPointInView:(NSNumber*)viewRef atCoordinate:(NSArray *)atCoordinate resolve:(RCTPromiseResolveBlock)resolve reject:(RCTPromiseRejectBlock)reject {
+    [self withMapComponentView:viewRef block:^(MBXMapViewComponentView* view) {
+        [view getPointInView:atCoordinate resolve:resolve reject:reject];
+    } reject:reject];
 }
 
 
-- (void)getVisibleBounds:(double)viewRef resolve:(RCTPromiseResolveBlock)resolve reject:(RCTPromiseRejectBlock)reject {
-    reject(@"getVisibleBounds", @"not implemented yet", nil);
+- (void)getVisibleBounds:(NSNumber*)viewRef resolve:(RCTPromiseResolveBlock)resolve reject:(RCTPromiseRejectBlock)reject {
+    [self withMapComponentView:viewRef block:^(MBXMapViewComponentView* view) {
+        [view getVisibleBounds:resolve];
+    } reject:reject];
 }
 
 
-- (void)getZoom:(double)viewRef resolve:(RCTPromiseResolveBlock)resolve reject:(RCTPromiseRejectBlock)reject {
-    reject(@"getZoom", @"not implemented yet", nil);
+- (void)getZoom:(NSNumber*)viewRef resolve:(RCTPromiseResolveBlock)resolve reject:(RCTPromiseRejectBlock)reject {
+    [self withMapComponentView:viewRef block:^(MBXMapViewComponentView* view) {
+        [view getZoom:resolve reject:reject];
+    } reject:reject];
 }
 
 
-- (void)queryRenderedFeaturesAtPoint:(double)viewRef atPoint:(NSArray *)atPoint withFilter:(NSArray *)withFilter withLayerIDs:(NSArray *)withLayerIDs resolve:(RCTPromiseResolveBlock)resolve reject:(RCTPromiseRejectBlock)reject {
-    reject(@"queryRenderedFeaturesAtPoint", @"not implemented yet", nil);
+- (void)queryRenderedFeaturesAtPoint:(NSNumber*)viewRef atPoint:(NSArray *)atPoint withFilter:(NSArray *)withFilter withLayerIDs:(NSArray *)withLayerIDs resolve:(RCTPromiseResolveBlock)resolve reject:(RCTPromiseRejectBlock)reject {
+    [self withMapComponentView:viewRef block:^(MBXMapViewComponentView* view) {
+        [view queryRenderedFeaturesAtPoint:atPoint withFilter:withFilter withLayerIDs:withLayerIDs resolve:resolve reject:reject];
+    } reject:reject];
 }
 
 
-- (void)queryRenderedFeaturesInRect:(double)viewRef withBBox:(NSArray *)withBBox withFilter:(NSArray *)withFilter withLayerIDs:(NSArray *)withLayerIDs resolve:(RCTPromiseResolveBlock)resolve reject:(RCTPromiseRejectBlock)reject {
-    reject(@"queryRenderedFeaturesInRect", @"not implemented yet", nil);
+- (void)queryRenderedFeaturesInRect:(NSNumber*)viewRef withBBox:(NSArray *)withBBox withFilter:(NSArray *)withFilter withLayerIDs:(NSArray *)withLayerIDs resolve:(RCTPromiseResolveBlock)resolve reject:(RCTPromiseRejectBlock)reject {
+    [self withMapComponentView:viewRef block:^(MBXMapViewComponentView* view) {
+        [view queryRenderedFeaturesInRect:withBBox withFilter:withFilter withLayerIDs:withLayerIDs resolve:resolve reject:reject];
+    } reject:reject];
 }
 
 
-- (void)queryTerrainElevation:(double)viewRef coordinates:(NSArray *)coordinates resolve:(RCTPromiseResolveBlock)resolve reject:(RCTPromiseRejectBlock)reject {
-    reject(@"queryTerrainElevation", @"not implemented yet", nil);
+- (void)queryTerrainElevation:(NSNumber*)viewRef coordinates:(NSArray *)coordinates resolve:(RCTPromiseResolveBlock)resolve reject:(RCTPromiseRejectBlock)reject {
+    [self withMapComponentView:viewRef block:^(MBXMapViewComponentView* view) {
+        [view queryTerrainElevation:coordinates resolve:resolve reject:reject];
+    } reject:reject];
 }
 
 
-- (void)setHandledMapChangedEvents:(double)viewRef events:(NSArray *)events resolve:(RCTPromiseResolveBlock)resolve reject:(RCTPromiseRejectBlock)reject {
-    reject(@"setHandledMapChangedEvents", @"not implemented yet", nil);
+- (void)setHandledMapChangedEvents:(NSNumber*)viewRef events:(NSArray *)events resolve:(RCTPromiseResolveBlock)resolve reject:(RCTPromiseRejectBlock)reject {
+    [self withMapComponentView:viewRef block:^(MBXMapViewComponentView* view) {
+        [view setHandledMapChangedEvents:events resolve:resolve reject:reject];
+    } reject:reject];
 }
 
 
-- (void)setSourceVisibility:(double)viewRef visible:(BOOL)visible sourceId:(NSString *)sourceId sourceLayerId:(NSString *)sourceLayerId resolve:(RCTPromiseResolveBlock)resolve reject:(RCTPromiseRejectBlock)reject {
-    reject(@"setSourceVisibility", @"not implemented yet", nil);
+- (void)setSourceVisibility:(NSNumber*)viewRef visible:(BOOL)visible sourceId:(NSString *)sourceId sourceLayerId:(NSString *)sourceLayerId resolve:(RCTPromiseResolveBlock)resolve reject:(RCTPromiseRejectBlock)reject {
+    [self withMapComponentView:viewRef block:^(MBXMapViewComponentView* view) {
+        [view setSourceVisibility:visible sourceId:sourceId sourceLayerId:sourceLayerId resolve:resolve reject:reject];
+    } reject:reject];
+}
+
+- (void)querySourceFeatures:sourceId:(NSString* _Nonnull)sourceId withFilter:(NSArray<id>* _Nullable)filter withSourceLayerIDs:(NSArray<NSString*>* _Nullable)sourceLayerIDs resolve:(RCTPromiseResolveBlock _Nonnull )resolve reject:(RCTPromiseRejectBlock _Nonnull )reject {
+    [self withMapComponentView:viewRef block:^(MBXMapViewComponentView* view) {
+        [view querySourceFeatures:sourceId withFilter:filter withSourceLayerIDs:sourceLayerIDs resolve:resolve reject:reject];
+    } reject:reject];
 }
 
 

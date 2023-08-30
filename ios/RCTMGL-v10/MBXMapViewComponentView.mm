@@ -81,15 +81,6 @@ using namespace facebook::react;
               std::dynamic_pointer_cast<const facebook::react::MBXMapViewEventEmitter>(strongSelf->_eventEmitter)->onMapChange({type, json});
             }
       }];
-      
-//      [_view setOnCameraChange:^(NSDictionary* event) {
-//          __typeof__(self) strongSelf = weakSelf;
-//
-//          if (strongSelf != nullptr && strongSelf->_eventEmitter != nullptr) {
-//              const auto [type, json] = [MBXMapViewComponentView stringifyEventData:event];
-//              std::dynamic_pointer_cast<const facebook::react::MBXMapViewEventEmitter>(strongSelf->_eventEmitter)->onCameraChanged({type, json});
-//            }
-//      }];
 
     self.contentView = _view;
   }
@@ -152,9 +143,58 @@ using namespace facebook::react;
     return result;
 }
 
-- (void)takeSnap:(BOOL)writeToDisk resolve:(id)resolve {
+- (void)takeSnap:(BOOL)writeToDisk resolve:(RCTPromiseResolveBlock)resolve {
     [_view takeSnap:writeToDisk resolve:resolve];
 }
+
+- (void)clearData:(RCTPromiseResolveBlock)resolve reject:(RCTPromiseRejectBlock)reject {
+    [_view clearData:resolve reject:reject];
+}
+
+- (void)getCenter:(RCTPromiseResolveBlock)resolve reject:(RCTPromiseRejectBlock)reject {
+    [_view getCenter:resolve reject:reject];
+}
+
+- (void)getCoordinateFromView:(CGPoint)point resolve:(RCTPromiseResolveBlock)resolve reject:(RCTPromiseRejectBlock)reject {
+    [_view getCoordinateFromView:point resolve:resolve reject:reject];
+}
+
+- (void)getPointInView:(NSArray*)coordinate resolve:(RCTPromiseResolveBlock)resolve reject:(RCTPromiseRejectBlock)reject {
+    [_view getPointInView:coordinate resolve:resolve reject:reject];
+}
+
+- (void)getVisibleBounds:(RCTPromiseResolveBlock)resolve {
+    [_view getVisibleBounds:resolve];
+}
+
+- (void)getZoom:(RCTPromiseResolveBlock)resolve reject:(RCTPromiseRejectBlock)reject {
+    [_view getZoom:resolve reject:reject];
+}
+
+- (void)queryRenderedFeaturesAtPoint:(NSArray*)point withFilter:(NSArray*)filter withLayerIDs:(NSArray*)layerIDs resolve:(RCTPromiseResolveBlock)resolve reject:(RCTPromiseRejectBlock)reject {
+    [_view queryRenderedFeaturesAtPoint:point withFilter:filter withLayerIDs:layerIDs resolve:resolve reject:reject];
+}
+
+- (void)queryRenderedFeaturesInRect:(NSArray*)bbox withFilter:(NSArray*)filter withLayerIDs:(NSArray*)layerIDs resolve:(RCTPromiseResolveBlock)resolve reject:(RCTPromiseRejectBlock)reject {
+    [_view queryRenderedFeaturesInRect:bbox withFilter:filter withLayerIDs:layerIDs resolve:resolve reject:reject];
+}
+
+- (void)queryTerrainElevation:(NSArray*)coordinates resolve:(RCTPromiseResolveBlock)resolve reject:(RCTPromiseRejectBlock)reject {
+    [_view queryTerrainElevation:coordinates resolve:resolve reject:reject];
+}
+
+- (void)setHandledMapChangedEvents:(NSArray*)events resolve:(RCTPromiseResolveBlock)resolve reject:(RCTPromiseRejectBlock)reject {
+    [_view setHandledMapChangedEvents:events resolve:resolve reject:reject];
+}
+
+- (void)setSourceVisibility:(BOOL)visible sourceId:(NSString*)sourceId sourceLayerId:(NSString*)sourceLayerId resolve:(RCTPromiseResolveBlock)resolve reject:(RCTPromiseRejectBlock)reject {
+    [_view setSourceVisibility:visible sourceId:sourceId sourceLayerId:sourceLayerId resolve:resolve reject:reject];
+}
+
+- (void)querySourceFeatures:sourceId:(NSString* _Nonnull)sourceId withFilter:(NSArray<id>* _Nullable)filter withSourceLayerIDs:(NSArray<NSString*>* _Nullable)sourceLayerIDs resolve:(RCTPromiseResolveBlock _Nonnull )resolve reject:(RCTPromiseRejectBlock _Nonnull )reject {
+    [_view querySourceFeatures:sourceId withFilter:filter withSourceLayerIDs:sourceLayerIDs resolve:resolve reject:reject];
+}
+
 
 #pragma mark - RCTComponentViewProtocol
 

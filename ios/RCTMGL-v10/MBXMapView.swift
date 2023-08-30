@@ -98,9 +98,109 @@ open class MBXMapView : RCTMGLMapView, MBXMapViewProtocol {
         self.setReactOnMapChange(callback)
     }
     
+    
+    private func withMapboxMap(
+        name: String,
+        rejecter: @escaping RCTPromiseRejectBlock,
+        fn: @escaping (_: MapboxMap) -> Void) -> Void
+    {
+        guard let mapboxMap = self.mapboxMap else {
+          RCTMGLLogError("MapboxMap is not yet available");
+          rejecter(name, "Map not loaded yet", nil)
+          return;
+        }
+        
+        fn(mapboxMap)
+    }
+    
     public func takeSnap(_ writeToDisk: Bool, resolve: RCTPromiseResolveBlock!) {
-        let uri = self.takeSnap(writeToDisk: writeToDisk)
-        resolve(["uri": uri.absoluteString])
+        MBXMapViewManager.takeSnap(self, writeToDisk: writeToDisk, resolver: resolve)
+    }
+    
+    public func clearData(_ resolve: RCTPromiseResolveBlock!, reject: RCTPromiseRejectBlock!) {
+        MBXMapViewManager.clearData(self, resolver: resolve, rejecter: reject)
+    }
+    
+    public func getCenter(_ resolve: RCTPromiseResolveBlock!, reject: RCTPromiseRejectBlock!) {
+        withMapboxMap(name: "getCenter", rejecter: reject) { map in
+            MBXMapViewManager.getCenter(map, resolver: resolve)
+        }
+    }
+    
+    public func getCoordinateFromView(_ point: CGPoint, resolve: @escaping RCTPromiseResolveBlock, reject: @escaping RCTPromiseRejectBlock) {
+        withMapboxMap(name: "getCoordinateFromView", rejecter: reject) { map in
+            MBXMapViewManager.getCoordinateFromView(map, atPoint: point, resolver: resolve)
+        }
+    }
+    
+    public func getPointInView(_ coordinate: [NSNumber], resolve: @escaping RCTPromiseResolveBlock, reject: @escaping RCTPromiseRejectBlock) {
+        withMapboxMap(name: "getPointInView", rejecter: reject) { map in
+            MBXMapViewManager.getPointInView(map, atCoordinate: coordinate, resolver: resolve)
+        }
+    }
+    
+    public func getVisibleBounds(_ resolve: RCTPromiseResolveBlock!) {
+        MBXMapViewManager.getVisibleBounds(self, resolver: resolve)
+    }
+    
+    public func getZoom(_ resolve: @escaping RCTPromiseResolveBlock, reject: @escaping RCTPromiseRejectBlock) {
+        withMapboxMap(name: "getZoom", rejecter: reject) { map in
+            MBXMapViewManager.getZoom(map, resolver: resolve)
+        }
+    }
+    
+    public func queryRenderedFeatures(
+        atPoint point: [NSNumber],
+        withFilter filter: [Any]?,
+        withLayerIDs layerIDs: [String]?,
+        resolve: @escaping RCTPromiseResolveBlock,
+        reject: @escaping RCTPromiseRejectBlock) {
+        withMapboxMap(name: "queryRenderedFeaturesAtPoint", rejecter: reject) { map in
+            MBXMapViewManager.queryRenderedFeaturesAtPoint(map, atPoint: point, withFilter: filter, withLayerIDs: layerIDs, resolver: resolve, rejecter: reject)
+        }
+    }
+    
+    public func queryRenderedFeatures(
+        inRect bbox: [NSNumber],
+        withFilter filter: [Any]?,
+        withLayerIDs layerIDs: [String]?,
+        resolve: @escaping RCTPromiseResolveBlock,
+        reject: @escaping RCTPromiseRejectBlock) {
+          MBXMapViewManager.queryRenderedFeaturesInRect(self, withBBox: bbox, withFilter: filter, withLayerIDs: layerIDs, resolver: resolve, rejecter: reject)
+    }
+    
+    public func queryTerrainElevation(
+        _ coordinates: [NSNumber],
+        resolve: @escaping RCTPromiseResolveBlock,
+        reject: @escaping RCTPromiseRejectBlock
+    ) {
+        MBXMapViewManager.queryTerrainElevation(self, coordinates: coordinates, resolver: resolve, rejecter: reject)
+    }
+    
+    public func setHandledMapChangedEvents(
+        _ events: [String],
+        resolve: @escaping RCTPromiseResolveBlock,
+        reject: @escaping RCTPromiseRejectBlock) {
+          MBXMapViewManager.setHandledMapChangedEvents(self, events: events, resolver: resolve, rejecter: reject)
+    }
+    
+    public func setSourceVisibility(
+        _ visible: Bool,
+        sourceId: String,
+        sourceLayerId: String?,
+        resolve: @escaping RCTPromiseResolveBlock,
+        reject: @escaping RCTPromiseRejectBlock) {
+          MBXMapViewManager.setSourceVisibility(self, visible: visible, sourceId: sourceId, sourceLayerId: sourceLayerId, resolver: resolve, rejecter: reject)
+    }
+
+      func querySourceFeatures(
+        _ reactTag: NSNumber,
+        withSourceId sourceId: String,
+        withFilter filter: [Any]?,
+        withSourceLayerIds sourceLayerIds: [String]?,
+        resolve: @escaping RCTPromiseResolveBlock,
+        reject: @escaping RCTPromiseRejectBlock) -> Void {
+          MBXMapViewManager.querySourceFeatures(self, withSourceId: sourceId, withFilter: filter, withSourceLayerIds: sourceLayerIds, resolver: resolve, rejecter: reject)
     }
 }
 
