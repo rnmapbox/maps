@@ -14,11 +14,11 @@ class RCTMGLStyleValue {
   var styleType: String? = nil
   var styleValue: [String:Any]? = nil
   var styleObject: Any? = nil
-
-
+  
+  
   init(value: Any) {
     self.value = value
-
+  
     if let dict = value as? [String:Any] {
       guard let styleType = dict["styletype"] as? String else {
         fatalError("StyleType should be string in \(dict)")
@@ -31,15 +31,15 @@ class RCTMGLStyleValue {
       self.styleObject = parse(rawStyleValue: styleValue)
     }
   }
-
+  
   static func make(_ reactStyleValue: Any) ->RCTMGLStyleValue {
     return RCTMGLStyleValue(value: reactStyleValue)
   }
-
+  
   func isVisible() -> Value<Visibility> {
     return mglStyleValueEnum()
   }
-
+  
   func getTransition() -> StyleTransition {
     guard let dict = styleObject as? [String:Any] else {
       Logger.log(level:.error, message: "Invalid transition value: \(optional: styleObject)")
@@ -54,7 +54,7 @@ class RCTMGLStyleValue {
     let millisecondsToSeconds = 1.0/1000.0;
     return StyleTransition(duration: millisecondsToSeconds * (duration?.doubleValue ?? 0.0), delay: millisecondsToSeconds * (delay?.doubleValue ?? 0.0))
   }
-
+  
   func getImageScale() -> Double {
     if let dict = styleObject as? [String:Any] {
       if let scale = dict["scale"] as? NSNumber {
@@ -65,13 +65,13 @@ class RCTMGLStyleValue {
     }
     return 1.0
   }
-
+  
   func parse(rawStyleValue: [String:Any]) -> Any
   {
     guard let type = rawStyleValue["type"] as? String else {
       fatalError("type is not a string in \(rawStyleValue)")
     }
-
+    
     let value = rawStyleValue["value"]
     if type == "string" {
       guard let string = value as? String else {
@@ -114,7 +114,7 @@ class RCTMGLStyleValue {
       fatalError("unepxected type: \(type)")
     }
   }
-
+  
   static func convert(_ from:[String: Any]) -> Any {
     guard let type = from["type"] as? String else {
       fatalError("Type should be string but was \(optional: from["type"])")
@@ -130,14 +130,14 @@ class RCTMGLStyleValue {
       guard let value = from["value"] as? String else {
         fatalError("Value for string should be String")
       }
-
+      
       return value
     }
     else if type == "hashmap" {
       guard let values = from["value"] as? [[Any]] else {
         fatalError("Value for hashmap should be array of array")
       }
-
+    
       let result = values.map { items -> (String,Any) in
         var key = items[0]
         let value = items[1]
@@ -176,11 +176,11 @@ class RCTMGLStyleValue {
       fatalError("Unexpected type \(type)")
     }
   }
-
+  
   func mglStyleValueNumber() -> Value<Double> {
     if let value = value as? Dictionary<String,Any> {
       let value = RCTMGLStyleValue.convert(value["stylevalue"] as! [String:Any])
-
+      
       if let num = value as? NSNumber {
         return Value.constant(Double(num.doubleValue))
       } else if let num = value as? Double {
@@ -208,9 +208,9 @@ class RCTMGLStyleValue {
       Logger.log(level: .error, message: "Invalid value for number: \(value) retuning 0.0")
       return 0.0
     }
-
+    
     let valueObj = RCTMGLStyleValue.convert(value["stylevalue"] as! [String:Any])
-
+    
     if let num = valueObj as? NSNumber {
       return num.doubleValue
     } else if let num = valueObj as? Double {
@@ -236,12 +236,12 @@ class RCTMGLStyleValue {
     //return Value.constant(ColorRepresentable(color: UIColor.black))
     if let value = value as? Dictionary<String,Any> {
       let value = RCTMGLStyleValue.convert(value["stylevalue"] as! [String:Any])
-
+      
       if let num = value as? Int {
         let uicolor = uicolor(num)
         return Value.constant(StyleColor(uicolor))
       }
-
+      
       let data = try! JSONSerialization.data(withJSONObject: value, options: .prettyPrinted)
 
       let decodedExpression = try! JSONDecoder().decode(Expression.self, from: data)
@@ -250,7 +250,7 @@ class RCTMGLStyleValue {
       return Value.constant(StyleColor(UIColor.red))
     }
   }
-
+  
   func asExpression(json: [Any]) -> Expression {
     let data = try! JSONSerialization.data(withJSONObject: json, options: .prettyPrinted)
     let decodedExpression = try! JSONDecoder().decode(Expression.self, from: data)
@@ -272,15 +272,15 @@ class RCTMGLStyleValue {
       return StyleColor(UIColor.red)
     }
   }
-
+  
   func mglStyleValueBoolean() -> Value<Bool> {
     guard let value = value as? Dictionary<String,Any> else {
       Logger.log(level: .error, message: "Invalid value for boolean: \(value)")
       return Value.constant(true)
     }
-
+    
     let valueObj = RCTMGLStyleValue.convert(value["stylevalue"] as! [String:Any])
-
+    
     if let valueObj = valueObj as? NSNumber {
       return .constant(valueObj.boolValue)
     } else {
@@ -294,15 +294,15 @@ class RCTMGLStyleValue {
       }
     }
   }
-
+  
   func mglStyleValueArrayNumber() -> Value<[Double]> {
     guard let value = value as? Dictionary<String,Any> else {
       Logger.log(level: .error, message: "Invalid value for array number: \(value)")
       return Value.constant([1.0,1.0])
     }
-
+  
     let valueObj = RCTMGLStyleValue.convert(value["stylevalue"] as! [String:Any])
-
+      
     if let valueObj = valueObj as? [NSNumber] {
       return .constant(valueObj.map { $0.doubleValue })
     } else {
@@ -316,7 +316,7 @@ class RCTMGLStyleValue {
       }
     }
   }
-
+  
   func mglStyleValueArrayString() -> Value<[String]> {
     guard let value = value as? Dictionary<String,Any> else {
       Logger.log(level: .error, message: "Invalid value for array of strings: \(value)")
@@ -324,7 +324,7 @@ class RCTMGLStyleValue {
     }
 
     let valueObj = RCTMGLStyleValue.convert(value["stylevalue"] as! [String:Any])
-
+      
     if let valueObj = valueObj as? [String] {
       return .constant(valueObj)
     } else {
@@ -341,7 +341,7 @@ class RCTMGLStyleValue {
       }
     }
   }
-
+  
   func mglStyleValueResolvedImage() -> Value<ResolvedImage> {
     if let exprJSON = styleObject as? [Any] {
       return Value.expression(asExpression(json: exprJSON))
@@ -362,13 +362,13 @@ class RCTMGLStyleValue {
   func mglStyleValueLineCap() -> Value<LineCap> {
     return mglStyleValueEnum()
   }
-
+    
   func parseExpression(_ expression: [Any]) throws -> Expression {
     let data = try JSONSerialization.data(withJSONObject: expression, options: .prettyPrinted)
     let decodedExpression = try JSONDecoder().decode(Expression.self, from: data)
     return decodedExpression
   }
-
+  
   func mglStyleValueEnum<Enum : RawRepresentable>() -> Value<Enum> where Enum.RawValue == String {
     if let value = value as? Dictionary<String,Any> {
       let value = RCTMGLStyleValue.convert(value["stylevalue"] as! [String:Any])
@@ -401,11 +401,11 @@ class RCTMGLStyleValue {
       return Enum(rawValue: value as! String)!
     }
   }
-
+  
   func mglStyleValueArrayTextWritingMode() -> Value<[TextWritingMode]> {
     return Value.constant([])
   }
-
+  
   func mglStyleValueAnchorRaw() -> Anchor {
     return mglStyleEnum()
   }
@@ -416,7 +416,7 @@ class RCTMGLStyleValue {
     }
     return false
   }
-
+  
   func setImage(
     bridge: RCTBridge,
     style: Style,
@@ -430,7 +430,7 @@ class RCTMGLStyleValue {
       setImageOnLayer(self)
     } else {
       let imageURI = getImageURI()
-
+      
       if let oldRawValue = oldValue as? [String:Any] {
         if let oldRawValue = oldRawValue["stylevalue"] as? [String:Any] {
           if let oldValue = parse(rawStyleValue: oldRawValue) as? [String:Any] {
@@ -458,7 +458,7 @@ class RCTMGLStyleValue {
       });
     }
   }
-
+  
   func getImageURI(_ dict: [String:Any]) -> String? {
     if let uri = dict["uri"] as? String {
       return uri
@@ -466,7 +466,7 @@ class RCTMGLStyleValue {
       return nil
     }
   }
-
+  
   func getImageURI() -> String? {
     if let dict = styleObject as? [String:Any] {
       return getImageURI(dict)
@@ -475,11 +475,11 @@ class RCTMGLStyleValue {
     }
     return nil
   }
-
+  
   func mglStyleValueArrayTextVariableAnchor() -> Value<[TextAnchor]> {
     return Value.constant([.left])
   }
-
+  
   func getSphericalPosition() -> [Double] {
     if let array = styleObject as? [NSNumber] {
       var result = array.map { $0.doubleValue }
@@ -490,15 +490,15 @@ class RCTMGLStyleValue {
     Logger.log(level: .error, message: "Expected array of numbers as position received: \(optional: styleObject)")
     return []
   }
-
+  
   func mglStyleValueFormatted() -> Value<String> {
     if let value = value as? Dictionary<String,Any> {
       let value = RCTMGLStyleValue.convert(value["stylevalue"] as! [String:Any])
-
+      
       if let string = value as? String {
         return Value.constant(string)
       }
-
+      
       let data = try! JSONSerialization.data(withJSONObject: value, options: .prettyPrinted)
 
       let decodedExpression = try! JSONDecoder().decode(Expression.self, from: data)
@@ -507,11 +507,11 @@ class RCTMGLStyleValue {
       fatalError("mglStyleValueFormatted - Unpexected value: \(value)")
     }
   }
-
+  
   func mglStyleValueLineJoin() -> Value<LineJoin> {
     return mglStyleValueEnum()
   }
-
+  
   func mglStyleValueLineTranslateAnchor() -> Value<LineTranslateAnchor> {
     return mglStyleValueEnum()
   }
