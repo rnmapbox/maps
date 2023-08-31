@@ -47,10 +47,13 @@ const QuerySourceFeatures = (props: BaseExampleProps) => {
 
       setMessage(
         `[SUCCESS] querySourceFeatures retrieved ${featuresCount} features ` +
-          `and includes: \n- ${countiesOfInterest.join('\n- ')}`,
+          `and includes: \n- ${res.features
+            .map((f) => f.properties?.COUNTY)
+            .join('\n- ')}`,
       );
     } catch (err) {
       console.error(err);
+      setMessage(`[ERROR] ${err}. See console for details.`);
     }
   }, [ready]);
 

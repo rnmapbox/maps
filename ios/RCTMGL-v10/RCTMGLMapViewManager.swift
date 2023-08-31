@@ -6,11 +6,11 @@ class RCTMGLMapViewManager: RCTViewManager {
     override static func requiresMainQueueSetup() -> Bool {
         return true
     }
-
+  
     func defaultFrame() -> CGRect {
         return UIScreen.main.bounds
     }
-
+  
     override func view() -> UIView! {
         let result = RCTMGLMapView(frame: self.defaultFrame(), eventDispatcher: self.bridge.eventDispatcher())
         return result
@@ -34,7 +34,7 @@ extension RCTMGLMapViewManager {
           rejecter(name, "Unknown find reactTag: \(reactTag)", nil)
           return;
         }
-
+        
         fn(view)
       }
     }
@@ -51,7 +51,7 @@ extension RCTMGLMapViewManager {
           rejecter(name, "Map not loaded yet", nil)
           return;
         }
-
+        
         fn(mapboxMap)
       }
     }
@@ -71,7 +71,7 @@ extension RCTMGLMapViewManager {
         resolver(["uri": uri.absoluteString])
       }
     }
-
+  
     @objc
     func queryTerrainElevation(_ reactTag: NSNumber,
                                coordinates: [NSNumber],
@@ -87,7 +87,7 @@ extension RCTMGLMapViewManager {
         }
       }
     }
-
+  
   @objc
   func setSourceVisibility(_ reactTag: NSNumber,
                       visible: Bool,
@@ -189,7 +189,7 @@ extension RCTMGLMapViewManager {
 
         logged("queryRenderedFeaturesAtPoint.option", rejecter: rejecter) {
           let options = try RenderedQueryOptions(layerIds: (layerIDs ?? []).isEmpty ? nil : layerIDs, filter: filter?.asExpression())
-
+          
           mapboxMap.queryRenderedFeatures(with: point, options: options) { result in
             switch result {
             case .success(let features):
@@ -247,30 +247,24 @@ extension RCTMGLMapViewManager {
     resolver: @escaping RCTPromiseResolveBlock,
     rejecter: @escaping RCTPromiseRejectBlock) -> Void {
       withMapView(reactTag, name:"querySourceFeatures", rejecter: rejecter) { mapView in
-        do {
-          let sourceLayerIds = sourceLayerIds?.isEmpty ?? true ? nil : sourceLayerIds
-          logged("querySourceFeatures.option", rejecter: rejecter) {
-            let options = SourceQueryOptions(sourceLayerIds: sourceLayerIds, filter: filter!)
-            mapView.mapboxMap.querySourceFeatures(for: sourceId, options: options) { result in
-              switch result {
-              case .success(let features):
-                resolver([
-                  "data": ["type": "FeatureCollection", "features": features.compactMap { queriedFeature in
-                    logged("querySourceFeatures.queriedfeature.map") { try queriedFeature.feature.toJSON() }
-                  }] as [String : Any]
-                ])
-              case .failure(let error):
-                rejecter("querySourceFeatures", "failed to query source features: \(error.localizedDescription)", error)
-              }
+        let sourceLayerIds = sourceLayerIds?.isEmpty ?? true ? nil : sourceLayerIds
+        logged("querySourceFeatures.option", rejecter: rejecter) {
+          let options = SourceQueryOptions(sourceLayerIds: sourceLayerIds, filter: filter ?? Exp(arguments: []))
+          mapView.mapboxMap.querySourceFeatures(for: sourceId, options: options) { result in
+            switch result {
+            case .success(let features):
+              resolver([
+                "data": ["type": "FeatureCollection", "features": features.compactMap { queriedFeature in
+                  logged("querySourceFeatures.queriedfeature.map") { try queriedFeature.feature.toJSON() }
+                }] as [String : Any]
+              ])
+            case .failure(let error):
+              rejecter("querySourceFeatures", "failed to query source features: \(error.localizedDescription)", error)
             }
           }
         }
-        catch {
-          rejecter("querySourceFeatures","failed to query source features: \(error.localizedDescription)", error)
-        }
       }
     }
-
 
   @objc
   func clearData(

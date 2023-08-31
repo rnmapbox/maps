@@ -71,7 +71,6 @@ import com.mapbox.rctmgl.events.CameraChangeEvent
 import com.mapbox.rctmgl.events.MapClickEvent
 import com.mapbox.rctmgl.events.constants.EventTypes
 import com.mapbox.rctmgl.utils.*
-import com.mapbox.rctmgl.utils.extensions.toJSONObject
 import com.mapbox.rctmgl.utils.extensions.toReadableArray
 import org.json.JSONException
 import org.json.JSONObject
