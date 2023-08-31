@@ -248,10 +248,9 @@ extension RCTMGLMapViewManager {
     rejecter: @escaping RCTPromiseRejectBlock) -> Void {
       withMapView(reactTag, name:"querySourceFeatures", rejecter: rejecter) { mapView in
         do {
-          let filterExp = try filter!.asExpression()
           let sourceLayerIds = sourceLayerIds?.isEmpty ?? true ? nil : sourceLayerIds
           logged("querySourceFeatures.option", rejecter: rejecter) {
-            let options = SourceQueryOptions(sourceLayerIds: sourceLayerIds, filter: filterExp)
+            let options = SourceQueryOptions(sourceLayerIds: sourceLayerIds, filter: filter!)
             mapView.mapboxMap.querySourceFeatures(for: sourceId, options: options) { result in
               switch result {
               case .success(let features):
