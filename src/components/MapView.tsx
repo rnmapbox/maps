@@ -703,7 +703,7 @@ class MapView extends NativeBridgeComponent(
    *
    * @param  {String} sourceId - Style source identifier used to query for source features.
    * @param  {Array=} filter - A filter to limit query results.
-   * @param  {Array=} sourceLayerIds - The name of the source layers to query. For vector tile sources, this parameter is required. For GeoJSON sources, it is ignored.
+   * @param  {Array=} sourceLayerIDs - The name of the source layers to query. For vector tile sources, this parameter is required. For GeoJSON sources, it is ignored.
    * @return {FeatureCollection}
    */
   async querySourceFeatures(
