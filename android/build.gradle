@@ -35,10 +35,6 @@ buildscript {
 
 if (isNewArchitectureEnabled()) {
     apply plugin: 'com.facebook.react'
-
-    react {
-        codegenJavaPackageName = "com.mapbox.rctmgl"
-    }
 }
 apply plugin: 'com.android.library'
 
@@ -91,6 +87,7 @@ android {
         targetSdkVersion safeExtGet('targetSdkVersion', 26)
         versionCode 1
         versionName "1.0"
+        buildConfigField "boolean", "IS_NEW_ARCHITECTURE_ENABLED", isNewArchitectureEnabled().toString()
     }
 
     compileOptions {
