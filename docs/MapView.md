@@ -576,7 +576,7 @@ this._map.queryRenderedFeaturesInRect([30, 40, 20, 10], ['==', 'type', 'Point'],
 ```
 
 
-### querySourceFeatures(sourceId[, sourceLayerIds][, filter])
+### querySourceFeatures(sourceId[, filter][, sourceLayerIDs])
 
 Returns an array of GeoJSON Feature objects representing features within the specified vector tile or GeoJSON source that satisfy the query parameters.
 
@@ -584,13 +584,13 @@ Returns an array of GeoJSON Feature objects representing features within the spe
 | Name | Type | Required | Description  |
 | ---- | :--: | :------: | :----------: |
 | `sourceId` | `string` | `Yes` | Style source identifier used to query for source features. |
-| `sourceLayerIds` | `n/a` | `No` | The name of the source layers to query. For vector tile sources, this parameter is required. For GeoJSON sources, it is ignored. |
 | `filter` | `Array` | `No` | A filter to limit query results. |
+| `sourceLayerIDs` | `Array` | `No` | The name of the source layers to query. For vector tile sources, this parameter is required. For GeoJSON sources, it is ignored. |
 
 
 
 ```javascript
-this._map.querySourceFeatures("your-source-id", { filter: ['==', 'type', 'Point'], sourceLayer: "your-source-layer" })
+this._map.querySourceFeatures('your-source-id', [], ['your-source-layer'])
 ```
 
 
