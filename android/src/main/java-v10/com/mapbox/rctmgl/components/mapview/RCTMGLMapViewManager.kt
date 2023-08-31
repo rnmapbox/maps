@@ -10,19 +10,13 @@ import com.facebook.react.uimanager.LayoutShadowNode
 import com.facebook.react.uimanager.ThemedReactContext
 import com.facebook.react.uimanager.annotations.ReactProp
 import com.mapbox.rctmgl.events.constants.EventKeys
-import com.mapbox.maps.MapboxMap
 import com.facebook.react.common.MapBuilder
-import com.mapbox.maps.MapInitOptions
 import com.mapbox.maps.extension.style.layers.properties.generated.ProjectionName
-import com.mapbox.maps.plugin.compass.compass
 import com.mapbox.maps.plugin.gestures.gestures
-import com.mapbox.maps.plugin.logo.logo
 import com.mapbox.rctmgl.utils.ConvertUtils
 import com.mapbox.rctmgl.utils.ExpressionParser
-import com.mapbox.rctmgl.utils.GeoJSONUtils
 import com.mapbox.rctmgl.utils.Logger
 import com.mapbox.rctmgl.utils.extensions.toCoordinate
-import com.mapbox.rctmgl.utils.extensions.toReadableArray
 import com.mapbox.rctmgl.utils.extensions.toScreenCoordinate
 import java.lang.Exception
 import java.util.HashMap
@@ -307,6 +301,15 @@ open class RCTMGLMapViewManager(context: ReactApplicationContext) :
                         ConvertUtils.toRectF(args.getArray(1)),
                         ExpressionParser.from(args!!.getArray(2)),
                         if (layerIds.size == 0) null else layerIds
+                );
+            }
+            "querySourceFeatures" -> {
+                val sourceLayerIds = ConvertUtils.toStringList(args!!.getArray(3))
+                mapView.querySourceFeatures(
+                        args!!.getString(0),
+                        args!!.getString(1),
+                        ExpressionParser.from(args!!.getArray(2)),
+                        if (sourceLayerIds.size == 0) null else sourceLayerIds
                 );
             }
             "getVisibleBounds" -> {

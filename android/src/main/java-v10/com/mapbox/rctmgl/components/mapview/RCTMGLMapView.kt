@@ -16,6 +16,7 @@ import androidx.lifecycle.LifecycleRegistry
 import androidx.lifecycle.ViewTreeLifecycleOwner
 import com.facebook.react.bridge.*
 import com.mapbox.android.gestures.*
+import com.mapbox.bindgen.Value
 import com.mapbox.geojson.Feature
 import com.mapbox.geojson.FeatureCollection
 import com.mapbox.geojson.Point
@@ -70,6 +71,7 @@ import com.mapbox.rctmgl.events.CameraChangeEvent
 import com.mapbox.rctmgl.events.MapClickEvent
 import com.mapbox.rctmgl.events.constants.EventTypes
 import com.mapbox.rctmgl.utils.*
+import com.mapbox.rctmgl.utils.extensions.toJSONObject
 import com.mapbox.rctmgl.utils.extensions.toReadableArray
 import org.json.JSONException
 import org.json.JSONObject
@@ -986,6 +988,28 @@ open class RCTMGLMapView(private val mContext: Context, var mManager: RCTMGLMapV
                 mManager.handleEvent(event)
             } else {
                 Logger.e("queryRenderedFeaturesInRect", features.error ?: "n/a")
+            }
+        }
+    }
+
+    fun querySourceFeatures(callbackID: String?, sourceId: String, filter: Expression?, sourceLayerIDs: List<String>?) {
+        mMap?.querySourceFeatures(
+                sourceId,
+                SourceQueryOptions(sourceLayerIDs, filter as Value),
+        ) { features ->
+            if (features.isValue) {
+                val featuresList = ArrayList<Feature?>()
+                for (i in features.value!!) {
+                    featuresList.add(i.feature)
+                }
+
+                val payload: WritableMap = WritableNativeMap()
+                payload.putString("data", FeatureCollection.fromFeatures(featuresList).toJson())
+
+                var event = AndroidCallbackEvent(this, callbackID, payload)
+                mManager.handleEvent(event)
+            } else {
+                Logger.e("querySourceFeatures", features.error ?: "n/a")
             }
         }
     }
