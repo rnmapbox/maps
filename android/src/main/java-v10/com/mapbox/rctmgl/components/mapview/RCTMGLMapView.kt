@@ -208,12 +208,6 @@ open class RCTMGLMapView(private val mContext: Context, var mManager: RCTMGLMapV
         return mapView.getMapboxMap()
     }
 
-    override fun setId(id: Int) {
-        super.setId(id)
-
-        mManager.setViewForReactTag(id, this)
-    }
-
     val pointAnnotationManager: PointAnnotationManager?
         get() {
             if (mPointAnnotationManager == null) {

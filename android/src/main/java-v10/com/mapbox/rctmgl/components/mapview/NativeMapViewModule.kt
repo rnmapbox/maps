@@ -21,24 +21,11 @@ class NativeMapViewModule(context: ReactApplicationContext) : NativeMapViewModul
             return
         }
 
-        // returns null when called too early :/, maybe fixable
-//        val manager = UIManagerHelper.getUIManager(reactApplicationContext, UIManagerType.FABRIC) as FabricUIManager
-//        val view = manager.resolveView(viewRef.toInt())
-
         reactApplicationContext.runOnUiQueueThread {
-            val viewManagers =
-                (reactApplicationContext.applicationContext as ReactApplication)
-                    .reactNativeHost
-                    .reactInstanceManager
-                    .getOrCreateViewManagers(reactApplicationContext)
-                    .filterIsInstance<RCTMGLMapViewManager>()
+            val manager = UIManagerHelper.getUIManager(reactApplicationContext, UIManagerType.FABRIC) as FabricUIManager
+            val view = manager.resolveView(viewRef.toInt()) as? RCTMGLMapView
 
-            for (viewManager in viewManagers) {
-                val view = viewManager.getByReactTag(viewRef.toInt()) ?: continue
-
-                fn(view)
-                break
-            }
+            view?.let(fn)
         }
     }
 
@@ -202,7 +189,7 @@ class NativeMapViewModule(context: ReactApplicationContext) : NativeMapViewModul
         promise: Promise
     ) {
         withMapViewManagerOnUIThread(viewRef) {
-            it.setHandledMapChangedEvents(events.asArrayString() ?: emptyArray())
+            it.setHandledMapChangedEvents(events.asArrayString())
             promise.resolveOrReject(null)
         }
     }

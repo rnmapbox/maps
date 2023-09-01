@@ -118,10 +118,6 @@ open class RCTMGLMapViewManager(context: ReactApplicationContext) :
         return mViews[reactTag]
     }
 
-    fun setViewForReactTag(reactTag: Int, mapView: RCTMGLMapView) {
-        mViews[reactTag] = mapView
-    }
-
     // region React Props
     @ReactProp(name = "projection")
     override fun setProjection(mapView: RCTMGLMapView, projection: String?) {
