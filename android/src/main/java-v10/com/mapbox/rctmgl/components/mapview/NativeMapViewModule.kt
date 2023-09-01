@@ -4,6 +4,10 @@ import com.facebook.react.ReactApplication
 import com.facebook.react.bridge.Promise
 import com.facebook.react.bridge.ReactApplicationContext
 import com.facebook.react.bridge.ReadableArray
+import com.facebook.react.bridge.WritableNativeMap
+import com.facebook.react.fabric.FabricUIManager
+import com.facebook.react.uimanager.UIManagerHelper
+import com.facebook.react.uimanager.common.UIManagerType
 import com.mapbox.rctmgl.NativeMapViewModuleSpec
 import com.mapbox.rctmgl.utils.ConvertUtils
 import com.mapbox.rctmgl.utils.ExpressionParser
@@ -39,9 +43,12 @@ class NativeMapViewModule(context: ReactApplicationContext) : NativeMapViewModul
 
     override fun takeSnap(viewRef: Double?, command: String, writeToDisk: Boolean, promise: Promise) {
         withMapViewManagerOnUIThread(viewRef) {
-            it.takeSnap(command, writeToDisk)
-
-            promise.resolve(null)
+            it.takeSnap(writeToDisk) { fillData ->
+                with(WritableNativeMap()) {
+                    fillData(this)
+                    promise.resolve(this)
+                }
+            }
         }
     }
 
@@ -52,9 +59,12 @@ class NativeMapViewModule(context: ReactApplicationContext) : NativeMapViewModul
         promise: Promise
     ) {
         withMapViewManagerOnUIThread(viewRef) {
-            it.queryTerrainElevation(command, coordinates.getDouble(0), coordinates.getDouble(1))
-
-            promise.resolve(null)
+            it.queryTerrainElevation(coordinates.getDouble(0), coordinates.getDouble(1)) { fillData ->
+                with(WritableNativeMap()) {
+                    fillData(this)
+                    promise.resolve(this)
+                }
+            }
         }
     }
 
@@ -75,9 +85,12 @@ class NativeMapViewModule(context: ReactApplicationContext) : NativeMapViewModul
 
     override fun getCenter(viewRef: Double?, command: String, promise: Promise) {
         withMapViewManagerOnUIThread(viewRef) {
-            it.getCenter(command)
-
-            promise.resolve(null)
+            it.getCenter { fillData ->
+                with(WritableNativeMap()) {
+                    fillData(this)
+                    promise.resolve(this)
+                }
+            }
         }
     }
 
@@ -88,33 +101,45 @@ class NativeMapViewModule(context: ReactApplicationContext) : NativeMapViewModul
         promise: Promise
     ) {
         withMapViewManagerOnUIThread(viewRef) {
-            it.getCoordinateFromView(command, atPoint.toScreenCoordinate())
-
-            promise.resolve(null)
+            it.getCoordinateFromView(atPoint.toScreenCoordinate()) { fillData ->
+                with(WritableNativeMap()) {
+                    fillData(this)
+                    promise.resolve(this)
+                }
+            }
         }
     }
 
     override fun getPointInView(viewRef: Double?, command: String, atCoordinate: ReadableArray, promise: Promise) {
         withMapViewManagerOnUIThread(viewRef) {
-            it.getPointInView(command, atCoordinate.toCoordinate())
-
-            promise.resolve(null)
+            it.getPointInView(atCoordinate.toCoordinate()) { fillData ->
+                with(WritableNativeMap()) {
+                    fillData(this)
+                    promise.resolve(this)
+                }
+            }
         }
     }
 
     override fun getZoom(viewRef: Double?, command: String, promise: Promise) {
         withMapViewManagerOnUIThread(viewRef) {
-            it.getZoom(command)
-
-            promise.resolve(null)
+            it.getZoom { fillData ->
+                with(WritableNativeMap()) {
+                    fillData(this)
+                    promise.resolve(this)
+                }
+            }
         }
     }
 
     override fun getVisibleBounds(viewRef: Double?, command: String, promise: Promise) {
         withMapViewManagerOnUIThread(viewRef) {
-            it.getVisibleBounds(command)
-
-            promise.resolve(null)
+            it.getVisibleBounds { fillData ->
+                with(WritableNativeMap()) {
+                    fillData(this)
+                    promise.resolve(this)
+                }
+            }
         }
     }
 
@@ -128,14 +153,17 @@ class NativeMapViewModule(context: ReactApplicationContext) : NativeMapViewModul
     ) {
         withMapViewManagerOnUIThread(viewRef) {
             val layerIds = ConvertUtils.toStringList(withLayerIDs)
+
             it.queryRenderedFeaturesAtPoint(
-                command,
                 ConvertUtils.toPointF(atPoint),
                 ExpressionParser.from(withFilter),
                 if (layerIds.size == 0) null else layerIds
-            )
-
-            promise.resolve(null)
+            ) { fillData ->
+                with(WritableNativeMap()) {
+                    fillData(this)
+                    promise.resolve(this)
+                }
+            }
         }
     }
 
@@ -149,14 +177,17 @@ class NativeMapViewModule(context: ReactApplicationContext) : NativeMapViewModul
     ) {
         withMapViewManagerOnUIThread(viewRef) {
             val layerIds = ConvertUtils.toStringList(withLayerIDs)
+
             it.queryRenderedFeaturesInRect(
-                command,
                 ConvertUtils.toRectF(withBBox),
                 ExpressionParser.from(withFilter),
                 if (layerIds.size == 0) null else layerIds
-            )
-
-            promise.resolve(null)
+            ) { fillData ->
+                with(WritableNativeMap()) {
+                    fillData(this)
+                    promise.resolve(this)
+                }
+            }
         }
     }
 
@@ -174,8 +205,12 @@ class NativeMapViewModule(context: ReactApplicationContext) : NativeMapViewModul
 
     override fun clearData(viewRef: Double?, command: String, promise: Promise) {
         withMapViewManagerOnUIThread(viewRef) {
-            it.clearData(command)
-            promise.resolve(null)
+            it.clearData { fillData ->
+                with(WritableNativeMap()) {
+                    fillData(this)
+                    promise.resolve(this)
+                }
+            }
         }
     }
 
@@ -191,8 +226,12 @@ class NativeMapViewModule(context: ReactApplicationContext) : NativeMapViewModul
                 command,
                 ExpressionParser.from(withFilter),
                 if (withSourceLayerIDs.size == 0) null else withSourceLayerIDs
-            )
-            promise.resolve(null)
+            ) { fillData ->
+                with(WritableNativeMap()) {
+                    fillData(this)
+                    promise.resolve(this)
+                }
+            }
         }
     }
 
