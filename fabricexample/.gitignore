@@ -66,3 +66,5 @@ yarn-error.log
 /coverage
 
 .env
+accesstoken
+env.json
