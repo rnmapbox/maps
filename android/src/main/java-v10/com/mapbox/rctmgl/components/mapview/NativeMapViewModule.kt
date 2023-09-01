@@ -4,6 +4,7 @@ import com.facebook.react.ReactApplication
 import com.facebook.react.bridge.Promise
 import com.facebook.react.bridge.ReactApplicationContext
 import com.facebook.react.bridge.ReadableArray
+import com.facebook.react.bridge.ReadableMap
 import com.facebook.react.bridge.WritableNativeMap
 import com.facebook.react.fabric.FabricUIManager
 import com.facebook.react.uimanager.UIManagerHelper
@@ -41,12 +42,20 @@ class NativeMapViewModule(context: ReactApplicationContext) : NativeMapViewModul
         }
     }
 
+    private fun Promise.resolveOrReject(data: ReadableMap?) {
+        if (data != null && data.hasKey("error")) {
+            this.reject(Exception(data.getString("error")))
+        } else {
+            this.resolve(data)
+        }
+    }
+
     override fun takeSnap(viewRef: Double?, writeToDisk: Boolean, promise: Promise) {
         withMapViewManagerOnUIThread(viewRef) {
             it.takeSnap(writeToDisk) { fillData ->
                 with(WritableNativeMap()) {
                     fillData(this)
-                    promise.resolve(this)
+                    promise.resolveOrReject(this)
                 }
             }
         }
@@ -61,7 +70,7 @@ class NativeMapViewModule(context: ReactApplicationContext) : NativeMapViewModul
             it.queryTerrainElevation(coordinates.getDouble(0), coordinates.getDouble(1)) { fillData ->
                 with(WritableNativeMap()) {
                     fillData(this)
-                    promise.resolve(this)
+                    promise.resolveOrReject(this)
                 }
             }
         }
@@ -77,7 +86,7 @@ class NativeMapViewModule(context: ReactApplicationContext) : NativeMapViewModul
         withMapViewManagerOnUIThread(viewRef) {
             it.setSourceVisibility(visible, sourceId, sourceLayerId)
 
-            promise.resolve(null)
+            promise.resolveOrReject(null)
         }
     }
 
@@ -86,7 +95,8 @@ class NativeMapViewModule(context: ReactApplicationContext) : NativeMapViewModul
             it.getCenter { fillData ->
                 with(WritableNativeMap()) {
                     fillData(this)
-                    promise.resolve(this)
+
+                    promise.resolveOrReject(this)
                 }
             }
         }
@@ -101,7 +111,7 @@ class NativeMapViewModule(context: ReactApplicationContext) : NativeMapViewModul
             it.getCoordinateFromView(atPoint.toScreenCoordinate()) { fillData ->
                 with(WritableNativeMap()) {
                     fillData(this)
-                    promise.resolve(this)
+                    promise.resolveOrReject(this)
                 }
             }
         }
@@ -112,7 +122,7 @@ class NativeMapViewModule(context: ReactApplicationContext) : NativeMapViewModul
             it.getPointInView(atCoordinate.toCoordinate()) { fillData ->
                 with(WritableNativeMap()) {
                     fillData(this)
-                    promise.resolve(this)
+                    promise.resolveOrReject(this)
                 }
             }
         }
@@ -123,7 +133,7 @@ class NativeMapViewModule(context: ReactApplicationContext) : NativeMapViewModul
             it.getZoom { fillData ->
                 with(WritableNativeMap()) {
                     fillData(this)
-                    promise.resolve(this)
+                    promise.resolveOrReject(this)
                 }
             }
         }
@@ -134,7 +144,7 @@ class NativeMapViewModule(context: ReactApplicationContext) : NativeMapViewModul
             it.getVisibleBounds { fillData ->
                 with(WritableNativeMap()) {
                     fillData(this)
-                    promise.resolve(this)
+                    promise.resolveOrReject(this)
                 }
             }
         }
@@ -157,7 +167,7 @@ class NativeMapViewModule(context: ReactApplicationContext) : NativeMapViewModul
             ) { fillData ->
                 with(WritableNativeMap()) {
                     fillData(this)
-                    promise.resolve(this)
+                    promise.resolveOrReject(this)
                 }
             }
         }
@@ -180,7 +190,7 @@ class NativeMapViewModule(context: ReactApplicationContext) : NativeMapViewModul
             ) { fillData ->
                 with(WritableNativeMap()) {
                     fillData(this)
-                    promise.resolve(this)
+                    promise.resolveOrReject(this)
                 }
             }
         }
@@ -193,7 +203,7 @@ class NativeMapViewModule(context: ReactApplicationContext) : NativeMapViewModul
     ) {
         withMapViewManagerOnUIThread(viewRef) {
             it.setHandledMapChangedEvents(events.asArrayString() ?: emptyArray())
-            promise.resolve(null)
+            promise.resolveOrReject(null)
         }
     }
 
@@ -202,7 +212,7 @@ class NativeMapViewModule(context: ReactApplicationContext) : NativeMapViewModul
             it.clearData { fillData ->
                 with(WritableNativeMap()) {
                     fillData(this)
-                    promise.resolve(this)
+                    promise.resolveOrReject(this)
                 }
             }
         }
