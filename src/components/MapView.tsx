@@ -872,7 +872,6 @@ class MapView extends NativeBridgeComponent(
       // It can, it's just not pretty.
       return NativeMapViewModule[methodName]?.(
         handle,
-        '',
         ...(args ?? []),
       ) as Promise<ReturnType>;
     } else {

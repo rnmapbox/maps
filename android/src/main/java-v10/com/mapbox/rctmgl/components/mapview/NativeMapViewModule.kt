@@ -41,7 +41,7 @@ class NativeMapViewModule(context: ReactApplicationContext) : NativeMapViewModul
         }
     }
 
-    override fun takeSnap(viewRef: Double?, command: String, writeToDisk: Boolean, promise: Promise) {
+    override fun takeSnap(viewRef: Double?, writeToDisk: Boolean, promise: Promise) {
         withMapViewManagerOnUIThread(viewRef) {
             it.takeSnap(writeToDisk) { fillData ->
                 with(WritableNativeMap()) {
@@ -54,7 +54,6 @@ class NativeMapViewModule(context: ReactApplicationContext) : NativeMapViewModul
 
     override fun queryTerrainElevation(
         viewRef: Double?,
-        command: String,
         coordinates: ReadableArray,
         promise: Promise
     ) {
@@ -70,7 +69,6 @@ class NativeMapViewModule(context: ReactApplicationContext) : NativeMapViewModul
 
     override fun setSourceVisibility(
         viewRef: Double?,
-        command: String,
         visible: Boolean,
         sourceId: String,
         sourceLayerId: String?,
@@ -83,7 +81,7 @@ class NativeMapViewModule(context: ReactApplicationContext) : NativeMapViewModul
         }
     }
 
-    override fun getCenter(viewRef: Double?, command: String, promise: Promise) {
+    override fun getCenter(viewRef: Double?, promise: Promise) {
         withMapViewManagerOnUIThread(viewRef) {
             it.getCenter { fillData ->
                 with(WritableNativeMap()) {
@@ -96,7 +94,6 @@ class NativeMapViewModule(context: ReactApplicationContext) : NativeMapViewModul
 
     override fun getCoordinateFromView(
         viewRef: Double?,
-        command: String,
         atPoint: ReadableArray,
         promise: Promise
     ) {
@@ -110,7 +107,7 @@ class NativeMapViewModule(context: ReactApplicationContext) : NativeMapViewModul
         }
     }
 
-    override fun getPointInView(viewRef: Double?, command: String, atCoordinate: ReadableArray, promise: Promise) {
+    override fun getPointInView(viewRef: Double?, atCoordinate: ReadableArray, promise: Promise) {
         withMapViewManagerOnUIThread(viewRef) {
             it.getPointInView(atCoordinate.toCoordinate()) { fillData ->
                 with(WritableNativeMap()) {
@@ -121,7 +118,7 @@ class NativeMapViewModule(context: ReactApplicationContext) : NativeMapViewModul
         }
     }
 
-    override fun getZoom(viewRef: Double?, command: String, promise: Promise) {
+    override fun getZoom(viewRef: Double?, promise: Promise) {
         withMapViewManagerOnUIThread(viewRef) {
             it.getZoom { fillData ->
                 with(WritableNativeMap()) {
@@ -132,7 +129,7 @@ class NativeMapViewModule(context: ReactApplicationContext) : NativeMapViewModul
         }
     }
 
-    override fun getVisibleBounds(viewRef: Double?, command: String, promise: Promise) {
+    override fun getVisibleBounds(viewRef: Double?, promise: Promise) {
         withMapViewManagerOnUIThread(viewRef) {
             it.getVisibleBounds { fillData ->
                 with(WritableNativeMap()) {
@@ -145,7 +142,6 @@ class NativeMapViewModule(context: ReactApplicationContext) : NativeMapViewModul
 
     override fun queryRenderedFeaturesAtPoint(
         viewRef: Double?,
-        command: String,
         atPoint: ReadableArray,
         withFilter: ReadableArray,
         withLayerIDs: ReadableArray,
@@ -169,7 +165,6 @@ class NativeMapViewModule(context: ReactApplicationContext) : NativeMapViewModul
 
     override fun queryRenderedFeaturesInRect(
         viewRef: Double?,
-        command: String,
         withBBox: ReadableArray,
         withFilter: ReadableArray,
         withLayerIDs: ReadableArray,
@@ -193,7 +188,6 @@ class NativeMapViewModule(context: ReactApplicationContext) : NativeMapViewModul
 
     override fun setHandledMapChangedEvents(
         viewRef: Double?,
-        command: String,
         events: ReadableArray,
         promise: Promise
     ) {
@@ -203,7 +197,7 @@ class NativeMapViewModule(context: ReactApplicationContext) : NativeMapViewModul
         }
     }
 
-    override fun clearData(viewRef: Double?, command: String, promise: Promise) {
+    override fun clearData(viewRef: Double?, promise: Promise) {
         withMapViewManagerOnUIThread(viewRef) {
             it.clearData { fillData ->
                 with(WritableNativeMap()) {
@@ -216,14 +210,12 @@ class NativeMapViewModule(context: ReactApplicationContext) : NativeMapViewModul
 
     override fun querySourceFeatures(
         viewRef: Double?,
-        command: String,
         withFilter: ReadableArray,
         withSourceLayerIDs: ReadableArray,
         promise: Promise
     ) {
         withMapViewManagerOnUIThread(viewRef) {
             it.querySourceFeatures(
-                command,
                 ExpressionParser.from(withFilter),
                 if (withSourceLayerIDs.size == 0) null else withSourceLayerIDs
             ) { fillData ->
