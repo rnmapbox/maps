@@ -16,7 +16,7 @@ import com.mapbox.rctmgl.utils.extensions.toCoordinate
 import com.mapbox.rctmgl.utils.extensions.toScreenCoordinate
 
 class NativeMapViewModule(context: ReactApplicationContext) : NativeMapViewModuleSpec(context) {
-    private fun withMapViewManagerOnUIThread(viewRef: Double?, fn: (RCTMGLMapView) -> Unit) {
+    private fun withMapViewManagerOnUIThread(viewRef: Double?, promise: Promise, fn: (RCTMGLMapView) -> Unit) {
         if (viewRef == null) {
             return
         }
@@ -25,7 +25,11 @@ class NativeMapViewModule(context: ReactApplicationContext) : NativeMapViewModul
             val manager = UIManagerHelper.getUIManager(reactApplicationContext, UIManagerType.FABRIC) as FabricUIManager
             val view = manager.resolveView(viewRef.toInt()) as? RCTMGLMapView
 
-            view?.let(fn)
+            if (view != null) {
+                fn(view)
+            } else {
+                promise.reject(Exception("cannot find map view for tag ${viewRef.toInt()}"))
+            }
         }
     }
 
@@ -38,7 +42,7 @@ class NativeMapViewModule(context: ReactApplicationContext) : NativeMapViewModul
     }
 
     override fun takeSnap(viewRef: Double?, writeToDisk: Boolean, promise: Promise) {
-        withMapViewManagerOnUIThread(viewRef) {
+        withMapViewManagerOnUIThread(viewRef, promise) {
             it.takeSnap(writeToDisk) { fillData ->
                 with(WritableNativeMap()) {
                     fillData(this)
@@ -53,7 +57,7 @@ class NativeMapViewModule(context: ReactApplicationContext) : NativeMapViewModul
         coordinates: ReadableArray,
         promise: Promise
     ) {
-        withMapViewManagerOnUIThread(viewRef) {
+        withMapViewManagerOnUIThread(viewRef, promise) {
             it.queryTerrainElevation(coordinates.getDouble(0), coordinates.getDouble(1)) { fillData ->
                 with(WritableNativeMap()) {
                     fillData(this)
@@ -70,7 +74,7 @@ class NativeMapViewModule(context: ReactApplicationContext) : NativeMapViewModul
         sourceLayerId: String?,
         promise: Promise
     ) {
-        withMapViewManagerOnUIThread(viewRef) {
+        withMapViewManagerOnUIThread(viewRef, promise) {
             it.setSourceVisibility(visible, sourceId, sourceLayerId)
 
             promise.resolveOrReject(null)
@@ -78,7 +82,7 @@ class NativeMapViewModule(context: ReactApplicationContext) : NativeMapViewModul
     }
 
     override fun getCenter(viewRef: Double?, promise: Promise) {
-        withMapViewManagerOnUIThread(viewRef) {
+        withMapViewManagerOnUIThread(viewRef, promise) {
             it.getCenter { fillData ->
                 with(WritableNativeMap()) {
                     fillData(this)
@@ -94,7 +98,7 @@ class NativeMapViewModule(context: ReactApplicationContext) : NativeMapViewModul
         atPoint: ReadableArray,
         promise: Promise
     ) {
-        withMapViewManagerOnUIThread(viewRef) {
+        withMapViewManagerOnUIThread(viewRef, promise) {
             it.getCoordinateFromView(atPoint.toScreenCoordinate()) { fillData ->
                 with(WritableNativeMap()) {
                     fillData(this)
@@ -105,7 +109,7 @@ class NativeMapViewModule(context: ReactApplicationContext) : NativeMapViewModul
     }
 
     override fun getPointInView(viewRef: Double?, atCoordinate: ReadableArray, promise: Promise) {
-        withMapViewManagerOnUIThread(viewRef) {
+        withMapViewManagerOnUIThread(viewRef, promise) {
             it.getPointInView(atCoordinate.toCoordinate()) { fillData ->
                 with(WritableNativeMap()) {
                     fillData(this)
@@ -116,7 +120,7 @@ class NativeMapViewModule(context: ReactApplicationContext) : NativeMapViewModul
     }
 
     override fun getZoom(viewRef: Double?, promise: Promise) {
-        withMapViewManagerOnUIThread(viewRef) {
+        withMapViewManagerOnUIThread(viewRef, promise) {
             it.getZoom { fillData ->
                 with(WritableNativeMap()) {
                     fillData(this)
@@ -127,7 +131,7 @@ class NativeMapViewModule(context: ReactApplicationContext) : NativeMapViewModul
     }
 
     override fun getVisibleBounds(viewRef: Double?, promise: Promise) {
-        withMapViewManagerOnUIThread(viewRef) {
+        withMapViewManagerOnUIThread(viewRef, promise) {
             it.getVisibleBounds { fillData ->
                 with(WritableNativeMap()) {
                     fillData(this)
@@ -144,7 +148,7 @@ class NativeMapViewModule(context: ReactApplicationContext) : NativeMapViewModul
         withLayerIDs: ReadableArray,
         promise: Promise
     ) {
-        withMapViewManagerOnUIThread(viewRef) {
+        withMapViewManagerOnUIThread(viewRef, promise) {
             val layerIds = ConvertUtils.toStringList(withLayerIDs)
 
             it.queryRenderedFeaturesAtPoint(
@@ -167,7 +171,7 @@ class NativeMapViewModule(context: ReactApplicationContext) : NativeMapViewModul
         withLayerIDs: ReadableArray,
         promise: Promise
     ) {
-        withMapViewManagerOnUIThread(viewRef) {
+        withMapViewManagerOnUIThread(viewRef, promise) {
             val layerIds = ConvertUtils.toStringList(withLayerIDs)
 
             it.queryRenderedFeaturesInRect(
@@ -188,14 +192,14 @@ class NativeMapViewModule(context: ReactApplicationContext) : NativeMapViewModul
         events: ReadableArray,
         promise: Promise
     ) {
-        withMapViewManagerOnUIThread(viewRef) {
+        withMapViewManagerOnUIThread(viewRef, promise) {
             it.setHandledMapChangedEvents(events.asArrayString())
             promise.resolveOrReject(null)
         }
     }
 
     override fun clearData(viewRef: Double?, promise: Promise) {
-        withMapViewManagerOnUIThread(viewRef) {
+        withMapViewManagerOnUIThread(viewRef, promise) {
             it.clearData { fillData ->
                 with(WritableNativeMap()) {
                     fillData(this)
