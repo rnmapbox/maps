@@ -20,6 +20,7 @@ import {
   isAndroid,
   type NativeArg,
   type OrnamentPositonProp,
+  getCommandName,
 } from '../utils';
 import { getFilter } from '../utils/filterUtils';
 import Logger from '../utils/Logger';
@@ -867,10 +868,24 @@ class MapView extends NativeBridgeComponent(
 
       const handle = findNodeHandle(nativeRef as any);
 
+      if (isAndroid()) {
+        return new Promise((resolve, reject) => {
+          const callbackID = `${methodName}_${this._nextCallbackIncrement()}`;
+          this._addAddAndroidCallback(callbackID, resolve, reject);
+
+          NativeMapViewModule[methodName]?.(
+            handle,
+            callbackID,
+            ...(args ?? []),
+          );
+        });
+      }
+
       // @ts-expect-error TS says that string cannot be used to index NativeMapViewModule.
       // It can, it's just not pretty.
       return NativeMapViewModule[methodName]?.(
         handle,
+        '',
         ...(args ?? []),
       ) as Promise<ReturnType>;
     } else {

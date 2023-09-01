@@ -99,6 +99,22 @@ export function runNativeCommand<ReturnType = NativeArg>(
   return managerInstance[name](handle, ...args);
 }
 
+export function getCommandName(module: string, name: string): string {
+  if (!isAndroid()) {
+    return ''; // unused on iOS
+  }
+
+  const managerInstance = getAndroidManagerInstance(module);
+
+  if (!managerInstance) {
+    throw new Error(`Could not find ${module}`);
+  }
+
+  const { Commands } = managerInstance;
+
+  return Commands._useCommandName ? name : Commands[name];
+}
+
 export function cloneReactChildrenWithProps(
   children: Parameters<typeof React.Children.map>[0],
   propsToAdd: { [key: string]: string } = {},

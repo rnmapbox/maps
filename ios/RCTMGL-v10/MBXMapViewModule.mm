@@ -26,28 +26,28 @@ RCT_EXPORT_MODULE();
 }
 
 
-- (void)takeSnap:(NSNumber*)viewRef writeToDisk:(BOOL)writeToDisk resolve:(RCTPromiseResolveBlock)resolve reject:(RCTPromiseRejectBlock)reject
+- (void)takeSnap:(NSNumber*)viewRef command:(NSString *)command writeToDisk:(BOOL)writeToDisk resolve:(RCTPromiseResolveBlock)resolve reject:(RCTPromiseRejectBlock)reject
 {
     [self withMapComponentView:viewRef block:^(MBXMapViewComponentView* view) {
         [view takeSnap:writeToDisk resolve:resolve];
     } reject:reject];
 }
 
-- (void)clearData:(NSNumber*)viewRef resolve:(RCTPromiseResolveBlock)resolve reject:(RCTPromiseRejectBlock)reject {
+- (void)clearData:(NSNumber*)viewRef command:(NSString *)command resolve:(RCTPromiseResolveBlock)resolve reject:(RCTPromiseRejectBlock)reject {
     [self withMapComponentView:viewRef block:^(MBXMapViewComponentView* view) {
         [view clearData:resolve reject:reject];
     } reject:reject];
 }
 
 
-- (void)getCenter:(NSNumber*)viewRef resolve:(RCTPromiseResolveBlock)resolve reject:(RCTPromiseRejectBlock)reject {
+- (void)getCenter:(NSNumber*)viewRef command:(NSString *)command resolve:(RCTPromiseResolveBlock)resolve reject:(RCTPromiseRejectBlock)reject {
     [self withMapComponentView:viewRef block:^(MBXMapViewComponentView* view) {
         [view getCenter:resolve reject:reject];
     } reject:reject];
 }
 
 
-- (void)getCoordinateFromView:(NSNumber*)viewRef atPoint:(NSArray *)atPoint resolve:(RCTPromiseResolveBlock)resolve reject:(RCTPromiseRejectBlock)reject {
+- (void)getCoordinateFromView:(NSNumber*)viewRef command:(NSString *)command atPoint:(NSArray *)atPoint resolve:(RCTPromiseResolveBlock)resolve reject:(RCTPromiseRejectBlock)reject {
     [self withMapComponentView:viewRef block:^(MBXMapViewComponentView* view) {
         NSNumber* a = [atPoint objectAtIndex:0];
         NSNumber* b = [atPoint objectAtIndex:1];
@@ -57,56 +57,56 @@ RCT_EXPORT_MODULE();
 }
 
 
-- (void)getPointInView:(NSNumber*)viewRef atCoordinate:(NSArray *)atCoordinate resolve:(RCTPromiseResolveBlock)resolve reject:(RCTPromiseRejectBlock)reject {
+- (void)getPointInView:(NSNumber*)viewRef command:(NSString *)command atCoordinate:(NSArray *)atCoordinate resolve:(RCTPromiseResolveBlock)resolve reject:(RCTPromiseRejectBlock)reject {
     [self withMapComponentView:viewRef block:^(MBXMapViewComponentView* view) {
         [view getPointInView:atCoordinate resolve:resolve reject:reject];
     } reject:reject];
 }
 
 
-- (void)getVisibleBounds:(NSNumber*)viewRef resolve:(RCTPromiseResolveBlock)resolve reject:(RCTPromiseRejectBlock)reject {
+- (void)getVisibleBounds:(NSNumber*)viewRef command:(NSString *)command resolve:(RCTPromiseResolveBlock)resolve reject:(RCTPromiseRejectBlock)reject {
     [self withMapComponentView:viewRef block:^(MBXMapViewComponentView* view) {
         [view getVisibleBounds:resolve];
     } reject:reject];
 }
 
 
-- (void)getZoom:(NSNumber*)viewRef resolve:(RCTPromiseResolveBlock)resolve reject:(RCTPromiseRejectBlock)reject {
+- (void)getZoom:(NSNumber*)viewRef command:(NSString *)command resolve:(RCTPromiseResolveBlock)resolve reject:(RCTPromiseRejectBlock)reject {
     [self withMapComponentView:viewRef block:^(MBXMapViewComponentView* view) {
         [view getZoom:resolve reject:reject];
     } reject:reject];
 }
 
 
-- (void)queryRenderedFeaturesAtPoint:(NSNumber*)viewRef atPoint:(NSArray *)atPoint withFilter:(NSArray *)withFilter withLayerIDs:(NSArray *)withLayerIDs resolve:(RCTPromiseResolveBlock)resolve reject:(RCTPromiseRejectBlock)reject {
+- (void)queryRenderedFeaturesAtPoint:(NSNumber*)viewRef command:(NSString *)command atPoint:(NSArray *)atPoint withFilter:(NSArray *)withFilter withLayerIDs:(NSArray *)withLayerIDs resolve:(RCTPromiseResolveBlock)resolve reject:(RCTPromiseRejectBlock)reject {
     [self withMapComponentView:viewRef block:^(MBXMapViewComponentView* view) {
         [view queryRenderedFeaturesAtPoint:atPoint withFilter:withFilter withLayerIDs:withLayerIDs resolve:resolve reject:reject];
     } reject:reject];
 }
 
 
-- (void)queryRenderedFeaturesInRect:(NSNumber*)viewRef withBBox:(NSArray *)withBBox withFilter:(NSArray *)withFilter withLayerIDs:(NSArray *)withLayerIDs resolve:(RCTPromiseResolveBlock)resolve reject:(RCTPromiseRejectBlock)reject {
+- (void)queryRenderedFeaturesInRect:(NSNumber*)viewRef command:(NSString *)command withBBox:(NSArray *)withBBox withFilter:(NSArray *)withFilter withLayerIDs:(NSArray *)withLayerIDs resolve:(RCTPromiseResolveBlock)resolve reject:(RCTPromiseRejectBlock)reject {
     [self withMapComponentView:viewRef block:^(MBXMapViewComponentView* view) {
         [view queryRenderedFeaturesInRect:withBBox withFilter:withFilter withLayerIDs:withLayerIDs resolve:resolve reject:reject];
     } reject:reject];
 }
 
 
-- (void)queryTerrainElevation:(NSNumber*)viewRef coordinates:(NSArray *)coordinates resolve:(RCTPromiseResolveBlock)resolve reject:(RCTPromiseRejectBlock)reject {
+- (void)queryTerrainElevation:(NSNumber*)viewRef command:(NSString *)command coordinates:(NSArray *)coordinates resolve:(RCTPromiseResolveBlock)resolve reject:(RCTPromiseRejectBlock)reject {
     [self withMapComponentView:viewRef block:^(MBXMapViewComponentView* view) {
         [view queryTerrainElevation:coordinates resolve:resolve reject:reject];
     } reject:reject];
 }
 
 
-- (void)setHandledMapChangedEvents:(NSNumber*)viewRef events:(NSArray *)events resolve:(RCTPromiseResolveBlock)resolve reject:(RCTPromiseRejectBlock)reject {
+- (void)setHandledMapChangedEvents:(NSNumber*)viewRef command:(NSString *)command events:(NSArray *)events resolve:(RCTPromiseResolveBlock)resolve reject:(RCTPromiseRejectBlock)reject {
     [self withMapComponentView:viewRef block:^(MBXMapViewComponentView* view) {
         [view setHandledMapChangedEvents:events resolve:resolve reject:reject];
     } reject:reject];
 }
 
 
-- (void)setSourceVisibility:(NSNumber*)viewRef visible:(BOOL)visible sourceId:(NSString *)sourceId sourceLayerId:(NSString *)sourceLayerId resolve:(RCTPromiseResolveBlock)resolve reject:(RCTPromiseRejectBlock)reject {
+- (void)setSourceVisibility:(NSNumber*)viewRef command:(NSString *)command visible:(BOOL)visible sourceId:(NSString *)sourceId sourceLayerId:(NSString *)sourceLayerId resolve:(RCTPromiseResolveBlock)resolve reject:(RCTPromiseRejectBlock)reject {
     [self withMapComponentView:viewRef block:^(MBXMapViewComponentView* view) {
         [view setSourceVisibility:visible sourceId:sourceId sourceLayerId:sourceLayerId resolve:resolve reject:reject];
     } reject:reject];

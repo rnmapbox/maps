@@ -4,9 +4,6 @@ import com.facebook.react.ReactApplication
 import com.facebook.react.bridge.Promise
 import com.facebook.react.bridge.ReactApplicationContext
 import com.facebook.react.bridge.ReadableArray
-import com.facebook.react.fabric.FabricUIManager
-import com.facebook.react.uimanager.UIManagerHelper
-import com.facebook.react.uimanager.common.UIManagerType
 import com.mapbox.rctmgl.NativeMapViewModuleSpec
 import com.mapbox.rctmgl.utils.ConvertUtils
 import com.mapbox.rctmgl.utils.ExpressionParser
@@ -40,10 +37,9 @@ class NativeMapViewModule(context: ReactApplicationContext) : NativeMapViewModul
         }
     }
 
-    override fun takeSnap(viewRef: Double?, writeToDisk: Boolean, promise: Promise) {
+    override fun takeSnap(viewRef: Double?, command: String, writeToDisk: Boolean, promise: Promise) {
         withMapViewManagerOnUIThread(viewRef) {
-            // TODO: callbackID
-            it.takeSnap("", writeToDisk)
+            it.takeSnap(command, writeToDisk)
 
             promise.resolve(null)
         }
@@ -51,12 +47,12 @@ class NativeMapViewModule(context: ReactApplicationContext) : NativeMapViewModul
 
     override fun queryTerrainElevation(
         viewRef: Double?,
+        command: String,
         coordinates: ReadableArray,
         promise: Promise
     ) {
         withMapViewManagerOnUIThread(viewRef) {
-            // TODO: callbackID
-            it.queryTerrainElevation("", coordinates.getDouble(0), coordinates.getDouble(1))
+            it.queryTerrainElevation(command, coordinates.getDouble(0), coordinates.getDouble(1))
 
             promise.resolve(null)
         }
@@ -64,6 +60,7 @@ class NativeMapViewModule(context: ReactApplicationContext) : NativeMapViewModul
 
     override fun setSourceVisibility(
         viewRef: Double?,
+        command: String,
         visible: Boolean,
         sourceId: String,
         sourceLayerId: String?,
@@ -76,10 +73,9 @@ class NativeMapViewModule(context: ReactApplicationContext) : NativeMapViewModul
         }
     }
 
-    override fun getCenter(viewRef: Double?, promise: Promise) {
+    override fun getCenter(viewRef: Double?, command: String, promise: Promise) {
         withMapViewManagerOnUIThread(viewRef) {
-            // TODO: callbackID
-            it.getCenter("")
+            it.getCenter(command)
 
             promise.resolve(null)
         }
@@ -87,39 +83,36 @@ class NativeMapViewModule(context: ReactApplicationContext) : NativeMapViewModul
 
     override fun getCoordinateFromView(
         viewRef: Double?,
+        command: String,
         atPoint: ReadableArray,
         promise: Promise
     ) {
         withMapViewManagerOnUIThread(viewRef) {
-            // TODO: callbackID
-            it.getCoordinateFromView("", atPoint.toScreenCoordinate())
+            it.getCoordinateFromView(command, atPoint.toScreenCoordinate())
 
             promise.resolve(null)
         }
     }
 
-    override fun getPointInView(viewRef: Double?, atCoordinate: ReadableArray, promise: Promise) {
+    override fun getPointInView(viewRef: Double?, command: String, atCoordinate: ReadableArray, promise: Promise) {
         withMapViewManagerOnUIThread(viewRef) {
-            // TODO: callbackID
-            it.getPointInView("", atCoordinate.toCoordinate())
+            it.getPointInView(command, atCoordinate.toCoordinate())
 
             promise.resolve(null)
         }
     }
 
-    override fun getZoom(viewRef: Double?, promise: Promise) {
+    override fun getZoom(viewRef: Double?, command: String, promise: Promise) {
         withMapViewManagerOnUIThread(viewRef) {
-            // TODO: callbackID
-            it.getZoom("")
+            it.getZoom(command)
 
             promise.resolve(null)
         }
     }
 
-    override fun getVisibleBounds(viewRef: Double?, promise: Promise) {
+    override fun getVisibleBounds(viewRef: Double?, command: String, promise: Promise) {
         withMapViewManagerOnUIThread(viewRef) {
-            // TODO: callbackID
-            it.getVisibleBounds("")
+            it.getVisibleBounds(command)
 
             promise.resolve(null)
         }
@@ -127,16 +120,16 @@ class NativeMapViewModule(context: ReactApplicationContext) : NativeMapViewModul
 
     override fun queryRenderedFeaturesAtPoint(
         viewRef: Double?,
+        command: String,
         atPoint: ReadableArray,
         withFilter: ReadableArray,
         withLayerIDs: ReadableArray,
         promise: Promise
     ) {
         withMapViewManagerOnUIThread(viewRef) {
-            // TODO: callbackID
             val layerIds = ConvertUtils.toStringList(withLayerIDs)
             it.queryRenderedFeaturesAtPoint(
-                "",
+                command,
                 ConvertUtils.toPointF(atPoint),
                 ExpressionParser.from(withFilter),
                 if (layerIds.size == 0) null else layerIds
@@ -148,16 +141,16 @@ class NativeMapViewModule(context: ReactApplicationContext) : NativeMapViewModul
 
     override fun queryRenderedFeaturesInRect(
         viewRef: Double?,
+        command: String,
         withBBox: ReadableArray,
         withFilter: ReadableArray,
         withLayerIDs: ReadableArray,
         promise: Promise
     ) {
         withMapViewManagerOnUIThread(viewRef) {
-            // TODO: callbackID
             val layerIds = ConvertUtils.toStringList(withLayerIDs)
             it.queryRenderedFeaturesInRect(
-                "",
+                command,
                 ConvertUtils.toRectF(withBBox),
                 ExpressionParser.from(withFilter),
                 if (layerIds.size == 0) null else layerIds
@@ -169,19 +162,36 @@ class NativeMapViewModule(context: ReactApplicationContext) : NativeMapViewModul
 
     override fun setHandledMapChangedEvents(
         viewRef: Double?,
+        command: String,
         events: ReadableArray,
         promise: Promise
     ) {
         withMapViewManagerOnUIThread(viewRef) {
-            it.setHandledMapChangedEvents(events?.asArrayString() ?: emptyArray())
+            it.setHandledMapChangedEvents(events.asArrayString() ?: emptyArray())
             promise.resolve(null)
         }
     }
 
-    override fun clearData(viewRef: Double?, promise: Promise) {
+    override fun clearData(viewRef: Double?, command: String, promise: Promise) {
         withMapViewManagerOnUIThread(viewRef) {
-            // TODO: callbackID
-            it.clearData("")
+            it.clearData(command)
+            promise.resolve(null)
+        }
+    }
+
+    override fun querySourceFeatures(
+        viewRef: Double?,
+        command: String,
+        withFilter: ReadableArray,
+        withSourceLayerIDs: ReadableArray,
+        promise: Promise
+    ) {
+        withMapViewManagerOnUIThread(viewRef) {
+            it.querySourceFeatures(
+                command,
+                ExpressionParser.from(withFilter),
+                if (withSourceLayerIDs.size == 0) null else withSourceLayerIDs
+            )
             promise.resolve(null)
         }
     }

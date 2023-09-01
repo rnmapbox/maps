@@ -110,6 +110,11 @@ const NativeBridgeComponent = <
         args,
       );
     }
+
+    _nextCallbackIncrement() {
+      callbackIncrement += 1;
+      return callbackIncrement;
+    }
   };
 
 export default NativeBridgeComponent;
