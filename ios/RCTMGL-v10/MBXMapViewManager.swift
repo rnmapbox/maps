@@ -12,7 +12,7 @@ class MBXMapViewManager: RCTViewManager {
     }
   
     override func view() -> UIView! {
-        let result = RCTMGLMapView(frame: self.defaultFrame(), eventDispatcher: self.bridge.eventDispatcher())
+        let result = MBXMapView(frame: self.defaultFrame(), eventDispatcher: self.bridge.eventDispatcher())
         return result
     }
 }

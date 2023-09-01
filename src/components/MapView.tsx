@@ -20,7 +20,6 @@ import {
   isAndroid,
   type NativeArg,
   type OrnamentPositonProp,
-  getCommandName,
 } from '../utils';
 import { getFilter } from '../utils/filterUtils';
 import Logger from '../utils/Logger';
@@ -744,6 +743,8 @@ class MapView extends NativeBridgeComponent(
   ): Promise<ReturnType> {
     return this._runNativeCommand<typeof RCTMGLMapView, ReturnType>(
       methodName,
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore TODO: fix types
       this._nativeRef as HostComponent<NativeProps> | undefined,
       args,
     );
@@ -1137,6 +1138,8 @@ class MapView extends NativeBridgeComponent(
       );
     } else if (this.state.isReady) {
       mapView = (
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-ignore TODO: fix types
         <RCTMGLMapView {...props} {...callbacks}>
           {this.props.children}
         </RCTMGLMapView>

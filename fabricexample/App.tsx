@@ -1,11 +1,9 @@
-// @ts-ignore
-import {ACCESS_TOKEN} from '@env';
-
 import React from 'react';
 import {StyleSheet, View} from 'react-native';
 import Mapbox from '@rnmapbox/maps';
+import env from './env.json';
 
-Mapbox.setAccessToken(ACCESS_TOKEN);
+Mapbox.setAccessToken(env.accessToken);
 
 const App = () => {
   return (
