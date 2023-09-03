@@ -2922,6 +2922,55 @@
         ]
       },
       {
+        "name": "querySourceFeatures",
+        "docblock": "Returns an array of GeoJSON Feature objects representing features within the specified vector tile or GeoJSON source that satisfy the query parameters.\n\n@example\nthis._map.querySourceFeatures('your-source-id', [], ['your-source-layer'])\n\n@param  {String} sourceId - Style source identifier used to query for source features.\n@param  {Array=} filter - A filter to limit query results.\n@param  {Array=} sourceLayerIDs - The name of the source layers to query. For vector tile sources, this parameter is required. For GeoJSON sources, it is ignored.\n@return {FeatureCollection}",
+        "modifiers": [
+          "async"
+        ],
+        "params": [
+          {
+            "name": "sourceId",
+            "description": "Style source identifier used to query for source features.",
+            "type": {
+              "name": "string"
+            },
+            "optional": false
+          },
+          {
+            "name": "filter",
+            "description": "A filter to limit query results.",
+            "type": {
+              "name": "Array"
+            },
+            "optional": true
+          },
+          {
+            "name": "sourceLayerIDs",
+            "description": "The name of the source layers to query. For vector tile sources, this parameter is required. For GeoJSON sources, it is ignored.",
+            "type": {
+              "name": "Array"
+            },
+            "optional": true
+          }
+        ],
+        "returns": {
+          "description": null,
+          "type": {
+            "name": "Promise",
+            "elements": [
+              {
+                "name": "GeoJSON.FeatureCollection"
+              }
+            ],
+            "raw": "Promise<GeoJSON.FeatureCollection>"
+          }
+        },
+        "description": "Returns an array of GeoJSON Feature objects representing features within the specified vector tile or GeoJSON source that satisfy the query parameters.",
+        "examples": [
+          "\nthis._map.querySourceFeatures('your-source-id', [], ['your-source-layer'])\n\n"
+        ]
+      },
+      {
         "name": "setCamera",
         "docblock": "Map camera will perform updates based on provided config. Deprecated use Camera#setCamera.\n@deprecated use Camera#setCamera",
         "modifiers": [],

@@ -6,11 +6,11 @@ class RCTMGLMapViewManager: RCTViewManager {
     override static func requiresMainQueueSetup() -> Bool {
         return true
     }
-    
+  
     func defaultFrame() -> CGRect {
         return UIScreen.main.bounds
     }
-    
+  
     override func view() -> UIView! {
         let result = RCTMGLMapView(frame: self.defaultFrame(), eventDispatcher: self.bridge.eventDispatcher())
         return result
@@ -34,7 +34,7 @@ extension RCTMGLMapViewManager {
           rejecter(name, "Unknown find reactTag: \(reactTag)", nil)
           return;
         }
-      
+        
         fn(view)
       }
     }
@@ -237,7 +237,35 @@ extension RCTMGLMapViewManager {
         }
       }
    }
-  
+
+  @objc
+  func querySourceFeatures(
+    _ reactTag: NSNumber,
+    withSourceId sourceId: String,
+    withFilter filter: [Any]?,
+    withSourceLayerIds sourceLayerIds: [String]?,
+    resolver: @escaping RCTPromiseResolveBlock,
+    rejecter: @escaping RCTPromiseRejectBlock) -> Void {
+      withMapView(reactTag, name:"querySourceFeatures", rejecter: rejecter) { mapView in
+        let sourceLayerIds = sourceLayerIds?.isEmpty ?? true ? nil : sourceLayerIds
+        logged("querySourceFeatures.option", rejecter: rejecter) {
+          let options = SourceQueryOptions(sourceLayerIds: sourceLayerIds, filter: filter ?? Exp(arguments: []))
+          mapView.mapboxMap.querySourceFeatures(for: sourceId, options: options) { result in
+            switch result {
+            case .success(let features):
+              resolver([
+                "data": ["type": "FeatureCollection", "features": features.compactMap { queriedFeature in
+                  logged("querySourceFeatures.queriedfeature.map") { try queriedFeature.feature.toJSON() }
+                }] as [String : Any]
+              ])
+            case .failure(let error):
+              rejecter("querySourceFeatures", "failed to query source features: \(error.localizedDescription)", error)
+            }
+          }
+        }
+      }
+    }
+
   @objc
   func clearData(
     _ reactTag: NSNumber,

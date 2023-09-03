@@ -87,6 +87,13 @@ RCT_EXTERN_METHOD(queryRenderedFeaturesInRect:(nonnull NSNumber*)reactTag
                   resolver:(RCTPromiseResolveBlock)resolve
                   rejecter:(RCTPromiseRejectBlock)reject)
 
+RCT_EXTERN_METHOD(querySourceFeatures:(nonnull NSNumber*)reactTag
+                  withSourceId:(NSString*)sourceId
+                  withFilter:(NSArray)filter
+                  withSourceLayerIds:(NSArray<NSString*>*)sourceLayerIds
+                  resolver:(RCTPromiseResolveBlock)resolve
+                  rejecter:(RCTPromiseRejectBlock)reject)
+
 RCT_EXTERN_METHOD(setHandledMapChangedEvents:(nonnull NSNumber*)reactTag
                   events:(NSArray<NSString*>*)events
                   resolver:(RCTPromiseResolveBlock)resolve

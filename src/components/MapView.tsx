@@ -696,6 +696,35 @@ class MapView extends NativeBridgeComponent(
   }
 
   /**
+   * Returns an array of GeoJSON Feature objects representing features within the specified vector tile or GeoJSON source that satisfy the query parameters.
+   *
+   * @example
+   * this._map.querySourceFeatures('your-source-id', [], ['your-source-layer'])
+   *
+   * @param  {String} sourceId - Style source identifier used to query for source features.
+   * @param  {Array=} filter - A filter to limit query results.
+   * @param  {Array=} sourceLayerIDs - The name of the source layers to query. For vector tile sources, this parameter is required. For GeoJSON sources, it is ignored.
+   * @return {FeatureCollection}
+   */
+  async querySourceFeatures(
+    sourceId: string,
+    filter: FilterExpression | [] = [],
+    sourceLayerIDs: string[] = [],
+  ): Promise<GeoJSON.FeatureCollection> {
+    const args = [sourceId, getFilter(filter), sourceLayerIDs];
+    const res = await this._runNative<{ data: GeoJSON.FeatureCollection }>(
+      'querySourceFeatures',
+      args,
+    );
+
+    if (isAndroid()) {
+      return JSON.parse(res.data as unknown as string);
+    }
+
+    return res.data;
+  }
+
+  /**
    * Map camera will perform updates based on provided config. Deprecated use Camera#setCamera.
    * @deprecated use Camera#setCamera
    */

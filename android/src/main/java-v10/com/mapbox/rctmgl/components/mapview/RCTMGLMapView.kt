@@ -16,6 +16,7 @@ import androidx.lifecycle.LifecycleRegistry
 import androidx.lifecycle.ViewTreeLifecycleOwner
 import com.facebook.react.bridge.*
 import com.mapbox.android.gestures.*
+import com.mapbox.bindgen.Value
 import com.mapbox.geojson.Feature
 import com.mapbox.geojson.FeatureCollection
 import com.mapbox.geojson.Point
@@ -511,7 +512,7 @@ open class RCTMGLMapView(private val mContext: Context, var mManager: RCTMGLMapV
         }
     }
 
-    
+
     private val allTouchableSources: List<RCTSource<*>>
         private get() {
             val sources: MutableList<RCTSource<*>> = ArrayList()
@@ -825,7 +826,7 @@ open class RCTMGLMapView(private val mContext: Context, var mManager: RCTMGLMapV
             val boundsMap = WritableNativeMap()
             boundsMap.putArray("ne", bounds.northeast.toReadableArray())
             boundsMap.putArray("sw", bounds.southwest.toReadableArray())
-            
+
             properties.putMap("bounds", boundsMap)
         } catch (ex: Exception) {
             Logger.e(LOG_TAG, "An error occurred while attempting to make the region", ex)
@@ -986,6 +987,28 @@ open class RCTMGLMapView(private val mContext: Context, var mManager: RCTMGLMapV
                 mManager.handleEvent(event)
             } else {
                 Logger.e("queryRenderedFeaturesInRect", features.error ?: "n/a")
+            }
+        }
+    }
+
+    fun querySourceFeatures(callbackID: String?, sourceId: String, filter: Expression?, sourceLayerIDs: List<String>?) {
+        mMap?.querySourceFeatures(
+                sourceId,
+                SourceQueryOptions(sourceLayerIDs, (filter ?: Value.nullValue()) as Value),
+        ) { features ->
+            if (features.isValue) {
+                val featuresList = ArrayList<Feature?>()
+                for (i in features.value!!) {
+                    featuresList.add(i.feature)
+                }
+
+                val payload: WritableMap = WritableNativeMap()
+                payload.putString("data", FeatureCollection.fromFeatures(featuresList).toJson())
+
+                var event = AndroidCallbackEvent(this, callbackID, payload)
+                mManager.handleEvent(event)
+            } else {
+                Logger.e("querySourceFeatures", features.error ?: "n/a")
             }
         }
     }
