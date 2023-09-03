@@ -19,6 +19,7 @@ import com.mapbox.rctmgl.utils.ConvertUtils
 import com.mapbox.rctmgl.utils.ExpressionParser
 import com.mapbox.rctmgl.utils.Logger
 import com.mapbox.rctmgl.utils.extensions.toCoordinate
+import com.mapbox.rctmgl.utils.extensions.toRectF
 import com.mapbox.rctmgl.utils.extensions.toScreenCoordinate
 import java.lang.Exception
 import java.util.HashMap
@@ -325,7 +326,7 @@ open class RCTMGLMapViewManager(context: ReactApplicationContext) :
             "queryRenderedFeaturesInRect" -> {
                 val layerIds = ConvertUtils.toStringList(args!!.getArray(3))
                 mapView.queryRenderedFeaturesInRect(
-                        ConvertUtils.toRectF(args.getArray(1)),
+                        if ((args.getArray(1)?.size() ?: 0) == 0) null else  args.getArray(1).toRectF(),
                         ExpressionParser.from(args!!.getArray(2)),
                         if (layerIds.size == 0) null else layerIds,
                         response

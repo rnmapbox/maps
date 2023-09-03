@@ -964,9 +964,9 @@ open class RCTMGLMapView(private val mContext: Context, var mManager: RCTMGLMapV
         }
     }
 
-    fun queryRenderedFeaturesInRect(rect: RectF, filter: Expression?, layerIDs: List<String>?, response: CommandResponse) {
+    fun queryRenderedFeaturesInRect(rect: RectF?, filter: Expression?, layerIDs: List<String>?, response: CommandResponse) {
         val size = mMap!!.getMapOptions().size
-        val screenBox = if (rect.isEmpty()) ScreenBox(ScreenCoordinate(0.0, 0.0), ScreenCoordinate(size?.width!!.toDouble(), size?.height!!.toDouble())) else ScreenBox(
+        val screenBox = if (rect == null) ScreenBox(ScreenCoordinate(0.0, 0.0), ScreenCoordinate(size?.width!!.toDouble(), size?.height!!.toDouble())) else ScreenBox(
                 ScreenCoordinate(rect.right.toDouble(), rect.bottom.toDouble() ),
                 ScreenCoordinate(rect.left.toDouble(), rect.top.toDouble()),
         )
