@@ -12,6 +12,7 @@ import {
   findNodeHandle,
 } from 'react-native';
 import { debounce } from 'debounce';
+import { GeoJsonProperties, Geometry } from 'geojson';
 
 import NativeMapView from '../specs/MBXMapViewNativeComponent';
 import NativeMapViewModule from '../specs/NativeMapViewModule';
@@ -884,27 +885,27 @@ class MapView extends NativeBridgeComponent(
     }
   }
 
+  _decodePayload<G extends Geometry | null = Geometry, P = GeoJsonProperties>(
+    payload: GeoJSON.Feature<G, P> | string,
+  ): GeoJSON.Feature<G, P> {
+    // we check whether the payload is a string, since the strict type safety is enforced only on iOS on the new arch
+    // on Android, on both archs, the payload is an object
+    if (typeof payload === 'string') {
+      return JSON.parse(payload);
+    } else {
+      return payload;
+    }
+  }
+
   _onPress(e: NativeSyntheticEvent<{ payload: GeoJSON.Feature }>) {
     if (isFunction(this.props.onPress)) {
-      const { payload } = e.nativeEvent;
-
-      if (typeof payload === 'string') {
-        this.props.onPress(JSON.parse(payload));
-      } else {
-        this.props.onPress(payload);
-      }
+      this.props.onPress(this._decodePayload(e.nativeEvent.payload));
     }
   }
 
   _onLongPress(e: NativeSyntheticEvent<{ payload: GeoJSON.Feature }>) {
     if (isFunction(this.props.onLongPress)) {
-      const { payload } = e.nativeEvent;
-
-      if (typeof payload === 'string') {
-        this.props.onLongPress(JSON.parse(payload));
-      } else {
-        this.props.onLongPress(payload);
-      }
+      this.props.onLongPress(e.nativeEvent.payload);
     }
   }
 
@@ -932,13 +933,7 @@ class MapView extends NativeBridgeComponent(
   }
 
   _onCameraChanged(e: NativeSyntheticEvent<{ payload: MapState }>) {
-    const { payload } = e.nativeEvent;
-
-    if (typeof payload === 'string') {
-      this.props.onCameraChanged?.(JSON.parse(payload));
-    } else {
-      this.props.onCameraChanged?.(payload);
-    }
+    this.props.onCameraChanged?.(e.nativeEvent.payload);
   }
 
   _onChange(
@@ -953,10 +948,7 @@ class MapView extends NativeBridgeComponent(
     const { regionWillChangeDebounceTime, regionDidChangeDebounceTime } =
       this.props;
     const { type } = e.nativeEvent;
-    const payload =
-      typeof e.nativeEvent.payload === 'string'
-        ? JSON.parse(e.nativeEvent.payload)
-        : e.nativeEvent.payload;
+    const payload = this._decodePayload(e.nativeEvent.payload);
 
     let propName: CallbablePropKeys | '' = '';
     let deprecatedPropName: CallbablePropKeys | '' = '';
