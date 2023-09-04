@@ -191,7 +191,7 @@ using namespace facebook::react;
     [_view setSourceVisibility:visible sourceId:sourceId sourceLayerId:sourceLayerId resolve:resolve reject:reject];
 }
 
-- (void)querySourceFeatures:sourceId:(NSString* _Nonnull)sourceId withFilter:(NSArray<id>* _Nullable)filter withSourceLayerIDs:(NSArray<NSString*>* _Nullable)sourceLayerIDs resolve:(RCTPromiseResolveBlock _Nonnull )resolve reject:(RCTPromiseRejectBlock _Nonnull )reject {
+- (void)querySourceFeatures:(NSString*)sourceId withFilter:(NSArray<id>*)filter withSourceLayerIDs:(NSArray<NSString*>*)sourceLayerIDs resolve:(RCTPromiseResolveBlock)resolve reject:(RCTPromiseRejectBlock)reject {
     [_view querySourceFeatures:sourceId withFilter:filter withSourceLayerIDs:sourceLayerIDs resolve:resolve reject:reject];
 }
 

@@ -1,10 +1,9 @@
 package com.mapbox.rctmgl.components.mapview
 
-import com.facebook.react.ReactApplication
 import com.facebook.react.bridge.Promise
 import com.facebook.react.bridge.ReactApplicationContext
 import com.facebook.react.bridge.ReadableArray
-import com.facebook.react.bridge.ReadableMap
+import com.facebook.react.bridge.WritableMap
 import com.facebook.react.bridge.WritableNativeMap
 import com.facebook.react.fabric.FabricUIManager
 import com.facebook.react.uimanager.UIManagerHelper
@@ -16,7 +15,7 @@ import com.mapbox.rctmgl.utils.extensions.toCoordinate
 import com.mapbox.rctmgl.utils.extensions.toScreenCoordinate
 
 class NativeMapViewModule(context: ReactApplicationContext) : NativeMapViewModuleSpec(context) {
-    private fun withMapViewManagerOnUIThread(viewRef: Double?, promise: Promise, fn: (RCTMGLMapView) -> Unit) {
+    private fun withMapViewOnUIThread(viewRef: Double?, promise: Promise, fn: (RCTMGLMapView) -> Unit) {
         if (viewRef == null) {
             return
         }
@@ -33,22 +32,22 @@ class NativeMapViewModule(context: ReactApplicationContext) : NativeMapViewModul
         }
     }
 
-    private fun Promise.resolveOrReject(data: ReadableMap?) {
-        if (data != null && data.hasKey("error")) {
-            this.reject(Exception(data.getString("error")))
-        } else {
-            this.resolve(data)
+    private fun createCommandResponse(promise: Promise): CommandResponse = object : CommandResponse {
+        override fun success(builder: (WritableMap) -> Unit) {
+            val payload: WritableMap = WritableNativeMap()
+            builder(payload)
+
+            promise.resolve(payload)
+        }
+
+        override fun error(message: String) {
+            promise.reject(Exception(message))
         }
     }
 
     override fun takeSnap(viewRef: Double?, writeToDisk: Boolean, promise: Promise) {
-        withMapViewManagerOnUIThread(viewRef, promise) {
-            it.takeSnap(writeToDisk) { fillData ->
-                with(WritableNativeMap()) {
-                    fillData(this)
-                    promise.resolveOrReject(this)
-                }
-            }
+        withMapViewOnUIThread(viewRef, promise) {
+            it.takeSnap(writeToDisk, createCommandResponse(promise))
         }
     }
 
@@ -57,13 +56,8 @@ class NativeMapViewModule(context: ReactApplicationContext) : NativeMapViewModul
         coordinates: ReadableArray,
         promise: Promise
     ) {
-        withMapViewManagerOnUIThread(viewRef, promise) {
-            it.queryTerrainElevation(coordinates.getDouble(0), coordinates.getDouble(1)) { fillData ->
-                with(WritableNativeMap()) {
-                    fillData(this)
-                    promise.resolveOrReject(this)
-                }
-            }
+        withMapViewOnUIThread(viewRef, promise) {
+            it.queryTerrainElevation(coordinates.getDouble(0), coordinates.getDouble(1), createCommandResponse(promise))
         }
     }
 
@@ -74,22 +68,16 @@ class NativeMapViewModule(context: ReactApplicationContext) : NativeMapViewModul
         sourceLayerId: String?,
         promise: Promise
     ) {
-        withMapViewManagerOnUIThread(viewRef, promise) {
+        withMapViewOnUIThread(viewRef, promise) {
             it.setSourceVisibility(visible, sourceId, sourceLayerId)
 
-            promise.resolveOrReject(null)
+            promise.resolve(null)
         }
     }
 
     override fun getCenter(viewRef: Double?, promise: Promise) {
-        withMapViewManagerOnUIThread(viewRef, promise) {
-            it.getCenter { fillData ->
-                with(WritableNativeMap()) {
-                    fillData(this)
-
-                    promise.resolveOrReject(this)
-                }
-            }
+        withMapViewOnUIThread(viewRef, promise) {
+            it.getCenter(createCommandResponse(promise))
         }
     }
 
@@ -98,46 +86,26 @@ class NativeMapViewModule(context: ReactApplicationContext) : NativeMapViewModul
         atPoint: ReadableArray,
         promise: Promise
     ) {
-        withMapViewManagerOnUIThread(viewRef, promise) {
-            it.getCoordinateFromView(atPoint.toScreenCoordinate()) { fillData ->
-                with(WritableNativeMap()) {
-                    fillData(this)
-                    promise.resolveOrReject(this)
-                }
-            }
+        withMapViewOnUIThread(viewRef, promise) {
+            it.getCoordinateFromView(atPoint.toScreenCoordinate(), createCommandResponse(promise))
         }
     }
 
     override fun getPointInView(viewRef: Double?, atCoordinate: ReadableArray, promise: Promise) {
-        withMapViewManagerOnUIThread(viewRef, promise) {
-            it.getPointInView(atCoordinate.toCoordinate()) { fillData ->
-                with(WritableNativeMap()) {
-                    fillData(this)
-                    promise.resolveOrReject(this)
-                }
-            }
+        withMapViewOnUIThread(viewRef, promise) {
+            it.getPointInView(atCoordinate.toCoordinate(), createCommandResponse(promise))
         }
     }
 
     override fun getZoom(viewRef: Double?, promise: Promise) {
-        withMapViewManagerOnUIThread(viewRef, promise) {
-            it.getZoom { fillData ->
-                with(WritableNativeMap()) {
-                    fillData(this)
-                    promise.resolveOrReject(this)
-                }
-            }
+        withMapViewOnUIThread(viewRef, promise) {
+            it.getZoom(createCommandResponse(promise))
         }
     }
 
     override fun getVisibleBounds(viewRef: Double?, promise: Promise) {
-        withMapViewManagerOnUIThread(viewRef, promise) {
-            it.getVisibleBounds { fillData ->
-                with(WritableNativeMap()) {
-                    fillData(this)
-                    promise.resolveOrReject(this)
-                }
-            }
+        withMapViewOnUIThread(viewRef, promise) {
+            it.getVisibleBounds(createCommandResponse(promise))
         }
     }
 
@@ -148,19 +116,15 @@ class NativeMapViewModule(context: ReactApplicationContext) : NativeMapViewModul
         withLayerIDs: ReadableArray,
         promise: Promise
     ) {
-        withMapViewManagerOnUIThread(viewRef, promise) {
+        withMapViewOnUIThread(viewRef, promise) {
             val layerIds = ConvertUtils.toStringList(withLayerIDs)
 
             it.queryRenderedFeaturesAtPoint(
                 ConvertUtils.toPointF(atPoint),
                 ExpressionParser.from(withFilter),
-                if (layerIds.size == 0) null else layerIds
-            ) { fillData ->
-                with(WritableNativeMap()) {
-                    fillData(this)
-                    promise.resolveOrReject(this)
-                }
-            }
+                if (layerIds.size == 0) null else layerIds,
+                createCommandResponse(promise)
+            )
         }
     }
 
@@ -171,19 +135,15 @@ class NativeMapViewModule(context: ReactApplicationContext) : NativeMapViewModul
         withLayerIDs: ReadableArray,
         promise: Promise
     ) {
-        withMapViewManagerOnUIThread(viewRef, promise) {
+        withMapViewOnUIThread(viewRef, promise) {
             val layerIds = ConvertUtils.toStringList(withLayerIDs)
 
             it.queryRenderedFeaturesInRect(
                 ConvertUtils.toRectF(withBBox),
                 ExpressionParser.from(withFilter),
-                if (layerIds.size == 0) null else layerIds
-            ) { fillData ->
-                with(WritableNativeMap()) {
-                    fillData(this)
-                    promise.resolveOrReject(this)
-                }
-            }
+                if (layerIds.size == 0) null else layerIds,
+                createCommandResponse(promise)
+            )
         }
     }
 
@@ -192,39 +152,34 @@ class NativeMapViewModule(context: ReactApplicationContext) : NativeMapViewModul
         events: ReadableArray,
         promise: Promise
     ) {
-        withMapViewManagerOnUIThread(viewRef, promise) {
+        withMapViewOnUIThread(viewRef, promise) {
             it.setHandledMapChangedEvents(events.asArrayString())
-            promise.resolveOrReject(null)
+            promise.resolve(null)
         }
     }
 
     override fun clearData(viewRef: Double?, promise: Promise) {
-        withMapViewManagerOnUIThread(viewRef, promise) {
-            it.clearData { fillData ->
-                with(WritableNativeMap()) {
-                    fillData(this)
-                    promise.resolveOrReject(this)
-                }
-            }
+        withMapViewOnUIThread(viewRef, promise) {
+            it.clearData(createCommandResponse(promise))
         }
     }
 
     override fun querySourceFeatures(
         viewRef: Double?,
+        sourceId: String,
         withFilter: ReadableArray,
         withSourceLayerIDs: ReadableArray,
         promise: Promise
     ) {
-        withMapViewManagerOnUIThread(viewRef) {
+        withMapViewOnUIThread(viewRef, promise) {
+            val sourceLayerIds = ConvertUtils.toStringList(withSourceLayerIDs)
+
             it.querySourceFeatures(
+                sourceId,
                 ExpressionParser.from(withFilter),
-                if (withSourceLayerIDs.size == 0) null else withSourceLayerIDs
-            ) { fillData ->
-                with(WritableNativeMap()) {
-                    fillData(this)
-                    promise.resolve(this)
-                }
-            }
+                if (sourceLayerIds.size == 0) null else sourceLayerIds,
+                createCommandResponse(promise)
+            )
         }
     }
 

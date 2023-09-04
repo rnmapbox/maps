@@ -41,7 +41,7 @@
 - (void)queryTerrainElevation:(NSArray<NSNumber*>* _Nonnull)coordinates resolve:(RCTPromiseResolveBlock _Nonnull )resolve reject:(RCTPromiseRejectBlock _Nonnull )reject;
 - (void)setHandledMapChangedEvents:(NSArray<NSString*>* _Nonnull)events resolve:(RCTPromiseResolveBlock _Nonnull )resolve reject:(RCTPromiseRejectBlock _Nonnull )reject;
 - (void)setSourceVisibility:(BOOL)visible sourceId:(NSString* _Nonnull)sourceId sourceLayerId:(NSString* _Nullable)sourceLayerId resolve:(RCTPromiseResolveBlock _Nonnull )resolve reject:(RCTPromiseRejectBlock _Nonnull )reject;
-- (void)querySourceFeatures:sourceId:(NSString* _Nonnull)sourceId withFilter:(NSArray<id>* _Nullable)filter withSourceLayerIDs:(NSArray<NSString*>* _Nullable)sourceLayerIDs resolve:(RCTPromiseResolveBlock _Nonnull )resolve reject:(RCTPromiseRejectBlock _Nonnull )reject;
+- (void)querySourceFeatures:(NSString* _Nonnull)sourceId withFilter:(NSArray<id>* _Nullable)filter withSourceLayerIDs:(NSArray<NSString*>* _Nullable)sourceLayerIDs resolve:(RCTPromiseResolveBlock _Nonnull )resolve reject:(RCTPromiseRejectBlock _Nonnull )reject;
 
 @end
 

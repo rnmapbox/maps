@@ -129,14 +129,15 @@ RCT_EXPORT_METHOD(setSourceVisibility:(NSNumber*)viewRef visible:(BOOL)visible s
     } reject:reject];
 }
 
-RCT_EXPORT_METHOD(querySourceFeatures:sourceId:(NSString* _Nonnull)sourceId withFilter:(NSArray<id>* _Nullable)filter withSourceLayerIDs:(NSArray<NSString*>* _Nullable)sourceLayerIDs resolve:(RCTPromiseResolveBlock _Nonnull )resolve reject:(RCTPromiseRejectBlock _Nonnull )reject) {
-    [self withMapComponentView:viewRef block:^(MBXMapViewComponentView* view) {
+RCT_EXPORT_METHOD(querySourceFeatures:(NSNumber*)viewRef sourceId:(NSString*)sourceId withFilter:(NSArray<id>*)filter withSourceLayerIDs:(NSArray<NSString*>*)sourceLayerIDs resolve:(RCTPromiseResolveBlock)resolve reject:(RCTPromiseRejectBlock)reject) {
+    [self withMapComponentView:viewRef block:^(UIView<MBXMapViewProtocol>* view) {
         [view querySourceFeatures:sourceId withFilter:filter withSourceLayerIDs:sourceLayerIDs resolve:resolve reject:reject];
     } reject:reject];
 }
 
 
 // Thanks to this guard, we won't compile this code when we build for the old architecture.
+#ifdef RCT_NEW_ARCH_ENABLED
 - (std::shared_ptr<facebook::react::TurboModule>)getTurboModule:
     (const facebook::react::ObjCTurboModule::InitParams &)params
 {

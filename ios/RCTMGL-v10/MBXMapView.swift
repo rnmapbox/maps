@@ -193,11 +193,10 @@ open class MBXMapView : RCTMGLMapView, MBXMapViewProtocol {
           MBXMapViewManager.setSourceVisibility(self, visible: visible, sourceId: sourceId, sourceLayerId: sourceLayerId, resolver: resolve, rejecter: reject)
     }
 
-      func querySourceFeatures(
-        _ reactTag: NSNumber,
-        withSourceId sourceId: String,
+    public func querySourceFeatures(
+        _ sourceId: String,
         withFilter filter: [Any]?,
-        withSourceLayerIds sourceLayerIds: [String]?,
+        withSourceLayerIDs sourceLayerIds: [String]?,
         resolve: @escaping RCTPromiseResolveBlock,
         reject: @escaping RCTPromiseRejectBlock) -> Void {
           MBXMapViewManager.querySourceFeatures(self, withSourceId: sourceId, withFilter: filter, withSourceLayerIds: sourceLayerIds, resolver: resolve, rejecter: reject)

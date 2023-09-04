@@ -42,9 +42,10 @@ export interface Spec extends TurboModule {
     viewRef: Int32 | null,
     events: ReadonlyArray<string>,
   ) => Promise<Object>;
-  clearData: (viewRef: Int32 | null, command: string) => Promise<Object>;
+  clearData: (viewRef: Int32 | null) => Promise<Object>;
   querySourceFeatures: (
     viewRef: Int32 | null,
+    sourceId: string,
     withFilter: ReadonlyArray<Object>,
     withSourceLayerIDs: ReadonlyArray<string>,
   ) => Promise<Object>;
