@@ -79,6 +79,14 @@ android {
         throw new GradleException(msg)
     }
 
+    if (!isNewArchitectureEnabled()) {
+        sourceSets {
+            main {
+                java.srcDirs += 'src/main/old-arch'
+            }
+        }
+    }
+
     compileSdkVersion safeExtGet("compileSdkVersion", 28)
     buildToolsVersion safeExtGet("buildToolsVersion", '28.0.3')
 

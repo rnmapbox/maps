@@ -5,9 +5,9 @@ import com.facebook.react.bridge.ReactApplicationContext
 import com.facebook.react.bridge.ReadableArray
 import com.facebook.react.bridge.WritableMap
 import com.facebook.react.bridge.WritableNativeMap
-import com.facebook.react.fabric.FabricUIManager
 import com.facebook.react.uimanager.UIManagerHelper
 import com.facebook.react.uimanager.common.UIManagerType
+import com.mapbox.rctmgl.BuildConfig
 import com.mapbox.rctmgl.NativeMapViewModuleSpec
 import com.mapbox.rctmgl.utils.ConvertUtils
 import com.mapbox.rctmgl.utils.ExpressionParser
@@ -21,8 +21,12 @@ class NativeMapViewModule(context: ReactApplicationContext) : NativeMapViewModul
         }
 
         reactApplicationContext.runOnUiQueueThread {
-            val manager = UIManagerHelper.getUIManager(reactApplicationContext, UIManagerType.FABRIC) as FabricUIManager
-            val view = manager.resolveView(viewRef.toInt()) as? RCTMGLMapView
+            val manager = if (BuildConfig.IS_NEW_ARCHITECTURE_ENABLED)
+                UIManagerHelper.getUIManager(reactApplicationContext, UIManagerType.FABRIC)
+            else
+                UIManagerHelper.getUIManager(reactApplicationContext, UIManagerType.DEFAULT)
+
+            val view = manager?.resolveView(viewRef.toInt()) as? RCTMGLMapView
 
             if (view != null) {
                 fn(view)
