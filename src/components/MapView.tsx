@@ -3,7 +3,6 @@ import {
   View,
   StyleSheet,
   NativeModules,
-  requireNativeComponent,
   ViewProps,
   NativeSyntheticEvent,
   NativeMethods,
@@ -15,6 +14,7 @@ import { debounce } from 'debounce';
 import { GeoJsonProperties, Geometry } from 'geojson';
 
 import NativeMapView from '../specs/MBXMapViewNativeComponent';
+import NativeAndroidTextureMapView from '../specs/MBXAndroidTextureMapViewNativeComponent';
 import NativeMapViewModule from '../specs/NativeMapViewModule';
 import {
   isFunction,
@@ -44,9 +44,8 @@ if (!MGLModule.MapboxV10) {
   );
 }
 
+// TODO: check if this can be removed
 export const NATIVE_MODULE_NAME = 'MBXMapView';
-
-export const ANDROID_TEXTURE_NATIVE_MODULE_NAME = 'RCTMGLAndroidTextureMapView';
 
 const styles = StyleSheet.create({
   matchParent: { flex: 1 },
@@ -1166,9 +1165,7 @@ const RCTMGLMapView = NativeMapView;
 
 let RCTMGLAndroidTextureMapView: any;
 if (isAndroid()) {
-  RCTMGLAndroidTextureMapView = requireNativeComponent<NativeProps>(
-    ANDROID_TEXTURE_NATIVE_MODULE_NAME,
-  );
+  RCTMGLAndroidTextureMapView = NativeAndroidTextureMapView;
 }
 
 export default MapView;
