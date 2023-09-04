@@ -218,9 +218,9 @@ open class RCTMGLMapView(private val mContext: Context, var mManager: RCTMGLMapV
 
                 mPointAnnotationManager = mapView.annotations.createPointAnnotationManager(AnnotationConfig(layerId = "rctmgl-mapview-annotations"))
                 mPointAnnotationManager?.addClickListener(OnPointAnnotationClickListener { pointAnnotation ->
-                    onMarkerClick(pointAnnotation)
-                    false
-                }
+                        onMarkerClick(pointAnnotation)
+                        false
+                    }
                 )
                 mPointAnnotationManager?.addDragListener(object : OnPointAnnotationDragListener {
                     override fun onAnnotationDragStarted(_annotation: Annotation<*>) {
@@ -236,7 +236,7 @@ open class RCTMGLMapView(private val mContext: Context, var mManager: RCTMGLMapV
                         reactAnnotation?.let { it.onDragStart() }
                     }
 
-                    override fun onAnnotationDrag(_annotation: Annotation<*>) {
+                   override fun onAnnotationDrag(_annotation: Annotation<*>) {
                         var reactAnnotation: RCTMGLPointAnnotation? = null
                         for (key in mPointAnnotations.keys) {
                             val annotation = mPointAnnotations[key]
@@ -278,13 +278,13 @@ open class RCTMGLMapView(private val mContext: Context, var mManager: RCTMGLMapV
     }
 
     private fun setupEvents() {
-        mMap?.addOnRenderFrameFinishedListener(
-            object: OnRenderFrameFinishedListener {
-                override fun onRenderFrameFinished(eventData: RenderFrameFinishedEventData) {
-                    handleMapChangedEvent(EventTypes.DID_FINISH_RENDERING_FRAME_FULLY)
-                }
-            }
-        )
+       mMap?.addOnRenderFrameFinishedListener(
+           object: OnRenderFrameFinishedListener {
+               override fun onRenderFrameFinished(eventData: RenderFrameFinishedEventData) {
+                   handleMapChangedEvent(EventTypes.DID_FINISH_RENDERING_FRAME_FULLY)
+               }
+           }
+       )
     }
 
     private fun onMapReady(map: MapboxMap) {
@@ -371,11 +371,11 @@ open class RCTMGLMapView(private val mContext: Context, var mManager: RCTMGLMapV
             Logger.e(LOG_TAG, String.format("Map load failed: %s", event.data.toString()))
             val errorMessage = event.getMapLoadingErrorEventData().message
             val event = MapChangeEvent(this, EventTypes.MAP_LOADING_ERROR, writableMapOf(
-                "error" to errorMessage
+                    "error" to errorMessage
             ))
             mManager.handleEvent(event)
 
-        }, Arrays.asList(MapEvents.MAP_LOADING_ERROR))
+                      }, Arrays.asList(MapEvents.MAP_LOADING_ERROR))
     }
 
     fun<T> mapGestureBegin(type:MapGestureType, gesture: T) {
@@ -490,7 +490,7 @@ open class RCTMGLMapView(private val mContext: Context, var mManager: RCTMGLMapV
 
     fun sendRegionChangeEvent(isAnimated: Boolean) {
         val didChangeEvent = MapChangeEvent(this, EventTypes.REGION_DID_CHANGE,
-            makeRegionPayload(isAnimated))
+                makeRegionPayload(isAnimated))
         mManager.handleEvent(didChangeEvent)
         mCameraChangeTracker.setReason(CameraChangeReason.NONE)
     }
@@ -610,11 +610,11 @@ open class RCTMGLMapView(private val mContext: Context, var mManager: RCTMGLMapV
                         styleLoaded(style)
                     }
                 },
-                    object : OnMapLoadErrorListener {
-                        override fun onMapLoadError(mapLoadingErrorEventData: MapLoadingErrorEventData) {
-                            Logger.w("MapLoadError", mapLoadingErrorEventData.message)
+                        object : OnMapLoadErrorListener {
+                            override fun onMapLoadError(mapLoadingErrorEventData: MapLoadingErrorEventData) {
+                                Logger.w("MapLoadError", mapLoadingErrorEventData.message)
+                            }
                         }
-                    }
                 )
             }
         }
@@ -625,10 +625,10 @@ open class RCTMGLMapView(private val mContext: Context, var mManager: RCTMGLMapV
     }
 
     fun handleTapInSources(
-        sources: LinkedList<RCTSource<*>>, screenPoint: ScreenCoordinate,
-        hits: HashMap<String?, List<Feature?>?>,
-        hitTouchableSources: ArrayList<RCTSource<*>?>,
-        handleTap: HandleTap
+            sources: LinkedList<RCTSource<*>>, screenPoint: ScreenCoordinate,
+            hits: HashMap<String?, List<Feature?>?>,
+            hitTouchableSources: ArrayList<RCTSource<*>?>,
+            handleTap: HandleTap
     ) {
         if (sources.isEmpty()) {
             handleTap.run(hitTouchableSources, hits)
@@ -640,17 +640,17 @@ open class RCTMGLMapView(private val mContext: Context, var mManager: RCTMGLMapV
             val halfWidth = (hitbox["width"]!!.toFloat() / 2.0f).toDouble()
             val halfHeight = (hitbox["height"]!!.toFloat() / 2.0f).toDouble()
             val screenBox = ScreenBox(
-                ScreenCoordinate(screenPoint.x - halfWidth,
-                    screenPoint.y - halfHeight
-                ),
-                ScreenCoordinate(screenPoint.x + halfWidth,
-                    screenPoint.y + halfHeight)
+                    ScreenCoordinate(screenPoint.x - halfWidth,
+                            screenPoint.y - halfHeight
+                    ),
+                    ScreenCoordinate(screenPoint.x + halfWidth,
+                            screenPoint.y + halfHeight)
             )
             mapView.getMapboxMap().queryRenderedFeatures(RenderedQueryGeometry(screenBox),
-                RenderedQueryOptions(
-                    source.layerIDs,
-                    null
-                )
+                    RenderedQueryOptions(
+                            source.layerIDs,
+                            null
+                    )
             ) { features ->
                 if (features.isValue) {
                     if (features.value!!.size > 0) {
@@ -687,9 +687,9 @@ open class RCTMGLMapView(private val mContext: Context, var mManager: RCTMGLMapV
                         val source = getTouchableSourceWithHighestZIndex(hitTouchableSources as List<RCTSource<*>>?)
                         if (source != null && source.hasPressListener() && source.iD != null && source.iD in hits) {
                             source.onPress(RCTSource.OnPressEvent(
-                                hits[source.iD] as List<Feature>,
-                                GeoJSONUtils.toLatLng(point),
-                                PointF(screenPoint.x.toFloat(), screenPoint.y.toFloat())
+                                    hits[source.iD] as List<Feature>,
+                                    GeoJSONUtils.toLatLng(point),
+                                    PointF(screenPoint.x.toFloat(), screenPoint.y.toFloat())
                             ))
                             return
                         }
@@ -852,7 +852,7 @@ open class RCTMGLMapView(private val mContext: Context, var mManager: RCTMGLMapV
         properties.putDouble("heading", position.bearing)
         properties.putDouble("pitch", position.pitch)
         properties.putBoolean("animated",
-            if (null == isAnimated) mCameraChangeTracker.isAnimated else isAnimated)
+                if (null == isAnimated) mCameraChangeTracker.isAnimated else isAnimated)
         properties.putBoolean("isUserInteraction", mCameraChangeTracker.isUserInteraction)
         try {
             val bounds = mMap.coordinateBoundsForCamera(position.toCameraOptions())
@@ -870,7 +870,7 @@ open class RCTMGLMapView(private val mContext: Context, var mManager: RCTMGLMapV
      */
     private fun setUpImage(loadedStyle: Style) {
         loadedStyle.addImage("MARKER_IMAGE_ID", BitmapFactory.decodeResource(
-            this.resources, R.drawable.red_marker)
+                this.resources, R.drawable.red_marker)
         )
     }
 
@@ -971,8 +971,8 @@ open class RCTMGLMapView(private val mContext: Context, var mManager: RCTMGLMapV
                 ScreenCoordinate(rect.left.toDouble(), rect.top.toDouble()),
         )
         mMap.queryRenderedFeatures(
-            RenderedQueryGeometry(screenBox),
-            RenderedQueryOptions(layerIDs, filter)
+                RenderedQueryGeometry(screenBox),
+                RenderedQueryOptions(layerIDs, filter)
         ) { features ->
             if (features.isValue) {
                 val featuresList = ArrayList<Feature?>()
