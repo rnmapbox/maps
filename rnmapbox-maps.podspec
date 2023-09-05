@@ -237,6 +237,7 @@ Pod::Spec.new do |s|
   s.source      	= { :git => "https://github.com/rnmapbox/maps.git" }
   s.license     	= "MIT"
   s.platform    	= :ios, "11.0"
+  s.header_dir = "rnmapbox_maps"
 
   unless $RNMapboxMapsSwiftPackageManager
     case $RNMapboxMapsImpl

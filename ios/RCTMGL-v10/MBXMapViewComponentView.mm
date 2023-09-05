@@ -5,10 +5,10 @@
 #import <React/RCTConversions.h>
 #import <React/RCTFabricComponentsPlugins.h>
 
-#import <react/renderer/components/rnmapbox_maps/ComponentDescriptors.h>
-#import <react/renderer/components/rnmapbox_maps/EventEmitters.h>
-#import <react/renderer/components/rnmapbox_maps/Props.h>
-#import <react/renderer/components/rnmapbox_maps/RCTComponentViewHelpers.h>
+#import <react/renderer/components/rnmapbox_maps_specs/ComponentDescriptors.h>
+#import <react/renderer/components/rnmapbox_maps_specs/EventEmitters.h>
+#import <react/renderer/components/rnmapbox_maps_specs/Props.h>
+#import <react/renderer/components/rnmapbox_maps_specs/RCTComponentViewHelpers.h>
 // needed for compilation for some reason
 #import <CoreFoundation/CoreFoundation.h>
 #import <CoreLocation/CoreLocation.h>
@@ -57,6 +57,9 @@ using namespace facebook::react;
     _props = defaultProps;
     _eventDispatcher = [[MBXMapViewEventDispatcher alloc] initWithComponentView:self];
       _view =  [[MBXMapView alloc] initWithFrame:frame eventDispatcher:_eventDispatcher];
+      
+      // just need to pass something, it won't really be used on fabric, but it's used to create events (it won't impact sending them)
+      _view.reactTag = @-1;
       
       // capture weak self reference to prevent retain cycle
       __weak __typeof__(self) weakSelf = self;

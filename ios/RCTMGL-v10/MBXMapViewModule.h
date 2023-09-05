@@ -2,7 +2,7 @@
 #import <UIKit/UIKit.h>
 
 #ifdef RCT_NEW_ARCH_ENABLED
-#import "rnmapbox_maps.h"
+#import "rnmapbox_maps_specs.h"
 #else
 #import <React/RCTBridge.h>
 #endif
