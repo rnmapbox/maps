@@ -53,12 +53,18 @@ class ShowMarkerView extends React.Component {
     };
   }
 
+  onPress(e) {
+    this.setState({
+      coordinates: [...this.state.coordinates, e.geometry.coordinates],
+    });
+  }
+
   render() {
     return (
       <Page {...this.props}>
         <MapboxGL.MapView
           ref={(c) => (this._map = c)}
-          onPress={this.onPress}
+          onPress={(e) => this.onPress(e)}
           onDidFinishLoadingMap={this.onDidFinishLoadingMap}
           style={sheet.matchParent}
         >
@@ -77,6 +83,16 @@ class ShowMarkerView extends React.Component {
           <MapboxGL.MarkerView coordinate={this.state.coordinates[0]}>
             <AnnotationContent title={'this is a marker view'} />
           </MapboxGL.MarkerView>
+
+          {this.state.coordinates.slice(2).map((coordinate, index) => (
+            <MapboxGL.PointAnnotation
+              coordinate={coordinate}
+              id={`pt-ann-${index}`}
+              key={`pt-ann-${index}`}
+            >
+              <AnnotationContent title={'this is a point annotation'} />
+            </MapboxGL.PointAnnotation>
+          ))}
         </MapboxGL.MapView>
 
         <Bubble>
