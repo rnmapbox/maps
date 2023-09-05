@@ -63,9 +63,12 @@ abstract class RCTLayer<T : Layer?>(protected var mContext: Context) : AbstractS
             return
         }
         mAboveLayerID = aboveLayerID
-        if (mLayer != null) {
-            removeFromMap(mMapView!!, RemovalReason.REORDER)
-            addAbove(mAboveLayerID)
+        if (aboveLayerID == null) {
+            return
+        }
+        mMapView?.let {mapView ->
+            removeFromMap(mapView, RemovalReason.REORDER)
+            addAbove(mapView, aboveLayerID)
         }
     }
 
@@ -74,9 +77,12 @@ abstract class RCTLayer<T : Layer?>(protected var mContext: Context) : AbstractS
             return
         }
         mBelowLayerID = belowLayerID
-        if (mLayer != null) {
-            removeFromMap(mMapView!!,RemovalReason.REORDER)
-            addBelow(mBelowLayerID)
+        if (belowLayerID == null) {
+            return
+        }
+        mMapView?.let { mapView ->
+            removeFromMap(mapView,RemovalReason.REORDER)
+            addBelow(mapView, belowLayerID)
         }
     }
 
@@ -159,28 +165,36 @@ abstract class RCTLayer<T : Layer?>(protected var mContext: Context) : AbstractS
         }
     }
 
-    fun addAbove(aboveLayerID: String?) {
-        mMapView!!.waitForLayer(aboveLayerID, object : FoundLayerCallback {
-            override fun found(layer: Layer?) {
+    fun addAbove(mapView: RCTMGLMapView, aboveLayerID: String) {
+        mapView.waitForLayer(aboveLayerID, object : FoundLayerCallback {
+            override fun found(aboveLayer: Layer?) {
                 if (!hasInitialized()) {
                     return
                 }
-                if (style == null) return
-                style!!.addLayerAbove(mLayer!!, aboveLayerID)
-                mMapView!!.layerAdded(mLayer!!)
+                mapView.savedStyle?.let { style ->
+                    mLayer?.let {layer ->
+                        style.addLayerAbove(layer, aboveLayerID)
+                        mapView.layerAdded(layer)
+                        mMapView = mapView
+                    }
+                }
             }
         })
     }
 
-    fun addBelow(belowLayerID: String?) {
-        mMapView!!.waitForLayer(belowLayerID, object : FoundLayerCallback {
-            override fun found(layer: Layer?) {
+    fun addBelow(mapView: RCTMGLMapView, belowLayerID: String) {
+        mapView.waitForLayer(belowLayerID, object : FoundLayerCallback {
+            override fun found(belowLayer: Layer?) {
                 if (!hasInitialized()) {
                     return
                 }
-                if (style == null) return
-                style!!.addLayerBelow(mLayer!!, belowLayerID)
-                mMapView!!.layerAdded(mLayer!!)
+                mapView.savedStyle?.let { style ->
+                    mLayer?.let { layer ->
+                        style.addLayerBelow(layer, belowLayerID)
+                        mapView.layerAdded(layer)
+                        mMapView = mapView
+                    }
+                }
             }
         })
     }
@@ -211,16 +225,20 @@ abstract class RCTLayer<T : Layer?>(protected var mContext: Context) : AbstractS
         if (style.styleLayerExists(id)) {
             return  // prevent adding a layer twice
         }
-        if (mAboveLayerID != null) {
-            addAbove(mAboveLayerID)
-        } else if (mBelowLayerID != null) {
-            addBelow(mBelowLayerID)
-        } else if (mLayerIndex != null) {
-            addAtIndex(mLayerIndex!!)
-        } else {
-            add()
+        mMapView?.let { mapView ->
+            mLayer?.let { layer ->
+                mAboveLayerID?.also {
+                    addAbove(mapView, it)
+                } ?: { mBelowLayerID?.also {
+                    addBelow(mapView, it)
+                } ?: { mLayerIndex?.also {
+                    addAtIndex(it)
+                } ?: {
+                    add ()
+                } } }
+            }
+            setZoomBounds()
         }
-        setZoomBounds()
     }
 
     protected fun setZoomBounds() {
