@@ -51,4 +51,4 @@ export interface Spec extends TurboModule {
   ) => Promise<Object>;
 }
 
-export default TurboModuleRegistry.get<Spec>('MBXMapViewModule');
+export default TurboModuleRegistry.getEnforcing<Spec>('MBXMapViewModule');

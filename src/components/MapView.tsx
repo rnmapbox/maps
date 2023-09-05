@@ -858,30 +858,22 @@ class MapView extends NativeBridgeComponent(
     nativeRef: RefType | undefined,
     args?: NativeArg[],
   ): Promise<ReturnType> {
-    if (NativeMapViewModule) {
-      // when this method is called after component mounts, the ref is not yet set
-      // schedule it to be called after a timeout
-      if (!this._nativeRef) {
-        return new Promise((resolve) => setTimeout(resolve, 1)).then(() => {
-          return this._runNativeCommand(methodName, this._nativeRef, args);
-        });
-      }
-
-      const handle = findNodeHandle(nativeRef as any);
-
-      // @ts-expect-error TS says that string cannot be used to index NativeMapViewModule.
-      // It can, it's just not pretty.
-      return NativeMapViewModule[methodName]?.(
-        handle,
-        ...(args ?? []),
-      ) as Promise<ReturnType>;
-    } else {
-      return super._runNativeCommand<RefType, ReturnType>(
-        methodName,
-        nativeRef,
-        args,
-      );
+    // when this method is called after component mounts, the ref is not yet set
+    // schedule it to be called after a timeout
+    if (!this._nativeRef) {
+      return new Promise((resolve) => setTimeout(resolve, 1)).then(() => {
+        return this._runNativeCommand(methodName, this._nativeRef, args);
+      });
     }
+
+    const handle = findNodeHandle(nativeRef as any);
+
+    // @ts-expect-error TS says that string cannot be used to index NativeMapViewModule.
+    // It can, it's just not pretty.
+    return NativeMapViewModule[methodName]?.(
+      handle,
+      ...(args ?? []),
+    ) as Promise<ReturnType>;
   }
 
   _decodePayload<G extends Geometry | null = Geometry, P = GeoJsonProperties>(
