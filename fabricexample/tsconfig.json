@@ -1,3 +1,13 @@
 {
-  "extends": "@tsconfig/react-native/tsconfig.json"
+  "extends": "../tsconfig.json",
+  "compilerOptions": {
+    "allowJs": true,
+    "resolveJsonModule": true,
+    "baseUrl": ".",
+    "paths": {
+      "@rnmapbox/maps": ["../src"],
+      "react": ["./node_modules/@types/react"],
+    }
+  },
+  "include": ["index.js", "src/**/*"]
 }

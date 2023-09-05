@@ -1,6 +1,7 @@
 import React from 'react';
 import {StyleSheet, View} from 'react-native';
 import Mapbox from '@rnmapbox/maps';
+
 import env from './env.json';
 
 Mapbox.setAccessToken(env.accessToken);
