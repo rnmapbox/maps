@@ -67,6 +67,8 @@ class BugReportExample extends React.Component {
     radius: 20,
   };
 
+  shapeAnimator = new DummyShapeAnimator();
+
   render() {
     const circleLayerStyle = {
       ...styles.circleLayer,
@@ -75,17 +77,16 @@ class BugReportExample extends React.Component {
 
     return (
       <>
+        <Button title="Start" onPress={() => this.shapeAnimator.start()} />
         <MapView style={styles.mapView}>
           <Camera centerCoordinate={[-74.00597, 40.71427]} zoomLevel={14} />
           <Images images={{ example: require('../assets/example.png') }} />
-          <DummyShapeAnimator>
-            <ShapeSource id={'shape-source-animated'}>
-              <CircleLayer
-                id={'circle-layer-animated'}
-                style={styles.circleLayerAnimated}
-              />
-            </ShapeSource>
-          </DummyShapeAnimator>
+          <ShapeSource shape={this.shapeAnimator} id={'shape-source-animated'}>
+            <CircleLayer
+              id={'circle-layer-animated'}
+              style={styles.circleLayerAnimated}
+            />
+          </ShapeSource>
           <ShapeSource id={'shape-source-static'} shape={features}>
             <CircleLayer id={'circle-layer'} style={circleLayerStyle} />
             <SymbolLayer

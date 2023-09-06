@@ -2,7 +2,7 @@ import MapboxMaps
 import Turf
 
 @objc
-class RCTMGLShapeSource : RCTMGLSource, AnimatedShapeConsumer {
+class RCTMGLShapeSource : RCTMGLSource, ShapeAnimationConsumer {
   @objc var url : String? {
     didSet {
       parseJSON(url) { [weak self] result in
@@ -23,10 +23,19 @@ class RCTMGLShapeSource : RCTMGLSource, AnimatedShapeConsumer {
     }
   }
 
+  var shapeAnimator: ShapeAnimator? = nil
   var shapeObject : GeoJSONObject? = nil
   @objc var shape : String? {
     didSet {
       logged("RCTMGLShapeSource.updateShape") {
+        shapeAnimator?.unsubscribe(consumer: self)
+        shapeAnimator = nil
+        if let shape = shape, let animatedShape = ShapeAnimatorManager.shared.get(shape: shape) {
+          shapeAnimator = animatedShape
+          animatedShape.subscribe(consumer: self)
+          shapeObject = animatedShape.getShape()
+          return
+        }
         let obj : GeoJSONObject = try parse(shape)
         shapeObject = obj
 
@@ -61,16 +70,11 @@ class RCTMGLShapeSource : RCTMGLSource, AnimatedShapeConsumer {
   @objc var tolerance : NSNumber?
   @objc var lineMetrics : NSNumber?
 
-  func initialShape(shape: GeoJSONObject) {
-    shapeObject = shape
-    doUpdate { (style) in
-      logged("RCTMGLShapeSource.setShape") {
-        try style.updateGeoJSONSource(withId: id, geoJSON: shape)
-      }
-    }
+  deinit {
+    shapeAnimator?.unsubscribe(consumer: self)
   }
-
-  func updateShape(shape: GeoJSONObject) {
+  
+  func shapeUpdated(shape: GeoJSONObject) {
     shapeObject = shape
     doUpdate { (style) in
       logged("RCTMGLShapeSource.setShape") {
