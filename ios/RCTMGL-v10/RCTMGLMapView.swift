@@ -97,7 +97,7 @@ open class RCTMGLMapView : MapView {
     get { return self }
   }
 
-  func addToMap(_ subview: UIView) {
+  @objc public func addToMap(_ subview: UIView) {
     if let mapComponent = subview as? RCTMGLMapComponent {
       let style = mapView.mapboxMap.style
       var addToMap = false
@@ -123,7 +123,7 @@ open class RCTMGLMapView : MapView {
     }
   }
   
-  func removeFromMap(_ subview: UIView) {
+  @objc public func removeFromMap(_ subview: UIView) {
     if let mapComponent = subview as? RCTMGLMapComponent {
       var entryIndex = features.firstIndex { $0.view == subview }
       if let entryIndex = entryIndex {
@@ -636,7 +636,7 @@ class IgnoreRCTMGLMakerViewGestureDelegate : NSObject, UIGestureRecognizerDelega
   private func isMarkerViewSubview(_ view: UIView) -> Bool {
     var current : UIView? = view
     while let act = current {
-      if (act is RCTMGLMarkerView) {
+      if (act is MBXMarkerView) {
         return true
       }
       current = act.superview

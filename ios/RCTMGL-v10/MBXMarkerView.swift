@@ -3,8 +3,8 @@ import UIKit
 
 /// dummy parent of RCTMGLMarkerView, so react-native changes visibility on RCTMGLMarkerView,
 /// and Mapbox changes visibility on RCTMGLMarkerViewParentViewAnnotation
-class RCTMGLMarkerViewParentViewAnnotation : UIView {
-  required init(marker: RCTMGLMarkerView) {
+class MBXMarkerViewParentViewAnnotation : UIView {
+  required init(marker: MBXMarkerView) {
     super.init(frame: marker.bounds)
     insertSubview(marker, at: 0)
   }
@@ -13,7 +13,7 @@ class RCTMGLMarkerViewParentViewAnnotation : UIView {
     fatalError("not implented")
   }
 
-  func remove(marker: RCTMGLMarkerView) {
+  func remove(marker: MBXMarkerView) {
     marker.removeFromSuperview()
   }
 
@@ -31,36 +31,37 @@ class RCTMGLMarkerViewParentViewAnnotation : UIView {
   }
 }
 
-class RCTMGLMarkerView: UIView, RCTMGLMapComponent {
+@objc(MBXMarkerView)
+public class MBXMarkerView: UIView, RCTMGLMapComponent {
   // MARK: - Instance variables
   
-  static let key = "RCTMGLMarkerView"
+  static let key = "MBXMarkerView"
   let id: String = "marker-\(UUID().uuidString)"
   
   weak var map: RCTMGLMapView?
-  weak var _annotationView: RCTMGLMarkerViewParentViewAnnotation?
+  weak var _annotationView: MBXMarkerViewParentViewAnnotation?
   
   var didAddToMap = false
   
-  @objc var coordinate: String? {
+  @objc public var coordinate: String? {
     didSet {
       update()
     }
   }
   
-  @objc var anchor: [String: NSNumber]? {
+  @objc public var anchor: [String: NSNumber]? {
     didSet {
       update()
     }
   }
   
-  @objc var allowOverlap: Bool = false {
+  @objc public var allowOverlap: Bool = false {
     didSet {
       update()
     }
   }
   
-  @objc var isSelected: Bool = false {
+  @objc public var isSelected: Bool = false {
     didSet {
       update()
     }
@@ -115,7 +116,7 @@ class RCTMGLMarkerView: UIView, RCTMGLMapComponent {
   
   // MARK: - React methods
   
-  override var isHidden: Bool {
+    public override var isHidden: Bool {
     get {
       return super.isHidden
     }
@@ -124,7 +125,7 @@ class RCTMGLMarkerView: UIView, RCTMGLMapComponent {
     }
   }
   
-  override func reactSetFrame(_ frame: CGRect) {
+    public override func reactSetFrame(_ frame: CGRect) {
     let prev = self.frame
     var next = frame
     
@@ -145,11 +146,11 @@ class RCTMGLMarkerView: UIView, RCTMGLMapComponent {
     addOrUpdate()
   }
   
-  override func insertReactSubview(_ subview: UIView, at atIndex: Int) {
+    public override func insertReactSubview(_ subview: UIView, at atIndex: Int) {
     super.insertReactSubview(subview, at: atIndex)
   }
   
-  override func removeReactSubview(_ subview: UIView) {
+    public override func removeReactSubview(_ subview: UIView) {
     super.removeReactSubview(subview)
   }
   
@@ -244,16 +245,16 @@ class RCTMGLMarkerView: UIView, RCTMGLMapComponent {
     return CGVector(dx: x, dy: y)
   }
   
-  var annotationView : RCTMGLMarkerViewParentViewAnnotation {
+  var annotationView : MBXMarkerViewParentViewAnnotation {
     if let result = _annotationView {
       return result
     }
-    let result = RCTMGLMarkerViewParentViewAnnotation(marker: self)
+    let result = MBXMarkerViewParentViewAnnotation(marker: self)
     _annotationView = result
     return result
   }
 
-  @objc override func didMoveToSuperview() {
+    @objc public override func didMoveToSuperview() {
     // React tends to add back us to our original superview,
     // https://github.com/facebook/react-native/blob/11ece22fc6955d169def9ef9f2809c24bc457ba8/React/Views/UIView%2BReact.m#L172-L177
     // fix that if we see that

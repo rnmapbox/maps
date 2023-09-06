@@ -1,6 +1,7 @@
 #ifdef RCT_NEW_ARCH_ENABLED
 
 #import "MBXMapViewComponentView.h"
+#import "MBXMapFeatureView.h"
 
 #import <React/RCTConversions.h>
 #import <React/RCTFabricComponentsPlugins.h>
@@ -150,6 +151,26 @@ using namespace facebook::react;
     [result setValue:ids forKey:@"layerIds"];
 
     return result;
+}
+
+- (void)insertSubview:(UIView *)view atIndex:(NSInteger)index
+{
+    if ([view conformsToProtocol:@protocol(MBXMapFeatureView)]) {
+        id<MBXMapFeatureView> featureView = (id<MBXMapFeatureView>)view;
+        [_view addToMap:featureView.mapFeature];
+    }
+    
+    [super insertSubview:view atIndex:index];
+}
+
+- (void)willRemoveSubview:(UIView *)subview
+{
+    if ([subview conformsToProtocol:@protocol(MBXMapFeatureView)]) {
+        id<MBXMapFeatureView> featureView = (id<MBXMapFeatureView>)subview;
+        [_view removeFromMap:featureView.mapFeature];
+    }
+    
+    [super willRemoveSubview:subview];
 }
 
 
