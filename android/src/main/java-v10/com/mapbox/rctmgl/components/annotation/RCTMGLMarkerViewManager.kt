@@ -9,34 +9,51 @@ import com.facebook.react.uimanager.annotations.ReactProp
 import com.facebook.react.bridge.ReadableMap
 import com.facebook.react.common.MapBuilder
 import com.facebook.react.uimanager.ThemedReactContext
+import com.facebook.react.uimanager.ViewManagerDelegate
+import com.facebook.react.viewmanagers.MBXMapViewManagerDelegate
+import com.facebook.react.viewmanagers.MBXMarkerViewManagerDelegate
+import com.facebook.react.viewmanagers.MBXMarkerViewManagerInterface
 import com.mapbox.maps.ScreenCoordinate
 import com.mapbox.maps.viewannotation.OnViewAnnotationUpdatedListener
 import com.mapbox.maps.viewannotation.ViewAnnotationManager
 import com.mapbox.rctmgl.components.mapview.RCTMGLMapView
+import com.mapbox.rctmgl.components.mapview.RCTMGLMapViewManager
 
 class RCTMGLMarkerViewManager(reactApplicationContext: ReactApplicationContext) :
-    AbstractEventEmitter<RCTMGLMarkerView?>(reactApplicationContext) {
+    AbstractEventEmitter<RCTMGLMarkerView>(reactApplicationContext), MBXMarkerViewManagerInterface<RCTMGLMarkerView> {
+    private val mDelegate: ViewManagerDelegate<RCTMGLMarkerView>
+
+    init {
+        mDelegate = MBXMarkerViewManagerDelegate<RCTMGLMarkerView, RCTMGLMarkerViewManager>(this)
+    }
+
+    override fun getDelegate(): ViewManagerDelegate<RCTMGLMarkerView> {
+        return mDelegate
+    }
+
     override fun getName(): String {
         return REACT_CLASS
     }
 
     @ReactProp(name = "coordinate")
-    fun setCoordinate(markerView: RCTMGLMarkerView, geoJSONStr: String?) {
+    override fun setCoordinate(markerView: RCTMGLMarkerView, geoJSONStr: String?) {
         markerView.setCoordinate(toPointGeometry(geoJSONStr))
     }
 
     @ReactProp(name = "anchor")
-    fun setAnchor(markerView: RCTMGLMarkerView, map: ReadableMap) {
-        markerView.setAnchor(map.getDouble("x").toFloat(), map.getDouble("y").toFloat())
+    override fun setAnchor(markerView: RCTMGLMarkerView, map: ReadableMap?) {
+        if (map != null) {
+            markerView.setAnchor(map.getDouble("x").toFloat(), map.getDouble("y").toFloat())
+        }
     }
 
     @ReactProp(name = "allowOverlap")
-    fun setAllowOverlap(markerView: RCTMGLMarkerView, allowOverlap: Boolean) {
+    override fun setAllowOverlap(markerView: RCTMGLMarkerView, allowOverlap: Boolean) {
         markerView.setAllowOverlap(allowOverlap)
     }
 
     @ReactProp(name = "isSelected")
-    fun setIsSelected(markerView: RCTMGLMarkerView, isSelected: Boolean) {
+    override fun setIsSelected(markerView: RCTMGLMarkerView, isSelected: Boolean) {
         markerView.setIsSelected(isSelected)
     }
 
@@ -50,7 +67,7 @@ class RCTMGLMarkerViewManager(reactApplicationContext: ReactApplicationContext) 
     }
 
     companion object {
-        const val REACT_CLASS = "RCTMGLMarkerView"
+        const val REACT_CLASS = "MBXMarkerView"
 
         fun markerViewContainerSizeFixer(mapView: RCTMGLMapView, viewAnnotationManager: ViewAnnotationManager) {
             // see https://github.com/rnmapbox/maps/issues/2376

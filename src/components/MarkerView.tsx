@@ -1,15 +1,10 @@
 import React from 'react';
-import {
-  Platform,
-  NativeModules,
-  requireNativeComponent,
-  type ViewProps,
-  View,
-} from 'react-native';
+import { Platform, NativeModules, type ViewProps, View } from 'react-native';
 
 import { toJSONString } from '../utils';
 import { makePoint } from '../utils/geoUtils';
 import { type Position } from '../types/Position';
+import NativeMarkerViewComponent from '../specs/MBXMarkerViewNativeComponent';
 
 import PointAnnotation from './PointAnnotation';
 
@@ -139,14 +134,6 @@ class MarkerView extends React.PureComponent<Props> {
   }
 }
 
-type NativeProps = ViewProps & {
-  coordinate: string | undefined;
-  anchor: { x: number; y: number };
-  allowOverlap: boolean;
-  isSelected: boolean;
-};
-
-const RCTMGLMarkerView =
-  requireNativeComponent<NativeProps>(NATIVE_MODULE_NAME);
+const RCTMGLMarkerView = NativeMarkerViewComponent;
 
 export default MarkerView;
