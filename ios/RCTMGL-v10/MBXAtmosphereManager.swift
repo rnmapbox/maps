@@ -1,12 +1,12 @@
-@objc(RCTMGLAtmosphereManager)
-class RCTMGLAtmosphereManager: RCTViewManager {
+@objc(MBXAtmosphereManager)
+class MBXAtmosphereManager: RCTViewManager {
     @objc
     override static func requiresMainQueueSetup() -> Bool {
         return true
     }
   
     override func view() -> UIView! {
-      let atmosphere = RCTMGLAtmosphere()
+      let atmosphere = MBXAtmosphere()
       //atmosphere.bridge = self.bridge
       return atmosphere
     }

@@ -1,7 +1,7 @@
 import MapboxMaps
 
-@objc(RCTMGLAtmosphere)
-class RCTMGLAtmosphere : RCTMGLSingletonLayer, RCTMGLMapComponent, RCTMGLSourceConsumer {
+@objc(MBXAtmosphere)
+public class MBXAtmosphere : RCTMGLSingletonLayer, RCTMGLMapComponent, RCTMGLSourceConsumer {
   var atmosphere : Atmosphere? = nil
   
   func makeAtmosphere() -> Atmosphere {
@@ -34,7 +34,7 @@ class RCTMGLAtmosphere : RCTMGLSingletonLayer, RCTMGLMapComponent, RCTMGLSourceC
   }
   
   func removeFromMap(_ map: RCTMGLMapView, style: Style) {
-    logged("RCTMGLAtmosphere.removeFromMap") {
+    logged("MBXAtmosphere.removeFromMap") {
       try style.removeAtmosphere()
     }
   }
