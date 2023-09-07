@@ -1,10 +1,10 @@
 import MapboxMaps
 
-protocol RCTMGLImageSetter : AnyObject {
+protocol MBXImageSetter : AnyObject {
   func addImage(name: String, image: UIImage, sdf: Bool?, stretchX: [[NSNumber]], stretchY: [[NSNumber]], content: [NSNumber]?, log: String) -> Bool
 }
 
-class RCTMGLImages : UIView, RCTMGLMapComponent {
+class MBXImages : UIView, RCTMGLMapComponent {
   
   weak var bridge : RCTBridge! = nil
   
@@ -22,7 +22,7 @@ class RCTMGLImages : UIView, RCTMGLMapComponent {
     
   var loadedImages : Set<String> = []
   
-  var imageViews: [RCTMGLImage] = []
+  var imageViews: [MBXImage] = []
 
   @objc
   var nativeImages: [Any] = [] {
@@ -35,16 +35,16 @@ class RCTMGLImages : UIView, RCTMGLMapComponent {
   var nativeImageInfos: [NativeImageInfo] = []
   
   @objc open override func insertReactSubview(_ subview: UIView!, at atIndex: Int) {
-    if let image = subview as? RCTMGLImage {
+    if let image = subview as? MBXImage {
       imageViews.insert(image, at: atIndex)
     } else {
-      Logger.log(level:.warn, message: "RCTMGLImages children can only be RCTMGLImage, got \(optional: subview)")
+      Logger.log(level:.warn, message: "MBXImages children can only be MBXImage, got \(optional: subview)")
     }
     super.insertReactSubview(subview, at: atIndex)
   }
   
   @objc open override func removeReactSubview(_ subview: UIView!) {
-    if let image = subview as? RCTMGLImage {
+    if let image = subview as? MBXImage {
       imageViews.removeAll { $0 == image }
       image.images = nil
     }
@@ -105,7 +105,7 @@ class RCTMGLImages : UIView, RCTMGLMapComponent {
           missingImages[name] = images[name]
         } else {
           if style.styleManager.getStyleImage(forImageId: name) == nil {
-            logged("RCTMGLImages.addImagePlaceholder") {
+            logged("MBXImages.addImagePlaceholder") {
               try? style.addImage(placeholderImage, id: name, stretchX: [], stretchY: [])
               missingImages[name] = images[name]
             }
@@ -119,7 +119,7 @@ class RCTMGLImages : UIView, RCTMGLMapComponent {
     }
   }
   
-  private func addImageViews(style: Style, imageViews: [RCTMGLImage]) {
+  private func addImageViews(style: Style, imageViews: [MBXImage]) {
     imageViews.forEach { imageView in
       imageView.images = self
     }
@@ -209,21 +209,21 @@ class RCTMGLImages : UIView, RCTMGLMapComponent {
       }
       
       if let stretchXV = imageInfo["stretchX"] as? [[NSNumber]] {
-        stretchX = RCTMGLImages.convert(stretch: stretchXV)
+        stretchX = MBXImages.convert(stretch: stretchXV)
       }
       
       if let stretchYV = imageInfo["stretchY"] as? [[NSNumber]] {
-        stretchY = RCTMGLImages.convert(stretch: stretchYV)
+        stretchY = MBXImages.convert(stretch: stretchYV)
       }
       
       var content : (left:Float, top:Float, right:Float, bottom:Float)? = nil
       if let contentV = imageInfo["content"] as? [NSNumber] {
-        content = RCTMGLImages.convert(content: contentV)
+        content = MBXImages.convert(content: contentV)
       }
       
       return (name: name, sdf: sdf, stretchX: stretchX, stretchY: stretchY, content: content)
     } else {
-      Logger.log(level: .warn, message: "RCTMGLImage.nativeImage, unexpected image: \(imageNameOrInfo)")
+      Logger.log(level: .warn, message: "MBXImage.nativeImage, unexpected image: \(imageNameOrInfo)")
       return nil
     }
   }
@@ -233,11 +233,11 @@ class RCTMGLImages : UIView, RCTMGLMapComponent {
       let imageName = imageInfo.name
       if style.styleManager.getStyleImage(forImageId: imageInfo.name) == nil {
         if let image = UIImage(named: imageName) {
-          logged("RCTMGLImage.addNativeImage: \(imageName)") {
+          logged("MBXImage.addNativeImage: \(imageName)") {
             try style.addImage(image, id: imageName, sdf: imageInfo.sdf,
-                               stretchX: RCTMGLImages.convert(stretch: imageInfo.stretchX, scale: image.scale),
-                               stretchY: RCTMGLImages.convert(stretch: imageInfo.stretchY, scale: image.scale),
-                               content: RCTMGLImages.convert(content: imageInfo.content, scale: image.scale)
+                               stretchX: MBXImages.convert(stretch: imageInfo.stretchX, scale: image.scale),
+                               stretchY: MBXImages.convert(stretch: imageInfo.stretchY, scale: image.scale),
+                               content: MBXImages.convert(content: imageInfo.content, scale: image.scale)
             )
           }
         } else {
@@ -255,7 +255,7 @@ class RCTMGLImages : UIView, RCTMGLMapComponent {
   }()
 }
 
-extension RCTMGLImages : RCTMGLImageSetter {
+extension MBXImages : MBXImageSetter {
   func addImage(name: String, image: UIImage, sdf: Bool?, stretchX: [[NSNumber]], stretchY: [[NSNumber]], content: [NSNumber]?, log: String) -> Bool
   {
      return logged("\(log).addImage") {
@@ -263,9 +263,9 @@ extension RCTMGLImages : RCTMGLImageSetter {
          try style.addImage(image,
                             id:name,
                             sdf: sdf ?? false,
-                            stretchX: RCTMGLImages.convert(stretch: stretchX, scale: image.scale),
-                            stretchY: RCTMGLImages.convert(stretch: stretchY, scale: image.scale),
-                            content: RCTMGLImages.convert(content: content, scale: image.scale)
+                            stretchX: MBXImages.convert(stretch: stretchX, scale: image.scale),
+                            stretchY: MBXImages.convert(stretch: stretchY, scale: image.scale),
+                            content: MBXImages.convert(content: content, scale: image.scale)
          )
          return true
        } else {

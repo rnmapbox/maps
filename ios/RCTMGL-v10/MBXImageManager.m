@@ -18,7 +18,7 @@
 @end
 
 
-@interface RCT_EXTERN_MODULE(RCTMGLImageManager, RCTViewManager)
+@interface RCT_EXTERN_MODULE(MBXImageManager, RCTViewManager)
 
 RCT_EXPORT_VIEW_PROPERTY(stretchX, NSArray<NSArray<NSNumber*>>)
 RCT_EXPORT_VIEW_PROPERTY(stretchY, NSArray<NSArray<NSNumber*>>)

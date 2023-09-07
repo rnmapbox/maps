@@ -1,7 +1,7 @@
 import MapboxMaps
 
 @objc
-class RCTMGLImageSource : MBXSource {
+class MBXImageSource : MBXSource {
   
   @objc var url: String? = nil {
     didSet {

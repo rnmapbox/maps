@@ -70,7 +70,7 @@ open class RCTMGLMapView : MapView {
   var features: [FeatureEntry] = []
 
   weak var reactCamera : RCTMGLCamera?
-  var images : [RCTMGLImages] = []
+  var images : [MBXImages] = []
   var sources : [MBXInteractiveElement] = []
   
   var handleMapChangedEvents = Set<RCTMGLEvent.EventType>()

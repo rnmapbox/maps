@@ -5,7 +5,7 @@ class RCTMGLUtils {
     guard let url = url else {
       fatalError("FetchImage called with nil as url")
     }
-    RCTMGLImageQueue.sharedInstance.addImage(url, scale: scale, bridge: bridge, handler: callback)
+    MBXImageQueue.sharedInstance.addImage(url, scale: scale, bridge: bridge, handler: callback)
   }
   
   static func fetchImages(_ bridge: RCTBridge, style: Style, objects: [String:Any], forceUpdate: Bool, loaded: @escaping (_ name:String) -> Void, callback: @escaping ()->Void) {
@@ -33,12 +33,12 @@ class RCTMGLUtils {
           let scale = (image["scale"] as? NSNumber)?.floatValue ?? 1.0
           let sdf = (image["sdf"] as? NSNumber)?.boolValue ?? false
           let imageStretchX = image["stretchX"] as? [[NSNumber]]
-          let stretchX: [ImageStretches] = imageStretchX != nil ? RCTMGLImages.convert(stretch: imageStretchX!, scale: CGFloat(scale)) : []
+          let stretchX: [ImageStretches] = imageStretchX != nil ? MBXImages.convert(stretch: imageStretchX!, scale: CGFloat(scale)) : []
           let imageStretchY = image["stretchY"] as? [[NSNumber]]
-          let stretchY: [ImageStretches] = imageStretchY != nil ? RCTMGLImages.convert(stretch: imageStretchY!, scale: CGFloat(scale)) : []
-          let content: ImageContent? = RCTMGLImages.convert(content: image["content"] as? [NSNumber], scale: CGFloat(scale))
+          let stretchY: [ImageStretches] = imageStretchY != nil ? MBXImages.convert(stretch: imageStretchY!, scale: CGFloat(scale)) : []
+          let content: ImageContent? = MBXImages.convert(content: image["content"] as? [NSNumber], scale: CGFloat(scale))
           
-          RCTMGLImageQueue.sharedInstance.addImage(objects[imageName], scale: Double(scale), bridge:bridge) {
+          MBXImageQueue.sharedInstance.addImage(objects[imageName], scale: Double(scale), bridge:bridge) {
             (error,image) in
             if image == nil {
               RCTMGLLogWarn("Failed to fetch image: \(imageName) error:\(error)")

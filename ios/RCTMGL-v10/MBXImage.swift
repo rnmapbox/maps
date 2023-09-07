@@ -1,56 +1,55 @@
 import MapboxMaps
 
-class RCTMGLImage : UIView {
+public class MBXImage : UIView {
   @objc
-  var name: String = "" {
+  public var name: String = "" {
     didSet {
       _addImageToStyle()
     }
   }
 
-  var image: UIImage? = nil
+  @objc public var image: UIImage? = nil
   
   @objc
-  var sdf: Bool = false {
+    public var sdf: Bool = false {
     didSet {
       _addImageToStyle()
     }
   }
 
   @objc
-  var stretchX: [[NSNumber]] = [] {
+    public var stretchX: [[NSNumber]] = [] {
     didSet {
       _addImageToStyle()
     }
   }
 
   @objc
-  var stretchY: [[NSNumber]] = [] {
+    public var stretchY: [[NSNumber]] = [] {
     didSet {
       _addImageToStyle()
     }
   }
 
   @objc
-  var content: [NSNumber]? = nil {
+    public var content: [NSNumber]? = nil {
     didSet {
       _addImageToStyle()
     }
   }
 
-  weak var images: RCTMGLImageSetter? = nil {
+  weak var images: MBXImageSetter? = nil {
     didSet {
       DispatchQueue.main.async { self.setImage() }
     }
   }
-  weak var bridge : RCTBridge! = nil
   
-  var reactSubviews : [UIView] = []
+ var reactSubviews : [UIView] = []
   
   // MARK: - subview management
   
   @objc open override func insertReactSubview(_ subview: UIView!, at atIndex: Int) {
-    reactSubviews.insert(subview, at: atIndex)
+      reactSubviews.insert(subview, at: atIndex)
     if reactSubviews.count > 1 {
       Logger.log(level: .error, message: "Image supports max 1 subview")
     }
@@ -63,14 +62,14 @@ class RCTMGLImage : UIView {
 
   @objc
   open override func removeReactSubview(_ subview: UIView!) {
-    reactSubviews.removeAll(where: { $0 == subview })
+      reactSubviews.removeAll(where: { $0 == subview })
   }
   
   // MARK: - view shnapshot
   
   func _addImageToStyle() {
     if let image = self.image, let images = images {
-      let _ = images.addImage(name: name, image: image, sdf: sdf, stretchX:stretchX, stretchY:stretchY, content:content, log: "RCTMGLImage._addImageToStyle")
+      let _ = images.addImage(name: name, image: image, sdf: sdf, stretchX:stretchX, stretchY:stretchY, content:content, log: "MBXImage._addImageToStyle")
     }
   }
   
@@ -79,7 +78,7 @@ class RCTMGLImage : UIView {
     _addImageToStyle()
   }
   
-  func setImage() {
+  @objc public func setImage() {
     if let image = _createViewSnapshot() {
       changeImage(image, name: name)
     }

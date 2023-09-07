@@ -1,4 +1,4 @@
-class RCTMGLImageQueueOperation : Operation {
+class MBXImageQueueOperation : Operation {
   enum State : Equatable {
     case Initial
     case Executing
@@ -63,7 +63,7 @@ class RCTMGLImageQueueOperation : Operation {
   }
   
   override func start() {
-    weak var weakSelf : RCTMGLImageQueueOperation! = self
+    weak var weakSelf : MBXImageQueueOperation! = self
     
     DispatchQueue.global(qos: .default).async {
       
@@ -116,9 +116,9 @@ class RCTMGLImageQueueOperation : Operation {
   }
 }
 
-class RCTMGLImageQueue {
-   static let sharedInstance: RCTMGLImageQueue = {
-        let instance = RCTMGLImageQueue()
+class MBXImageQueue {
+   static let sharedInstance: MBXImageQueue = {
+        let instance = MBXImageQueue()
         // setup code
         return instance
     }()
@@ -130,7 +130,7 @@ class RCTMGLImageQueue {
   }()
   
   public func addImage(_ json : Any!, scale: Double?, bridge: RCTBridge, handler: @escaping (Error?, UIImage?) -> Void) {
-    let operation = RCTMGLImageQueueOperation()
+    let operation = MBXImageQueueOperation()
     operation.bridge = bridge
     operation.urlRequest = RCTConvert.nsurlRequest(json)
     operation.completionHandler = handler;
