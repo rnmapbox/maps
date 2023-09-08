@@ -1,5 +1,5 @@
-@objc(MBXAtmosphereManager)
-class MBXAtmosphereManager: RCTViewManager {
+@objc(MBXAtmosphereViewManager)
+class MBXAtmosphereViewManager: RCTViewManager {
     @objc
     override static func requiresMainQueueSetup() -> Bool {
         return true
