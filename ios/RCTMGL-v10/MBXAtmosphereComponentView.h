@@ -5,11 +5,9 @@
 #import <React/RCTUIManager.h>
 #import <React/RCTViewComponentView.h>
 
-#import "MBXMapFeatureView.h"
-
 NS_ASSUME_NONNULL_BEGIN
 
-@interface MBXAtmosphereComponentView : RCTViewComponentView <MBXMapFeatureView>
+@interface MBXAtmosphereComponentView : RCTViewComponentView
 @end
 
 NS_ASSUME_NONNULL_END

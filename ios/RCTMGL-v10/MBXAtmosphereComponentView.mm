@@ -27,8 +27,6 @@ using namespace facebook::react;
     MBXAtmosphere *_view;
 }
 
-@synthesize mapFeature;
-
 - (instancetype)initWithFrame:(CGRect)frame
 {
   if (self = [super initWithFrame:frame]) {
@@ -37,7 +35,6 @@ using namespace facebook::react;
     _view = [[MBXAtmosphere alloc] init];
       
     self.contentView = _view;
-    self.mapFeature = _view;
   }
 
   return self;
@@ -51,7 +48,7 @@ using namespace facebook::react;
 }
 
 // copied from RCTFollyConvert
-id convertFollyDynamicToId(const folly::dynamic &dyn)
++ (id)convertFollyDynamicToId:(const folly::dynamic)dyn
 {
   // I could imagine an implementation which avoids copies by wrapping the
   // dynamic in a derived class of NSDictionary.  We can do that if profiling
@@ -71,7 +68,7 @@ id convertFollyDynamicToId(const folly::dynamic &dyn)
     case folly::dynamic::ARRAY: {
       NSMutableArray *array = [[NSMutableArray alloc] initWithCapacity:dyn.size()];
       for (const auto &elem : dyn) {
-        id value = convertFollyDynamicToId(elem);
+        id value = [self convertFollyDynamicToId:elem];
         if (value) {
           [array addObject:value];
         }
@@ -81,8 +78,8 @@ id convertFollyDynamicToId(const folly::dynamic &dyn)
     case folly::dynamic::OBJECT: {
       NSMutableDictionary *dict = [[NSMutableDictionary alloc] initWithCapacity:dyn.size()];
       for (const auto &elem : dyn.items()) {
-        id key = convertFollyDynamicToId(elem.first);
-        id value = convertFollyDynamicToId(elem.second);
+          id key = [self convertFollyDynamicToId:elem.first];
+          id value = [self convertFollyDynamicToId:elem.second];
         if (key && value) {
           dict[key] = value;
         }
@@ -98,7 +95,7 @@ id convertFollyDynamicToId(const folly::dynamic &dyn)
     if (!dynamic->isNull()) {
         for (auto& pair : dynamic->items()) {
             NSString* key = [NSString stringWithUTF8String:pair.first.getString().c_str()];
-            id obj = convertFollyDynamicToId(pair.second);
+            id obj = [self convertFollyDynamicToId:pair.second];
             [result setValue:obj forKey:key];
         }
     }
