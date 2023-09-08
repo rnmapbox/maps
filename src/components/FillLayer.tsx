@@ -1,14 +1,13 @@
 import React from 'react';
-import { NativeModules, requireNativeComponent } from 'react-native';
+import { NativeModules } from 'react-native';
 
 import { FilterExpression, FillLayerStyleProps } from '../utils/MapboxStyles';
 import { StyleValue } from '../utils/StyleValue';
+import MBXFillLayerNativeComponent from '../specs/MBXFillLayerNativeComponent';
 
 import AbstractLayer from './AbstractLayer';
 
 const MapboxGL = NativeModules.MGLModule;
-
-export const NATIVE_MODULE_NAME = 'RCTMGLFillLayer';
 
 export type Props = {
   /**
@@ -86,11 +85,8 @@ class FillLayer extends AbstractLayer<Props, NativeTypeProps> {
       ...this.baseProps,
       sourceLayerID: this.props.sourceLayerID,
     };
-    return <RCTMGLFillLayer ref={this.setNativeLayer} {...props} />;
+    return <MBXFillLayerNativeComponent ref={this.setNativeLayer} {...props} />;
   }
 }
-
-const RCTMGLFillLayer =
-  requireNativeComponent<NativeTypeProps>(NATIVE_MODULE_NAME);
 
 export default FillLayer;

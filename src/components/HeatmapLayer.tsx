@@ -1,17 +1,16 @@
 import React from 'react';
-import { NativeModules, requireNativeComponent } from 'react-native';
+import { NativeModules } from 'react-native';
 
 import {
   FilterExpression,
   HeatmapLayerStyleProps,
 } from '../utils/MapboxStyles';
 import { StyleValue } from '../utils/StyleValue';
+import MBXHeatmapLayerNativeComponent from '../specs/MBXHeatmapLayerNativeComponent';
 
 import AbstractLayer from './AbstractLayer';
 
 const MapboxGL = NativeModules.MGLModule;
-
-export const NATIVE_MODULE_NAME = 'RCTMGLHeatmapLayer';
 
 export type Props = {
   /**
@@ -91,11 +90,10 @@ class HeatmapLayer extends AbstractLayer<Props, NativeTypeProps> {
       ...this.baseProps,
       sourceLayerID: this.props.sourceLayerID,
     };
-    return <RCTMGLHeatmapLayer ref={this.setNativeLayer} {...props} />;
+    return (
+      <MBXHeatmapLayerNativeComponent ref={this.setNativeLayer} {...props} />
+    );
   }
 }
-
-const RCTMGLHeatmapLayer =
-  requireNativeComponent<NativeTypeProps>(NATIVE_MODULE_NAME);
 
 export default HeatmapLayer;

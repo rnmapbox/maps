@@ -13,7 +13,7 @@ class RCTMGLSource : RCTMGLInteractiveElement {
   
   override func getLayerIDs() -> [String] {
     layers.compactMap {
-      if let layer = $0 as? RCTMGLLayer {
+      if let layer = $0 as? MBXLayer {
         return layer.id
       } else {
         return nil

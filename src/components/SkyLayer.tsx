@@ -1,14 +1,13 @@
 import React from 'react';
-import { NativeModules, requireNativeComponent } from 'react-native';
+import { NativeModules } from 'react-native';
 
 import { FilterExpression, SkyLayerStyleProps } from '../utils/MapboxStyles';
 import { StyleValue } from '../utils/StyleValue';
+import MBXSkyLayerNativeComponent from '../specs/MBXSkyLayerNativeComponent';
 
 import AbstractLayer from './AbstractLayer';
 
 const MapboxGL = NativeModules.MGLModule;
-
-export const NATIVE_MODULE_NAME = 'RCTMGLSkyLayer';
 
 export type Props = {
   /**
@@ -65,11 +64,13 @@ class SkyLayer extends AbstractLayer<Props, NativeTypeProps> {
   };
 
   render() {
-    return <RCTMGLSkyLayer ref={this.setNativeLayer} {...this.baseProps} />;
+    return (
+      <MBXSkyLayerNativeComponent
+        ref={this.setNativeLayer}
+        {...this.baseProps}
+      />
+    );
   }
 }
-
-const RCTMGLSkyLayer =
-  requireNativeComponent<NativeTypeProps>(NATIVE_MODULE_NAME);
 
 export default SkyLayer;
