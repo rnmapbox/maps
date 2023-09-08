@@ -1,12 +1,12 @@
 #import <React/RCTBridgeModule.h>
 #import <React/RCTViewManager.h>
 
-@interface RCTMGLTerrain : UIView
+@interface MBXTerrain : UIView
 {}
 @property (nonatomic) NSObject* exaggeration;
 @end
 
-@interface RCT_EXTERN_MODULE(RCTMGLTerrainManager, RCTViewManager)
+@interface RCT_EXTERN_REMAP_MODULE(MBXTerrain, MBXTerrainViewManager, RCTViewManager)
 
 RCT_EXPORT_VIEW_PROPERTY(sourceID, NSString);
 

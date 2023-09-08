@@ -1,7 +1,7 @@
 import MapboxMaps
 
 @objc
-class RCTMGLTerrain : RCTMGLSingletonLayer, RCTMGLMapComponent, RCTMGLSourceConsumer {
+public class MBXTerrain : RCTMGLSingletonLayer, RCTMGLMapComponent, RCTMGLSourceConsumer {
   var terrain : Terrain? = nil
   
   func makeTerrain() -> Terrain {
@@ -39,15 +39,15 @@ class RCTMGLTerrain : RCTMGLSingletonLayer, RCTMGLMapComponent, RCTMGLSourceCons
   }
   
   func removeFromMap(_ map: RCTMGLMapView, style: Style) {
-    logged("RCTMGLTerrain.removeFromMap") {
+    logged("MBXTerrain.removeFromMap") {
       style.removeTerrain()
     }
   }
 
-  @objc var sourceID: String? = nil {
+  @objc public var sourceID: String? = nil {
     didSet {
       guard let sourceID = sourceID else {
-        Logger.log(level: .error, message: "RCTMGLTerrain cannot set source to nil")
+        Logger.log(level: .error, message: "MBXTerrain cannot set source to nil")
         return
       }
       
