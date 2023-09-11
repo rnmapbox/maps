@@ -1,4 +1,8 @@
-import MapboxMaps
+@_spi(Experimental) import MapboxMaps
+
+#if RNMBX_11
+typealias Light = FlatLight
+#endif
 
 @objc(RCTMGLLight)
 class RCTMGLLight: UIView, RCTMGLMapComponent {
@@ -17,9 +21,15 @@ class RCTMGLLight: UIView, RCTMGLMapComponent {
   }
   
   func apply(light: Light) {
-    let lightData = try! JSONEncoder().encode(light)
-    let lightDictionary = try! JSONSerialization.jsonObject(with: lightData)
-    try! self.map.style.setLight(properties: lightDictionary as! [String:Any])
+    logged("RCTMGLLight.apply") {
+#if RNMBX_11
+      try self.map.setLights(light)
+#else
+      let lightData = try JSONEncoder().encode(light)
+      let lightDictionary = try JSONSerialization.jsonObject(with: lightData)
+      try self.map.style.setLight(properties: lightDictionary as! [String:Any])
+#endif
+    }
   }
 
   func addStyles() {

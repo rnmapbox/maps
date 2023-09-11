@@ -5,10 +5,11 @@ class RCTMGLBackgroundLayer: RCTMGLLayer {
   typealias LayerType = BackgroundLayer
 
   override func makeLayer(style: Style) throws -> Layer {
-    let vectorSource : VectorSource = try self.layerWithSourceID(in: style)
     var layer = LayerType(id: self.id!)
+    #if !RNMBX_11
     layer.sourceLayer = self.sourceLayerID
     layer.source = sourceID
+    #endif
     return layer
   }
 

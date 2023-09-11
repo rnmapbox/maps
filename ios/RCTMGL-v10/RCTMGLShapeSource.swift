@@ -65,7 +65,11 @@ class RCTMGLShapeSource : RCTMGLSource {
 
   override func makeSource() -> Source
   {
+    #if RNMBX_11
+    var result =  GeoJSONSource(id: id)
+    #else
     var result =  GeoJSONSource()
+    #endif
 
     if let shape = shape {
       do {
@@ -211,8 +215,14 @@ extension RCTMGLShapeSource
       return .featureCollection(featureCollection)
     case .geometry(let geometry):
       return .geometry(geometry)
+    #if RNMBX_11
+    case .string(_):
+      // RNMBX_11_TODO
+      throw RCTMGLError.parseError("url as shape is not supported when updating a ShapeSource")
+    #else
     case .url(_):
       throw RCTMGLError.parseError("url as shape is not supported when updating a ShapeSource")
+      #endif
     }
   }
 
@@ -243,6 +253,58 @@ extension RCTMGLShapeSource
   }
 }
 
+#if !RNMBX_11
+class DummyCancellable : Cancelable {
+  func cancel() {}
+}
+
+#if false
+extension MapboxMap {
+  @discardableResult
+  public func getGeoJsonClusterExpansionZoom(forSourceId sourceId: String,
+                                             feature: Feature,
+                                             completion: @escaping (Result<FeatureExtensionValue, Error>) -> Void) -> Cancelable {
+    self.queryFeatureExtension(for: sourceId,
+                               feature: feature,
+                               extension: "supercluster",
+                               extensionField: "expansion-zoom",
+                               args: nil,
+                               completion: completion)
+    return DummyCancellable()
+  }
+  @discardableResult
+  public func getGeoJsonClusterChildren(forSourceId sourceId: String,
+                                        feature: Feature,
+                                        completion: @escaping (Result<FeatureExtensionValue, Error>) -> Void) -> Cancelable {
+    self.queryFeatureExtension(for: sourceId,
+                                   feature: feature,
+                                   extension: "supercluster",
+                                   extensionField: "children",
+                                   args: nil,
+                                   completion: completion)
+    return DummyCancellable()
+  }
+
+  @discardableResult
+  public func getGeoJsonClusterLeaves(forSourceId sourceId: String,
+                                      feature: Feature,
+                                      limit: UInt64 = 10,
+                                      offset: UInt64 = 0,
+                                      completion: @escaping (Result<FeatureExtensionValue, Error>) -> Void) -> Cancelable {
+      self.queryFeatureExtension(for: sourceId,
+                                   feature: /*MapboxCommon.Feature(*/feature/*)*/,
+                                   extension: "supercluster",
+                                   extensionField: "leaves",
+                                   args: ["limit": limit, "offset": offset],
+                                   completion: completion)
+    return DummyCancellable()
+  }
+  
+  
+}
+#endif
+#endif
+
 // MARK: - getClusterExpansionZoom/getClusterLeaves
 
 extension RCTMGLShapeSource
@@ -261,7 +323,7 @@ extension RCTMGLShapeSource
     }) {
       let cluster : Feature = try parse(featureJSON);
 
-      mapView.mapboxMap.queryFeatureExtension(for: self.id, feature: cluster, extension: "supercluster", extensionField: "expansion-zoom") { result in
+      mapView.mapboxMap.getGeoJsonClusterExpansionZoom(forSourceId: self.id, feature: cluster) { result in
         switch result {
         case .success(let features):
           guard let value = features.value as? NSNumber else {
@@ -291,7 +353,7 @@ extension RCTMGLShapeSource
       completion(.failure(error!))
     }) {
       let cluster : Feature = try parse(featureJSON);
-      mapView.mapboxMap.queryFeatureExtension(for: self.id, feature: cluster,  extension: "supercluster", extensionField: "leaves", args: ["limit": UInt64(number),"offset": UInt64(offset)]) {
+      mapView.mapboxMap.getGeoJsonClusterLeaves(forSourceId: self.id, feature: cluster, limit: UInt64(number), offset: UInt64(offset)) {
         result in
         switch result {
         case .success(let features):
@@ -313,7 +375,7 @@ extension RCTMGLShapeSource
       completion(.failure(error!))
     }) {
       let cluster : Feature = try parse(featureJSON);
-      mapView.mapboxMap.queryFeatureExtension(for: self.id, feature: cluster, extension: "supercluster", extensionField: "children") {
+      mapView.mapboxMap.getGeoJsonClusterChildren(forSourceId: self.id, feature: cluster) {
         result in
         switch result {
         case .success(let features):

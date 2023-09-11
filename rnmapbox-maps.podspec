@@ -156,6 +156,13 @@ def $RNMapboxMaps._add_spm_to_target(project, target, url, requirement, product_
 end
 
 def $RNMapboxMaps.post_install(installer)
+
+  if $RNMapboxMapsUseV11
+    installer.pods_project.build_configurations.each do |config|
+      config.build_settings['OTHER_SWIFT_FLAGS'] ||= ['$(inherited)', '-D RNMBX_11']
+    end
+  end
+
   if $RNMapboxMapsSwiftPackageManager
     return if $RNMapboxMapsSwiftPackageManager == "manual"
 
@@ -236,7 +243,11 @@ Pod::Spec.new do |s|
   s.homepage    	= "https://github.com/rnmapbox/maps#readme"
   s.source      	= { :git => "https://github.com/rnmapbox/maps.git" }
   s.license     	= "MIT"
-  s.platform    	= :ios, "11.0"
+  if $RNMapboxMapsUseV11
+    s.platform    	= :ios, "13.0"
+  else
+    s.platform    	= :ios, "11.0"
+  end
   s.header_dir = "rnmapbox_maps"
 
   unless $RNMapboxMapsSwiftPackageManager

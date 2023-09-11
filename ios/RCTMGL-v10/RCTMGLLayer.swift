@@ -5,6 +5,14 @@ protocol RCTMGLSourceConsumer : class {
   func removeFromMap(_ map: RCTMGLMapView, style: Style)
 }
 
+func styleLayerExists(_ style: Style, id: String) -> Bool {
+  #if RNMBX_11
+  return style.layerExists(withId: id)
+  #else
+  return style.styleManager.styleLayerExists(forLayerId: id)
+  #endif
+}
+
 @objc(RCTMGLLayer)
 class RCTMGLLayer : UIView, RCTMGLMapComponent, RCTMGLSourceConsumer {
   weak var bridge : RCTBridge? = nil
@@ -129,7 +137,7 @@ class RCTMGLLayer : UIView, RCTMGLMapComponent, RCTMGLSourceConsumer {
     addStyles()
     if let style = style,
       let map = map {
-      if style.styleManager.styleLayerExists(forLayerId: id) {
+      if styleLayerExists(style, id: id) {
         self.updateLayer(map)
       }
     }
@@ -215,7 +223,7 @@ class RCTMGLLayer : UIView, RCTMGLMapComponent, RCTMGLSourceConsumer {
     }
 
     do {
-      if (style.styleManager.styleLayerExists(forLayerId: id)) {
+      if (styleLayerExists(style,id: id)) {
         styleLayer = try findLayer(style: style, id: id)
         existingLayer = true
       } else {
@@ -244,14 +252,25 @@ class RCTMGLLayer : UIView, RCTMGLMapComponent, RCTMGLSourceConsumer {
     removeFromMap(style)
   }
   
+  func setBaseOptions<T: Layer>(_ layer: inout T) {
+    if let minZoom = minZoomLevel {
+      layer.minZoom = minZoom.doubleValue
+    }
+    
+    if let maxZoom = maxZoomLevel {
+      layer.maxZoom = maxZoom.doubleValue
+    }
+  }
+  
   func setOptions(_ layer: inout Layer) {
+    setBaseOptions(&layer)
+    #if !RNMBX_11
     if let sourceLayerID = sourceLayerID {
       layer.sourceLayer = sourceLayerID
     }
     
     if let sourceID = sourceID {
       if !(existingLayer && sourceID == DEFAULT_SOURCE_ID) && hasSource() {
-        
         layer.source = sourceID
       }
     }
@@ -265,14 +284,7 @@ class RCTMGLLayer : UIView, RCTMGLMapComponent, RCTMGLSourceConsumer {
         Logger.log(level: .error, message: "parsing filters failed for layer \(optional: id): \(error.localizedDescription)")
       }
     }
-    
-    if let minZoom = minZoomLevel {
-      layer.minZoom = minZoom.doubleValue
-    }
-    
-    if let maxZoom = maxZoomLevel {
-      layer.maxZoom = maxZoom.doubleValue
-    }
+    #endif
   }
   
   private func optionsChanged() {
@@ -341,3 +353,15 @@ class RCTMGLLayer : UIView, RCTMGLMapComponent, RCTMGLSourceConsumer {
     return true
   }
 }
+
+#if RNMBX_11
+protocol LayerWithSource : Layer {
+  var source: String? { get set }
+  var sourceLayer: String? { get set }
+  var filter: Expression? { get set}
+}
+#else
+protocol LayerWithSource : Layer {
+  
+}
+#endif

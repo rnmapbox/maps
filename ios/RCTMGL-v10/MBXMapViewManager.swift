@@ -1,5 +1,11 @@
 import MapboxMaps
 
+#if RNMBX_11
+extension QueriedSourceFeature {
+  var feature: Feature { return self.queriedFeature.feature }
+}
+#endif
+
 @objc(MBXMapViewManager)
 public class MBXMapViewManager: RCTViewManager {
     @objc
@@ -218,13 +224,21 @@ extension MBXMapViewManager {
         }
       }
     }
+
+    static func clearData(_ view: RCTMGLMapView, completion: @escaping (Error?) -> Void) {
+      #if RNMBX_11
+      MapboxMap.clearData(completion: completion)
+      #else
+      view.mapboxMap.clearData(completion: completion)
+      #endif
+    }
   
     @objc public static func clearData(
-        _ view: RCTMGLMapView,
+        _ mapView: RCTMGLMapView,
         resolver:@escaping RCTPromiseResolveBlock,
         rejecter:@escaping RCTPromiseRejectBlock
     ) {
-        view.mapboxMap.clearData { error in
+        self.clearData(mapView) { error in
           if let error = error {
             rejecter("clearData","failed to clearData: \(error.localizedDescription)", error)
           } else {

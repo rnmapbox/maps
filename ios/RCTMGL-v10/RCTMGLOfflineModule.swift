@@ -33,11 +33,19 @@ class RCTMGLOfflineModule: RCTEventEmitter {
   }
   
   lazy var offlineManager : OfflineManager = {
+    #if RNMBX_11
+    return OfflineManager()
+    #else
     return OfflineManager(resourceOptions: .init(accessToken: MGLModule.accessToken!))
+    #endif
   }()
   
   lazy var offlineRegionManager: OfflineRegionManager = {
+    #if RNMBX_11
+    return OfflineRegionManager()
+    #else
     return OfflineRegionManager(resourceOptions: .init(accessToken: MGLModule.accessToken!))
+    #endif
   }()
 
   lazy var tileStore : TileStore = {
@@ -350,11 +358,20 @@ class RCTMGLOfflineModule: RCTEventEmitter {
     
     let stylePackLoadOptions = StylePackLoadOptions(glyphsRasterizationMode: .ideographsRasterizedLocally, metadata: pack.metadata)
     
+    #if RNMBX_11
+    let descriptorOptions = TilesetDescriptorOptions(
+      styleURI: styleURI,
+      zoomRange: zoomRange,
+      tilesets: [], // RNMBX_11_TODO
+      stylePackOptions: stylePackLoadOptions
+    )
+    #else
     let descriptorOptions = TilesetDescriptorOptions(
       styleURI: styleURI,
       zoomRange: zoomRange,
       stylePackOptions: stylePackLoadOptions
     )
+    #endif
     let tilesetDescriptor = self.offlineManager.createTilesetDescriptor(for: descriptorOptions)
     
     let loadOptions = TileRegionLoadOptions(

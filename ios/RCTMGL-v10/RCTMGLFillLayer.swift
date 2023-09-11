@@ -6,7 +6,11 @@ class RCTMGLFillLayer: RCTMGLVectorLayer {
 
   override func makeLayer(style: Style) throws -> Layer {
     let _ : VectorSource = try self.layerWithSourceID(in: style)
+    #if RNMBX_11
+    var layer: Layer = FillLayer(id: self.id!, source: sourceID!)
+    #else
     var layer: Layer = FillLayer(id: self.id!)
+    #endif
     
     setOptions(&layer)
     

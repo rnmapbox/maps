@@ -14,6 +14,56 @@ class FeatureEntry {
   }
 }
 
+
+#if RNMBX_11
+extension QueriedRenderedFeature {
+  var feature : Feature { return queriedFeature.feature }
+}
+#else
+typealias QueriedRenderedFeature = QueriedFeature
+#endif
+
+#if RNMBX_11
+public struct MapEventType<Payload> {
+    var method: (_ map: MapboxMap) -> Signal<Payload>
+
+    init(_ method: @escaping (MapboxMap) -> Signal<Payload>) {
+        self.method = method
+    }
+
+    /// The style has been fully loaded, and the map has rendered all visible tiles.
+  public static var mapLoaded: MapEventType<MapLoaded> { .init( \.onMapLoaded ) }
+    /// An error that has occurred while loading the Map.
+    public static var mapLoadingError: MapEventType<MapLoadingError> { .init(\.onMapLoadingError) }
+    /// The requested style has been fully loaded.
+    public static var styleLoaded: MapEventType<StyleLoaded> { .init(\.onStyleLoaded) }
+    /// The requested style data has been loaded.
+    public static var styleDataLoaded: MapEventType<StyleDataLoaded> { .init(\.onStyleDataLoaded) }
+    /// The camera has changed.
+    public static var cameraChanged: MapEventType<CameraChanged> { .init(\.onCameraChanged) }
+    /// The map has entered the idle state.
+    public static var mapIdle: MapEventType<MapIdle> { .init(\.onMapIdle) }
+    /// The source has been added.
+    public static var sourceAdded: MapEventType<SourceAdded> { .init(\.onSourceAdded) }
+    /// The source has been removed.
+    public static var sourceRemoved: MapEventType<SourceRemoved> { .init(\.onSourceRemoved) }
+    /// A source data has been loaded.
+    public static var sourceDataLoaded: MapEventType<SourceDataLoaded> { .init(\.onSourceDataLoaded) }
+    /// A style has a missing image.
+    public static var styleImageMissing: MapEventType<StyleImageMissing> { .init(\.onStyleImageMissing) }
+    /// An image added to the style is no longer needed and can be removed.
+    public static var styleImageRemoveUnused: MapEventType<StyleImageRemoveUnused> { .init(\.onStyleImageRemoveUnused) }
+    /// The map started rendering a frame.
+    public static var renderFrameStarted: MapEventType<RenderFrameStarted> { .init(\.onRenderFrameStarted) }
+    /// The map finished rendering a frame.
+    public static var renderFrameFinished: MapEventType<RenderFrameFinished> { .init(\.onRenderFrameFinished) }
+    /// Resource requiest as been made.
+    public static var resourceRequest: MapEventType<ResourceRequest> { .init(\.onResourceRequest) }
+}
+
+typealias MapLoadingErrorPayload = MapLoadingError
+#endif
+
 class RCTMGLCameraChanged : RCTMGLEvent, RCTEvent {
   init(type: EventType, payload: [String:Any?]?, reactTag: NSNumber) {
     super.init(type: type, payload: payload)
@@ -82,6 +132,10 @@ open class RCTMGLMapView : MapView {
   private var isGestureActive = false
 
   var layerWaiters : [String:[(String) -> Void]] = [:]
+  
+  #if RNMBX_11
+  var cancelables = Set<AnyCancelable>()
+  #endif
   
   lazy var pointAnnotationManager : PointAnnotationManager = {
     let result = PointAnnotationManager(annotations: annotations, mapView: mapView)
@@ -152,10 +206,15 @@ open class RCTMGLMapView : MapView {
     super.removeReactSubview(subview)
   }
 
-  @objc public required init(frame:CGRect, eventDispatcher: RCTEventDispatcherProtocol) {
+  public required init(frame:CGRect, eventDispatcher: RCTEventDispatcherProtocol) {
+    #if RNMBX_11
+    self.eventDispatcher = eventDispatcher
+    super.init(frame: frame, mapInitOptions: MapInitOptions())
+    #else
     let resourceOptions = ResourceOptions(accessToken: MGLModule.accessToken!)
     self.eventDispatcher = eventDispatcher
     super.init(frame: frame, mapInitOptions: MapInitOptions(resourceOptions: resourceOptions))
+    #endif
 
     self.mapView.gestures.delegate = self
 
@@ -426,6 +485,25 @@ open class RCTMGLMapView : MapView {
 // MARK: - event handlers
 
 extension RCTMGLMapView {
+  #if RNMBX_11
+  private func onEvery<T>(event: MapEventType<T>, handler: @escaping (RCTMGLMapView, T) -> Void) {
+    let signal = event.method(self.mapView.mapboxMap)
+    signal.observe { [weak self] (mapEvent) in
+      guard let self = self else { return }
+
+      handler(self, mapEvent)
+    }.store(in: &cancelables)
+  }
+  
+  private func onNext<T>(event: MapEventType<T>, handler: @escaping (RCTMGLMapView, T) -> Void) {
+    let signal = event.method(self.mapView.mapboxMap)
+    signal.observeNext { [weak self] (mapEvent) in
+      guard let self = self else { return }
+
+      handler(self, mapEvent)
+    }.store(in: &cancelables)
+  }
+  #else
   private func onEvery<Payload>(event: MapEvents.Event<Payload>, handler: @escaping  (RCTMGLMapView, MapEvent<Payload>) -> Void) {
     let eventListener = self.mapView.mapboxMap.onEvery(event: event) { [weak self](mapEvent) in
       guard let self = self else { return }
@@ -445,6 +523,7 @@ extension RCTMGLMapView {
       handler(self, mapEvent)
     }
   }
+  #endif
 
   @objc public func setReactOnMapChange(_ value: @escaping RCTBubblingEventBlock) {
     self.reactOnMapChange = value
@@ -538,8 +617,13 @@ extension RCTMGLMapView {
   public func setupEvents() {
     self.onEvery(event: .mapLoadingError, handler: { (self, event) in
       let eventPayload : MapLoadingErrorPayload = event.payload
+      #if RNMBX_11
+      let error = eventPayload
+      #else
+      let error = eventPayload.error
+      #endif
       var payload : [String:String] = [
-        "error": eventPayload.error.errorDescription ?? eventPayload.error.localizedDescription
+        "error": error.errorDescription ?? error.localizedDescription
       ]
       if let tileId = eventPayload.tileId {
         payload["tileId"] = "x:\(tileId.x) y:\(tileId.y) z:\(tileId.z)"
@@ -550,7 +634,7 @@ extension RCTMGLMapView {
       let rctmglEvent = RCTMGLEvent(type: .mapLoadingError, payload: payload);
       self.fireEvent(event: rctmglEvent, callback: self.reactOnMapChange)
 
-      if let message = eventPayload.error.errorDescription {
+      if let message = error.errorDescription {
         Logger.log(level: .error, message: "MapLoad error \(message)")
       } else {
         Logger.log(level: .error, message: "MapLoad error \(event)")
@@ -692,7 +776,7 @@ extension RCTMGLMapView: GestureManagerDelegate {
     return sources.filter { $0.isTouchable() }
   }
 
-  private func doHandleTapInSources(sources: [RCTMGLInteractiveElement], tapPoint: CGPoint, hits: [String: [QueriedFeature]], touchedSources: [RCTMGLInteractiveElement], callback: @escaping (_ hits: [String: [QueriedFeature]], _ touchedSources: [RCTMGLInteractiveElement]) -> Void) {
+  private func doHandleTapInSources(sources: [RCTMGLInteractiveElement], tapPoint: CGPoint, hits: [String: [QueriedRenderedFeature]], touchedSources: [RCTMGLInteractiveElement], callback: @escaping (_ hits: [String: [QueriedRenderedFeature]], _ touchedSources: [RCTMGLInteractiveElement]) -> Void) {
     DispatchQueue.main.async {
       if let source = sources.first {
         let hitbox = source.hitbox;
@@ -905,6 +989,9 @@ extension RCTMGLMapView {
       let layer = logged("setSourceVisibility.layer", info: { "\(layerInfo.id)" }) {
         try style.layer(withId: layerInfo.id)
       }
+      #if RNMBX_11
+      // RNMBX_11_TODO
+      #else
       if let layer = layer {
         if layer.source == sourceId {
           var good = true
@@ -922,6 +1009,7 @@ extension RCTMGLMapView {
           }
         }
       }
+      #endif
     }
   }
 }

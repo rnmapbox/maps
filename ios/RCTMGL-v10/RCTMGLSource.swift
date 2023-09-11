@@ -83,7 +83,11 @@ class RCTMGLSource : RCTMGLInteractiveElement {
       self.ownsSource = true
       self.source = source
       logged("SyleSource.addToMap", info: {"id: \(optional: self.id)"}) {
+        #if RNMBX_11
+        try style.addSource(source)
+        #else
         try style.addSource(source, id: self.id)
+        #endif
       }
     }
 
