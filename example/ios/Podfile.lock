@@ -77,12 +77,12 @@ PODS:
     - hermes-engine/Pre-built (= 0.71.7)
   - hermes-engine/Pre-built (0.71.7)
   - libevent (2.1.12)
-  - MapboxCommon (23.7.0)
-  - MapboxCoreMaps (10.15.0):
-    - MapboxCommon (~> 23.7)
-  - MapboxMaps (10.15.0):
-    - MapboxCommon (= 23.7.0)
-    - MapboxCoreMaps (= 10.15.0)
+  - MapboxCommon (23.8.0)
+  - MapboxCoreMaps (10.16.0):
+    - MapboxCommon (~> 23.8)
+  - MapboxMaps (10.16.0):
+    - MapboxCommon (= 23.8.0)
+    - MapboxCoreMaps (= 10.16.0)
     - MapboxMobileEvents (= 1.0.10)
     - Turf (~> 2.0)
   - MapboxMobileEvents (1.0.10)
@@ -641,9 +641,9 @@ SPEC CHECKSUMS:
   glog: 04b94705f318337d7ead9e6d17c019bd9b1f6b1b
   hermes-engine: 4438d2b8bf8bebaba1b1ac0451160bab59e491f8
   libevent: 4049cae6c81cdb3654a443be001fb9bdceff7913
-  MapboxCommon: dcbdb86acbcfc1a23efd341ed097c6c63ab532a9
-  MapboxCoreMaps: bcbaac14467616940187f79bba49ca491cd37906
-  MapboxMaps: 1fd9d97d0e8eceb7a45b9ac8bf87a8922da881a8
+  MapboxCommon: 8592a003eae487508461d452d62cfc5906a9682a
+  MapboxCoreMaps: faa14a797417dc32088c98019a3ce72e46cda5cd
+  MapboxMaps: f10aecadbfb7cf96368852ca313101eb4171da53
   MapboxMobileEvents: de50b3a4de180dd129c326e09cd12c8adaaa46d6
   OpenSSL-Universal: ebc357f1e6bc71fa463ccb2fe676756aff50e88c
   RCT-Folly: 424b8c9a7a0b9ab2886ffe9c3b041ef628fd4fb1

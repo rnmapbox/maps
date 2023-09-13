@@ -40,7 +40,7 @@ class ChangeLayerColor extends React.Component {
         >
           <MapboxGL.Camera defaultSettings={defaultCamera} />
           {!!fillColor && (
-            <MapboxGL.FillLayer id="water" style={{ fillColor }} />
+            <MapboxGL.FillLayer id="water" existing style={{ fillColor }} />
           )}
         </MapboxGL.MapView>
         <Bubble onPress={this.onPress}>

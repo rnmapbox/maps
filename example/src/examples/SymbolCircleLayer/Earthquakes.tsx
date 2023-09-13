@@ -11,7 +11,7 @@ import MapboxGL, {
 import { FeatureCollection } from 'geojson';
 import moment from 'moment';
 import React, { useRef, useState } from 'react';
-import { FlatList } from 'react-native';
+import { FlatList, SafeAreaView } from 'react-native';
 
 import earthQuakesJSON from '../../assets/earthquakes.json';
 import sheet from '../../styles/sheet';
@@ -99,42 +99,44 @@ const Earthquakes = ({ label, onDismissExample }: BaseExampleProps) => {
   return (
     <>
       <Overlay isVisible={!!selectedCluster} fullScreen>
-        <FAB
-          onPress={() => {
-            setSelectedCluster(undefined);
-          }}
-          icon={<Icon name="close" />}
-          size="large"
-          style={styles.fab}
-        />
-        {selectedCluster && (
-          <FlatList
-            keyExtractor={({ properties: earthquakeInfo }) => {
-              return earthquakeInfo?.code;
+        <SafeAreaView style={{ flex: 1 }}>
+          <FAB
+            onPress={() => {
+              setSelectedCluster(undefined);
             }}
-            data={selectedCluster.features}
-            renderItem={({ item: { properties: earthquakeInfo } }) => {
-              const magnitude = `Magnitude: ${earthquakeInfo?.mag}`;
-              const place = `Place: ${earthquakeInfo?.place}`;
-              const code = `Code: ${earthquakeInfo?.code}`;
-              const time = `Time: ${moment(earthquakeInfo?.time).format(
-                'MMMM Do YYYY, h:mm:ss a',
-              )}`;
-
-              return (
-                <ListItem bottomDivider>
-                  <ListItem.Content>
-                    <ListItem.Title>{earthquakeInfo?.title}</ListItem.Title>
-                    <ListItem.Subtitle>{magnitude}</ListItem.Subtitle>
-                    <ListItem.Subtitle>{place}</ListItem.Subtitle>
-                    <ListItem.Subtitle>{code}</ListItem.Subtitle>
-                    <ListItem.Subtitle>{time}</ListItem.Subtitle>
-                  </ListItem.Content>
-                </ListItem>
-              );
-            }}
+            icon={<Icon name="close" />}
+            size="large"
+            style={styles.fab}
           />
-        )}
+          {selectedCluster && (
+            <FlatList
+              keyExtractor={({ properties: earthquakeInfo }) => {
+                return earthquakeInfo?.code;
+              }}
+              data={selectedCluster.features}
+              renderItem={({ item: { properties: earthquakeInfo } }) => {
+                const magnitude = `Magnitude: ${earthquakeInfo?.mag}`;
+                const place = `Place: ${earthquakeInfo?.place}`;
+                const code = `Code: ${earthquakeInfo?.code}`;
+                const time = `Time: ${moment(earthquakeInfo?.time).format(
+                  'MMMM Do YYYY, h:mm:ss a',
+                )}`;
+
+                return (
+                  <ListItem bottomDivider>
+                    <ListItem.Content>
+                      <ListItem.Title>{earthquakeInfo?.title}</ListItem.Title>
+                      <ListItem.Subtitle>{magnitude}</ListItem.Subtitle>
+                      <ListItem.Subtitle>{place}</ListItem.Subtitle>
+                      <ListItem.Subtitle>{code}</ListItem.Subtitle>
+                      <ListItem.Subtitle>{time}</ListItem.Subtitle>
+                    </ListItem.Content>
+                  </ListItem>
+                );
+              }}
+            />
+          )}
+        </SafeAreaView>
       </Overlay>
       <Page label={label} onDismissExample={onDismissExample}>
         <MapView style={sheet.matchParent} styleURL={MapboxGL.StyleURL.Dark}>
