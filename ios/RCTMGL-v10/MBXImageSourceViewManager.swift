@@ -1,5 +1,5 @@
-@objc(MBXImageSourceManager)
-class MBXImageSourceManager: RCTViewManager {
+@objc(MBXImageSourceViewManager)
+class MBXImageSourceViewManager: RCTViewManager {
   @objc
   override static func requiresMainQueueSetup() -> Bool {
     return true

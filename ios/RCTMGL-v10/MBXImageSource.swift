@@ -1,9 +1,9 @@
 import MapboxMaps
 
 @objc
-class MBXImageSource : MBXSource {
+public class MBXImageSource : MBXSource {
   
-  @objc var url: String? = nil {
+  @objc public var url: String? = nil {
     didSet {
       if var source = source as? ImageSource {
         source.url = url
@@ -14,7 +14,7 @@ class MBXImageSource : MBXSource {
     }
   }
   
-  @objc var coordinates: [[NSNumber]]? = nil {
+  @objc public var coordinates: [[NSNumber]]? = nil {
     didSet {
       if var source = source as? ImageSource {
         if let coordinates = coordinates {

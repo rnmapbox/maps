@@ -1,5 +1,4 @@
 import React from 'react';
-import { requireNativeComponent } from 'react-native';
 
 import {
   cloneReactChildrenWithProps,
@@ -7,6 +6,7 @@ import {
   resolveImagePath,
 } from '../utils';
 import { BaseProps } from '../types/BaseProps';
+import MBXImageSourceNativeComponent from '../specs/MBXImageSourceNativeComponent';
 
 import AbstractSource from './AbstractSource';
 
@@ -71,16 +71,13 @@ class ImageSource extends AbstractSource<Props, NativeProps> {
     };
 
     return (
-      <RCTMGLImageSource ref={this.setNativeRef} {...props}>
+      <MBXImageSourceNativeComponent ref={this.setNativeRef} {...props}>
         {cloneReactChildrenWithProps(this.props.children, {
           sourceID: this.props.id,
         })}
-      </RCTMGLImageSource>
+      </MBXImageSourceNativeComponent>
     );
   }
 }
-
-const RCTMGLImageSource =
-  requireNativeComponent<NativeProps>(NATIVE_MODULE_NAME);
 
 export default ImageSource;
