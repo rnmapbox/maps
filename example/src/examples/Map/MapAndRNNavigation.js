@@ -7,6 +7,7 @@ import {
   StyleSheet,
   Modal,
   Text,
+  SafeAreaView,
 } from 'react-native';
 import MapboxGL, {
   MapView,
@@ -101,17 +102,19 @@ export default function MapAndNavigation({
         transparent={false}
         visible={modalVisible}
         onRequestClose={() => {
-          this.setState({ modalVisbile: false });
+          setModalVisible(false);
         }}
       >
-        <Text>this is a modal</Text>
-        <Button
-          title="close"
-          onPress={() => {
-            this.setState({ modalVisbile: false });
-          }}
-        />
-        <MapView style={{ flex: 1 }} />
+        <SafeAreaView style={{ flex: 1 }}>
+          <Text>this is a modal</Text>
+          <Button
+            title="close"
+            onPress={() => {
+              setModalVisible(false);
+            }}
+          />
+          <MapView style={{ flex: 1 }} />
+        </SafeAreaView>
       </Modal>
       {showMap && (
         <MapView style={{ flex: 1 }}>
