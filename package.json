@@ -116,6 +116,14 @@
     "react-test-renderer": "17.0.2",
     "typescript": "4.8.4"
   },
+  "codegenConfig": {
+    "name": "rnmapbox_maps_specs",
+    "type": "all",
+    "jsSrcsDir": "src/specs",
+    "android": {
+      "javaPackageName": "com.mapbox.rctmgl"
+    }
+  },
   "jest": {
     "preset": "react-native",
     "collectCoverageFrom": [

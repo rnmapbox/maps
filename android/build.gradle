@@ -5,6 +5,14 @@ def safeExtGet(prop, fallback) {
     rootProject.ext.has(prop) ? rootProject.ext.get(prop) : fallback
 }
 
+def isNewArchitectureEnabled() {
+    // To opt-in for the New Architecture, you can either:
+    // - Set `newArchEnabled` to true inside the `gradle.properties` file
+    // - Invoke gradle with `-newArchEnabled=true`
+    // - Set an environment variable `ORG_GRADLE_PROJECT_newArchEnabled=true`
+    return project.hasProperty("newArchEnabled") && project.newArchEnabled == "true"
+}
+
 // expo plugin
 if (rootProject.ext.has('expoRNMapboxMapsImpl')) {
     rootProject.ext.set('RNMapboxMapsImpl', rootProject.ext.get('expoRNMapboxMapsImpl'))
@@ -25,6 +33,9 @@ buildscript {
   }
 }
 
+if (isNewArchitectureEnabled()) {
+    apply plugin: 'com.facebook.react'
+}
 apply plugin: 'com.android.library'
 
 if (safeExtGet("RNMapboxMapsImpl", defaultMapboxMapsImpl) == "mapbox") {
@@ -68,6 +79,14 @@ android {
         throw new GradleException(msg)
     }
 
+    if (!isNewArchitectureEnabled()) {
+        sourceSets {
+            main {
+                java.srcDirs += 'src/main/old-arch'
+            }
+        }
+    }
+
     compileSdkVersion safeExtGet("compileSdkVersion", 28)
     buildToolsVersion safeExtGet("buildToolsVersion", '28.0.3')
 
@@ -76,6 +95,7 @@ android {
         targetSdkVersion safeExtGet('targetSdkVersion', 26)
         versionCode 1
         versionName "1.0"
+        buildConfigField "boolean", "IS_NEW_ARCHITECTURE_ENABLED", isNewArchitectureEnabled().toString()
     }
 
     compileOptions {

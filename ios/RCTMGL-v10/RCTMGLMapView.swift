@@ -47,7 +47,7 @@ class RCTMGLCameraChanged : RCTMGLEvent, RCTEvent {
   }
 }
 
-@objc(RCTMGLMapView)
+@objc(MBXMapView)
 open class RCTMGLMapView : MapView {
   var tapDelegate: IgnoreRCTMGLMakerViewGestureDelegate? = nil
 
@@ -152,7 +152,7 @@ open class RCTMGLMapView : MapView {
     super.removeReactSubview(subview)
   }
 
-  public required init(frame:CGRect, eventDispatcher: RCTEventDispatcherProtocol) {
+  @objc public required init(frame:CGRect, eventDispatcher: RCTEventDispatcherProtocol) {
     let resourceOptions = ResourceOptions(accessToken: MGLModule.accessToken!)
     self.eventDispatcher = eventDispatcher
     super.init(frame: frame, mapInitOptions: MapInitOptions(resourceOptions: resourceOptions))
@@ -193,14 +193,14 @@ open class RCTMGLMapView : MapView {
   
   // MARK: - React Native properties
 
-  @objc func setReactProjection(_ value: String?) {
+  @objc public func setReactProjection(_ value: String?) {
     if let value = value {
       let projection = StyleProjection(name: value == "globe" ? .globe : .mercator)
       try! self.mapboxMap.style.setProjection(projection)
     }
   }
 
-  @objc func setReactLocalizeLabels(_ value: NSDictionary?) {
+  @objc public func setReactLocalizeLabels(_ value: NSDictionary?) {
     onMapStyleLoaded { _ in
       if let value = value {
         logged("RCTMGLMapVIew.setReactLocalizeLabels") {
@@ -214,34 +214,34 @@ open class RCTMGLMapView : MapView {
   }
   
   
-  @objc func setReactAttributionEnabled(_ value: Bool) {
+  @objc public func setReactAttributionEnabled(_ value: Bool) {
     mapView.ornaments.options.attributionButton.visibility = value ? .visible : .hidden
   }
   
-  @objc func setReactAttributionPosition(_ position: [String: NSNumber]) {
+  @objc public func setReactAttributionPosition(_ position: [String: NSNumber]) {
     if let ornamentOptions = self.getOrnamentOptionsFromPosition(position) {
       mapView.ornaments.options.attributionButton.position = ornamentOptions.position
       mapView.ornaments.options.attributionButton.margins = ornamentOptions.margins
     }
   }
   
-  @objc func setReactLogoEnabled(_ value: Bool) {
+  @objc public func setReactLogoEnabled(_ value: Bool) {
     mapView.ornaments.options.logo.visibility = value ? .visible : .hidden
   }
   
-  @objc func setReactLogoPosition(_ position: [String: NSNumber]) {
+  @objc public func setReactLogoPosition(_ position: [String: NSNumber]) {
     if let ornamentOptions = self.getOrnamentOptionsFromPosition(position) {
       mapView.ornaments.options.logo.position = ornamentOptions.position
       mapView.ornaments.options.logo.margins = ornamentOptions.margins
     }
   }
   
-  @objc func setReactCompassEnabled(_ value: Bool) {
+  @objc public func setReactCompassEnabled(_ value: Bool) {
     compassEnabled = value
     refreshCompassVisibility()
   }
   
-  @objc func setReactCompassFadeWhenNorth(_ value: Bool) {
+  @objc public func setReactCompassFadeWhenNorth(_ value: Bool) {
     compassFadeWhenNorth = value
     refreshCompassVisibility()
   }
@@ -256,7 +256,7 @@ open class RCTMGLMapView : MapView {
     refreshCompassImage()
   }
   
-  @objc func setReactCompassPosition(_ position: [String: NSNumber]) {
+  @objc public func setReactCompassPosition(_ position: [String: NSNumber]) {
     if let ornamentOptions = self.getOrnamentOptionsFromPosition(position) {
       mapView.ornaments.options.compass.position = ornamentOptions.position
       mapView.ornaments.options.compass.margins = ornamentOptions.margins
@@ -286,15 +286,15 @@ open class RCTMGLMapView : MapView {
     }
   }
   
-  @objc func setReactCompassViewPosition(_ position: NSInteger) {
+  @objc public func setReactCompassViewPosition(_ position: NSInteger) {
     mapView.ornaments.options.compass.position = toOrnamentPositon(Int(truncating: NSNumber(value: position)))
   }
   
-  @objc func setReactCompassViewMargins(_ margins: CGPoint) {
+  @objc public func setReactCompassViewMargins(_ margins: CGPoint) {
     mapView.ornaments.options.compass.margins = margins;
   }
 
-  @objc func setReactCompassImage(_ image: String) {
+  @objc public func setReactCompassImage(_ image: String) {
     compassImage = image.isEmpty ? nil : image
     refreshCompassImage()
   }
@@ -312,33 +312,33 @@ open class RCTMGLMapView : MapView {
     }
   }
 
-  @objc func setReactScaleBarEnabled(_ value: Bool) {
+  @objc public func setReactScaleBarEnabled(_ value: Bool) {
     self.mapView.ornaments.options.scaleBar.visibility = value ? .visible : .hidden
   }
   
-  @objc func setReactScaleBarPosition(_ position: [String: NSNumber]) {
+  @objc public func setReactScaleBarPosition(_ position: [String: NSNumber]) {
     if let ornamentOptions = self.getOrnamentOptionsFromPosition(position) {
       mapView.ornaments.options.scaleBar.position = ornamentOptions.position
       mapView.ornaments.options.scaleBar.margins = ornamentOptions.margins
     }
   }
 
-  @objc func setReactZoomEnabled(_ value: Bool) {
+  @objc public func setReactZoomEnabled(_ value: Bool) {
     self.mapView.gestures.options.quickZoomEnabled = value
     self.mapView.gestures.options.doubleTapToZoomInEnabled = value
     self.mapView.gestures.options.pinchZoomEnabled = value
   }
 
-  @objc func setReactScrollEnabled(_ value: Bool) {
+  @objc public func setReactScrollEnabled(_ value: Bool) {
     self.mapView.gestures.options.panEnabled = value
     self.mapView.gestures.options.pinchPanEnabled = value
   }
 
-  @objc func setReactRotateEnabled(_ value: Bool) {
+  @objc public func setReactRotateEnabled(_ value: Bool) {
     self.mapView.gestures.options.rotateEnabled = value
   }
 
-  @objc func setReactPitchEnabled(_ value: Bool) {
+  @objc public func setReactPitchEnabled(_ value: Bool) {
     self.mapView.gestures.options.pitchEnabled = value
   }
 
@@ -368,7 +368,7 @@ open class RCTMGLMapView : MapView {
       addFeaturesToMap(style: style)
   }
   
-  @objc func setReactStyleURL(_ value: String?) {
+  @objc public func setReactStyleURL(_ value: String?) {
     var initialLoad = !self.styleLoaded
     if !initialLoad { refreshComponentsBeforeStyleChange() }
     self.styleLoaded = false
@@ -446,7 +446,7 @@ extension RCTMGLMapView {
     }
   }
 
-  @objc func setReactOnMapChange(_ value: @escaping RCTBubblingEventBlock) {
+  @objc public func setReactOnMapChange(_ value: @escaping RCTBubblingEventBlock) {
     self.reactOnMapChange = value
 
     self.onEvery(event: .cameraChanged, handler: { (self, cameraEvent) in
@@ -664,7 +664,7 @@ class IgnoreRCTMGLMakerViewGestureDelegate : NSObject, UIGestureRecognizerDelega
 
 extension RCTMGLMapView {
   
-  @objc func setReactOnPress(_ value: @escaping RCTBubblingEventBlock) {
+  @objc public func setReactOnPress(_ value: @escaping RCTBubblingEventBlock) {
     self.reactOnPress = value
 
     let singleTapGestureRecognizer = self.mapView.gestures.singleTapGestureRecognizer
@@ -676,7 +676,7 @@ extension RCTMGLMapView {
     singleTapGestureRecognizer.delegate = tapDelegate
   }
 
-  @objc func setReactOnLongPress(_ value: @escaping RCTBubblingEventBlock) {
+  @objc public func setReactOnLongPress(_ value: @escaping RCTBubblingEventBlock) {
     self.reactOnLongPress = value
 
     let longPressGestureRecognizer = UILongPressGestureRecognizer(target: self, action: #selector(doHandleLongPress(_:)))
@@ -864,7 +864,7 @@ extension RCTMGLMapView: GestureManagerDelegate {
 
 extension RCTMGLMapView
 {
-  @objc func takeSnap(
+  @objc public func takeSnap(
     writeToDisk:Bool) -> URL
   {
     UIGraphicsBeginImageContextWithOptions(self.bounds.size, true, 0);

@@ -5,11 +5,10 @@ import android.view.ViewGroup
 import com.facebook.react.bridge.ReactApplicationContext
 import com.facebook.react.common.MapBuilder
 import com.facebook.react.uimanager.ThemedReactContext
-import com.facebook.react.uimanager.UIManagerModule
+import com.facebook.react.uimanager.UIManagerHelper
 import com.facebook.react.uimanager.ViewGroupManager
 import com.facebook.react.uimanager.events.EventDispatcher
 import com.mapbox.rctmgl.events.IEvent
-import javax.annotation.Nonnull
 
 /**
  * Created by nickitaliano on 8/23/17.
@@ -47,7 +46,7 @@ abstract class AbstractEventEmitter<T : ViewGroup?>(reactApplicationContext: Rea
     }
 
     override fun addEventEmitters(context: ThemedReactContext, view: T) {
-        mEventDispatcher = context.getNativeModule(UIManagerModule::class.java)!!.eventDispatcher
+        mEventDispatcher = UIManagerHelper.getEventDispatcherForReactTag(context, view!!.id)
     }
 
     override fun getExportedCustomDirectEventTypeConstants(): Map<String, Any>? {

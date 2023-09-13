@@ -970,7 +970,7 @@ open class RCTMGLMapView(private val mContext: Context, var mManager: RCTMGLMapV
                 ScreenCoordinate(rect.right.toDouble(), rect.bottom.toDouble() ),
                 ScreenCoordinate(rect.left.toDouble(), rect.top.toDouble()),
         )
-        mMap?.queryRenderedFeatures(
+        mMap.queryRenderedFeatures(
                 RenderedQueryGeometry(screenBox),
                 RenderedQueryOptions(layerIDs, filter)
         ) { features ->

@@ -118,6 +118,22 @@ NativeModules.MGLLocationModule = {
   pause: jest.fn(),
 };
 
+NativeModules.MBXMapViewModule = {
+  takeSnap: jest.fn(),
+  queryTerrainElevation: jest.fn(),
+  setSourceVisibility: jest.fn(),
+  getCenter: jest.fn(),
+  getCoordinateFromView: jest.fn(),
+  getPointInView: jest.fn(),
+  getZoom: jest.fn(),
+  getVisibleBounds: jest.fn(),
+  queryRenderedFeaturesAtPoint: jest.fn(),
+  queryRenderedFeaturesInRect: jest.fn(),
+  setHandledMapChangedEvents: jest.fn(),
+  clearData: jest.fn(),
+  querySourceFeatures: jest.fn(),
+};
+
 // Mock for global AbortController
 global.AbortController = class {
   signal = 'test-signal';
