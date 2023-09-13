@@ -1,7 +1,7 @@
 #import <React/RCTBridgeModule.h>
 #import <React/RCTViewManager.h>
 
-@interface RCT_EXTERN_MODULE(RCTMGLRasterSourceManager, RCTViewManager)
+@interface RCT_EXTERN_MODULE(MBXRasterSourceViewManager, RCTViewManager)
 
 RCT_EXPORT_VIEW_PROPERTY(id, NSString)
 RCT_EXPORT_VIEW_PROPERTY(existing, BOOL)

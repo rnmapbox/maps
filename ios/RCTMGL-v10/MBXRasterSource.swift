@@ -1,20 +1,20 @@
 import MapboxMaps
 
 @objc
-class RCTMGLRasterSource : RCTMGLSource {
+public class MBXRasterSource : MBXSource {
   typealias SourceType = RasterSource
 
-  @objc var url: String? = nil
+  @objc public var url: String? = nil
   
-  @objc var tileUrlTemplates: [String]? = nil
+  @objc public var tileUrlTemplates: [String]? = nil
   
-  @objc var minZoomLevel: NSNumber?
-  @objc var maxZoomLevel: NSNumber?
-  @objc var tileSize: NSNumber?
+  @objc public var minZoomLevel: NSNumber?
+  @objc public var maxZoomLevel: NSNumber?
+  @objc public var tileSize: NSNumber?
   
-  @objc var tms: Bool = false
+  @objc public var tms: Bool = false
   
-  @objc var attribution: String?
+  @objc public var attribution: String?
 
   override func makeSource() -> Source
   {

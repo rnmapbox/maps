@@ -9,7 +9,7 @@ final class WeakRef<T: AnyObject> {
   }
 }
 
-class RCTMGLPointAnnotation : RCTMGLInteractiveElement {
+class RCTMGLPointAnnotation : MBXInteractiveElement {
   static let key = "RCTMGLPointAnnotation"
   static var gid = 0;
   

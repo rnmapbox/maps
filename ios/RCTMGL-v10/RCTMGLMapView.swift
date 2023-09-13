@@ -71,7 +71,7 @@ open class RCTMGLMapView : MapView {
 
   weak var reactCamera : RCTMGLCamera?
   var images : [RCTMGLImages] = []
-  var sources : [RCTMGLInteractiveElement] = []
+  var sources : [MBXInteractiveElement] = []
   
   var handleMapChangedEvents = Set<RCTMGLEvent.EventType>()
 
@@ -118,7 +118,7 @@ open class RCTMGLMapView : MapView {
     } else {
       subview.reactSubviews()?.forEach { addToMap($0) }
     }
-    if let source = subview as? RCTMGLInteractiveElement {
+    if let source = subview as? MBXInteractiveElement {
       sources.append(source)
     }
   }
@@ -137,7 +137,7 @@ open class RCTMGLMapView : MapView {
     } else {
       subview.reactSubviews()?.forEach { removeFromMap($0) }
     }
-    if let source = subview as? RCTMGLInteractiveElement {
+    if let source = subview as? MBXInteractiveElement {
       sources.removeAll { $0 == source }
     }
   }
@@ -685,20 +685,20 @@ extension RCTMGLMapView {
 }
 
 extension RCTMGLMapView: GestureManagerDelegate {
-  private func draggableSources() -> [RCTMGLInteractiveElement] {
+  private func draggableSources() -> [MBXInteractiveElement] {
     return sources.filter { $0.isDraggable() }
   }
-  private func touchableSources() -> [RCTMGLInteractiveElement] {
+  private func touchableSources() -> [MBXInteractiveElement] {
     return sources.filter { $0.isTouchable() }
   }
 
-  private func doHandleTapInSources(sources: [RCTMGLInteractiveElement], tapPoint: CGPoint, hits: [String: [QueriedFeature]], touchedSources: [RCTMGLInteractiveElement], callback: @escaping (_ hits: [String: [QueriedFeature]], _ touchedSources: [RCTMGLInteractiveElement]) -> Void) {
+  private func doHandleTapInSources(sources: [MBXInteractiveElement], tapPoint: CGPoint, hits: [String: [QueriedFeature]], touchedSources: [MBXInteractiveElement], callback: @escaping (_ hits: [String: [QueriedFeature]], _ touchedSources: [MBXInteractiveElement]) -> Void) {
     DispatchQueue.main.async {
       if let source = sources.first {
         let hitbox = source.hitbox;
         
-        let halfWidth = (hitbox["width"]?.doubleValue ?? RCTMGLInteractiveElement.hitboxDefault) / 2.0;
-        let halfHeight = (hitbox["height"]?.doubleValue  ?? RCTMGLInteractiveElement.hitboxDefault) / 2.0;
+        let halfWidth = (hitbox["width"]?.doubleValue ?? MBXInteractiveElement.hitboxDefault) / 2.0;
+        let halfHeight = (hitbox["height"]?.doubleValue  ?? MBXInteractiveElement.hitboxDefault) / 2.0;
 
         let top = tapPoint.y - halfHeight;
         let left = tapPoint.x - halfWidth;
@@ -733,8 +733,8 @@ extension RCTMGLMapView: GestureManagerDelegate {
     }
   }
   
-  func highestZIndex(sources: [RCTMGLInteractiveElement]) -> RCTMGLInteractiveElement? {
-    var layersToSource : [String:RCTMGLInteractiveElement] = [:]
+  func highestZIndex(sources: [MBXInteractiveElement]) -> MBXInteractiveElement? {
+    var layersToSource : [String:MBXInteractiveElement] = [:]
     
     sources.forEach { source in
       source.getLayerIDs().forEach { layerId in

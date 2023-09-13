@@ -1,7 +1,7 @@
 import MapboxMaps
 
 @objc
-class RCTMGLInteractiveElement : UIView, RCTMGLMapComponent {
+public class MBXInteractiveElement : UIView, RCTMGLMapComponent {
   weak var map : RCTMGLMapView? = nil
 
   static let hitboxDefault = 44.0
@@ -15,7 +15,7 @@ class RCTMGLInteractiveElement : UIView, RCTMGLMapComponent {
     "height": NSNumber(value: hitboxDefault)
   ]
   
-  @objc var id: String! = nil {
+  @objc public var id: String! = nil {
     willSet {
       if id != nil && newValue != id {
         Logger.log(level:.warn, message: "Changing id from: \(optional: id) to \(optional: newValue), changing of id is supported")

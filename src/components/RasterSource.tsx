@@ -1,14 +1,13 @@
 import React from 'react';
-import { NativeModules, requireNativeComponent } from 'react-native';
+import { NativeModules } from 'react-native';
 
 import { cloneReactChildrenWithProps } from '../utils';
 import { BaseProps } from '../types/BaseProps';
+import MBXRasterSourceNativeComponent from '../specs/MBXRasterSourceNativeComponent';
 
 import AbstractSource from './AbstractSource';
 
 const MapboxGL = NativeModules.MGLModule;
-
-export const NATIVE_MODULE_NAME = 'RCTMGLRasterSource';
 
 const isTileTemplateUrl = (url?: string): url is string =>
   !!url &&
@@ -115,16 +114,13 @@ class RasterSource extends AbstractSource<Props, NativeProps> {
       attribution: this.props.attribution,
     };
     return (
-      <RCTMGLRasterSource ref={this.setNativeRef} {...props}>
+      <MBXRasterSourceNativeComponent ref={this.setNativeRef} {...props}>
         {cloneReactChildrenWithProps(this.props.children, {
           sourceID: this.props.id,
         })}
-      </RCTMGLRasterSource>
+      </MBXRasterSourceNativeComponent>
     );
   }
 }
-
-const RCTMGLRasterSource =
-  requireNativeComponent<NativeProps>(NATIVE_MODULE_NAME);
 
 export default RasterSource;

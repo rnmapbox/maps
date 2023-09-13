@@ -1,7 +1,7 @@
 @_spi(Experimental) import MapboxMaps
 
 @objc
-class RCTMGLSource : RCTMGLInteractiveElement {
+public class MBXSource : MBXInteractiveElement {
   var layers: [RCTMGLSourceConsumer] = []
   var components: [RCTMGLMapComponent] = []
 
@@ -9,7 +9,7 @@ class RCTMGLSource : RCTMGLInteractiveElement {
 
   var ownsSource : Bool = false
 
-  @objc var existing: Bool = false
+  @objc public var existing: Bool = false
   
   override func getLayerIDs() -> [String] {
     layers.compactMap {
@@ -31,7 +31,7 @@ class RCTMGLSource : RCTMGLInteractiveElement {
   
   // MARK: - UIView+React
 
-  @objc override func insertReactSubview(_ subview: UIView!, at atIndex: Int) {
+    @objc public override func insertReactSubview(_ subview: UIView!, at atIndex: Int) {
     if let layer = subview as? RCTMGLSourceConsumer {
       if let map = map {
         layer.addToMap(map, style: map.mapboxMap.style)
@@ -46,7 +46,7 @@ class RCTMGLSource : RCTMGLInteractiveElement {
     super.insertReactSubview(subview, at: atIndex)
   }
   
-  @objc override func removeReactSubview(_ subview: UIView!) {
+  @objc public override func removeReactSubview(_ subview: UIView!) {
     if let layer : RCTMGLSourceConsumer = subview as? RCTMGLSourceConsumer {
       if let map = map {
         layer.removeFromMap(map, style: map.mapboxMap.style)
@@ -61,11 +61,11 @@ class RCTMGLSource : RCTMGLInteractiveElement {
     super.removeReactSubview(subview)
   }
   
-  @objc override func didUpdateReactSubviews() {
+  @objc public override func didUpdateReactSubviews() {
     // do nothing to prevent inserting layers to UIView hierarchy
   }
   
-  // MARK: - RCTMGLInteractiveElement
+  // MARK: - MBXInteractiveElement
   
   override func addToMap(_ map: RCTMGLMapView, style: Style) {
     self.map = map

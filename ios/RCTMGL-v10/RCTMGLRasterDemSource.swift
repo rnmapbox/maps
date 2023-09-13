@@ -1,7 +1,7 @@
 import MapboxMaps
 
 @objc
-class RCTMGLRasterDemSource : RCTMGLSource {
+class RCTMGLRasterDemSource : MBXSource {
   typealias SourceType = RasterDemSource
   
   @objc

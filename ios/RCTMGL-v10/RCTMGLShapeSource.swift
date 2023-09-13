@@ -2,7 +2,7 @@ import MapboxMaps
 import Turf
 
 @objc
-class RCTMGLShapeSource : RCTMGLSource {
+class RCTMGLShapeSource : MBXSource {
   @objc var url : String? {
     didSet {
       parseJSON(url) { [weak self] result in
