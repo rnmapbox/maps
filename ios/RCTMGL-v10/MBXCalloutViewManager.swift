@@ -1,14 +1,14 @@
 import Foundation
 import MapboxMaps
 
-@objc(RCTMGLCalloutManager)
-class RCTMGLCalloutManager  : RCTViewManager {
+@objc(MBXCalloutViewManager)
+class MBXCalloutViewManager  : RCTViewManager {
     @objc
     override static func requiresMainQueueSetup() -> Bool {
         return true
     }
     
     override func view() -> UIView! {
-        return RCTMGLCallout()
+        return MBXCallout()
     }
 }

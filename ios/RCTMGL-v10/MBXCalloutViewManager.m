@@ -2,7 +2,7 @@
 #import <React/RCTViewManager.h>
 #import <Foundation/Foundation.h>
 
-@interface RCT_EXTERN_MODULE(RCTMGLCalloutManager, RCTViewManager)
+@interface RCT_EXTERN_REMAP_MODULE(MBXCallout, MBXCalloutViewManager, RCTViewManager)
 
 @end
 

@@ -21,7 +21,7 @@ class RCTMGLPointAnnotation : MBXInteractiveElement {
   }()
   var added = false
 
-  weak var callout: RCTMGLCallout? = nil
+  weak var callout: MBXCallout? = nil
   var calloutId : String?
   var image : UIImage? = nil
   var reactSubviews : [UIView] = []
@@ -178,7 +178,7 @@ class RCTMGLPointAnnotation : MBXInteractiveElement {
   
   @objc
   override func insertReactSubview(_ subview: UIView!, at atIndex: Int) {
-    if let callout = subview as? RCTMGLCallout {
+    if let callout = subview as? MBXCallout {
       self.callout = callout
     } else {
       reactSubviews.insert(subview, at: atIndex)
@@ -195,7 +195,7 @@ class RCTMGLPointAnnotation : MBXInteractiveElement {
 
   @objc
   override func removeReactSubview(_ subview: UIView!) {
-    if let callout = subview as? RCTMGLCallout {
+    if let callout = subview as? MBXCallout {
       if self.callout == callout {
         self.callout = nil
       }
