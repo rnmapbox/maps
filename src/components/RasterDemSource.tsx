@@ -1,6 +1,7 @@
 import React from 'react';
-import { NativeModules, requireNativeComponent } from 'react-native';
+import { NativeModules } from 'react-native';
 
+import MBXRasterDemSourceNativeComponent from '../specs/MBXRasterDemSourceNativeComponent';
 import { cloneReactChildrenWithProps } from '../utils';
 
 import AbstractSource from './AbstractSource';
@@ -10,8 +11,6 @@ const isTileTemplateUrl = (url?: string): url is string =>
   (url.includes('{z}') || url.includes('{bbox-') || url.includes('{quadkey}'));
 
 const MapboxGL = NativeModules.MGLModule;
-
-export const NATIVE_MODULE_NAME = 'RCTMGLRasterDemSource';
 
 type Props = {
   /**
@@ -96,16 +95,13 @@ class RasterDemSource extends AbstractSource<Props, NativeProps> {
       tileSize: this.props.tileSize,
     };
     return (
-      <RCTMGLRasterDemSource ref={this.setNativeRef} {...props}>
+      <MBXRasterDemSourceNativeComponent ref={this.setNativeRef} {...props}>
         {cloneReactChildrenWithProps(this.props.children, {
           sourceID: this.props.id,
         })}
-      </RCTMGLRasterDemSource>
+      </MBXRasterDemSourceNativeComponent>
     );
   }
 }
-
-const RCTMGLRasterDemSource =
-  requireNativeComponent<NativeProps>(NATIVE_MODULE_NAME);
 
 export default RasterDemSource;

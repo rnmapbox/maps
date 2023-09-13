@@ -1,23 +1,23 @@
 import MapboxMaps
 
 @objc
-class RCTMGLRasterDemSource : MBXSource {
+public class MBXRasterDemSource : MBXSource {
   typealias SourceType = RasterDemSource
   
   @objc
-  var url: String? = nil
+    public var url: String? = nil
   
   @objc
-  var tileUrlTemplates: [String]? = nil
+    public var tileUrlTemplates: [String]? = nil
   
   @objc
-  var tileSize : NSNumber? = nil
+    public var tileSize : NSNumber? = nil
   
   @objc
-  var maxZoomLevel : NSNumber? = nil
+    public var maxZoomLevel : NSNumber? = nil
   
   @objc
-  var minZoomLevel : NSNumber? = nil
+    public var minZoomLevel : NSNumber? = nil
 
   @objc
   static func requiresMainQueueSetup() -> Bool {

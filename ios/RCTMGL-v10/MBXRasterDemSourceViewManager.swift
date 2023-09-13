@@ -1,11 +1,11 @@
-@objc(RCTMGLRasterDemSourceManager)
-class RCTMGLRasterDemSourceManager: RCTViewManager {
+@objc(MBXRasterDemSourceViewManager)
+class MBXRasterDemSourceViewManager: RCTViewManager {
   @objc
   override static func requiresMainQueueSetup() -> Bool {
     return true
   }
 
   @objc override func view() -> UIView {
-    return RCTMGLRasterDemSource()
+    return MBXRasterDemSource()
   }
 }
