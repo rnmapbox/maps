@@ -264,7 +264,7 @@ class RCTMGLStyleValue {
     }
     let valueObj = RCTMGLStyleValue.convert(value["stylevalue"] as! [String:Any])
 
-    if let num = value as? Int {
+    if let num = valueObj as? Int {
       let uicolor = uicolor(num)
       return StyleColor(uicolor)
     } else {
