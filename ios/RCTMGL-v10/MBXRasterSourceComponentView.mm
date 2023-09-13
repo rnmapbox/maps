@@ -1,6 +1,7 @@
 #ifdef RCT_NEW_ARCH_ENABLED
 
 #import "MBXRasterSourceComponentView.h"
+#import "MBXFabricHelpers.h"
 
 #import <React/RCTConversions.h>
 #import <React/RCTFabricComponentsPlugins.h>
@@ -57,15 +58,6 @@ using namespace facebook::react;
     }
 }
 
-+ (NSArray<NSString *> *)convertArrayOfString:(std::vector<std::string>)stringArray
-{
-    NSMutableArray<NSString *> *result = [NSMutableArray new];
-    for (auto string : stringArray) {
-        [result addObject:RCTNSStringFromStringNilIfEmpty(string)];
-    }
-    return result;
-}
-
 #pragma mark - RCTComponentViewProtocol
 
 + (ComponentDescriptorProvider)componentDescriptorProvider
@@ -79,7 +71,7 @@ using namespace facebook::react;
     _view.id = RCTNSStringFromStringNilIfEmpty(newProps.id);
     _view.existing = newProps.existing;
     _view.url = RCTNSStringFromStringNilIfEmpty(newProps.url);
-    _view.tileUrlTemplates = [MBXRasterSourceComponentView convertArrayOfString:newProps.tileUrlTemplates];
+    _view.tileUrlTemplates = RNMBXConvertArrayOfString(newProps.tileUrlTemplates);
 
     _view.tileSize = @(newProps.tileSize);
     _view.minZoomLevel = @(newProps.minZoomLevel);

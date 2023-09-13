@@ -263,6 +263,7 @@ Pod::Spec.new do |s|
       sp.source_files = "ios/RCTMGL-v10/**/*.{h,m,mm,swift}"
 
       if new_arch_enabled
+        sp.private_header_files = 'ios/RCTMGL-v10/MBXFabricHelpers.h'
         install_modules_dependencies(sp)
       end
     when 'mapbox-gl'

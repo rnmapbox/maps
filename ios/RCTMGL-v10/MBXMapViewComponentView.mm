@@ -2,6 +2,7 @@
 
 #import "MBXMapViewComponentView.h"
 #import "MBXMapFeatureView.h"
+#import "MBXFabricHelpers.h"
 
 #import <React/RCTConversions.h>
 #import <React/RCTFabricComponentsPlugins.h>
@@ -69,7 +70,7 @@ using namespace facebook::react;
           __typeof__(self) strongSelf = weakSelf;
 
           if (strongSelf != nullptr && strongSelf->_eventEmitter != nullptr) {
-              const auto [type, json] = [MBXMapViewComponentView stringifyEventData:event];
+              const auto [type, json] = RNMBXStringifyEventData(event);
               std::dynamic_pointer_cast<const facebook::react::MBXMapViewEventEmitter>(strongSelf->_eventEmitter)->onPress({type, json});
             }
       }];
@@ -78,7 +79,7 @@ using namespace facebook::react;
           __typeof__(self) strongSelf = weakSelf;
 
           if (strongSelf != nullptr && strongSelf->_eventEmitter != nullptr) {
-              const auto [type, json] = [MBXMapViewComponentView stringifyEventData:event];
+              const auto [type, json] = RNMBXStringifyEventData(event);
               std::dynamic_pointer_cast<const facebook::react::MBXMapViewEventEmitter>(strongSelf->_eventEmitter)->onLongPress({type, json});
             }
       }];
@@ -87,7 +88,7 @@ using namespace facebook::react;
           __typeof__(self) strongSelf = weakSelf;
 
           if (strongSelf != nullptr && strongSelf->_eventEmitter != nullptr) {
-              const auto [type, json] = [MBXMapViewComponentView stringifyEventData:event];
+              const auto [type, json] = RNMBXStringifyEventData(event);
               std::dynamic_pointer_cast<const facebook::react::MBXMapViewEventEmitter>(strongSelf->_eventEmitter)->onMapChange({type, json});
             }
       }];
@@ -99,58 +100,8 @@ using namespace facebook::react;
 }
 
 - (void)dispatchCameraChangedEvent:(NSDictionary*)event {
-    const auto [type, json] = [MBXMapViewComponentView stringifyEventData:event];
+    const auto [type, json] = RNMBXStringifyEventData(event);
     std::dynamic_pointer_cast<const facebook::react::MBXMapViewEventEmitter>(self->_eventEmitter)->onCameraChanged({type, json});
-}
-
-+ (std::tuple<std::string, std::string>)stringifyEventData:(NSDictionary*)event {
-    std::string type = [event valueForKey:@"type"] == nil ? "" : std::string([[event valueForKey:@"type"] UTF8String]);
-    std::string json = "{}";
-
-    NSError *error;
-    NSData *jsonData = nil;
-
-    if ([event valueForKey:@"payload"] != nil) {
-        jsonData = [NSJSONSerialization dataWithJSONObject:[event valueForKey:@"payload"]
-                                                           options:0
-                                                             error:&error];
-    }
-
-    if (jsonData) {
-        json = std::string([[[NSString alloc] initWithData:jsonData encoding:NSUTF8StringEncoding] UTF8String]);
-    }
-
-    return {type, json};
-}
-
-- (NSDictionary*)convertPositionToDictionary:(const folly::dynamic*)position {
-    NSMutableDictionary<NSString*, NSNumber*>* result = [[NSMutableDictionary alloc] init];
-
-    if (!position->isNull()) {
-        for (auto& pair : position->items()) {
-            NSString* key = [NSString stringWithUTF8String:pair.first.getString().c_str()];
-            NSNumber* value = [[NSNumber alloc] initWithInt:pair.second.getDouble()];
-            [result setValue:value forKey:key];
-        }
-    }
-
-    return result;
-}
-
-- (NSDictionary*)convertLocalizeLabels:(const MBXMapViewLocalizeLabelsStruct*)labels {
-    NSMutableDictionary* result = [[NSMutableDictionary alloc] init];
-    NSMutableArray* ids = [[NSMutableArray alloc] init];
-
-    [result setValue:[NSString stringWithUTF8String:labels->locale.c_str()] forKey:@"locale"];
-
-    for (auto& layerId : labels->layerIds) {
-        NSString* value = [NSString stringWithUTF8String:layerId.c_str()];
-        [ids addObject:value];
-    }
-
-    [result setValue:ids forKey:@"layerIds"];
-
-    return result;
 }
 
 - (void)insertSubview:(UIView *)view atIndex:(NSInteger)index
@@ -185,20 +136,20 @@ using namespace facebook::react;
 {
   const auto &newProps = *std::static_pointer_cast<const MBXMapViewProps>(props);
     [_view setReactAttributionEnabled:newProps.attributionEnabled];
-    [_view setReactAttributionPosition:[self convertPositionToDictionary:&newProps.attributionPosition]];
+    [_view setReactAttributionPosition:RNMBXConvertDynamicToDictionary(&newProps.attributionPosition)];
 
     [_view setReactLogoEnabled:newProps.logoEnabled];
-    [_view setReactLogoPosition:[self convertPositionToDictionary:&newProps.logoPosition]];
+    [_view setReactLogoPosition:RNMBXConvertDynamicToDictionary(&newProps.logoPosition)];
 
     [_view setReactCompassEnabled:newProps.compassEnabled];
     [_view setReactCompassFadeWhenNorth:newProps.compassFadeWhenNorth];
-    [_view setReactCompassPosition:[self convertPositionToDictionary:&newProps.compassPosition]];
+    [_view setReactCompassPosition:RNMBXConvertDynamicToDictionary(&newProps.compassPosition)];
     [_view setReactCompassViewPosition:newProps.compassViewPosition];
     [_view setReactCompassViewMargins:CGPointMake(newProps.compassViewMargins.x, newProps.compassViewMargins.y)];
     [_view setReactCompassImage:[NSString stringWithUTF8String:newProps.compassImage.c_str()]];
 
     [_view setReactScaleBarEnabled:newProps.scaleBarEnabled];
-    [_view setReactScaleBarPosition:[self convertPositionToDictionary:&newProps.scaleBarPosition]];
+    [_view setReactScaleBarPosition:RNMBXConvertDynamicToDictionary(&newProps.scaleBarPosition)];
 
     [_view setReactZoomEnabled:newProps.zoomEnabled];
     [_view setReactScrollEnabled:newProps.scrollEnabled];
@@ -209,7 +160,7 @@ using namespace facebook::react;
     [_view setReactStyleURL:[NSString stringWithUTF8String:newProps.styleURL.c_str()]];
 
     if (!newProps.localizeLabels.locale.empty()) {
-        [_view setReactLocalizeLabels:[self convertLocalizeLabels:&newProps.localizeLabels]];
+        [_view setReactLocalizeLabels:RNMBXConvertLocalizeLabels(&newProps.localizeLabels)];
     }
   [super updateProps:props oldProps:oldProps];
 }
