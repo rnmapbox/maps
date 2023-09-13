@@ -1,5 +1,6 @@
 import React, { memo, forwardRef, ReactElement } from 'react';
-import { requireNativeComponent } from 'react-native';
+
+import MBXImageNativeComponent from '../specs/MBXImageNativeComponent';
 
 interface Props {
   /** ID of the image */
@@ -42,21 +43,9 @@ const Image = memo(
       stretchY,
       children,
     };
-    return <RCTMGLImage {...nativeProps} />;
+    return <MBXImageNativeComponent {...nativeProps} />;
   }),
 );
-
-interface NativeProps {
-  name: string;
-  children: ReactElement;
-  sdf?: boolean;
-  stretchX?: [number, number][];
-  stretchY?: [number, number][];
-}
-
-export const NATIVE_MODULE_NAME = 'RCTMGLImage';
-
-const RCTMGLImage = requireNativeComponent<NativeProps>(NATIVE_MODULE_NAME);
 
 Image.displayName = 'Image';
 
