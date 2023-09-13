@@ -1,11 +1,11 @@
 import MapboxMaps
 
-@objc(RCTMGLLight)
-class RCTMGLLight: UIView, RCTMGLMapComponent {
+@objc(MBXLight)
+public class MBXLight: UIView, RCTMGLMapComponent {
   weak var bridge : RCTBridge! = nil
   weak var map: MapboxMap! = nil
   var oldReactStyle: [String:Any]?
-  @objc var reactStyle : [String:Any]! = nil {
+  @objc public var reactStyle : [String:Any]! = nil {
     willSet {
       oldReactStyle = reactStyle
     }
