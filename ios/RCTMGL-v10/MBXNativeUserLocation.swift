@@ -1,7 +1,7 @@
 import MapboxMaps
 
 @objc
-class RCTMGLNativeUserLocation : UIView, RCTMGLMapComponent {
+public class MBXNativeUserLocation : UIView, RCTMGLMapComponent {
   weak var map : RCTMGLMapView! = nil
   
   let locationLayerId = "location-layer"
@@ -9,7 +9,7 @@ class RCTMGLNativeUserLocation : UIView, RCTMGLMapComponent {
   var locationLayer : LocationIndicatorLayer? = nil
 
   @objc
-  var iosShowsUserHeadingIndicator : Bool = false {
+  public var iosShowsUserHeadingIndicator : Bool = false {
     didSet {
       if let map = self.map { _applySettings(map) }
     }

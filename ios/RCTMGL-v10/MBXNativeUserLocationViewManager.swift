@@ -1,11 +1,11 @@
-@objc(RCTMGLNativeUserLocationManager)
-class RCTMGLNativeUserLocationManager : RCTViewManager {
+@objc(MBXNativeUserLocationViewManager)
+class MBXNativeUserLocationViewManager : RCTViewManager {
   @objc
   override static func requiresMainQueueSetup() -> Bool {
     return true
   }
 
   @objc override func view() -> UIView {
-    return RCTMGLNativeUserLocation()
+    return MBXNativeUserLocation()
   }
 }
