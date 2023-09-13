@@ -3,14 +3,12 @@ import {
   View,
   Text,
   Animated,
-  requireNativeComponent,
   StyleSheet,
   ViewStyle,
   ViewProps,
-  StyleProp,
 } from 'react-native';
 
-export const NATIVE_MODULE_NAME = 'RCTMGLCallout';
+import MBXCalloutNativeComponent from '../specs/MBXCalloutNativeComponent';
 
 const styles = StyleSheet.create({
   container: {
@@ -47,11 +45,6 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
 });
-
-type NativeProps = {
-  children: ReactNode;
-  style: StyleProp<ViewStyle>;
-};
 
 type Props = Omit<ViewProps, 'style'> & {
   /**
@@ -135,13 +128,11 @@ class Callout extends React.PureComponent<Props> {
       ? this._renderCustomCallout()
       : this._renderDefaultCallout();
     return (
-      <RCTMGLCallout style={this._containerStyle}>
+      <MBXCalloutNativeComponent style={this._containerStyle}>
         {calloutContent}
-      </RCTMGLCallout>
+      </MBXCalloutNativeComponent>
     );
   }
 }
-
-const RCTMGLCallout = requireNativeComponent<NativeProps>(NATIVE_MODULE_NAME);
 
 export default Callout;
