@@ -110,7 +110,7 @@ open class RCTMGLMapComponentBase : UIView, RCTMGLMapComponent {
 }
 
 @objc(MBXCamera)
-open class RCTMGLCamera : RCTMGLMapComponentBase {
+open class MBXCamera : RCTMGLMapComponentBase {
   var cameraAnimator: BasicCameraAnimator?
   let cameraUpdateQueue = CameraUpdateQueue()
   
@@ -524,7 +524,7 @@ open class RCTMGLCamera : RCTMGLMapComponentBase {
 
 // MARK: - ViewportStatusObserver
 
-extension RCTMGLCamera : ViewportStatusObserver {
+extension MBXCamera : ViewportStatusObserver {
   func toDict(_ status: ViewportStatus) -> [String: Any] {
     switch (status) {
     case .idle:

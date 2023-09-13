@@ -6,11 +6,12 @@ import React, {
   useMemo,
   useRef,
 } from 'react';
-import { NativeModules, requireNativeComponent } from 'react-native';
+import { NativeModules } from 'react-native';
 
 import { MapboxGLEvent } from '../types';
 import { makeLatLngBounds, makePoint } from '../utils/geoUtils';
 import { type NativeRefType } from '../utils/nativeRef';
+import MBXCameraNativeComponent from '../specs/MBXCameraNativeComponent';
 
 const NativeModule = NativeModules.MGLModule;
 
@@ -538,7 +539,7 @@ export const Camera = memo(
       }));
 
       return (
-        <RCTMGLCamera
+        <MBXCameraNativeComponent
           testID={'Camera'}
           ref={nativeCamera}
           stop={nativeStop}
@@ -560,8 +561,5 @@ export const Camera = memo(
     },
   ),
 );
-
-const RCTMGLCamera =
-  requireNativeComponent<NativeCameraProps>(NATIVE_MODULE_NAME);
 
 export type Camera = CameraRef;

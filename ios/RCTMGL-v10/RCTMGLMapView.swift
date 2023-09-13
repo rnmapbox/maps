@@ -69,7 +69,7 @@ open class RCTMGLMapView : MapView {
 
   var features: [FeatureEntry] = []
 
-  weak var reactCamera : RCTMGLCamera?
+  weak var reactCamera : MBXCamera?
   var images : [MBXImages] = []
   var sources : [MBXInteractiveElement] = []
   
