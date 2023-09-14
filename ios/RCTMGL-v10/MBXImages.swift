@@ -4,17 +4,17 @@ protocol MBXImageSetter : AnyObject {
   func addImage(name: String, image: UIImage, sdf: Bool?, stretchX: [[NSNumber]], stretchY: [[NSNumber]], content: [NSNumber]?, log: String) -> Bool
 }
 
-class MBXImages : UIView, RCTMGLMapComponent {
+open class MBXImages : UIView, RCTMGLMapComponent {
   
   weak var bridge : RCTBridge! = nil
   
   weak var style: Style? = nil
 
   @objc
-  var onImageMissing: RCTBubblingEventBlock? = nil
+  public var onImageMissing: RCTBubblingEventBlock? = nil
   
   @objc
-  var images : [String:Any] = [:] {
+  public var images : [String:Any] = [:] {
     didSet {
       updateImages(images: images, oldImages: oldValue)
     }
@@ -25,7 +25,7 @@ class MBXImages : UIView, RCTMGLMapComponent {
   var imageViews: [MBXImage] = []
 
   @objc
-  var nativeImages: [Any] = [] {
+  public var nativeImages: [Any] = [] {
     didSet {
       nativeImageInfos = nativeImages.compactMap { decodeImage($0) }
     }

@@ -1,10 +1,8 @@
 import React, { ReactNode, ReactElement } from 'react';
-import {
-  requireNativeComponent,
-  Image as RNImage,
-  ImageURISource,
-} from 'react-native';
+import { Image as RNImage, ImageURISource } from 'react-native';
 import { ImageSourcePropType, ImageResolvedAssetSource } from 'react-native';
+
+import MBXImagesNativeComponent from '../specs/MBXImagesNativeComponent';
 
 import { ShapeSource } from './ShapeSource';
 import Image from './Image';
@@ -101,7 +99,6 @@ interface Props {
    */
   onImageMissing?: (imageKey: string) => void;
 
-  id?: string;
   children?: TypedReactNode<typeof Image>;
 }
 
@@ -184,25 +181,17 @@ class Images extends React.PureComponent<Props> {
 
   render() {
     const props = {
-      id: this.props.id,
       hasOnImageMissing: !!this.props.onImageMissing,
       onImageMissing: this._onImageMissing.bind(this),
       ...this._getImages(),
     };
 
-    return <RCTMGLImages {...props}>{this.props.children}</RCTMGLImages>;
+    return (
+      <MBXImagesNativeComponent {...props}>
+        {this.props.children}
+      </MBXImagesNativeComponent>
+    );
   }
 }
-
-type NativeProps = {
-  hasOnImageMissing: boolean;
-  onImageMissing?: (event: React.SyntheticEvent<Element, RNMBEvent>) => void;
-  images?: {
-    [key: string]: string | ImageResolvedAssetSource | ResolvedImageEntryData;
-  };
-  nativeImages?: NativeImage[];
-};
-
-const RCTMGLImages = requireNativeComponent<NativeProps>(NATIVE_MODULE_NAME);
 
 export default Images;

@@ -41,15 +41,6 @@ any of the `Images` component of the Map.
 
 
   
-### id
-
-```tsx
-string
-```
-FIX ME NO DESCRIPTION
-
-
-  
 ### children
 
 ```tsx
