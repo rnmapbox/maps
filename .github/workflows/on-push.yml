@@ -4,6 +4,7 @@ on:
     branches:
     - 'main'
     - 'v8'
+    - 'v10.0'
   pull_request:
 
 concurrency: 
