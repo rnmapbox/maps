@@ -766,7 +766,7 @@ extension RCTMGLMapView: GestureManagerDelegate {
               logged("doHandleTap.hitFeatures") { try queriedFeature.feature.toJSON() } }
             let location = self.mapboxMap.coordinate(for: tapPoint)
             let event = RCTMGLEvent(
-              type: (source is RCTMGLVectorSource) ? .vectorSourceLayerPress : .shapeSourceLayerPress,
+              type: (source is MBXVectorSource) ? .vectorSourceLayerPress : .shapeSourceLayerPress,
               payload: [
                 "features": features,
                 "point": [

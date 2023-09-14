@@ -3,9 +3,9 @@ import {
   NativeMethods,
   NativeModules,
   NativeSyntheticEvent,
-  requireNativeComponent,
 } from 'react-native';
 
+import MBXVectorSourceNativeComponent from '../specs/MBXVectorSourceNativeComponent';
 import { cloneReactChildrenWithProps, isFunction, isAndroid } from '../utils';
 import { getFilter } from '../utils/filterUtils';
 import { copyPropertiesAsDeprecated } from '../utils/deprecation';
@@ -147,16 +147,23 @@ class VectorSource extends NativeBridgeComponent(
     return res.data;
   }
 
+  _decodePayload(payload: OnPressEvent | string): OnPressEvent {
+    // we check whether the payload is a string, since the strict type safety is enforced only on iOS on the new arch
+    // on Android, on both archs, the payload is an object
+    if (typeof payload === 'string') {
+      return JSON.parse(payload);
+    } else {
+      return payload;
+    }
+  }
+
   onPress(
     event: NativeSyntheticEvent<{
-      payload: OnPressEvent;
+      payload: OnPressEvent | string;
     }>,
   ) {
-    const {
-      nativeEvent: {
-        payload: { features, coordinates, point },
-      },
-    } = event;
+    const payload = this._decodePayload(event.nativeEvent.payload);
+    const { features, coordinates, point } = payload;
     let newEvent = {
       features,
       coordinates,
@@ -200,16 +207,16 @@ class VectorSource extends NativeBridgeComponent(
       onAndroidCallback: isAndroid() ? this._onAndroidCallback : undefined,
     };
     return (
-      <RCTMGLVectorSource ref={(r) => this._setNativeRef(r)} {...props}>
+      <MBXVectorSourceNativeComponent
+        ref={(r) => this._setNativeRef(r)}
+        {...props}
+      >
         {cloneReactChildrenWithProps(this.props.children, {
           sourceID: this.props.id,
         })}
-      </RCTMGLVectorSource>
+      </MBXVectorSourceNativeComponent>
     );
   }
 }
-
-const RCTMGLVectorSource =
-  requireNativeComponent<NativeProps>(NATIVE_MODULE_NAME);
 
 export default VectorSource;

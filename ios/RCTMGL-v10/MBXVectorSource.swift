@@ -1,13 +1,13 @@
 import MapboxMaps
 
 @objc
-class RCTMGLVectorSource : RCTMGLTileSource {
+public class MBXVectorSource : RCTMGLTileSource {
   
-  @objc var attribution: String?
-  @objc var maxZoomLevel: NSNumber?
-  @objc var minZoomLevel: NSNumber?
-  @objc var tileUrlTemplates: [String] = []
-  @objc var tms: Bool = false
+  @objc public var attribution: String?
+  @objc public var maxZoomLevel: NSNumber?
+  @objc public var minZoomLevel: NSNumber?
+  @objc public var tileUrlTemplates: [String] = []
+  @objc public var tms: Bool = false
   
   override func sourceType() -> Source.Type {
     return VectorSource.self

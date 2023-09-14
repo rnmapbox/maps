@@ -6,11 +6,11 @@ public class MBXInteractiveElement : UIView, RCTMGLMapComponent {
 
   static let hitboxDefault = 44.0
 
-  @objc var draggable: Bool = false
+  @objc public var draggable: Bool = false
   
-  @objc var hasPressListener: Bool = false
+  @objc public var hasPressListener: Bool = false
   
-  @objc var hitbox : [String:NSNumber] = [
+  @objc public var hitbox : [String:NSNumber] = [
     "width": NSNumber(value: hitboxDefault),
     "height": NSNumber(value: hitboxDefault)
   ]
@@ -29,9 +29,9 @@ public class MBXInteractiveElement : UIView, RCTMGLMapComponent {
     }
   }
   
-  @objc var onDragStart: RCTBubblingEventBlock? = nil
+  @objc public var onDragStart: RCTBubblingEventBlock? = nil
   
-  @objc var onPress: RCTBubblingEventBlock? = nil
+  @objc public var onPress: RCTBubblingEventBlock? = nil
   
   func getLayerIDs() -> [String] {
     return []
