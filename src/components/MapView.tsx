@@ -896,7 +896,7 @@ class MapView extends NativeBridgeComponent(
 
   _onLongPress(e: NativeSyntheticEvent<{ payload: GeoJSON.Feature }>) {
     if (isFunction(this.props.onLongPress)) {
-      this.props.onLongPress(e.nativeEvent.payload);
+      this.props.onLongPress(this._decodePayload(e.nativeEvent.payload));
     }
   }
 
