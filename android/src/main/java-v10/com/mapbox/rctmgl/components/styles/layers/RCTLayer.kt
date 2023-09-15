@@ -229,11 +229,11 @@ abstract class RCTLayer<T : Layer?>(protected var mContext: Context) : AbstractS
             mLayer?.let { layer ->
                 mAboveLayerID?.also {
                     addAbove(mapView, it)
-                } ?: { mBelowLayerID?.also {
+                } ?: run { mBelowLayerID?.also {
                     addBelow(mapView, it)
-                } ?: { mLayerIndex?.also {
+                } ?: run { mLayerIndex?.also {
                     addAtIndex(it)
-                } ?: {
+                } ?: run {
                     add ()
                 } } }
             }
