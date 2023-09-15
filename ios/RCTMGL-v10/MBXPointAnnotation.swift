@@ -8,15 +8,15 @@ final class WeakRef<T: AnyObject> {
     self.object = object
   }
 }
-
-class RCTMGLPointAnnotation : MBXInteractiveElement {
-  static let key = "RCTMGLPointAnnotation"
+@objc
+public class MBXPointAnnotation : MBXInteractiveElement {
+  static let key = "MBXPointAnnotation"
   static var gid = 0;
   
   lazy var annotation : PointAnnotation = {
     var result = PointAnnotation(coordinate: CLLocationCoordinate2D())
     result.isDraggable = false // we implement our own drag logic
-    result.userInfo = [RCTMGLPointAnnotation.key:WeakRef(self)]
+    result.userInfo = [MBXPointAnnotation.key:WeakRef(self)]
     return result
   }()
   var added = false
@@ -25,19 +25,20 @@ class RCTMGLPointAnnotation : MBXInteractiveElement {
   var calloutId : String?
   var image : UIImage? = nil
   var reactSubviews : [UIView] = []
-
-  @objc var onDeselected: RCTBubblingEventBlock? = nil
-  @objc var onDrag: RCTBubblingEventBlock? = nil
-  @objc var onDragEnd: RCTBubblingEventBlock? = nil
-  @objc var onSelected: RCTBubblingEventBlock? = nil
+ 
+    
+  @objc public var onDeselected: RCTBubblingEventBlock? = nil
+  @objc public var onDrag: RCTBubblingEventBlock? = nil
+  @objc public var onDragEnd: RCTBubblingEventBlock? = nil
+  @objc public var onSelected: RCTBubblingEventBlock? = nil
   
-  @objc var coordinate : String? {
+  @objc public var coordinate : String? {
     didSet {
       _updateCoordinate()
     }
   }
   
-  @objc var anchor: [String:NSNumber] = [:] {
+  @objc public var anchor: [String:NSNumber] = [:] {
     didSet {
       update { annotation in
         _updateAnchor(&annotation)
@@ -105,12 +106,12 @@ class RCTMGLPointAnnotation : MBXInteractiveElement {
   }
    
   func gid() -> Int {
-    RCTMGLPointAnnotation.gid = RCTMGLPointAnnotation.gid + 1
-    return RCTMGLPointAnnotation.gid
+      MBXPointAnnotation.gid = MBXPointAnnotation.gid + 1
+    return MBXPointAnnotation.gid
   }
    
   @objc
-  func refresh() {
+  public func refresh() {
     if let image = _createViewSnapshot() {
       changeImage(image)
     }
@@ -177,7 +178,7 @@ class RCTMGLPointAnnotation : MBXInteractiveElement {
   }
   
   @objc
-  override func insertReactSubview(_ subview: UIView!, at atIndex: Int) {
+  public override func insertReactSubview(_ subview: UIView!, at atIndex: Int) {
     if let callout = subview as? MBXCallout {
       self.callout = callout
     } else {
@@ -194,7 +195,7 @@ class RCTMGLPointAnnotation : MBXInteractiveElement {
   }
 
   @objc
-  override func removeReactSubview(_ subview: UIView!) {
+  public override func removeReactSubview(_ subview: UIView!) {
     if let callout = subview as? MBXCallout {
       if self.callout == callout {
         self.callout = nil
@@ -227,7 +228,7 @@ class RCTMGLPointAnnotation : MBXInteractiveElement {
 
 // MARK: - add/remove/update of point annotation
 
-extension RCTMGLPointAnnotation {
+extension MBXPointAnnotation {
   func removeIfAdded() {
     if added, let pointAnnotationManager = map?.pointAnnotationManager {
       pointAnnotationManager.remove(annotation)

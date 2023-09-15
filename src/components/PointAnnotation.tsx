@@ -1,17 +1,14 @@
 import React, { SyntheticEvent, type Component } from 'react';
-import {
-  requireNativeComponent,
-  StyleSheet,
-  Platform,
-  type ViewProps,
-} from 'react-native';
-import { Feature, Point } from 'geojson';
+import { StyleSheet, findNodeHandle, type ViewProps } from 'react-native';
+import { Feature, GeoJsonProperties, Geometry, Point } from 'geojson';
 
 import { toJSONString, isFunction } from '../utils';
 import checkRequiredProps from '../utils/checkRequiredProps';
 import { makePoint } from '../utils/geoUtils';
 import { type BaseProps } from '../types/BaseProps';
 import { Position } from '../types/Position';
+import MBXPointAnnotationNativeComponent from '../specs/MBXPointAnnotationNativeComponent';
+import NativeMBXPointAnnotationModule from '../specs/NativeMBXPointAnnotationModule';
 
 import NativeBridgeComponent, { type RNMBEvent } from './NativeBridgeComponent';
 
@@ -146,33 +143,50 @@ class PointAnnotation extends NativeBridgeComponent(
     this._onDragEnd = this._onDragEnd.bind(this);
   }
 
+  _decodePayload<G extends Geometry | null = Geometry, P = GeoJsonProperties>(
+    payload: GeoJSON.Feature<G, P> | string,
+  ): GeoJSON.Feature<G, P> {
+    // we check whether the payload is a string, since the strict type safety is enforced only on iOS on the new arch
+    // on Android, on both archs, the payload is an object
+    if (typeof payload === 'string') {
+      return JSON.parse(payload);
+    } else {
+      return payload;
+    }
+  }
+
   _onSelected(e: SyntheticEvent<Element, RNMBEvent<FeaturePayload>>) {
     if (isFunction(this.props.onSelected)) {
-      this.props.onSelected(e.nativeEvent.payload);
+      const payload = this._decodePayload(e.nativeEvent.payload);
+      this.props.onSelected(payload);
     }
   }
 
   _onDeselected(e: SyntheticEvent<Element, RNMBEvent<FeaturePayload>>) {
     if (isFunction(this.props.onDeselected)) {
-      this.props.onDeselected(e.nativeEvent.payload);
+      const payload = this._decodePayload(e.nativeEvent.payload);
+      this.props.onDeselected(payload);
     }
   }
 
   _onDragStart(e: SyntheticEvent<Element, RNMBEvent<FeaturePayload>>) {
     if (isFunction(this.props.onDragStart)) {
-      this.props.onDragStart(e.nativeEvent.payload);
+      const payload = this._decodePayload(e.nativeEvent.payload);
+      this.props.onDragStart(payload);
     }
   }
 
   _onDrag(e: SyntheticEvent<Element, RNMBEvent<FeaturePayload>>) {
     if (isFunction(this.props.onDrag)) {
-      this.props.onDrag(e.nativeEvent.payload);
+      const payload = this._decodePayload(e.nativeEvent.payload);
+      this.props.onDrag(payload);
     }
   }
 
   _onDragEnd(e: SyntheticEvent<Element, RNMBEvent<FeaturePayload>>) {
     if (isFunction(this.props.onDragEnd)) {
-      this.props.onDragEnd(e.nativeEvent.payload);
+      const payload = this._decodePayload(e.nativeEvent.payload);
+      this.props.onDragEnd(payload);
     }
   }
 
@@ -189,11 +203,9 @@ class PointAnnotation extends NativeBridgeComponent(
    * Call this for example from Image#onLoad.
    */
   refresh() {
-    if (Platform.OS === 'android') {
-      this._runNativeCommand('refresh', this._nativeRef, []);
-    } else {
-      this._runNativeCommand('refresh', this._nativeRef, []);
-    }
+    const handle = findNodeHandle(this._nativeRef);
+
+    NativeMBXPointAnnotationModule.refresh(handle);
   }
 
   _setNativeRef(nativeRef: NativePointAnnotationRef | null) {
@@ -221,9 +233,9 @@ class PointAnnotation extends NativeBridgeComponent(
       coordinate: this._getCoordinate(),
     };
     return (
-      <RCTMGLPointAnnotation {...props}>
+      <MBXPointAnnotationNativeComponent {...props}>
         {this.props.children}
-      </RCTMGLPointAnnotation>
+      </MBXPointAnnotationNativeComponent>
     );
   }
 }
@@ -233,8 +245,5 @@ type NativeProps = Omit<Props, 'coordinate'> & {
 };
 
 type NativePointAnnotationRef = Component<NativeProps>;
-
-const RCTMGLPointAnnotation =
-  requireNativeComponent<NativeProps>(NATIVE_MODULE_NAME);
 
 export default PointAnnotation;

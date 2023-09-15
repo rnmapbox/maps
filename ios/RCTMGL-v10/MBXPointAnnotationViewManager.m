@@ -2,7 +2,7 @@
 #import <React/RCTViewManager.h>
 #import <Foundation/Foundation.h>
 
-@interface RCT_EXTERN_REMAP_MODULE(RCTMGLPointAnnotation, RCTMGLPointAnnotationManager, RCTViewManager)
+@interface RCT_EXTERN_REMAP_MODULE(MBXPointAnnotation, MBXPointAnnotationViewManager, RCTViewManager)
 
 RCT_EXPORT_VIEW_PROPERTY(coordinate, NSString)
 RCT_EXPORT_VIEW_PROPERTY(draggable, BOOL)

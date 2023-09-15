@@ -927,7 +927,7 @@ extension RCTMGLMapView {
 }
 
 class PointAnnotationManager : AnnotationInteractionDelegate {
-  weak var selected : RCTMGLPointAnnotation? = nil
+  weak var selected : MBXPointAnnotation? = nil
   private var draggedAnnotation: PointAnnotation?
   
   func annotationManager(_ manager: AnnotationManager, didDetectTappedAnnotations annotations: [Annotation]) {
@@ -944,8 +944,8 @@ class PointAnnotationManager : AnnotationInteractionDelegate {
       if let pointAnnotation = annotation as? PointAnnotation,
          let userInfo = pointAnnotation.userInfo {
         
-        if let rctmglPointAnnotation = userInfo[RCTMGLPointAnnotation.key] as? WeakRef<RCTMGLPointAnnotation> {
-          if let pt = rctmglPointAnnotation.object {
+        if let mbxPointAnnotation = userInfo[MBXPointAnnotation.key] as? WeakRef<MBXPointAnnotation> {
+          if let pt = mbxPointAnnotation.object {
             let position = pt.superview?.convert(pt.layer.position, to: nil)
             let location = pt.map?.mapboxMap.coordinate(for: position!)
             var geojson = Feature(geometry: .point(Point(location!)))
@@ -1034,7 +1034,7 @@ class PointAnnotationManager : AnnotationInteractionDelegate {
       if let pointAnnotation = annotation as? PointAnnotation,
          let userInfo = pointAnnotation.userInfo {
         
-        if let rctmglPointAnnotation = userInfo[RCTMGLPointAnnotation.key] as? WeakRef<RCTMGLPointAnnotation> {
+        if let rctmglPointAnnotation = userInfo[MBXPointAnnotation.key] as? WeakRef<MBXPointAnnotation> {
           if let pt = rctmglPointAnnotation.object {
             let position = pt.superview?.convert(pt.layer.position, to: nil)
             var geojson = Feature(geometry: .point(Point(targetPoint)))
@@ -1101,7 +1101,7 @@ class PointAnnotationManager : AnnotationInteractionDelegate {
 
                   // Find if any `queriedFeatureIds` match an annotation's `id`
                 let draggedAnnotations = self.manager.annotations.filter { queriedFeatureIds.contains($0.id) }
-                let enabledAnnotations = draggedAnnotations.filter { ($0.userInfo?[RCTMGLPointAnnotation.key] as? WeakRef<RCTMGLPointAnnotation>)?.object?.draggable ?? false }
+                let enabledAnnotations = draggedAnnotations.filter { ($0.userInfo?[MBXPointAnnotation.key] as? WeakRef<MBXPointAnnotation>)?.object?.draggable ?? false }
                   // If `tappedAnnotations` is not empty, call delegate
                   if !enabledAnnotations.isEmpty {
                     self.draggedAnnotation = enabledAnnotations.first!
