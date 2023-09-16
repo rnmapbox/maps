@@ -30,7 +30,11 @@ class RCTMGLRasterDemSource : RCTMGLSource {
 
   override func makeSource() -> Source
   {
+    #if RNMBX_11 // RNMBX_11_TODO
+    var result = SourceType(id: "raster-dem-source-id-todo")
+    #else
     var result = SourceType()
+    #endif
     if let url = url {
       result.url = url
     } else if let tileUrlTemplates = tileUrlTemplates {

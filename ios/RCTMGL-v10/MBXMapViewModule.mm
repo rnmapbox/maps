@@ -114,21 +114,21 @@ RCT_EXPORT_METHOD(getZoom:(NSNumber*)viewRef resolve:(RCTPromiseResolveBlock)res
 }
 
 
-RCT_EXPORT_METHOD(queryRenderedFeaturesAtPoint:(NSNumber*)viewRef atPoint:(NSArray *)atPoint withFilter:(NSArray *)withFilter withLayerIDs:(NSArray *)withLayerIDs resolve:(RCTPromiseResolveBlock)resolve reject:(RCTPromiseRejectBlock)reject) {
+RCT_EXPORT_METHOD(queryRenderedFeaturesAtPoint:(nonnull NSNumber*)viewRef atPoint:(nonnull NSArray *)atPoint withFilter:(NSArray *)withFilter withLayerIDs:(NSArray *)withLayerIDs resolve:(RCTPromiseResolveBlock)resolve reject:(RCTPromiseRejectBlock)reject) {
     [self withMapView:viewRef block:^(MBXMapView *view) {
         [MBXMapViewManager queryRenderedFeaturesAtPoint:view atPoint:atPoint withFilter:withFilter withLayerIDs:withLayerIDs resolver:resolve rejecter:reject];
     } reject:reject methodName:@"queryRenderedFeaturesAtPoint"];
 }
 
 
-RCT_EXPORT_METHOD(queryRenderedFeaturesInRect:(NSNumber*)viewRef withBBox:(NSArray *)withBBox withFilter:(NSArray *)withFilter withLayerIDs:(NSArray *)withLayerIDs resolve:(RCTPromiseResolveBlock)resolve reject:(RCTPromiseRejectBlock)reject) {
+RCT_EXPORT_METHOD(queryRenderedFeaturesInRect:(nonnull NSNumber*)viewRef withBBox:(NSArray *)withBBox withFilter:(NSArray *)withFilter withLayerIDs:(NSArray *)withLayerIDs resolve:(RCTPromiseResolveBlock)resolve reject:(RCTPromiseRejectBlock)reject) {
     [self withMapView:viewRef block:^(MBXMapView *view) {
         [MBXMapViewManager queryRenderedFeaturesInRect:view withBBox:withBBox withFilter:withFilter withLayerIDs:withLayerIDs resolver:resolve rejecter:reject];
     } reject:reject methodName:@"queryRenderedFeaturesInRect"];
 }
 
 
-RCT_EXPORT_METHOD(queryTerrainElevation:(NSNumber*)viewRef coordinates:(NSArray *)coordinates resolve:(RCTPromiseResolveBlock)resolve reject:(RCTPromiseRejectBlock)reject) {
+RCT_EXPORT_METHOD(queryTerrainElevation:(nonnull NSNumber*)viewRef coordinates:(NSArray *)coordinates resolve:(RCTPromiseResolveBlock)resolve reject:(RCTPromiseRejectBlock)reject) {
     [self withMapView:viewRef block:^(MBXMapView *view) {
         [MBXMapViewManager queryTerrainElevation:view coordinates:coordinates resolver:resolve rejecter:reject];
     } reject:reject methodName:@"queryTerrainElevation"];
@@ -142,13 +142,13 @@ RCT_EXPORT_METHOD(setHandledMapChangedEvents:(nonnull NSNumber*)viewRef events:(
 }
 
 
-RCT_EXPORT_METHOD(setSourceVisibility:(NSNumber*)viewRef visible:(BOOL)visible sourceId:(NSString *)sourceId sourceLayerId:(NSString *)sourceLayerId resolve:(RCTPromiseResolveBlock)resolve reject:(RCTPromiseRejectBlock)reject) {
+RCT_EXPORT_METHOD(setSourceVisibility:(nonnull NSNumber*)viewRef visible:(BOOL)visible sourceId:(NSString *)sourceId sourceLayerId:(NSString *)sourceLayerId resolve:(RCTPromiseResolveBlock)resolve reject:(RCTPromiseRejectBlock)reject) {
     [self withMapView:viewRef block:^(MBXMapView *view) {
         [MBXMapViewManager setSourceVisibility:view visible:visible sourceId:sourceId sourceLayerId:sourceLayerId resolver:resolve rejecter:reject];
     } reject:reject methodName:@"setSourceVisibility"];
 }
 
-RCT_EXPORT_METHOD(querySourceFeatures:(NSNumber*)viewRef sourceId:(NSString*)sourceId withFilter:(NSArray<id>*)withFilter withSourceLayerIDs:(NSArray<NSString*>*)withSourceLayerIDs resolve:(RCTPromiseResolveBlock)resolve reject:(RCTPromiseRejectBlock)reject) {
+RCT_EXPORT_METHOD(querySourceFeatures:(nonnull NSNumber*)viewRef sourceId:(NSString*)sourceId withFilter:(NSArray<id>*)withFilter withSourceLayerIDs:(NSArray<NSString*>*)withSourceLayerIDs resolve:(RCTPromiseResolveBlock)resolve reject:(RCTPromiseRejectBlock)reject) {
     [self withMapView:viewRef block:^(MBXMapView *view) {
         [MBXMapViewManager querySourceFeatures:view withSourceId:sourceId withFilter:withFilter withSourceLayerIds:withSourceLayerIDs resolver:resolve rejecter:reject];
     } reject:reject methodName:@"querySourceFeatures"];

@@ -6,7 +6,11 @@ class RCTMGLRasterLayer: RCTMGLLayer {
 
   override func makeLayer(style: Style) throws -> Layer {
     // let source : ImageSource = try self.sourceWithSourceID(in: style)
+    #if RNMBX_11
+    var layer = LayerType(id: self.id!, source: sourceID!)
+    #else
     var layer = LayerType(id: self.id!)
+    #endif
     layer.source = sourceID
     return layer
   }

@@ -4,6 +4,18 @@ protocol RCTMGLImageSetter : AnyObject {
   func addImage(name: String, image: UIImage, sdf: Bool?, stretchX: [[NSNumber]], stretchY: [[NSNumber]], content: [NSNumber]?, log: String) -> Bool
 }
 
+func hasImage(style: Style, name: String) -> Bool {
+  #if RNMBX_11
+  return style.imageExists(withId: name)
+  #else
+  return (style.styleManager.getStyleImage(forImageId: name) != nil)
+  #endif
+}
+
+#if RNMBX_11
+typealias StyleImageMissingPayload = StyleImageMissing
+#endif
+
 class RCTMGLImages : UIView, RCTMGLMapComponent {
   
   weak var bridge : RCTBridge! = nil
@@ -104,7 +116,7 @@ class RCTMGLImages : UIView, RCTMGLMapComponent {
         if !sameImage(oldValue: oldImages[name], newValue: images[name]) {
           missingImages[name] = images[name]
         } else {
-          if style.styleManager.getStyleImage(forImageId: name) == nil {
+          if !hasImage(style: style, name: name) {
             logged("RCTMGLImages.addImagePlaceholder") {
               try? style.addImage(placeholderImage, id: name, stretchX: [], stretchY: [])
               missingImages[name] = images[name]
@@ -231,7 +243,7 @@ class RCTMGLImages : UIView, RCTMGLMapComponent {
   func addNativeImages(style: Style, nativeImages: [NativeImageInfo]) {
     for imageInfo in nativeImages {
       let imageName = imageInfo.name
-      if style.styleManager.getStyleImage(forImageId: imageInfo.name) == nil {
+      if !hasImage(style: style, name: imageInfo.name) {
         if let image = UIImage(named: imageName) {
           logged("RCTMGLImage.addNativeImage: \(imageName)") {
             try style.addImage(image, id: imageName, sdf: imageInfo.sdf,

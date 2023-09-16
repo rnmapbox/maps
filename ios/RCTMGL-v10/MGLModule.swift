@@ -1,13 +1,25 @@
 import Foundation
 import MapboxMaps
+#if canImport(MapboxMobileEvents)
 import MapboxMobileEvents
+#endif
 
 
 let DEFAULT_SOURCE_ID = "composite";
 
 @objc(MGLModule)
 class MGLModule : NSObject {
-  static var accessToken : String?
+  #if RNMBX_11
+  static var accessToken : String? {
+    didSet {
+      if let token = accessToken {
+        MapboxOptions.accessToken = token
+      }
+    }
+  }
+  #else
+    static var accessToken : String?
+  #endif
     
   @objc
   func constantsToExport() -> [AnyHashable: Any]! {
@@ -91,7 +103,9 @@ class MGLModule : NSObject {
   }
   
   @objc func setTelemetryEnabled(_ telemetryEnabled: Bool) {
+    #if !RNMBX_11 // RNMBX_11_TODO
     UserDefaults.mme_configuration().mme_isCollectionEnabled = telemetryEnabled
+    #endif
   }
 
   @objc func setWellKnownTileServer(_ tileServer: String) {

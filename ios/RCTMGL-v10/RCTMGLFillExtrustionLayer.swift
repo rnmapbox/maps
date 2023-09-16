@@ -6,7 +6,11 @@ class RCTMGLFillExtrusionLayer: RCTMGLVectorLayer {
 
   override func makeLayer(style: Style) throws -> Layer {
     let _ : VectorSource = try self.layerWithSourceID(in: style)
+    #if RNMBX_11
+    var layer = LayerType(id: self.id!, source:sourceID!)
+    #else
     var layer = LayerType(id: self.id!)
+    #endif
     layer.sourceLayer = self.sourceLayerID
     layer.source = sourceID
     return layer

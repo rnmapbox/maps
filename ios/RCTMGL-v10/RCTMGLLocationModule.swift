@@ -1,6 +1,8 @@
 import Foundation
 import MapboxMaps
 
+#if !RNMBX_11
+
 @objc(RCTMGLLocation)
 class RCTMGLLocation: NSObject {
   var location : CLLocation = CLLocation(latitude: 0.0, longitude: 0.0)
@@ -32,6 +34,10 @@ let RCT_MAPBOX_USER_LOCATION_UPDATE = "MapboxUserLocationUpdate";
 /// This implementation of LocationProviderDelegate is used by `LocationManager` to work around
 /// the fact that the `LocationProvider` API does not allow the delegate to be set to `nil`.
 internal class EmptyLocationProviderDelegate: LocationProviderDelegate {
+    #if RNMBX_11
+    func onLocationUpdateReceived(for locations: [Location]) {}
+    #endif
+  
     func locationProvider(_ provider: LocationProvider, didFailWithError error: Error) {}
     func locationProvider(_ provider: LocationProvider, didUpdateHeading newHeading: CLHeading) {}
     func locationProvider(_ provider: LocationProvider, didUpdateLocations locations: [CLLocation]) {}
@@ -44,6 +50,18 @@ protocol LocationProviderRCTMGLDelegate : AnyObject {
 
 class RCTMGLAppleLocationProvider: NSObject {
     private var locationProvider: CLLocationManager
+  
+  #if RNMBX_11
+    private var observers : [LocationObserver] = []
+    private var privateAppleLocationProviderOptions: AppleLocationProvider.Options {
+        didSet {
+            locationProvider.distanceFilter = privateAppleLocationProviderOptions.distanceFilter
+            locationProvider.desiredAccuracy = privateAppleLocationProviderOptions.desiredAccuracy
+            locationProvider.activityType = privateAppleLocationProviderOptions.activityType
+        }
+    }
+    private var privateLocationProviderOptions: LocationOptions
+  #else
     private var privateLocationProviderOptions: LocationOptions {
         didSet {
             locationProvider.distanceFilter = privateLocationProviderOptions.distanceFilter
@@ -52,6 +70,7 @@ class RCTMGLAppleLocationProvider: NSObject {
         }
     }
     private weak var delegate: LocationProviderDelegate?
+  #endif
 
     public var headingOrientation: CLDeviceOrientation {
         didSet { locationProvider.headingOrientation = headingOrientation }
@@ -59,6 +78,9 @@ class RCTMGLAppleLocationProvider: NSObject {
 
     public override init() {
         locationProvider = CLLocationManager()
+      #if RNMBX_11
+        privateAppleLocationProviderOptions = AppleLocationProvider.Options()
+      #endif
         privateLocationProviderOptions = LocationOptions()
         headingOrientation = locationProvider.headingOrientation
         super.init()
@@ -67,6 +89,20 @@ class RCTMGLAppleLocationProvider: NSObject {
 }
 
 extension RCTMGLAppleLocationProvider: LocationProvider {
+  #if RNMBX_11
+    func addLocationObserver(for observer: LocationObserver) {
+      observers.append(observer)
+    }
+    
+    func removeLocationObserver(for observer: LocationObserver) {
+      observers.removeAll { $0 === observer }
+    }
+    
+    func getLastObservedLocation() -> Location? {
+      locationProvider.location
+    }
+  #endif
+  
 
     public var locationProviderOptions: LocationOptions {
         get { privateLocationProviderOptions }
@@ -132,22 +168,38 @@ extension RCTMGLAppleLocationProvider: LocationProvider {
 }
 
 extension RCTMGLAppleLocationProvider: CLLocationManagerDelegate {
-    public func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
-        delegate?.locationProvider(self, didUpdateLocations: locations)
-    }
+  public func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
+  #if RNMBX_11
+    observers.forEach { $0.onLocationUpdateReceived(for: locations) }
+  #else
+    delegate?.locationProvider(self, didUpdateLocations: locations)
+  #endif
+  }
 
-    public func locationManager(_ manager: CLLocationManager, didUpdateHeading heading: CLHeading) {
-        delegate?.locationProvider(self, didUpdateHeading: heading)
-    }
+    public func locationManager(_ manager: CLLocationManager, didUpdateHeading heading: CLHeading)
+  {
+    #if RNMBX_11
+      
+    #else
+      delegate?.locationProvider(self, didUpdateHeading: heading)
+    #endif
+  }
 
-    public func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
-        delegate?.locationProvider(self, didFailWithError: error)
-    }
+  public func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
+    #if RNMBX_11
+      
+    #else
+      delegate?.locationProvider(self, didFailWithError: error)
+    #endif
+  }
 
     @available(iOS 14.0, *)
-    public func locationManagerDidChangeAuthorization(_ manager: CLLocationManager) {
-        delegate?.locationProviderDidChangeAuthorization(self)
-    }
+  public func locationManagerDidChangeAuthorization(_ manager: CLLocationManager) {
+    #if RNMBX_11
+    #else
+      delegate?.locationProviderDidChangeAuthorization(self)
+    #endif
+  }
 
     public func locationManagerShouldDisplayHeadingCalibration(_ manager: CLLocationManager) -> Bool {
         guard let calibratingDelegate = delegate as? CalibratingLocationProviderDelegate else {
@@ -573,4 +625,5 @@ class RCTMGLLocationModule: RCTEventEmitter, LocationProviderRCTMGLDelegate {
   }
 }
 
+#endif
 

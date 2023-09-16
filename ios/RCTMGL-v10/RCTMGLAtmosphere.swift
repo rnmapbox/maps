@@ -1,5 +1,9 @@
 import MapboxMaps
 
+#if RNMBX_11
+typealias Style = StyleManager
+#endif
+
 @objc(RCTMGLAtmosphere)
 class RCTMGLAtmosphere : RCTMGLSingletonLayer, RCTMGLMapComponent, RCTMGLSourceConsumer {
   var atmosphere : Atmosphere? = nil

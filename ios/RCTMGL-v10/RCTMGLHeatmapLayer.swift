@@ -6,8 +6,11 @@ class RCTMGLHeatmapLayer: RCTMGLVectorLayer {
 
   override func makeLayer(style: Style) throws -> Layer {
     let _ : VectorSource = try self.layerWithSourceID(in: style)
+    #if RNMBX_11
+    var layer: Layer = LayerType(id: self.id!, source: self.sourceID!)
+    #else
     var layer: Layer = LayerType(id: self.id!)
-    
+    #endif
     setOptions(&layer)
     
     return layer

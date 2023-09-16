@@ -2,6 +2,15 @@ import Foundation
 import MapboxMaps
 import Turf
 
+#if RNMBX_11
+extension NSNumber {
+  /// Converts an `NSNumber` to a `CGFloat` value from its `Double` representation.
+  internal var CGFloat: CGFloat {
+    CoreGraphics.CGFloat(doubleValue)
+  }
+}
+#endif
+
 enum RemovalReason {
     case ViewRemoval, StyleChange, OnDestroy, ComponentChange, Reorder
 }
@@ -279,16 +288,26 @@ class RCTMGLCamera : RCTMGLMapComponentBase {
 
       if let locationModule = RCTMGLLocationModule.shared {
         var isSameProvider = false
+        #if !RNMBX_11
         if let currentProvider = map.location.locationProvider as? AnyObject, let newProvider = locationModule.locationProvider as? AnyObject {
           if currentProvider === newProvider {
             isSameProvider = true
           }
         }
+        #endif
         if !isSameProvider {
+          #if RNMBX_11
+          map.location.override(provider: locationModule.locationProvider)
+          #else
           map.location.overrideLocationProvider(with: locationModule.locationProvider)
+          #endif
         }
       }
+      #if RNMBX_11
+      // RNMBX_11_TODO
+      #else
       map.location.locationProvider.requestWhenInUseAuthorization()
+      #endif
       var trackingModeChanged = false
       var followOptions = FollowPuckViewportStateOptions()
       switch userTrackingMode {
@@ -427,7 +446,11 @@ class RCTMGLCamera : RCTMGLMapComponentBase {
       }
       
       withMapView { map in
+        #if RNMBX_11
+        let bounds = [sw, ne]
+        #else
         let bounds = CoordinateBounds(southwest: sw, northeast: ne)
+        #endif
         let camera = map.mapboxMap.camera(
           for: bounds,
           padding: padding,
