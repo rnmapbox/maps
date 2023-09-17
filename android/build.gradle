@@ -1,4 +1,4 @@
-def defaultMapboxMapsImpl = "maplibre"
+def defaultMapboxMapsImpl = "mabpox"
 def defaultMapboxMapsVersion = "10.16.0"
 
 def safeExtGet(prop, fallback) {
@@ -44,20 +44,14 @@ if (safeExtGet("RNMapboxMapsImpl", defaultMapboxMapsImpl) == "mapbox") {
 
 android {
     if (safeExtGet("RNMapboxMapsImpl", defaultMapboxMapsImpl) == "maplibre") {
-        logger.warn('@rnmapbox/maps: Maplibre implementation is DEPRECATED and will be removed, set RNMapboxMapsImpl to mapbox- see https://github.com/rnmapbox/maps/wiki/Deprecated-RNMapboxImpl-Maplibre#android')
-        sourceSets {
-            main {
-                java.srcDirs = ['src/main/java-mapboxgl/common','src/main/java-mapboxgl/maplibre']
-            }
-        }
+        msg = '@rnmapbox/maps: Maplibre implementation has been removed, set RNMapboxMapsImpl to mapbox- see https://github.com/rnmapbox/maps/wiki/Deprecated-RNMapboxImpl-Maplibre#android'
+        logger.error(msg)
+        throw new GradleException(msg)
     }
     else if (safeExtGet("RNMapboxMapsImpl", defaultMapboxMapsImpl) == "mapbox-gl") {
-        logger.warn('@rnmapbox/maps: Maplibre implementation is DEPRECATED and will be removed, set RNMapboxMapsImpl to mapbox  - see https://github.com/rnmapbox/maps/wiki/Deprecated-RNMapboxImpl-Maplibre#android')
-        sourceSets {
-            main {
-                java.srcDirs = ['src/main/java-mapboxgl/common','src/main/java-mapboxgl/mapbox']
-            }
-        }
+        msg = '@rnmapbox/maps: MapboxGL implementation is DEPRECATED has been removed, set RNMapboxMapsImpl to mapbox  - see https://github.com/rnmapbox/maps/wiki/Deprecated-RNMapboxImpl-Maplibre#android'
+        logger.error(msg)
+        throw new GradleException(msg)
     }
     else if (safeExtGet("RNMapboxMapsImpl", defaultMapboxMapsImpl) == "mapbox") {
         sourceSets {
@@ -79,7 +73,7 @@ android {
         }
     }
     else {
-        msg = "RNMapboxMapsImpl should be one of: mapbox, mapbox-gl, maplibre got: ${safeExtGet("mapboxV10", defaultMapboxMapsImpl)}"
+        msg = "RNMapboxMapsImpl should be one of: mapbox, mapbox-gl, maplibre got: ${safeExtGet("RNMapboxMapsImpl", defaultMapboxMapsImpl)}"
         logger.error(msg)
         throw new GradleException(msg)
     }
@@ -141,30 +135,14 @@ dependencies {
 
     // Mapbox SDK
     customizableDependencies('RNMapboxMapsLibs') {
-        if (safeExtGet("RNMapboxMapsImpl", defaultMapboxMapsImpl) == "maplibre") {
-            implementation ("org.maplibre.gl:android-sdk:9.5.2")
-            implementation ("org.maplibre.gl:android-sdk-turf:5.9.0")
-
-            implementation ("org.maplibre.gl:android-plugin-localization-v9:1.0.0")
-            implementation ("org.maplibre.gl:android-plugin-annotation-v9:1.0.0")
-            implementation ("org.maplibre.gl:android-plugin-markerview-v9:1.0.0")
-        }
-        else if (safeExtGet("RNMapboxMapsImpl", defaultMapboxMapsImpl) == "mapbox-gl") {
-            implementation 'com.mapbox.mapboxsdk:mapbox-sdk-services:5.1.0'
-            implementation 'com.mapbox.mapboxsdk:mapbox-android-sdk:9.1.0'
-            implementation 'com.mapbox.mapboxsdk:mapbox-android-telemetry:6.1.0'
-            implementation 'com.mapbox.mapboxsdk:mapbox-android-plugin-annotation-v9:0.8.0'
-
-                // plugins
-            implementation 'com.mapbox.mapboxsdk:mapbox-android-gestures:0.6.0'
-            implementation 'com.mapbox.mapboxsdk:mapbox-android-plugin-localization-v9:0.12.0'
-            implementation 'com.mapbox.mapboxsdk:mapbox-android-plugin-markerview-v9:0.4.0'
-            implementation 'com.mapbox.mapboxsdk:mapbox-sdk-turf:5.1.0'
-        }
-        else if (safeExtGet("RNMapboxMapsImpl", defaultMapboxMapsImpl) == "mapbox") {
+        if (safeExtGet("RNMapboxMapsImpl", defaultMapboxMapsImpl) == "mapbox") {
             implementation "com.mapbox.maps:android:${safeExtGet("RNMapboxMapsVersion", defaultMapboxMapsVersion)}"
             implementation 'com.mapbox.mapboxsdk:mapbox-sdk-turf:6.11.0'
             implementation 'androidx.asynclayoutinflater:asynclayoutinflater:1.0.0'
+        } else {
+            msg = '@rnmapbox/maps: RNMapboxMapsImpl has invalid value - only mapbox supported - see https://github.com/rnmapbox/maps/wiki/Deprecated-RNMapboxImpl-Maplibre#android'
+            logger.error(msg)
+            throw new GradleException(msg) 
         }
     }
 

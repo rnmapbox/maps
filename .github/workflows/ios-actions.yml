@@ -66,11 +66,11 @@ jobs:
         id: pods-cache
         with:
           path: ios/Pods
-          key: pods-${{ hashFiles('**/Podfile.lock') }}
+          key: pods-${{ hashFiles('**/Podfile.lock') }}-${{ inputs.MAP_IMPL }}
 
       - name: Install Pod Dependencies
         if: steps.pods-cache.outputs.cache-hit != 'true'
-        run: cd ios && pod --version && pod install
+        run: cd ios && pod --version && pod update MapboxMaps && pod install
         env:
           CI_MAP_IMPL: ${{ inputs.MAP_IMPL }}
 
@@ -88,7 +88,7 @@ jobs:
           npx detox --version
           yarn detox test --configuration ios.debug --debug-synchronization 500 --loglevel trace --record-logs all --take-screenshots all
         env:
-          SKIP_TESTS_NO_METAL: ${{ inputs.MAP_IMPL == 'mapbox' }}
+          SKIP_TESTS_NO_METAL: ${{ inputs.MAP_IMPL == 'mapbox' || inputs.MAP_IMPL == 'mapbox11' }}
 
       - name: Store Detox artifacts on test failure
         uses: actions/upload-artifact@v3
