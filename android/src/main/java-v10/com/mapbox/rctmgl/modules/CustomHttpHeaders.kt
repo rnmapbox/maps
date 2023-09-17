@@ -2,7 +2,9 @@ package com.mapbox.rctmgl.modules
 
 import com.mapbox.common.*
 
-object CustomHttpHeaders : HttpServiceInterceptorInterface {
+import com.mapbox.rctmgl.v11compat.httpinterceptor.*
+
+object CustomHttpHeaders : HttpServiceBase() {
     init {}
 
     val map = mutableMapOf<String, String>()
@@ -35,5 +37,11 @@ object CustomHttpHeaders : HttpServiceInterceptorInterface {
     override fun onResponse(response: HttpResponse): HttpResponse {
         return response
     }
+
+    /*
+    override fun onUpload(options: UploadOptions): UploadOptions {
+        return options;
+    }
+    */
 }
 

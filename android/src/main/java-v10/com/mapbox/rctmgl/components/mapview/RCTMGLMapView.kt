@@ -24,7 +24,6 @@ import com.mapbox.maps.*
 import com.mapbox.maps.extension.localization.localizeLabels
 import com.mapbox.maps.extension.observable.eventdata.MapLoadingErrorEventData
 import com.mapbox.maps.extension.observable.eventdata.RenderFrameFinishedEventData
-import com.mapbox.maps.extension.observable.getMapLoadingErrorEventData
 import com.mapbox.maps.extension.style.expressions.generated.Expression
 import com.mapbox.maps.extension.style.layers.Layer
 import com.mapbox.maps.extension.style.layers.generated.*
@@ -72,10 +71,18 @@ import com.mapbox.rctmgl.events.MapClickEvent
 import com.mapbox.rctmgl.events.constants.EventTypes
 import com.mapbox.rctmgl.utils.*
 import com.mapbox.rctmgl.utils.extensions.toReadableArray
+import com.mapbox.rctmgl.v11compat.annotation.AnnotationID
+import com.mapbox.rctmgl.v11compat.annotation.INVALID_ANNOTATION_ID
 import org.json.JSONException
 import org.json.JSONObject
 import java.util.*
 
+import com.mapbox.maps.MapboxMap.*;
+
+import com.mapbox.rctmgl.v11compat.event.*
+import com.mapbox.rctmgl.v11compat.feature.*
+import com.mapbox.rctmgl.v11compat.mapboxmap.*
+import com.mapbox.rctmgl.v11compat.ornamentsettings.*
 
 data class OrnamentSettings(
     var enabled : Boolean? = false,
@@ -161,7 +168,7 @@ open class RCTMGLMapView(private val mContext: Context, var mManager: RCTMGLMapV
     private val mSources: MutableMap<String, RCTSource<*>>
     private val mImages: MutableList<RCTMGLImages>
     private var mPointAnnotationManager: PointAnnotationManager? = null
-    private var mActiveMarkerID: Long = -1
+    private var mActiveMarkerID: AnnotationID = INVALID_ANNOTATION_ID
     private var mProjection: ProjectionName = ProjectionName.MERCATOR
     private var mLocaleString: String? = null
     private var mLocaleLayerIds: List<String>? = null
@@ -458,7 +465,7 @@ open class RCTMGLMapView(private val mContext: Context, var mManager: RCTMGLMapV
         } else if (feature is RCTMGLPointAnnotation) {
             val annotation = feature
             if (annotation.mapboxID == mActiveMarkerID) {
-                mActiveMarkerID = -1
+                mActiveMarkerID = INVALID_ANNOTATION_ID
             }
             mPointAnnotations.remove(annotation.iD)
         } else if (feature is RCTMGLImages) {
@@ -743,7 +750,7 @@ open class RCTMGLMapView(private val mContext: Context, var mManager: RCTMGLMapV
     }
 
     fun deselectAnnotation(annotation: RCTMGLPointAnnotation) {
-        mActiveMarkerID = -1
+        mActiveMarkerID = INVALID_ANNOTATION_ID
         annotation.onDeselect()
     }
 
@@ -1022,13 +1029,15 @@ open class RCTMGLMapView(private val mContext: Context, var mManager: RCTMGLMapV
             if (snapshot == null) {
                 response.error("snapshot failed")
             } else {
-                val uri: String = if (writeToDisk) BitmapUtils.createTempFile(
+                val uri: String? = if (writeToDisk) BitmapUtils.createTempFile(
                     mContext,
                     snapshot
                 ) else BitmapUtils.createBase64(snapshot)
 
                 response.success {
-                    it.putString("uri", uri)
+                    uri?.let { uri ->
+                        it.putString("uri", uri)
+                    }
                 }
             }
         }
@@ -1305,7 +1314,7 @@ open class RCTMGLMapView(private val mContext: Context, var mManager: RCTMGLMapV
     }
 
     // region Attribution
-    var mAttributionSettings = OrnamentSettings(enabled = AttributionSettings().enabled)
+    var mAttributionSettings = OrnamentSettings(enabled = getAttributionSettings().enabled)
 
     fun setReactAttributionEnabled(attributionEnabled: Boolean?) {
         mAttributionSettings.enabled = attributionEnabled
@@ -1479,87 +1488,4 @@ fun OrnamentSettings.setPosAndMargins(posAndMargins: ReadableMap?) {
     this.margins = margins
 }
 
-interface GenericOrnamentSettings {
-    fun setHMargins(left: Float?, right: Float?)
-    fun setVMargins(top: Float?, bottom: Float?)
-    var enabled: Boolean
-    var position: Int
-}
 
-fun ScaleBarSettings.toGenericOrnamentSettings() = object : GenericOrnamentSettings {
-    private val settings = this@toGenericOrnamentSettings
-    override fun setHMargins(left: Float?, right: Float?) {
-        left?.let { settings.marginLeft = it }
-        right?.let { settings.marginRight = it }
-    }
-    override fun setVMargins(top: Float?, bottom: Float?) {
-        top?.let { settings.marginTop = it }
-        bottom?.let { settings.marginBottom = it }
-    }
-    override var enabled: Boolean
-        get() = settings.enabled
-        set(value) { settings.enabled = value }
-    override var position: Int
-        get() = settings.position
-        set(value) { settings.position = value }
-}
-
-fun CompassSettings.toGenericOrnamentSettings() = object : GenericOrnamentSettings {
-    private var settings = this@toGenericOrnamentSettings
-    override fun setHMargins(left: Float?, right: Float?) {
-        left?.let { settings.marginLeft = it }
-        right?.let { settings.marginRight = it }
-    }
-    override fun setVMargins(top: Float?, bottom: Float?) {
-        top?.let { settings.marginTop = it }
-        bottom?.let { settings.marginBottom = it }
-    }
-    override var enabled: Boolean
-        get() = settings.enabled
-        set(value) { settings.enabled = value }
-    override var position: Int
-        get() = settings.position
-        set(value) {
-            settings.position = value
-        }
-}
-
-fun LogoSettings.toGenericOrnamentSettings() = object : GenericOrnamentSettings {
-    private var settings = this@toGenericOrnamentSettings
-    override fun setHMargins(left: Float?, right: Float?) {
-        left?.let { settings.marginLeft = it }
-        right?.let { settings.marginRight = it }
-    }
-    override fun setVMargins(top: Float?, bottom: Float?) {
-        top?.let { settings.marginTop = it }
-        bottom?.let { settings.marginBottom = it }
-    }
-    override var enabled: Boolean
-        get() = settings.enabled
-        set(value) { settings.enabled = value }
-    override var position: Int
-        get() = settings.position
-        set(value) {
-            settings.position = value
-        }
-}
-
-fun AttributionSettings.toGenericOrnamentSettings() = object : GenericOrnamentSettings {
-    private var settings = this@toGenericOrnamentSettings;
-    override fun setHMargins(left: Float?, right: Float?) {
-        left?.let { settings.marginLeft = it }
-        right?.let { settings.marginRight = it }
-    }
-    override fun setVMargins(top: Float?, bottom: Float?) {
-        top?.let { settings.marginTop = it }
-        bottom?.let { settings.marginBottom = it }
-    }
-    override var enabled: Boolean
-        get() = settings.enabled
-        set(value) { settings.enabled = value }
-    override var position: Int
-        get() = settings.position
-        set(value) {
-            settings.position = value
-        }
-}

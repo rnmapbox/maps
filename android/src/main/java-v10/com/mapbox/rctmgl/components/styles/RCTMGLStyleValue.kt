@@ -9,6 +9,7 @@ import com.mapbox.rctmgl.components.styles.RCTMGLStyleFactory
 import com.mapbox.maps.extension.style.expressions.generated.Expression
 import com.mapbox.maps.extension.style.light.LightPosition
 import com.mapbox.rctmgl.utils.ExpressionParser
+import com.mapbox.rctmgl.utils.Logger
 import java.util.ArrayList
 
 class RCTMGLStyleValue(config: ReadableMap) {
@@ -97,12 +98,17 @@ class RCTMGLStyleValue(config: ReadableMap) {
 
         return stringArr;
     } */
-    fun getStringArray(key: String?): List<String?> {
+    fun getStringArray(key: String?): List<String> {
         val arr = getArray(key)
-        val result = ArrayList<String?>(arr!!.size())
+        val result = ArrayList<String>(arr!!.size())
         for (i in 0 until arr.size()) {
             val item = arr.getMap(i)
-            result.add(item.getString("value"))
+            val value = item.getString("value")
+            if (value != null) {
+                result.add(value)
+            } else {
+                Logger.e("RCTMGLStyleValue", "getStringArray: null value for item: $i")
+            }
         }
         return result
     }

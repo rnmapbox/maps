@@ -56,11 +56,13 @@ class RCTMGLTerrain(context: Context?) : AbstractSourceConsumer(context) {
     }
 
     fun addStyles() {
-        RCTMGLStyleFactory.setTerrainLayerStyle(
-            mTerrain, RCTMGLStyle(
-                context, mReactStyle!!,
-                mMap!!
+        mTerrain?.also {
+            RCTMGLStyleFactory.setTerrainLayerStyle(
+                it,
+                RCTMGLStyle(context, mReactStyle, mMap!!)
             )
-        )
+        } ?: run {
+            Logger.e("RCTMGLTerrainLayer", "mLayer is null")
+        }
     }
 }

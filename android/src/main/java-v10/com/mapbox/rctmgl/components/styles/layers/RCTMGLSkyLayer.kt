@@ -8,6 +8,7 @@ import com.mapbox.rctmgl.utils.Logger.e
 import com.mapbox.rctmgl.components.mapview.RCTMGLMapView
 import com.mapbox.rctmgl.components.styles.RCTMGLStyleFactory
 import com.mapbox.rctmgl.components.styles.RCTMGLStyle
+import com.mapbox.rctmgl.utils.Logger
 
 class RCTMGLSkyLayer(context: Context?) : RCTLayer<SkyLayer?>(
     context!!
@@ -26,7 +27,14 @@ class RCTMGLSkyLayer(context: Context?) : RCTLayer<SkyLayer?>(
     }
 
     override fun addStyles() {
-        RCTMGLStyleFactory.setSkyLayerStyle(mLayer, RCTMGLStyle(context, mReactStyle!!, mMap!!))
+        mLayer?.also {
+            RCTMGLStyleFactory.setSkyLayerStyle(
+                it,
+                RCTMGLStyle(context, mReactStyle, mMap!!)
+            )
+        } ?: run {
+            Logger.e("RCTMGLSkyLayer", "mLayer is null")
+        }
     }
 
     fun setSourceLayerID(sourceLayerID: String?) {

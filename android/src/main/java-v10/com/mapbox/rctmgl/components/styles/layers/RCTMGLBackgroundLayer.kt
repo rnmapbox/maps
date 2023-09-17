@@ -4,6 +4,7 @@ import android.content.Context
 import com.mapbox.maps.extension.style.layers.generated.BackgroundLayer
 import com.mapbox.rctmgl.components.styles.RCTMGLStyle
 import com.mapbox.rctmgl.components.styles.RCTMGLStyleFactory
+import com.mapbox.rctmgl.utils.Logger
 
 class RCTMGLBackgroundLayer(context: Context?) : RCTLayer<BackgroundLayer?>(
     context!!
@@ -13,9 +14,13 @@ class RCTMGLBackgroundLayer(context: Context?) : RCTLayer<BackgroundLayer?>(
     }
 
     override fun addStyles() {
-        RCTMGLStyleFactory.setBackgroundLayerStyle(
-            mLayer,
-            RCTMGLStyle(context, mReactStyle, mMap!!)
-        )
+        mLayer?.also {
+            RCTMGLStyleFactory.setBackgroundLayerStyle(
+                it,
+                RCTMGLStyle(context, mReactStyle, mMap!!)
+            )
+        } ?: run {
+            Logger.e("RCTMGLBackgroundLayer", "mLayer is null")
+        }
     }
 }

@@ -29,11 +29,14 @@ class RCTMGLStyle(private val mContext: Context, reactStyle: ReadableMap?, map: 
             return keys
         }
 
-    fun getStyleValueForKey(styleKey: String?): RCTMGLStyleValue? {
-        val styleValueConfig = mReactStyle!!.getMap(styleKey!!)
-            ?: // TODO: throw exeception here
-            return null
-        return RCTMGLStyleValue(styleValueConfig)
+    fun getStyleValueForKey(styleKey: String): RCTMGLStyleValue {
+        val styleValueConfig = mReactStyle!!.getMap(styleKey)
+        if (styleValueConfig != null) {
+            return RCTMGLStyleValue(styleValueConfig)
+        } else {
+            Logger.e("RCTMGLStyle", "Value for ${styleKey} not found")
+            throw Exception("RCTMGLStyle - Value for ${styleKey} not found")
+        }
     }
 
     fun imageEntry(styleValue: RCTMGLStyleValue): ImageEntry {

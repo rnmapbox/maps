@@ -15,6 +15,8 @@ import com.mapbox.rctmgl.events.FeatureClickEvent
 import com.mapbox.rctmgl.utils.Logger
 import java.util.*
 
+import com.mapbox.rctmgl.v11compat.feature.*
+
 // import com.mapbox.rctmgl.R;
 // import com.mapbox.rctmgl.utils.DownloadMapImageTask;
 class RCTMGLRasterDemSource(context: Context?, private val mManager: RCTMGLRasterDemSourceManager) :

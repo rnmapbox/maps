@@ -6,6 +6,7 @@ import com.mapbox.maps.extension.style.layers.generated.CircleLayer
 import com.mapbox.rctmgl.components.mapview.RCTMGLMapView
 import com.mapbox.rctmgl.components.styles.RCTMGLStyle
 import com.mapbox.rctmgl.components.styles.RCTMGLStyleFactory
+import com.mapbox.rctmgl.utils.Logger
 
 class RCTMGLCircleLayer(context: Context?) : RCTLayer<CircleLayer?>(
     context!!
@@ -28,7 +29,12 @@ class RCTMGLCircleLayer(context: Context?) : RCTLayer<CircleLayer?>(
     }
 
     override fun addStyles() {
-        RCTMGLStyleFactory.setCircleLayerStyle(mLayer, RCTMGLStyle(context, mReactStyle, mMap!!))
+        mLayer?.also {
+            RCTMGLStyleFactory.setCircleLayerStyle(it, RCTMGLStyle(context, mReactStyle, mMap!!))
+        } ?: run {
+            Logger.e("RCTMGLCircleLayer", "mLayer is null")
+        }
+
     }
 
     fun setSourceLayerID(sourceLayerID: String?) {

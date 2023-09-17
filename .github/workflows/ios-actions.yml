@@ -7,7 +7,7 @@ on:
         required: true
         type: string
       MAP_IMPL:
-        description: "The map implementation to use (mapbox,maplibre or mapbox-gl)"
+        description: "The map implementation to use (mapbox,mapbox11)"
         default: mapbox
         required: false
         type: string

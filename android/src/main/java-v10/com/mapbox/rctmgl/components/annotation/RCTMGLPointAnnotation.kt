@@ -25,6 +25,8 @@ import com.mapbox.rctmgl.utils.BitmapUtils
 import com.mapbox.rctmgl.utils.LatLng
 import java.util.*
 
+import com.mapbox.rctmgl.v11compat.annotation.*;
+
 class RCTMGLPointAnnotation(private val mContext: Context, private val mManager: RCTMGLPointAnnotationManager) : AbstractMapFeature(mContext), View.OnLayoutChangeListener {
     var marker: PointAnnotation? = null
         private set
@@ -133,8 +135,8 @@ class RCTMGLPointAnnotation(private val mContext: Context, private val mManager:
 
     val latLng: LatLng?
         get() = mCoordinate?.let { GeoJSONUtils.toLatLng(it) }
-    val mapboxID: Long
-        get() = if (marker == null) -1 else marker!!.id
+    val mapboxID: AnnotationID
+        get() = if (marker == null) INVALID_ANNOTATION_ID else marker!!.id
 
     fun setCoordinate(point: Point) {
         mCoordinate = point

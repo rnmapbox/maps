@@ -63,6 +63,11 @@ android {
         sourceSets {
             main {
                 java.srcDirs = ['src/main/java-v10']
+                if (safeExtGet("RNMapboxMapsUseV11", false)) {
+                    java.srcDirs += 'src/main/mapbox-v11-compat/v11'
+                } else {
+                    java.srcDirs += 'src/main/mapbox-v11-compat/v10'
+                }
             }
         }
 

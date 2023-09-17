@@ -469,8 +469,8 @@ async function generate() {
       only: 'gl',
     },
     {
-      input: path.join(TMPL_PATH, 'RCTMGLStyleFactoryv10.java.ejs'),
-      output: path.join(ANDROID_V10_OUTPUT_PATH, 'RCTMGLStyleFactory.java'),
+      input: path.join(TMPL_PATH, 'RCTMGLStyleFactoryv10.kt.ejs'),
+      output: path.join(ANDROID_V10_OUTPUT_PATH, 'RCTMGLStyleFactory.kt'),
       only: 'v10',
     },
     {

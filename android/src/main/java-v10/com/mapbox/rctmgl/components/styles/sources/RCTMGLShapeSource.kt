@@ -20,6 +20,8 @@ import java.net.URL
 import java.util.ArrayList
 import java.util.HashMap
 
+import com.mapbox.rctmgl.v11compat.feature.*
+
 class RCTMGLShapeSource(context: Context, private val mManager: RCTMGLShapeSourceManager) :
     RCTSource<GeoJsonSource>(context) {
     private var mURL: URL? = null

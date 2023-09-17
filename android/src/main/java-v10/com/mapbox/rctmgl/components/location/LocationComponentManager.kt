@@ -9,10 +9,12 @@ import androidx.lifecycle.Lifecycle
 import com.mapbox.maps.plugin.locationcomponent.location
 import com.mapbox.rctmgl.components.mapview.RCTMGLMapView
 import com.mapbox.maps.plugin.LocationPuck2D
-import com.mapbox.maps.plugin.PuckBearingSource
 import com.mapbox.maps.plugin.lifecycle.lifecycle
 import com.mapbox.rctmgl.R
 import com.mapbox.rctmgl.location.LocationManager
+
+import com.mapbox.rctmgl.v11compat.location.PuckBearingSource;
+import com.mapbox.rctmgl.v11compat.image.*;
 
 /**
  * The LocationComponent on android implements display of user's current location.
@@ -35,7 +37,7 @@ class LocationComponentManager(mapView: RCTMGLMapView, context: Context) {
         val showUserLocation: Boolean,
         val followUserLocation: Boolean,
         val tintColor: Int?, // tint of location puck
-        var bearingImage: Drawable?, // bearing image (background)
+        var bearingImage: ImageHolder?, // bearing image (background)
         var puckBearingSource: PuckBearingSource? // bearing source
     ) {
         val enabled: Boolean
@@ -79,7 +81,7 @@ class LocationComponentManager(mapView: RCTMGLMapView, context: Context) {
             if (fullUpdate || (newState.hidden != oldState.hidden) || (newState.tintColor != oldState.tintColor) || (newState.bearingImage != oldState.bearingImage)) {
                 if (newState.hidden) {
                     var emptyLocationPuck = LocationPuck2D()
-                    val empty = AppCompatResources.getDrawable(mContext, R.drawable.empty)
+                    val empty = AppCompatResourcesV11.getDrawableImageHolder(mContext, R.drawable.empty)
                     emptyLocationPuck.bearingImage = empty
                     emptyLocationPuck.shadowImage = empty
                     emptyLocationPuck.topImage = empty
@@ -90,18 +92,18 @@ class LocationComponentManager(mapView: RCTMGLMapView, context: Context) {
                     val mapboxBlueColor = Color.parseColor("#4A90E2")
                     val tintColor = newState.tintColor
                     val defaultLocationPuck = LocationPuck2D()
-                    var topImage = AppCompatResources.getDrawable(mContext, R.drawable.mapbox_user_icon)
+                    var topImage = AppCompatResourcesV11.getDrawableImageHolder(mContext, R.drawable.mapbox_user_icon)
                     if (tintColor != null) {
-                        val drawable = topImage as VectorDrawable?
+                        val drawable = AppCompatResources.getDrawable(mContext, R.drawable.mapbox_user_icon) as VectorDrawable?
                         drawable!!.setTint(tintColor)
-                        topImage = drawable
+                        topImage = drawable.toBitmapImageHolder()
                     }
                     defaultLocationPuck.topImage = topImage
-                    val defaultBearingImage = AppCompatResources.getDrawable(
+                    val defaultBearingImage = AppCompatResourcesV11.getDrawableImageHolder(
                         mContext, R.drawable.mapbox_user_stroke_icon
-                    );
+                    )
                     defaultLocationPuck.bearingImage = newState.bearingImage ?: defaultBearingImage
-                    val shadowImage = AppCompatResources.getDrawable(
+                    val shadowImage = AppCompatResourcesV11.getDrawableImageHolder(
                         mContext, R.drawable.mapbox_user_icon_shadow
                     )
                     defaultLocationPuck.shadowImage = shadowImage
