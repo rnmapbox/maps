@@ -91,13 +91,11 @@ class FlyTo extends React.Component {
 
           <MapboxGL.UserLocation />
 
-          <MapboxGL.VectorSource>
-            <MapboxGL.FillExtrusionLayer
-              id="building3d"
-              sourceLayerID="building"
-              style={layerStyles.building}
-            />
-          </MapboxGL.VectorSource>
+          <MapboxGL.FillExtrusionLayer
+            id="building3d"
+            sourceLayerID="building"
+            style={layerStyles.building}
+          />
         </MapboxGL.MapView>
       </TabBarPage>
     );

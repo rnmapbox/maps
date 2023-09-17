@@ -6,6 +6,7 @@ import com.mapbox.maps.extension.style.layers.generated.LineLayer
 import com.mapbox.rctmgl.components.mapview.RCTMGLMapView
 import com.mapbox.rctmgl.components.styles.RCTMGLStyle
 import com.mapbox.rctmgl.components.styles.RCTMGLStyleFactory
+import com.mapbox.rctmgl.utils.Logger
 
 class RCTMGLLineLayer(context: Context?) : RCTLayer<LineLayer?>(
     context!!
@@ -28,7 +29,11 @@ class RCTMGLLineLayer(context: Context?) : RCTLayer<LineLayer?>(
     }
 
     override fun addStyles() {
-        RCTMGLStyleFactory.setLineLayerStyle(mLayer, RCTMGLStyle(context, mReactStyle, mMap!!))
+        mLayer?.also {
+            RCTMGLStyleFactory.setLineLayerStyle(it, RCTMGLStyle(context, mReactStyle, mMap!!))
+        } ?: run {
+            Logger.e("RCTMGLLineLayer", "mLayer is null")
+        }
     }
 
     fun setSourceLayerID(sourceLayerID: String?) {

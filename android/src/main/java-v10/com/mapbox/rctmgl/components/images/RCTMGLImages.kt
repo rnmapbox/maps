@@ -27,13 +27,15 @@ import java.util.ArrayList
 import java.util.HashMap
 import java.util.HashSet
 
+import com.mapbox.rctmgl.v11compat.image.*;
+
 fun Style.addBitmapImage(imageId: String, bitmap: Bitmap, sdf: Boolean = false, stretchX: List<ImageStretches> = listOf(), stretchY: List<ImageStretches> = listOf(), content: ImageContent? = null, scale: Double = 1.0) : Expected<String, None> {
     val byteBuffer = ByteBuffer.allocate(bitmap.byteCount)
     bitmap.copyPixelsToBuffer(byteBuffer)
     return this.addStyleImage(
         imageId,
         (1.0/((160.0/bitmap.density)) * scale).toFloat() ,
-        Image(bitmap.width, bitmap.height, byteBuffer.array()),
+        Image(bitmap.width, bitmap.height, byteBuffer.array().toImageData()),
         sdf,
         stretchX,
         stretchY,

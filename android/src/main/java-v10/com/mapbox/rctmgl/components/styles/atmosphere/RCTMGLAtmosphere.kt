@@ -52,11 +52,15 @@ class RCTMGLAtmosphere(context: Context?) : AbstractSourceConsumer(context) {
     }
 
     fun addStyles() {
-        RCTMGLStyleFactory.setAtmosphereLayerStyle(
-            mAtmosphere, RCTMGLStyle(
-                context, mReactStyle!!,
-                mMap!!
+        mAtmosphere?.also {
+            RCTMGLStyleFactory.setAtmosphereLayerStyle(
+                it, RCTMGLStyle(
+                    context, mReactStyle!!,
+                    mMap!!
+                )
             )
-        )
+        } ?: run {
+            Logger.e("RCTMGLAtmosphere", "mAtmosphere is null")
+        }
     }
 }

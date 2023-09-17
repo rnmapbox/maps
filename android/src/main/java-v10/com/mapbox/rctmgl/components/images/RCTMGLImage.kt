@@ -45,9 +45,11 @@ class RCTMGLImage(private val mContext: ReactApplicationContext, private val mMa
             return
         }
         val bitmap = BitmapUtils.viewToBitmap(v, left, top, right, bottom)
-        nativeImageUpdater?.let {
-            it.updateImage(name, bitmap, sdf, stretchX, stretchY, content, scale)
-            mBitmap = null;
+        bitmap?.let { bitmap ->
+            nativeImageUpdater?.let {
+                it.updateImage(name, bitmap, sdf, stretchX, stretchY, content, scale)
+                mBitmap = null;
+            }
         }
     }
 

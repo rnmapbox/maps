@@ -22,6 +22,8 @@ import com.mapbox.maps.plugin.animation.MapAnimationOptions.Companion.mapAnimati
 import com.mapbox.maps.plugin.animation.easeTo
 import com.mapbox.maps.plugin.animation.flyTo
 import com.mapbox.rctmgl.components.camera.constants.CameraMode
+import com.mapbox.rctmgl.v11compat.mapboxmap.easeToV11
+import com.mapbox.rctmgl.v11compat.mapboxmap.flyToV11
 import java.lang.ref.WeakReference
 import java.util.concurrent.ExecutionException
 import java.util.concurrent.RunnableFuture
@@ -78,16 +80,14 @@ class CameraUpdateItem(
             isCameraActionCancelled = true
             return
         }
-        val animationOptions = MapAnimationOptions.Builder().apply {
-            animatorListener(callback)
-        }
+        val animationOptions = MapAnimationOptions.Builder();
 
         // animateCamera / easeCamera only allows positive duration
         if (duration == 0 || mCameraMode == CameraMode.NONE) {
-            map.flyTo(mCameraUpdate, animationOptions.apply {
+            map.flyToV11(mCameraUpdate, animationOptions.apply {
                 duration(0)
-                animatorListener(callback)
-            }.build())
+            },
+            callback)
         }
 
         // On iOS a duration of -1 means default or dynamic duration (based on flight-path length)
@@ -96,16 +96,17 @@ class CameraUpdateItem(
             animationOptions.apply { duration(duration.toLong()) }
         }
         if (mCameraMode == CameraMode.FLIGHT) {
-            map.flyTo(mCameraUpdate, animationOptions.build())
+            map.flyToV11(mCameraUpdate, animationOptions, callback)
         } else if (mCameraMode == CameraMode.LINEAR) {
-            map.easeTo(
-                mCameraUpdate,
-                animationOptions.apply { interpolator(LinearInterpolator()) }.build()
+            map.easeToV11(
+                mCameraUpdate,animationOptions.apply { interpolator(LinearInterpolator()) },
+                callback
             )
         } else if (mCameraMode == CameraMode.EASE) {
-            map.easeTo(
+            map.easeToV11(
                 mCameraUpdate,
-                animationOptions.apply{ interpolator(AccelerateDecelerateInterpolator()) }.build()
+                animationOptions.apply{ interpolator(AccelerateDecelerateInterpolator()) },
+                callback
             )
         }
         null

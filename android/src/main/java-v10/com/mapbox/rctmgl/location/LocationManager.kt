@@ -2,13 +2,7 @@ package com.mapbox.rctmgl.location
 
 import android.annotation.SuppressLint
 import android.content.Context
-import android.location.Location
-import com.mapbox.android.core.location.LocationEngine
-import com.mapbox.android.core.location.LocationEngineCallback
-import com.mapbox.android.core.location.LocationEngineResult
 import com.mapbox.maps.plugin.locationcomponent.LocationConsumer
-import com.mapbox.android.core.location.LocationEngineRequest
-import com.mapbox.android.core.location.LocationEngineProvider
 import com.mapbox.android.core.permissions.PermissionsManager
 import android.os.Looper
 import android.util.Log
@@ -17,6 +11,8 @@ import com.mapbox.maps.plugin.locationcomponent.LocationProvider
 import java.lang.ref.WeakReference
 import java.util.ArrayList
 import kotlin.Exception
+
+import com.mapbox.rctmgl.v11compat.location.*
 
 
 open class SingletonHolder<out T, in A>(creator: (A) -> T) {
@@ -43,24 +39,18 @@ open class SingletonHolder<out T, in A>(creator: (A) -> T) {
     }
 }
 
-internal class LocationProviderForEngine(var mEngine: LocationEngine?, val context: Context) : LocationProvider, LocationEngineCallback<LocationEngineResult> {
+internal class LocationProviderForEngine(var mEngine: LocationEngine?, val context: Context) : LocationProvider, LocationEngineCallback {
     var mConsumers = ArrayList<LocationConsumer>()
     @SuppressLint("MissingPermission")
     fun beforeAddingFirstConsumer() {
-        val request = LocationEngineRequest.Builder(LocationManager.DEFAULT_INTERVAL_MILLIS
-        )
-            .setFastestInterval(LocationManager.DEFAULT_FASTEST_INTERVAL_MILLIS)
-            .setPriority(LocationEngineRequest.PRIORITY_HIGH_ACCURACY)
-            .build();
-
         if (!PermissionsManager.areLocationPermissionsGranted(context)) {
             return
         }
 
-        mEngine?.requestLocationUpdates(
-          request,
+        mEngine?.requestLocationUpdatesV11(
           this,
-          Looper.getMainLooper()
+          Looper.getMainLooper(),
+            null
         )
 
     }
@@ -85,13 +75,14 @@ internal class LocationProviderForEngine(var mEngine: LocationEngine?, val conte
         for (consumer in mConsumers) {
             val points = Point.fromLngLat(location.longitude, location.latitude)
             consumer.onLocationUpdated(points)
-            val bearings = location.bearing.toDouble()
-            consumer.onBearingUpdated(bearings)
+            location.bearing?.toDouble()?.also {
+                consumer.onBearingUpdated(it)
+            }
         }
     }
 
     // * LocationEngineCallback
-    override fun onSuccess(locationEngineResult: LocationEngineResult?) {
+    override fun onSuccess(locationEngineResult: LocationEngineResult) {
         val location = locationEngineResult?.lastLocation
         location?.let { notifyLocationUpdates(it) }
     }
@@ -99,14 +90,14 @@ internal class LocationProviderForEngine(var mEngine: LocationEngine?, val conte
     override fun onFailure(e: Exception) {}
 }
 
-class LocationManager private constructor(private val context: Context) : LocationEngineCallback<LocationEngineResult> {
+class LocationManager private constructor(private val context: Context) : LocationEngineCallback {
     var engine: LocationEngine? = null
         private set
     private val listeners: MutableList<OnUserLocationChange> = ArrayList()
     private var mMinDisplacement = 0f
     private var isActive = false
     private var lastLocation: Location? = null
-    private var locationEngineRequest: LocationEngineRequest? = null
+    // private var locationEngineRequest: LocationEngineRequest? = null
     private var locationProvider: LocationProvider? = null
     private var nStarts : Int = 0
     private var isPaused : Boolean = false
@@ -164,6 +155,7 @@ class LocationManager private constructor(private val context: Context) : Locati
 
     ////
 
+    /*
     private fun buildEngineRequest() {
         engine = LocationEngineProvider.getBestLocationEngine(context.applicationContext)
         locationEngineRequest = LocationEngineRequest.Builder(DEFAULT_INTERVAL_MILLIS)
@@ -171,7 +163,7 @@ class LocationManager private constructor(private val context: Context) : Locati
                 .setPriority(LocationEngineRequest.PRIORITY_HIGH_ACCURACY)
                 .setDisplacement(mMinDisplacement)
                 .build()
-    }
+    }*/
 
     fun addLocationListener(listener: OnUserLocationChange) {
         if (!listeners.contains(listener)) {
@@ -203,13 +195,12 @@ class LocationManager private constructor(private val context: Context) : Locati
         engine?.removeLocationUpdates(this)
 
         // refresh location engine request with new values
-        buildEngineRequest()
 
         // add new listeners
-        engine?.requestLocationUpdates(
-                locationEngineRequest!!,
-                this,
-                Looper.getMainLooper()
+        engine?.requestLocationUpdatesV11(
+            this,
+            Looper.getMainLooper(),
+            mMinDisplacement
         )
         isActive = true
     }
@@ -236,13 +227,13 @@ class LocationManager private constructor(private val context: Context) : Locati
         } else lastLocation
 
     @SuppressLint("MissingPermission")
-    fun getLastKnownLocation(callback: LocationEngineCallback<LocationEngineResult>) {
+    fun getLastKnownLocation(callback: LocationEngineCallback) {
         if (engine == null) {
             callback.onFailure(Exception("LocationEngine not initialized"))
         }
         try {
-            engine?.getLastLocation(object : LocationEngineCallback<LocationEngineResult> {
-                override fun onSuccess(result: LocationEngineResult?) {
+            engine?.getLastLocation(object : LocationEngineCallback {
+                override fun onSuccess(result: LocationEngineResult) {
                     if (result == null) {
                         callback.onFailure( NullPointerException("LocationEngineResult is null"))
                     } else {
@@ -271,7 +262,7 @@ class LocationManager private constructor(private val context: Context) : Locati
         // FMTODO handle this.
     }
 
-    override fun onSuccess(result: LocationEngineResult?) {
+    override fun onSuccess(result: LocationEngineResult) {
         onLocationChanged(result?.lastLocation)
         val provider = locationProvider
         if (provider != null && provider is LocationProviderForEngine) {
@@ -287,6 +278,6 @@ class LocationManager private constructor(private val context: Context) : Locati
     }
 
     init {
-        buildEngineRequest()
+        // buildEngineRequest()
     }
 }

@@ -7,11 +7,13 @@ import com.mapbox.rctmgl.components.mapview.OnMapReadyCallback
 import com.mapbox.maps.MapboxMap
 import com.mapbox.android.core.permissions.PermissionsManager
 import com.mapbox.maps.Style
-import com.mapbox.maps.plugin.PuckBearingSource
 import com.mapbox.rctmgl.R
 import com.mapbox.rctmgl.components.AbstractMapFeature
 import com.mapbox.rctmgl.components.RemovalReason
 import com.mapbox.rctmgl.components.mapview.RCTMGLMapView
+
+import com.mapbox.rctmgl.v11compat.location.PuckBearingSource
+import com.mapbox.rctmgl.v11compat.image.AppCompatResourcesV11
 
 enum class RenderMode {
     GPS, COMPASS, NORMAL
@@ -69,10 +71,10 @@ class RCTMGLNativeUserLocation(context: Context) : AbstractMapFeature(context), 
                 RenderMode.NORMAL ->
                     it.update { it.copy(bearingImage =  null, puckBearingSource = null)}
                 RenderMode.GPS -> it.update {
-                    it.copy(bearingImage =  AppCompatResources.getDrawable(
+                    it.copy(bearingImage =  AppCompatResourcesV11.getDrawableImageHolder(
                         mContext, R.drawable.mapbox_user_bearing_icon
                     ), puckBearingSource = PuckBearingSource.COURSE) }
-                RenderMode.COMPASS -> it.update{ it.copy(bearingImage=  AppCompatResources.getDrawable(
+                RenderMode.COMPASS -> it.update{ it.copy(bearingImage=  AppCompatResourcesV11.getDrawableImageHolder(
                     mContext, R.drawable.mapbox_user_puck_icon
                 ), puckBearingSource = PuckBearingSource.HEADING) }
             }

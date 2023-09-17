@@ -110,6 +110,7 @@ ios/.framework_version
 ios/Pods/
 ios/RCTMGL.xcodeproj/xcshareddata/
 android/build/
+android/rctmgl/build/
 android/.gradle/
 android/.idea/
 android/android.iml

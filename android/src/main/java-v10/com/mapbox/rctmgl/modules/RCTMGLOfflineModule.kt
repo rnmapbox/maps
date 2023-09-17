@@ -17,6 +17,7 @@ import com.mapbox.rctmgl.events.constants.EventTypes
 import com.mapbox.rctmgl.utils.*
 import com.mapbox.rctmgl.utils.Logger
 import com.mapbox.rctmgl.utils.extensions.*
+import com.mapbox.rctmgl.v11compat.offlinemanager.getOfflineManager
 import com.mapbox.turf.TurfMeasurement
 import org.json.JSONArray
 import org.json.JSONException
@@ -27,6 +28,8 @@ import java.nio.file.Files
 import java.nio.file.Paths
 import java.nio.file.StandardCopyOption
 import java.util.concurrent.CountDownLatch
+
+import com.mapbox.rctmgl.v11compat.offlinemanager.*
 
 data class ZoomRange(val minZoom: Byte, val maxZoom: Byte) {
 
@@ -104,12 +107,9 @@ class RCTMGLOfflineModule(private val mReactContext: ReactApplicationContext) :
     }
 
     val offlineManager: OfflineManager by lazy {
-        OfflineManager(
-            ResourceOptions.Builder()
-                .accessToken(RCTMGLModule.getAccessToken(mReactContext)).tileStore(
-                    tileStore
-                ).build()
-        )
+        getOfflineManager(tileStore) {
+            RCTMGLModule.getAccessToken(mReactContext)
+        }
     }
 
     override fun getName(): String {
@@ -218,7 +218,9 @@ class RCTMGLOfflineModule(private val mReactContext: ReactApplicationContext) :
 
     @ReactMethod
     fun setTileCountLimit(tileCountLimit: Int) {
-        val offlineRegionManager = OfflineRegionManager(ResourceOptions.Builder().accessToken(RCTMGLModule.getAccessToken(mReactContext)).build())
+        val offlineRegionManager = getOfflineRegionManager {
+            RCTMGLModule.getAccessToken(mReactContext)
+        }
         offlineRegionManager.setOfflineMapboxTileCountLimit(tileCountLimit.toLong())
     }
 

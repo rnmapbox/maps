@@ -6,6 +6,7 @@ import com.mapbox.maps.extension.style.layers.generated.HeatmapLayer
 import com.mapbox.rctmgl.components.mapview.RCTMGLMapView
 import com.mapbox.rctmgl.components.styles.RCTMGLStyle
 import com.mapbox.rctmgl.components.styles.RCTMGLStyleFactory
+import com.mapbox.rctmgl.utils.Logger
 
 class RCTMGLHeatmapLayer(context: Context?) : RCTLayer<HeatmapLayer?>(
     context!!
@@ -28,7 +29,14 @@ class RCTMGLHeatmapLayer(context: Context?) : RCTLayer<HeatmapLayer?>(
     }
 
     override fun addStyles() {
-        RCTMGLStyleFactory.setHeatmapLayerStyle(mLayer, RCTMGLStyle(context, mReactStyle, mMap!!))
+        mLayer?.also {
+            RCTMGLStyleFactory.setHeatmapLayerStyle(
+                it,
+                RCTMGLStyle(context, mReactStyle, mMap!!)
+            )
+        } ?: run {
+            Logger.e("RCTMGLHeatmapLayer", "mLayer is null")
+        }
     }
 
     fun setSourceLayerID(sourceLayerID: String?) {

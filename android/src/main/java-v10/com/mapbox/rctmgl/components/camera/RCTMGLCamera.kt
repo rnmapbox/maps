@@ -16,9 +16,7 @@ import com.mapbox.maps.plugin.locationcomponent.OnIndicatorPositionChangedListen
 import com.facebook.react.bridge.WritableMap
 import com.facebook.react.bridge.WritableNativeMap
 import com.mapbox.maps.*
-import com.mapbox.maps.plugin.PuckBearingSource
 import com.mapbox.maps.plugin.locationcomponent.location
-import com.mapbox.maps.plugin.locationcomponent.location2
 import com.mapbox.maps.plugin.viewport.ViewportStatus
 import com.mapbox.maps.plugin.viewport.ViewportStatusObserver
 import com.mapbox.maps.plugin.viewport.data.FollowPuckViewportStateBearing
@@ -36,6 +34,7 @@ import com.mapbox.rctmgl.location.*
 import com.mapbox.rctmgl.utils.Logger
 import com.mapbox.rctmgl.utils.writableMapOf
 
+import com.mapbox.rctmgl.v11compat.location.*;
 
 class RCTMGLCamera(private val mContext: Context, private val mManager: RCTMGLCameraManager) :
     AbstractMapFeature(

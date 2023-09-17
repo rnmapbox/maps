@@ -6,6 +6,7 @@ import com.mapbox.maps.extension.style.layers.generated.SymbolLayer
 import com.mapbox.rctmgl.components.mapview.RCTMGLMapView
 import com.mapbox.rctmgl.components.styles.RCTMGLStyle
 import com.mapbox.rctmgl.components.styles.RCTMGLStyleFactory
+import com.mapbox.rctmgl.utils.Logger
 
 class RCTMGLSymbolLayer(context: Context?) : RCTLayer<SymbolLayer?>(
     context!!
@@ -28,7 +29,14 @@ class RCTMGLSymbolLayer(context: Context?) : RCTLayer<SymbolLayer?>(
     }
 
     override fun addStyles() {
-        RCTMGLStyleFactory.setSymbolLayerStyle(mLayer, RCTMGLStyle(context, mReactStyle, mMap!!))
+        mLayer?.also {
+            RCTMGLStyleFactory.setSymbolLayerStyle(
+                it,
+                RCTMGLStyle(context, mReactStyle, mMap!!)
+            )
+        } ?: run {
+            Logger.e("RCTMGLSymbolLayer", "mLayer is null")
+        }
     }
 
     fun setSourceLayerID(sourceLayerID: String?) {

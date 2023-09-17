@@ -2,7 +2,7 @@ require_relative '../node_modules/react-native/scripts/react_native_pods'
 require_relative '../node_modules/@react-native-community/cli-platform-ios/native_modules'
 
 $RNMapboxMapsImpl = 'mapbox' # mapbox-gl, maplibre
-if ENV['MBX11']
+if ENV['RNMBX11']
   $RNMapboxMapsUseV11 = true # use 11 version
   $RNMapboxMapsVersion = '= 11.0.0-beta.3'
 end

@@ -6,6 +6,7 @@ import com.mapbox.maps.extension.style.layers.generated.FillLayer
 import com.mapbox.rctmgl.components.mapview.RCTMGLMapView
 import com.mapbox.rctmgl.components.styles.RCTMGLStyle
 import com.mapbox.rctmgl.components.styles.RCTMGLStyleFactory
+import com.mapbox.rctmgl.utils.Logger
 
 class RCTMGLFillLayer(context: Context?) : RCTLayer<FillLayer?>(
     context!!
@@ -28,7 +29,12 @@ class RCTMGLFillLayer(context: Context?) : RCTLayer<FillLayer?>(
     }
 
     override fun addStyles() {
-        RCTMGLStyleFactory.setFillLayerStyle(mLayer, RCTMGLStyle(context, mReactStyle, mMap!!))
+        mLayer?.also {
+            RCTMGLStyleFactory.setFillLayerStyle(it, RCTMGLStyle(context, mReactStyle, mMap!!))
+        } ?: run {
+            Logger.e("RCTMGLStyleFactory", "mLayer is null")
+        }
+
     }
 
     fun setSourceLayerID(sourceLayerID: String?) {

@@ -14,6 +14,8 @@ import com.mapbox.rctmgl.events.AndroidCallbackEvent
 import com.mapbox.rctmgl.events.FeatureClickEvent
 import java.util.*
 
+import com.mapbox.rctmgl.v11compat.feature.*
+
 class RCTMGLVectorSource(context: Context?, private val mManager: RCTMGLVectorSourceManager) :
     RCTMGLTileSource<VectorSource?>(context) {
     override fun onPress(event: OnPressEvent?) {

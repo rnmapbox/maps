@@ -6,6 +6,7 @@ import com.mapbox.maps.extension.style.layers.generated.FillExtrusionLayer
 import com.mapbox.rctmgl.components.mapview.RCTMGLMapView
 import com.mapbox.rctmgl.components.styles.RCTMGLStyle
 import com.mapbox.rctmgl.components.styles.RCTMGLStyleFactory
+import com.mapbox.rctmgl.utils.Logger
 
 class RCTMGLFillExtrusionLayer(context: Context?) : RCTLayer<FillExtrusionLayer?>(
     context!!
@@ -28,10 +29,14 @@ class RCTMGLFillExtrusionLayer(context: Context?) : RCTLayer<FillExtrusionLayer?
     }
 
     override fun addStyles() {
-        RCTMGLStyleFactory.setFillExtrusionLayerStyle(
-            mLayer,
-            RCTMGLStyle(context, mReactStyle, mMap!!)
-        )
+        mLayer?.also {
+            RCTMGLStyleFactory.setFillExtrusionLayerStyle(
+                it,
+                RCTMGLStyle(context, mReactStyle, mMap!!)
+            )
+        } ?: run {
+            Logger.e("RCTMGLFillExtrusionLayer", "Layer is null")
+        }
     }
 
     fun setSourceLayerID(sourceLayerID: String?) {

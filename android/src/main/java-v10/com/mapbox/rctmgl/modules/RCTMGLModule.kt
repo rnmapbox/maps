@@ -3,7 +3,6 @@ package com.mapbox.rctmgl.modules
 import android.os.Handler
 import com.facebook.react.bridge.Promise
 import com.mapbox.maps.extension.style.layers.properties.generated.LineJoin
-import com.mapbox.maps.ResourceOptionsManager.Companion.getDefault
 import com.facebook.react.module.annotations.ReactModule
 import com.mapbox.rctmgl.modules.RCTMGLModule
 import com.facebook.react.bridge.ReactApplicationContext
@@ -19,6 +18,8 @@ import com.mapbox.maps.Style
 import com.mapbox.maps.plugin.attribution.attribution
 import com.mapbox.rctmgl.components.camera.constants.CameraMode
 import java.util.HashMap
+
+import com.mapbox.rctmgl.v11compat.resourceoption.*
 
 @ReactModule(name = RCTMGLModule.REACT_CLASS)
 class RCTMGLModule(private val mReactContext: ReactApplicationContext) : ReactContextBaseJavaModule(
@@ -130,9 +131,7 @@ class RCTMGLModule(private val mReactContext: ReactApplicationContext) : ReactCo
     @ReactMethod
     fun setAccessToken(accessToken: String?, promise: Promise) {
         mReactContext.runOnUiQueueThread(Runnable {
-            getDefault(
-                reactApplicationContext, accessToken
-            )
+            setMapboxAccessToken(reactApplicationContext, accessToken)
             promise.resolve(accessToken)
         })
     }
@@ -157,7 +156,7 @@ class RCTMGLModule(private val mReactContext: ReactApplicationContext) : ReactCo
         private val customHeaderInterceptorAdded = false
         @JvmStatic
         fun getAccessToken(reactContext: ReactApplicationContext?): String {
-            return getDefault((reactContext)!!, null).resourceOptions.accessToken
+            return getMapboxAccessToken(reactContext)
         }
     }
 }

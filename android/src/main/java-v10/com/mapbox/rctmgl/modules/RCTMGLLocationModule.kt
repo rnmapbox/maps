@@ -1,16 +1,15 @@
 package com.mapbox.rctmgl.modules
 
-import android.location.Location
 import com.facebook.react.bridge.*
 import com.mapbox.rctmgl.location.LocationManager
 import com.facebook.react.module.annotations.ReactModule
 import com.mapbox.rctmgl.location.LocationManager.OnUserLocationChange
 import com.mapbox.rctmgl.events.LocationEvent
-import com.mapbox.android.core.location.LocationEngineCallback
-import com.mapbox.android.core.location.LocationEngineResult
 import com.mapbox.rctmgl.events.EventEmitter
 import com.mapbox.rctmgl.location.LocationManager.Companion.getInstance
 import java.lang.Exception
+
+import com.mapbox.rctmgl.v11compat.location.*
 
 data class LocationEventThrottle(var waitBetweenEvents: Double? = null, var lastSentTimestamp: Long? = null) {
 }
@@ -104,7 +103,7 @@ class RCTMGLLocationModule(reactContext: ReactApplicationContext) :
     @ReactMethod
     fun getLastKnownLocation(promise: Promise) {
         locationManager!!.getLastKnownLocation(
-            object : LocationEngineCallback<LocationEngineResult> {
+            object : LocationEngineCallback {
                 override fun onSuccess(result: LocationEngineResult) {
                     val location = result.lastLocation
                     if (location != null) {
