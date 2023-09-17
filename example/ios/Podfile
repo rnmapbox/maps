@@ -1,16 +1,25 @@
 require_relative '../node_modules/react-native/scripts/react_native_pods'
 require_relative '../node_modules/@react-native-community/cli-platform-ios/native_modules'
 
-$RNMapboxMapsImpl = 'mapbox' # mapbox-gl, maplibre
+$RNMapboxMapsImpl = 'mapbox'
 if ENV['RNMBX11']
   $RNMapboxMapsUseV11 = true # use 11 version
   $RNMapboxMapsVersion = '= 11.0.0-beta.3'
 end
 
-if ENV['CI_MAP_IMPL']
-  fail "Invalid CI_MAP_IMPL value" unless ["maplibre", "mapbox-gl", "mapbox"].include?(ENV['CI_MAP_IMPL'])
 
-  $RNMapboxMapsImpl = ENV['CI_MAP_IMPL']
+if ENV['CI_MAP_IMPL']
+  fail "Invalid CI_MAP_IMPL value" unless ["mapbox","mapbox11"].include?(ENV['CI_MAP_IMPL'])
+  case ENV['CI_MAP_IMPL']
+  when 'mapbox'
+    $RNMapboxMapsImpl = 'mapbox'
+  when 'mapbox11'
+    $RNMapboxMapsImpl = 'mapbox'
+    $RNMapboxMapsUseV11 = true # use 11 version
+    $RNMapboxMapsVersion = '= 11.0.0-beta.3' 
+  else
+    fail "Invalid CI_MAP_IMPL value: #{ENV['CI_MAP_IMPL']}"
+  end
 end
 
 #if $RNMapboxMapsImpl == 'mapbox'
@@ -38,17 +47,6 @@ if linkage != nil
 end
 
 production = ENV["PRODUCTION"] == "1"
-
-if $RNMapboxMapsImpl == 'maplibre'
-  $RNMapboxMapsSwiftPackageManager = {
-    url: "https://github.com/maplibre/maplibre-gl-native-distribution",
-    requirement: {
-      kind: "upToNextMajorVersion",
-      minimumVersion: "5.12.1"
-    },
-    product_name: "Mapbox"
-  }
-end
 
 # We ignore warning except for RNMapboxMaps
 INHIBIT_WARNING_BY_DEFAULT = true
