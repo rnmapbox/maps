@@ -88,3 +88,23 @@ Add the following to your Podfile:
 $RNMapboxMapsUseV11 = true # use 11 version
 $RNMapboxMapsVersion = '= 11.0.0-beta.3'
 ```
+
+
+## Troubleshooting
+
+### Pod install fails on upgrade of @rnmapbox/maps with `could not find compatible versions for pod "MapboxMaps"`
+
+Example message:
+```log
+[!] CocoaPods could not find compatible versions for pod "MapboxMaps":
+  In snapshot (Podfile.lock):
+    MapboxMaps (= 10.15.0, ~> 10.15.0)
+
+  In Podfile:
+    rnmapbox-maps (from `../node_modules/@rnmapbox/maps`) was resolved to 10.0.15, which depends on
+      MapboxMaps (~> 10.16.0)
+```
+
+Please use `pod update MapboxMaps` as suggested by cocoapods
+
+
