@@ -1,4 +1,4 @@
-export * from './MGLModule';
+export * from './RNMBXModule';
 export {
   Camera,
   UserTrackingMode,

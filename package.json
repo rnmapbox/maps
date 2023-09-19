@@ -121,7 +121,7 @@
     "type": "all",
     "jsSrcsDir": "src/specs",
     "android": {
-      "javaPackageName": "com.mapbox.rctmgl"
+      "javaPackageName": "com.mapbox.rnmbx"
     }
   },
   "jest": {

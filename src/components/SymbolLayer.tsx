@@ -6,9 +6,9 @@ import { type StyleValue } from '../utils/StyleValue';
 
 import AbstractLayer from './AbstractLayer';
 
-const MapboxGL = NativeModules.MGLModule;
+const MapboxGL = NativeModules.RNMBXModule;
 
-export const NATIVE_MODULE_NAME = 'RCTMGLSymbolLayer';
+export const NATIVE_MODULE_NAME = 'RNMBXSymbolLayer';
 
 export type Props = {
   /**
@@ -77,7 +77,7 @@ type NativeTypeProps = Omit<Props, 'style'> & {
   reactStyle?: { [key: string]: StyleValue };
 };
 
-const RCTMGLSymbolLayer =
+const RNMBXSymbolLayer =
   requireNativeComponent<NativeTypeProps>(NATIVE_MODULE_NAME);
 
 /**
@@ -119,9 +119,9 @@ export class SymbolLayer extends AbstractLayer<Props, NativeTypeProps> {
     };
 
     return (
-      <RCTMGLSymbolLayer ref={this.setNativeLayer} {...props}>
+      <RNMBXSymbolLayer ref={this.setNativeLayer} {...props}>
         {this.props.children}
-      </RCTMGLSymbolLayer>
+      </RNMBXSymbolLayer>
     );
   }
 }

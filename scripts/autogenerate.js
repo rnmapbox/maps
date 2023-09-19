@@ -63,7 +63,7 @@ const IOS_V10_OUTPUT_PATH = path.join(
   __dirname,
   ...OUTPUT_PREFIX,
   'ios',
-  'RCTMGL-v10',
+  'RNMBX-v10',
 );
 
 const ANDROID_V10_OUTPUT_PATH = path.join(
@@ -75,7 +75,7 @@ const ANDROID_V10_OUTPUT_PATH = path.join(
   'java-v10',
   'com',
   'mapbox',
-  'rctmgl',
+  'rnmbx',
   'components',
   'styles',
 );
@@ -398,13 +398,13 @@ async function generate() {
       output: path.join(JS_OUTPUT_PATH, 'MapboxStyles.d.ts'),
     },
     {
-      input: path.join(TMPL_PATH, 'RCTMGLStyle.swift.ejs'),
-      output: path.join(IOS_V10_OUTPUT_PATH, 'RCTMGLStyle.swift'),
+      input: path.join(TMPL_PATH, 'RNMBXStyle.swift.ejs'),
+      output: path.join(IOS_V10_OUTPUT_PATH, 'RNMBXStyle.swift'),
       only: 'v10',
     },
     {
-      input: path.join(TMPL_PATH, 'RCTMGLStyleFactoryv10.kt.ejs'),
-      output: path.join(ANDROID_V10_OUTPUT_PATH, 'RCTMGLStyleFactory.kt'),
+      input: path.join(TMPL_PATH, 'RNMBXStyleFactoryv10.kt.ejs'),
+      output: path.join(ANDROID_V10_OUTPUT_PATH, 'RNMBXStyleFactory.kt'),
       only: 'v10',
     },
     {

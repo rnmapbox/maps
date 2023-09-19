@@ -9,9 +9,9 @@ import { StyleValue } from '../utils/StyleValue';
 
 import AbstractLayer from './AbstractLayer';
 
-const MapboxGL = NativeModules.MGLModule;
+const MapboxGL = NativeModules.RNMBXModule;
 
-export const NATIVE_MODULE_NAME = 'RCTMGLFillExtrusionLayer';
+export const NATIVE_MODULE_NAME = 'RNMBXFillExtrusionLayer';
 
 export type Props = {
   /**
@@ -90,11 +90,11 @@ class FillExtrusionLayer extends AbstractLayer<Props, NativeTypeProps> {
       ...this.baseProps,
       sourceLayerID: this.props.sourceLayerID,
     };
-    return <RCTMGLFillExtrusionLayer ref={this.setNativeLayer} {...props} />;
+    return <RNMBXFillExtrusionLayer ref={this.setNativeLayer} {...props} />;
   }
 }
 
-const RCTMGLFillExtrusionLayer =
+const RNMBXFillExtrusionLayer =
   requireNativeComponent<NativeTypeProps>(NATIVE_MODULE_NAME);
 
 export default FillExtrusionLayer;

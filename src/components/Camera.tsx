@@ -12,7 +12,7 @@ import { MapboxGLEvent } from '../types';
 import { makeLatLngBounds, makePoint } from '../utils/geoUtils';
 import { type NativeRefType } from '../utils/nativeRef';
 
-const NativeModule = NativeModules.MGLModule;
+const NativeModule = NativeModules.RNMBXModule;
 
 type Position = number[] | [number, number];
 
@@ -56,7 +56,7 @@ const nativeAnimationMode = (
   }
 };
 
-export const NATIVE_MODULE_NAME = 'RCTMGLCamera';
+export const NATIVE_MODULE_NAME = 'RNMBXCamera';
 
 // Native module types.
 
@@ -242,7 +242,7 @@ export const Camera = memo(
         onUserTrackingModeChange,
       } = props;
 
-      const nativeCamera = useRef<typeof RCTMGLCamera>(
+      const nativeCamera = useRef<typeof RNMBXCamera>(
         null,
       ) as NativeRefType<NativeCameraProps>;
 
@@ -538,7 +538,7 @@ export const Camera = memo(
       }));
 
       return (
-        <RCTMGLCamera
+        <RNMBXCamera
           testID={'Camera'}
           ref={nativeCamera}
           stop={nativeStop}
@@ -561,7 +561,7 @@ export const Camera = memo(
   ),
 );
 
-const RCTMGLCamera =
+const RNMBXCamera =
   requireNativeComponent<NativeCameraProps>(NATIVE_MODULE_NAME);
 
 export type Camera = CameraRef;

@@ -4,7 +4,7 @@ import LocationManager, {
   LocationModuleEventEmitter,
 } from '../../../src/modules/location/locationManager';
 
-const MapboxGL = NativeModules.MGLModule;
+const MapboxGL = NativeModules.RNMBXModule;
 const MapboxGLLocationManager = NativeModules.MGLLocationModule;
 
 const location = {

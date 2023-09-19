@@ -6,9 +6,9 @@ import { StyleValue } from '../utils/StyleValue';
 
 import AbstractLayer from './AbstractLayer';
 
-const MapboxGL = NativeModules.MGLModule;
+const MapboxGL = NativeModules.RNMBXModule;
 
-export const NATIVE_MODULE_NAME = 'RCTMGLLineLayer';
+export const NATIVE_MODULE_NAME = 'RNMBXLineLayer';
 
 export type Props = {
   /**
@@ -86,11 +86,11 @@ class LineLayer extends AbstractLayer<Props, NativeTypeProps> {
       ...this.baseProps,
       sourceLayerID: this.props.sourceLayerID,
     };
-    return <RCTMGLLineLayer ref={this.setNativeLayer} {...props} />;
+    return <RNMBXLineLayer ref={this.setNativeLayer} {...props} />;
   }
 }
 
-const RCTMGLLineLayer =
+const RNMBXLineLayer =
   requireNativeComponent<NativeTypeProps>(NATIVE_MODULE_NAME);
 
 export default LineLayer;

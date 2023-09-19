@@ -34,7 +34,7 @@ Style property for the Animated.View wrapper, apply animations to this
 ```tsx
 ViewStyle
 ```
-Style property for the native RCTMGLCallout container, set at your own risk.
+Style property for the native RNMBXCallout container, set at your own risk.
 
 
   

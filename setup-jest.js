@@ -7,7 +7,7 @@ function keyMirror(keys) {
 }
 
 // Mock of what the native code puts on the JS object
-NativeModules.MGLModule = {
+NativeModules.RNMBXModule = {
   // constants
   UserTrackingModes: keyMirror([
     'None',
@@ -106,7 +106,7 @@ NativeModules.MGLOfflineModule = {
   setProgressEventThrottle: jest.fn(),
 };
 
-NativeModules.MGLSnapshotModule = {
+NativeModules.RNMBXSnapshotModule = {
   takeSnap: () => {
     return Promise.resolve('file://test.png');
   },
@@ -118,7 +118,7 @@ NativeModules.MGLLocationModule = {
   pause: jest.fn(),
 };
 
-NativeModules.MBXMapViewModule = {
+NativeModules.RNMBXMapViewModule = {
   takeSnap: jest.fn(),
   queryTerrainElevation: jest.fn(),
   setSourceVisibility: jest.fn(),

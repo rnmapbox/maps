@@ -6,9 +6,9 @@ import { StyleValue } from '../utils/StyleValue';
 
 import AbstractLayer from './AbstractLayer';
 
-const MapboxGL = NativeModules.MGLModule;
+const MapboxGL = NativeModules.RNMBXModule;
 
-export const NATIVE_MODULE_NAME = 'RCTMGLSkyLayer';
+export const NATIVE_MODULE_NAME = 'RNMBXSkyLayer';
 
 export type Props = {
   /**
@@ -65,11 +65,11 @@ class SkyLayer extends AbstractLayer<Props, NativeTypeProps> {
   };
 
   render() {
-    return <RCTMGLSkyLayer ref={this.setNativeLayer} {...this.baseProps} />;
+    return <RNMBXSkyLayer ref={this.setNativeLayer} {...this.baseProps} />;
   }
 }
 
-const RCTMGLSkyLayer =
+const RNMBXSkyLayer =
   requireNativeComponent<NativeTypeProps>(NATIVE_MODULE_NAME);
 
 export default SkyLayer;

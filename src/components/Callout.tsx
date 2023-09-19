@@ -10,7 +10,7 @@ import {
   StyleProp,
 } from 'react-native';
 
-export const NATIVE_MODULE_NAME = 'RCTMGLCallout';
+export const NATIVE_MODULE_NAME = 'RNMBXCallout';
 
 const styles = StyleSheet.create({
   container: {
@@ -65,7 +65,7 @@ type Props = Omit<ViewProps, 'style'> & {
   style?: ViewStyle;
 
   /**
-   * Style property for the native RCTMGLCallout container, set at your own risk.
+   * Style property for the native RNMBXCallout container, set at your own risk.
    */
   containerStyle?: ViewStyle;
 
@@ -135,13 +135,11 @@ class Callout extends React.PureComponent<Props> {
       ? this._renderCustomCallout()
       : this._renderDefaultCallout();
     return (
-      <RCTMGLCallout style={this._containerStyle}>
-        {calloutContent}
-      </RCTMGLCallout>
+      <RNMBXCallout style={this._containerStyle}>{calloutContent}</RNMBXCallout>
     );
   }
 }
 
-const RCTMGLCallout = requireNativeComponent<NativeProps>(NATIVE_MODULE_NAME);
+const RNMBXCallout = requireNativeComponent<NativeProps>(NATIVE_MODULE_NAME);
 
 export default Callout;

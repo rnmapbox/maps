@@ -3,7 +3,7 @@ import { NativeModules } from 'react-native';
 import { toJSONString } from '../../utils';
 import { makePoint, makeFeatureCollection } from '../../utils/geoUtils';
 
-const MapboxGL = NativeModules.MGLModule;
+const MapboxGL = NativeModules.RNMBXModule;
 
 export type SnapshotOptionsArgs = {
   centerCoordinate?: GeoJSON.Position;
