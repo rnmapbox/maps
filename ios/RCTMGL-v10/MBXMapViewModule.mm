@@ -33,7 +33,7 @@ RCT_EXPORT_MODULE();
   return RCTGetUIManagerQueue();
 }
 
-- (void)withMapView:(NSNumber*)viewRef block:(void (^)(MBXMapView *))block reject:(RCTPromiseRejectBlock)reject methodName:(NSString *)methodName
+- (void)withMapView:(nonnull NSNumber*)viewRef block:(void (^)(MBXMapView *))block reject:(RCTPromiseRejectBlock)reject methodName:(NSString *)methodName
 {
 //    void (^upperBlock)(void) = ^{
 #ifdef RCT_NEW_ARCH_ENABLED
@@ -62,28 +62,28 @@ RCT_EXPORT_MODULE();
 }
 
 
-RCT_EXPORT_METHOD(takeSnap:(NSNumber*)viewRef writeToDisk:(BOOL)writeToDisk resolve:(RCTPromiseResolveBlock)resolve reject:(RCTPromiseRejectBlock)reject)
+RCT_EXPORT_METHOD(takeSnap:(nonnull NSNumber*)viewRef writeToDisk:(BOOL)writeToDisk resolve:(RCTPromiseResolveBlock)resolve reject:(RCTPromiseRejectBlock)reject)
 {
     [self withMapView:viewRef block:^(MBXMapView *view) {
         [MBXMapViewManager takeSnap:view writeToDisk:writeToDisk resolver:resolve];
     } reject:reject methodName:@"takeSnap"];
 }
 
-RCT_EXPORT_METHOD(clearData:(NSNumber*)viewRef resolve:(RCTPromiseResolveBlock)resolve reject:(RCTPromiseRejectBlock)reject) {
+RCT_EXPORT_METHOD(clearData:(nonnull NSNumber*)viewRef resolve:(RCTPromiseResolveBlock)resolve reject:(RCTPromiseRejectBlock)reject) {
     [self withMapView:viewRef block:^(MBXMapView *view) {
         [MBXMapViewManager clearData:view resolver:resolve rejecter:reject];
     } reject:reject methodName:@"clearData"];
 }
 
 
-RCT_EXPORT_METHOD(getCenter:(NSNumber*)viewRef resolve:(RCTPromiseResolveBlock)resolve reject:(RCTPromiseRejectBlock)reject) {
+RCT_EXPORT_METHOD(getCenter:(nonnull NSNumber*)viewRef resolve:(RCTPromiseResolveBlock)resolve reject:(RCTPromiseRejectBlock)reject) {
     [self withMapView:viewRef block:^(MBXMapView *view) {
         [MBXMapViewManager getCenter:view resolver:resolve rejecter:reject];
     } reject:reject methodName:@"getCenter"];
 }
 
 
-RCT_EXPORT_METHOD(getCoordinateFromView:(NSNumber*)viewRef atPoint:(NSArray *)atPoint resolve:(RCTPromiseResolveBlock)resolve reject:(RCTPromiseRejectBlock)reject) {
+RCT_EXPORT_METHOD(getCoordinateFromView:(nonnull NSNumber*)viewRef atPoint:(NSArray *)atPoint resolve:(RCTPromiseResolveBlock)resolve reject:(RCTPromiseRejectBlock)reject) {
     [self withMapView:viewRef block:^(MBXMapView *view) {
         NSNumber* a = [atPoint objectAtIndex:0];
         NSNumber* b = [atPoint objectAtIndex:1];
@@ -100,14 +100,14 @@ RCT_EXPORT_METHOD(getPointInView:(nonnull NSNumber*)viewRef atCoordinate:(NSArra
 }
 
 
-RCT_EXPORT_METHOD(getVisibleBounds:(NSNumber*)viewRef resolve:(RCTPromiseResolveBlock)resolve reject:(RCTPromiseRejectBlock)reject) {
+RCT_EXPORT_METHOD(getVisibleBounds:(nonnull NSNumber*)viewRef resolve:(RCTPromiseResolveBlock)resolve reject:(RCTPromiseRejectBlock)reject) {
     [self withMapView:viewRef block:^(MBXMapView *view) {
         [MBXMapViewManager getVisibleBounds:view resolver:resolve];
     } reject:reject methodName:@"getVisibleBounds"];
 }
 
 
-RCT_EXPORT_METHOD(getZoom:(NSNumber*)viewRef resolve:(RCTPromiseResolveBlock)resolve reject:(RCTPromiseRejectBlock)reject) {
+RCT_EXPORT_METHOD(getZoom:(nonnull NSNumber*)viewRef resolve:(RCTPromiseResolveBlock)resolve reject:(RCTPromiseRejectBlock)reject) {
     [self withMapView:viewRef block:^(MBXMapView *view) {
         [MBXMapViewManager getZoom:view resolver:resolve rejecter:reject];
     } reject:reject methodName:@"getZoom"];
