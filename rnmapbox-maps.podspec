@@ -28,6 +28,8 @@ rnMapboxMapsDefaultImpl = 'maplibre'
 
 new_arch_enabled = ENV['RCT_NEW_ARCH_ENABLED'] == '1'
 
+folly_compiler_flags = '-DFOLLY_NO_CONFIG -DFOLLY_MOBILE=1 -DFOLLY_USE_LIBCPP=1 -Wno-comma -Wno-shorten-64-to-32'
+
 # DEPRECATIONS
 
 
@@ -261,10 +263,22 @@ Pod::Spec.new do |s|
     case $RNMapboxMapsImpl
     when 'mapbox'
       sp.source_files = "ios/RCTMGL-v10/**/*.{h,m,mm,swift}"
-
       if new_arch_enabled
         sp.private_header_files = 'ios/RCTMGL-v10/MBXFabricHelpers.h'
-        install_modules_dependencies(sp)
+        sp.compiler_flags = folly_compiler_flags + " -DRCT_NEW_ARCH_ENABLED=1"
+        sp.pod_target_xcconfig    = {
+          "HEADER_SEARCH_PATHS" => "\"$(PODS_ROOT)/boost\"",
+          "OTHER_CPLUSPLUSFLAGS" => "-DFOLLY_NO_CONFIG -DFOLLY_MOBILE=1 -DFOLLY_USE_LIBCPP=1",
+          "CLANG_CXX_LANGUAGE_STANDARD" => "c++17",
+          "DEFINES_MODULE" => "YES",
+        }
+        
+        sp.dependency "React-RCTFabric"
+        sp.dependency "React-Codegen"
+        sp.dependency "RCT-Folly"
+        sp.dependency "RCTRequired"
+        sp.dependency "RCTTypeSafety"
+        sp.dependency "ReactCommon/turbomodule/core"
       end
     when 'mapbox-gl'
       sp.source_files	= "ios/RCTMGL/**/*.{h,m,mm}"

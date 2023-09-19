@@ -30,8 +30,6 @@ end
 
 ENV['RCT_NEW_ARCH_ENABLED'] = '1'
 
-use_modular_headers!
-
 target 'fabricexample' do
   config = use_native_modules!
 

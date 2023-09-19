@@ -1081,24 +1081,16 @@ PODS:
     - rnmapbox-maps/DynamicLibrary (= 10.1.0-beta.1)
     - Turf
   - rnmapbox-maps/DynamicLibrary (10.1.0-beta.1):
-    - hermes-engine
     - MapboxMaps (~> 10.16.0)
-    - RCT-Folly (= 2021.07.22.00)
+    - RCT-Folly
     - RCTRequired
     - RCTTypeSafety
     - React
     - React-Codegen
     - React-Core
-    - React-debug
-    - React-Fabric
-    - React-graphics
-    - React-NativeModulesApple
     - React-RCTFabric
-    - React-utils
-    - ReactCommon/turbomodule/bridging
     - ReactCommon/turbomodule/core
     - Turf
-    - Yoga
   - RNScreens (3.25.0):
     - RCT-Folly
     - RCTRequired
@@ -1382,7 +1374,7 @@ SPEC CHECKSUMS:
   React-utils: b79f2411931f9d3ea5781404dcbb2fa8a837e13a
   ReactCommon: 4b2bdcb50a3543e1c2b2849ad44533686610826d
   RNCAsyncStorage: 2b77010cff31de7199eb7f65c59ae35abf9970b1
-  rnmapbox-maps: 7a4ddf409911e313560f797617942972f5600638
+  rnmapbox-maps: 2c6bde38e40310b96250dc1bd9fc4a79d419d564
   RNScreens: cba72a26a6c967765a8388fe85f78e7771012ca1
   RNSVG: e136c0e3c70ff4fb98687fc5a887039c436c65e6
   RNVectorIcons: 61c44830bebe662f0bcb40aad2e6a31a34c8d8ba
@@ -1390,6 +1382,6 @@ SPEC CHECKSUMS:
   Turf: 13d1a92d969ca0311bbc26e8356cca178ce95da2
   Yoga: 3efc43e0d48686ce2e8c60f99d4e6bd349aff981
 
-PODFILE CHECKSUM: 34bab290d8edfdede4db2c3d509a154dee3b11ef
+PODFILE CHECKSUM: fcd1d7c285daf568157a63657ca5300b934250c0
 
 COCOAPODS: 1.11.3
