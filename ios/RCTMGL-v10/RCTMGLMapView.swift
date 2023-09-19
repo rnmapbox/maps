@@ -206,7 +206,7 @@ open class RCTMGLMapView : MapView {
     super.removeReactSubview(subview)
   }
 
-  public required init(frame:CGRect, eventDispatcher: RCTEventDispatcherProtocol) {
+  @objc public required init(frame:CGRect, eventDispatcher: RCTEventDispatcherProtocol) {
     #if RNMBX_11
     self.eventDispatcher = eventDispatcher
     super.init(frame: frame, mapInitOptions: MapInitOptions())
