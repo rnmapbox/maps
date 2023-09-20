@@ -13,9 +13,9 @@ import { type Position } from '../types/Position';
 
 import PointAnnotation from './PointAnnotation';
 
-const Mapbox = NativeModules.MGLModule;
+const Mapbox = NativeModules.RNMBXModule;
 
-export const NATIVE_MODULE_NAME = 'RCTMGLMarkerView';
+export const NATIVE_MODULE_NAME = 'RNMBXMarkerView';
 
 type Props = ViewProps & {
   /**
@@ -107,7 +107,7 @@ class MarkerView extends React.PureComponent<Props> {
     const { anchor = { x: 0.5, y: 0.5 } } = this.props;
 
     return (
-      <RCTMGLMarkerView
+      <RNMBXMarkerView
         style={[
           {
             flex: 0,
@@ -134,7 +134,7 @@ class MarkerView extends React.PureComponent<Props> {
         >
           {this.props.children}
         </View>
-      </RCTMGLMarkerView>
+      </RNMBXMarkerView>
     );
   }
 }
@@ -146,7 +146,6 @@ type NativeProps = ViewProps & {
   isSelected: boolean;
 };
 
-const RCTMGLMarkerView =
-  requireNativeComponent<NativeProps>(NATIVE_MODULE_NAME);
+const RNMBXMarkerView = requireNativeComponent<NativeProps>(NATIVE_MODULE_NAME);
 
 export default MarkerView;

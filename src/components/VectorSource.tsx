@@ -14,9 +14,9 @@ import { OnPressEvent } from '../types/OnPressEvent';
 import AbstractSource from './AbstractSource';
 import NativeBridgeComponent from './NativeBridgeComponent';
 
-const MapboxGL = NativeModules.MGLModule;
+const MapboxGL = NativeModules.RNMBXModule;
 
-export const NATIVE_MODULE_NAME = 'RCTMGLVectorSource';
+export const NATIVE_MODULE_NAME = 'RNMBXVectorSource';
 
 interface Props {
   /**
@@ -200,16 +200,16 @@ class VectorSource extends NativeBridgeComponent(
       onAndroidCallback: isAndroid() ? this._onAndroidCallback : undefined,
     };
     return (
-      <RCTMGLVectorSource ref={(r) => this._setNativeRef(r)} {...props}>
+      <RNMBXVectorSource ref={(r) => this._setNativeRef(r)} {...props}>
         {cloneReactChildrenWithProps(this.props.children, {
           sourceID: this.props.id,
         })}
-      </RCTMGLVectorSource>
+      </RNMBXVectorSource>
     );
   }
 }
 
-const RCTMGLVectorSource =
+const RNMBXVectorSource =
   requireNativeComponent<NativeProps>(NATIVE_MODULE_NAME);
 
 export default VectorSource;

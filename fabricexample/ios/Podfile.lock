@@ -8,12 +8,12 @@ PODS:
     - hermes-engine/Pre-built (= 0.72.4)
   - hermes-engine/Pre-built (0.72.4)
   - libevent (2.1.12)
-  - MapboxCommon (23.7.0)
-  - MapboxCoreMaps (10.15.0):
-    - MapboxCommon (~> 23.7)
-  - MapboxMaps (10.15.0):
-    - MapboxCommon (= 23.7.0)
-    - MapboxCoreMaps (= 10.15.0)
+  - MapboxCommon (23.8.0)
+  - MapboxCoreMaps (10.16.0):
+    - MapboxCommon (~> 23.8)
+  - MapboxMaps (10.16.0):
+    - MapboxCommon (= 23.8.0)
+    - MapboxCoreMaps (= 10.16.0)
     - MapboxMobileEvents (= 1.0.10)
     - Turf (~> 2.0)
   - MapboxMobileEvents (1.0.10)
@@ -1007,15 +1007,15 @@ PODS:
     - React-jsi (= 0.72.4)
     - React-logger (= 0.72.4)
     - React-perflogger (= 0.72.4)
-  - rnmapbox-maps (10.0.13-rc.1):
-    - MapboxMaps (~> 10.15.0)
+  - rnmapbox-maps (10.1.0-beta.4):
+    - MapboxMaps (~> 10.16.0)
     - React
     - React-Core
-    - rnmapbox-maps/DynamicLibrary (= 10.0.13-rc.1)
+    - rnmapbox-maps/DynamicLibrary (= 10.1.0-beta.4)
     - Turf
-  - rnmapbox-maps/DynamicLibrary (10.0.13-rc.1):
+  - rnmapbox-maps/DynamicLibrary (10.1.0-beta.4):
     - hermes-engine
-    - MapboxMaps (~> 10.15.0)
+    - MapboxMaps (~> 10.16.0)
     - RCT-Folly (= 2021.07.22.00)
     - RCTRequired
     - RCTTypeSafety
@@ -1192,9 +1192,9 @@ SPEC CHECKSUMS:
   glog: 04b94705f318337d7ead9e6d17c019bd9b1f6b1b
   hermes-engine: 81191603c4eaa01f5e4ae5737a9efcf64756c7b2
   libevent: 4049cae6c81cdb3654a443be001fb9bdceff7913
-  MapboxCommon: dcbdb86acbcfc1a23efd341ed097c6c63ab532a9
-  MapboxCoreMaps: bcbaac14467616940187f79bba49ca491cd37906
-  MapboxMaps: 1fd9d97d0e8eceb7a45b9ac8bf87a8922da881a8
+  MapboxCommon: 8592a003eae487508461d452d62cfc5906a9682a
+  MapboxCoreMaps: faa14a797417dc32088c98019a3ce72e46cda5cd
+  MapboxMaps: f10aecadbfb7cf96368852ca313101eb4171da53
   MapboxMobileEvents: de50b3a4de180dd129c326e09cd12c8adaaa46d6
   RCT-Folly: 424b8c9a7a0b9ab2886ffe9c3b041ef628fd4fb1
   RCTRequired: c0569ecc035894e4a68baecb30fe6a7ea6e399f9
@@ -1218,7 +1218,7 @@ SPEC CHECKSUMS:
   React-perflogger: 496a1a3dc6737f964107cb3ddae7f9e265ddda58
   React-RCTActionSheet: 02904b932b50e680f4e26e7a686b33ebf7ef3c00
   React-RCTAnimation: 88feaf0a85648fb8fd497ce749829774910276d6
-  React-RCTAppDelegate: 035cd8f2a17fa2b7c4a957729fe35f0a55879004
+  React-RCTAppDelegate: dfcb76b0c4f146c5f87d2f95d39520fbb34c19ca
   React-RCTBlob: 0dbc9e2a13d241b37d46b53e54630cbad1f0e141
   React-RCTFabric: 0d443ab3cc3f0af82442ec95747d503cee955f26
   React-RCTImage: b111645ab901f8e59fc68fbe31f5731bdbeef087
@@ -1232,11 +1232,11 @@ SPEC CHECKSUMS:
   React-runtimescheduler: 4941cc1b3cf08b792fbf666342c9fc95f1969035
   React-utils: b79f2411931f9d3ea5781404dcbb2fa8a837e13a
   ReactCommon: 4b2bdcb50a3543e1c2b2849ad44533686610826d
-  rnmapbox-maps: e58b0ffd46127cec4b5f2e355fc60936fdcd335d
+  rnmapbox-maps: 13bbd8ab1e85f2df68a2f684dd681175b15293ac
   SocketRocket: f32cd54efbe0f095c4d7594881e52619cfe80b17
   Turf: 469ce2c3d22e5e8e4818d5a3b254699a5c89efa4
   Yoga: 3efc43e0d48686ce2e8c60f99d4e6bd349aff981
 
 PODFILE CHECKSUM: e0bb91cec8c0b8362d299ffc928ec86944f02acd
 
-COCOAPODS: 1.12.1
+COCOAPODS: 1.11.3

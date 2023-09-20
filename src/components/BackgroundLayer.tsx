@@ -9,7 +9,7 @@ import { StyleValue } from '../utils/StyleValue';
 
 import AbstractLayer from './AbstractLayer';
 
-const MapboxGL = NativeModules.MGLModule;
+const MapboxGL = NativeModules.RNMBXModule;
 
 export type Props = {
   /**
@@ -70,7 +70,7 @@ export type Props = {
   style?: BackgroundLayerStyleProps;
 } & React.ComponentProps<typeof AbstractLayer>;
 
-export const NATIVE_MODULE_NAME = 'RCTMGLBackgroundLayer';
+export const NATIVE_MODULE_NAME = 'RNMBXBackgroundLayer';
 
 type NativeTypeProps = Omit<Props, 'style'> & {
   reactStyle?: { [key: string]: StyleValue };
@@ -86,11 +86,11 @@ class BackgroundLayer extends AbstractLayer<Props, NativeTypeProps> {
       ...this.baseProps,
       sourceLayerID: this.props.sourceLayerID,
     };
-    return <RCTMGLBackgroundLayer ref={this.setNativeLayer} {...props} />;
+    return <RNMBXBackgroundLayer ref={this.setNativeLayer} {...props} />;
   }
 }
 
-const RCTMGLBackgroundLayer =
+const RNMBXBackgroundLayer =
   requireNativeComponent<NativeTypeProps>(NATIVE_MODULE_NAME);
 
 export default BackgroundLayer;

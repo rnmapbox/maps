@@ -9,9 +9,9 @@ import { StyleValue } from '../utils/StyleValue';
 
 import AbstractLayer from './AbstractLayer';
 
-const MapboxGL = NativeModules.MGLModule;
+const MapboxGL = NativeModules.RNMBXModule;
 
-export const NATIVE_MODULE_NAME = 'RCTMGLHeatmapLayer';
+export const NATIVE_MODULE_NAME = 'RNMBXHeatmapLayer';
 
 export type Props = {
   /**
@@ -91,11 +91,11 @@ class HeatmapLayer extends AbstractLayer<Props, NativeTypeProps> {
       ...this.baseProps,
       sourceLayerID: this.props.sourceLayerID,
     };
-    return <RCTMGLHeatmapLayer ref={this.setNativeLayer} {...props} />;
+    return <RNMBXHeatmapLayer ref={this.setNativeLayer} {...props} />;
   }
 }
 
-const RCTMGLHeatmapLayer =
+const RNMBXHeatmapLayer =
   requireNativeComponent<NativeTypeProps>(NATIVE_MODULE_NAME);
 
 export default HeatmapLayer;

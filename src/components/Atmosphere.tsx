@@ -5,7 +5,7 @@ import type { AtmosphereLayerStyleProps } from '../utils/MapboxStyles';
 import { StyleValue, transformStyle } from '../utils/StyleValue';
 import type { BaseProps } from '../types/BaseProps';
 
-export const NATIVE_MODULE_NAME = 'RCTMGLAtmosphere';
+export const NATIVE_MODULE_NAME = 'RNMBXAtmosphere';
 
 type Props = BaseProps & {
   style: AtmosphereLayerStyleProps;
@@ -20,7 +20,7 @@ export const Atmosphere = memo((props: Props) => {
     };
   }, [props]);
 
-  return <RCTMGLAtmosphere {...baseProps} />;
+  return <RNMBXAtmosphere {...baseProps} />;
 });
 
 type NativeProps = {
@@ -28,5 +28,4 @@ type NativeProps = {
   style?: undefined;
 };
 
-const RCTMGLAtmosphere =
-  requireNativeComponent<NativeProps>(NATIVE_MODULE_NAME);
+const RNMBXAtmosphere = requireNativeComponent<NativeProps>(NATIVE_MODULE_NAME);

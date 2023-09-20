@@ -6,9 +6,9 @@ import { StyleValue } from '../utils/StyleValue';
 
 import AbstractLayer from './AbstractLayer';
 
-const MapboxGL = NativeModules.MGLModule;
+const MapboxGL = NativeModules.RNMBXModule;
 
-export const NATIVE_MODULE_NAME = 'RCTMGLRasterLayer';
+export const NATIVE_MODULE_NAME = 'RNMBXRasterLayer';
 
 export type Props = {
   /**
@@ -83,11 +83,11 @@ class RasterLayer extends AbstractLayer<Props, NativeTypeProps> {
       ...this.baseProps,
       sourceLayerID: this.props.sourceLayerID,
     };
-    return <RCTMGLRasterLayer ref={this.setNativeLayer} {...props} />;
+    return <RNMBXRasterLayer ref={this.setNativeLayer} {...props} />;
   }
 }
 
-const RCTMGLRasterLayer =
+const RNMBXRasterLayer =
   requireNativeComponent<NativeTypeProps>(NATIVE_MODULE_NAME);
 
 export default RasterLayer;

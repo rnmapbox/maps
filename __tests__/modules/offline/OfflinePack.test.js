@@ -20,7 +20,7 @@ describe('OfflinePack', () => {
 
   it('should resume pack download', () => {
     const spy = jest.spyOn(
-      NativeModules.MGLOfflineModule,
+      NativeModules.RNMBXOfflineModule,
       'resumePackDownload',
     );
     const offlinePack = new OfflinePack(fakeNativePack);
@@ -30,7 +30,10 @@ describe('OfflinePack', () => {
   });
 
   it('should pause pack download', () => {
-    const spy = jest.spyOn(NativeModules.MGLOfflineModule, 'pausePackDownload');
+    const spy = jest.spyOn(
+      NativeModules.RNMBXOfflineModule,
+      'pausePackDownload',
+    );
     const offlinePack = new OfflinePack(fakeNativePack);
     offlinePack.pause();
     expect(spy).toHaveBeenCalled();
@@ -38,7 +41,7 @@ describe('OfflinePack', () => {
   });
 
   it('should get pack status', () => {
-    const spy = jest.spyOn(NativeModules.MGLOfflineModule, 'getPackStatus');
+    const spy = jest.spyOn(NativeModules.RNMBXOfflineModule, 'getPackStatus');
     const offlinePack = new OfflinePack(fakeNativePack);
     offlinePack.status();
     expect(spy).toHaveBeenCalled();

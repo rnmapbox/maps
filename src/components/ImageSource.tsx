@@ -10,7 +10,7 @@ import { BaseProps } from '../types/BaseProps';
 
 import AbstractSource from './AbstractSource';
 
-export const NATIVE_MODULE_NAME = 'RCTMGLImageSource';
+export const NATIVE_MODULE_NAME = 'RNMBXImageSource';
 
 type Position = [number, number];
 
@@ -71,16 +71,16 @@ class ImageSource extends AbstractSource<Props, NativeProps> {
     };
 
     return (
-      <RCTMGLImageSource ref={this.setNativeRef} {...props}>
+      <RNMBXImageSource ref={this.setNativeRef} {...props}>
         {cloneReactChildrenWithProps(this.props.children, {
           sourceID: this.props.id,
         })}
-      </RCTMGLImageSource>
+      </RNMBXImageSource>
     );
   }
 }
 
-const RCTMGLImageSource =
+const RNMBXImageSource =
   requireNativeComponent<NativeProps>(NATIVE_MODULE_NAME);
 
 export default ImageSource;

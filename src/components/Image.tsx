@@ -42,7 +42,7 @@ const Image = memo(
       stretchY,
       children,
     };
-    return <RCTMGLImage {...nativeProps} />;
+    return <RNMBXImage {...nativeProps} />;
   }),
 );
 
@@ -54,9 +54,9 @@ interface NativeProps {
   stretchY?: [number, number][];
 }
 
-export const NATIVE_MODULE_NAME = 'RCTMGLImage';
+export const NATIVE_MODULE_NAME = 'RNMBXImage';
 
-const RCTMGLImage = requireNativeComponent<NativeProps>(NATIVE_MODULE_NAME);
+const RNMBXImage = requireNativeComponent<NativeProps>(NATIVE_MODULE_NAME);
 
 Image.displayName = 'Image';
 

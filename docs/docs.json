@@ -465,7 +465,7 @@
         "required": false,
         "type": "ViewStyle",
         "default": "none",
-        "description": "Style property for the native RCTMGLCallout container, set at your own risk."
+        "description": "Style property for the native RNMBXCallout container, set at your own risk."
       },
       {
         "name": "contentStyle",
@@ -3333,7 +3333,7 @@
         "name": "surfaceView",
         "required": false,
         "type": "boolean",
-        "default": "MGLModule.MapboxV10 ? true : false",
+        "default": "RNMBXModule.MapboxV10 ? true : false",
         "description": "[Android only] Enable/Disable use of GLSurfaceView instead of TextureView."
       },
       {

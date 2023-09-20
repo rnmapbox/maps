@@ -9,9 +9,9 @@ const isTileTemplateUrl = (url?: string): url is string =>
   !!url &&
   (url.includes('{z}') || url.includes('{bbox-') || url.includes('{quadkey}'));
 
-const MapboxGL = NativeModules.MGLModule;
+const MapboxGL = NativeModules.RNMBXModule;
 
-export const NATIVE_MODULE_NAME = 'RCTMGLRasterDemSource';
+export const NATIVE_MODULE_NAME = 'RNMBXRasterDemSource';
 
 type Props = {
   /**
@@ -96,16 +96,16 @@ class RasterDemSource extends AbstractSource<Props, NativeProps> {
       tileSize: this.props.tileSize,
     };
     return (
-      <RCTMGLRasterDemSource ref={this.setNativeRef} {...props}>
+      <RNMBXRasterDemSource ref={this.setNativeRef} {...props}>
         {cloneReactChildrenWithProps(this.props.children, {
           sourceID: this.props.id,
         })}
-      </RCTMGLRasterDemSource>
+      </RNMBXRasterDemSource>
     );
   }
 }
 
-const RCTMGLRasterDemSource =
+const RNMBXRasterDemSource =
   requireNativeComponent<NativeProps>(NATIVE_MODULE_NAME);
 
 export default RasterDemSource;

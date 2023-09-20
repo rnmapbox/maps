@@ -6,9 +6,9 @@ import { BaseProps } from '../types/BaseProps';
 
 import AbstractSource from './AbstractSource';
 
-const MapboxGL = NativeModules.MGLModule;
+const MapboxGL = NativeModules.RNMBXModule;
 
-export const NATIVE_MODULE_NAME = 'RCTMGLRasterSource';
+export const NATIVE_MODULE_NAME = 'RNMBXRasterSource';
 
 const isTileTemplateUrl = (url?: string): url is string =>
   !!url &&
@@ -115,16 +115,16 @@ class RasterSource extends AbstractSource<Props, NativeProps> {
       attribution: this.props.attribution,
     };
     return (
-      <RCTMGLRasterSource ref={this.setNativeRef} {...props}>
+      <RNMBXRasterSource ref={this.setNativeRef} {...props}>
         {cloneReactChildrenWithProps(this.props.children, {
           sourceID: this.props.id,
         })}
-      </RCTMGLRasterSource>
+      </RNMBXRasterSource>
     );
   }
 }
 
-const RCTMGLRasterSource =
+const RNMBXRasterSource =
   requireNativeComponent<NativeProps>(NATIVE_MODULE_NAME);
 
 export default RasterSource;

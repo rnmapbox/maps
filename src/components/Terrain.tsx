@@ -5,7 +5,7 @@ import type { TerrainLayerStyleProps, Value } from '../utils/MapboxStyles';
 import { StyleValue, transformStyle } from '../utils/StyleValue';
 import type { BaseProps } from '../types/BaseProps';
 
-export const NATIVE_MODULE_NAME = 'RCTMGLTerrain';
+export const NATIVE_MODULE_NAME = 'RNMBXTerrain';
 
 type Props = BaseProps & {
   /**
@@ -46,7 +46,7 @@ export const Terrain = memo((props: Props) => {
     };
   }, [props, style]);
 
-  return <RCTMGLTerrain {...baseProps} />;
+  return <RNMBXTerrain {...baseProps} />;
 });
 
-const RCTMGLTerrain = requireNativeComponent<NativeProps>(NATIVE_MODULE_NAME);
+const RNMBXTerrain = requireNativeComponent<NativeProps>(NATIVE_MODULE_NAME);
