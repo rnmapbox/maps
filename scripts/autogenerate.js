@@ -63,7 +63,7 @@ const IOS_V10_OUTPUT_PATH = path.join(
   __dirname,
   ...OUTPUT_PREFIX,
   'ios',
-  'RNMBX-v10',
+  'RNMBX',
 );
 
 const ANDROID_V10_OUTPUT_PATH = path.join(

@@ -218,7 +218,7 @@ Pod::Spec.new do |s|
   s.subspec 'DynamicLibrary' do |sp|
     case $RNMapboxMapsImpl
     when 'mapbox'
-      sp.source_files = "ios/RNMBX-v10/**/*.{h,m,mm,swift}"
+      sp.source_files = "ios/RNMBX/**/*.{h,m,mm,swift}"
 
       if new_arch_enabled
         install_modules_dependencies(sp)
