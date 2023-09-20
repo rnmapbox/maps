@@ -5,7 +5,7 @@ import LocationManager, {
 } from '../../../src/modules/location/locationManager';
 
 const MapboxGL = NativeModules.RNMBXModule;
-const MapboxGLLocationManager = NativeModules.MGLLocationModule;
+const MapboxGLLocationManager = NativeModules.RNMBXLocationModule;
 
 const location = {
   coords: {

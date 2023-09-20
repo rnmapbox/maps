@@ -184,7 +184,7 @@ class RNMBXImagesManager(private val mContext: ReactApplicationContext) :
             var result = mutableListOf<ImageStretches>();
             for (i in 0 until array.size()) {
                 if (array.getType(i) != ReadableType.Array) {
-                    Logger.e("RTMGLImages", "each element of strech should be an array but was: ${array.getDynamic(i)}")
+                    Logger.e("RNMBXImages", "each element of strech should be an array but was: ${array.getDynamic(i)}")
                 } else {
                     val pair = array.getArray(i)
                     if (pair.size() != 2 || pair.getType(0) != ReadableType.Number || pair.getType(1) != ReadableType.Number) {
@@ -209,7 +209,7 @@ class RNMBXImagesManager(private val mContext: ReactApplicationContext) :
             val result = arrayOf(0.0, 0.0, 0.0, 0.0, 0.0)
             for (i in 0 until array.size()) {
                 if (array.getType(i) != ReadableType.Number) {
-                    Logger.e("RTMGLImages", "each element of content should be an number but was : ${array}")
+                    Logger.e("RNMBXImages", "each element of content should be an number but was : ${array}")
                     return null
                 } else {
                     result[i] = array.getDouble(i)

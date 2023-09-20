@@ -88,7 +88,7 @@ NativeModules.RNMBXModule = {
   setConnected: jest.fn(),
 };
 
-NativeModules.MGLOfflineModule = {
+NativeModules.RNMBXOfflineModule = {
   createPack: (packOptions) => {
     return Promise.resolve({
       bounds: packOptions.bounds,
@@ -112,7 +112,7 @@ NativeModules.RNMBXSnapshotModule = {
   },
 };
 
-NativeModules.MGLLocationModule = {
+NativeModules.RNMBXLocationModule = {
   getLastKnownLocation: jest.fn(),
   start: jest.fn(),
   pause: jest.fn(),
