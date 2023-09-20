@@ -1,4 +1,4 @@
-package com.mapbox.rnmbx.v11compat.location;
+package com.rnmapbox.rnmbx.v11compat.location;
 
 import android.os.Looper
 import com.mapbox.common.location.Location as _Location

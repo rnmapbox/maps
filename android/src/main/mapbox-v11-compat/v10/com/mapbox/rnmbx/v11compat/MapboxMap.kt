@@ -1,4 +1,4 @@
-package com.mapbox.rnmbx.v11compat.mapboxmap;
+package com.rnmapbox.rnmbx.v11compat.mapboxmap;
 
 import android.animation.Animator
 import com.mapbox.maps.CameraOptions

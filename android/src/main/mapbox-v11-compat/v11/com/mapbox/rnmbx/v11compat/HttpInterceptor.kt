@@ -1,4 +1,4 @@
-package com.mapbox.rnmbx.v11compat.httpinterceptor;
+package com.rnmapbox.rnmbx.v11compat.httpinterceptor;
 
 import com.mapbox.common.*
 

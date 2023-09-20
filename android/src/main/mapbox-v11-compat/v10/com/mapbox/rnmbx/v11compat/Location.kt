@@ -1,4 +1,4 @@
-package com.mapbox.rnmbx.v11compat.location;
+package com.rnmapbox.rnmbx.v11compat.location;
 
 import android.Manifest.permission.ACCESS_COARSE_LOCATION
 import android.Manifest.permission.ACCESS_FINE_LOCATION

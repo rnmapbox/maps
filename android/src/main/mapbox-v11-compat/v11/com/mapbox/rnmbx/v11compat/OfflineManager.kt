@@ -1,4 +1,4 @@
-package com.mapbox.rnmbx.v11compat.offlinemanager;
+package com.rnmapbox.rnmbx.v11compat.offlinemanager;
 
 import com.mapbox.common.TileStore
 import com.mapbox.maps.OfflineManager

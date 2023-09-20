@@ -12,7 +12,7 @@ import com.facebook.soloader.SoLoader;
 import com.rnmapboxglexample.newarchitecture.MainApplicationReactNativeHost;
 import java.lang.reflect.InvocationTargetException;
 import java.util.List;
-import com.mapbox.rnmbx.RNMBXPackage;
+import com.rnmapbox.rnmbx.RNMBXPackage;
 
 public class MainApplication extends Application implements ReactApplication {
 

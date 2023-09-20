@@ -1,4 +1,4 @@
-package com.mapbox.rnmbx.v11compat.resourceoption;
+package com.rnmapbox.rnmbx.v11compat.resourceoption;
 
 import android.content.Context
 import com.mapbox.common.MapboxOptions

@@ -9,7 +9,7 @@
  * @nolint
  */
 
-package com.mapbox.rnmbx;
+package com.rnmapbox.rnmbx;
 
 import com.facebook.proguard.annotations.DoNotStrip;
 import com.facebook.react.bridge.Promise;

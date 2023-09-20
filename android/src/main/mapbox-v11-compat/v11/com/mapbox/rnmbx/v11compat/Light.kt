@@ -1,4 +1,4 @@
-package com.mapbox.rnmbx.v11compat.light;
+package com.rnmapbox.rnmbx.v11compat.light;
 import com.mapbox.maps.Style
 import com.mapbox.maps.extension.style.light.generated.FlatLight
 import com.mapbox.maps.extension.style.light.generated.flatLight

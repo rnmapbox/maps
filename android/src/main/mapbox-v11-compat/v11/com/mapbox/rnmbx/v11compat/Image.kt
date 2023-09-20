@@ -1,4 +1,4 @@
-package com.mapbox.rnmbx.v11compat.image;
+package com.rnmapbox.rnmbx.v11compat.image;
 
 import android.content.Context
 import android.graphics.drawable.Drawable

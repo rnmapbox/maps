@@ -1,4 +1,4 @@
-package com.mapbox.rnmbx.v11compat.feature;
+package com.rnmapbox.rnmbx.v11compat.feature;
 
 import com.mapbox.geojson.Feature;
 

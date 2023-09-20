@@ -1,10 +1,10 @@
-package com.mapbox.rnmbx.v11compat.ornamentsettings
+package com.rnmapbox.rnmbx.v11compat.ornamentsettings
 
 import com.mapbox.maps.plugin.attribution.generated.AttributionSettings
 import com.mapbox.maps.plugin.compass.generated.CompassSettings
 import com.mapbox.maps.plugin.logo.generated.LogoSettings
 import com.mapbox.maps.plugin.scalebar.generated.ScaleBarSettings
-import com.mapbox.rnmbx.components.mapview.OrnamentSettings
+import com.rnmapbox.rnmbx.components.mapview.OrnamentSettings
 
 fun getAttributionSettings(): AttributionSettings {
     return AttributionSettings()

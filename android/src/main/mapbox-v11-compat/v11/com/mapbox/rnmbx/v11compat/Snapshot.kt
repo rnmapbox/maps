@@ -1,4 +1,4 @@
-package com.mapbox.rnmbx.v11compat.snapshot;
+package com.rnmapbox.rnmbx.v11compat.snapshot;
 
 import android.graphics.Bitmap
 import com.mapbox.maps.Image

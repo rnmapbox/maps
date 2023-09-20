@@ -1,4 +1,4 @@
-package com.mapbox.rnmbx.v11compat.snapshot;
+package com.rnmapbox.rnmbx.v11compat.snapshot;
 
 import com.mapbox.maps.Image
 import com.mapbox.maps.MapSnapshotInterface;

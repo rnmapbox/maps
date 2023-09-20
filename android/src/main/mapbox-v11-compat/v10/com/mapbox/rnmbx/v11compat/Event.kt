@@ -1,4 +1,4 @@
-package com.mapbox.rnmbx.v11compat.event;
+package com.rnmapbox.rnmbx.v11compat.event;
 
 //import com.mapbox.maps.MapboxMap
 //import com.mapbox.maps.extension.observable.getMapLoadingErrorEventData
