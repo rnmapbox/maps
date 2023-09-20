@@ -56,7 +56,7 @@ android {
     else if (safeExtGet("RNMapboxMapsImpl", defaultMapboxMapsImpl) == "mapbox") {
         sourceSets {
             main {
-                java.srcDirs = ['src/main/java-v10']
+                java.srcDirs = ['src/main/java']
                 if (safeExtGet("RNMapboxMapsUseV11", false)) {
                     java.srcDirs += 'src/main/mapbox-v11-compat/v11'
                 } else {

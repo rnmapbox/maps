@@ -72,7 +72,7 @@ const ANDROID_V10_OUTPUT_PATH = path.join(
   'android',
   'src',
   'main',
-  'java-v10',
+  'java',
   'com',
   'mapbox',
   'rnmbx',
