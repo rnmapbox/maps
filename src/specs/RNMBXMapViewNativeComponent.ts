@@ -26,20 +26,20 @@ export interface NativeProps extends ViewProps {
   onCameraChanged?: DirectEventHandler<OnCameraChangedEventType>;
 
   attributionEnabled?: boolean;
-  attributionPosition?: UnsafeMixed;
+  attributionPosition?: UnsafeMixed<any>;
 
   logoEnabled?: boolean;
-  logoPosition?: UnsafeMixed;
+  logoPosition?: UnsafeMixed<any>;
 
   compassEnabled?: boolean;
   compassFadeWhenNorth?: boolean;
-  compassPosition?: UnsafeMixed;
+  compassPosition?: UnsafeMixed<any>;
   compassViewPosition?: Int32;
   compassViewMargins?: Point;
   compassImage?: string;
 
   scaleBarEnabled?: boolean;
-  scaleBarPosition?: UnsafeMixed;
+  scaleBarPosition?: UnsafeMixed<any>;
 
   zoomEnabled?: boolean;
   scrollEnabled?: boolean;

@@ -27,4 +27,7 @@ To manually generate the changes, run `npm run generate`.
 
 Notice, that changing the documentation in the individual <COMPONENT>.md within `/docs` will not suffice.  
 The correct way is the above described
- 
+
+## Generated Java files
+
+`android/src/main/old-arch/` contains files generated with codegen scripts from `src/specs` to update those use the `codegen-old-arch.sh` script
