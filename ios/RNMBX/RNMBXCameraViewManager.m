@@ -2,7 +2,7 @@
 #import <React/RCTViewManager.h>
 #import <Foundation/Foundation.h>
 
-@interface RCT_EXTERN_MODULE(RNMBXCameraManager, RCTViewManager)
+@interface RCT_EXTERN_REMAP_MODULE(RNMBXCamera, RNMBXCameraViewManager, RCTViewManager)
 
 RCT_EXPORT_VIEW_PROPERTY(maxBounds, NSString)
 RCT_EXPORT_VIEW_PROPERTY(animationDuration, NSNumber)
