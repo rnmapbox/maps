@@ -86,6 +86,7 @@ RNTester/build
 Gemfile
 Gemfile.lock
 vendor/
+.byebug_history
 
 # CocoaPods
 /template/ios/Pods/

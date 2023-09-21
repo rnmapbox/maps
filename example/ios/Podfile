@@ -4,6 +4,7 @@ require Pod::Executable.execute_command('node', ['-p',
     "react-native/scripts/react_native_pods.rb",
     {paths: [process.argv[1]]},
   )', __dir__]).strip
+prepare_react_native_project!
 
 $RNMapboxMapsImpl = 'mapbox'
 if ENV['RNMBX11']
@@ -48,6 +49,12 @@ linkage = ENV['USE_FRAMEWORKS']
 if linkage != nil
   Pod::UI.puts "Configuring Pod with #{linkage}ally linked Frameworks".green
   use_frameworks! :linkage => linkage.to_sym
+end
+
+flags = get_default_flags()
+if flags[:fabric_enabled]
+  use_modular_headers!
+  pod 'glog', :podspec => '../node_modules/react-native/third-party-podspecs/glog.podspec', :modular_headers => false
 end
 
 production = ENV["PRODUCTION"] == "1"
