@@ -856,7 +856,7 @@ class MapView extends NativeBridgeComponent(
   _runNativeCommand<RefType, ReturnType = NativeArg>(
     methodName: string,
     nativeRef: RefType | undefined,
-    args: NativeArg[],
+    args: NativeArg[] = [],
   ): Promise<ReturnType> {
     // when this method is called after component mounts, the ref is not yet set
     // schedule it to be called after a timeout
