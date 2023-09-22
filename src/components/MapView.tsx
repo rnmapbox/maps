@@ -850,19 +850,22 @@ class MapView extends NativeBridgeComponent(
    * If you implement a custom attribution button, you should add this action to the button.
    */
   showAttribution() {
-    return this._runNativeCommand('showAttribution', this._nativeRef);
+    return this._runNative<void>('showAttribution');
   }
 
   _runNativeCommand<RefType, ReturnType = NativeArg>(
     methodName: string,
     nativeRef: RefType | undefined,
-    args?: NativeArg[],
+    args: NativeArg[] = [],
   ): Promise<ReturnType> {
     // when this method is called after component mounts, the ref is not yet set
     // schedule it to be called after a timeout
     if (!this._nativeRef) {
-      return new Promise((resolve) => setTimeout(resolve, 1)).then(() => {
-        return this._runNativeCommand(methodName, this._nativeRef, args);
+      return new Promise<ReturnType>((resolve) => {
+        this._preRefMapMethodQueue.push({
+          method: { name: methodName, args },
+          resolver: resolve as (args: NativeArg) => void,
+        });
       });
     }
 
