@@ -71,7 +71,7 @@ jobs:
         id: pods-cache
         with:
           path: ios/Pods
-          key: pods-${{ hashFiles('**/Podfile.lock') }}-${{ inputs.MAP_IMPL }}
+          key: pods-${{ hashFiles('**/Podfile.lock') }}-${{ inputs.MAP_IMPL }}-${{ inputs.NEW_ARCH }}}
 
       - name: Install Pod Dependencies
         if: steps.pods-cache.outputs.cache-hit != 'true'
