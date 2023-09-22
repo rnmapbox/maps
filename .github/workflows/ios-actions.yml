@@ -11,6 +11,11 @@ on:
         default: mapbox
         required: false
         type: string
+      NEW_ARCH:
+        description: "If build with new architecture or not"
+        default: false
+        required: false
+        type: boolean
     secrets:
       MAPBOX_ACCESS_TOKEN:
         required: true
@@ -73,6 +78,8 @@ jobs:
         run: cd ios && pod --version && pod update MapboxMaps && pod install
         env:
           CI_MAP_IMPL: ${{ inputs.MAP_IMPL }}
+          RCT_NEW_ARCH_ENABLED: ${{ inputs.NEW_ARCH && 1 || 0 }}
+          NO_FLIPPER: 1
 
       - name: Install Detox Dependencies
         run: |
@@ -84,6 +91,7 @@ jobs:
         run: set -o pipefail && NSUnbufferedIO=YES  yarn detox build --configuration ios.debug 2>&1 | xcbeautify -qq
 
       - name: Test with detox
+        if: inputs.NEW_ARCH != 1
         run: |
           npx detox --version
           yarn detox test --configuration ios.debug --debug-synchronization 500 --loglevel trace --record-logs all --take-screenshots all

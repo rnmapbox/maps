@@ -11,6 +11,11 @@ on:
         default: mapbox
         required: false
         type: string
+      NEW_ARCH:
+        description: "If build with new architecture or not"
+        default: false
+        required: false
+        type: boolean
     secrets:
       MAPBOX_ACCESS_TOKEN:
         required: true
@@ -54,3 +59,4 @@ jobs:
         working-directory: example/android
         env:
           CI_MAP_IMPL: ${{ inputs.MAP_IMPL }}
+          ORG_GRADLE_PROJECT_newArchEnabled: ${{ inputs.NEW_ARCH && 'true' || 'false' }}
