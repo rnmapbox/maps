@@ -10,6 +10,10 @@ The following assumes, that you're using autolinking and installed
 
 Add the following to your `ios/Podfile`:
 
+```
+$RNMapboxMapsImpl = 'mapbox'
+```
+
 
 ```ruby
   pre_install do |installer|
