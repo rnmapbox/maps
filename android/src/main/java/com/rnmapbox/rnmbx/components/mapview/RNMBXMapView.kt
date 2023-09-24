@@ -438,6 +438,8 @@ open class RNMBXMapView(private val mContext: Context, var mManager: RNMBXMapVie
             feature = childView
         } else if (childView is RCTLayer<*>) {
             feature = childView as AbstractMapFeature?
+        } else if (childView is AbstractMapFeature) {
+            feature = childView as AbstractMapFeature
         } else if (childView is ViewGroup) {
             val children = childView
             Logger.w(LOG_TAG, "Adding non map components as a child of a map is deprecated!")
@@ -447,7 +449,6 @@ open class RNMBXMapView(private val mContext: Context, var mManager: RNMBXMapVie
         }
 
         val addToMap = styleLoaded
-
 
         var entry = FeatureEntry(feature, childView, false)
         if (addToMap) {

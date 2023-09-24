@@ -9,14 +9,8 @@
 #import <react/renderer/components/rnmapbox_maps_specs/EventEmitters.h>
 #import <react/renderer/components/rnmapbox_maps_specs/Props.h>
 #import <react/renderer/components/rnmapbox_maps_specs/RCTComponentViewHelpers.h>
-// needed for compilation for some reason
-#import <CoreFoundation/CoreFoundation.h>
-#import <CoreLocation/CoreLocation.h>
 
-@interface MapView : UIView
-@end
-
-#import <rnmapbox_maps-Swift.h>
+#import "rnmapbox_maps-Swift.h.pre"
 
 using namespace facebook::react;
 
