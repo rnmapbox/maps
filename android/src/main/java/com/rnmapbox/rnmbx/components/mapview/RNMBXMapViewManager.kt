@@ -22,6 +22,7 @@ import com.rnmapbox.rnmbx.events.AndroidCallbackEvent
 import com.rnmapbox.rnmbx.utils.ConvertUtils
 import com.rnmapbox.rnmbx.utils.ExpressionParser
 import com.rnmapbox.rnmbx.utils.Logger
+import com.rnmapbox.rnmbx.utils.ViewTagResolver
 import com.rnmapbox.rnmbx.utils.extensions.toCoordinate
 import com.rnmapbox.rnmbx.utils.extensions.toRectF
 import com.rnmapbox.rnmbx.utils.extensions.toScreenCoordinate
@@ -46,7 +47,7 @@ interface CommandResponse {
     fun error(message: String)
 }
 
-open class RNMBXMapViewManager(context: ReactApplicationContext) :
+open class RNMBXMapViewManager(context: ReactApplicationContext, val viewTagResolver: ViewTagResolver<RNMBXMapView>) :
     AbstractEventEmitter<RNMBXMapView>(context), RNMBXMapViewManagerInterface<RNMBXMapView> {
     private val mViews: MutableMap<Int, RNMBXMapView>
 
@@ -107,6 +108,9 @@ open class RNMBXMapViewManager(context: ReactApplicationContext) :
 
     override fun onDropViewInstance(mapView: RNMBXMapView) {
         val reactTag = mapView.id
+
+        viewTagResolver.viewRemoved(reactTag)
+
         if (mViews.containsKey(reactTag)) {
             mViews.remove(reactTag)
         }
@@ -116,6 +120,10 @@ open class RNMBXMapViewManager(context: ReactApplicationContext) :
 
     fun getByReactTag(reactTag: Int): RNMBXMapView? {
         return mViews[reactTag]
+    }
+
+    fun tagAssigned(reactTag: Int) {
+        return viewTagResolver.tagAssigned(reactTag)
     }
 
     // region React Props

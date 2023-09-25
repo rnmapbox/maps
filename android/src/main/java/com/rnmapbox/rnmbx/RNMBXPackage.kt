@@ -16,6 +16,7 @@ import com.rnmapbox.rnmbx.components.images.RNMBXImagesManager
 import com.rnmapbox.rnmbx.components.location.RNMBXNativeUserLocationManager
 import com.rnmapbox.rnmbx.components.mapview.NativeMapViewModule
 import com.rnmapbox.rnmbx.components.mapview.RNMBXAndroidTextureMapViewManager
+import com.rnmapbox.rnmbx.components.mapview.RNMBXMapView
 import com.rnmapbox.rnmbx.components.mapview.RNMBXMapViewManager
 import com.rnmapbox.rnmbx.components.styles.RNMBXStyleImportManager
 import com.rnmapbox.rnmbx.components.styles.atmosphere.RNMBXAtmosphereManager
@@ -40,8 +41,21 @@ import com.rnmapbox.rnmbx.modules.RNMBXLogging
 import com.rnmapbox.rnmbx.modules.RNMBXModule
 import com.rnmapbox.rnmbx.modules.RNMBXOfflineModule
 import com.rnmapbox.rnmbx.modules.RNMBXSnapshotModule
+import com.rnmapbox.rnmbx.utils.ViewTagResolver
 
 class RNMBXPackage : TurboReactPackage() {
+
+    var mapViewTagResolver: ViewTagResolver<RNMBXMapView>? = null
+    fun getMapViewTagResolver(context: ReactApplicationContext) : ViewTagResolver<RNMBXMapView> {
+        val viewTagResolver = mapViewTagResolver
+        if (viewTagResolver == null) {
+            val viewTagResolver = ViewTagResolver<RNMBXMapView>(context)
+            mapViewTagResolver = viewTagResolver
+            return viewTagResolver
+        }
+        return viewTagResolver
+    }
+
     override fun getModule(
         s: String,
         reactApplicationContext: ReactApplicationContext
@@ -52,7 +66,7 @@ class RNMBXPackage : TurboReactPackage() {
             RNMBXOfflineModule.REACT_CLASS -> return RNMBXOfflineModule(reactApplicationContext)
             RNMBXSnapshotModule.REACT_CLASS -> return RNMBXSnapshotModule(reactApplicationContext)
             RNMBXLogging.REACT_CLASS -> return RNMBXLogging(reactApplicationContext)
-            NativeMapViewModule.NAME -> return NativeMapViewModule(reactApplicationContext)
+            NativeMapViewModule.NAME -> return NativeMapViewModule(reactApplicationContext, getMapViewTagResolver(reactApplicationContext))
         }
         return null
     }
@@ -67,8 +81,8 @@ class RNMBXPackage : TurboReactPackage() {
 
         // components
         managers.add(RNMBXCameraManager(reactApplicationContext))
-        managers.add(RNMBXAndroidTextureMapViewManager(reactApplicationContext))
-        managers.add(RNMBXMapViewManager(reactApplicationContext))
+        managers.add(RNMBXAndroidTextureMapViewManager(reactApplicationContext, getMapViewTagResolver(reactApplicationContext)))
+        managers.add(RNMBXMapViewManager(reactApplicationContext, getMapViewTagResolver(reactApplicationContext)))
         managers.add(RNMBXStyleImportManager(reactApplicationContext))
 
         // annotations
