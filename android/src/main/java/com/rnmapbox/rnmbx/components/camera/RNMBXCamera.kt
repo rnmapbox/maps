@@ -91,9 +91,11 @@ class RNMBXCamera(private val mContext: Context, private val mManager: RNMBXCame
 
     override fun addToMap(mapView: RNMBXMapView) {
         super.addToMap(mapView)
-        setInitialCamera()
-        updateMaxBounds()
-        mCameraStop?.let { updateCamera(it) }
+        mapView.callIfAttachedToWindow {
+            setInitialCamera()
+            updateMaxBounds()
+            mCameraStop?.let { updateCamera(it) }
+        }
         _observeViewportState(mapView.mapView)
         _updateViewportState()
     }
