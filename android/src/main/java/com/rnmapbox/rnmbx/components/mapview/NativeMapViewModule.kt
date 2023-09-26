@@ -1,38 +1,34 @@
 package com.rnmapbox.rnmbx.components.mapview
 
+import android.util.Log
 import com.facebook.react.bridge.Promise
 import com.facebook.react.bridge.ReactApplicationContext
 import com.facebook.react.bridge.ReadableArray
+import com.facebook.react.bridge.UIManager
 import com.facebook.react.bridge.WritableMap
 import com.facebook.react.bridge.WritableNativeMap
+import com.facebook.react.uimanager.IllegalViewOperationException
 import com.facebook.react.uimanager.UIManagerHelper
 import com.facebook.react.uimanager.common.UIManagerType
 import com.rnmapbox.rnmbx.BuildConfig
 import com.rnmapbox.rnmbx.NativeMapViewModuleSpec
 import com.rnmapbox.rnmbx.utils.ConvertUtils
 import com.rnmapbox.rnmbx.utils.ExpressionParser
+import com.rnmapbox.rnmbx.utils.Logger
+import com.rnmapbox.rnmbx.utils.ViewTagResolver
 import com.rnmapbox.rnmbx.utils.extensions.toCoordinate
 import com.rnmapbox.rnmbx.utils.extensions.toScreenCoordinate
 
-class NativeMapViewModule(context: ReactApplicationContext) : NativeMapViewModuleSpec(context) {
-    private fun withMapViewOnUIThread(viewRef: Double?, promise: Promise, fn: (RNMBXMapView) -> Unit) {
+class NativeMapViewModule(context: ReactApplicationContext, val viewTagResolver: ViewTagResolver<RNMBXMapView>) : NativeMapViewModuleSpec(context) {
+    private fun withMapViewOnUIThread(
+        viewRef: Double?,
+        reject: Promise,
+        fn: (RNMBXMapView) -> Unit
+    ) {
         if (viewRef == null) {
-            return
-        }
-
-        reactApplicationContext.runOnUiQueueThread {
-            val manager = if (BuildConfig.IS_NEW_ARCHITECTURE_ENABLED)
-                UIManagerHelper.getUIManager(reactApplicationContext, UIManagerType.FABRIC)
-            else
-                UIManagerHelper.getUIManager(reactApplicationContext, UIManagerType.DEFAULT)
-
-            val view = manager?.resolveView(viewRef.toInt()) as? RNMBXMapView
-
-            if (view != null) {
-                fn(view)
-            } else {
-                promise.reject(Exception("cannot find map view for tag ${viewRef.toInt()}"))
-            }
+            reject.reject(Exception("viewRef is null"))
+        } else {
+            viewTagResolver.withViewResolved(viewRef.toInt(), reject, fn)
         }
     }
 

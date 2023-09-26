@@ -215,6 +215,11 @@ open class RNMBXMapView(private val mContext: Context, var mManager: RNMBXMapVie
         return mapView.getMapboxMap()
     }
 
+    override fun setId(id: Int) {
+        super.setId(id)
+        mManager.tagAssigned(id)
+    }
+
     val pointAnnotationManager: PointAnnotationManager?
         get() {
             if (mPointAnnotationManager == null) {
