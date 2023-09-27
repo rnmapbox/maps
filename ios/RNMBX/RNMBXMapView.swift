@@ -768,6 +768,16 @@ extension RNMBXMapView {
   }
 }
 
+extension MapboxMaps.PointAnnotationManager {
+  public func refresh() {
+    #if !RNMBX_11
+    syncSourceAndLayerIfNeeded()
+    #else
+    self.annotations = annotations
+    #endif
+  }
+}
+
 extension RNMBXMapView: GestureManagerDelegate {
   private func draggableSources() -> [RNMBXInteractiveElement] {
     return sources.filter { $0.isDraggable() }
@@ -1234,7 +1244,7 @@ class PointAnnotationManager : AnnotationInteractionDelegate {
   
   func add(_ annotation: PointAnnotation) {
     manager.annotations.append(annotation)
-    manager.syncSourceAndLayerIfNeeded()
+    manager.refresh()
   }
   
   func update(_ annotation: PointAnnotation) {
@@ -1246,6 +1256,7 @@ class PointAnnotationManager : AnnotationInteractionDelegate {
     }
     
     manager.annotations[index] = annotation
-    manager.syncSourceAndLayerIfNeeded()
+    manager.refresh()
   }
 }
+

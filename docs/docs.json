@@ -4766,7 +4766,7 @@
     "name": "Style"
   },
   "StyleImport": {
-    "description": "",
+    "description": "Use StyleImport to set configuration options on the new standard style. **V11 only.**\n\nSee https://github.com/mapbox/mapbox-maps-ios/blob/main/Sources/MapboxMaps/Documentation.docc/Migrate%20to%20v11.md#21-the-mapbox-standard-style",
     "methods": [],
     "props": [
       {
@@ -4774,14 +4774,14 @@
         "required": true,
         "type": "string",
         "default": "none",
-        "description": "FIX ME NO DESCRIPTION"
+        "description": "id of the style import (eg. basemap)"
       },
       {
         "name": "existing",
         "required": true,
         "type": "boolean",
         "default": "none",
-        "description": "FIX ME NO DESCRIPTION"
+        "description": "existing is now always required as true"
       },
       {
         "name": "config",
@@ -4801,7 +4801,7 @@
           ]
         },
         "default": "none",
-        "description": "FIX ME NO DESCRIPTION"
+        "description": "config is a dictionary of configuration options for the style import.\n\nSee https://github.com/mapbox/mapbox-maps-ios/blob/main/Sources/MapboxMaps/Documentation.docc/Migrate%20to%20v11.md#21-the-mapbox-standard-style"
       }
     ],
     "fileNameWithExt": "StyleImport.tsx",
