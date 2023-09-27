@@ -88,6 +88,8 @@ import MapHandlers from '../examples/V10/MapHandlers';
 import Markers from '../examples/V10/Markers';
 import QueryTerrainElevation from '../examples/V10/QueryTerrainElevation';
 import TerrainSkyAtmosphere from '../examples/V10/TerrainSkyAtmosphere';
+// V11
+import StyleImportConfig from '../examples/V11/StyleImportConfig';
 
 const MostRecentExampleKey = '@recent_example';
 
@@ -274,6 +276,7 @@ const Examples = new ExampleGroup('React Native Mapbox', [
     new ExampleItem('Camera Animation', CameraAnimation),
     new ExampleItem('Map Handlers', MapHandlers),
   ]),
+  new ExampleGroup('V11', [example(StyleImportConfig)]),
   new ExampleGroup('Map', [
     new ExampleItem('Show Map', ShowMap),
     new ExampleItem('Show Map With Local Style.JSON', ShowMapLocalStyle),

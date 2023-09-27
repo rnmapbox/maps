@@ -5,7 +5,9 @@ import { StyleImport } from '@rnmapbox/maps';
 
 StyleImport
 ```
+Use StyleImport to set configuration options on the new standard style. **V11 only.**
 
+See https://github.com/mapbox/mapbox-maps-ios/blob/main/Sources/MapboxMaps/Documentation.docc/Migrate%20to%20v11.md#21-the-mapbox-standard-style
 
 ## props
 
@@ -16,7 +18,7 @@ StyleImport
 string
 ```
 _required_
-FIX ME NO DESCRIPTION
+id of the style import (eg. basemap)
 
 
   
@@ -26,7 +28,7 @@ FIX ME NO DESCRIPTION
 boolean
 ```
 _required_
-FIX ME NO DESCRIPTION
+existing is now always required as true
 
 
   
@@ -34,7 +36,9 @@ FIX ME NO DESCRIPTION
 
 TODO
 _required_
-FIX ME NO DESCRIPTION
+config is a dictionary of configuration options for the style import.
+
+See https://github.com/mapbox/mapbox-maps-ios/blob/main/Sources/MapboxMaps/Documentation.docc/Migrate%20to%20v11.md#21-the-mapbox-standard-style
 
 
   

@@ -12,7 +12,13 @@ open class RNMBXStyleImport : UIView, RNMBXMapComponent {
   var existing: Bool = false;
   
   @objc
-  var config: [String: Any]?
+  var config: [String: Any]? {
+    didSet {
+      if let mapView = mapView {
+        apply(mapView: mapView)
+      }
+    }
+  }
   
   func waitForStyleLoad() -> Bool {
     true
