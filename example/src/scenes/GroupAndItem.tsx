@@ -47,6 +47,7 @@ import QuerySourceFeatures from '../examples/FillRasterLayer/QuerySourceFeatures
 import WatercolorRasterTiles from '../examples/FillRasterLayer/WatercolorRasterTiles';
 // LINE LAYER
 import GradientLine from '../examples/LineLayer/GradientLine';
+import DrawPolyline from '../examples/LineLayer/DrawPolyline';
 // MAP
 import ChangeLayerColor from '../examples/Map/ChangeLayerColor';
 import CreateOfflineRegion from '../examples/Map/CreateOfflineRegion';
@@ -247,6 +248,12 @@ class ExampleGroup implements ExampleNode {
   updateIfNeeded(_updated: () => void): void {}
 }
 
+function example(
+  Component: ItemComponent & { title: string; tags: string[]; docs: string },
+) {
+  return new ExampleItem(Component.title, Component);
+}
+
 const BugReportPage =
   (Klass: React.ComponentType<PageProps>) =>
   ({ ...props }: PageProps) =>
@@ -329,6 +336,7 @@ const Examples = new ExampleGroup('React Native Mapbox', [
   ]),
   new ExampleGroup('LineLayer', [
     new ExampleItem('GradientLine', GradientLine),
+    example(DrawPolyline),
   ]),
   new ExampleGroup('Annotations', [
     new ExampleItem('Marker Positions & Anchors', Markers),

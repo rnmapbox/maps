@@ -66,6 +66,9 @@ jobs:
         if: steps.yarn-cache.outputs.cache-hit != 'true'
         run: yarn install --network-timeout 1000000
 
+      - run: yarn postinstall
+        working-directory: example
+
       - name: Cache Pods
         uses: actions/cache@v3
         id: pods-cache

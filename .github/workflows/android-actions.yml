@@ -55,6 +55,9 @@ jobs:
       - run: yarn install --network-timeout 1000000
         working-directory: example
 
+      - run: yarn postinstall
+        working-directory: example
+
       - run: ./gradlew assemble
         working-directory: example/android
         env:
