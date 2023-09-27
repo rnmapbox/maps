@@ -1,6 +1,7 @@
 #ifdef RCT_NEW_ARCH_ENABLED
 
 #import "RNMBXCameraComponentView.h"
+#import "RNMBXFabricHelpers.h"
 
 #import <React/RCTConversions.h>
 #import <React/RCTFabricComponentsPlugins.h>
@@ -32,82 +33,39 @@ using namespace facebook::react;
   if (self = [super initWithFrame:frame]) {
     static const auto defaultProps = std::make_shared<const RNMBXCameraProps>();
     _props = defaultProps;
-      _view =  [[RNMBXCamera alloc] init];
-      
-      // just need to pass something, it won't really be used on fabric, but it's used to create events (it won't impact sending them)
-      _view.reactTag = @-1;
-      
-      __weak __typeof__(self) weakSelf = self;
-
-      [_view setOnUserTrackingModeChange:^(NSDictionary* event) {
-          __typeof__(self) strongSelf = weakSelf;
-
-          if (strongSelf != nullptr && strongSelf->_eventEmitter != nullptr) {
-              const auto [type, json] = [RNMBXCameraComponentView stringifyEventData:event];
-              std::dynamic_pointer_cast<const facebook::react::RNMBXCameraEventEmitter>(strongSelf->_eventEmitter)->onUserTrackingModeChange({type, json});
-            }
-      }];
-    self.contentView = _view;
+    [self prepareView];
   }
 
   return self;
 }
 
-+ (std::tuple<BOOL, std::string>)stringifyEventData:(NSDictionary*)event {
-    BOOL followUserLocation = [[event valueForKey:@"followUserLocation"] boolValue] == YES ? YES : NO;
-    std::string followUserMode = [event valueForKey:@"followUserMode"] == nil ? "" : std::string([[event valueForKey:@"followUserMode"] UTF8String]);
-
-    return {followUserLocation, followUserMode};
-}
-
-+ (NSDictionary *)convertDefaultStopToDictionary:(RNMBXCameraDefaultStopStruct)stop {
-    NSMutableDictionary *result = [NSMutableDictionary new];
-    result[@"centerCoordinate"] = RCTNSStringFromStringNilIfEmpty(stop.centerCoordinate);
-    result[@"bounds"] = RCTNSStringFromStringNilIfEmpty(stop.bounds);
-    result[@"heading"] = @(stop.heading);
-    result[@"pitch"] = @(stop.pitch);
-    result[@"zoom"] = @(stop.zoom);
-    result[@"paddingLeft"] = @(stop.paddingLeft);
-    result[@"paddingRight"] = @(stop.paddingRight);
-    result[@"paddingTop"] = @(stop.paddingTop);
-    result[@"paddingBottom"] = @(stop.paddingBottom);
-    result[@"duration"] = @(stop.duration);
-    result[@"mode"] = RCTNSStringFromStringNilIfEmpty(stop.mode);
-
+- (void)prepareView
+{
+    _view =  [[RNMBXCamera alloc] init];
     
-    return result;
-}
-
-+ (NSDictionary *)convertStopToDictionary:(RNMBXCameraStopStruct)stop {
-    NSMutableDictionary *result = [NSMutableDictionary new];
-    result[@"centerCoordinate"] = RCTNSStringFromStringNilIfEmpty(stop.centerCoordinate);
-    result[@"bounds"] = RCTNSStringFromStringNilIfEmpty(stop.bounds);
-    result[@"heading"] = @(stop.heading);
-    result[@"pitch"] = @(stop.pitch);
-    result[@"zoom"] = @(stop.zoom);
-    result[@"paddingLeft"] = @(stop.paddingLeft);
-    result[@"paddingRight"] = @(stop.paddingRight);
-    result[@"paddingTop"] = @(stop.paddingTop);
-    result[@"paddingBottom"] = @(stop.paddingBottom);
-    result[@"duration"] = @(stop.duration);
-    result[@"mode"] = RCTNSStringFromStringNilIfEmpty(stop.mode);
-
+    // just need to pass something, it won't really be used on fabric, but it's used to create events (it won't impact sending them)
+    _view.reactTag = @-1;
     
-    return result;
+    __weak __typeof__(self) weakSelf = self;
+
+    [_view setOnUserTrackingModeChange:^(NSDictionary* event) {
+        __typeof__(self) strongSelf = weakSelf;
+
+        if (strongSelf != nullptr && strongSelf->_eventEmitter != nullptr) {
+            const auto [type, payload] = [RNMBXCameraComponentView stringifyEventData:event];
+            std::dynamic_pointer_cast<const facebook::react::RNMBXCameraEventEmitter>(strongSelf->_eventEmitter)->onUserTrackingModeChange({type, payload});
+          }
+    }];
+  self.contentView = _view;
 }
 
-+ (NSDictionary*)convertDynamicToDictionary:(const folly::dynamic*)dynamic {
-    NSMutableDictionary<NSString*, NSNumber*>* result = [[NSMutableDictionary alloc] init];
++ (facebook::react::RNMBXCameraEventEmitter::OnUserTrackingModeChange)stringifyEventData:(NSDictionary*)event {
+    std::string type = [event valueForKey:@"type"] == nil ? "" : std::string([[event valueForKey:@"type"] UTF8String]);
+    NSDictionary *payload = [event valueForKey:@"payload"];
+    BOOL followUserLocation = [[payload valueForKey:@"followUserLocation"] boolValue] ?: NO;
+    std::string followUserMode = [[payload valueForKey:@"followUserMode"] isKindOfClass:[NSString class]] ? std::string([[payload valueForKey:@"followUserMode"] UTF8String]): "";
 
-    if (!dynamic->isNull()) {
-        for (auto& pair : dynamic->items()) {
-            NSString* key = [NSString stringWithUTF8String:pair.first.getString().c_str()];
-            NSNumber* value = [[NSNumber alloc] initWithInt:pair.second.getDouble()];
-            [result setValue:value forKey:key];
-        }
-    }
-
-    return result;
+    return {type, {followUserLocation, followUserMode}};
 }
 
 #pragma mark - RCTComponentViewProtocol
@@ -120,23 +78,65 @@ using namespace facebook::react;
 - (void)updateProps:(const Props::Shared &)props oldProps:(const Props::Shared &)oldProps
 {
   const auto &newProps = *std::static_pointer_cast<const RNMBXCameraProps>(props);
-    _view.maxBounds = RCTNSStringFromStringNilIfEmpty(newProps.maxBounds);
-    _view.animationDuration = @(newProps.animationDuration);
-    _view.animationMode = RCTNSStringFromStringNilIfEmpty(newProps.animationMode);
-    _view.defaultStop = [RNMBXCameraComponentView convertDefaultStopToDictionary:newProps.defaultStop];
-
-    _view.followUserLocation = @(newProps.followUserLocation);
-    _view.followUserMode = RCTNSStringFromStringNilIfEmpty(newProps.followUserMode);
-    _view.followZoomLevel = @(newProps.followZoomLevel);
-    _view.followPitch = @(newProps.followPitch);
-    _view.followHeading = @(newProps.followHeading);
-    _view.followPadding = [RNMBXCameraComponentView convertDynamicToDictionary:&newProps.followPadding];
-
-    _view.maxZoomLevel = @(newProps.maxZoomLevel);
-    _view.minZoomLevel = @(newProps.minZoomLevel);
-    _view.stop = [RNMBXCameraComponentView convertStopToDictionary:newProps.stop];
-    
+    id maxBounds = RNMBXConvertFollyDynamicToId(newProps.maxBounds);
+    if (maxBounds != nil) {
+        _view.maxBounds = maxBounds;
+    }
+    id animationDuration = RNMBXConvertFollyDynamicToId(newProps.animationDuration);
+    if (animationDuration != nil) {
+        _view.animationDuration = animationDuration;
+    }
+    id animationMode = RNMBXConvertFollyDynamicToId(newProps.animationMode);
+    if (animationMode != nil) {
+        _view.animationMode = animationMode;
+    }
+    id defaultStop = RNMBXConvertFollyDynamicToId(newProps.defaultStop);
+    if (defaultStop != nil) {
+        _view.defaultStop = defaultStop;
+    }
+    id followUserLocation = RNMBXConvertFollyDynamicToId(newProps.followUserLocation);
+    if (followUserLocation != nil) {
+        _view.followUserLocation = followUserLocation;
+    }
+    id followUserMode = RNMBXConvertFollyDynamicToId(newProps.followUserMode);
+    if (followUserMode != nil) {
+        _view.followUserMode = followUserMode;
+    }
+    id followZoomLevel = RNMBXConvertFollyDynamicToId(newProps.followZoomLevel);
+    if (followZoomLevel != nil) {
+        _view.followZoomLevel = followZoomLevel;
+    }
+    id followPitch = RNMBXConvertFollyDynamicToId(newProps.followPitch);
+    if (followPitch != nil) {
+        _view.followPitch = followPitch;
+    }
+    id followHeading = RNMBXConvertFollyDynamicToId(newProps.followHeading);
+    if (followHeading != nil) {
+        _view.followHeading = followHeading;
+    }
+    id followPadding = RNMBXConvertFollyDynamicToId(newProps.followPadding);
+    if (followPadding != nil) {
+        _view.followPadding = followPadding;
+    }
+    id maxZoomLevel = RNMBXConvertFollyDynamicToId(newProps.maxZoomLevel);
+    if (maxZoomLevel != nil) {
+        _view.maxZoomLevel = maxZoomLevel;
+    }
+    id minZoomLevel = RNMBXConvertFollyDynamicToId(newProps.minZoomLevel);
+    if (minZoomLevel != nil) {
+        _view.minZoomLevel = minZoomLevel;
+    }
+    id stop = RNMBXConvertFollyDynamicToId(newProps.stop);
+    if (stop != nil) {
+        _view.stop = stop;
+    }
   [super updateProps:props oldProps:oldProps];
+}
+
+- (void)prepareForRecycle
+{
+    [super prepareForRecycle];
+    [self prepareView];
 }
 
 @end

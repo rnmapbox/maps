@@ -28,65 +28,65 @@ class RNMBXCameraManager(private val mContext: ReactApplicationContext) :
     }
 
     @ReactProp(name = "stop")
-    override fun setStop(camera: RNMBXCamera, map: ReadableMap?) {
-        if (map != null) {
-            val stop = fromReadableMap(mContext, map, null)
+    override fun setStop(camera: RNMBXCamera, map: Dynamic) {
+        if (!map.isNull) {
+            val stop = fromReadableMap(mContext, map.asMap(), null)
             camera.setStop(stop)
         }
     }
 
     @ReactProp(name = "defaultStop")
-    override fun setDefaultStop(camera: RNMBXCamera, map: ReadableMap?) {
-        if (map != null) {
-            val stop = fromReadableMap(mContext, map, null)
+    override fun setDefaultStop(camera: RNMBXCamera, map: Dynamic) {
+        if (!map.isNull) {
+            val stop = fromReadableMap(mContext, map.asMap(), null)
             camera.setDefaultStop(stop)
         }
     }
 
     @ReactProp(name = "userTrackingMode")
-    override fun setUserTrackingMode(camera: RNMBXCamera, userTrackingMode: Int) {
-        camera.setUserTrackingMode(userTrackingMode)
+    override fun setUserTrackingMode(camera: RNMBXCamera, userTrackingMode: Dynamic) {
+        camera.setUserTrackingMode(userTrackingMode.asInt())
         throw AssertionError("Unused code")
     }
 
     @ReactProp(name = "zoomLevel")
-    override fun setZoomLevel(camera: RNMBXCamera, zoomLevel: Double) {
-        camera.setZoomLevel(zoomLevel)
+    override fun setZoomLevel(camera: RNMBXCamera, zoomLevel: Dynamic) {
+        camera.setZoomLevel(zoomLevel.asDouble())
     }
 
     @ReactProp(name = "minZoomLevel")
-    override fun setMinZoomLevel(camera: RNMBXCamera, value: Double) {
-        camera.setMinZoomLevel(value)
+    override fun setMinZoomLevel(camera: RNMBXCamera, value: Dynamic) {
+        camera.setMinZoomLevel(value.asDouble())
     }
 
     @ReactProp(name = "maxZoomLevel")
-    override fun setMaxZoomLevel(camera: RNMBXCamera, value: Double) {
-        camera.setMaxZoomLevel(value)
+    override fun setMaxZoomLevel(camera: RNMBXCamera, value: Dynamic) {
+        camera.setMaxZoomLevel(value.asDouble())
     }
 
     @ReactProp(name = "followUserLocation")
-    override fun setFollowUserLocation(camera: RNMBXCamera, value: Boolean) {
-        camera.setFollowUserLocation(value)
+    override fun setFollowUserLocation(camera: RNMBXCamera, value: Dynamic) {
+        camera.setFollowUserLocation(value.asBoolean())
     }
 
     @ReactProp(name = "followUserMode")
-    override fun setFollowUserMode(camera: RNMBXCamera, value: String?) {
-        camera.setFollowUserMode(value)
+    override fun setFollowUserMode(camera: RNMBXCamera, value: Dynamic) {
+        camera.setFollowUserMode(value.asString())
     }
 
     @ReactProp(name = "followZoomLevel")
-    override fun setFollowZoomLevel(camera: RNMBXCamera, value: Double) {
-        camera.setFollowZoomLevel(value)
+    override fun setFollowZoomLevel(camera: RNMBXCamera, value: Dynamic) {
+        camera.setFollowZoomLevel(value.asDouble())
     }
 
     @ReactProp(name = "followPitch")
-    override fun setFollowPitch(camera: RNMBXCamera, value: Double) {
-        camera.setFollowPitch(value)
+    override fun setFollowPitch(camera: RNMBXCamera, value: Dynamic) {
+        camera.setFollowPitch(value.asDouble())
     }
 
     @ReactProp(name = "followHeading")
-    override fun setFollowHeading(camera: RNMBXCamera, value: Double) {
-        camera.setFollowHeading(value)
+    override fun setFollowHeading(camera: RNMBXCamera, value: Dynamic) {
+        camera.setFollowHeading(value.asDouble())
     }
 
     @ReactProp(name = "followPadding")
@@ -95,20 +95,20 @@ class RNMBXCameraManager(private val mContext: ReactApplicationContext) :
     }
 
     @ReactProp(name = "maxBounds")
-    override fun setMaxBounds(camera: RNMBXCamera, value: String?) {
-        if (value != null) {
-            val collection = FeatureCollection.fromJson(value)
+    override fun setMaxBounds(camera: RNMBXCamera, value: Dynamic) {
+        if (!value.isNull) {
+            val collection = FeatureCollection.fromJson(value.asString())
             camera.setMaxBounds(toLatLngBounds(collection))
         } else {
             camera.setMaxBounds(null)
         }
     }
 
-    override fun setAnimationDuration(view: RNMBXCamera?, value: Double) {
+    override fun setAnimationDuration(view: RNMBXCamera?, value: Dynamic) {
         // no-op on Android
     }
 
-    override fun setAnimationMode(view: RNMBXCamera?, value: String?) {
+    override fun setAnimationMode(view: RNMBXCamera?, value: Dynamic) {
         // no-op on Android
     }
 

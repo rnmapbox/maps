@@ -10,24 +10,22 @@
 package com.facebook.react.viewmanagers;
 
 import android.view.View;
-import androidx.annotation.Nullable;
 import com.facebook.react.bridge.Dynamic;
-import com.facebook.react.bridge.ReadableMap;
 
 public interface RNMBXCameraManagerInterface<T extends View> {
-  void setMaxBounds(T view, @Nullable String value);
-  void setAnimationDuration(T view, double value);
-  void setAnimationMode(T view, @Nullable String value);
-  void setDefaultStop(T view, @Nullable ReadableMap value);
-  void setUserTrackingMode(T view, int value);
-  void setFollowUserLocation(T view, boolean value);
-  void setFollowUserMode(T view, @Nullable String value);
-  void setFollowZoomLevel(T view, double value);
-  void setFollowPitch(T view, double value);
-  void setFollowHeading(T view, double value);
+  void setMaxBounds(T view, Dynamic value);
+  void setAnimationDuration(T view, Dynamic value);
+  void setAnimationMode(T view, Dynamic value);
+  void setDefaultStop(T view, Dynamic value);
+  void setUserTrackingMode(T view, Dynamic value);
+  void setFollowUserLocation(T view, Dynamic value);
+  void setFollowUserMode(T view, Dynamic value);
+  void setFollowZoomLevel(T view, Dynamic value);
+  void setFollowPitch(T view, Dynamic value);
+  void setFollowHeading(T view, Dynamic value);
   void setFollowPadding(T view, Dynamic value);
-  void setZoomLevel(T view, double value);
-  void setMaxZoomLevel(T view, double value);
-  void setMinZoomLevel(T view, double value);
-  void setStop(T view, @Nullable ReadableMap value);
+  void setZoomLevel(T view, Dynamic value);
+  void setMaxZoomLevel(T view, Dynamic value);
+  void setMinZoomLevel(T view, Dynamic value);
+  void setStop(T view, Dynamic value);
 }

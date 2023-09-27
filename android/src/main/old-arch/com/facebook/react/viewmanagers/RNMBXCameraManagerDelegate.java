@@ -12,7 +12,6 @@ package com.facebook.react.viewmanagers;
 import android.view.View;
 import androidx.annotation.Nullable;
 import com.facebook.react.bridge.DynamicFromObject;
-import com.facebook.react.bridge.ReadableMap;
 import com.facebook.react.uimanager.BaseViewManagerDelegate;
 import com.facebook.react.uimanager.BaseViewManagerInterface;
 
@@ -24,49 +23,49 @@ public class RNMBXCameraManagerDelegate<T extends View, U extends BaseViewManage
   public void setProperty(T view, String propName, @Nullable Object value) {
     switch (propName) {
       case "maxBounds":
-        mViewManager.setMaxBounds(view, value == null ? null : (String) value);
+        mViewManager.setMaxBounds(view, new DynamicFromObject(value));
         break;
       case "animationDuration":
-        mViewManager.setAnimationDuration(view, value == null ? 0f : ((Double) value).doubleValue());
+        mViewManager.setAnimationDuration(view, new DynamicFromObject(value));
         break;
       case "animationMode":
-        mViewManager.setAnimationMode(view, value == null ? null : (String) value);
+        mViewManager.setAnimationMode(view, new DynamicFromObject(value));
         break;
       case "defaultStop":
-        mViewManager.setDefaultStop(view, (ReadableMap) value);
+        mViewManager.setDefaultStop(view, new DynamicFromObject(value));
         break;
       case "userTrackingMode":
-        mViewManager.setUserTrackingMode(view, value == null ? 0 : ((Double) value).intValue());
+        mViewManager.setUserTrackingMode(view, new DynamicFromObject(value));
         break;
       case "followUserLocation":
-        mViewManager.setFollowUserLocation(view, value == null ? false : (boolean) value);
+        mViewManager.setFollowUserLocation(view, new DynamicFromObject(value));
         break;
       case "followUserMode":
-        mViewManager.setFollowUserMode(view, value == null ? null : (String) value);
+        mViewManager.setFollowUserMode(view, new DynamicFromObject(value));
         break;
       case "followZoomLevel":
-        mViewManager.setFollowZoomLevel(view, value == null ? 0f : ((Double) value).doubleValue());
+        mViewManager.setFollowZoomLevel(view, new DynamicFromObject(value));
         break;
       case "followPitch":
-        mViewManager.setFollowPitch(view, value == null ? 0f : ((Double) value).doubleValue());
+        mViewManager.setFollowPitch(view, new DynamicFromObject(value));
         break;
       case "followHeading":
-        mViewManager.setFollowHeading(view, value == null ? 0f : ((Double) value).doubleValue());
+        mViewManager.setFollowHeading(view, new DynamicFromObject(value));
         break;
       case "followPadding":
         mViewManager.setFollowPadding(view, new DynamicFromObject(value));
         break;
       case "zoomLevel":
-        mViewManager.setZoomLevel(view, value == null ? 0f : ((Double) value).doubleValue());
+        mViewManager.setZoomLevel(view, new DynamicFromObject(value));
         break;
       case "maxZoomLevel":
-        mViewManager.setMaxZoomLevel(view, value == null ? 0f : ((Double) value).doubleValue());
+        mViewManager.setMaxZoomLevel(view, new DynamicFromObject(value));
         break;
       case "minZoomLevel":
-        mViewManager.setMinZoomLevel(view, value == null ? 0f : ((Double) value).doubleValue());
+        mViewManager.setMinZoomLevel(view, new DynamicFromObject(value));
         break;
       case "stop":
-        mViewManager.setStop(view, (ReadableMap) value);
+        mViewManager.setStop(view, new DynamicFromObject(value));
         break;
       default:
         super.setProperty(view, propName, value);

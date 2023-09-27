@@ -1,6 +1,7 @@
 #ifdef RCT_NEW_ARCH_ENABLED
 
 #import "RNMBXMapViewComponentView.h"
+#import "RNMBXFabricHelpers.h"
 
 #import <React/RCTConversions.h>
 #import <React/RCTFabricComponentsPlugins.h>
@@ -48,6 +49,7 @@ using namespace facebook::react;
 @implementation RNMBXMapViewComponentView {
     RNMBXMapView *_view;
     RNMBXMapViewEventDispatcher *_eventDispatcher;
+    CGRect _frame;
 }
 
 - (instancetype)initWithFrame:(CGRect)frame
@@ -55,8 +57,16 @@ using namespace facebook::react;
   if (self = [super initWithFrame:frame]) {
     static const auto defaultProps = std::make_shared<const RNMBXMapViewProps>();
     _props = defaultProps;
+    _frame = frame;
+    [self prepareView];
+  }
+  return self;
+}
+
+- (void)prepareView
+{
     _eventDispatcher = [[RNMBXMapViewEventDispatcher alloc] initWithComponentView:self];
-      _view =  [[RNMBXMapView alloc] initWithFrame:frame eventDispatcher:_eventDispatcher];
+      _view =  [[RNMBXMapView alloc] initWithFrame:_frame eventDispatcher:_eventDispatcher];
       
       // just need to pass something, it won't really be used on fabric, but it's used to create events (it won't impact sending them)
       _view.reactTag = @-1;
@@ -68,7 +78,7 @@ using namespace facebook::react;
           __typeof__(self) strongSelf = weakSelf;
 
           if (strongSelf != nullptr && strongSelf->_eventEmitter != nullptr) {
-              const auto [type, json] = [RNMBXMapViewComponentView stringifyEventData:event];
+              const auto [type, json] = RNMBXStringifyEventData(event);
               std::dynamic_pointer_cast<const facebook::react::RNMBXMapViewEventEmitter>(strongSelf->_eventEmitter)->onPress({type, json});
             }
       }];
@@ -77,7 +87,7 @@ using namespace facebook::react;
           __typeof__(self) strongSelf = weakSelf;
 
           if (strongSelf != nullptr && strongSelf->_eventEmitter != nullptr) {
-              const auto [type, json] = [RNMBXMapViewComponentView stringifyEventData:event];
+              const auto [type, json] = RNMBXStringifyEventData(event);
               std::dynamic_pointer_cast<const facebook::react::RNMBXMapViewEventEmitter>(strongSelf->_eventEmitter)->onLongPress({type, json});
             }
       }];
@@ -86,72 +96,34 @@ using namespace facebook::react;
           __typeof__(self) strongSelf = weakSelf;
 
           if (strongSelf != nullptr && strongSelf->_eventEmitter != nullptr) {
-              const auto [type, json] = [RNMBXMapViewComponentView stringifyEventData:event];
+              const auto [type, json] = RNMBXStringifyEventData(event);
               std::dynamic_pointer_cast<const facebook::react::RNMBXMapViewEventEmitter>(strongSelf->_eventEmitter)->onMapChange({type, json});
             }
       }];
 
     self.contentView = _view;
-  }
+}
 
-  return self;
+- (void)mountChildComponentView:(UIView<RCTComponentViewProtocol> *)childComponentView index:(NSInteger)index
+{
+    if ([childComponentView isKindOfClass:[RCTViewComponentView class]] && ((RCTViewComponentView *)childComponentView).contentView) {
+        [_view addToMap:((RCTViewComponentView *)childComponentView).contentView];
+    }
+    [super mountChildComponentView:childComponentView index:index];
+}
+
+- (void)unmountChildComponentView:(UIView<RCTComponentViewProtocol> *)childComponentView index:(NSInteger)index
+{
+    if ([childComponentView isKindOfClass:[RCTViewComponentView class]] && ((RCTViewComponentView *)childComponentView).contentView) {
+        [_view removeFromMap:((RCTViewComponentView *)childComponentView).contentView];
+    }
+    [super unmountChildComponentView:childComponentView index:index];
 }
 
 - (void)dispatchCameraChangedEvent:(NSDictionary*)event {
-    const auto [type, json] = [RNMBXMapViewComponentView stringifyEventData:event];
+    const auto [type, json] = RNMBXStringifyEventData(event);
     std::dynamic_pointer_cast<const facebook::react::RNMBXMapViewEventEmitter>(self->_eventEmitter)->onCameraChanged({type, json});
 }
-
-+ (std::tuple<std::string, std::string>)stringifyEventData:(NSDictionary*)event {
-    std::string type = [event valueForKey:@"type"] == nil ? "" : std::string([[event valueForKey:@"type"] UTF8String]);
-    std::string json = "{}";
-
-    NSError *error;
-    NSData *jsonData = nil;
-
-    if ([event valueForKey:@"payload"] != nil) {
-        jsonData = [NSJSONSerialization dataWithJSONObject:[event valueForKey:@"payload"]
-                                                           options:0
-                                                             error:&error];
-    }
-
-    if (jsonData) {
-        json = std::string([[[NSString alloc] initWithData:jsonData encoding:NSUTF8StringEncoding] UTF8String]);
-    }
-
-    return {type, json};
-}
-
-- (NSDictionary*)convertPositionToDictionary:(const folly::dynamic*)position {
-    NSMutableDictionary<NSString*, NSNumber*>* result = [[NSMutableDictionary alloc] init];
-
-    if (!position->isNull()) {
-        for (auto& pair : position->items()) {
-            NSString* key = [NSString stringWithUTF8String:pair.first.getString().c_str()];
-            NSNumber* value = [[NSNumber alloc] initWithInt:pair.second.getDouble()];
-            [result setValue:value forKey:key];
-        }
-    }
-
-    return result;
-}
-
-- (NSDictionary*)convertLocalizeLabels:(const RNMBXMapViewLocalizeLabelsStruct*)labels {
-    NSMutableDictionary* result = [[NSMutableDictionary alloc] init];
-    NSMutableArray* ids = [[NSMutableArray alloc] init];
-
-    [result setValue:[NSString stringWithUTF8String:labels->locale.c_str()] forKey:@"locale"];
-
-    for (auto& layerId : labels->layerIds) {
-        NSString* value = [NSString stringWithUTF8String:layerId.c_str()];
-        [ids addObject:value];
-    }
-
-    [result setValue:ids forKey:@"layerIds"];
-
-    return result;
-}
-
 
 #pragma mark - RCTComponentViewProtocol
 
@@ -163,34 +135,109 @@ using namespace facebook::react;
 - (void)updateProps:(const Props::Shared &)props oldProps:(const Props::Shared &)oldProps
 {
   const auto &newProps = *std::static_pointer_cast<const RNMBXMapViewProps>(props);
-    [_view setReactAttributionEnabled:newProps.attributionEnabled];
-    [_view setReactAttributionPosition:[self convertPositionToDictionary:&newProps.attributionPosition]];
-
-    [_view setReactLogoEnabled:newProps.logoEnabled];
-    [_view setReactLogoPosition:[self convertPositionToDictionary:&newProps.logoPosition]];
-
-    [_view setReactCompassEnabled:newProps.compassEnabled];
-    [_view setReactCompassFadeWhenNorth:newProps.compassFadeWhenNorth];
-    [_view setReactCompassPosition:[self convertPositionToDictionary:&newProps.compassPosition]];
-    [_view setReactCompassViewPosition:newProps.compassViewPosition];
-    [_view setReactCompassViewMargins:CGPointMake(newProps.compassViewMargins.x, newProps.compassViewMargins.y)];
-    [_view setReactCompassImage:[NSString stringWithUTF8String:newProps.compassImage.c_str()]];
-
-    [_view setReactScaleBarEnabled:newProps.scaleBarEnabled];
-    [_view setReactScaleBarPosition:[self convertPositionToDictionary:&newProps.scaleBarPosition]];
-
-    [_view setReactZoomEnabled:newProps.zoomEnabled];
-    [_view setReactScrollEnabled:newProps.scrollEnabled];
-    [_view setReactRotateEnabled:newProps.rotateEnabled];
-    [_view setReactPitchEnabled:newProps.pitchEnabled];
-
-    [_view setReactProjection:newProps.projection == RNMBXMapViewProjection::Mercator ? @"mercator" : @"globe"];
-    [_view setReactStyleURL:[NSString stringWithUTF8String:newProps.styleURL.c_str()]];
-
-    if (!newProps.localizeLabels.locale.empty()) {
-        [_view setReactLocalizeLabels:[self convertLocalizeLabels:&newProps.localizeLabels]];
+    id attributionEnabled = RNMBXConvertFollyDynamicToId(newProps.attributionEnabled);
+    if (attributionEnabled != nil) {
+        _view.reactAttributionEnabled = attributionEnabled;
     }
+
+    id attributionPosition = RNMBXConvertFollyDynamicToId(newProps.attributionPosition);
+    if (attributionPosition != nil) {
+        _view.reactAttributionPosition = attributionPosition;
+    }
+
+    id logoEnabled = RNMBXConvertFollyDynamicToId(newProps.logoEnabled);
+    if (logoEnabled != nil) {
+        _view.reactLogoEnabled = logoEnabled;
+    }
+
+    id logoPosition = RNMBXConvertFollyDynamicToId(newProps.logoPosition);
+    if (logoPosition != nil) {
+        _view.reactLogoPosition = logoPosition;
+    }
+
+    id compassEnabled = RNMBXConvertFollyDynamicToId(newProps.compassEnabled);
+    if (compassEnabled != nil) {
+        _view.reactCompassEnabled = compassEnabled;
+    }
+
+    id compassFadeWhenNorth = RNMBXConvertFollyDynamicToId(newProps.compassFadeWhenNorth);
+    if (compassFadeWhenNorth != nil) {
+        _view.reactCompassFadeWhenNorth = compassFadeWhenNorth;
+    }
+
+    id compassPosition = RNMBXConvertFollyDynamicToId(newProps.compassPosition);
+    if (compassPosition != nil) {
+        _view.reactCompassPosition = compassPosition;
+    }
+
+    id compassViewPosition = RNMBXConvertFollyDynamicToId(newProps.compassViewPosition);
+    if (compassViewPosition != nil) {
+        _view.reactCompassViewPosition = [(NSNumber *)compassViewPosition doubleValue];
+    }
+
+    NSDictionary<NSString *, NSNumber *> *compassViewMargins = RNMBXConvertFollyDynamicToId(newProps.compassViewMargins);
+    if (compassViewMargins != nil) {
+        CGPoint margins = CGPointMake([compassViewMargins[@"x"] doubleValue], [compassViewMargins[@"y"] doubleValue]);
+        _view.reactCompassViewMargins = margins;
+    }
+
+    id compassImage = RNMBXConvertFollyDynamicToId(newProps.compassImage);
+    if (compassImage != nil) {
+        _view.reactCompassImage = compassImage;
+    }
+
+    id scaleBarEnabled = RNMBXConvertFollyDynamicToId(newProps.scaleBarEnabled);
+    if (scaleBarEnabled != nil) {
+        _view.reactScaleBarEnabled = scaleBarEnabled;
+    }
+
+    id scaleBarPosition = RNMBXConvertFollyDynamicToId(newProps.scaleBarPosition);
+    if (scaleBarPosition != nil) {
+        _view.reactScaleBarPosition = scaleBarPosition;
+    }
+
+    id zoomEnabled = RNMBXConvertFollyDynamicToId(newProps.zoomEnabled);
+    if (zoomEnabled != nil) {
+        _view.reactZoomEnabled = zoomEnabled;
+    }
+
+    id scrollEnabled = RNMBXConvertFollyDynamicToId(newProps.scrollEnabled);
+    if (scrollEnabled != nil) {
+        _view.reactScrollEnabled = scrollEnabled;
+    }
+
+    id rotateEnabled = RNMBXConvertFollyDynamicToId(newProps.rotateEnabled);
+    if (rotateEnabled != nil) {
+        _view.reactRotateEnabled = rotateEnabled;
+    }
+
+    id pitchEnabled = RNMBXConvertFollyDynamicToId(newProps.pitchEnabled);
+    if (pitchEnabled != nil) {
+        _view.reactPitchEnabled = pitchEnabled;
+    }
+
+    id projection = RNMBXConvertFollyDynamicToId(newProps.projection);
+    if (projection != nil) {
+        _view.reactProjection = projection;
+    }
+
+    id localizeLabels = RNMBXConvertFollyDynamicToId(newProps.localizeLabels);
+    if (localizeLabels != nil) {
+        _view.reactLocalizeLabels = localizeLabels;
+    }
+
+    id styleURL = RNMBXConvertFollyDynamicToId(newProps.styleURL);
+    if (styleURL != nil) {
+        _view.reactStyleURL = styleURL;
+    }
+
   [super updateProps:props oldProps:oldProps];
+}
+
+- (void)prepareForRecycle
+{
+    [super prepareForRecycle];
+    [self prepareView];
 }
 
 @end

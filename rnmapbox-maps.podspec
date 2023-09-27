@@ -220,9 +220,8 @@ Pod::Spec.new do |s|
     case $RNMapboxMapsImpl
     when 'mapbox'
       sp.source_files = "ios/RNMBX/**/*.{h,m,mm,swift}"
-
+      sp.private_header_files = 'ios/RNMBX/RNMBXFabricHelpers.h'
       if new_arch_enabled
-        sp.private_header_files = 'ios/RNMBX/RNMBXFabricHelpers.h'
         sp.compiler_flags = folly_compiler_flags + " -DRCT_NEW_ARCH_ENABLED=1"
         sp.pod_target_xcconfig    = {
           "HEADER_SEARCH_PATHS" => "\"$(PODS_ROOT)/boost\"",
