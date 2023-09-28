@@ -3,15 +3,13 @@ import { Text } from 'react-native';
 import MapboxGL, { Location } from '@rnmapbox/maps';
 
 import sheet from '../../styles/sheet';
-import { BaseExampleProps } from '../common/BaseExamplePropTypes';
-import Page from '../common/Page';
 import Bubble from '../common/Bubble';
 
-const UserLocationUpdates = (props: BaseExampleProps) => {
+const UserLocationUpdates = () => {
   const [location, setLocation] = useState<Location>();
 
   return (
-    <Page {...props}>
+    <>
       <MapboxGL.MapView style={sheet.matchParent}>
         <MapboxGL.UserLocation
           onUpdate={(newLocation) => setLocation(newLocation)}
@@ -32,8 +30,13 @@ const UserLocationUpdates = (props: BaseExampleProps) => {
           </>
         )}
       </Bubble>
-    </Page>
+    </>
   );
 };
+
+UserLocationUpdates.title = 'User Location Updates';
+UserLocationUpdates.tags = ['UserLocation', 'UserLocation#onUpdate'];
+UserLocationUpdates.docs =
+  'Retrieves and shows location updates from UserLocation componen via the `onUpdate` callback';
 
 export default UserLocationUpdates;
