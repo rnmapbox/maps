@@ -4,6 +4,8 @@ import android.content.Context
 import android.graphics.BitmapFactory
 import android.graphics.PointF
 import android.graphics.RectF
+import android.os.Handler
+import android.os.Looper
 import android.util.Log
 import android.view.Gravity
 import android.view.View
@@ -102,6 +104,10 @@ interface RNMBXLifeCycleOwner : LifecycleOwner {
     fun handleLifecycleEvent(event: Lifecycle.Event)
 }
 
+fun interface Cancelable {
+    fun cancel()
+}
+
 class RNMBXLifeCycle {
     private var lifecycleOwner : RNMBXLifeCycleOwner? = null
 
@@ -149,6 +155,25 @@ class RNMBXLifeCycle {
 
     fun getState() : Lifecycle.State {
         return lifecycleOwner?.lifecycle?.currentState ?: Lifecycle.State.INITIALIZED;
+    }
+
+    var attachedToWindowWaiters : MutableList<()-> Unit> = mutableListOf()
+
+    fun callIfAttachedToWindow(callback: () -> Unit) : com.rnmapbox.rnmbx.components.mapview.Cancelable {
+        if (getState() == Lifecycle.State.STARTED) {
+            callback()
+            return com.rnmapbox.rnmbx.components.mapview.Cancelable {}
+        } else {
+            attachedToWindowWaiters.add(callback)
+            return com.rnmapbox.rnmbx.components.mapview.Cancelable {
+                attachedToWindowWaiters.removeIf { it === callback }
+            }
+        }
+    }
+
+    fun afterAttachFromLooper() {
+        attachedToWindowWaiters.forEach { it() }
+        attachedToWindowWaiters.clear()
     }
 }
 
@@ -213,6 +238,11 @@ open class RNMBXMapView(private val mContext: Context, var mManager: RNMBXMapVie
 
     fun getMapboxMap(): MapboxMap {
         return mapView.getMapboxMap()
+    }
+
+    override fun setId(id: Int) {
+        super.setId(id)
+        mManager.tagAssigned(id)
     }
 
     val pointAnnotationManager: PointAnnotationManager?
@@ -438,6 +468,8 @@ open class RNMBXMapView(private val mContext: Context, var mManager: RNMBXMapVie
             feature = childView
         } else if (childView is RCTLayer<*>) {
             feature = childView as AbstractMapFeature?
+        } else if (childView is AbstractMapFeature) {
+            feature = childView as AbstractMapFeature
         } else if (childView is ViewGroup) {
             val children = childView
             Logger.w(LOG_TAG, "Adding non map components as a child of a map is deprecated!")
@@ -447,7 +479,6 @@ open class RNMBXMapView(private val mContext: Context, var mManager: RNMBXMapVie
         }
 
         val addToMap = styleLoaded
-
 
         var entry = FeatureEntry(feature, childView, false)
         if (addToMap) {
@@ -1412,6 +1443,13 @@ open class RNMBXMapView(private val mContext: Context, var mManager: RNMBXMapVie
     override fun onAttachedToWindow() {
         lifecycle.onAttachedToWindow(this)
         super.onAttachedToWindow()
+        Handler(Looper.getMainLooper()).post {
+            lifecycle.afterAttachFromLooper()
+        }
+    }
+
+    fun callIfAttachedToWindow(callback: () -> Unit) {
+       lifecycle.callIfAttachedToWindow(callback)
     }
 
     override fun onLayoutChange(

@@ -47,6 +47,7 @@ import QuerySourceFeatures from '../examples/FillRasterLayer/QuerySourceFeatures
 import WatercolorRasterTiles from '../examples/FillRasterLayer/WatercolorRasterTiles';
 // LINE LAYER
 import GradientLine from '../examples/LineLayer/GradientLine';
+import DrawPolyline from '../examples/LineLayer/DrawPolyline';
 // MAP
 import ChangeLayerColor from '../examples/Map/ChangeLayerColor';
 import CreateOfflineRegion from '../examples/Map/CreateOfflineRegion';
@@ -87,6 +88,8 @@ import MapHandlers from '../examples/V10/MapHandlers';
 import Markers from '../examples/V10/Markers';
 import QueryTerrainElevation from '../examples/V10/QueryTerrainElevation';
 import TerrainSkyAtmosphere from '../examples/V10/TerrainSkyAtmosphere';
+// V11
+import StyleImportConfig from '../examples/V11/StyleImportConfig';
 
 const MostRecentExampleKey = '@recent_example';
 
@@ -247,6 +250,12 @@ class ExampleGroup implements ExampleNode {
   updateIfNeeded(_updated: () => void): void {}
 }
 
+function example(
+  Component: ItemComponent & { title: string; tags: string[]; docs: string },
+) {
+  return new ExampleItem(Component.title, Component);
+}
+
 const BugReportPage =
   (Klass: React.ComponentType<PageProps>) =>
   ({ ...props }: PageProps) =>
@@ -267,6 +276,7 @@ const Examples = new ExampleGroup('React Native Mapbox', [
     new ExampleItem('Camera Animation', CameraAnimation),
     new ExampleItem('Map Handlers', MapHandlers),
   ]),
+  new ExampleGroup('V11', [example(StyleImportConfig)]),
   new ExampleGroup('Map', [
     new ExampleItem('Show Map', ShowMap),
     new ExampleItem('Show Map With Local Style.JSON', ShowMapLocalStyle),
@@ -329,6 +339,7 @@ const Examples = new ExampleGroup('React Native Mapbox', [
   ]),
   new ExampleGroup('LineLayer', [
     new ExampleItem('GradientLine', GradientLine),
+    example(DrawPolyline),
   ]),
   new ExampleGroup('Annotations', [
     new ExampleItem('Marker Positions & Anchors', Markers),

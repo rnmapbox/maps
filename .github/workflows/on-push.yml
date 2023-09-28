@@ -77,6 +77,20 @@ jobs:
       MAPBOX_ACCESS_TOKEN: ${{ secrets.MAPBOX_ACCESS_TOKEN }}
       MAPBOX_DOWNLOAD_TOKEN: ${{ secrets.MAPBOX_DOWNLOAD_TOKEN }}
 
+  call_android_workflow_fabric:
+    name: "Android/Mapbox/Fabric"
+    needs: [lint_test_generate,has_mapbox_token]
+    uses: ./.github/workflows/android-actions.yml
+    with:
+      NVMRC: ${{ needs.lint_test_generate.outputs.NVMRC }}
+      MAP_IMPL: mapbox
+      NEW_ARCH: true
+    if: needs.has_mapbox_token.outputs.has-mapbox-token == 'true'
+    secrets:
+      MAPBOX_ACCESS_TOKEN: ${{ secrets.MAPBOX_ACCESS_TOKEN }}
+      MAPBOX_DOWNLOAD_TOKEN: ${{ secrets.MAPBOX_DOWNLOAD_TOKEN }}
+
+
   call_android_workflow_11:
     name: "Android/Mapbox11"
     needs: [lint_test_generate,has_mapbox_token]
@@ -97,6 +111,19 @@ jobs:
     with:
       NVMRC: ${{ needs.lint_test_generate.outputs.NVMRC }}
       MAP_IMPL: mapbox
+    secrets:
+      MAPBOX_ACCESS_TOKEN: ${{ secrets.MAPBOX_ACCESS_TOKEN }}
+      MAPBOX_DOWNLOAD_TOKEN: ${{ secrets.MAPBOX_DOWNLOAD_TOKEN }}
+
+  call_ios_workflow_fabric:
+    name: "iOS/Mapbox/Fabric"
+    needs: [lint_test_generate,has_mapbox_token]
+    uses: ./.github/workflows/ios-actions.yml
+    if: needs.has_mapbox_token.outputs.has-mapbox-token == 'true'
+    with:
+      NVMRC: ${{ needs.lint_test_generate.outputs.NVMRC }}
+      MAP_IMPL: mapbox
+      NEW_ARCH: true
     secrets:
       MAPBOX_ACCESS_TOKEN: ${{ secrets.MAPBOX_ACCESS_TOKEN }}
       MAPBOX_DOWNLOAD_TOKEN: ${{ secrets.MAPBOX_DOWNLOAD_TOKEN }}

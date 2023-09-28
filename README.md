@@ -175,6 +175,7 @@ const styles = StyleSheet.create({
 ### Components
 
 - [MapView](/docs/MapView.md)
+- [StyleImport](/docs/StyleImport.md)
 - [Light](/docs/Light.md)
 - [StyleSheet](/docs/StyleSheet.md)
 - [PointAnnotation](/docs/PointAnnotation.md)

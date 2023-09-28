@@ -10,6 +10,10 @@ const prettier = require('prettier');
 const prettierrc = require('../.prettierrc.js');
 const styleSpecJSON = require('../style-spec/v8.json');
 
+const {
+  generateCodegenJavaOldArch,
+  javaOldArchDir,
+} = require('./codegen-old-arch.js');
 const DocJSONBuilder = require('./autogenHelpers/DocJSONBuilder');
 const MarkdownBuilder = require('./autogenHelpers/MarkdownBuilder');
 
@@ -450,6 +454,9 @@ async function generate() {
   const markdownBuilder = new MarkdownBuilder();
   await docBuilder.generate();
   await markdownBuilder.generate();
+
+  await generateCodegenJavaOldArch();
+  outputPaths.push(javaOldArchDir());
 
   // Check if any generated files changed
   try {

@@ -7,9 +7,11 @@ import com.facebook.react.viewmanagers.RNMBXAndroidTextureMapViewManagerDelegate
 import com.facebook.react.viewmanagers.RNMBXAndroidTextureMapViewManagerInterface
 import com.facebook.react.viewmanagers.RNMBXMapViewManagerDelegate
 import com.mapbox.maps.MapInitOptions
+import com.rnmapbox.rnmbx.utils.ViewTagResolver
 
-class RNMBXAndroidTextureMapViewManager(context: ReactApplicationContext) : RNMBXMapViewManager(
-    context
+class RNMBXAndroidTextureMapViewManager(context: ReactApplicationContext, viewTagResolver: ViewTagResolver<RNMBXMapView>) : RNMBXMapViewManager(
+    context,
+    viewTagResolver
 ), RNMBXAndroidTextureMapViewManagerInterface<RNMBXMapView> {
     private val mDelegate: ViewManagerDelegate<RNMBXMapView>
 

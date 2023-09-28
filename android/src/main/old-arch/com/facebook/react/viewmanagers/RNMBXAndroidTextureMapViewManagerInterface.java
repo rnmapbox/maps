@@ -22,7 +22,6 @@ public interface RNMBXAndroidTextureMapViewManagerInterface<T extends View> {
   void setCompassPosition(T view, Dynamic value);
   void setCompassViewPosition(T view, Dynamic value);
   void setCompassViewMargins(T view, Dynamic value);
-  void setCompassImage(T view, Dynamic value);
   void setScaleBarEnabled(T view, Dynamic value);
   void setScaleBarPosition(T view, Dynamic value);
   void setZoomEnabled(T view, Dynamic value);
@@ -33,4 +32,7 @@ public interface RNMBXAndroidTextureMapViewManagerInterface<T extends View> {
   void setProjection(T view, Dynamic value);
   void setLocalizeLabels(T view, Dynamic value);
   void setStyleURL(T view, Dynamic value);
+  void setScaleBarViewMargins(T view, Dynamic value);
+  void setAttributionViewMargins(T view, Dynamic value);
+  void setAttributionViewPosition(T view, Dynamic value);
 }

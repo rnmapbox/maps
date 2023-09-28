@@ -1074,13 +1074,13 @@ PODS:
     - ReactCommon/turbomodule/bridging
     - ReactCommon/turbomodule/core
     - Yoga
-  - rnmapbox-maps (10.1.0-beta.4):
+  - rnmapbox-maps (10.1.0-beta.7):
     - MapboxMaps (~> 10.16.0)
     - React
     - React-Core
-    - rnmapbox-maps/DynamicLibrary (= 10.1.0-beta.4)
+    - rnmapbox-maps/DynamicLibrary (= 10.1.0-beta.7)
     - Turf
-  - rnmapbox-maps/DynamicLibrary (10.1.0-beta.4):
+  - rnmapbox-maps/DynamicLibrary (10.1.0-beta.7):
     - MapboxMaps (~> 10.16.0)
     - RCT-Folly
     - RCTRequired
@@ -1374,7 +1374,7 @@ SPEC CHECKSUMS:
   React-utils: b79f2411931f9d3ea5781404dcbb2fa8a837e13a
   ReactCommon: 4b2bdcb50a3543e1c2b2849ad44533686610826d
   RNCAsyncStorage: 2b77010cff31de7199eb7f65c59ae35abf9970b1
-  rnmapbox-maps: 5937147064b01dbb2dc8c8360595b249367c80ee
+  rnmapbox-maps: c89e425121d05d429b17a0d2fd13b938ba0cbc88
   RNScreens: cba72a26a6c967765a8388fe85f78e7771012ca1
   RNSVG: df9aaada196f6a61c8e30dc55d41e6c108a954e7
   RNVectorIcons: 61c44830bebe662f0bcb40aad2e6a31a34c8d8ba

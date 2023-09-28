@@ -39,7 +39,7 @@ module.exports = {
     'eslint:recommended',
     'plugin:react/recommended',
     'plugin:jest/recommended',
-    '@react-native-community',
+    '@react-native',
     'prettier',
   ],
   rules: {
@@ -98,7 +98,7 @@ module.exports = {
       extends: [
         'eslint:recommended',
         'plugin:react/recommended',
-        '@react-native-community',
+        '@react-native',
         'plugin:@typescript-eslint/recommended',
         'prettier',
       ],

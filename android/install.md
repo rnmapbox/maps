@@ -35,6 +35,20 @@ allprojects {
 }
 ```
 
+### Setting Mapbox implementation
+
+Note 10.1 or later only supports mapbox 10 and 11 implementations. So you no longer need to set this variable:
+
+Set `RNMapboxMapsImpl` in `android/build.gradle > buildscript > ext` section
+
+```groovy
+buildscript {
+    ext {
+        RNMapboxMapsImpl = 'mapbox'
+    }
+}
+```
+
 ### Using non default mapbox version
 
 *Warning*: If you set a custom version, make sure you revisit, any time you update @rnmapbox/maps. Setting it to earlier version than what we exepect will likely result in a build error.

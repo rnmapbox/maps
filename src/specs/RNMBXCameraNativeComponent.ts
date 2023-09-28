@@ -1,8 +1,12 @@
 import type { HostComponent, ViewProps } from 'react-native';
 import codegenNativeComponent from 'react-native/Libraries/Utilities/codegenNativeComponent';
-import { DirectEventHandler } from 'react-native/Libraries/Types/CodegenTypes';
+import {
+  DirectEventHandler,
+  Double,
+  Int32,
+} from 'react-native/Libraries/Types/CodegenTypes';
 
-import type { UnsafeMixed } from './codegenUtils';
+import type { NativeCameraStop, UnsafeMixed } from './codegenUtils';
 
 type UserTrackingModeChangeEventType = {
   type: string;
@@ -13,24 +17,25 @@ type UserTrackingModeChangeEventType = {
 };
 
 export interface NativeProps extends ViewProps {
-  maxBounds?: UnsafeMixed;
-  animationDuration?: UnsafeMixed;
-  animationMode?: UnsafeMixed;
-  defaultStop?: UnsafeMixed;
-  userTrackingMode?: UnsafeMixed;
+  maxBounds?: UnsafeMixed<string>;
+  animationDuration?: UnsafeMixed<Double>;
+  animationMode?: UnsafeMixed<string>;
+  defaultStop?: UnsafeMixed<NativeCameraStop>;
+  userTrackingMode?: UnsafeMixed<Int32>;
 
-  followUserLocation?: UnsafeMixed;
-  followUserMode?: UnsafeMixed;
-  followZoomLevel?: UnsafeMixed;
-  followPitch?: UnsafeMixed;
-  followHeading?: UnsafeMixed;
-  followPadding?: UnsafeMixed;
+  followUserLocation?: UnsafeMixed<boolean>;
+  followUserMode?: UnsafeMixed<string>;
+  followZoomLevel?: UnsafeMixed<Double>;
+  followPitch?: UnsafeMixed<Double>;
+  followHeading?: UnsafeMixed<Double>;
+  followPadding?: UnsafeMixed<any>;
 
-  zoomLevel?: UnsafeMixed;
-  maxZoomLevel?: UnsafeMixed;
-  minZoomLevel?: UnsafeMixed;
+  zoomLevel?: UnsafeMixed<Double>;
+  maxZoomLevel?: UnsafeMixed<Double>;
+  minZoomLevel?: UnsafeMixed<Double>;
+  stop?: UnsafeMixed<NativeCameraStop>;
+
   onUserTrackingModeChange?: DirectEventHandler<UserTrackingModeChangeEventType>;
-  stop?: UnsafeMixed;
 }
 
 export default codegenNativeComponent<NativeProps>(

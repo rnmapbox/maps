@@ -86,6 +86,8 @@ NativeModules.RNMBXModule = {
   getAccessToken: () => Promise.resolve('test-token'),
   setTelemetryEnabled: jest.fn(),
   setConnected: jest.fn(),
+
+  MapboxV10: true,
 };
 
 NativeModules.RNMBXOfflineModule = {

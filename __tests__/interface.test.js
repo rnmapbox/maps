@@ -14,6 +14,7 @@ describe('Public Interface', () => {
       'Callout',
       'Camera',
       'UserLocation',
+      'StyleImport',
 
       // modules
       'offlineManager',

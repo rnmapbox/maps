@@ -1,8 +1,11 @@
 import type { HostComponent, ViewProps } from 'react-native';
 import codegenNativeComponent from 'react-native/Libraries/Utilities/codegenNativeComponent';
-import { DirectEventHandler } from 'react-native/Libraries/Types/CodegenTypes';
+import {
+  DirectEventHandler,
+  Int32,
+} from 'react-native/Libraries/Types/CodegenTypes';
 
-import type { UnsafeMixed } from './codegenUtils';
+import type { LocalizeLabels, Point, UnsafeMixed } from './codegenUtils';
 
 type OnCameraChangedEventType = { type: string; payload: string };
 type OnPressEventType = { type: string; payload: string };
@@ -11,33 +14,37 @@ type OnMapChangeEventType = { type: string; payload: string };
 export interface NativeProps extends ViewProps {
   onCameraChanged?: DirectEventHandler<OnCameraChangedEventType>;
 
-  attributionEnabled?: UnsafeMixed;
-  attributionPosition?: UnsafeMixed;
+  attributionEnabled?: UnsafeMixed<boolean>;
+  attributionPosition?: UnsafeMixed<any>;
 
-  logoEnabled?: UnsafeMixed;
-  logoPosition?: UnsafeMixed;
+  logoEnabled?: UnsafeMixed<boolean>;
+  logoPosition?: UnsafeMixed<any>;
 
-  compassEnabled?: UnsafeMixed;
-  compassFadeWhenNorth?: UnsafeMixed;
-  compassPosition?: UnsafeMixed;
-  compassViewPosition?: UnsafeMixed;
-  compassViewMargins?: UnsafeMixed;
-  compassImage?: UnsafeMixed;
+  compassEnabled?: UnsafeMixed<boolean>;
+  compassFadeWhenNorth?: UnsafeMixed<boolean>;
+  compassPosition?: UnsafeMixed<any>;
+  compassViewPosition?: UnsafeMixed<Int32>;
+  compassViewMargins?: UnsafeMixed<Point>;
 
-  scaleBarEnabled?: UnsafeMixed;
-  scaleBarPosition?: UnsafeMixed;
+  scaleBarEnabled?: UnsafeMixed<boolean>;
+  scaleBarPosition?: UnsafeMixed<any>;
 
-  zoomEnabled?: UnsafeMixed;
-  scrollEnabled?: UnsafeMixed;
-  rotateEnabled?: UnsafeMixed;
-  pitchEnabled?: UnsafeMixed;
+  zoomEnabled?: UnsafeMixed<boolean>;
+  scrollEnabled?: UnsafeMixed<boolean>;
+  rotateEnabled?: UnsafeMixed<boolean>;
+  pitchEnabled?: UnsafeMixed<boolean>;
 
-  requestDisallowInterceptTouchEvent?: UnsafeMixed;
+  requestDisallowInterceptTouchEvent?: UnsafeMixed<boolean>;
 
-  projection?: UnsafeMixed;
-  localizeLabels?: UnsafeMixed;
+  projection?: UnsafeMixed<string>;
+  localizeLabels?: UnsafeMixed<LocalizeLabels>;
 
-  styleURL?: UnsafeMixed;
+  styleURL?: UnsafeMixed<string>;
+
+  // Android only
+  scaleBarViewMargins?: UnsafeMixed<any>;
+  attributionViewMargins?: UnsafeMixed<any>;
+  attributionViewPosition?: UnsafeMixed<any>;
 
   onPress?: DirectEventHandler<OnPressEventType>;
   onLongPress?: DirectEventHandler<OnPressEventType>;

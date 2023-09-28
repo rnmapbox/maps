@@ -49,9 +49,6 @@ public class RNMBXAndroidTextureMapViewManagerDelegate<T extends View, U extends
       case "compassViewMargins":
         mViewManager.setCompassViewMargins(view, new DynamicFromObject(value));
         break;
-      case "compassImage":
-        mViewManager.setCompassImage(view, new DynamicFromObject(value));
-        break;
       case "scaleBarEnabled":
         mViewManager.setScaleBarEnabled(view, new DynamicFromObject(value));
         break;
@@ -81,6 +78,15 @@ public class RNMBXAndroidTextureMapViewManagerDelegate<T extends View, U extends
         break;
       case "styleURL":
         mViewManager.setStyleURL(view, new DynamicFromObject(value));
+        break;
+      case "scaleBarViewMargins":
+        mViewManager.setScaleBarViewMargins(view, new DynamicFromObject(value));
+        break;
+      case "attributionViewMargins":
+        mViewManager.setAttributionViewMargins(view, new DynamicFromObject(value));
+        break;
+      case "attributionViewPosition":
+        mViewManager.setAttributionViewPosition(view, new DynamicFromObject(value));
         break;
       default:
         super.setProperty(view, propName, value);

@@ -4765,6 +4765,48 @@
     "fileNameWithExt": "Style.tsx",
     "name": "Style"
   },
+  "StyleImport": {
+    "description": "Use StyleImport to set configuration options on the new standard style. **V11 only.**\n\nSee https://github.com/mapbox/mapbox-maps-ios/blob/main/Sources/MapboxMaps/Documentation.docc/Migrate%20to%20v11.md#21-the-mapbox-standard-style",
+    "methods": [],
+    "props": [
+      {
+        "name": "id",
+        "required": true,
+        "type": "string",
+        "default": "none",
+        "description": "id of the style import (eg. basemap)"
+      },
+      {
+        "name": "existing",
+        "required": true,
+        "type": "boolean",
+        "default": "none",
+        "description": "existing is now always required as true"
+      },
+      {
+        "name": "config",
+        "required": true,
+        "type": {
+          "name": "shape",
+          "value": [
+            {
+              "name": {
+                "name": "string"
+              },
+              "required": true,
+              "type": "string",
+              "default": "none",
+              "description": "FIX ME NO DESCRIPTION"
+            }
+          ]
+        },
+        "default": "none",
+        "description": "config is a dictionary of configuration options for the style import.\n\nSee https://github.com/mapbox/mapbox-maps-ios/blob/main/Sources/MapboxMaps/Documentation.docc/Migrate%20to%20v11.md#21-the-mapbox-standard-style"
+      }
+    ],
+    "fileNameWithExt": "StyleImport.tsx",
+    "name": "StyleImport"
+  },
   "SymbolLayer": {
     "description": "SymbolLayer is a style layer that renders icon and text labels at points or along lines on the map.",
     "displayName": "SymbolLayer",

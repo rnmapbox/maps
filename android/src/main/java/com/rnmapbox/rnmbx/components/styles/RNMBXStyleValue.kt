@@ -169,12 +169,12 @@ class RNMBXStyleValue(config: ReadableMap) {
                     config.getMap("enablePlacementTransitions")!!.getBoolean("value")
             }
             var duration = 300
-            val delay = 0
+            var delay = 0
             if (config.hasKey("duration") && ReadableType.Map == config.getType("duration")) {
                 duration = config.getMap("duration")!!.getInt("value")
             }
             if (config.hasKey("delay") && ReadableType.Map == config.getType("delay")) {
-                duration = config.getMap("delay")!!.getInt("value")
+                delay = config.getMap("delay")!!.getInt("value")
             }
             return Builder().duration(duration.toLong()).delay(delay.toLong()).build()
         }
