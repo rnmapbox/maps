@@ -287,25 +287,9 @@ class RNMBXCamera : RNMBXMapComponentBase {
       }
 
       if let locationModule = RNMBXLocationModule.shared {
-        var isSameProvider = false
-        #if !RNMBX_11
-        if let currentProvider = map.location.locationProvider as? AnyObject, let newProvider = locationModule.locationProvider as? AnyObject {
-          if currentProvider === newProvider {
-            isSameProvider = true
-          }
-        }
-        #endif
-        if !isSameProvider {
-          #if RNMBX_11
-          map.location.override(provider: locationModule.locationProvider)
-          #else
-          map.location.overrideLocationProvider(with: locationModule.locationProvider)
-          #endif
-        }
+        locationModule.override(for: map.location)
       }
-      #if RNMBX_11
-      // RNMBX_11_TODO
-      #else
+      #if !RNMBX_11
       map.location.locationProvider.requestWhenInUseAuthorization()
       #endif
       var trackingModeChanged = false
