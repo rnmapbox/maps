@@ -2,6 +2,12 @@ jest.mock('react-native/Libraries/Image/resolveAssetSource', () => {
   return () => ({ uri: 'asset://test.png' });
 });
 
+jest.mock('react-native/Libraries/StyleSheet/StyleSheet', () => {
+  return {
+    create: (x) => x,
+  };
+});
+
 jest.mock('react-native/Libraries/EventEmitter/NativeEventEmitter', () => {
   function MockEventEmitter() {}
   MockEventEmitter.prototype.addListener = jest.fn(() => ({

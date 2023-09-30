@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import { Text } from 'react-native';
 import MapboxGL, { Location } from '@rnmapbox/maps';
 
-import sheet from '../../styles/sheet';
 import Bubble from '../common/Bubble';
 
 const UserLocationUpdates = () => {
@@ -10,7 +9,7 @@ const UserLocationUpdates = () => {
 
   return (
     <>
-      <MapboxGL.MapView style={sheet.matchParent}>
+      <MapboxGL.MapView style={styles.matchParent}>
         <MapboxGL.UserLocation
           onUpdate={(newLocation) => setLocation(newLocation)}
         />
@@ -32,6 +31,12 @@ const UserLocationUpdates = () => {
       </Bubble>
     </>
   );
+};
+
+const styles = {
+  matchParent: {
+    flex: 1,
+  },
 };
 
 UserLocationUpdates.title = 'User Location Updates';

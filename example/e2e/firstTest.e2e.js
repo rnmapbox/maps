@@ -1,3 +1,15 @@
+const { mkdir, copyFile } = require('fs/promises');
+
+async function saveImage(imageName) {
+  const imagePath = await device.takeScreenshot('Show Click');
+  console.log('[x] imagePath =>', imagePath);
+  const destDir = '/tmp/screenshots';
+  const destPath = `${destDir}/Show Click.png`;
+  await mkdir(destDir, { recursive: true });
+  await copyFile(imagePath, destPath);
+  console.log('[x] destPath =>', destPath);
+}
+
 describe('Maps Example App', () => {
   beforeAll(async () => {
     await device.launchApp({ permissions: { location: 'always' } });
@@ -26,6 +38,7 @@ describe('Maps Example App', () => {
     await expect(element(by.text('Show Map'))).toBeVisible();
     await element(by.text('Show Map')).tap();
     await expect(element(by.id('show-map'))).toBeVisible();
+    await saveImage('Show Map');
   });
 
   it('should show click location', async () => {
@@ -45,5 +58,6 @@ describe('Maps Example App', () => {
     await waitFor(element(by.id('location-bubble-latitude')))
       .toBeVisible()
       .withTimeout(1000);
+    await saveImage('Show Click');
   });
 });
