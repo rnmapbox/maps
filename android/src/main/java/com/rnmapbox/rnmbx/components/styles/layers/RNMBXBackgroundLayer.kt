@@ -6,7 +6,7 @@ import com.rnmapbox.rnmbx.components.styles.RNMBXStyle
 import com.rnmapbox.rnmbx.components.styles.RNMBXStyleFactory
 import com.rnmapbox.rnmbx.utils.Logger
 
-class RNMBXBackgroundLayer(context: Context?) : RCTLayer<BackgroundLayer?>(
+class RNMBXBackgroundLayer(context: Context?) : RNMBXLayer<BackgroundLayer?>(
     context!!
 ) {
     override fun makeLayer(): BackgroundLayer {

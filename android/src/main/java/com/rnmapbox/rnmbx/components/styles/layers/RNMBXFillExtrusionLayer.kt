@@ -8,7 +8,7 @@ import com.rnmapbox.rnmbx.components.styles.RNMBXStyle
 import com.rnmapbox.rnmbx.components.styles.RNMBXStyleFactory
 import com.rnmapbox.rnmbx.utils.Logger
 
-class RNMBXFillExtrusionLayer(context: Context?) : RCTLayer<FillExtrusionLayer?>(
+class RNMBXFillExtrusionLayer(context: Context?) : RNMBXLayer<FillExtrusionLayer?>(
     context!!
 ) {
     private var mSourceLayerID: String? = null

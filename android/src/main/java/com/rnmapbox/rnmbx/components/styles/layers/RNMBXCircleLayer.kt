@@ -8,7 +8,7 @@ import com.rnmapbox.rnmbx.components.styles.RNMBXStyle
 import com.rnmapbox.rnmbx.components.styles.RNMBXStyleFactory
 import com.rnmapbox.rnmbx.utils.Logger
 
-class RNMBXCircleLayer(context: Context?) : RCTLayer<CircleLayer?>(
+class RNMBXCircleLayer(context: Context?) : RNMBXLayer<CircleLayer?>(
     context!!
 ) {
     private var mSourceLayerID: String? = null

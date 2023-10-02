@@ -3,14 +3,14 @@ package com.rnmapbox.rnmbx.components.styles.layers
 import android.content.Context
 import com.mapbox.maps.extension.style.expressions.generated.Expression
 import com.mapbox.maps.extension.style.layers.generated.SkyLayer
-import com.rnmapbox.rnmbx.components.styles.layers.RCTLayer
+import com.rnmapbox.rnmbx.components.styles.layers.RNMBXLayer
 import com.rnmapbox.rnmbx.utils.Logger.e
 import com.rnmapbox.rnmbx.components.mapview.RNMBXMapView
 import com.rnmapbox.rnmbx.components.styles.RNMBXStyleFactory
 import com.rnmapbox.rnmbx.components.styles.RNMBXStyle
 import com.rnmapbox.rnmbx.utils.Logger
 
-class RNMBXSkyLayer(context: Context?) : RCTLayer<SkyLayer?>(
+class RNMBXSkyLayer(context: Context?) : RNMBXLayer<SkyLayer?>(
     context!!
 ) {
     private val mSourceLayerID: String? = null

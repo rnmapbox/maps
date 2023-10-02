@@ -8,7 +8,7 @@ import com.rnmapbox.rnmbx.components.styles.RNMBXStyle
 import com.rnmapbox.rnmbx.components.styles.RNMBXStyleFactory
 import com.rnmapbox.rnmbx.utils.Logger
 
-class RNMBXLineLayer(context: Context?) : RCTLayer<LineLayer?>(
+class RNMBXLineLayer(context: Context?) : RNMBXLayer<LineLayer?>(
     context!!
 ) {
     private var mSourceLayerID: String? = null

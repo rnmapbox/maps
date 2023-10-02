@@ -4,7 +4,6 @@ import android.content.Context
 import com.mapbox.maps.extension.style.layers.Layer
 import com.rnmapbox.rnmbx.components.mapview.RNMBXMapView
 import com.mapbox.maps.Style
-import com.mapbox.maps.MapView
 import com.rnmapbox.rnmbx.components.styles.sources.AbstractSourceConsumer
 import com.facebook.react.bridge.ReadableMap
 import com.mapbox.maps.MapboxMap
@@ -12,19 +11,15 @@ import com.facebook.react.bridge.ReadableArray
 import com.rnmapbox.rnmbx.components.mapview.RNMBXMapView.FoundLayerCallback
 import com.facebook.common.logging.FLog
 import com.mapbox.maps.extension.style.expressions.dsl.generated.all
-import com.mapbox.maps.extension.style.expressions.dsl.generated.literal
 import com.mapbox.maps.extension.style.expressions.generated.Expression
 import com.mapbox.maps.extension.style.layers.*
 import com.mapbox.maps.extension.style.layers.properties.generated.Visibility
 import com.rnmapbox.rnmbx.components.RemovalReason
-import com.rnmapbox.rnmbx.components.styles.layers.RCTLayer
-import com.rnmapbox.rnmbx.components.styles.sources.RCTSource
-import com.rnmapbox.rnmbx.modules.RNMBXLogging
 import com.rnmapbox.rnmbx.utils.ExpressionParser
 import java.lang.ClassCastException
 import com.rnmapbox.rnmbx.utils.Logger
 
-abstract class RCTLayer<T : Layer?>(protected var mContext: Context) : AbstractSourceConsumer(
+abstract class RNMBXLayer<T : Layer?>(protected var mContext: Context) : AbstractSourceConsumer(
     mContext
 ) {
     override var iD: String? = null
@@ -159,7 +154,7 @@ abstract class RCTLayer<T : Layer?>(protected var mContext: Context) : AbstractS
             return;
         } */
 
-        Logger.logged("RCTLayer.add") {
+        Logger.logged("RNMBXLayer.add") {
             style!!.addLayer(mLayer!!);
             mMapView!!.layerAdded(mLayer!!)
         }
@@ -297,7 +292,7 @@ abstract class RCTLayer<T : Layer?>(protected var mContext: Context) : AbstractS
             if (layer != null) {
                 it.removeStyleLayer(layer.layerId)
             } else {
-                Logger.e("RCTLayer","mLayer is null on removal layer from map")
+                Logger.e("RNMBXLayer","mLayer is null on removal layer from map")
             }
         }
         return super.removeFromMap(mapView, reason)
@@ -316,6 +311,6 @@ abstract class RCTLayer<T : Layer?>(protected var mContext: Context) : AbstractS
     }
 
     companion object {
-        const val LOG_TAG = "RCTLayer"
+        const val LOG_TAG = "RNMBXLayer"
     }
 }

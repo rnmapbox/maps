@@ -8,7 +8,7 @@ import com.rnmapbox.rnmbx.components.styles.RNMBXStyle
 import com.rnmapbox.rnmbx.components.styles.RNMBXStyleFactory
 import com.rnmapbox.rnmbx.utils.Logger
 
-class RNMBXHeatmapLayer(context: Context?) : RCTLayer<HeatmapLayer?>(
+class RNMBXHeatmapLayer(context: Context?) : RNMBXLayer<HeatmapLayer?>(
     context!!
 ) {
     private var mSourceLayerID: String? = null
