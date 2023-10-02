@@ -151,7 +151,7 @@ open class RNMBXMapView : MapView {
     get { return self }
   }
 
-  func addToMap(_ subview: UIView) {
+  @objc public func addToMap(_ subview: UIView) {
     if let mapComponent = subview as? RNMBXMapComponent {
       let style = mapView.mapboxMap.style
       var addToMap = false
@@ -177,7 +177,7 @@ open class RNMBXMapView : MapView {
     }
   }
   
-  func removeFromMap(_ subview: UIView) {
+  @objc public func removeFromMap(_ subview: UIView) {
     if let mapComponent = subview as? RNMBXMapComponent {
       var entryIndex = features.firstIndex { $0.view == subview }
       if let entryIndex = entryIndex {

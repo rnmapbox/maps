@@ -6,11 +6,12 @@ import React, {
   useMemo,
   useRef,
 } from 'react';
-import { NativeModules, requireNativeComponent } from 'react-native';
+import { NativeModules } from 'react-native';
 
 import { MapboxGLEvent } from '../types';
 import { makeLatLngBounds, makePoint } from '../utils/geoUtils';
 import { type NativeRefType } from '../utils/nativeRef';
+import NativeCameraView from '../specs/RNMBXCameraNativeComponent';
 
 const NativeModule = NativeModules.RNMBXModule;
 
@@ -55,8 +56,6 @@ const nativeAnimationMode = (
       return NativeCameraModes.Ease;
   }
 };
-
-export const NATIVE_MODULE_NAME = 'RNMBXCamera';
 
 // Native module types.
 
@@ -242,7 +241,7 @@ export const Camera = memo(
         onUserTrackingModeChange,
       } = props;
 
-      const nativeCamera = useRef<typeof RNMBXCamera>(
+      const nativeCamera = useRef<typeof NativeCameraView>(
         null,
       ) as NativeRefType<NativeCameraProps>;
 
@@ -308,6 +307,29 @@ export const Camera = memo(
           return _nativeStop;
         },
         [props.followUserLocation],
+      );
+
+      // since codegen uses `payload` name in cpp code for creating payload for event,
+      // we rename it to `payloadRenamed` to avoid name collision there on new arch
+      const _onUserTrackingModeChange = useCallback(
+        (
+          event: MapboxGLEvent<
+            'usertrackingmodechange',
+            {
+              followUserLocation: boolean;
+              followUserMode: UserTrackingMode | null;
+            }
+          >,
+        ) => {
+          if (onUserTrackingModeChange) {
+            if (!event.nativeEvent.payload) {
+              // @ts-expect-error see the comment above
+              event.nativeEvent.payload = event.nativeEvent.payloadRenamed;
+            }
+            onUserTrackingModeChange(event);
+          }
+        },
+        [onUserTrackingModeChange],
       );
 
       const nativeDefaultStop = useMemo((): NativeCameraStop | null => {
@@ -540,6 +562,7 @@ export const Camera = memo(
       return (
         <RNMBXCamera
           testID={'Camera'}
+          // @ts-expect-error just codegen stuff
           ref={nativeCamera}
           stop={nativeStop}
           animationDuration={animationDuration}
@@ -554,14 +577,14 @@ export const Camera = memo(
           minZoomLevel={minZoomLevel}
           maxZoomLevel={maxZoomLevel}
           maxBounds={nativeMaxBounds}
-          onUserTrackingModeChange={onUserTrackingModeChange}
+          // @ts-expect-error just codegen stuff
+          onUserTrackingModeChange={_onUserTrackingModeChange}
         />
       );
     },
   ),
 );
 
-const RNMBXCamera =
-  requireNativeComponent<NativeCameraProps>(NATIVE_MODULE_NAME);
+const RNMBXCamera = NativeCameraView;
 
 export type Camera = CameraRef;

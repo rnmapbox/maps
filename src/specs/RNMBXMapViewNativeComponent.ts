@@ -1,57 +1,53 @@
 import type { HostComponent, ViewProps } from 'react-native';
 import codegenNativeComponent from 'react-native/Libraries/Utilities/codegenNativeComponent';
 import {
-  WithDefault,
   DirectEventHandler,
   Int32,
 } from 'react-native/Libraries/Types/CodegenTypes';
 
-import type { UnsafeMixed } from './codegenUtils';
+import type { LocalizeLabels, Point, UnsafeMixed } from './codegenUtils';
 
 type OnCameraChangedEventType = { type: string; payload: string };
 type OnPressEventType = { type: string; payload: string };
 type OnMapChangeEventType = { type: string; payload: string };
 
-type Point = {
-  x: Int32;
-  y: Int32;
-};
-
-type LocalizeLabels = {
-  locale: string;
-  layerIds?: string[];
-};
-
 export interface NativeProps extends ViewProps {
   onCameraChanged?: DirectEventHandler<OnCameraChangedEventType>;
 
-  attributionEnabled?: boolean;
+  attributionEnabled?: UnsafeMixed<boolean>;
   attributionPosition?: UnsafeMixed<any>;
 
-  logoEnabled?: boolean;
+  logoEnabled?: UnsafeMixed<boolean>;
   logoPosition?: UnsafeMixed<any>;
 
-  compassEnabled?: boolean;
-  compassFadeWhenNorth?: boolean;
+  compassEnabled?: UnsafeMixed<boolean>;
+  compassFadeWhenNorth?: UnsafeMixed<boolean>;
   compassPosition?: UnsafeMixed<any>;
-  compassViewPosition?: Int32;
-  compassViewMargins?: Point;
-  compassImage?: string;
+  compassViewPosition?: UnsafeMixed<Int32>;
+  compassViewMargins?: UnsafeMixed<Point>;
 
-  scaleBarEnabled?: boolean;
+  scaleBarEnabled?: UnsafeMixed<boolean>;
   scaleBarPosition?: UnsafeMixed<any>;
 
-  zoomEnabled?: boolean;
-  scrollEnabled?: boolean;
-  rotateEnabled?: boolean;
-  pitchEnabled?: boolean;
+  zoomEnabled?: UnsafeMixed<boolean>;
+  scrollEnabled?: UnsafeMixed<boolean>;
+  rotateEnabled?: UnsafeMixed<boolean>;
+  pitchEnabled?: UnsafeMixed<boolean>;
 
-  requestDisallowInterceptTouchEvent?: boolean;
+  requestDisallowInterceptTouchEvent?: UnsafeMixed<boolean>;
 
-  projection?: WithDefault<'mercator' | 'globe', 'mercator'>;
-  localizeLabels?: LocalizeLabels;
+  projection?: UnsafeMixed<string>;
+  localizeLabels?: UnsafeMixed<LocalizeLabels>;
 
-  styleURL?: string;
+  styleURL?: UnsafeMixed<string>;
+
+  // Android only
+  scaleBarViewMargins?: UnsafeMixed<any>;
+  attributionViewMargins?: UnsafeMixed<any>;
+  attributionViewPosition?: UnsafeMixed<any>;
+
+  // iOS only
+  compassImage?: UnsafeMixed<string>;
 
   onPress?: DirectEventHandler<OnPressEventType>;
   onLongPress?: DirectEventHandler<OnPressEventType>;

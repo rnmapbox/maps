@@ -1,8 +1,8 @@
 import Foundation
 import MapboxMaps
 
-@objc(RNMBXCameraManager)
-class RNMBXCameraManager  : RCTViewManager {
+@objc(RNMBXCameraViewManager)
+class RNMBXCameraViewManager  : RCTViewManager {
     @objc
     override static func requiresMainQueueSetup() -> Bool {
         return true

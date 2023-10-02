@@ -118,71 +118,72 @@ open class RNMBXMapComponentBase : UIView, RNMBXMapComponent {
   }
 }
 
-class RNMBXCamera : RNMBXMapComponentBase {
+@objc(RNMBXCamera)
+open class RNMBXCamera : RNMBXMapComponentBase {
   var cameraAnimator: BasicCameraAnimator?
   let cameraUpdateQueue = CameraUpdateQueue()
   
   // MARK: React properties
   
-  @objc var animationDuration: NSNumber?
+  @objc public var animationDuration: NSNumber?
   
-  @objc var animationMode: NSString?
+  @objc public var animationMode: NSString?
   
-  @objc var defaultStop: [String: Any]?
+  @objc public var defaultStop: [String: Any]?
   
-  @objc var followUserLocation : Bool = false {
+  @objc public var followUserLocation : Bool = false {
     didSet {
       _updateCameraFromTrackingMode()
     }
   }
   
-  @objc var followUserMode: String? {
+  @objc public var followUserMode: String? {
     didSet {
       _updateCameraFromTrackingMode()
     }
   }
   
-  @objc var followZoomLevel: NSNumber? {
+  @objc public var followZoomLevel: NSNumber? {
     didSet {
       _updateCameraFromTrackingMode()
     }
   }
   
-  @objc var followPitch: NSNumber? {
+  @objc public var followPitch: NSNumber? {
     didSet {
       _updateCameraFromTrackingMode()
     }
   }
   
-  @objc var followHeading: NSNumber? {
+  @objc public var followHeading: NSNumber? {
     didSet {
       _updateCameraFromTrackingMode()
     }
   }
   
-  @objc var followPadding: NSDictionary? {
+  @objc public var followPadding: NSDictionary? {
     didSet {
       _updateCameraFromTrackingMode()
     }
   }
   
-  @objc var maxZoomLevel: NSNumber? {
+  @objc public var maxZoomLevel: NSNumber? {
     didSet { _updateMaxBounds() }
   }
   
-  @objc var minZoomLevel: NSNumber? {
+  @objc public var minZoomLevel: NSNumber? {
     didSet { _updateMaxBounds() }
   }
   
-  @objc var onUserTrackingModeChange: RCTBubblingEventBlock? = nil
+  @objc public var onUserTrackingModeChange: RCTBubblingEventBlock? = nil
   
-  @objc var stop: [String: Any]? {
+  @objc public var stop: [String: Any]? {
     didSet {
       _updateCamera()
     }
   }
   
-  @objc var maxBounds: String? {
+  @objc public var maxBounds: String? {
     didSet {
       if let maxBounds = maxBounds {
         logged("RNMBXCamera.maxBounds") {
@@ -602,7 +603,7 @@ extension RNMBXCamera : ViewportStatusObserver {
     }
   }
 
-  func viewportStatusDidChange(from fromStatus: ViewportStatus,
+  public func viewportStatusDidChange(from fromStatus: ViewportStatus,
                                to toStatus: ViewportStatus,
                                reason: ViewportStatusChangeReason)
   {
@@ -630,4 +631,3 @@ extension RNMBXCamera : ViewportStatusObserver {
 private func toSeconds(_ ms: Double) -> TimeInterval {
   return ms * 0.001
 }
-

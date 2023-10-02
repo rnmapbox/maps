@@ -12,7 +12,6 @@ package com.facebook.react.viewmanagers;
 import android.view.View;
 import androidx.annotation.Nullable;
 import com.facebook.react.bridge.DynamicFromObject;
-import com.facebook.react.bridge.ReadableMap;
 import com.facebook.react.uimanager.BaseViewManagerDelegate;
 import com.facebook.react.uimanager.BaseViewManagerInterface;
 
@@ -24,64 +23,73 @@ public class RNMBXMapViewManagerDelegate<T extends View, U extends BaseViewManag
   public void setProperty(T view, String propName, @Nullable Object value) {
     switch (propName) {
       case "attributionEnabled":
-        mViewManager.setAttributionEnabled(view, value == null ? false : (boolean) value);
+        mViewManager.setAttributionEnabled(view, new DynamicFromObject(value));
         break;
       case "attributionPosition":
         mViewManager.setAttributionPosition(view, new DynamicFromObject(value));
         break;
       case "logoEnabled":
-        mViewManager.setLogoEnabled(view, value == null ? false : (boolean) value);
+        mViewManager.setLogoEnabled(view, new DynamicFromObject(value));
         break;
       case "logoPosition":
         mViewManager.setLogoPosition(view, new DynamicFromObject(value));
         break;
       case "compassEnabled":
-        mViewManager.setCompassEnabled(view, value == null ? false : (boolean) value);
+        mViewManager.setCompassEnabled(view, new DynamicFromObject(value));
         break;
       case "compassFadeWhenNorth":
-        mViewManager.setCompassFadeWhenNorth(view, value == null ? false : (boolean) value);
+        mViewManager.setCompassFadeWhenNorth(view, new DynamicFromObject(value));
         break;
       case "compassPosition":
         mViewManager.setCompassPosition(view, new DynamicFromObject(value));
         break;
       case "compassViewPosition":
-        mViewManager.setCompassViewPosition(view, value == null ? 0 : ((Double) value).intValue());
+        mViewManager.setCompassViewPosition(view, new DynamicFromObject(value));
         break;
       case "compassViewMargins":
-        mViewManager.setCompassViewMargins(view, (ReadableMap) value);
-        break;
-      case "compassImage":
-        mViewManager.setCompassImage(view, value == null ? null : (String) value);
+        mViewManager.setCompassViewMargins(view, new DynamicFromObject(value));
         break;
       case "scaleBarEnabled":
-        mViewManager.setScaleBarEnabled(view, value == null ? false : (boolean) value);
+        mViewManager.setScaleBarEnabled(view, new DynamicFromObject(value));
         break;
       case "scaleBarPosition":
         mViewManager.setScaleBarPosition(view, new DynamicFromObject(value));
         break;
       case "zoomEnabled":
-        mViewManager.setZoomEnabled(view, value == null ? false : (boolean) value);
+        mViewManager.setZoomEnabled(view, new DynamicFromObject(value));
         break;
       case "scrollEnabled":
-        mViewManager.setScrollEnabled(view, value == null ? false : (boolean) value);
+        mViewManager.setScrollEnabled(view, new DynamicFromObject(value));
         break;
       case "rotateEnabled":
-        mViewManager.setRotateEnabled(view, value == null ? false : (boolean) value);
+        mViewManager.setRotateEnabled(view, new DynamicFromObject(value));
         break;
       case "pitchEnabled":
-        mViewManager.setPitchEnabled(view, value == null ? false : (boolean) value);
+        mViewManager.setPitchEnabled(view, new DynamicFromObject(value));
         break;
       case "requestDisallowInterceptTouchEvent":
-        mViewManager.setRequestDisallowInterceptTouchEvent(view, value == null ? false : (boolean) value);
+        mViewManager.setRequestDisallowInterceptTouchEvent(view, new DynamicFromObject(value));
         break;
       case "projection":
-        mViewManager.setProjection(view, (String) value);
+        mViewManager.setProjection(view, new DynamicFromObject(value));
         break;
       case "localizeLabels":
-        mViewManager.setLocalizeLabels(view, (ReadableMap) value);
+        mViewManager.setLocalizeLabels(view, new DynamicFromObject(value));
         break;
       case "styleURL":
-        mViewManager.setStyleURL(view, value == null ? null : (String) value);
+        mViewManager.setStyleURL(view, new DynamicFromObject(value));
+        break;
+      case "scaleBarViewMargins":
+        mViewManager.setScaleBarViewMargins(view, new DynamicFromObject(value));
+        break;
+      case "attributionViewMargins":
+        mViewManager.setAttributionViewMargins(view, new DynamicFromObject(value));
+        break;
+      case "attributionViewPosition":
+        mViewManager.setAttributionViewPosition(view, new DynamicFromObject(value));
+        break;
+      case "compassImage":
+        mViewManager.setCompassImage(view, new DynamicFromObject(value));
         break;
       default:
         super.setProperty(view, propName, value);
