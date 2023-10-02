@@ -1,5 +1,5 @@
-@objc(RNMBXAtmosphereManager)
-class RNMBXAtmosphereManager: RCTViewManager {
+@objc(RNMBXAtmosphereViewManager)
+class RNMBXAtmosphereViewManager: RCTViewManager {
     @objc
     override static func requiresMainQueueSetup() -> Bool {
         return true
