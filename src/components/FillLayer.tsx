@@ -1,14 +1,13 @@
 import React from 'react';
-import { NativeModules, requireNativeComponent } from 'react-native';
+import { NativeModules } from 'react-native';
 
 import { FilterExpression, FillLayerStyleProps } from '../utils/MapboxStyles';
 import { StyleValue } from '../utils/StyleValue';
+import RNMBXFillLayerNativeComponent from '../specs/RNMBXFillLayerNativeComponent';
 
 import AbstractLayer from './AbstractLayer';
 
 const MapboxGL = NativeModules.RNMBXModule;
-
-export const NATIVE_MODULE_NAME = 'RNMBXFillLayer';
 
 export type Props = {
   /**
@@ -86,11 +85,11 @@ class FillLayer extends AbstractLayer<Props, NativeTypeProps> {
       ...this.baseProps,
       sourceLayerID: this.props.sourceLayerID,
     };
-    return <RNMBXFillLayer ref={this.setNativeLayer} {...props} />;
+    return (
+      // @ts-expect-error just codegen stuff
+      <RNMBXFillLayerNativeComponent ref={this.setNativeLayer} {...props} />
+    );
   }
 }
-
-const RNMBXFillLayer =
-  requireNativeComponent<NativeTypeProps>(NATIVE_MODULE_NAME);
 
 export default FillLayer;

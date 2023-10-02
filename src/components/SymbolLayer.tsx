@@ -1,14 +1,13 @@
 import React from 'react';
-import { View, NativeModules, requireNativeComponent } from 'react-native';
+import { View, NativeModules } from 'react-native';
 
 import { Expression, type SymbolLayerStyleProps } from '../utils/MapboxStyles';
 import { type StyleValue } from '../utils/StyleValue';
+import RNMBXSymbolLayerNativeComponent from '../specs/RNMBXSymbolLayerNativeComponent';
 
 import AbstractLayer from './AbstractLayer';
 
 const MapboxGL = NativeModules.RNMBXModule;
-
-export const NATIVE_MODULE_NAME = 'RNMBXSymbolLayer';
 
 export type Props = {
   /**
@@ -77,9 +76,6 @@ type NativeTypeProps = Omit<Props, 'style'> & {
   reactStyle?: { [key: string]: StyleValue };
 };
 
-const RNMBXSymbolLayer =
-  requireNativeComponent<NativeTypeProps>(NATIVE_MODULE_NAME);
-
 /**
  * SymbolLayer is a style layer that renders icon and text labels at points or along lines on the map.
  */
@@ -119,9 +115,10 @@ export class SymbolLayer extends AbstractLayer<Props, NativeTypeProps> {
     };
 
     return (
-      <RNMBXSymbolLayer ref={this.setNativeLayer} {...props}>
+      // @ts-expect-error just codegen stuff
+      <RNMBXSymbolLayerNativeComponent ref={this.setNativeLayer} {...props}>
         {this.props.children}
-      </RNMBXSymbolLayer>
+      </RNMBXSymbolLayerNativeComponent>
     );
   }
 }

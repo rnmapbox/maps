@@ -1,14 +1,13 @@
 import React from 'react';
-import { NativeModules, requireNativeComponent } from 'react-native';
+import { NativeModules } from 'react-native';
 
 import { FilterExpression, LineLayerStyleProps } from '../utils/MapboxStyles';
 import { StyleValue } from '../utils/StyleValue';
+import RNMBXLineLayerNativeComponent from '../specs/RNMBXLineLayerNativeComponent';
 
 import AbstractLayer from './AbstractLayer';
 
 const MapboxGL = NativeModules.RNMBXModule;
-
-export const NATIVE_MODULE_NAME = 'RNMBXLineLayer';
 
 export type Props = {
   /**
@@ -86,11 +85,11 @@ class LineLayer extends AbstractLayer<Props, NativeTypeProps> {
       ...this.baseProps,
       sourceLayerID: this.props.sourceLayerID,
     };
-    return <RNMBXLineLayer ref={this.setNativeLayer} {...props} />;
+    return (
+      // @ts-expect-error just codegen stuff
+      <RNMBXLineLayerNativeComponent ref={this.setNativeLayer} {...props} />
+    );
   }
 }
-
-const RNMBXLineLayer =
-  requireNativeComponent<NativeTypeProps>(NATIVE_MODULE_NAME);
 
 export default LineLayer;
