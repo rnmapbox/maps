@@ -359,6 +359,8 @@ open class RCTMGLMapView(private val mContext: Context, var mManager: RCTMGLMapV
             }
 
             override fun onMove(moveGestureDetector: MoveGestureDetector): Boolean {
+                if (!mapView.gestures.scrollEnabled) return true
+
                 return mapGesture(MapGestureType.Move, moveGestureDetector)
             }
 
