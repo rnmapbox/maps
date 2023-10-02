@@ -2,6 +2,15 @@ import Foundation
 import MapboxMaps
 import Turf
 
+#if RNMBX_11
+extension NSNumber {
+  /// Converts an `NSNumber` to a `CGFloat` value from its `Double` representation.
+  internal var CGFloat: CGFloat {
+    CoreGraphics.CGFloat(doubleValue)
+  }
+}
+#endif
+
 enum RemovalReason {
     case ViewRemoval, StyleChange, OnDestroy, ComponentChange, Reorder
 }
@@ -279,17 +288,11 @@ open class RNMBXCamera : RNMBXMapComponentBase {
       }
 
       if let locationModule = RNMBXLocationModule.shared {
-        var isSameProvider = false
-        if let currentProvider = map.location.locationProvider as? AnyObject, let newProvider = locationModule.locationProvider as? AnyObject {
-          if currentProvider === newProvider {
-            isSameProvider = true
-          }
-        }
-        if !isSameProvider {
-          map.location.overrideLocationProvider(with: locationModule.locationProvider)
-        }
+        locationModule.override(for: map.location)
       }
+      #if !RNMBX_11
       map.location.locationProvider.requestWhenInUseAuthorization()
+      #endif
       var trackingModeChanged = false
       var followOptions = FollowPuckViewportStateOptions()
       switch userTrackingMode {
@@ -428,7 +431,11 @@ open class RNMBXCamera : RNMBXMapComponentBase {
       }
       
       withMapView { map in
+        #if RNMBX_11
+        let bounds = [sw, ne]
+        #else
         let bounds = CoordinateBounds(southwest: sw, northeast: ne)
+        #endif
         let camera = map.mapboxMap.camera(
           for: bounds,
           padding: padding,
@@ -624,4 +631,3 @@ extension RNMBXCamera : ViewportStatusObserver {
 private func toSeconds(_ ms: Double) -> TimeInterval {
   return ms * 0.001
 }
-

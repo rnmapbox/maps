@@ -114,11 +114,13 @@ const styles = StyleSheet.create({
 
 type NavigationType = 'Group' | 'Item';
 
-type ItemComponent = React.ComponentType<{
+type ItemComponentProps = {
   label: string;
   onDismissExample: () => void;
   navigation: ItemProps['navigation'];
-}>;
+};
+
+type ItemComponent = React.ComponentType<ItemComponentProps>;
 
 interface ExampleNode {
   label: string;
@@ -250,10 +252,25 @@ class ExampleGroup implements ExampleNode {
   updateIfNeeded(_updated: () => void): void {}
 }
 
+const PageWrapper = (Component: ItemComponent) => (props: ItemComponentProps) =>
+  (
+    <Page label={props.label} onDismissExample={props.onDismissExample}>
+      <Component {...props} />
+    </Page>
+  );
+
 function example(
-  Component: ItemComponent & { title: string; tags: string[]; docs: string },
+  Component: ItemComponent & {
+    title: string;
+    tags: string[];
+    docs: string;
+    page?: boolean;
+  },
 ) {
-  return new ExampleItem(Component.title, Component);
+  return new ExampleItem(
+    Component.title,
+    Component.page ? Component : PageWrapper(Component),
+  );
 }
 
 const BugReportPage =
@@ -312,7 +329,7 @@ const Examples = new ExampleGroup('React Native Mapbox', [
   ]),
   new ExampleGroup('User Location', [
     new ExampleItem('User Location Render Mode', UserLocationRenderMode),
-    new ExampleItem('User Location Updates', UserLocationUpdates),
+    example(UserLocationUpdates),
     new ExampleItem('User Location Padding', UserLocationPadding),
     new ExampleItem('Set Displacement', SetDisplacement),
   ]),

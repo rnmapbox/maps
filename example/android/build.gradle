@@ -6,7 +6,7 @@ buildscript {
 
         if (project.hasProperty('RNMBX11') && project.getProperty('RNMBX11').toBoolean()) {
             RNMapboxMapsUseV11 = true
-            RNMapboxMapsVersion = '11.0.0-beta.3'
+            RNMapboxMapsVersion = '11.0.0-beta.4'
         }
 
         useCustomMapbox = false

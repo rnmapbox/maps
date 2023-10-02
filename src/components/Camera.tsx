@@ -312,9 +312,18 @@ export const Camera = memo(
       // since codegen uses `payload` name in cpp code for creating payload for event,
       // we rename it to `payloadRenamed` to avoid name collision there on new arch
       const _onUserTrackingModeChange = useCallback(
-        (event: MapboxGLEvent<'usertrackingmodechange', { mode: string }>) => {
+        (
+          event: MapboxGLEvent<
+            'usertrackingmodechange',
+            {
+              followUserLocation: boolean;
+              followUserMode: UserTrackingMode | null;
+            }
+          >,
+        ) => {
           if (onUserTrackingModeChange) {
             if (!event.nativeEvent.payload) {
+              // @ts-expect-error see the comment above
               event.nativeEvent.payload = event.nativeEvent.payloadRenamed;
             }
             onUserTrackingModeChange(event);
@@ -553,6 +562,7 @@ export const Camera = memo(
       return (
         <RNMBXCamera
           testID={'Camera'}
+          // @ts-expect-error just codegen stuff
           ref={nativeCamera}
           stop={nativeStop}
           animationDuration={animationDuration}
@@ -567,6 +577,7 @@ export const Camera = memo(
           minZoomLevel={minZoomLevel}
           maxZoomLevel={maxZoomLevel}
           maxBounds={nativeMaxBounds}
+          // @ts-expect-error just codegen stuff
           onUserTrackingModeChange={_onUserTrackingModeChange}
         />
       );

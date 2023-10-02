@@ -17,7 +17,7 @@ type UserTrackingModeChangeEventType = {
 };
 
 export interface NativeProps extends ViewProps {
-  maxBounds?: UnsafeMixed<string>;
+  maxBounds?: UnsafeMixed<string | null>;
   animationDuration?: UnsafeMixed<Double>;
   animationMode?: UnsafeMixed<string>;
   defaultStop?: UnsafeMixed<NativeCameraStop>;

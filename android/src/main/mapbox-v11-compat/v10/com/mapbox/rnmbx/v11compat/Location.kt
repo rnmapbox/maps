@@ -2,6 +2,7 @@ package com.rnmapbox.rnmbx.v11compat.location;
 
 import android.Manifest.permission.ACCESS_COARSE_LOCATION
 import android.Manifest.permission.ACCESS_FINE_LOCATION
+import android.content.Context
 import android.location.LocationManager
 import android.os.Looper
 import androidx.annotation.RequiresPermission
@@ -10,12 +11,18 @@ import com.mapbox.maps.plugin.PuckBearingSource
 import com.mapbox.maps.plugin.locationcomponent.LocationComponentPlugin2
 import com.mapbox.maps.plugin.locationcomponent.location2 as _location2
 
+
 import com.mapbox.android.core.location.LocationEngineResult as _LocationEngineResult
 
 import com.mapbox.android.core.location.LocationEngine as _LocationEngine
 import com.mapbox.android.core.location.LocationEngineCallback as _LocationEngineCallback
 import com.mapbox.android.core.location.LocationEngineRequest
 import com.mapbox.android.core.location.LocationEngineProvider
+import com.mapbox.common.location.LocationService
+import com.mapbox.common.location.LocationUpdatesReceiver
+import com.mapbox.common.location.LocationServiceFactory
+
+
 import android.location.Location as _Location
 //import com.mapbox.common.location.Location as _Location
 
@@ -37,7 +44,7 @@ fun LocationEngine.requestLocationUpdatesV11(callback: LocationEngineCallback, l
   val builder = LocationEngineRequest.Builder(DEFAULT_INTERVAL_MILLIS)
       .setFastestInterval(DEFAULT_FASTEST_INTERVAL_MILLIS)
       .setPriority(LocationEngineRequest.PRIORITY_HIGH_ACCURACY)
-  if (minDisplacement != null) {
+  if (minDisplacement != null && minDisplacement > 0.0) {
     builder.setDisplacement(minDisplacement)
   }
   val request = builder
@@ -52,3 +59,7 @@ fun LocationEngine.requestLocationUpdatesV11(callback: LocationEngineCallback, l
 
 val Location.timestamp: Long
   get() = this.time
+
+fun createLocationEngine(context: Context): LocationEngine {
+    return LocationEngineProvider.getBestLocationEngine(context)
+}

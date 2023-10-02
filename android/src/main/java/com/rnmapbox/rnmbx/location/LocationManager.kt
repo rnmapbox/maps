@@ -155,15 +155,9 @@ class LocationManager private constructor(private val context: Context) : Locati
 
     ////
 
-    /*
     private fun buildEngineRequest() {
-        engine = LocationEngineProvider.getBestLocationEngine(context.applicationContext)
-        locationEngineRequest = LocationEngineRequest.Builder(DEFAULT_INTERVAL_MILLIS)
-                .setFastestInterval(DEFAULT_FASTEST_INTERVAL_MILLIS)
-                .setPriority(LocationEngineRequest.PRIORITY_HIGH_ACCURACY)
-                .setDisplacement(mMinDisplacement)
-                .build()
-    }*/
+        engine = createLocationEngine(context.applicationContext)
+    }
 
     fun addLocationListener(listener: OnUserLocationChange) {
         if (!listeners.contains(listener)) {
@@ -278,6 +272,6 @@ class LocationManager private constructor(private val context: Context) : Locati
     }
 
     init {
-        // buildEngineRequest()
+        buildEngineRequest()
     }
 }
