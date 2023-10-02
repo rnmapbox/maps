@@ -30,15 +30,20 @@ using namespace facebook::react;
 
 - (instancetype)initWithFrame:(CGRect)frame
 {
-  if (self = [super initWithFrame:frame]) {
-    static const auto defaultProps = std::make_shared<const RNMBXAtmosphereProps>();
-    _props = defaultProps;
-    _view = [[RNMBXAtmosphere alloc] init];
-      
-    self.contentView = _view;
-  }
+    if (self = [super initWithFrame:frame]) {
+        static const auto defaultProps = std::make_shared<const RNMBXAtmosphereProps>();
+        _props = defaultProps;
+        [self prepareView];
+    }
 
-  return self;
+    return self;
+}
+
+- (void)prepareView
+{
+    _view =  [[RNMBXAtmosphere alloc] init];
+
+    self.contentView = _view;
 }
 
 #pragma mark - RCTComponentViewProtocol
@@ -52,10 +57,20 @@ using namespace facebook::react;
 - (void)updateProps:(const Props::Shared &)props oldProps:(const Props::Shared &)oldProps
 {
   const auto &newProps = *std::static_pointer_cast<const RNMBXAtmosphereProps>(props);
-    _view.reactStyle = RNMBXConvertFollyDynamicToId(newProps.reactStyle);
+    id reactStyle = RNMBXConvertFollyDynamicToId(newProps.reactStyle);
+    if (reactStyle != nil) {
+        _view.reactStyle = reactStyle;
+    }
     
   [super updateProps:props oldProps:oldProps];
 }
+
+- (void)prepareForRecycle
+{
+    [super prepareForRecycle];
+    [self prepareView];
+}
+
 
 @end
 
