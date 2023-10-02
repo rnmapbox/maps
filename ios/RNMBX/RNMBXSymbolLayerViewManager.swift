@@ -1,12 +1,12 @@
-@objc(RNMBXBackgroundLayerManager)
-class RNMBXBackgroundLayerManager: RCTViewManager {
+@objc(RNMBXSymbolLayerViewManager)
+class RNMBXSymbolLayerViewManager: RCTViewManager {
     @objc
     override static func requiresMainQueueSetup() -> Bool {
         return true
     }
   
     override func view() -> UIView! {
-      let layer = RNMBXBackgroundLayer()
+      let layer = RNMBXSymbolLayer()
       layer.bridge = self.bridge
       return layer
     }

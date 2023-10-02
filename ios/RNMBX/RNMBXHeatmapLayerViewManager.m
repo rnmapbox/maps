@@ -1,9 +1,9 @@
 #import <React/RCTBridgeModule.h>
 #import <React/RCTViewManager.h>
 
-@interface RCT_EXTERN_MODULE(RNMBXFillExtrusionLayerManager, RCTViewManager)
+@interface RCT_EXTERN_REMAP_MODULE(RNMBXHeatmapLayer, RNMBXHeatmapLayerViewManager, RCTViewManager)
 
-// fill extrusion layer props
+// circle layer props
 RCT_EXPORT_VIEW_PROPERTY(sourceLayerID, NSString)
 
 // standard layer props

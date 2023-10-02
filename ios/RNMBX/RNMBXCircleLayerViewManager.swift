@@ -1,12 +1,12 @@
-@objc(RNMBXSkyLayerManager)
-class RNMBXSkyLayerManager: RCTViewManager {
+@objc(RNMBXCircleLayerViewManager)
+class RNMBXCircleLayerViewManager: RCTViewManager {
     @objc
     override static func requiresMainQueueSetup() -> Bool {
         return true
     }
   
     override func view() -> UIView! {
-      let layer = RNMBXSkyLayer()
+      let layer = RNMBXCircleLayer()
       layer.bridge = self.bridge
       return layer
     }

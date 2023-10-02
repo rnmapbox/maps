@@ -11,8 +11,6 @@
 #import <react/renderer/components/rnmapbox_maps_specs/Props.h>
 #import <react/renderer/components/rnmapbox_maps_specs/RCTComponentViewHelpers.h>
 
-#import "rnmapbox_maps-Swift.h.pre"
-
 using namespace facebook::react;
 
 @interface RNMBXMapViewComponentView () <RCTRNMBXMapViewViewProtocol>

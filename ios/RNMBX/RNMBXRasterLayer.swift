@@ -1,7 +1,7 @@
 import MapboxMaps
 
 @objc(RNMBXRasterLayer)
-class RNMBXRasterLayer: RNMBXLayer {
+public class RNMBXRasterLayer: RNMBXLayer {
   typealias LayerType = RasterLayer
 
   override func makeLayer(style: Style) throws -> Layer {

@@ -2,6 +2,15 @@
 #import <folly/dynamic.h>
 #import <react/renderer/components/rnmapbox_maps_specs/Props.h>
 
+// needed for compilation for some reason
+#import <CoreFoundation/CoreFoundation.h>
+#import <CoreLocation/CoreLocation.h>
+
+@interface MapView : UIView
+@end
+
+#import <rnmapbox_maps-Swift.h>
+
 // copied from RCTFollyConvert
 static id RNMBXConvertFollyDynamicToId(const folly::dynamic &dyn)
 {
@@ -63,3 +72,55 @@ static std::tuple<std::string, std::string> RNMBXStringifyEventData(NSDictionary
 
     return {type, json};
 }
+
+template <typename T>
+void RNMBXSetCommonLayerPropsWithoutSourceID(T newProps, RNMBXLayer *_view)
+{
+    id idx = RNMBXConvertFollyDynamicToId(newProps.id);
+    if (idx != nil) {
+        _view.id = idx;
+    }
+    id sourceID = RNMBXConvertFollyDynamicToId(newProps.sourceID);
+    if (sourceID != nil) {
+        _view.sourceID = sourceID;
+    }
+    id filter = RNMBXConvertFollyDynamicToId(newProps.filter);
+    if (filter != nil) {
+        _view.filter = filter;
+    }
+    id aboveLayerID = RNMBXConvertFollyDynamicToId(newProps.aboveLayerID);
+    if (aboveLayerID != nil) {
+        _view.aboveLayerID = aboveLayerID;
+    }
+    id belowLayerID = RNMBXConvertFollyDynamicToId(newProps.belowLayerID);
+    if (belowLayerID != nil) {
+        _view.belowLayerID = belowLayerID;
+    }
+    id layerIndex = RNMBXConvertFollyDynamicToId(newProps.layerIndex);
+    if (layerIndex != nil) {
+        _view.layerIndex = layerIndex;
+    }
+    id reactStyle = RNMBXConvertFollyDynamicToId(newProps.reactStyle);
+    if (reactStyle != nil) {
+        _view.reactStyle = reactStyle;
+    }
+    id maxZoomLevel = RNMBXConvertFollyDynamicToId(newProps.maxZoomLevel);
+    if (maxZoomLevel != nil) {
+        _view.maxZoomLevel = maxZoomLevel;
+    }
+    id minZoomLevel = RNMBXConvertFollyDynamicToId(newProps.minZoomLevel);
+    if (minZoomLevel != nil) {
+        _view.minZoomLevel = minZoomLevel;
+    }
+}
+
+template <typename T>
+void RNMBXSetCommonLayerProps(T newProps, RNMBXLayer *_view)
+{
+    RNMBXSetCommonLayerPropsWithoutSourceID(newProps, _view);
+    id sourceLayerID = RNMBXConvertFollyDynamicToId(newProps.sourceLayerID);
+    if (sourceLayerID != nil) {
+        _view.sourceLayerID = sourceLayerID;
+    }
+}
+

@@ -1,7 +1,7 @@
 import MapboxMaps
 
 @objc(RNMBXHeatmapLayer)
-class RNMBXHeatmapLayer: RNMBXVectorLayer {
+public class RNMBXHeatmapLayer: RNMBXVectorLayer {
   typealias LayerType = HeatmapLayer
 
   override func makeLayer(style: Style) throws -> Layer {

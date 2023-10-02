@@ -1,7 +1,7 @@
 import MapboxMaps
 
 @objc(RNMBXSymbolLayer)
-class RNMBXSymbolLayer: RNMBXVectorLayer {
+public class RNMBXSymbolLayer: RNMBXVectorLayer {
   
   typealias LayerType = SymbolLayer
 
