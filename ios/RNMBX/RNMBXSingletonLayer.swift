@@ -2,13 +2,13 @@ import MapboxMaps
 
 /// RNMBXSingletonLayer is absract superclass for Light, Atmosphere, Terrain
 @objc
-class RNMBXSingletonLayer : UIView {
+public class RNMBXSingletonLayer : UIView {
   weak var bridge : RCTBridge? = nil
   weak var map : RNMBXMapView? = nil
   var style: Style? = nil
   
   var oldReactStyle: [String:Any]?
-  @objc var reactStyle : Dictionary<String, Any>? = nil {
+  @objc public var reactStyle : Dictionary<String, Any>? = nil {
     willSet {
       oldReactStyle = reactStyle
     }

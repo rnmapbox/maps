@@ -5,7 +5,7 @@ typealias Style = StyleManager
 #endif
 
 @objc(RNMBXAtmosphere)
-class RNMBXAtmosphere : RNMBXSingletonLayer, RNMBXMapComponent, RNMBXSourceConsumer {
+public class RNMBXAtmosphere : RNMBXSingletonLayer, RNMBXMapComponent, RNMBXSourceConsumer {
   var atmosphere : Atmosphere? = nil
   
   func makeAtmosphere() -> Atmosphere {
