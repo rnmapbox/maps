@@ -7,6 +7,8 @@ import RNMBXSymbolLayerNativeComponent from '../specs/RNMBXSymbolLayerNativeComp
 
 import AbstractLayer from './AbstractLayer';
 
+export const NATIVE_MODULE_NAME = 'RNMBXSymbolLayer';
+
 const MapboxGL = NativeModules.RNMBXModule;
 
 export type Props = {
