@@ -83,26 +83,40 @@ class RCTMGLOfflineModuleLegacy: RCTEventEmitter {
     return CoordinateBounds(southwest: pt0, northeast: pt1)
   }
 
-  func convertRegionToPack(region: OfflineRegion) -> [String: Any]? {
+func convertRegionToPack(region: OfflineRegion) -> [String: Any]? {
     let bb = region.getTilePyramidDefinition()?.bounds
+    var metadataString: String?
 
     guard let bb = region.getTilePyramidDefinition()?.bounds else { return [:] }
+    
+    do {
+      let metadata = region.getMetadata()
+      
+      metadataString = String(data: metadata, encoding: .utf8)
+      
+      if (metadataString == nil) {
+        // Handle archived data from V9
+        metadataString = try NSKeyedUnarchiver.unarchiveObject(with: metadata) as? String
+      }
+      
+      
+      let jsonBounds = [
+         [bb.east, bb.north],
+         [bb.west, bb.south]
+      ]
 
-    let jsonBounds = [
-       [bb.east, bb.north],
-       [bb.west, bb.south]
-    ]
-    let metadata = region.getMetadata()
-    let pack: [String: Any] = [
-      "metadata": String(data: metadata, encoding: .utf8),
-      "bounds": jsonBounds
-    ]
-
-    return pack
+      let pack: [String: Any] = [
+        "metadata": metadataString,
+        "bounds": jsonBounds
+      ]
+    
+      return pack
+    } catch {
+      print("convertRegionToPack error: \(error)")
+      return nil
+    }
   }
-
-
-
+  
   func createPackCallback(region: OfflineRegion,
                           metadata: Data,
                           resolver: @escaping RCTPromiseResolveBlock,
