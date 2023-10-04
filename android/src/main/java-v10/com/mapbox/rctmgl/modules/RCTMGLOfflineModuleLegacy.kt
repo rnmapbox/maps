@@ -456,7 +456,7 @@ class RCTMGLOfflineModuleLegacy(private val mReactContext: ReactApplicationConte
 
                 if (!source.exists()) {
                     Log.d(LOG_TAG, "Nothing to migrate")
-                    promise.resolve(null)
+                    promise.resolve(false)
                     return
                 }
 
@@ -465,7 +465,7 @@ class RCTMGLOfflineModuleLegacy(private val mReactContext: ReactApplicationConte
                 directory.mkdirs()
                 Files.move(sourcePath, targetPath, StandardCopyOption.REPLACE_EXISTING)
                 Log.d(LOG_TAG, "v10 cache directory created successfully")
-                promise.resolve(null)
+                promise.resolve(true)
             } catch (e: Exception) {
                 val mes = "${e}... file move unsuccessful"
                 Log.d(LOG_TAG, mes)

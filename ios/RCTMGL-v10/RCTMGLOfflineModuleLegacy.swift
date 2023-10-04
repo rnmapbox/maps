@@ -412,22 +412,27 @@ func convertRegionToPack(region: OfflineRegion) -> [String: Any]? {
   }
 
 
-  @objc
+ @objc
   func migrateOfflineCache(_ resolve : @escaping RCTPromiseResolveBlock, reject: @escaping RCTPromiseRejectBlock) {
-    // Old and new cache file paths
-    
     let bundleIdentifier = Bundle.main.bundleIdentifier!
-    print("path!!", URL(fileURLWithPath: NSHomeDirectory()).appendingPathComponent("Library/Application Support/\(bundleIdentifier)/.mapbox/cache.db"))
+    
+    let srcPath = "\(NSHomeDirectory())/Library/Application Support/\(bundleIdentifier)/.mapbox/cache.db"
     let srcURL = URL(fileURLWithPath: NSHomeDirectory()).appendingPathComponent("Library/Application Support/\(bundleIdentifier)/.mapbox/cache.db")
-
     let destURL = URL(fileURLWithPath: NSHomeDirectory()).appendingPathComponent("Library/Application Support/.mapbox/map_data/map_data.db")
 
     let fileManager = FileManager.default
+    
+    if (!fileManager.fileExists(atPath: srcPath)) {
+      print("migrateOfflineCache: nothing to migrate")
+      resolve(false)
+      return
+    }
 
     do {
       try fileManager.createDirectory(at: destURL.deletingLastPathComponent(), withIntermediateDirectories: true, attributes: nil)
       try fileManager.moveItem(at: srcURL, to: destURL)
-      resolve(nil)
+      print("migrateOfflineCache done:")
+      resolve(true)
     } catch {
       reject("migrateOfflineCache error:", error.localizedDescription, error)
     }

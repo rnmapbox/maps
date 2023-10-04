@@ -221,10 +221,8 @@ class OfflineManager {
    *
    * @return {void}
    */
-  async migrateOfflineCache(): Promise<void> {
-    await MapboxOfflineManager.migrateOfflineCache();
-    this._offlinePacks = {};
-    await this._initialize(true);
+  async migrateOfflineCache(): Promise<boolean | void> {
+    return await MapboxOfflineManager.migrateOfflineCache();
   }
 
   /**
