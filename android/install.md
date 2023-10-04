@@ -91,7 +91,7 @@ buildscript {
 
 
 
-# Trhoubleshooting
+# Troubleshooting
 
 If you see `2 files found with path 'lib/arm64-v8a/libc++_shared.so' from inputs` issue see [possible workaround](#workaround-for-2-files-found-with-path-libarm64-v8alibc_sharedso-from-inputs).
 
