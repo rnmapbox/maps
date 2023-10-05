@@ -84,7 +84,6 @@ class RCTMGLOfflineModuleLegacy: RCTEventEmitter {
   }
 
 func convertRegionToPack(region: OfflineRegion) -> [String: Any]? {
-    let bb = region.getTilePyramidDefinition()?.bounds
     var metadataString: String?
 
     guard let bb = region.getTilePyramidDefinition()?.bounds else { return [:] }
@@ -96,7 +95,7 @@ func convertRegionToPack(region: OfflineRegion) -> [String: Any]? {
       
       if (metadataString == nil) {
         // Handle archived data from V9
-        metadataString = try NSKeyedUnarchiver.unarchiveObject(with: metadata) as? String
+        metadataString = NSKeyedUnarchiver.unarchiveObject(with: metadata) as? String
       }
       
       
@@ -138,12 +137,23 @@ func convertRegionToPack(region: OfflineRegion) -> [String: Any]? {
     }
   }
 
-  func getRegionByName(name: String, offlineRegions: [OfflineRegion]) -> OfflineRegion? {
+func getRegionByName(name: String, offlineRegions: [OfflineRegion]) -> OfflineRegion? {
     for region in offlineRegions {
-      let byteMetadata = region.getMetadata()
+      var metadata:[String: Any] = [:]
 
       do {
-        let metadata = try JSONSerialization.jsonObject(with: byteMetadata, options: []) as! [String:Any]
+        let byteMetadata = region.getMetadata()
+        
+       // Handle archived data from V9
+        let metadataString = NSKeyedUnarchiver.unarchiveObject(with: byteMetadata) as? String
+        
+        if (metadataString != nil) {
+          let data = metadataString!.data(using: .utf8)
+          metadata = try JSONSerialization.jsonObject(with: data!, options: []) as! [String: Any]
+        } else {
+          metadata = try JSONSerialization.jsonObject(with: byteMetadata, options: []) as! [String:Any]
+        }
+        
         if (name == metadata["name"] as! String) {
           return region
         }
@@ -152,7 +162,7 @@ func convertRegionToPack(region: OfflineRegion) -> [String: Any]? {
         return nil
       }
     }
-
+    
     return nil
   }
 
