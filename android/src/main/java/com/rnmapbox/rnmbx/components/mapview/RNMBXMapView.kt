@@ -61,7 +61,7 @@ import com.rnmapbox.rnmbx.components.location.LocationComponentManager
 import com.rnmapbox.rnmbx.components.location.RNMBXNativeUserLocation
 import com.rnmapbox.rnmbx.components.mapview.helpers.CameraChangeReason
 import com.rnmapbox.rnmbx.components.mapview.helpers.CameraChangeTracker
-import com.rnmapbox.rnmbx.components.styles.layers.RCTLayer
+import com.rnmapbox.rnmbx.components.styles.layers.RNMBXLayer
 import com.rnmapbox.rnmbx.components.styles.light.RNMBXLight
 import com.rnmapbox.rnmbx.components.styles.sources.RCTSource
 import com.rnmapbox.rnmbx.components.styles.terrain.RNMBXTerrain
@@ -466,7 +466,7 @@ open class RNMBXMapView(private val mContext: Context, var mManager: RNMBXMapVie
         } else if (childView is RNMBXCamera) {
             mCamera = childView
             feature = childView
-        } else if (childView is RCTLayer<*>) {
+        } else if (childView is RNMBXLayer<*>) {
             feature = childView as AbstractMapFeature?
         } else if (childView is AbstractMapFeature) {
             feature = childView as AbstractMapFeature

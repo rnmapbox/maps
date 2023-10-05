@@ -8,7 +8,7 @@ import com.rnmapbox.rnmbx.components.styles.RNMBXStyle
 import com.rnmapbox.rnmbx.components.styles.RNMBXStyleFactory
 import com.rnmapbox.rnmbx.utils.Logger
 
-class RNMBXSymbolLayer(context: Context?) : RCTLayer<SymbolLayer?>(
+class RNMBXSymbolLayer(context: Context?) : RNMBXLayer<SymbolLayer?>(
     context!!
 ) {
     private var mSourceLayerID: String? = null

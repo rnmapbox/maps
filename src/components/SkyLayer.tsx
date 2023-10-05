@@ -1,14 +1,13 @@
 import React from 'react';
-import { NativeModules, requireNativeComponent } from 'react-native';
+import { NativeModules } from 'react-native';
 
 import { FilterExpression, SkyLayerStyleProps } from '../utils/MapboxStyles';
 import { StyleValue } from '../utils/StyleValue';
+import RNMBXSkyLayerNativeComponent from '../specs/RNMBXSkyLayerNativeComponent';
 
 import AbstractLayer from './AbstractLayer';
 
 const MapboxGL = NativeModules.RNMBXModule;
-
-export const NATIVE_MODULE_NAME = 'RNMBXSkyLayer';
 
 export type Props = {
   /**
@@ -65,11 +64,14 @@ class SkyLayer extends AbstractLayer<Props, NativeTypeProps> {
   };
 
   render() {
-    return <RNMBXSkyLayer ref={this.setNativeLayer} {...this.baseProps} />;
+    return (
+      <RNMBXSkyLayerNativeComponent
+        // @ts-expect-error just codegen stuff
+        ref={this.setNativeLayer}
+        {...this.baseProps}
+      />
+    );
   }
 }
-
-const RNMBXSkyLayer =
-  requireNativeComponent<NativeTypeProps>(NATIVE_MODULE_NAME);
 
 export default SkyLayer;

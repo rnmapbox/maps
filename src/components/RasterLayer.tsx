@@ -1,14 +1,13 @@
 import React from 'react';
-import { NativeModules, requireNativeComponent } from 'react-native';
+import { NativeModules } from 'react-native';
 
 import { FilterExpression, RasterLayerStyleProps } from '../utils/MapboxStyles';
 import { StyleValue } from '../utils/StyleValue';
+import RNMBXRasterLayerNativeComponent from '../specs/RNMBXRasterLayerNativeComponent';
 
 import AbstractLayer from './AbstractLayer';
 
 const MapboxGL = NativeModules.RNMBXModule;
-
-export const NATIVE_MODULE_NAME = 'RNMBXRasterLayer';
 
 export type Props = {
   /**
@@ -83,11 +82,11 @@ class RasterLayer extends AbstractLayer<Props, NativeTypeProps> {
       ...this.baseProps,
       sourceLayerID: this.props.sourceLayerID,
     };
-    return <RNMBXRasterLayer ref={this.setNativeLayer} {...props} />;
+    return (
+      // @ts-expect-error just codegen stuff
+      <RNMBXRasterLayerNativeComponent ref={this.setNativeLayer} {...props} />
+    );
   }
 }
-
-const RNMBXRasterLayer =
-  requireNativeComponent<NativeTypeProps>(NATIVE_MODULE_NAME);
 
 export default RasterLayer;

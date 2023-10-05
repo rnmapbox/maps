@@ -6,7 +6,7 @@ import com.rnmapbox.rnmbx.components.styles.RNMBXStyle
 import com.rnmapbox.rnmbx.components.styles.RNMBXStyleFactory
 import com.rnmapbox.rnmbx.utils.Logger
 
-class RNMBXRasterLayer(context: Context?) : RCTLayer<RasterLayer?>(
+class RNMBXRasterLayer(context: Context?) : RNMBXLayer<RasterLayer?>(
     context!!
 ) {
     override fun makeLayer(): RasterLayer {

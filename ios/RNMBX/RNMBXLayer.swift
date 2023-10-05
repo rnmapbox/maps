@@ -14,17 +14,17 @@ func styleLayerExists(_ style: Style, id: String) -> Bool {
 }
 
 @objc(RNMBXLayer)
-class RNMBXLayer : UIView, RNMBXMapComponent, RNMBXSourceConsumer {
+public class RNMBXLayer : UIView, RNMBXMapComponent, RNMBXSourceConsumer {
   weak var bridge : RCTBridge? = nil
 
   var waitingForID: String? = nil
 
-  @objc var sourceLayerID : String? = nil {
+  @objc public var sourceLayerID : String? = nil {
     didSet { self.optionsChanged() }
   }
 
   var oldReatStyle: Dictionary<String, Any>? = nil
-  @objc var reactStyle : Dictionary<String, Any>? = nil {
+  @objc public var reactStyle : Dictionary<String, Any>? = nil {
     willSet {
       oldReatStyle = reactStyle
     }
@@ -37,11 +37,11 @@ class RNMBXLayer : UIView, RNMBXMapComponent, RNMBXSourceConsumer {
   
   var style: Style? = nil
 
-  @objc var filter : Array<Any>? = nil {
+  @objc public var filter : Array<Any>? = nil {
     didSet { optionsChanged() }
   }
   
-  @objc var id: String! = nil {
+  @objc public var id: String! = nil {
     willSet {
       if id != nil && newValue != id {
         Logger.log(level:.warn, message: "Changing id from: \(optional: id) to \(optional: newValue), changing of id is supported")
@@ -55,18 +55,18 @@ class RNMBXLayer : UIView, RNMBXMapComponent, RNMBXSourceConsumer {
     }
   }
 
-  @objc var sourceID: String? = nil {
+  @objc public var sourceID: String? = nil {
     didSet { optionsChanged() }
   }
   
-  @objc var minZoomLevel : NSNumber? = nil {
+  @objc public var minZoomLevel : NSNumber? = nil {
     didSet { optionsChanged() }
   }
-  @objc var maxZoomLevel : NSNumber? = nil {
+  @objc public var maxZoomLevel : NSNumber? = nil {
     didSet { optionsChanged() }
   }
 
-  @objc var aboveLayerID : String? = nil {
+  @objc public var aboveLayerID : String? = nil {
     didSet {
       if let aboveLayerID = aboveLayerID {
         if aboveLayerID != oldValue {
@@ -76,7 +76,7 @@ class RNMBXLayer : UIView, RNMBXMapComponent, RNMBXSourceConsumer {
     }
   }
 
-  @objc var belowLayerID : String? = nil {
+  @objc public var belowLayerID : String? = nil {
     didSet {
       if let belowLayerID = belowLayerID {
         if belowLayerID != oldValue {
@@ -86,7 +86,7 @@ class RNMBXLayer : UIView, RNMBXMapComponent, RNMBXSourceConsumer {
     }
   }
   
-  @objc var layerIndex : NSNumber? = nil {
+  @objc public var layerIndex : NSNumber? = nil {
     didSet {
       if let layerIndex = layerIndex {
         if layerIndex != oldValue {

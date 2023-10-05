@@ -17,7 +17,7 @@ class RNMBXAtmosphere(context: Context?) : AbstractSourceConsumer(context) {
     override var iD: String? = null
     protected var mAtmosphere: Atmosphere? = null
 
-    // beginregion RCTLayer
+    // beginregion RNMBXLayer
     @JvmField
     protected var mMap: MapboxMap? = null
 
@@ -30,7 +30,7 @@ class RNMBXAtmosphere(context: Context?) : AbstractSourceConsumer(context) {
             addStyles()
         }
     }
-    // endregion RCTLayer
+    // endregion RNMBXLayer
 
     override fun addToMap(mapView: RNMBXMapView) {
         super.addToMap(mapView)

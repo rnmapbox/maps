@@ -1,5 +1,5 @@
 import MapboxMaps
 
 @objc(RNMBXVectorLayer)
-class RNMBXVectorLayer: RNMBXLayer {
+public class RNMBXVectorLayer: RNMBXLayer {
 }

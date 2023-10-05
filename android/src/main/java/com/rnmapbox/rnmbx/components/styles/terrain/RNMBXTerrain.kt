@@ -17,7 +17,7 @@ class RNMBXTerrain(context: Context?) : AbstractSourceConsumer(context) {
     protected var mSourceID: String? = null
     protected var mTerrain: Terrain? = null
 
-    // beginregion RCTLayer
+    // beginregion RNMBXLayer
     @JvmField
     protected var mMap: MapboxMap? = null
 
@@ -30,7 +30,7 @@ class RNMBXTerrain(context: Context?) : AbstractSourceConsumer(context) {
             addStyles()
         }
     }
-    // endregion RCTLayer
+    // endregion RNMBXLayer
 
     fun setSourceID(sourceID: String?) {
         mSourceID = sourceID

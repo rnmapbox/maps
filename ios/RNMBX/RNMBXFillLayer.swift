@@ -1,7 +1,7 @@
 import MapboxMaps
 
 @objc(RNMBXFillLayer)
-class RNMBXFillLayer: RNMBXVectorLayer {
+public class RNMBXFillLayer: RNMBXVectorLayer {
   typealias LayerType = FillLayer
 
   override func makeLayer(style: Style) throws -> Layer {

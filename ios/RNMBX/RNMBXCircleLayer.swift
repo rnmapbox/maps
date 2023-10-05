@@ -1,7 +1,7 @@
 import MapboxMaps
 
 @objc(RNMBXCircleLayer)
-class RNMBXCircleLayer: RNMBXVectorLayer {
+public class RNMBXCircleLayer: RNMBXVectorLayer {
   
   typealias LayerType = CircleLayer
 
