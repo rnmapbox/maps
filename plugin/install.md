@@ -32,7 +32,7 @@ After installing this package, add the [config plugin](https://docs.expo.io/guid
 }
 ```
 
-For `mapbox` or `mapbox-gl` you'll need to provide `RNMapboxMapsDownloadToken` as well.
+For `mapbox` or `mapbox-gl` you'll need to provide `RNMapboxMapsDownloadToken` as well. This secret token requires the `DOWNLOADS:READ` scope. You can refer to the [iOS guide](https://docs.mapbox.com/ios/maps/guides/install/#configure-credentials), which explains how to configure this token under the section `Configure your secret token`.
 
 ```json
 {
