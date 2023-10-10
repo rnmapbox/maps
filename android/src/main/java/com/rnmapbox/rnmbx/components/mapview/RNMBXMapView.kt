@@ -63,7 +63,7 @@ import com.rnmapbox.rnmbx.components.mapview.helpers.CameraChangeReason
 import com.rnmapbox.rnmbx.components.mapview.helpers.CameraChangeTracker
 import com.rnmapbox.rnmbx.components.styles.layers.RNMBXLayer
 import com.rnmapbox.rnmbx.components.styles.light.RNMBXLight
-import com.rnmapbox.rnmbx.components.styles.sources.RCTSource
+import com.rnmapbox.rnmbx.components.styles.sources.RNMBXSource
 import com.rnmapbox.rnmbx.components.styles.terrain.RNMBXTerrain
 import com.rnmapbox.rnmbx.events.AndroidCallbackEvent
 import com.rnmapbox.rnmbx.events.IEvent
@@ -190,7 +190,7 @@ open class RNMBXMapView(private val mContext: Context, var mManager: RNMBXMapVie
      */
     public var offscreenAnnotationViewContainer: ViewGroup? = null
 
-    private val mSources: MutableMap<String, RCTSource<*>>
+    private val mSources: MutableMap<String, RNMBXSource<*>>
     private val mImages: MutableList<RNMBXImages>
     private var mPointAnnotationManager: PointAnnotationManager? = null
     private var mActiveMarkerID: AnnotationID = INVALID_ANNOTATION_ID
@@ -444,7 +444,7 @@ open class RNMBXMapView(private val mContext: Context, var mManager: RNMBXMapVie
     // region Features
     fun addFeature(childView: View?, childPosition: Int) {
         var feature: AbstractMapFeature? = null
-        if (childView is RCTSource<*>) {
+        if (childView is RNMBXSource<*>) {
             val source = childView
             mSources[source.iD.toString()] = source
             feature = childView as AbstractMapFeature?
@@ -491,7 +491,7 @@ open class RNMBXMapView(private val mContext: Context, var mManager: RNMBXMapVie
     fun removeFeatureAt(childPosition: Int) {
         val entry = mFeatures[childPosition]
         val feature = entry.feature
-        if (feature is RCTSource<*>) {
+        if (feature is RNMBXSource<*>) {
             mSources.remove(feature.iD)
         } else if (feature is RNMBXPointAnnotation) {
             val annotation = feature
@@ -551,9 +551,9 @@ open class RNMBXMapView(private val mContext: Context, var mManager: RNMBXMapVie
     }
 
 
-    private val allTouchableSources: List<RCTSource<*>>
+    private val allTouchableSources: List<RNMBXSource<*>>
         private get() {
-            val sources: MutableList<RCTSource<*>> = ArrayList()
+            val sources: MutableList<RNMBXSource<*>> = ArrayList()
             for (key in mSources.keys) {
                 val source = mSources[key]
                 if (source != null && source.hasPressListener()) {
@@ -563,14 +563,14 @@ open class RNMBXMapView(private val mContext: Context, var mManager: RNMBXMapVie
             return sources
         }
 
-    private fun getTouchableSourceWithHighestZIndex(sources: List<RCTSource<*>>?): RCTSource<*>? {
+    private fun getTouchableSourceWithHighestZIndex(sources: List<RNMBXSource<*>>?): RNMBXSource<*>? {
         if (sources == null || sources.size == 0) {
             return null
         }
         if (sources.size == 1) {
             return sources[0]
         }
-        val layerToSourceMap: MutableMap<String, RCTSource<*>> = HashMap()
+        val layerToSourceMap: MutableMap<String, RNMBXSource<*>> = HashMap()
         for (source in sources) {
             val layerIDs: Array<out String>? = source.layerIDs.toTypedArray()
             if (layerIDs != null) {
@@ -659,13 +659,13 @@ open class RNMBXMapView(private val mContext: Context, var mManager: RNMBXMapVie
     }
 
     interface HandleTap {
-        fun run(hitTouchableSources: List<RCTSource<*>?>?, hits: Map<String?, List<Feature?>?>)
+        fun run(hitTouchableSources: List<RNMBXSource<*>?>?, hits: Map<String?, List<Feature?>?>)
     }
 
     fun handleTapInSources(
-            sources: LinkedList<RCTSource<*>>, screenPoint: ScreenCoordinate,
+            sources: LinkedList<RNMBXSource<*>>, screenPoint: ScreenCoordinate,
             hits: HashMap<String?, List<Feature?>?>,
-            hitTouchableSources: ArrayList<RCTSource<*>?>,
+            hitTouchableSources: ArrayList<RNMBXSource<*>?>,
             handleTap: HandleTap
     ) {
         if (sources.isEmpty()) {
@@ -720,11 +720,11 @@ open class RNMBXMapView(private val mContext: Context, var mManager: RNMBXMapVie
         val hits = HashMap<String?, List<Feature?>?>()
         if (screenPoint != null) {
             handleTapInSources(LinkedList(touchableSources), screenPoint, hits, ArrayList(), object : HandleTap {
-                override fun run(hitTouchableSources: List<RCTSource<*>?>?, hits: Map<String?, List<Feature?>?>) {
+                override fun run(hitTouchableSources: List<RNMBXSource<*>?>?, hits: Map<String?, List<Feature?>?>) {
                     if (hits.size > 0) {
-                        val source = getTouchableSourceWithHighestZIndex(hitTouchableSources as List<RCTSource<*>>?)
+                        val source = getTouchableSourceWithHighestZIndex(hitTouchableSources as List<RNMBXSource<*>>?)
                         if (source != null && source.hasPressListener() && source.iD != null && source.iD in hits) {
-                            source.onPress(RCTSource.OnPressEvent(
+                            source.onPress(RNMBXSource.OnPressEvent(
                                     hits[source.iD] as List<Feature>,
                                     GeoJSONUtils.toLatLng(point),
                                     PointF(screenPoint.x.toFloat(), screenPoint.y.toFloat())

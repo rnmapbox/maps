@@ -23,7 +23,7 @@ import java.util.HashMap
 import com.rnmapbox.rnmbx.v11compat.feature.*
 
 class RNMBXShapeSource(context: Context, private val mManager: RNMBXShapeSourceManager) :
-    RCTSource<GeoJsonSource>(context) {
+    RNMBXSource<GeoJsonSource>(context) {
     private var mURL: URL? = null
     private var mShape: String? = null
     private var mCluster: Boolean? = null

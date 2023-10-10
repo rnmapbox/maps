@@ -7,7 +7,7 @@ import com.facebook.react.bridge.Arguments;
 import com.facebook.react.bridge.WritableArray;
 import com.facebook.react.bridge.WritableMap;
 import com.mapbox.geojson.Feature;
-import com.rnmapbox.rnmbx.components.styles.sources.RCTSource;
+import com.rnmapbox.rnmbx.components.styles.sources.RNMBXSource;
 import com.rnmapbox.rnmbx.events.constants.EventKeys;
 import com.rnmapbox.rnmbx.events.constants.EventTypes;
 import com.rnmapbox.rnmbx.utils.ConvertUtils;
@@ -62,17 +62,17 @@ public class FeatureClickEvent extends AbstractEvent {
         return map;
     }
 
-    public static FeatureClickEvent makeShapeSourceEvent(View view, RCTSource.OnPressEvent event) {
+    public static FeatureClickEvent makeShapeSourceEvent(View view, RNMBXSource.OnPressEvent event) {
         return new FeatureClickEvent(view, EventKeys.SHAPE_SOURCE_LAYER_CLICK,
                 EventTypes.SHAPE_SOURCE_LAYER_CLICK, event.getFeatures(), event.getLatLng(), event.getScreenPoint());
     }
 
-    public static FeatureClickEvent makeVectorSourceEvent(View view, RCTSource.OnPressEvent event) {
+    public static FeatureClickEvent makeVectorSourceEvent(View view, RNMBXSource.OnPressEvent event) {
         return new FeatureClickEvent(view, EventKeys.VECTOR_SOURCE_LAYER_CLICK,
                 EventTypes.VECTOR_SOURCE_LAYER_CLICK, event.getFeatures(), event.getLatLng(), event.getScreenPoint());
     }
 
-    public static FeatureClickEvent makeRasterSourceEvent(View view, RCTSource.OnPressEvent event) {
+    public static FeatureClickEvent makeRasterSourceEvent(View view, RNMBXSource.OnPressEvent event) {
         return new FeatureClickEvent(view, EventKeys.RASTER_SOURCE_LAYER_CLICK,
                 EventTypes.RASTER_SOURCE_LAYER_CLICK, event.getFeatures(), event.getLatLng(), event.getScreenPoint());
     }

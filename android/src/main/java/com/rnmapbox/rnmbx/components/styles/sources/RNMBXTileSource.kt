@@ -7,7 +7,7 @@ import com.mapbox.maps.extension.style.sources.TileSet
 import com.mapbox.maps.extension.style.sources.generated.Scheme
 import java.util.*
 
-abstract class RNMBXTileSource<T : Source?>(context: Context?) : RCTSource<T>(context) {
+abstract class RNMBXTileSource<T : Source?>(context: Context?) : RNMBXSource<T>(context) {
     var uRL: String? = null
     public var tileUrlTemplates: Collection<String> = ArrayList()
     var attribution: String? = null
