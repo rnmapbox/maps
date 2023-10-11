@@ -152,11 +152,7 @@ class RCTMGLOfflineModuleLegacy(private val mReactContext: ReactApplicationConte
             Log.d(LOG_TAG, "Error downloading some resources:  ${error}, ${error.message}")
         }
 
-        override fun statusChanged(status: OfflineRegionStatus) {
-            Log.d(LOG_TAG,
-                "${status.completedResourceCount}/${status.requiredResourceCount} resources; ${status.completedResourceSize} bytes downloaded."
-            )
-        }
+        override fun statusChanged(status: OfflineRegionStatus) {}
 
         override fun mapboxTileCountLimitExceeded(Limit: Long) {
             Log.d(LOG_TAG, "mapboxTileCountLimitExceeded")

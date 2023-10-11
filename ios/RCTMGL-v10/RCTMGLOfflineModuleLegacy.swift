@@ -2,9 +2,7 @@ import Foundation
 import MapboxMaps
 
 final class OfflineRegionObserverCustom: OfflineRegionObserver {
-  func statusChanged(for status: OfflineRegionStatus) {
-    print("\(status.completedResourceCount)/\(status.requiredResourceCount) resources; \(status.completedResourceSize) bytes downloaded.")
-  }
+  func statusChanged(for status: OfflineRegionStatus) {}
 
   func responseError(forError error: ResponseError) {
     print("Offline resource download error: \(error.reason), \(error.message)")
