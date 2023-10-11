@@ -66,20 +66,21 @@ class RNMBXImageQueueOperation : Operation {
     weak var weakSelf : RNMBXImageQueueOperation! = self
     
     DispatchQueue.global(qos: .default).async {
-      
-      let loader : RCTImageLoaderProtocol = weakSelf.bridge!.module(forName: "ImageLoader", lazilyLoadIfNecessary: true) as! RCTImageLoaderProtocol
-        
-      let cancellationBlock = loader.loadImage(with: weakSelf.urlRequest, size: .zero, scale: CGFloat(weakSelf.scale), clipped: true, resizeMode: .stretch, progressBlock: { _,_  in }, partialLoad: { _ in }) { error, image in
-        if let completionHandler = weakSelf.completionHandler {
-          completionHandler(error, image)
-        }
-        _ = weakSelf.setState(state:.Finished, except:.Finished)
-      }
-
       if let weakSelf = weakSelf {
-        weakSelf.cancellationBlock = cancellationBlock
-        if (weakSelf.setState(state:.Executing, only:.Initial) == .CancelDoNotExecute) {
-          weakSelf.callCancellationBlock()
+        let loader : RCTImageLoaderProtocol = weakSelf.bridge!.module(forName: "ImageLoader", lazilyLoadIfNecessary: true) as! RCTImageLoaderProtocol
+        
+        let cancellationBlock = loader.loadImage(with: weakSelf.urlRequest, size: .zero, scale: CGFloat(weakSelf.scale), clipped: true, resizeMode: .stretch, progressBlock: { _,_  in }, partialLoad: { _ in }) { error, image in
+          if let completionHandler = weakSelf.completionHandler {
+            completionHandler(error, image)
+          }
+          _ = weakSelf.setState(state:.Finished, except:.Finished)
+        }
+        
+        if true /*let weakSelf = weakSelf */ {
+          weakSelf.cancellationBlock = cancellationBlock
+          if (weakSelf.setState(state:.Executing, only:.Initial) == .CancelDoNotExecute) {
+            weakSelf.callCancellationBlock()
+          }
         }
       }
     }
@@ -129,12 +130,20 @@ class RNMBXImageQueue {
     return result
   }()
   
-  public func addImage(_ json : Any!, scale: Double?, bridge: RCTBridge, handler: @escaping (Error?, UIImage?) -> Void) {
+  public func addImage(_ url: String, scale: Double?, bridge: RCTBridge, handler: @escaping (Error?, UIImage?) -> Void) {
+    addImage(urlRequest: RCTConvert.nsurlRequest(url), scale: scale, bridge: bridge, handler: handler)
+  }
+  
+  public func addImage(_ json : [String:Any], scale: Double?, bridge: RCTBridge, handler: @escaping (Error?, UIImage?) -> Void) {
+    addImage(urlRequest: RCTConvert.nsurlRequest(json), scale: scale, bridge: bridge, handler: handler)
+  }
+  
+  public func addImage(urlRequest: URLRequest, scale: Double?, bridge: RCTBridge, handler: @escaping (Error?, UIImage?) -> Void) {
     let operation = RNMBXImageQueueOperation()
     operation.bridge = bridge
-    operation.urlRequest = RCTConvert.nsurlRequest(json)
-    operation.completionHandler = handler;
-    operation.scale = scale;
+    operation.urlRequest = urlRequest
+    operation.completionHandler = handler
+    operation.scale = scale
     imageQueue.addOperation(operation)
   }
 }

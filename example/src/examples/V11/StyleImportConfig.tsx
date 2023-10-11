@@ -38,6 +38,8 @@ const styles = {
   mapView: { flex: 1 },
 };
 
+/* end-example-doc */
+
 StyleImportConfig.title = 'Style Import Config';
 StyleImportConfig.tags = ['StyleImport', 'v11'];
 StyleImportConfig.docs = `

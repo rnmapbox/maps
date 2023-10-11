@@ -28,6 +28,7 @@ import java.lang.ref.WeakReference
 import java.util.AbstractMap
 import java.util.ArrayList
 import java.util.HashMap
+import com.rnmapbox.rnmbx.v11compat.image.*
 
 data class DownloadedImage(val name: String, val bitmap: Bitmap, val info: ImageInfo)
 
@@ -125,9 +126,8 @@ class DownloadMapImageTask(context: Context, map: MapboxMap, callback: OnAllImag
                 for (image in images) {
                     bitmapImages[image.name] = image.bitmap
                     val info = image.info
-                    style.addBitmapImage(image.name, image.bitmap,sdf = info.sdf, stretchX = info.stretchX, stretchY = info.stretchY,
-                        content = info.content,scale = info.getScaleOr(1.0)
-                    )
+
+                    style.addBitmapImage(image.name, image.bitmap, info)
                 }
             }
         }
