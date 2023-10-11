@@ -25,7 +25,6 @@ rnMapboxMapsDefaultMapboxVersion = '~> 10.16.1'
 rnMapboxMapsDefaultImpl = 'mapbox'
 
 new_arch_enabled = ENV['RCT_NEW_ARCH_ENABLED'] == '1'
-folly_compiler_flags = '-DFOLLY_NO_CONFIG -DFOLLY_MOBILE=1 -DFOLLY_USE_LIBCPP=1 -Wno-comma -Wno-shorten-64-to-32'
 
 # DEPRECATIONS
 
@@ -222,20 +221,7 @@ Pod::Spec.new do |s|
       sp.source_files = "ios/RNMBX/**/*.{h,m,mm,swift}"
       sp.private_header_files = 'ios/RNMBX/RNMBXFabricHelpers.h'
       if new_arch_enabled
-        sp.compiler_flags = folly_compiler_flags + " -DRCT_NEW_ARCH_ENABLED=1"
-        sp.pod_target_xcconfig    = {
-          "HEADER_SEARCH_PATHS" => "\"$(PODS_ROOT)/boost\"",
-          "OTHER_CPLUSPLUSFLAGS" => "-DFOLLY_NO_CONFIG -DFOLLY_MOBILE=1 -DFOLLY_USE_LIBCPP=1",
-          "CLANG_CXX_LANGUAGE_STANDARD" => "c++17",
-          "DEFINES_MODULE" => "YES",
-        }
-        
-        sp.dependency "React-RCTFabric"
-        sp.dependency "React-Codegen"
-        sp.dependency "RCT-Folly"
-        sp.dependency "RCTRequired"
-        sp.dependency "RCTTypeSafety"
-        sp.dependency "ReactCommon/turbomodule/core"
+        install_modules_dependencies(sp)
       end
     else
       fail "$RNMapboxMapsImpl should be mapbox but was: $RNMapboxMapsImpl"
