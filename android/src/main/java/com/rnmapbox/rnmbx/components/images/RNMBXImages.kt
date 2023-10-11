@@ -6,7 +6,9 @@ import com.rnmapbox.rnmbx.components.images.RNMBXImagesManager
 import com.rnmapbox.rnmbx.components.AbstractMapFeature
 import com.rnmapbox.rnmbx.utils.ImageEntry
 import android.graphics.drawable.BitmapDrawable
+import android.util.DisplayMetrics
 import androidx.core.content.res.ResourcesCompat
+import com.mapbox.bindgen.DataRef
 import com.mapbox.bindgen.Expected
 import com.mapbox.bindgen.None
 import com.mapbox.maps.Image
@@ -28,6 +30,9 @@ import java.util.HashMap
 import java.util.HashSet
 
 import com.rnmapbox.rnmbx.v11compat.image.*;
+import java.lang.Float.max
+import java.lang.Math.ceil
+import kotlin.math.ceil
 
 fun Style.addBitmapImage(imageId: String, bitmap: Bitmap, sdf: Boolean = false, stretchX: List<ImageStretches> = listOf(), stretchY: List<ImageStretches> = listOf(), content: ImageContent? = null, scale: Double = 1.0) : Expected<String, None> {
     val byteBuffer = ByteBuffer.allocate(bitmap.byteCount)
@@ -49,7 +54,7 @@ fun Style.addBitmapImage(nativeImage: NativeImage) : Expected<String, None> {
 }
 
 data class ImageInfo(val name: String,  val scale: Double? = 1.0, val sdf: Boolean = false, val stretchX: List<ImageStretches> = listOf(),
-                     val stretchY: List<ImageStretches> = listOf(), val content: ImageContent? = null)
+                     val stretchY: List<ImageStretches> = listOf(), val content: ImageContent? = null, val width: Double? = null, val height: Double? = null)
 {
     fun getScaleOr(default: Double): Double {
         return scale ?: default;
@@ -213,10 +218,32 @@ class RNMBXImages(context: Context, private val mManager: RNMBXImagesManager) : 
         }
     }
 
+    private fun placeholderImageFor(info: ImageInfo): Image? {
+        if (info.width != null && info.height != null) {
+            val width = (info.width * info.getScaleOr(1.0)).toInt()
+            val height = (info.width * info.getScaleOr(1.0)).toInt()
+
+            return emptyImage(width, height)
+        } else if (info.stretchX.isNotEmpty() || info.stretchY.isNotEmpty() || info.content != null) {
+            var maxY = info.stretchY.maxOfOrNull { max(it.first, it.second) } ?: 0.0f
+            var maxX = info.stretchX.maxOfOrNull { max(it.first, it.second) } ?: 0.0f
+            if (info.content != null) {
+                maxX = max(max(info.content.left,info.content.right), maxX)
+                maxY = max(max(info.content.top,info.content.bottom), maxY)
+            }
+            return emptyImage(ceil(maxX).toInt()+1, ceil(maxY).toInt()+1)
+        } else {
+           return mImagePlaceholder?.toMapboxImage() ?: emptyImage(16, 16)
+        }
+    }
+
     private fun addRemoteImages(imageEntries: List<Map.Entry<String, ImageEntry>>?, map: MapboxMap) {
         val style = map.getStyle()
         if (style == null || imageEntries == null) return
         val missingImages: MutableList<Map.Entry<String, ImageEntry>> = ArrayList()
+
+        val metrics = context.resources.displayMetrics
+        val screenDensity = (metrics?.density ?: DisplayMetrics.DENSITY_DEFAULT).toDouble()
 
         // Add image placeholder for images that are not yet available in the style. This way
         // we can load the images asynchronously and add the ShapeSource to the map without delay.
@@ -227,7 +254,11 @@ class RNMBXImages(context: Context, private val mManager: RNMBXImagesManager) : 
         // See also: https://github.com/mapbox/mapbox-gl-native/pull/14253#issuecomment-478827792
         for (imageEntry in imageEntries) {
             if (!hasImage(imageEntry.key, map)) {
-                mImagePlaceholder?.let { style.addBitmapImage(imageEntry.key, it, false, listOf(), listOf(), null,1.0) }
+                val info = imageEntry.value.info;
+                val placeholderImage = placeholderImageFor(info)
+                placeholderImage?.let {
+                    style.addStyleImage(imageEntry.key, it, info)
+                }
                 missingImages.add(imageEntry)
                 mCurrentImages.add(imageEntry.key)
             }

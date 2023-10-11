@@ -3,19 +3,35 @@ package com.rnmapbox.rnmbx.v11compat.httpinterceptor;
 import com.mapbox.common.*
 
 open class HttpServiceBase : HttpServiceInterceptorInterface {
-    override fun onRequest(request: HttpRequest): HttpRequest {
+
+    override fun onRequest(
+        request: HttpRequest,
+        continuation: HttpServiceInterceptorRequestContinuation
+    ) {
+        val request = onRequest(request)
+        continuation.run(HttpRequestOrResponse(request))
+    }
+
+    override fun onResponse(
+        response: HttpResponse,
+        continuation: HttpServiceInterceptorResponseContinuation
+    ) {
+        continuation.run(onResponse(response))
+    }
+
+    open fun onRequest(request: HttpRequest): HttpRequest {
         return request
     }
 
-    override fun onDownload(download: DownloadOptions): DownloadOptions {
+    open fun onDownload(download: DownloadOptions): DownloadOptions {
         return download
     }
 
-    override fun onResponse(response: HttpResponse): HttpResponse {
+    open fun onResponse(response: HttpResponse): HttpResponse {
         return response
     }
 
-    override fun onUpload(options: UploadOptions): UploadOptions {
+    open fun onUpload(options: UploadOptions): UploadOptions {
         return options
     }
 }

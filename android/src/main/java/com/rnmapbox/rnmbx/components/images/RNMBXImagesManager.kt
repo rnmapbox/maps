@@ -14,6 +14,7 @@ import com.rnmapbox.rnmbx.utils.ImageEntry
 import com.rnmapbox.rnmbx.utils.Logger
 import com.rnmapbox.rnmbx.utils.ResourceUtils
 import com.rnmapbox.rnmbx.utils.extensions.forEach
+import com.rnmapbox.rnmbx.utils.extensions.getIfDouble
 import java.util.*
 
 class RNMBXImagesManager(private val mContext: ReactApplicationContext) :
@@ -28,12 +29,14 @@ class RNMBXImagesManager(private val mContext: ReactApplicationContext) :
         return RNMBXImages(context, this)
     }
 
-    fun imageInfo(name: String, map: ReadableMap): ImageInfo {
+    fun imageInfo(name: String, map: ReadableMap, secondScale: Double? = null): ImageInfo {
         var sdf = false
         var stretchX = listOf<ImageStretches>()
         var stretchY = listOf<ImageStretches>()
         var content : ImageContent? = null
         var scale : Double? = null
+        var width : Double? = null
+        var height : Double? = null
         if (map.hasKey("sdf")) {
             sdf = map.getBoolean("sdf");
         }
@@ -50,9 +53,17 @@ class RNMBXImagesManager(private val mContext: ReactApplicationContext) :
             if (map.getType("scale") != ReadableType.Number) {
                 Logger.e("RNMBXImages", "scale should be a number found: $scale in $map")
             }
-            scale = map.getDouble("scale")
+            scale = map.getDouble("scale") * (secondScale ?: 1.0);
+        } else if (secondScale != null) {
+            scale = secondScale
         }
-        return ImageInfo(name=name, sdf=sdf, scale=scale, content=content, stretchX = stretchX, stretchY = stretchY)
+        if (map.hasKey("width")) {
+            width = map.getDouble("width")
+        }
+        if (map.hasKey("height")) {
+            height = map.getDouble("height")
+        }
+        return ImageInfo(name=name, sdf=sdf, scale=scale, content=content, stretchX = stretchX, stretchY = stretchY, width = width, height = height)
     }
 
     @ReactProp(name = "images")
@@ -61,11 +72,47 @@ class RNMBXImagesManager(private val mContext: ReactApplicationContext) :
         map.forEach { imageName, imageInfo ->
             when (imageInfo) {
                 is ReadableMap -> {
-                    val uri = imageInfo.getString("uri") ?: imageInfo.getString("url")
+                    val uri = imageInfo.getString("uri")
                     if (uri != null) {
-                        imagesList.add(AbstractMap.SimpleEntry(imageName, ImageEntry(uri,  imageInfo(imageName, imageInfo))))
+                        imagesList.add(
+                            AbstractMap.SimpleEntry(
+                                imageName,
+                                ImageEntry(uri, imageInfo(imageName, imageInfo))
+                            )
+                        )
                     } else {
-                        Logger.e("RNMBXImagesManager", "Unexpected value for key: $imageName in images property, no uri/url found!")
+                        val imageMap = imageInfo.getMap("resolvedImage")
+                        val uri = imageMap?.getString("uri")
+                        if (uri != null) {
+                            imagesList.add(
+                                AbstractMap.SimpleEntry(
+                                    imageName,
+                                    ImageEntry(
+                                        uri,
+                                        imageInfo(imageName, imageInfo, imageMap.getIfDouble("scale"))
+                                    )
+                                )
+                            )
+                        } else {
+                            var url = imageInfo.getString("url")
+                            if (url != null) {
+                                imagesList.add(
+                                    AbstractMap.SimpleEntry(
+                                        imageName,
+                                        ImageEntry(
+                                            url,
+                                            imageInfo(imageName, imageInfo)
+                                        )
+                                    )
+                                )
+
+                            } else {
+                                Logger.e(
+                                    "RNMBXImagesManager",
+                                    "Unexpected value for key: $imageName in images property, no uri/url found!"
+                                )
+                            }
+                        }
                     }
                 }
                 is String -> {

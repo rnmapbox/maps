@@ -9,6 +9,7 @@ import {
   View,
 } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import type { BaseExampleProps } from 'src/examples/common/BaseExamplePropTypes';
 
 import MapHeader from '../examples/common/MapHeader';
 import Page, { PageProps } from '../examples/common/Page';
@@ -66,11 +67,7 @@ import MapAndRNNavigation from '../examples/Map/MapAndRNNavigation';
 import DynamicUrl from '../examples/Map/DynamicUrl';
 import LocalizeLabels from '../examples/Map/LocalizeLabels';
 // SYMBOLCIRCLELAYER
-import CustomIcon from '../examples/SymbolCircleLayer/CustomIcon';
-import DataDrivenCircleColors from '../examples/SymbolCircleLayer/DataDrivenCircleColors';
-import Earthquakes from '../examples/SymbolCircleLayer/Earthquakes';
-import ShapeSourceIcon from '../examples/SymbolCircleLayer/ShapeSourceIcon';
-import SdfIcons from '../examples/SymbolCircleLayer/SdfIcons';
+import * as SymbolCircleLayer from '../examples/SymbolCircleLayer';
 // USERLOCATION
 import SetDisplacement from '../examples/UserLocation/SetDisplacement';
 import SetTintColor from '../examples/UserLocation/SetTintColor';
@@ -93,6 +90,32 @@ import StyleImportConfig from '../examples/V11/StyleImportConfig';
 
 const MostRecentExampleKey = '@recent_example';
 
+//type with all uppercase letters from A-Z
+type UpercaseLetter =
+  | 'A'
+  | 'B'
+  | 'C'
+  | 'D'
+  | 'E'
+  | 'F'
+  | 'G'
+  | 'H'
+  | 'I'
+  | 'J'
+  | 'K'
+  | 'L'
+  | 'M'
+  | 'N'
+  | 'O'
+  | 'P'
+  | 'Q'
+  | 'R'
+  | 'S'
+  | 'T'
+  | 'X'
+  | 'Y'
+  | 'Z';
+
 const styles = StyleSheet.create({
   exampleList: {
     flex: 1,
@@ -114,13 +137,9 @@ const styles = StyleSheet.create({
 
 type NavigationType = 'Group' | 'Item';
 
-type ItemComponentProps = {
-  label: string;
-  onDismissExample: () => void;
-  navigation: ItemProps['navigation'];
-};
+type ItemComponentProps = BaseExampleProps;
 
-type ItemComponent = React.ComponentType<ItemComponentProps>;
+type ItemComponent = React.ComponentType<Partial<ItemComponentProps>>;
 
 interface ExampleNode {
   label: string;
@@ -207,7 +226,7 @@ type RootStackParamList = {
 };
 
 type GroupProps = NativeStackScreenProps<RootStackParamList, 'Group'>;
-type ItemProps = NativeStackScreenProps<RootStackParamList, 'Item'>;
+export type ItemProps = NativeStackScreenProps<RootStackParamList, 'Item'>;
 
 class ExampleGroup implements ExampleNode {
   label: string;
@@ -252,24 +271,44 @@ class ExampleGroup implements ExampleNode {
   updateIfNeeded(_updated: () => void): void {}
 }
 
-const PageWrapper = (Component: ItemComponent) => (props: ItemComponentProps) =>
+const PageWrapper = (Component: ItemComponent) => (props: BaseExampleProps) =>
   (
-    <Page label={props.label} onDismissExample={props.onDismissExample}>
+    <Page
+      label={props.label}
+      onDismissExample={props.onDismissExample}
+      navigation={props.navigation}
+    >
       <Component {...props} />
     </Page>
   );
 
 function example(
   Component: ItemComponent & {
-    title: string;
-    tags: string[];
-    docs: string;
+    title?: string;
+    tags?: string[];
+    docs?: string;
     page?: boolean;
   },
+  title: string | undefined = undefined,
 ) {
   return new ExampleItem(
-    Component.title,
+    Component.title ?? title ?? 'n/a',
     Component.page ? Component : PageWrapper(Component),
+  );
+}
+
+function exampleGroup(
+  group: { [key: `${UpercaseLetter}${string}`]: ItemComponent } & {
+    metadata: { title: string };
+  },
+) {
+  const { metadata, ...components } = group;
+
+  return new ExampleGroup(
+    metadata.title,
+    Object.entries(components).map(([key, value]) => {
+      return example(value, key);
+    }),
   );
 }
 
@@ -333,13 +372,7 @@ const Examples = new ExampleGroup('React Native Mapbox', [
     new ExampleItem('User Location Padding', UserLocationPadding),
     new ExampleItem('Set Displacement', SetDisplacement),
   ]),
-  new ExampleGroup('Symbol/CircleLayer', [
-    new ExampleItem('Custom Icon', CustomIcon),
-    new ExampleItem('Clustering Earthquakes', Earthquakes),
-    new ExampleItem('Shape Source From Icon', ShapeSourceIcon),
-    new ExampleItem('Data Driven Circle Colors', DataDrivenCircleColors),
-    new ExampleItem('SDF Icons', SdfIcons),
-  ]),
+  exampleGroup(SymbolCircleLayer),
   new ExampleGroup('Fill/RasterLayer', [
     new ExampleItem('GeoJSON Source', GeoJSONSource),
     new ExampleItem('Watercolor Raster Tiles', WatercolorRasterTiles),
