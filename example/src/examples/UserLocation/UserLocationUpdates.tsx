@@ -3,6 +3,7 @@ import { Text } from 'react-native';
 import MapboxGL, { Location } from '@rnmapbox/maps';
 
 import Bubble from '../common/Bubble';
+import { ExampleWithMetadata } from '../common/ExampleMetadata'; // exclude-from-example-doc
 
 const UserLocationUpdates = () => {
   const [location, setLocation] = useState<Location>();
@@ -39,9 +40,14 @@ const styles = {
   },
 };
 
-UserLocationUpdates.title = 'User Location Updates';
-UserLocationUpdates.tags = ['UserLocation', 'UserLocation#onUpdate'];
-UserLocationUpdates.docs =
-  'Retrieves and shows location updates from UserLocation componen via the `onUpdate` callback';
-
 export default UserLocationUpdates;
+/* end-example-doc */
+
+const metadata: ExampleWithMetadata['metadata'] = {
+  title: 'User Location Updates',
+  tags: ['UserLocation', 'UserLocation#onUpdate'],
+  docs: `
+Retrieves and shows location updates from UserLocation componen via the \`onUpdate\` callback
+`,
+};
+UserLocationUpdates.metadata = metadata;

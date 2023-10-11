@@ -15,7 +15,7 @@ import { FlatList, SafeAreaView } from 'react-native';
 
 import earthQuakesJSON from '../../assets/earthquakes.json';
 import { SF_OFFICE_COORDINATE } from '../../utils';
-import { ExampleMetadata } from '../common/ExampleMetadata';
+import { ExampleWithMetadata } from '../common/ExampleMetadata';
 
 const layerStyles: {
   singlePoint: CircleLayerStyle;
@@ -222,18 +222,21 @@ const Earthquakes = () => {
 export default Earthquakes;
 
 /* end-example-doc */
-const metadata = Earthquakes as unknown as ExampleMetadata;
-metadata.title = 'Earthquakes';
-metadata.tags = [
-  'ShapeSource',
-  'SymbolLayer',
-  'ShapeSource#getClusterLeaves',
-  'CircleLayer',
-  'CircleLayer#clusterProperties',
-  'expressions',
-];
-metadata.docs = `
+const metadata: ExampleWithMetadata['metadata'] = {
+  title: 'Earthquakes',
+  tags: [
+    'ShapeSource',
+    'SymbolLayer',
+    'ShapeSource#getClusterLeaves',
+    'CircleLayer',
+    'CircleLayer#clusterProperties',
+    'expressions',
+  ],
+  docs: `
 Renders earthqueke with clustering.
 
 Click a cluster to show list of contents in the cluster \`getClusterLeaves\`.
-`;
+`,
+};
+
+(Earthquakes as unknown as ExampleWithMetadata).metadata = metadata;

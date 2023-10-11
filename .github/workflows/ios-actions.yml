@@ -91,13 +91,13 @@ jobs:
           brew install xcbeautify
 
       - name: Build for detox
-        run: set -o pipefail && NSUnbufferedIO=YES  yarn detox build --configuration ios.debug 2>&1 | xcbeautify -qq
+        run: set -o pipefail && NSUnbufferedIO=YES  yarn detox build --configuration ios.debug.ci 2>&1 | xcbeautify -qq --renderer github-actions
 
       - name: Test with detox
         if: inputs.NEW_ARCH != 1
         run: |
           npx detox --version
-          yarn detox test --configuration ios.debug --debug-synchronization 500 --loglevel trace --record-logs all --take-screenshots all
+          yarn detox test --configuration ios.debug.ci --debug-synchronization 500 --loglevel trace --record-logs all --take-screenshots all  | xcbeautify -qq --renderer github-actions
         env:
           SKIP_TESTS_NO_METAL: ${{ inputs.MAP_IMPL == 'mapbox' || inputs.MAP_IMPL == 'mapbox11' }}
 

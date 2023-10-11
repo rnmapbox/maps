@@ -20,7 +20,7 @@
   },
   "main": "lib/commonjs/index",
   "module": "lib/module/index",
-  "types": "lib/typescript/index.d.ts",
+  "types": "lib/typescript/src/index.d.ts",
   "browser": "./src/index.web.js",
   "react-native": "src/index",
   "source": "src/index",
@@ -41,7 +41,7 @@
   ],
   "scripts": {
     "fetch:style:spec": ". ./scripts/download-style-spec.sh",
-    "generate": "node ./scripts/autogenerate",
+    "generate": "node ./scripts/autogenerate.mjs",
     "test": "yarn lint && yarn unittest",
     "unittest": "yarn jest",
     "unittest:single": "yarn jest --testNamePattern",
@@ -84,7 +84,7 @@
     "@babel/runtime": "7.19.0",
     "@react-native/eslint-config": "^0.72.2",
     "@sinonjs/fake-timers": "^8.0.1",
-    "@testing-library/react-native": "^11.0.0",
+    "@testing-library/react-native": "^12.0.0",
     "@types/debounce": "^1.2.1",
     "@types/mapbox-gl": "^2.7.5",
     "@types/react-native": ">=0.59.9",
@@ -110,10 +110,11 @@
     "node-dir": "0.1.17",
     "prettier": "2.7.1",
     "react": "17.0.2",
-    "react-docgen": "rnmapbox/react-docgen#rnmapbox-dist",
-    "react-native": "0.72.5",
+    "react-docgen": "rnmapbox/react-docgen#rnmapbox-dist-react-docgen-v6",
+    "react-native": "0.67",
     "react-native-builder-bob": "^0.22.0",
     "react-test-renderer": "17.0.2",
+    "ts-node": "10.9.1",
     "typescript": "4.8.4"
   },
   "codegenConfig": {
@@ -122,25 +123,6 @@
     "jsSrcsDir": "src/specs",
     "android": {
       "javaPackageName": "com.rnmapbox.rnmbx"
-    }
-  },
-  "jest": {
-    "preset": "react-native",
-    "collectCoverageFrom": [
-      "src/**/*.js"
-    ],
-    "setupFiles": [
-      "./setup-jest.js",
-      "./__tests__/__mocks__/react-native.mock.js"
-    ],
-    "modulePathIgnorePatterns": [
-      "example",
-      "__tests__/__mocks__",
-      "fixtures",
-      "<rootDir>/lib/"
-    ],
-    "moduleNameMapper": {
-      "^@rnmapbox/maps$": "<rootDir>/src"
     }
   },
   "lint-staged": {

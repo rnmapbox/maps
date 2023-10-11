@@ -40,18 +40,18 @@ const iosSpecOverrides = {
   'text-writing-mode': 'text-writing-modes',
 };
 
-global.getValue = function (value, defaultValue) {
+export function getValue(value, defaultValue) {
   if (!exists(value) || value === '') {
     return defaultValue;
   }
   return value;
-};
+}
 
-global.exists = function (value) {
+export function exists(value) {
   return typeof value !== 'undefined' && value !== null;
-};
+}
 
-global.camelCase = function (str, delimiter = '-') {
+export function camelCase(str, delimiter = '-') {
   const parts = str.split(delimiter);
   return parts
     .map((part, index) => {
@@ -61,25 +61,25 @@ global.camelCase = function (str, delimiter = '-') {
       return part.charAt(0).toUpperCase() + part.substring(1);
     })
     .join('');
-};
+}
 
-global.pascelCase = function (str, delimiter = '-') {
+export function pascelCase(str, delimiter = '-') {
   const parts = str.split(delimiter);
   return parts
     .map((part, index) => {
       return part.charAt(0).toUpperCase() + part.substring(1);
     })
     .join('');
-};
+}
 
-global.setLayerMethodName = function (layer, platform) {
+export function setLayerMethodName(layer, platform) {
   if (platform === 'ios') {
     return `${camelCase(layer.name)}Layer`;
   }
   return `set${pascelCase(layer.name)}LayerStyle`;
-};
+}
 
-global.getLayerType = function (layer, platform) {
+export function getLayerType(layer, platform) {
   const isIOS = platform === 'ios';
 
   switch (layer.name) {
@@ -114,20 +114,20 @@ global.getLayerType = function (layer, platform) {
         `Is ${layer.name} a new layer? We should add support for it!`,
       );
   }
-};
+}
 
-global.ifOrElseIf = function (index) {
+export function ifOrElseIf(index) {
   if (index === 0) {
     return 'if';
   }
   return '} else if';
-};
+}
 
-global.iosStringArrayLiteral = function (arr) {
+export function iosStringArrayLiteral(arr) {
   return `@[@${arr.map((item) => `"${item}"`).join(', @')}]`;
-};
+}
 
-global.iosPropName = function (name) {
+export function iosPropName(name) {
   if (name.indexOf('visibility') !== -1) {
     return 'visible';
   }
@@ -138,28 +138,28 @@ global.iosPropName = function (name) {
     return iosPropNameOverrides[name];
   }
   return name;
-};
+}
 
-global.iosMapLibrePropName = function (name) {
+export function iosMapLibrePropName(name) {
   let result = iosPropName(name);
   if (result === 'fillExtrusionVerticalGradient') {
     return 'fillExtrusionHasVerticalGradient';
   }
   return undefined;
-};
+}
 
-global.iosV10PropName = function (name) {
+export function iosV10PropName(name) {
   return name;
-};
+}
 
-global.iosPropMethodName = function (layer, name) {
+export function iosPropMethodName(layer, name) {
   if (name.indexOf('Visibility') !== -1) {
     return pascelCase(layer.name) + 'StyleLayer' + name;
   }
   return name;
-};
+}
 
-global.androidInputType = function (type, value) {
+export function androidInputType(type, value) {
   if (type === 'array' && value) {
     return `${androidInputType(value)}[]`;
   }
@@ -174,9 +174,9 @@ global.androidInputType = function (type, value) {
     default:
       return 'String';
   }
-};
+}
 
-global.androidOutputType = function (type, value) {
+export function androidOutputType(type, value) {
   if (type === 'array' && value) {
     return `${androidOutputType(value)}[]`;
   }
@@ -191,9 +191,9 @@ global.androidOutputType = function (type, value) {
     default:
       return 'String';
   }
-};
+}
 
-global.androidGetConfigTypeKt = function (androidType, prop) {
+export function androidGetConfigTypeKt(androidType, prop) {
   switch (androidType) {
     case 'Integer':
       return 'styleValue.getInt(VALUE_KEY)';
@@ -212,9 +212,9 @@ global.androidGetConfigTypeKt = function (androidType, prop) {
         return 'styleValue.getString(VALUE_KEY)';
       }
   }
-};
+}
 
-global.androidGetConfigType = function (androidType, prop) {
+export function androidGetConfigType(androidType, prop) {
   switch (androidType) {
     case 'Integer':
       return 'styleValue.getInt(VALUE_KEY)';
@@ -233,9 +233,9 @@ global.androidGetConfigType = function (androidType, prop) {
         return 'styleValue.getString(VALUE_KEY)';
       }
   }
-};
+}
 
-global.jsStyleType = function (prop) {
+export function jsStyleType(prop) {
   if (prop.type === 'color') {
     return 'StyleTypes.Color';
   }
@@ -257,9 +257,9 @@ global.jsStyleType = function (prop) {
   }
 
   return 'StyleTypes.Constant';
-};
+}
 
-global.jsDocPropRequires = function (prop) {
+export function jsDocPropRequires(prop) {
   if (!prop.doc.requires) {
     return;
   }
@@ -272,9 +272,9 @@ global.jsDocPropRequires = function (prop) {
   }
 
   return desc;
-};
+}
 
-global.getEnums = function (layers) {
+export function getEnums(layers) {
   let result = {};
 
   layers.forEach((layer) => {
@@ -291,9 +291,9 @@ global.getEnums = function (layers) {
     });
   });
   return Object.values(result);
-};
+}
 
-global.dtsInterfaceType = function (prop) {
+export function dtsInterfaceType(prop) {
   let propTypes = [];
 
   if (prop.name.indexOf('Translate') !== -1 && prop.type !== 'enum') {
@@ -362,9 +362,9 @@ ${startAtSpace(2, '')}`;
       return propTypes[0];
     }
   }
-};
+}
 
-global.jsDocReactProp = function (prop) {
+export function jsDocReactProp(prop) {
   let propTypes = [];
 
   if (prop.type === 'color') {
@@ -416,9 +416,9 @@ ${startAtSpace(2, '])')}`;
   } else {
     return propTypes[0];
   }
-};
+}
 
-global.startAtSpace = function (spaceCount, str) {
+export function startAtSpace(spaceCount, str) {
   let value = '';
 
   for (let i = 0; i < spaceCount; i++) {
@@ -426,14 +426,14 @@ global.startAtSpace = function (spaceCount, str) {
   }
 
   return `${value}${str}`;
-};
+}
 
-global.replaceNewLine = function (str) {
+export function replaceNewLine(str) {
   if (str === undefined || str === null) {
     return str;
   }
   return str.replace(/\n/g, '<br/>');
-};
+}
 
 function splitSingleLineOnWordBoundaries(str, maxlength) {
   let words = str.split(' ');
@@ -462,7 +462,7 @@ function splitMultilineOnWordBoundaries(str, maxlength) {
   return result;
 }
 
-global.codeQuote = function (str, maxwidth) {
+export function codeQuote(str, maxwidth) {
   if (str === undefined || str === null) {
     return str;
   }
@@ -473,17 +473,17 @@ global.codeQuote = function (str, maxwidth) {
   } else {
     return `<pre>${str}</pre>`;
   }
-};
+}
 
-global.styleMarkdownTableRow = function (style) {
+export function styleMarkdownTableRow(style) {
   return `| \`${style.name}\` | \`${style.type}\` | \`${
     style.requires.join(', ') || 'none'
   }\` | \`${style.disabledBy.join(', ') || 'none'}\` | ${replaceNewLine(
     style.description,
   )} |`;
-};
+}
 
-global.methodMarkdownTableRow = function (method) {
+export function methodMarkdownTableRow(method) {
   return method.params
     .map((param) => {
       return `| \`${param.name}\` | \`${
@@ -493,7 +493,7 @@ global.methodMarkdownTableRow = function (method) {
       )} |`;
     })
     .join('\n');
-};
+}
 
 function _propTableRows(props, prefix = '') {
   return props
@@ -555,22 +555,53 @@ global.propTableRows = function (component) {
   return _propTableRows(component.props, '');
 };
 
-global.propType = function (prop) {
+global.dumpTsTyle = function (type, name) {
+  const lines = type
+    .map((prop) => `  ${prop.name}: ${prop.type}; /* ${prop.description} */`)
+    .join('\n');
+  return `\`\`\`tsx\ntype ${pascelCase(name)} = {\n${lines}\n}\n\`\`\``;
+};
+
+export function propType(prop) {
   let { type } = prop;
+  if (typeof type === 'object' && type.name === 'shape') {
+    return global.dumpTsTyle(type.value, prop.name);
+  }
   if (typeof type === 'object') {
     type = type.name;
   }
-  if (type === 'shape') {
-    return 'TODO';
-  }
   return `\`\`\`tsx\n${type.replace(/(\\\|)/g, '|')}\n\`\`\``;
-};
+}
 
-global.propDescription = function (prop) {
-  return prop.description;
-};
+export function propDescription(prop) {
+  return prop.description.replace('<', '&lt;').replace('>', '&gt;');
+}
 
-global.getMarkdownMethodSignature = function (method) {
+export function examplePropLinks(prop, component) {
+  const key = `${component.name}#${prop.name}`;
+  if (global.exampleTagLinks[key]) {
+    return global.exampleTagLinks[key]
+      .map(({ groupName, name, title }) => {
+        return `[${title}](../examples/${groupName}/${name})`;
+      })
+      .join(', ');
+  }
+  return '';
+}
+
+export function exampleMethodLinks(method, component) {
+  const key = `${component.name}#${method.name}`;
+  if (global.exampleTagLinks[key]) {
+    return global.exampleTagLinks[key]
+      .map(({ groupName, name, title }) => {
+        return `[${title}](../examples/${groupName}/${name})`;
+      })
+      .join(', ');
+  }
+  return '';
+}
+
+export function getMarkdownMethodSignature(method) {
   const params = method.params
     .map((param, i) => {
       const isOptional = param.optional;
@@ -587,9 +618,9 @@ global.getMarkdownMethodSignature = function (method) {
     .join('');
 
   return `${method.name}(${params})`;
-};
+}
 
-global.getMarkdownMethodExamples = function (method) {
+export function getMarkdownMethodExamples(method) {
   if (method.examples == null) {
     return null;
   }
@@ -604,9 +635,9 @@ ${example.trim()}
 `;
     })
     .join('');
-};
+}
 
-global.getStyleDefaultValue = function (style) {
+export function getStyleDefaultValue(style) {
   if (style.type === 'string' && style.default === '') {
     return 'empty string';
   } else if (style.type.includes('array')) {
@@ -614,7 +645,7 @@ global.getStyleDefaultValue = function (style) {
   } else {
     return style.default;
   }
-};
+}
 
 Object.keys(iosSpecOverrides).forEach((propName) => {
   const camelCasePropName = camelCase(propName);
