@@ -107,6 +107,15 @@ def $RNMapboxMaps._add_spm_to_target(project, target, url, requirement, product_
   end
 end
 
+def $RNMapboxMaps._add_compiler_flags(sp, extra_flags)
+  exisiting_flags = sp.attributes_hash["compiler_flags"]
+  if exisiting_flags.present?
+    sp.compiler_flags = exisiting_flags + " #{extra_flags}"
+  else
+    sp.compiler_flags = extra_flags
+  end
+end
+
 def $RNMapboxMaps.post_install(installer)
   if $RNMapboxMapsUseV11
     installer.pods_project.build_configurations.each do |config|
@@ -219,9 +228,12 @@ Pod::Spec.new do |s|
     case $RNMapboxMapsImpl
     when 'mapbox'
       sp.source_files = "ios/RNMBX/**/*.{h,m,mm,swift}"
-      sp.private_header_files = 'ios/RNMBX/RNMBXFabricHelpers.h'
+      sp.private_header_files = 'ios/RNMBX/RNMBXFabricHelpers.h', 'ios/RNMBX/rnmapbox_maps-Swift.pre.h'
       if new_arch_enabled
         install_modules_dependencies(sp)
+      end
+      if ENV['USE_FRAMEWORKS'] || $RNMapboxMapsUseFrameworks
+        $RNMapboxMaps._add_compiler_flags(sp, "-DRNMBX_USE_FRAMEWORKS=1")
       end
     else
       fail "$RNMapboxMapsImpl should be mapbox but was: $RNMapboxMapsImpl"
