@@ -49,6 +49,12 @@ export interface Spec extends TurboModule {
     withFilter: ReadonlyArray<Object>,
     withSourceLayerIDs: ReadonlyArray<string>,
   ) => Promise<Object>;
+  setCustomLocation: (
+    viewRef: Int32 | null,
+    latitude: number,
+    longitude: number,
+    heading: number | null,
+  ) => Promise<Object>;
 }
 
 export default TurboModuleRegistry.getEnforcing<Spec>('RNMBXMapViewModule');

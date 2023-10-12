@@ -853,6 +853,18 @@ class MapView extends NativeBridgeComponent(
     return this._runNative<void>('showAttribution');
   }
 
+  /**
+   * sets up a custom location provider and applies the supplied location
+   * @param location custom coordinates and heading
+   */
+  setCustomLocation(latitude: number, longitude: number, heading?: number) {
+    return this._runNative<void>('setCustomLocation', [
+      latitude,
+      longitude,
+      heading ?? null,
+    ]);
+  }
+
   _runNativeCommand<RefType, ReturnType = NativeArg>(
     methodName: string,
     nativeRef: RefType | undefined,

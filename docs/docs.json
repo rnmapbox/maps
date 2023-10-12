@@ -3154,6 +3154,37 @@
         "returns": null,
         "description": "Show the attribution and telemetry action sheet.\nIf you implement a custom attribution button, you should add this action to the button.",
         "examples": []
+      },
+      {
+        "name": "setCustomLocation",
+        "docblock": "sets up a custom location provider and applies the supplied location\n@param location custom coordinates and heading",
+        "modifiers": [],
+        "params": [
+          {
+            "name": "latitude",
+            "optional": false,
+            "type": {
+              "name": "number"
+            }
+          },
+          {
+            "name": "longitude",
+            "optional": false,
+            "type": {
+              "name": "number"
+            }
+          },
+          {
+            "name": "heading",
+            "optional": true,
+            "type": {
+              "name": "number"
+            }
+          }
+        ],
+        "returns": null,
+        "description": "sets up a custom location provider and applies the supplied location",
+        "examples": []
       }
     ],
     "props": [

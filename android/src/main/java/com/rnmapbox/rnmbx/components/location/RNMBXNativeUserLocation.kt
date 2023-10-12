@@ -2,18 +2,16 @@ package com.rnmapbox.rnmbx.components.location
 
 import android.annotation.SuppressLint
 import android.content.Context
-import androidx.appcompat.content.res.AppCompatResources
-import com.rnmapbox.rnmbx.components.mapview.OnMapReadyCallback
-import com.mapbox.maps.MapboxMap
 import com.mapbox.android.core.permissions.PermissionsManager
+import com.mapbox.maps.MapboxMap
 import com.mapbox.maps.Style
 import com.rnmapbox.rnmbx.R
 import com.rnmapbox.rnmbx.components.AbstractMapFeature
 import com.rnmapbox.rnmbx.components.RemovalReason
+import com.rnmapbox.rnmbx.components.mapview.OnMapReadyCallback
 import com.rnmapbox.rnmbx.components.mapview.RNMBXMapView
-
-import com.rnmapbox.rnmbx.v11compat.location.PuckBearingSource
 import com.rnmapbox.rnmbx.v11compat.image.AppCompatResourcesV11
+import com.rnmapbox.rnmbx.v11compat.location.PuckBearingSource
 
 enum class RenderMode {
     GPS, COMPASS, NORMAL
@@ -69,14 +67,14 @@ class RNMBXNativeUserLocation(context: Context) : AbstractMapFeature(context), O
             // emulate https://docs.mapbox.com/android/legacy/maps/guides/location-component/
             when (mRenderMode) {
                 RenderMode.NORMAL ->
-                    it.update { it.copy(bearingImage =  null, puckBearingSource = null)}
+                    it.update { it.copy(bearingImage =  null, puckBearingSource = null, topImage = AppCompatResourcesV11.getDrawableImageHolder(mContext, R.drawable.mapbox_user_icon), pulsing = true)}
                 RenderMode.GPS -> it.update {
                     it.copy(bearingImage =  AppCompatResourcesV11.getDrawableImageHolder(
                         mContext, R.drawable.mapbox_user_bearing_icon
-                    ), puckBearingSource = PuckBearingSource.COURSE) }
+                    ), topImage = null, pulsing = false, puckBearingSource = PuckBearingSource.COURSE) }
                 RenderMode.COMPASS -> it.update{ it.copy(bearingImage=  AppCompatResourcesV11.getDrawableImageHolder(
                     mContext, R.drawable.mapbox_user_puck_icon
-                ), puckBearingSource = PuckBearingSource.HEADING) }
+                ), topImage = null, pulsing = false, puckBearingSource = PuckBearingSource.HEADING) }
             }
         }
     }
