@@ -4,11 +4,9 @@ import android.content.Context
 import android.graphics.Bitmap
 import com.mapbox.maps.Style
 import com.mapbox.maps.MapboxMap
-import com.rnmapbox.rnmbx.utils.DownloadMapImageTask.OnAllImagesLoaded
 import android.os.AsyncTask
 import com.rnmapbox.rnmbx.utils.ImageEntry
 import android.util.DisplayMetrics
-import com.rnmapbox.rnmbx.utils.DownloadMapImageTask
 import android.graphics.BitmapFactory
 import android.net.Uri
 import android.util.Log
@@ -22,11 +20,8 @@ import com.facebook.imagepipeline.image.CloseableStaticBitmap
 import com.facebook.imagepipeline.request.ImageRequestBuilder
 import com.facebook.react.views.imagehelper.ImageSource
 import com.rnmapbox.rnmbx.components.images.ImageInfo
-import com.rnmapbox.rnmbx.components.images.addBitmapImage
 import java.io.File
 import java.lang.ref.WeakReference
-import java.util.AbstractMap
-import java.util.ArrayList
 import java.util.HashMap
 import com.rnmapbox.rnmbx.v11compat.image.*
 
@@ -54,63 +49,39 @@ class DownloadMapImageTask(context: Context, map: MapboxMap, callback: OnAllImag
             if (uri.startsWith("/")) {
                 uri = Uri.fromFile(File(uri)).toString()
             }
-            if (uri.startsWith("http://") || uri.startsWith("https://") ||
-                uri.startsWith("file://") || uri.startsWith("asset://") || uri.startsWith("data:")
-            ) {
-                val source = ImageSource(context, uri)
-                val request = ImageRequestBuilder.newBuilderWithSource(source.uri)
-                    .setRotationOptions(RotationOptions.autoRotate())
-                    .build()
-                val dataSource =
-                    Fresco.getImagePipeline().fetchDecodedImage(request, mCallerContext)
-                var result: CloseableReference<CloseableImage>? = null
-                try {
-                    result = DataSources.waitForFinalResult(dataSource)
-                    if (result != null) {
-                        val image = result.get()
-                        if (image is CloseableStaticBitmap) {
-                            val bitmap =
-                                image.underlyingBitmap // Copy the bitmap to make sure it doesn't get recycled when we release
-                                    // the fresco reference.
-                                    .copy(Bitmap.Config.ARGB_8888, true)
-                            bitmap.density =
-                                (DisplayMetrics.DENSITY_DEFAULT.toDouble() * imageEntry.getScaleOr(
-                                    1.0
-                                )).toInt()
-                            images.add(
-                                DownloadedImage(name=key, bitmap=bitmap, info=imageEntry.info)
-                            )
-                        } else {
-                            FLog.e(LOG_TAG, "Failed to load bitmap from: $uri")
-                        }
+            val source = ImageSource(context, uri)
+            val request = ImageRequestBuilder.newBuilderWithSource(source.uri)
+                .setRotationOptions(RotationOptions.autoRotate())
+                .build()
+            val dataSource =
+                Fresco.getImagePipeline().fetchDecodedImage(request, mCallerContext)
+            var result: CloseableReference<CloseableImage>? = null
+            try {
+                result = DataSources.waitForFinalResult(dataSource)
+                if (result != null) {
+                    val image = result.get()
+                    if (image is CloseableStaticBitmap) {
+                        val bitmap =
+                            image.underlyingBitmap // Copy the bitmap to make sure it doesn't get recycled when we release
+                                // the fresco reference.
+                                .copy(Bitmap.Config.ARGB_8888, true)
+                        Log.e("RNMBXImageManager", "downloadImage: $key $uri $image ${image.width}x${image.height}")
+                        bitmap.density = DisplayMetrics.DENSITY_DEFAULT
+                        images.add(
+                            DownloadedImage(name=key, bitmap=bitmap, info=imageEntry.info)
+                        )
                     } else {
                         FLog.e(LOG_TAG, "Failed to load bitmap from: $uri")
                     }
-                } catch (e: Throwable) {
-                    Log.w(LOG_TAG, e.localizedMessage)
-                } finally {
-                    dataSource.close()
-                    if (result != null) {
-                        CloseableReference.closeSafely(result)
-                    }
-                }
-            } else {
-                // local asset required from JS require('image.png') or import icon from 'image.png' while in release mode
-                val bitmap = BitmapUtils.getBitmapFromResource(
-                    context,
-                    uri,
-                    getBitmapOptions(metrics, imageEntry.info.scale)
-                )
-                if (bitmap != null) {
-                    images.add(
-                        DownloadedImage(
-                            name=key,
-                            bitmap=bitmap,
-                            info=imageEntry.info
-                        )
-                    )
                 } else {
                     FLog.e(LOG_TAG, "Failed to load bitmap from: $uri")
+                }
+            } catch (e: Throwable) {
+                Log.w(LOG_TAG, e.localizedMessage)
+            } finally {
+                dataSource.close()
+                if (result != null) {
+                    CloseableReference.closeSafely(result)
                 }
             }
         }
@@ -132,16 +103,6 @@ class DownloadMapImageTask(context: Context, map: MapboxMap, callback: OnAllImag
             }
         }
         mCallback?.onAllImagesLoaded()
-    }
-
-    private fun getBitmapOptions(metrics: DisplayMetrics, scale: Double?): BitmapFactory.Options {
-        val options = BitmapFactory.Options()
-        options.inScreenDensity = metrics.densityDpi
-        options.inTargetDensity = metrics.densityDpi
-        if (scale != null) {
-            options.inDensity = (DisplayMetrics.DENSITY_DEFAULT.toDouble() * scale).toInt()
-        }
-        return options
     }
 
     companion object {

@@ -228,8 +228,8 @@ class RNMBXImages(context: Context, private val mManager: RNMBXImagesManager) : 
             var maxY = info.stretchY.maxOfOrNull { max(it.first, it.second) } ?: 0.0f
             var maxX = info.stretchX.maxOfOrNull { max(it.first, it.second) } ?: 0.0f
             if (info.content != null) {
-                maxX = max(max(info.content.left,info.content.right), maxX)
-                maxY = max(max(info.content.top,info.content.bottom), maxY)
+                maxX = max(max(info.content.left, info.content.right), maxX)
+                maxY = max(max(info.content.top, info.content.bottom), maxY)
             }
             return emptyImage(ceil(maxX).toInt()+1, ceil(maxY).toInt()+1)
         } else {
