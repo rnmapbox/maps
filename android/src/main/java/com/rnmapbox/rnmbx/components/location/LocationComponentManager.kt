@@ -4,6 +4,7 @@ import android.content.Context
 import android.graphics.Color
 import android.graphics.drawable.BitmapDrawable
 import androidx.lifecycle.Lifecycle
+import com.mapbox.maps.extension.style.expressions.dsl.generated.interpolate
 import com.mapbox.maps.plugin.LocationPuck2D
 import com.mapbox.maps.plugin.locationcomponent.location
 import com.rnmapbox.rnmbx.R
@@ -20,9 +21,20 @@ import com.rnmapbox.rnmbx.v11compat.location.PuckBearingSource
  * And NativeUserLocation can ask for display of user's current location - independent of Camera's user tracking.
  */
 class LocationComponentManager(mapView: RNMBXMapView, context: Context) {
+    private val MAPBOX_BLUE_COLOR = Color.parseColor("#4A90E2")
+
     var mMapView = mapView
     var mContext = context
-    private var mState = State(showUserLocation=false, followUserLocation=false, tintColor= null, bearingImage = null, puckBearingSource =null, topImage = AppCompatResourcesV11.getDrawableImageHolder(mContext, R.drawable.mapbox_user_icon))
+    private var mState = State(
+        showUserLocation = false,
+        followUserLocation = false,
+        tintColor = null,
+        bearingImage = null,
+        puckBearingSource = null,
+        topImage = null,
+        shadowImage = null,
+        scale = 1.0,
+    )
 
     private var mLocationManager: LocationManager = LocationManager.getInstance(context)
 
@@ -34,10 +46,12 @@ class LocationComponentManager(mapView: RNMBXMapView, context: Context) {
         val showUserLocation: Boolean,
         val followUserLocation: Boolean,
         val tintColor: Int?, // tint of location puck
-        var topImage: ImageHolder?, // top image (blue circle by default)
-        var bearingImage: ImageHolder?, // bearing image (background)
+        var bearingImage: ImageHolder?, // The image used as the middle of the location indicator.
+        var topImage: ImageHolder?, // The image to use as the top layer for the location indicator.
+        var shadowImage: ImageHolder?, // The image that acts as a background of the location indicator.
         var puckBearingSource: PuckBearingSource?, // bearing source
         var pulsing: Boolean = true,
+        var scale: Double = 1.0,
     ) {
         val enabled: Boolean
             get() = showUserLocation || followUserLocation
@@ -77,10 +91,18 @@ class LocationComponentManager(mapView: RNMBXMapView, context: Context) {
         mapView.location.updateSettings {
             enabled = newState.enabled
 
-            if (fullUpdate || (newState.hidden != oldState.hidden) || (newState.tintColor != oldState.tintColor) || (newState.bearingImage != oldState.bearingImage) || (newState.topImage != oldState.topImage)) {
+            if (fullUpdate ||
+                newState.hidden != oldState.hidden ||
+                newState.tintColor != oldState.tintColor ||
+                newState.bearingImage != oldState.bearingImage ||
+                newState.topImage != oldState.topImage ||
+                newState.shadowImage != oldState.shadowImage ||
+                newState.scale != oldState.scale
+            ) {
                 if (newState.hidden) {
                     var emptyLocationPuck = LocationPuck2D()
-                    val empty = AppCompatResourcesV11.getDrawableImageHolder(mContext, R.drawable.empty)
+                    val empty =
+                        AppCompatResourcesV11.getDrawableImageHolder(mContext, R.drawable.empty)
                     emptyLocationPuck.bearingImage = empty
                     emptyLocationPuck.shadowImage = empty
                     emptyLocationPuck.topImage = empty
@@ -88,31 +110,32 @@ class LocationComponentManager(mapView: RNMBXMapView, context: Context) {
                     locationPuck = emptyLocationPuck
                     pulsingEnabled = false
                 } else {
-                    val mapboxBlueColor = Color.parseColor("#4A90E2")
                     val tintColor = newState.tintColor
-                    val defaultLocationPuck = LocationPuck2D()
                     var topImage = newState.topImage
                     if (tintColor != null && topImage != null) {
                         val drawable = BitmapDrawable(mContext.resources, topImage.bitmap)
                         drawable.setTint(tintColor)
                         topImage = com.mapbox.maps.ImageHolder.Companion.from(drawable.bitmap)
                     }
-                    defaultLocationPuck.topImage = topImage
-                    val defaultBearingImage = AppCompatResourcesV11.getDrawableImageHolder(
-                        mContext, R.drawable.mapbox_user_stroke_icon
+                    val scaleExpression = if (newState.scale != 1.0) {
+                        interpolate {
+                            linear()
+                            zoom()
+                            stop {
+                                literal(0)
+                                literal(newState.scale)
+                            }
+                        }.toJson()
+                    } else null
+
+                    locationPuck = LocationPuck2D(
+                        topImage = topImage,
+                        bearingImage = newState.bearingImage,
+                        shadowImage = newState.shadowImage,
+                        scaleExpression = scaleExpression,
                     )
-                    defaultLocationPuck.bearingImage = newState.bearingImage ?: defaultBearingImage
-                    val shadowImage = AppCompatResourcesV11.getDrawableImageHolder(
-                        mContext, R.drawable.mapbox_user_icon_shadow
-                    )
-                    defaultLocationPuck.shadowImage = shadowImage
-                    locationPuck = defaultLocationPuck
                     pulsingEnabled = newState.pulsing
-                    if (tintColor != null) {
-                        pulsingColor = tintColor
-                    } else {
-                        pulsingColor = mapboxBlueColor
-                    }
+                    pulsingColor = tintColor ?: MAPBOX_BLUE_COLOR
                 }
             }
 

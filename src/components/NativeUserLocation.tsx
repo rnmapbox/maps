@@ -21,6 +21,26 @@ export type Props = {
    * @platform ios
    */
   iosShowsUserHeadingIndicator?: boolean;
+
+  /**
+   * The image to use as the top layer for the location indicator.
+   */
+  topImage?: string;
+
+  /**
+   * The image used as the middle of the location indicator.
+   */
+  bearingImage?: string;
+
+  /**
+   * The image that acts as a background of the location indicator.
+   */
+  shadowImage?: string;
+
+  /**
+   * The size of the images, as a scale factor applied to the size of the specified image.
+   */
+  scale?: number;
 };
 
 type NativeProps = Props;

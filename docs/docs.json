@@ -3669,6 +3669,34 @@
         "type": "boolean",
         "default": "none",
         "description": "iOS only. A Boolean value indicating whether the user location annotation may display a permanent heading indicator.\n\n@platform ios"
+      },
+      {
+        "name": "topImage",
+        "required": false,
+        "type": "string",
+        "default": "none",
+        "description": "The image to use as the top layer for the location indicator."
+      },
+      {
+        "name": "bearingImage",
+        "required": false,
+        "type": "string",
+        "default": "none",
+        "description": "The image used as the middle of the location indicator."
+      },
+      {
+        "name": "shadowImage",
+        "required": false,
+        "type": "string",
+        "default": "none",
+        "description": "The image that acts as a background of the location indicator."
+      },
+      {
+        "name": "scale",
+        "required": false,
+        "type": "number",
+        "default": "none",
+        "description": "The size of the images, as a scale factor applied to the size of the specified image."
       }
     ],
     "fileNameWithExt": "NativeUserLocation.tsx",
@@ -6377,80 +6405,46 @@
     ],
     "props": [
       {
-        "name": "androidRenderMode",
-        "required": false,
-        "type": "'normal' \\| 'compass' \\| 'gps'",
-        "default": "none",
-        "description": "native/android only render mode\n\n - normal: just a circle\n - compass: triangle with heading\n - gps: large arrow\n\n@platform android"
-      },
-      {
         "name": "animated",
         "required": false,
-        "type": "boolean",
+        "type": "FIX ME UNKNOWN TYPE",
         "default": "true",
-        "description": "Whether location icon is animated between updates"
-      },
-      {
-        "name": "children",
-        "required": false,
-        "type": "ReactElement \\| ReactElement[]",
-        "default": "none",
-        "description": "Custom location icon of type mapbox-gl-native components"
-      },
-      {
-        "name": "minDisplacement",
-        "required": false,
-        "type": "number",
-        "default": "0",
-        "description": "Minimum amount of movement before GPS location is updated in meters"
-      },
-      {
-        "name": "onPress",
-        "required": false,
-        "type": {
-          "name": "func",
-          "funcSignature": "() => void"
-        },
-        "default": "none",
-        "description": "Callback that is triggered on location icon press\n*signature:*`() => void`"
-      },
-      {
-        "name": "onUpdate",
-        "required": false,
-        "type": {
-          "name": "func",
-          "funcSignature": "(location:Location) => void"
-        },
-        "default": "none",
-        "description": "Callback that is triggered on location update\n*signature:*`(location:Location) => void`"
-      },
-      {
-        "name": "renderMode",
-        "required": false,
-        "type": "UserLocationRenderMode",
-        "default": "UserLocationRenderMode.Normal",
-        "description": "Which render mode to use."
-      },
-      {
-        "name": "requestsAlwaysUse",
-        "required": false,
-        "type": "boolean",
-        "default": "false",
-        "description": "Request the always location permission, and listen to the location even when the app is in background\n\n@platform ios"
-      },
-      {
-        "name": "showsUserHeadingIndicator",
-        "required": false,
-        "type": "boolean",
-        "default": "false",
-        "description": "Show or hide small arrow which indicates direction the device is pointing relative to north."
+        "description": "FIX ME NO DESCRIPTION"
       },
       {
         "name": "visible",
         "required": false,
-        "type": "boolean",
+        "type": "FIX ME UNKNOWN TYPE",
         "default": "true",
-        "description": "Whether location icon is visible"
+        "description": "FIX ME NO DESCRIPTION"
+      },
+      {
+        "name": "showsUserHeadingIndicator",
+        "required": false,
+        "type": "FIX ME UNKNOWN TYPE",
+        "default": "false",
+        "description": "FIX ME NO DESCRIPTION"
+      },
+      {
+        "name": "requestsAlwaysUse",
+        "required": false,
+        "type": "FIX ME UNKNOWN TYPE",
+        "default": "false",
+        "description": "FIX ME NO DESCRIPTION"
+      },
+      {
+        "name": "minDisplacement",
+        "required": false,
+        "type": "FIX ME UNKNOWN TYPE",
+        "default": "0",
+        "description": "FIX ME NO DESCRIPTION"
+      },
+      {
+        "name": "renderMode",
+        "required": false,
+        "type": "FIX ME UNKNOWN TYPE",
+        "default": "UserLocationRenderMode.Normal",
+        "description": "FIX ME NO DESCRIPTION"
       }
     ],
     "fileNameWithExt": "UserLocation.tsx",

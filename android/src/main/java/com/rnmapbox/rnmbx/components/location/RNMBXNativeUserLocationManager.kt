@@ -3,7 +3,6 @@ package com.rnmapbox.rnmbx.components.location
 import com.facebook.react.uimanager.ThemedReactContext
 import com.facebook.react.uimanager.ViewGroupManager
 import com.facebook.react.uimanager.annotations.ReactProp
-import com.rnmapbox.rnmbx.utils.Logger
 import javax.annotation.Nonnull
 
 class RNMBXNativeUserLocationManager : ViewGroupManager<RNMBXNativeUserLocation>() {
@@ -15,10 +14,30 @@ class RNMBXNativeUserLocationManager : ViewGroupManager<RNMBXNativeUserLocation>
     @ReactProp(name = "androidRenderMode")
     fun setAndroidRenderMode(userLocation: RNMBXNativeUserLocation, mode: String) {
         when (mode) {
-            "compass" -> userLocation.setAndroidRenderMode(RenderMode.COMPASS);
-            "gps" -> userLocation.setAndroidRenderMode(RenderMode.GPS);
-            "normal" -> userLocation.setAndroidRenderMode(RenderMode.NORMAL);
+            "compass" -> userLocation.setAndroidRenderMode(RenderMode.COMPASS)
+            "gps" -> userLocation.setAndroidRenderMode(RenderMode.GPS)
+            "normal" -> userLocation.setAndroidRenderMode(RenderMode.NORMAL)
         }
+    }
+
+    @ReactProp(name = "topImage")
+    fun setTopImage(userLocation: RNMBXNativeUserLocation, topImage: String?) {
+        userLocation.mTopImage = topImage
+    }
+
+    @ReactProp(name = "bearingImage")
+    fun setBearingImage(userLocation: RNMBXNativeUserLocation, bearingImage: String?) {
+        userLocation.mBearingImage = bearingImage
+    }
+
+    @ReactProp(name = "shadowImage")
+    fun setShadowImage(userLocation: RNMBXNativeUserLocation, shadowImage: String?) {
+        userLocation.mShadowImage = shadowImage
+    }
+
+    @ReactProp(name = "scale", defaultDouble = 1.0)
+    fun setScale(userLocation: RNMBXNativeUserLocation, scale: Double) {
+        userLocation.mScale = scale
     }
 
     @Nonnull

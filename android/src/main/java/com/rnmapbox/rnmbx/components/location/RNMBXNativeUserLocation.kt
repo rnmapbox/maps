@@ -2,6 +2,7 @@ package com.rnmapbox.rnmbx.components.location
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.util.Log
 import com.mapbox.android.core.permissions.PermissionsManager
 import com.mapbox.maps.MapboxMap
 import com.mapbox.maps.Style
@@ -22,6 +23,26 @@ class RNMBXNativeUserLocation(context: Context) : AbstractMapFeature(context), O
     private var mMap: MapboxMap? = null
     private var mRenderMode : RenderMode = RenderMode.NORMAL;
     private var mContext : Context = context
+    var mTopImage: String? = null
+        set(value) {
+            field = value
+            applyChanges()
+        }
+    var mBearingImage: String? = null
+        set(value) {
+            field = value
+            applyChanges()
+        }
+    var mShadowImage: String? = null
+        set(value) {
+            field = value
+            applyChanges()
+        }
+    var mScale: Double = 1.0
+        set(value) {
+            field = value
+            applyChanges()
+        }
 
     override fun addToMap(mapView: RNMBXMapView) {
         super.addToMap(mapView)
@@ -62,19 +83,82 @@ class RNMBXNativeUserLocation(context: Context) : AbstractMapFeature(context), O
         mMapView?.locationComponentManager?.showNativeUserLocation(mEnabled)
     }
 
+    @SuppressLint("DiscouragedApi")
     fun applyChanges() {
-        mMapView?.locationComponentManager?.let {
+        Log.d(
+            "***",
+            "mTopImage: ${mTopImage}, mBearingImage: ${mBearingImage}, mShadowImage: ${mShadowImage}"
+        )
+        val useCustomImages = mTopImage != null || mBearingImage != null || mShadowImage != null
+
+        val bearingImageResourceId = if (mBearingImage != null) {
+            context.resources.getIdentifier(
+                mBearingImage,
+                "drawable",
+                context.packageName
+            )
+        } else if (useCustomImages) {
+            null
+        } else when (mRenderMode) {
+            RenderMode.GPS -> R.drawable.mapbox_user_bearing_icon
+            RenderMode.COMPASS -> R.drawable.mapbox_user_puck_icon
+            RenderMode.NORMAL -> R.drawable.mapbox_user_stroke_icon
+        }
+
+        val topImageResourceId = if (mTopImage != null) {
+            context.resources.getIdentifier(
+                mTopImage,
+                "drawable",
+                context.packageName
+            )
+        } else if (useCustomImages) {
+            null
+        } else R.drawable.mapbox_user_icon
+
+        val shadowImageResourceId = if (mShadowImage != null) {
+            context.resources.getIdentifier(
+                mShadowImage,
+                "drawable",
+                context.packageName
+            )
+        } else if (useCustomImages) {
+            null
+        } else R.drawable.mapbox_user_icon_shadow
+
+        val puckBearingSource = when (mRenderMode) {
+            RenderMode.GPS -> PuckBearingSource.COURSE
+            RenderMode.COMPASS -> PuckBearingSource.HEADING
+            RenderMode.NORMAL -> null
+        }
+        val pulsing = mRenderMode == RenderMode.NORMAL
+
+
+        mMapView?.locationComponentManager?.let { locationComponentManager ->
             // emulate https://docs.mapbox.com/android/legacy/maps/guides/location-component/
-            when (mRenderMode) {
-                RenderMode.NORMAL ->
-                    it.update { it.copy(bearingImage =  null, puckBearingSource = null, topImage = AppCompatResourcesV11.getDrawableImageHolder(mContext, R.drawable.mapbox_user_icon), pulsing = true)}
-                RenderMode.GPS -> it.update {
-                    it.copy(bearingImage =  AppCompatResourcesV11.getDrawableImageHolder(
-                        mContext, R.drawable.mapbox_user_bearing_icon
-                    ), topImage = null, pulsing = false, puckBearingSource = PuckBearingSource.COURSE) }
-                RenderMode.COMPASS -> it.update{ it.copy(bearingImage=  AppCompatResourcesV11.getDrawableImageHolder(
-                    mContext, R.drawable.mapbox_user_puck_icon
-                ), topImage = null, pulsing = false, puckBearingSource = PuckBearingSource.HEADING) }
+            locationComponentManager.update { state ->
+                state.copy(
+                    bearingImage = bearingImageResourceId?.let { bearingImageResourceId ->
+                        AppCompatResourcesV11.getDrawableImageHolder(
+                            mContext,
+                            bearingImageResourceId
+                        )
+                    },
+                    topImage = topImageResourceId?.let { topImageResourceId ->
+                        AppCompatResourcesV11.getDrawableImageHolder(
+                            mContext,
+                            topImageResourceId
+                        )
+                    },
+                    shadowImage = shadowImageResourceId?.let { shadowImageResourceId ->
+                        AppCompatResourcesV11.getDrawableImageHolder(
+                            mContext,
+                            shadowImageResourceId
+                        )
+                    },
+                    puckBearingSource = puckBearingSource,
+                    pulsing = pulsing,
+                    scale = mScale
+                )
             }
         }
     }

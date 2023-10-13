@@ -15,8 +15,42 @@ class RNMBXNativeUserLocation : UIView, RNMBXMapComponent {
     }
   }
   
+  @objc
+  var topImage : NSString? = nil {
+    didSet {
+      if let map = self.map { _applySettings(map) }
+    }
+  }
+
+  @objc
+  var bearingImage : NSString? = nil {
+    didSet {
+      if let map = self.map { _applySettings(map) }
+    }
+  }
+    
+  @objc
+  var shadowImage : NSString? = nil {
+    didSet {
+      if let map = self.map { _applySettings(map) }
+    }
+  }
+    
+  @objc
+  var scale : NSNumber? = nil {
+    didSet {
+      if let map = self.map { _applySettings(map) }
+    }
+  }
+  
   func _applySettings(_ map: RNMBXMapView) {
-    map.location.options.puckType = .puck2D(.makeDefault(showBearing: iosShowsUserHeadingIndicator))
+      map.location.options.puckType = .puck2D(Puck2DConfiguration(
+        topImage: self.topImage != nil ? UIImage(named: self.topImage! as String, in: .main, compatibleWith: nil)! : nil,
+        bearingImage: self.bearingImage != nil ? UIImage(named: self.bearingImage! as String, in: .main, compatibleWith: nil)! : nil,
+        shadowImage: self.shadowImage != nil ? UIImage(named: self.shadowImage! as String, in: .main, compatibleWith: nil)! : nil,
+        scale: self.scale != nil ? .constant(scale as! Double) : nil
+      ))
+//    map.location.options.puckType = .puck2D(.makeDefault(showBearing: iosShowsUserHeadingIndicator))
     if (iosShowsUserHeadingIndicator) {
       #if RNMBX_11
       map.location.options.puckBearing = .heading

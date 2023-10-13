@@ -10,110 +10,64 @@ UserLocation
 ## props
 
   
-### androidRenderMode
-
-```tsx
-'normal' | 'compass' | 'gps'
-```
-native/android only render mode
-
- - normal: just a circle
- - compass: triangle with heading
- - gps: large arrow
-
-@platform android
-
-
-  
 ### animated
 
 ```tsx
-boolean
+FIX ME UNKNOWN TYPE
 ```
-Whether location icon is animated between updates
+FIX ME NO DESCRIPTION
 
   _defaults to:_ `true`
-
-  
-### children
-
-```tsx
-ReactElement | ReactElement[]
-```
-Custom location icon of type mapbox-gl-native components
-
-
-  
-### minDisplacement
-
-```tsx
-number
-```
-Minimum amount of movement before GPS location is updated in meters
-
-  _defaults to:_ `0`
-
-  
-### onPress
-
-```tsx
-func
-```
-Callback that is triggered on location icon press
-*signature:*`() => void`
-
-
-  
-### onUpdate
-
-```tsx
-func
-```
-Callback that is triggered on location update
-*signature:*`(location:Location) => void`
-
-
-  
-### renderMode
-
-```tsx
-UserLocationRenderMode
-```
-Which render mode to use.
-
-  _defaults to:_ `UserLocationRenderMode.Normal`
-
-  
-### requestsAlwaysUse
-
-```tsx
-boolean
-```
-Request the always location permission, and listen to the location even when the app is in background
-
-@platform ios
-
-  _defaults to:_ `false`
-
-  
-### showsUserHeadingIndicator
-
-```tsx
-boolean
-```
-Show or hide small arrow which indicates direction the device is pointing relative to north.
-
-  _defaults to:_ `false`
 
   
 ### visible
 
 ```tsx
-boolean
+FIX ME UNKNOWN TYPE
 ```
-Whether location icon is visible
+FIX ME NO DESCRIPTION
 
   _defaults to:_ `true`
+
+  
+### showsUserHeadingIndicator
+
+```tsx
+FIX ME UNKNOWN TYPE
+```
+FIX ME NO DESCRIPTION
+
+  _defaults to:_ `false`
+
+  
+### requestsAlwaysUse
+
+```tsx
+FIX ME UNKNOWN TYPE
+```
+FIX ME NO DESCRIPTION
+
+  _defaults to:_ `false`
+
+  
+### minDisplacement
+
+```tsx
+FIX ME UNKNOWN TYPE
+```
+FIX ME NO DESCRIPTION
+
+  _defaults to:_ `0`
+
+  
+### renderMode
+
+```tsx
+FIX ME UNKNOWN TYPE
+```
+FIX ME NO DESCRIPTION
+
+  _defaults to:_ `UserLocationRenderMode.Normal`
 
   
 

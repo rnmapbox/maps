@@ -36,6 +36,42 @@ iOS only. A Boolean value indicating whether the user location annotation may di
 
 
   
+### topImage
+
+```tsx
+string
+```
+The image to use as the top layer for the location indicator.
+
+
+  
+### bearingImage
+
+```tsx
+string
+```
+The image used as the middle of the location indicator.
+
+
+  
+### shadowImage
+
+```tsx
+string
+```
+The image that acts as a background of the location indicator.
+
+
+  
+### scale
+
+```tsx
+number
+```
+The size of the images, as a scale factor applied to the size of the specified image.
+
+
+  
 
 
 
