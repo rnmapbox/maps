@@ -203,14 +203,14 @@ open class RNMBXMapView(private val mContext: Context, var mManager: RNMBXMapVie
     private val mMap: MapboxMap?
 
     private val mMapView: MapView
-    private var mLocationConsumer: LocationConsumer? = null
+    private var mLocationConsumers = mutableListOf<LocationConsumer>()
     private val customLocationProvider: LocationProvider = object : LocationProvider {
         override fun registerLocationConsumer(locationConsumer: LocationConsumer) {
-            mLocationConsumer = locationConsumer
+            mLocationConsumers.add(locationConsumer)
         }
 
         override fun unRegisterLocationConsumer(locationConsumer: LocationConsumer) {
-            mLocationConsumer = null
+            mLocationConsumers.remove(locationConsumer)
         }
     }
 
@@ -1056,10 +1056,13 @@ open class RNMBXMapView(private val mContext: Context, var mManager: RNMBXMapVie
     fun setCustomLocation(latitude: Double, longitude: Double, heading: Double?, response: CommandResponse) {
         mMapView.location.setLocationProvider(customLocationProvider)
         val point = Point.fromLngLat(longitude, latitude)
-        mLocationConsumer?.onLocationUpdated(point)
-        if (heading != null) {
-            mLocationConsumer?.onBearingUpdated(heading)
+        mLocationConsumers.forEach {
+            it.onLocationUpdated(point)
+            if (heading != null) {
+                it.onBearingUpdated(heading)
+            }
         }
+
         response.success {  }
     }
 
