@@ -33,10 +33,6 @@ object BitmapUtils {
             }
         }
 
-    fun getBitmapFromURL(url: String?): Bitmap? {
-        return getBitmapFromURL(url, null)
-    }
-
     fun toImage(bitmap: Bitmap): Image {
         if (bitmap.config != Bitmap.Config.ARGB_8888) {
             throw RuntimeException("Only ARGB_8888 bitmap config is supported!")
@@ -71,33 +67,6 @@ object BitmapUtils {
         }
     }
 
-    fun getBitmapFromURL(url: String?, options: BitmapFactory.Options?): Bitmap? {
-        var bitmap = getImage(url)
-        if (bitmap != null) {
-            return bitmap
-        }
-        try {
-            val bitmapStream = URL(url).openStream()
-            bitmap = BitmapFactory.decodeStream(bitmapStream, null, options)
-            bitmapStream.close()
-            addImage(url, bitmap)
-        } catch (e: Exception) {
-            Log.w(LOG_TAG, e.localizedMessage)
-            bitmap =
-                Bitmap.createBitmap(1, 1, Bitmap.Config.ALPHA_8) // Returns a transparent bitmap
-        }
-        return bitmap
-    }
-
-    fun getBitmapFromResource(
-        context: Context,
-        resourceName: String?,
-        options: BitmapFactory.Options?
-    ): Bitmap {
-        val resources = context.resources
-        val resID = resources.getIdentifier(resourceName, "drawable", context.packageName)
-        return BitmapFactory.decodeResource(resources, resID, options)
-    }
 
     @Throws(IOException::class)
     fun createImgTempFile(context: Context, image: Image): String? {
