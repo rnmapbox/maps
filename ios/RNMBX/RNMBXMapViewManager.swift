@@ -21,6 +21,28 @@ public class RNMBXMapViewManager: RCTViewManager {
         let result = RNMBXMapView(frame: self.defaultFrame(), eventDispatcher: self.bridge.eventDispatcher())
         return result
     }
+    
+    static var customLocationProvider: CustomLocationProvider? = nil
+    static var customHeadingProvider: CustomHeadingProvider? = nil
+    
+    @objc public static func setCustomLocation(
+        _ map: RNMBXMapView,
+        latitude: NSNumber,
+        longitude: NSNumber,
+        heading: NSNumber,
+        resolver: @escaping RCTPromiseResolveBlock,
+        rejecter: @escaping RCTPromiseRejectBlock
+
+    ) -> Void {
+        if (customLocationProvider == nil && customHeadingProvider == nil) {
+            customLocationProvider = CustomLocationProvider()
+            customHeadingProvider = CustomHeadingProvider()
+            map.mapView.location.override(locationProvider: customLocationProvider!, headingProvider: customHeadingProvider)
+        }
+        
+        customLocationProvider?.setLocation(latitude: latitude, longitude: longitude, heading: heading)
+        customHeadingProvider?.setHeading(heading: heading)
+    }
 }
 
 // MARK: helpers
@@ -246,5 +268,51 @@ extension RNMBXMapViewManager {
           }
         }
     }
-
+    
+    final class CustomHeadingProvider: HeadingProvider {
+        var latestHeading: Heading?
+        private let observers: NSHashTable<AnyObject> = .weakObjects()
+        
+        func add(headingObserver: HeadingObserver) {
+            observers.add(headingObserver)
+        }
+        
+        func remove(headingObserver: HeadingObserver) {
+            observers.remove(headingObserver)
+        }
+        
+        func setHeading(heading: NSNumber) {
+            let latestHeading = Heading(direction: CLLocationDirection(truncating: heading), accuracy: CLLocationDirection(truncating: 1))
+            self.latestHeading = latestHeading
+            for observer in observers.allObjects {
+                (observer as? HeadingObserver)?.onHeadingUpdate(latestHeading)
+            }
+        }
+    }
+    
+    final class CustomLocationProvider: LocationProvider {
+        private var observers: NSHashTable<AnyObject> = .weakObjects()
+        private var location: Location? = nil
+        
+        func addLocationObserver(for observer: LocationObserver) {
+            observers.add(observer)
+        }
+        
+        func removeLocationObserver(for observer: LocationObserver) {
+            observers.remove(observer)
+        }
+        
+        func getLastObservedLocation() -> Location? {
+            return location
+        }
+        
+        func setLocation(latitude: NSNumber, longitude: NSNumber, heading: NSNumber) {
+            let lat = CLLocationDegrees(truncating: latitude)
+            let lon = CLLocationDegrees(truncating: longitude)
+            self.location = Location(clLocation: CLLocation(latitude: lat, longitude: lon))
+            for observer in observers.allObjects {
+                (observer as? LocationObserver)?.onLocationUpdateReceived(for: [self.location!])
+            }
+        }
+    }
 }

@@ -139,6 +139,12 @@ RCT_EXPORT_METHOD(querySourceFeatures:(nonnull NSNumber*)viewRef sourceId:(NSStr
     } reject:reject methodName:@"querySourceFeatures"];
 }
 
+RCT_EXPORT_METHOD(setCustomLocation:(nonnull NSNumber*)viewRef latitude:(nonnull NSNumber*)latitude longitude:(nonnull NSNumber*)longitude heading:(nonnull NSNumber*)heading resolve:(RCTPromiseResolveBlock)resolve reject:(RCTPromiseRejectBlock)reject) {
+    [self withMapView:viewRef block:^(RNMBXMapView *view) {
+        [RNMBXMapViewManager setCustomLocation:view latitude:latitude longitude:longitude heading:heading resolver:resolve rejecter:reject];
+    } reject:reject methodName:@"setCustomLocation"];
+}
+
 
 // Thanks to this guard, we won't compile this code when we build for the old architecture.
 #ifdef RCT_NEW_ARCH_ENABLED
