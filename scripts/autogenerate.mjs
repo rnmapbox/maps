@@ -1,3 +1,4 @@
+/*
 require('./autogenHelpers/globals');
 
 const fs = require('fs');
@@ -10,12 +11,39 @@ const prettier = require('prettier');
 const prettierrc = require('../.prettierrc.js');
 const styleSpecJSON = require('../style-spec/v8.json');
 
+
 const {
   generateCodegenJavaOldArch,
   javaOldArchDir,
 } = require('./codegen-old-arch.js');
 const DocJSONBuilder = require('./autogenHelpers/DocJSONBuilder');
 const MarkdownBuilder = require('./autogenHelpers/MarkdownBuilder');
+
+*/
+
+import fs from 'fs';
+import path from 'path';
+import { execSync } from 'child_process';
+
+import * as url from 'url';
+
+import ejs from 'ejs';
+import prettier from 'prettier';
+
+import prettierrc from '../.prettierrc.js';
+import styleSpecJSON from '../style-spec/v8.json' assert { type: 'json' };
+
+import { camelCase } from './autogenHelpers/globals.mjs';
+
+import DocJSONBuilder from './autogenHelpers/DocJSONBuilder.mjs';
+import MarkdownBuilder from './autogenHelpers/MarkdownBuilder.mjs';
+
+import {
+  generateCodegenJavaOldArch,
+  javaOldArchDir,
+} from './codegen-old-arch.js';
+
+const __dirname = url.fileURLToPath(new URL('.', import.meta.url));
 
 function readIosVersion() {
   const podspecPath = path.join(__dirname, '..', 'rnmapbox-maps.podspec');
@@ -135,7 +163,7 @@ function getPropertiesFor(kind, only) {
   const attributes = styleSpecJSON[kind];
 
   const props = getSupportedProperties(attributes, only).map((attrName) => {
-    return Object.assign({}, buildProperties(attributes, attrName), {
+    return Object.assign({}, buildProperties(attributes, attrName, null, kind), {
       allowedFunctionTypes: [],
     });
   });
@@ -157,7 +185,7 @@ function getPropertiesForLayer(layerName, only) {
 
   const paintProps = getSupportedProperties(paintAttributes, only).map(
     (attrName) => {
-      const prop = buildProperties(paintAttributes, attrName);
+      const prop = buildProperties(paintAttributes, attrName, 'paint', layerName);
 
       // overrides
       if (['line-width'].includes(attrName)) {
@@ -170,7 +198,7 @@ function getPropertiesForLayer(layerName, only) {
 
   const layoutProps = getSupportedProperties(layoutAttributes, only).map(
     (attrName) => {
-      const prop = buildProperties(layoutAttributes, attrName);
+      const prop = buildProperties(layoutAttributes, attrName, 'layout', layerName);
 
       // overrides
       if (
@@ -220,7 +248,15 @@ function getSupportedProperties(attributes, only) {
   );
 }
 
-function buildProperties(attributes, attrName) {
+/**
+ * 
+ * @param {*} attributes 
+ * @param {string} attrName 
+ * @param {'paint' | 'layout' | null} type 
+ * @param {string} layerName
+ * @returns 
+ */
+function buildProperties(attributes, attrName, type, layerName) {
   return {
     name: camelCase(attrName),
     doc: {
@@ -232,6 +268,11 @@ function buildProperties(attributes, attrName) {
       requires: getRequires(attributes[attrName].requires),
       disabledBy: getDisables(attributes[attrName].requires),
       values: attributes[attrName].values,
+    },
+    mbx: {
+      name: attrName,
+      namespace: type,
+      fullName: type ? `${type}-${layerName}-${attrName}` : attrName,
     },
     type: attributes[attrName].type,
     value: attributes[attrName].value,
@@ -450,10 +491,14 @@ async function generate() {
   outputPaths.push('plugin/build');
 
   // autogenerate docs
+
+  const docsRoot = path.join(__dirname, '..', 'docs');
+  const docsJsonPath = path.join(docsRoot, 'docs.json')
+
   const docBuilder = new DocJSONBuilder(layers);
   const markdownBuilder = new MarkdownBuilder();
-  await docBuilder.generate();
-  await markdownBuilder.generate();
+  await docBuilder.generate(docsJsonPath);
+  await markdownBuilder.generate(docsJsonPath, docsRoot);
 
   await generateCodegenJavaOldArch();
   outputPaths.push(javaOldArchDir());

@@ -152,16 +152,16 @@ export default ShapeSourceIcon;
 
 /* end-example-doc */
 /** @type {import('../common/ExampleMetadata').ExampleMetadata} */
-const metadata = ShapeSourceIcon;
-metadata.title = 'Shape Source Icons';
-metadata.tags = [
-  'ShapeSource',
-  'SymbolLayer',
-  'Images',
-  'Images#nativeAssetImages',
-  'Images#onImageMissing',
-];
-metadata.docs = `
+const metadata = {
+  title: 'Shape Source Icons',
+  tags: [
+    'ShapeSource',
+    'SymbolLayer',
+    'Images',
+    'Images#nativeAssetImages',
+    'Images#onImageMissing',
+  ],
+  docs: `
 Render icons with various methods.
 
 * pin-rn: Rendered with a React Native View
@@ -169,4 +169,7 @@ Render icons with various methods.
 * pin3: Resolved as a result of onImageMissing
 * example: Rendered with a js asset image (require)
 
-`;
+`,
+};
+
+ShapeSourceIcon.metadata = metadata;
