@@ -40,6 +40,8 @@ class RNMBXCamera(private val mContext: Context, private val mManager: RNMBXCame
     AbstractMapFeature(
         mContext
     ) {
+    override var requiresStyleLoad = false
+
     private var hasSentFirstRegion = false
     private var mDefaultStop: CameraStop? = null
     private var mCameraStop: CameraStop? = null
