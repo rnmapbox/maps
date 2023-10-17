@@ -188,6 +188,12 @@ class NativeMapViewModule(context: ReactApplicationContext, val viewTagResolver:
         }
     }
 
+    override fun removeCustomLocationProvider(viewRef: Double?, promise: Promise) {
+        withMapViewOnUIThread(viewRef, promise) {
+            it.removeCustomLocationProvider(createCommandResponse(promise))
+        }
+    }
+
     companion object {
         const val NAME = "RNMBXMapViewModule"
     }
