@@ -55,6 +55,7 @@ export interface Spec extends TurboModule {
     longitude: number,
     heading: number | null,
   ) => Promise<Object>;
+  removeCustomLocationProvider: (viewRef: Int32 | null) => Promise<Object>;
 }
 
 export default TurboModuleRegistry.getEnforcing<Spec>('RNMBXMapViewModule');

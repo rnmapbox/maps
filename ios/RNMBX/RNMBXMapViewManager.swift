@@ -24,7 +24,7 @@ public class RNMBXMapViewManager: RCTViewManager {
     
     static var customLocationProvider: CustomLocationProvider? = nil
     static var customHeadingProvider: CustomHeadingProvider? = nil
-    
+
     @objc public static func setCustomLocation(
         _ map: RNMBXMapView,
         latitude: NSNumber,
@@ -42,6 +42,18 @@ public class RNMBXMapViewManager: RCTViewManager {
         
         customLocationProvider?.setLocation(latitude: latitude, longitude: longitude, heading: heading)
         customHeadingProvider?.setHeading(heading: heading)
+        
+        resolver(nil)
+    }
+    
+    @objc public static func removeCustomLocationProvider(
+        _ map: RNMBXMapView,
+        resolver: @escaping RCTPromiseResolveBlock,
+        rejecter: @escaping RCTPromiseRejectBlock
+    ) -> Void {
+        map.mapView.location.override(locationProvider: AppleLocationProvider())
+        
+        resolver(nil)
     }
 }
 

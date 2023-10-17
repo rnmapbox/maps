@@ -23,7 +23,6 @@ import com.mapbox.geojson.Feature
 import com.mapbox.geojson.FeatureCollection
 import com.mapbox.geojson.Point
 import com.mapbox.maps.*
-import com.mapbox.maps.MapboxMap.*
 import com.mapbox.maps.extension.localization.localizeLabels
 import com.mapbox.maps.extension.observable.eventdata.MapLoadingErrorEventData
 import com.mapbox.maps.extension.observable.eventdata.RenderFrameFinishedEventData
@@ -43,6 +42,7 @@ import com.mapbox.maps.plugin.attribution.attribution
 import com.mapbox.maps.plugin.compass.compass
 import com.mapbox.maps.plugin.delegates.listeners.*
 import com.mapbox.maps.plugin.gestures.*
+import com.mapbox.maps.plugin.locationcomponent.DefaultLocationProvider
 import com.mapbox.maps.plugin.locationcomponent.LocationConsumer
 import com.mapbox.maps.plugin.locationcomponent.LocationProvider
 import com.mapbox.maps.plugin.locationcomponent.location
@@ -204,15 +204,8 @@ open class RNMBXMapView(private val mContext: Context, var mManager: RNMBXMapVie
 
     private val mMapView: MapView
     private var mLocationConsumers = mutableListOf<LocationConsumer>()
-    private val customLocationProvider: LocationProvider = object : LocationProvider {
-        override fun registerLocationConsumer(locationConsumer: LocationConsumer) {
-            mLocationConsumers.add(locationConsumer)
-        }
-
-        override fun unRegisterLocationConsumer(locationConsumer: LocationConsumer) {
-            mLocationConsumers.remove(locationConsumer)
-        }
-    }
+    private var mCustomLocationProvider: LocationProvider? = null
+    private var mDefaultLocationProvider: LocationProvider? = null
 
     var savedStyle: Style? = null
         private set
@@ -1053,8 +1046,30 @@ open class RNMBXMapView(private val mContext: Context, var mManager: RNMBXMapVie
         }
     }
 
-    fun setCustomLocation(latitude: Double, longitude: Double, heading: Double?, response: CommandResponse) {
-        mMapView.location.setLocationProvider(customLocationProvider)
+    fun setCustomLocation(
+        latitude: Double,
+        longitude: Double,
+        heading: Double?,
+        response: CommandResponse
+    ) {
+        var customLocationProvider: LocationProvider? = null
+        if (mCustomLocationProvider == null) {
+            customLocationProvider = object : LocationProvider {
+                override fun registerLocationConsumer(locationConsumer: LocationConsumer) {
+                    mLocationConsumers.add(locationConsumer)
+                }
+
+                override fun unRegisterLocationConsumer(locationConsumer: LocationConsumer) {
+                    mLocationConsumers.remove(locationConsumer)
+                }
+            }
+        }
+        if (customLocationProvider != null) {
+            mDefaultLocationProvider = mMapView.location.getLocationProvider()
+            mMapView.location.setLocationProvider(customLocationProvider)
+            mCustomLocationProvider = customLocationProvider
+        }
+
         val point = Point.fromLngLat(longitude, latitude)
         mLocationConsumers.forEach {
             it.onLocationUpdated(point)
@@ -1063,7 +1078,16 @@ open class RNMBXMapView(private val mContext: Context, var mManager: RNMBXMapVie
             }
         }
 
-        response.success {  }
+        response.success { }
+    }
+
+    fun removeCustomLocationProvider(response: CommandResponse) {
+        mMapView.location.setLocationProvider(
+            mDefaultLocationProvider ?: DefaultLocationProvider(
+                mContext
+            )
+        )
+        response.success { }
     }
 
     fun getVisibleBounds(response: CommandResponse) {

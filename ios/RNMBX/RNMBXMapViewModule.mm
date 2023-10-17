@@ -145,6 +145,11 @@ RCT_EXPORT_METHOD(setCustomLocation:(nonnull NSNumber*)viewRef latitude:(nonnull
     } reject:reject methodName:@"setCustomLocation"];
 }
 
+RCT_EXPORT_METHOD(removeCustomLocationProvider:(nonnull NSNumber*)viewRef resolve:(RCTPromiseResolveBlock)resolve reject:(RCTPromiseRejectBlock)reject) {
+    [self withMapView:viewRef block:^(RNMBXMapView *view) {
+        [RNMBXMapViewManager removeCustomLocationProvider:view resolver:resolve rejecter:reject];
+    } reject:reject methodName:@"removeCustomLocationProvider"];
+}
 
 // Thanks to this guard, we won't compile this code when we build for the old architecture.
 #ifdef RCT_NEW_ARCH_ENABLED

@@ -3157,33 +3157,51 @@
       },
       {
         "name": "setCustomLocation",
-        "docblock": "sets up a custom location provider and applies the supplied location\n@param location custom coordinates and heading",
+        "docblock": "Sets up a custom location provider and applies the supplied location\n@param latitude\n@param longitude\n@param heading\n@returns Promise",
         "modifiers": [],
         "params": [
           {
             "name": "latitude",
-            "optional": false,
+            "description": null,
             "type": {
               "name": "number"
-            }
+            },
+            "optional": false
           },
           {
             "name": "longitude",
-            "optional": false,
+            "description": null,
             "type": {
               "name": "number"
-            }
+            },
+            "optional": false
           },
           {
             "name": "heading",
-            "optional": true,
+            "description": null,
             "type": {
               "name": "number"
-            }
+            },
+            "optional": true
           }
         ],
-        "returns": null,
-        "description": "sets up a custom location provider and applies the supplied location",
+        "returns": {
+          "description": "Promise",
+          "type": null
+        },
+        "description": "Sets up a custom location provider and applies the supplied location",
+        "examples": []
+      },
+      {
+        "name": "removeCustomLocationProvider",
+        "docblock": "Removes any previously set custom location provider\n@returns Promise",
+        "modifiers": [],
+        "params": [],
+        "returns": {
+          "description": "Promise",
+          "type": null
+        },
+        "description": "Removes any previously set custom location provider",
         "examples": []
       }
     ],

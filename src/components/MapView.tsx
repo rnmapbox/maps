@@ -854,8 +854,11 @@ class MapView extends NativeBridgeComponent(
   }
 
   /**
-   * sets up a custom location provider and applies the supplied location
-   * @param location custom coordinates and heading
+   * Sets up a custom location provider and applies the supplied location
+   * @param latitude
+   * @param longitude
+   * @param heading
+   * @returns Promise
    */
   setCustomLocation(latitude: number, longitude: number, heading?: number) {
     return this._runNative<void>('setCustomLocation', [
@@ -863,6 +866,14 @@ class MapView extends NativeBridgeComponent(
       longitude,
       heading ?? null,
     ]);
+  }
+
+  /**
+   * Removes any previously set custom location provider
+   * @returns Promise
+   */
+  removeCustomLocationProvider() {
+    return this._runNative<void>('removeCustomLocationProvider');
   }
 
   _runNativeCommand<RefType, ReturnType = NativeArg>(

@@ -90,4 +90,8 @@ public abstract class NativeMapViewModuleSpec extends ReactContextBaseJavaModule
   @ReactMethod
   @DoNotStrip
   public abstract void setCustomLocation(@Nullable Double viewRef, double latitude, double longitude, @Nullable Double heading, Promise promise);
+
+  @ReactMethod
+  @DoNotStrip
+  public abstract void removeCustomLocationProvider(@Nullable Double viewRef, Promise promise);
 }
