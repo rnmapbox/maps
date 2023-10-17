@@ -230,7 +230,10 @@ Pod::Spec.new do |s|
       sp.source_files = "ios/RNMBX/**/*.{h,m,mm,swift}"
       sp.private_header_files = 'ios/RNMBX/RNMBXFabricHelpers.h', 'ios/RNMBX/rnmapbox_maps-Swift.pre.h'
       if new_arch_enabled
+        sp.pod_target_xcconfig = { 'DEFINES_MODULE' => 'YES' }
         install_modules_dependencies(sp)
+        dependencies_only_requiring_modular_headers = ["React-Fabric", "React-graphics", "React-utils", "React-debug"]
+        sp.dependencies = sp.dependencies.select { |d| !dependencies_only_requiring_modular_headers.include?(d.name) }.map {|d| [d.name, []]}.to_h
       end
       if ENV['USE_FRAMEWORKS'] || $RNMapboxMapsUseFrameworks
         $RNMapboxMaps._add_compiler_flags(sp, "-DRNMBX_USE_FRAMEWORKS=1")

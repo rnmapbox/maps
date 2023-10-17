@@ -53,7 +53,6 @@ end
 
 flags = get_default_flags()
 if flags[:fabric_enabled]
-  use_modular_headers!
   pod 'glog', :podspec => '../node_modules/react-native/third-party-podspecs/glog.podspec', :modular_headers => false
 end
 
