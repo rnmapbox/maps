@@ -477,7 +477,7 @@ open class RNMBXMapView(private val mContext: Context, var mManager: RNMBXMapVie
             }
         }
 
-        val addToMap = styleLoaded
+        val addToMap = styleLoaded || (feature?.requiresStyleLoad == false)
 
         var entry = FeatureEntry(feature, childView, false)
         if (addToMap) {
@@ -540,11 +540,13 @@ open class RNMBXMapView(private val mContext: Context, var mManager: RNMBXMapVie
         }
     }
 
-    private fun addFeaturesToMap() {
+    private fun addFeaturesToMap(styleLoaded: Boolean = false) {
         mFeatures.forEach {
             if (!it.addedToMap) {
-                it.feature?.addToMap(this)
-                it.addedToMap = true
+                if (styleLoaded || it.feature?.requiresStyleLoad == false) {
+                    it.feature?.addToMap(this)
+                    it.addedToMap = true
+                }
             }
         }
     }
@@ -653,6 +655,7 @@ open class RNMBXMapView(private val mContext: Context, var mManager: RNMBXMapVie
                             }
                         }
                 )
+                addFeaturesToMap(false)
             }
         }
     }

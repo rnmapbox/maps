@@ -1,9 +1,21 @@
+// copied from `react-16-node-hanging-test-fix` module. Without it we get jest hangs.
+delete global.MessageChannel;
 import { NativeModules } from 'react-native';
+
+jest.useFakeTimers('legacy');
 
 function keyMirror(keys) {
   const obj = {};
   keys.forEach((key) => (obj[key] = key));
   return obj;
+}
+
+function nativeModule(properties) {
+  return {
+    addListener: jest.fn(),
+    removeListeners: jest.fn(),
+    ...properties,
+  };
 }
 
 // Mock of what the native code puts on the JS object
@@ -90,7 +102,7 @@ NativeModules.RNMBXModule = {
   MapboxV10: true,
 };
 
-NativeModules.RNMBXOfflineModule = {
+NativeModules.RNMBXOfflineModule = nativeModule({
   createPack: (packOptions) => {
     return Promise.resolve({
       bounds: packOptions.bounds,
@@ -106,7 +118,7 @@ NativeModules.RNMBXOfflineModule = {
   setPackObserver: () => Promise.resolve(),
   setTileCountLimit: jest.fn(),
   setProgressEventThrottle: jest.fn(),
-};
+});
 
 NativeModules.RNMBXSnapshotModule = {
   takeSnap: () => {
@@ -114,11 +126,12 @@ NativeModules.RNMBXSnapshotModule = {
   },
 };
 
-NativeModules.RNMBXLocationModule = {
+NativeModules.RNMBXLocationModule = nativeModule({
   getLastKnownLocation: jest.fn(),
   start: jest.fn(),
   pause: jest.fn(),
-};
+  stop: jest.fn(),
+});
 
 NativeModules.RNMBXMapViewModule = {
   takeSnap: jest.fn(),
@@ -135,6 +148,8 @@ NativeModules.RNMBXMapViewModule = {
   clearData: jest.fn(),
   querySourceFeatures: jest.fn(),
 };
+
+NativeModules.RNMBXLogging = nativeModule({});
 
 // Mock for global AbortController
 global.AbortController = class {

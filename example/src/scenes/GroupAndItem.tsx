@@ -69,11 +69,7 @@ import LocalizeLabels from '../examples/Map/LocalizeLabels';
 // SYMBOLCIRCLELAYER
 import * as SymbolCircleLayer from '../examples/SymbolCircleLayer';
 // USERLOCATION
-import SetDisplacement from '../examples/UserLocation/SetDisplacement';
-import SetTintColor from '../examples/UserLocation/SetTintColor';
-import UserLocationRenderMode from '../examples/UserLocation/UserLocationRenderMode';
-import UserLocationPadding from '../examples/UserLocation/UserLocationPadding';
-import UserLocationUpdates from '../examples/UserLocation/UserLocationUpdates';
+import * as UserLocation from '../examples/UserLocation';
 // MISC
 import BugReportExample from '../examples/BugReportExample';
 import BugReportExampleTS from '../examples/BugReportExampleTS';
@@ -284,16 +280,18 @@ const PageWrapper = (Component: ItemComponent) => (props: BaseExampleProps) =>
 
 function example(
   Component: ItemComponent & {
-    title?: string;
-    tags?: string[];
-    docs?: string;
-    page?: boolean;
+    metadata?: {
+      title?: string;
+      tags?: string[];
+      docs?: string;
+      page?: boolean;
+    };
   },
   title: string | undefined = undefined,
 ) {
   return new ExampleItem(
-    Component.title ?? title ?? 'n/a',
-    Component.page ? Component : PageWrapper(Component),
+    Component?.metadata?.title ?? title ?? 'n/a',
+    Component?.metadata?.page ? Component : PageWrapper(Component),
   );
 }
 
@@ -347,7 +345,6 @@ const Examples = new ExampleGroup('React Native Mapbox', [
     new ExampleItem('Change Layer Color', ChangeLayerColor),
     new ExampleItem('Source Layer Visiblity', SourceLayerVisibility),
     new ExampleItem('Style JSON', StyleJson),
-    new ExampleItem('Set Tint Color', SetTintColor),
     new ExampleItem('Ornaments', Ornaments),
     new ExampleItem('Map and rn-navigation', MapAndRNNavigation),
     new ExampleItem('Dynamic Url', DynamicUrl),
@@ -366,12 +363,7 @@ const Examples = new ExampleGroup('React Native Mapbox', [
     new ExampleItem('Get Center', GetCenter),
     new ExampleItem('Compass View', CompassView),
   ]),
-  new ExampleGroup('User Location', [
-    new ExampleItem('User Location Render Mode', UserLocationRenderMode),
-    example(UserLocationUpdates),
-    new ExampleItem('User Location Padding', UserLocationPadding),
-    new ExampleItem('Set Displacement', SetDisplacement),
-  ]),
+  exampleGroup(UserLocation),
   exampleGroup(SymbolCircleLayer),
   new ExampleGroup('Fill/RasterLayer', [
     new ExampleItem('GeoJSON Source', GeoJSONSource),

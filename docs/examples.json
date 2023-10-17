@@ -1,0 +1,166 @@
+[
+  {
+    "groupName": "SymbolCircleLayer",
+    "metadata": {
+      "title": "Symbol/CircleLayer"
+    },
+    "examples": [
+      {
+        "metadata": {
+          "title": "Custom Icon",
+          "tags": [
+            "ShapeSource",
+            "ShapeSource#onPress",
+            "SymbolLayer",
+            "Images",
+            "SymbolLayer#iconImage"
+          ],
+          "docs": "\nRenders a symbol layer with custom icon defined using the Images component. Clicking a location on a map add a new icon.\n"
+        },
+        "fullPath": "example/src/examples/SymbolCircleLayer/CustomIcon.tsx",
+        "relPath": "SymbolCircleLayer/CustomIcon.tsx",
+        "name": "CustomIcon"
+      },
+      {
+        "metadata": {
+          "title": "Data driven circle colors",
+          "tags": [
+            "VectorSource",
+            "CircleLayer",
+            "CircleLayer#circleRadius",
+            "CircleLayer#circleColor",
+            "expressions"
+          ],
+          "docs": "\nRenders circles with radius and color based on data-driven expressions.\n\nColor is based on the `ethnicity` property of the feature, radius is based on zoom level.\n"
+        },
+        "fullPath": "example/src/examples/SymbolCircleLayer/DataDrivenCircleColors.js",
+        "relPath": "SymbolCircleLayer/DataDrivenCircleColors.js",
+        "name": "DataDrivenCircleColors"
+      },
+      {
+        "metadata": {
+          "title": "Earthquakes",
+          "tags": [
+            "ShapeSource",
+            "SymbolLayer",
+            "ShapeSource#getClusterLeaves",
+            "CircleLayer",
+            "CircleLayer#clusterProperties",
+            "expressions"
+          ],
+          "docs": "\nRenders earthqueke with clustering.\n\nClick a cluster to show list of contents in the cluster `getClusterLeaves`.\n"
+        },
+        "fullPath": "example/src/examples/SymbolCircleLayer/Earthquakes.tsx",
+        "relPath": "SymbolCircleLayer/Earthquakes.tsx",
+        "name": "Earthquakes"
+      },
+      {
+        "metadata": {
+          "title": "Scaleable images",
+          "tags": [
+            "Images",
+            "Images#stretchX",
+            "Images#stretchY",
+            "Images#content"
+          ],
+          "docs": "\nDemonstates Scalable images.\n\nYou can use strachX, stretchY and content to scale a bitmap image - keep parts of it fixed while only scale specific parts.\n"
+        },
+        "fullPath": "example/src/examples/SymbolCircleLayer/ScalableImages.tsx",
+        "relPath": "SymbolCircleLayer/ScalableImages.tsx",
+        "name": "ScalableImages"
+      },
+      {
+        "metadata": {
+          "title": "Shape Source Icons",
+          "tags": [
+            "ShapeSource",
+            "SymbolLayer",
+            "Images",
+            "Images#nativeAssetImages",
+            "Images#onImageMissing"
+          ],
+          "docs": "\nRender icons with various methods.\n\n* pin-rn: Rendered with a React Native View\n* pin: Rendered with a native asset image\n* pin3: Resolved as a result of onImageMissing\n* example: Rendered with a js asset image (require)\n\n"
+        },
+        "fullPath": "example/src/examples/SymbolCircleLayer/ShapeSourceIcon.js",
+        "relPath": "SymbolCircleLayer/ShapeSourceIcon.js",
+        "name": "ShapeSourceIcon"
+      }
+    ]
+  },
+  {
+    "groupName": "UserLocation",
+    "metadata": {
+      "title": "User Location"
+    },
+    "examples": [
+      {
+        "metadata": {
+          "title": "Set Displacement",
+          "tags": [
+            "UserLocation",
+            "UserLocation#minDisplacement"
+          ],
+          "docs": "\nChange the minimum displacement required to update the user location.\n"
+        },
+        "fullPath": "example/src/examples/UserLocation/SetDisplacement.js",
+        "relPath": "UserLocation/SetDisplacement.js",
+        "name": "SetDisplacement"
+      },
+      {
+        "metadata": {
+          "title": "Set Tint Color",
+          "tags": [
+            "MapView#tintColor"
+          ],
+          "docs": "\nChange the tint color of the map. This will change the color of the user location icon and the compass.\n"
+        },
+        "fullPath": "example/src/examples/UserLocation/SetTintColor.js",
+        "relPath": "UserLocation/SetTintColor.js",
+        "name": "SetTintColor"
+      },
+      {
+        "metadata": {
+          "title": "User Location Padding",
+          "tags": [
+            "Images",
+            "Images#stretchX",
+            "Images#stretchY",
+            "Images#content"
+          ],
+          "docs": "\nDemonstates Scalable images.\n\nYou can use strachX, stretchY and content to scale a bitmap image - keep parts of it fixed while only scale specific parts.\n"
+        },
+        "fullPath": "example/src/examples/UserLocation/UserLocationPadding.tsx",
+        "relPath": "UserLocation/UserLocationPadding.tsx",
+        "name": "UserLocationPadding"
+      },
+      {
+        "metadata": {
+          "title": "User Location Render Mode",
+          "tags": [
+            "UserLocation",
+            "UserLocation#renderMode",
+            "UserLocation#visible",
+            "UserLocation#onUserTrackingModeChange"
+          ],
+          "docs": "\nDemonstates UserLocation render modes, follow modes\n"
+        },
+        "fullPath": "example/src/examples/UserLocation/UserLocationRenderMode.tsx",
+        "relPath": "UserLocation/UserLocationRenderMode.tsx",
+        "name": "UserLocationRenderMode"
+      },
+      {
+        "metadata": {
+          "title": "User Location Updates",
+          "tags": [
+            "UserLocation",
+            "UserLocation#onUpdate"
+          ],
+          "docs": "\nRetrieves and shows location updates from UserLocation componen via the `onUpdate` callback\n"
+        },
+        "fullPath": "example/src/examples/UserLocation/UserLocationUpdates.tsx",
+        "relPath": "UserLocation/UserLocationUpdates.tsx",
+        "name": "UserLocationUpdates"
+      }
+    ]
+  }
+]

@@ -3,3 +3,7 @@ export type ExampleMetadata = {
   tags: string[];
   docs: string;
 };
+
+export type ExampleWithMetadata = React.ComponentType & {
+  metadata: ExampleMetadata;
+};

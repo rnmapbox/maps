@@ -1,17 +1,21 @@
-const fs = require('fs');
-const path = require('path');
-const { exec } = require('child_process');
+import fs from 'fs';
+import path from 'path';
+import { exec } from 'child_process';
+import * as url from 'url';
 
-const dir = require('node-dir');
-const docgen = require('react-docgen');
-const parseJsDoc = require('react-docgen/dist/utils/parseJsDoc').default;
+import dir from 'node-dir';
+import { parse, utils } from 'react-docgen';
+const { parseJsDoc } = utils;
 
-const JSDocNodeTree = require('./JSDocNodeTree');
+import JSDocNodeTree from './JSDocNodeTree.js';
+
+const __dirname = url.fileURLToPath(new URL('.', import.meta.url));
+
+const rootPath = path.join(__dirname, '..', '..');
 
 const COMPONENT_PATH = path.join(__dirname, '..', '..', 'src', 'components');
 const MODULES_PATH = path.join(__dirname, '..', '..', 'src', 'modules');
 
-const OUTPUT_PATH = path.join(__dirname, '..', '..', 'docs', 'docs.json');
 const IGNORE_FILES = [
   'AbstractLayer',
   'AbstractSource',
@@ -64,9 +68,15 @@ class DocJSONBuilder {
       /(\n*)(@\w+) (\{.*\})/g,
       '',
     );
+    component.description = component.description
+      .replace('<', '&lt;')
+      .replace('>', '&gt;');
 
     // Styles
     if (this._styledLayers[name] && this._styledLayers[name].properties) {
+      component.mbx = {
+        name: this._styledLayers[name].name,
+      };
       component.styles = [];
 
       for (const prop of this._styledLayers[name].properties) {
@@ -84,6 +94,11 @@ class DocJSONBuilder {
           allowedFunctionTypes: prop.allowedFunctionTypes || [],
           expression: prop.expression,
           transition: prop.transition,
+          mbx: {
+            fullName: prop.mbx.fullName,
+            name: prop.mbx.name,
+            namespace: prop.mbx.namespace,
+          },
         };
         if (prop.type === 'enum') {
           docStyle.values = Object.keys(prop.doc.values).map((value) => {
@@ -362,7 +377,7 @@ class DocJSONBuilder {
             return;
           }
 
-          let parsedComponents = docgen.parse(content, {
+          let parsedComponents = parse(content, {
             babelOptions: {
               filename: fileNameWithExt,
             },
@@ -370,6 +385,9 @@ class DocJSONBuilder {
           let [parsed] = parsedComponents;
           fileName = fileName.replace(fileExtensionsRegex, '');
           parsed.fileNameWithExt = fileNameWithExt;
+          parsed.relPath = path
+            .join(filePath, fileNameWithExt)
+            .replace(`${rootPath}/`, '');
           results[fileName] = parsed;
 
           this.postprocess(results[fileName], fileName);
@@ -404,6 +422,7 @@ class DocJSONBuilder {
             results[name] = {
               name,
               fileNameWithExt,
+              relPath: module.context.file.replace(`${rootPath}/`, ''),
               description: node.getText(),
               props: [],
               styles: [],
@@ -429,7 +448,10 @@ class DocJSONBuilder {
       );
   }
 
-  async generate() {
+  /**
+   * @param {string} docsJsonPath
+   */
+  async generate(docsJsonPath) {
     this.generateModulesTask({}, MODULES_PATH);
 
     const results = {};
@@ -441,7 +463,7 @@ class DocJSONBuilder {
 
     return Promise.all(tasks).then(() => {
       fs.writeFileSync(
-        OUTPUT_PATH,
+        docsJsonPath,
         JSON.stringify(this.sortObject(results), null, 2),
       );
       return true;
@@ -449,4 +471,4 @@ class DocJSONBuilder {
   }
 }
 
-module.exports = DocJSONBuilder;
+export default DocJSONBuilder;

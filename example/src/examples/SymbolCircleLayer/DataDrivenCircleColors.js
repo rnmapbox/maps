@@ -65,17 +65,20 @@ export default DataDrivenCircleColors;
 
 /* end-example-doc */
 /** @type {import('../common/ExampleMetadata').ExampleMetadata} */
-const metadata = DataDrivenCircleColors;
-metadata.title = 'Data driven circle colors';
-metadata.tags = [
-  'VectorSource',
-  'CircleLayer',
-  'CircleLayer#circleRadius',
-  'CircleLayer#circleColor',
-  'expressions',
-];
-metadata.docs = `
+const metadata = {
+  title: 'Data driven circle colors',
+  tags: [
+    'VectorSource',
+    'CircleLayer',
+    'CircleLayer#circleRadius',
+    'CircleLayer#circleColor',
+    'expressions',
+  ],
+  docs: `
 Renders circles with radius and color based on data-driven expressions.
 
 Color is based on the \`ethnicity\` property of the feature, radius is based on zoom level.
-`;
+`,
+};
+
+DataDrivenCircleColors.metadata = metadata;

@@ -1,30 +1,21 @@
 import React from 'react';
-import MapboxGL from '@rnmapbox/maps';
-
-import sheet from '../../styles/sheet';
-import BaseExamplePropTypes from '../common/BaseExamplePropTypes';
-import TabBarPage from '../common/TabBarPage';
+import Mapbox, { MapView, UserLocation, Camera } from '@rnmapbox/maps';
+import { SafeAreaView } from 'react-native';
+import { ButtonGroup } from '@rneui/base';
 
 const DISPLACEMENT = [0, 5, 10];
-const OPTIONS = [
-  { label: '0 meter' },
-  { label: '5 meter' },
-  { label: '10 meter' },
-];
+
+const styles = { matchParent: { flex: 1 } };
 
 class SetDisplacement extends React.Component {
-  static propTypes = {
-    ...BaseExamplePropTypes,
-  };
-
   state = { minDisplacement: DISPLACEMENT[0] };
 
   componentDidMount() {
-    MapboxGL.locationManager.start();
+    Mapbox.locationManager.start();
   }
 
   componentWillUnmount() {
-    MapboxGL.locationManager.stop();
+    Mapbox.locationManager.stop();
   }
 
   onDisplacementChange = (index) => {
@@ -33,23 +24,36 @@ class SetDisplacement extends React.Component {
 
   render() {
     return (
-      <TabBarPage
-        {...this.props}
-        options={OPTIONS}
-        onOptionPress={this.onDisplacementChange}
-      >
-        <MapboxGL.MapView style={sheet.matchParent}>
-          <MapboxGL.Camera
+      <SafeAreaView style={styles.matchParent}>
+        <MapView style={styles.matchParent}>
+          <Camera
             followZoomLevel={16}
             followUserMode="compass"
             followUserLocation
           />
 
-          <MapboxGL.UserLocation minDisplacement={this.state.minDisplacement} />
-        </MapboxGL.MapView>
-      </TabBarPage>
+          <UserLocation minDisplacement={this.state.minDisplacement} />
+        </MapView>
+        <ButtonGroup
+          buttons={DISPLACEMENT.map((i) => `${i} meters`)}
+          selectedIndex={DISPLACEMENT.indexOf(this.state.minDisplacement)}
+          onPress={this.onDisplacementChange}
+        />
+      </SafeAreaView>
     );
   }
 }
 
 export default SetDisplacement;
+
+/* end-example-doc */
+
+/** @type ExampleWithMetadata['metadata'] */
+const metadata = {
+  title: 'Set Displacement',
+  tags: ['UserLocation', 'UserLocation#minDisplacement'],
+  docs: `
+Change the minimum displacement required to update the user location.
+`,
+};
+SetDisplacement.metadata = metadata;
