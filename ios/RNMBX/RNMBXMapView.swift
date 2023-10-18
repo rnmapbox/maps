@@ -255,7 +255,9 @@ open class RNMBXMapView : MapView {
   @objc public func setReactProjection(_ value: String?) {
     if let value = value {
       let projection = StyleProjection(name: value == "globe" ? .globe : .mercator)
-      try! self.mapboxMap.style.setProjection(projection)
+      logged("RNMBXMapView.setReactProjection") {
+        try self.mapboxMap.style.setProjection(projection)
+      }
     }
   }
 
@@ -272,6 +274,59 @@ open class RNMBXMapView : MapView {
     }
   }
   
+  @objc public func setReactGestureSettings(_ value: NSDictionary?) {
+    if let value = value, let gestures = self.mapView.gestures {
+      var options = gestures.options
+      if let doubleTapToZoomInEnabled = value["doubleTapToZoomInEnabled"] as? NSNumber {
+        options.doubleTapToZoomInEnabled = doubleTapToZoomInEnabled.boolValue
+      }
+      if let doubleTouchToZoomOutEnabled = value["doubleTouchToZoomOutEnabled"] as? NSNumber {
+        options.doubleTouchToZoomOutEnabled = doubleTouchToZoomOutEnabled.boolValue
+      }
+      if let pinchScrollEnabled = value["pinchPanEnabled"] as? NSNumber {
+        options.pinchPanEnabled = pinchScrollEnabled.boolValue
+      }
+      if let pinchZoomEnabled = value["pinchZoomEnabled"] as? NSNumber {
+        options.pinchZoomEnabled = pinchZoomEnabled.boolValue
+      }
+      /* android only
+      if let pinchZoomDecelerationEnabled = value["pinchZoomDecelerationEnabled"] as? NSNumber {
+        options.pinchZoomDecelerationEnabled = pinchZoomDecelerationEnabled.boolValue
+      }
+      */
+      if let pitchEnabled = value["pitchEnabled"] as? NSNumber {
+        options.pitchEnabled = pitchEnabled.boolValue
+      }
+      if let quickZoomEnabled = value["quickZoomEnabled"] as? NSNumber {
+        options.quickZoomEnabled = quickZoomEnabled.boolValue
+      }
+      if let rotateEnabled = value["rotateEnabled"] as? NSNumber {
+        options.rotateEnabled = rotateEnabled.boolValue
+      }
+      /* android only
+      if let rotateDecelerationEnabled = value["rotateDecelerationEnabled"] as? NSNumber {
+        options.rotateDecelerationEnabled = rotateDecelerationEnabled.boolValue
+      }*/
+      if let panEnabled = value["panEnabled"] as? NSNumber {
+        options.panEnabled = panEnabled.boolValue
+      }
+      if let panDecelerationFactor = value["panDecelerationFactor"] as? NSNumber {
+        options.panDecelerationFactor = panDecelerationFactor.CGFloat
+      }
+      #if RNMBX_11
+      if let simultaneousRotateAndPinchZoomEnabled = value["simultaneousRotateAndPinchZoomEnabled"] as? NSNumber {
+        options.simultaneousRotateAndPinchZoomEnabled = simultaneousRotateAndPinchZoomEnabled.boolValue
+      }
+      #endif
+      /* android only
+      if let zoomAnimationAmount = value["zoomAnimationAmount"] as? NSNumber {
+        options.zoomAnimationAmount = zoomAnimationAmount.CGFloat
+      }*/
+      if options != gestures.options {
+        gestures.options = options
+      }
+    }
+  }
   
   @objc public func setReactAttributionEnabled(_ value: Bool) {
     mapView.ornaments.options.attributionButton.visibility = value ? .visible : .hidden

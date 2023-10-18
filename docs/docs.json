@@ -3543,7 +3543,7 @@
         "name": "projection",
         "required": false,
         "type": "'mercator' \\| 'globe'",
-        "default": "'mercator'",
+        "default": "none",
         "description": "The projection used when rendering the map"
       },
       {
@@ -3724,6 +3724,108 @@
         "type": "\\| {\n    /** locale code like `es` or `current` for the device's current locale */\n    locale: string;\n    /** layer id to localize. If not specified, all layers will be localized */\n    layerIds?: string[];\n  }\n\\| true",
         "default": "none",
         "description": "[`mapbox` (v10) implementation only]\nSet map's label locale, e.g. { \"locale\": \"es\" } will localize labels to Spanish, { \"locale\": \"current\" } will localize labels to system locale."
+      },
+      {
+        "name": "gestureSettings",
+        "required": false,
+        "type": {
+          "name": "shape",
+          "value": [
+            {
+              "name": "doubleTapToZoomInEnabled",
+              "required": false,
+              "type": "boolean",
+              "default": "none",
+              "description": "Whether double tapping the map with one touch results in a zoom-in animation."
+            },
+            {
+              "name": "doubleTouchToZoomOutEnabled",
+              "required": false,
+              "type": "boolean",
+              "default": "none",
+              "description": "Whether single tapping the map with two touches results in a zoom-out animation."
+            },
+            {
+              "name": "pinchPanEnabled",
+              "required": false,
+              "type": "boolean",
+              "default": "none",
+              "description": "Whether pan/scroll is enabled for the pinch gesture."
+            },
+            {
+              "name": "pinchZoomEnabled",
+              "required": false,
+              "type": "boolean",
+              "default": "none",
+              "description": "Whether zoom is enabled for the pinch gesture."
+            },
+            {
+              "name": "pinchZoomDecelerationEnabled",
+              "required": false,
+              "type": "boolean",
+              "default": "none",
+              "description": "Whether a deceleration animation following a pinch-zoom gesture is enabled. True by default.\n(Android only)"
+            },
+            {
+              "name": "pitchEnabled",
+              "required": false,
+              "type": "boolean",
+              "default": "none",
+              "description": "Whether the pitch gesture is enabled."
+            },
+            {
+              "name": "quickZoomEnabled",
+              "required": false,
+              "type": "boolean",
+              "default": "none",
+              "description": "Whether the quick zoom gesture is enabled."
+            },
+            {
+              "name": "rotateEnabled",
+              "required": false,
+              "type": "boolean",
+              "default": "none",
+              "description": "Whether the rotate gesture is enabled."
+            },
+            {
+              "name": "rotateDecelerationEnabled",
+              "required": false,
+              "type": "boolean",
+              "default": "none",
+              "description": "Whether a deceleration animation following a rotate gesture is enabled. True by default.\n(Android only)"
+            },
+            {
+              "name": "panEnabled",
+              "required": false,
+              "type": "boolean",
+              "default": "none",
+              "description": "Whether the single-touch pan/scroll gesture is enabled."
+            },
+            {
+              "name": "panDecelerationFactor",
+              "required": false,
+              "type": "number",
+              "default": "none",
+              "description": "A constant factor that determines how quickly pan deceleration animations happen. Multiplied with the velocity vector once per millisecond during deceleration animations.\n\nOn iOS Defaults to UIScrollView.DecelerationRate.normal.rawValue\nOn android set to 0 to disable deceleration, and non zero to enabled it."
+            },
+            {
+              "name": "simultaneousRotateAndPinchZoomEnabled",
+              "required": false,
+              "type": "boolean",
+              "default": "none",
+              "description": "Whether rotation is enabled for the pinch zoom gesture."
+            },
+            {
+              "name": "zoomAnimationAmount",
+              "required": false,
+              "type": "number",
+              "default": "none",
+              "description": "The amount by which the zoom level increases or decreases during a double-tap-to-zoom-in or double-touch-to-zoom-out gesture. 1.0 by default. Must be positive.\n(Android only)"
+            }
+          ]
+        },
+        "default": "none",
+        "description": "Gesture configuration allows to control the user touch interaction."
       },
       {
         "name": "onPress",

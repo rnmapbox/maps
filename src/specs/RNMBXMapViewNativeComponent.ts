@@ -10,6 +10,13 @@ import type { LocalizeLabels, Point, UnsafeMixed } from './codegenUtils';
 // see https://github.com/rnmapbox/maps/wiki/FabricOptionalProp
 type OptionalProp<T> = UnsafeMixed<T>;
 
+type GestureSettings = {
+  doubleTapToZoomInEnabled?: boolean;
+  doubleTouchToZoomOutEnabled?: boolean;
+  pinchScrollEnabled?: boolean;
+  pinchToZoomDecelerationEnabled?: boolean;
+};
+
 type OnCameraChangedEventType = { type: string; payload: string };
 type OnPressEventType = { type: string; payload: string };
 type OnMapChangeEventType = { type: string; payload: string };
@@ -43,6 +50,8 @@ export interface NativeProps extends ViewProps {
   localizeLabels?: UnsafeMixed<LocalizeLabels>;
 
   styleURL?: OptionalProp<string>;
+
+  gestureSettings?: UnsafeMixed<GestureSettings>;
 
   // Android only
   scaleBarViewMargins?: UnsafeMixed<any>;
