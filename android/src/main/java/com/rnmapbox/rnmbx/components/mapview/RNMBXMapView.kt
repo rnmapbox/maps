@@ -1090,6 +1090,7 @@ open class RNMBXMapView(private val mContext: Context, var mManager: RNMBXMapVie
                 mContext
             )
         )
+        mCustomLocationProvider = null
         response.success { }
     }
 

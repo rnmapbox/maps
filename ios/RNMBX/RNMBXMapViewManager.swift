@@ -52,6 +52,8 @@ public class RNMBXMapViewManager: RCTViewManager {
         rejecter: @escaping RCTPromiseRejectBlock
     ) -> Void {
         map.mapView.location.override(locationProvider: AppleLocationProvider())
+        customLocationProvider = nil
+        customHeadingProvider = nil
         
         resolver(nil)
     }
