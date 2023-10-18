@@ -11,10 +11,15 @@ export declare type MapboxPlugProps = {
      * @platform ios
      */
     RNMapboxMapsUseV11?: boolean;
+    /**
+     * Enable if using static frameworks
+     * @platform ios
+     */
+    RNMapboxMapsUseFrameworks?: boolean;
 };
 export declare const addInstallerBlock: (src: string, blockName: InstallerBlockName) => string;
-export declare const addConstantBlock: (src: string, { RNMapboxMapsImpl, RNMapboxMapsVersion, RNMapboxMapsDownloadToken, RNMapboxMapsUseV11, }: MapboxPlugProps) => string;
-export declare const applyCocoaPodsModifications: (contents: string, { RNMapboxMapsImpl, RNMapboxMapsVersion, RNMapboxMapsDownloadToken, RNMapboxMapsUseV11, }: MapboxPlugProps) => string;
+export declare const addConstantBlock: (src: string, { RNMapboxMapsImpl, RNMapboxMapsVersion, RNMapboxMapsDownloadToken, RNMapboxMapsUseV11, RNMapboxMapsUseFrameworks, }: MapboxPlugProps) => string;
+export declare const applyCocoaPodsModifications: (contents: string, { RNMapboxMapsImpl, RNMapboxMapsVersion, RNMapboxMapsDownloadToken, RNMapboxMapsUseV11, RNMapboxMapsUseFrameworks, }: MapboxPlugProps) => string;
 export declare const addMapboxInstallerBlock: (src: string, blockName: InstallerBlockName) => string;
 export declare const addMapboxMavenRepo: (src: string) => string;
 declare const _default: ConfigPlugin<MapboxPlugProps>;

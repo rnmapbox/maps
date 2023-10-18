@@ -43,6 +43,12 @@ export type MapboxPlugProps = {
    * @platform ios
    */
   RNMapboxMapsUseV11?: boolean;
+
+  /**
+   * Enable if using static frameworks
+   * @platform ios
+   */
+  RNMapboxMapsUseFrameworks?: boolean;
 };
 
 export const addInstallerBlock = (
@@ -86,6 +92,7 @@ export const addConstantBlock = (
     RNMapboxMapsVersion,
     RNMapboxMapsDownloadToken,
     RNMapboxMapsUseV11,
+    RNMapboxMapsUseFrameworks,
   }: MapboxPlugProps,
 ): string => {
   const tag = `@rnmapbox/maps-rnmapboxmapsimpl`;
@@ -112,6 +119,10 @@ export const addConstantBlock = (
     newSrc.push(`$RNMapboxMapsUseV11 = true`);
   }
 
+  if (RNMapboxMapsUseFrameworks) {
+    newSrc.push(`$RNMapboxMapsUseFrameworks = true`);
+  }
+
   return mergeContents({
     tag,
     src,
@@ -132,6 +143,7 @@ export const applyCocoaPodsModifications = (
     RNMapboxMapsVersion,
     RNMapboxMapsDownloadToken,
     RNMapboxMapsUseV11,
+    RNMapboxMapsUseFrameworks,
   }: MapboxPlugProps,
 ): string => {
   // Ensure installer blocks exist
@@ -140,6 +152,7 @@ export const applyCocoaPodsModifications = (
     RNMapboxMapsVersion,
     RNMapboxMapsDownloadToken,
     RNMapboxMapsUseV11,
+    RNMapboxMapsUseFrameworks,
   });
   src = addInstallerBlock(src, 'pre');
   src = addInstallerBlock(src, 'post');
@@ -175,6 +188,7 @@ const withCocoaPodsInstallerBlocks: ConfigPlugin<MapboxPlugProps> = (
     RNMapboxMapsVersion,
     RNMapboxMapsDownloadToken,
     RNMapboxMapsUseV11,
+    RNMapboxMapsUseFrameworks,
   },
 ) =>
   withDangerousMod(config, [
@@ -193,6 +207,7 @@ const withCocoaPodsInstallerBlocks: ConfigPlugin<MapboxPlugProps> = (
           RNMapboxMapsVersion,
           RNMapboxMapsDownloadToken,
           RNMapboxMapsUseV11,
+          RNMapboxMapsUseFrameworks,
         }),
         'utf-8',
       );
@@ -398,6 +413,7 @@ const withMapbox: ConfigPlugin<MapboxPlugProps> = (
     RNMapboxMapsVersion,
     RNMapboxMapsDownloadToken,
     RNMapboxMapsUseV11,
+    RNMapboxMapsUseFrameworks,
   },
 ) => {
   config = withMapboxAndroid(config, {
@@ -410,6 +426,7 @@ const withMapbox: ConfigPlugin<MapboxPlugProps> = (
     RNMapboxMapsVersion,
     RNMapboxMapsDownloadToken,
     RNMapboxMapsUseV11,
+    RNMapboxMapsUseFrameworks,
   });
 
   return config;
