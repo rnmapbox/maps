@@ -8,6 +8,9 @@ import {
 
 import type { NativeCameraStop, UnsafeMixed } from './codegenUtils';
 
+// see https://github.com/rnmapbox/maps/wiki/FabricOptionalProp
+type OptionalProp<T> = UnsafeMixed<T>;
+
 type UserTrackingModeChangeEventType = {
   type: string;
   payloadRenamed: {
@@ -18,21 +21,21 @@ type UserTrackingModeChangeEventType = {
 
 export interface NativeProps extends ViewProps {
   maxBounds?: UnsafeMixed<string | null>;
-  animationDuration?: UnsafeMixed<Double>;
-  animationMode?: UnsafeMixed<string>;
+  animationDuration?: OptionalProp<Double>;
+  animationMode?: OptionalProp<string>;
   defaultStop?: UnsafeMixed<NativeCameraStop>;
-  userTrackingMode?: UnsafeMixed<Int32>;
+  userTrackingMode?: OptionalProp<Int32>;
 
-  followUserLocation?: UnsafeMixed<boolean>;
-  followUserMode?: UnsafeMixed<string>;
-  followZoomLevel?: UnsafeMixed<Double>;
-  followPitch?: UnsafeMixed<Double>;
-  followHeading?: UnsafeMixed<Double>;
+  followUserLocation?: OptionalProp<boolean>;
+  followUserMode?: OptionalProp<string>;
+  followZoomLevel?: OptionalProp<Double>;
+  followPitch?: OptionalProp<Double>;
+  followHeading?: OptionalProp<Double>;
   followPadding?: UnsafeMixed<any>;
 
-  zoomLevel?: UnsafeMixed<Double>;
-  maxZoomLevel?: UnsafeMixed<Double>;
-  minZoomLevel?: UnsafeMixed<Double>;
+  zoomLevel?: OptionalProp<Double>;
+  maxZoomLevel?: OptionalProp<Double>;
+  minZoomLevel?: OptionalProp<Double>;
   stop?: UnsafeMixed<NativeCameraStop>;
 
   onUserTrackingModeChange?: DirectEventHandler<UserTrackingModeChangeEventType>;

@@ -61,12 +61,6 @@ class RNMBXSkyLayerManager : ViewGroupManager<RNMBXSkyLayer>(),
         layer.setReactStyle(style.asMap())
     }
 
-//    not available
-//    @ReactProp(name = "sourceLayerID")
-//    override fun setSourceLayerId(layer: RNMBXSkyLayer, sourceLayerID: Dynamic) {
-//        layer.setSourceLayerID(sourceLayerID.asString())
-//    }
-
     @ReactProp(name = "filter")
     override fun setFilter(layer: RNMBXSkyLayer, filterList: Dynamic) {
         layer.setFilter(filterList.asArray())
