@@ -90,6 +90,26 @@ For `mapbox` or `mapbox-gl` on iOS it's possible to overwrite the native SDK ver
 }
 ```
 
+If using V11, on iOS, you can use property `RNMapboxMapsUseV11`, see [the ios guide](/ios/install.md):
+
+```json
+{
+  "expo": {
+    "plugins": [
+      [
+        "@rnmapbox/maps",
+        {
+          "RNMapboxMapsImpl": "mapbox",
+          "RNMapboxMapsVersion": "11.XX.XX",
+          "RNMapboxMapsDownloadToken": "sk.ey...qg",
+          "RNMapboxMapsUseV11": true
+        }
+      ]
+    ]
+  }
+}
+```
+
 ## Manual Setup
 
 For bare workflow projects, you can follow the manual setup guides:
