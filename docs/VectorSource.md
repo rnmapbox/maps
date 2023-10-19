@@ -128,23 +128,6 @@ FIX ME NO DESCRIPTION
 
 
 ## methods
-### features([layerIDs][, filter])
-
-Returns all features that match the query parameters regardless of whether or not the feature is<br/>currently rendered on the map. The domain of the query includes all currently-loaded vector tiles<br/>and GeoJSON source tiles. This function does not check tiles outside of the visible viewport.
-
-#### arguments
-| Name | Type | Required | Description  |
-| ---- | :--: | :------: | :----------: |
-| `layerIDs` | `Array` | `No` | A set of strings that correspond to the names of layers defined in the current style. Only the features contained in these layers are included in the returned array. |
-| `filter` | `Array` | `No` | an optional filter statement to filter the returned Features. |
-
-
-
-```javascript
-vectorSource.features(['id1', 'id2'])
-```
-
-
 ### onPress(event)
 
 

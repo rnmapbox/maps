@@ -4206,33 +4206,6 @@
     "displayName": "ShapeSource",
     "methods": [
       {
-        "name": "features",
-        "docblock": "Returns all features from the source that match the query parameters whether the feature is currently\nrendered on the map.\n\n@example\nshapeSource.features()\n\n@param  {Array=} filter - an optional filter statement to filter the returned Features.\n@return {FeatureCollection}",
-        "modifiers": [
-          "async"
-        ],
-        "params": [
-          {
-            "name": "filter",
-            "description": "an optional filter statement to filter the returned Features.",
-            "type": {
-              "name": "Array"
-            },
-            "optional": true
-          }
-        ],
-        "returns": {
-          "description": null,
-          "type": {
-            "name": "FeatureCollection"
-          }
-        },
-        "description": "Returns all features from the source that match the query parameters whether the feature is currently\nrendered on the map.",
-        "examples": [
-          "\nshapeSource.features()\n\n"
-        ]
-      },
-      {
         "name": "getClusterExpansionZoom",
         "docblock": "Returns the zoom needed to expand the cluster.\n\n@example\nconst zoom = await shapeSource.getClusterExpansionZoom(clusterId);\n\n@param  {Feature} feature - The feature cluster to expand.\n@return {number}",
         "modifiers": [
@@ -6429,41 +6402,6 @@
     "description": "VectorSource is a map content source that supplies tiled vector data in Mapbox Vector Tile format to be shown on the map.\nThe location of and metadata about the tiles are defined either by an option dictionary or by an external file that conforms to the TileJSON specification.",
     "displayName": "VectorSource",
     "methods": [
-      {
-        "name": "features",
-        "docblock": "Returns all features that match the query parameters regardless of whether or not the feature is\ncurrently rendered on the map. The domain of the query includes all currently-loaded vector tiles\nand GeoJSON source tiles. This function does not check tiles outside of the visible viewport.\n\n@example\nvectorSource.features(['id1', 'id2'])\n\n@param  {Array=} layerIDs - A set of strings that correspond to the names of layers defined in the current style. Only the features contained in these layers are included in the returned array.\n@param  {Array=} filter - an optional filter statement to filter the returned Features.\n@return {FeatureCollection}",
-        "modifiers": [
-          "async"
-        ],
-        "params": [
-          {
-            "name": "layerIDs",
-            "description": "A set of strings that correspond to the names of layers defined in the current style. Only the features contained in these layers are included in the returned array.",
-            "type": {
-              "name": "Array"
-            },
-            "optional": true
-          },
-          {
-            "name": "filter",
-            "description": "an optional filter statement to filter the returned Features.",
-            "type": {
-              "name": "Array"
-            },
-            "optional": true
-          }
-        ],
-        "returns": {
-          "description": null,
-          "type": {
-            "name": "FeatureCollection"
-          }
-        },
-        "description": "Returns all features that match the query parameters regardless of whether or not the feature is\ncurrently rendered on the map. The domain of the query includes all currently-loaded vector tiles\nand GeoJSON source tiles. This function does not check tiles outside of the visible viewport.",
-        "examples": [
-          "\nvectorSource.features(['id1', 'id2'])\n\n"
-        ]
-      },
       {
         "name": "onPress",
         "docblock": null,

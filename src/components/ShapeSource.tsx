@@ -8,7 +8,6 @@ import {
 
 import RNMBXShapeSourceNativeComponent from '../specs/RNMBXShapeSourceNativeComponent';
 import NativeRNMBXShapeSourceModule from '../specs/NativeRNMBXShapeSourceModule';
-import { getFilter } from '../utils/filterUtils';
 import {
   toJSONString,
   cloneReactChildrenWithProps,
@@ -19,7 +18,6 @@ import { copyPropertiesAsDeprecated } from '../utils/deprecation';
 import { OnPressEvent } from '../types/OnPressEvent';
 
 import AbstractSource from './AbstractSource';
-import NativeBridgeComponent from './NativeBridgeComponent';
 
 const MapboxGL = NativeModules.RNMBXModule;
 
@@ -150,10 +148,7 @@ export type Props = {
  * ShapeSource is a map content source that supplies vector shapes to be shown on the map.
  * The shape may be an url or a GeoJSON object
  */
-export class ShapeSource extends NativeBridgeComponent(
-  AbstractSource<Props, NativeProps>,
-  NATIVE_MODULE_NAME,
-) {
+export class ShapeSource extends AbstractSource<Props, NativeProps> {
   static NATIVE_ASSETS_KEY = 'assets';
 
   static defaultProps = {
@@ -168,31 +163,6 @@ export class ShapeSource extends NativeBridgeComponent(
     nativeRef: React.Component<NativeProps> & Readonly<NativeMethods>,
   ) {
     this.setNativeRef(nativeRef);
-    super._runPendingNativeCommands(nativeRef);
-  }
-
-  /**
-   * Returns all features from the source that match the query parameters whether the feature is currently
-   * rendered on the map.
-   *
-   * @example
-   * shapeSource.features()
-   *
-   * @param  {Array=} filter - an optional filter statement to filter the returned Features.
-   * @return {FeatureCollection}
-   */
-  async features(filter: Array<string> = []) {
-    const res: { data: string } = await this._runNativeCommand(
-      'features',
-      this._nativeRef,
-      getFilter(filter),
-    );
-
-    if (isAndroid()) {
-      return JSON.parse(res.data);
-    }
-
-    return res.data;
   }
 
   /**
@@ -370,7 +340,6 @@ export class ShapeSource extends NativeBridgeComponent(
       ref: (
         nativeRef: React.Component<NativeProps> & Readonly<NativeMethods>,
       ) => this._setNativeRef(nativeRef),
-      onAndroidCallback: isAndroid() ? this._onAndroidCallback : undefined,
     };
 
     return (

@@ -6,13 +6,11 @@ import {
 } from 'react-native';
 
 import RNMBXVectorSourceNativeComponent from '../specs/RNMBXVectorSourceNativeComponent';
-import { cloneReactChildrenWithProps, isFunction, isAndroid } from '../utils';
-import { getFilter } from '../utils/filterUtils';
+import { cloneReactChildrenWithProps, isFunction } from '../utils';
 import { copyPropertiesAsDeprecated } from '../utils/deprecation';
 import { OnPressEvent } from '../types/OnPressEvent';
 
 import AbstractSource from './AbstractSource';
-import NativeBridgeComponent from './NativeBridgeComponent';
 
 const MapboxGL = NativeModules.RNMBXModule;
 
@@ -99,10 +97,7 @@ type NativeProps = Props; // Omit<Props, 'children'>;
  * VectorSource is a map content source that supplies tiled vector data in Mapbox Vector Tile format to be shown on the map.
  * The location of and metadata about the tiles are defined either by an option dictionary or by an external file that conforms to the TileJSON specification.
  */
-class VectorSource extends NativeBridgeComponent(
-  AbstractSource<Props, NativeProps>,
-  NATIVE_MODULE_NAME,
-) {
+class VectorSource extends AbstractSource<Props, NativeProps> {
   static defaultProps = {
     id: MapboxGL.StyleSource.DefaultSourceID,
   };
@@ -117,34 +112,7 @@ class VectorSource extends NativeBridgeComponent(
     if (nativeRef) {
       this.setNativeRef(nativeRef);
       // this._nativeRef = nativeRef;
-      super._runPendingNativeCommands(nativeRef);
     }
-  }
-
-  /**
-   * Returns all features that match the query parameters regardless of whether or not the feature is
-   * currently rendered on the map. The domain of the query includes all currently-loaded vector tiles
-   * and GeoJSON source tiles. This function does not check tiles outside of the visible viewport.
-   *
-   * @example
-   * vectorSource.features(['id1', 'id2'])
-   *
-   * @param  {Array=} layerIDs - A set of strings that correspond to the names of layers defined in the current style. Only the features contained in these layers are included in the returned array.
-   * @param  {Array=} filter - an optional filter statement to filter the returned Features.
-   * @return {FeatureCollection}
-   */
-  async features(layerIDs = [], filter = []) {
-    const res: { data: string } = await this._runNativeCommand(
-      'features',
-      this._nativeRef,
-      [layerIDs, getFilter(filter)],
-    );
-
-    if (isAndroid()) {
-      return JSON.parse(res.data);
-    }
-
-    return res.data;
   }
 
   _decodePayload(payload: OnPressEvent | string): OnPressEvent {
@@ -204,7 +172,6 @@ class VectorSource extends NativeBridgeComponent(
       hasPressListener: isFunction(this.props.onPress),
       onMapboxVectorSourcePress: this.onPress.bind(this),
       onPress: undefined,
-      onAndroidCallback: isAndroid() ? this._onAndroidCallback : undefined,
     };
     return (
       // @ts-expect-error just codegen stuff
