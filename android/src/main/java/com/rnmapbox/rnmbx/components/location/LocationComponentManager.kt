@@ -67,7 +67,7 @@ class LocationComponentManager(mapView: RNMBXMapView, context: Context) {
 
     private fun applyStateChanges(map: RNMBXMapView, oldState: State, newState: State, fullUpdate: Boolean) {
         val mapView = map.mapView
-        if (map.getLifecycleState() != Lifecycle.State.STARTED) {
+        if (map.getLifecycleState() != Lifecycle.State.STARTED && map.getLifecycleState() != Lifecycle.State.INITIALIZED) {
             // In case lifecycle was already stopped, so we're part of shutdown, do not call updateSettings as it'll just restart
             // the loationComponent that will not be stopped. See https://github.com/mapbox/mapbox-maps-android/issues/2017
             if (!newState.enabled) {

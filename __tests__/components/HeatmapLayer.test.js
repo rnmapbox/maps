@@ -5,7 +5,7 @@ import HeatmapLayer from '../../src/components/HeatmapLayer';
 
 describe('HeatmapLayer', () => {
   test('renders correctly with default props', () => {
-    const { container: heatmapLayer } = render(
+    const { UNSAFE_root: heatmapLayer } = render(
       <HeatmapLayer id="requiredHeatmapLayerID" />,
     );
     const { props } = heatmapLayer;
@@ -25,7 +25,9 @@ describe('HeatmapLayer', () => {
       maxZoomLevel: 8,
       style: { visibility: 'none' },
     };
-    const { container: heatmapLayer } = render(<HeatmapLayer {...testProps} />);
+    const { UNSAFE_root: heatmapLayer } = render(
+      <HeatmapLayer {...testProps} />,
+    );
     const { props } = heatmapLayer;
 
     expect(props.id).toStrictEqual(testProps.id);

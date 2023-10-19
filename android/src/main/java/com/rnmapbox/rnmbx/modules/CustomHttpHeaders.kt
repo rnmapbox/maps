@@ -37,11 +37,5 @@ object CustomHttpHeaders : HttpServiceBase() {
     override fun onResponse(response: HttpResponse): HttpResponse {
         return response
     }
-
-    /*
-    override fun onUpload(options: UploadOptions): UploadOptions {
-        return options;
-    }
-    */
 }
 

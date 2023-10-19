@@ -20,12 +20,11 @@ require 'json'
 package = JSON.parse(File.read(File.join(__dir__, 'package.json')))
 
 ## Warning: these lines are scanned by autogenerate.js
-rnMapboxMapsDefaultMapboxVersion = '~> 10.16.0'
+rnMapboxMapsDefaultMapboxVersion = '~> 10.16.1'
 
 rnMapboxMapsDefaultImpl = 'mapbox'
 
 new_arch_enabled = ENV['RCT_NEW_ARCH_ENABLED'] == '1'
-folly_compiler_flags = '-DFOLLY_NO_CONFIG -DFOLLY_MOBILE=1 -DFOLLY_USE_LIBCPP=1 -Wno-comma -Wno-shorten-64-to-32'
 
 # DEPRECATIONS
 
@@ -105,6 +104,15 @@ def $RNMapboxMaps._add_spm_to_target(project, target, url, requirement, product_
     ref.package = pkg
     ref.product_name = product_name
     target.package_product_dependencies << ref
+  end
+end
+
+def $RNMapboxMaps._add_compiler_flags(sp, extra_flags)
+  exisiting_flags = sp.attributes_hash["compiler_flags"]
+  if exisiting_flags.present?
+    sp.compiler_flags = exisiting_flags + " #{extra_flags}"
+  else
+    sp.compiler_flags = extra_flags
   end
 end
 
@@ -220,22 +228,15 @@ Pod::Spec.new do |s|
     case $RNMapboxMapsImpl
     when 'mapbox'
       sp.source_files = "ios/RNMBX/**/*.{h,m,mm,swift}"
-      sp.private_header_files = 'ios/RNMBX/RNMBXFabricHelpers.h'
+      sp.private_header_files = 'ios/RNMBX/RNMBXFabricHelpers.h', 'ios/RNMBX/rnmapbox_maps-Swift.pre.h'
       if new_arch_enabled
-        sp.compiler_flags = folly_compiler_flags + " -DRCT_NEW_ARCH_ENABLED=1"
-        sp.pod_target_xcconfig    = {
-          "HEADER_SEARCH_PATHS" => "\"$(PODS_ROOT)/boost\"",
-          "OTHER_CPLUSPLUSFLAGS" => "-DFOLLY_NO_CONFIG -DFOLLY_MOBILE=1 -DFOLLY_USE_LIBCPP=1",
-          "CLANG_CXX_LANGUAGE_STANDARD" => "c++17",
-          "DEFINES_MODULE" => "YES",
-        }
-        
-        sp.dependency "React-RCTFabric"
-        sp.dependency "React-Codegen"
-        sp.dependency "RCT-Folly"
-        sp.dependency "RCTRequired"
-        sp.dependency "RCTTypeSafety"
-        sp.dependency "ReactCommon/turbomodule/core"
+        sp.pod_target_xcconfig = { 'DEFINES_MODULE' => 'YES' }
+        install_modules_dependencies(sp)
+        dependencies_only_requiring_modular_headers = ["React-Fabric", "React-graphics", "React-utils", "React-debug"]
+        sp.dependencies = sp.dependencies.select { |d| !dependencies_only_requiring_modular_headers.include?(d.name) }.map {|d| [d.name, []]}.to_h
+      end
+      if ENV['USE_FRAMEWORKS'] || $RNMapboxMapsUseFrameworks
+        $RNMapboxMaps._add_compiler_flags(sp, "-DRNMBX_USE_FRAMEWORKS=1")
       end
     else
       fail "$RNMapboxMapsImpl should be mapbox but was: $RNMapboxMapsImpl"

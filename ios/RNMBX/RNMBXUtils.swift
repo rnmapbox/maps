@@ -30,18 +30,25 @@ class RNMBXUtils {
       if (forceUpdate || foundImage == nil) {
         let image = objects[imageName]
         if let image = image as? [String:Any] {
-          let scale = (image["scale"] as? NSNumber)?.floatValue ?? 1.0
+          var scale = (image["scale"] as? NSNumber)?.floatValue ?? 1.0
           let sdf = (image["sdf"] as? NSNumber)?.boolValue ?? false
           let imageStretchX = image["stretchX"] as? [[NSNumber]]
           let stretchX: [ImageStretches] = imageStretchX != nil ? RNMBXImages.convert(stretch: imageStretchX!, scale: CGFloat(scale)) : []
           let imageStretchY = image["stretchY"] as? [[NSNumber]]
           let stretchY: [ImageStretches] = imageStretchY != nil ? RNMBXImages.convert(stretch: imageStretchY!, scale: CGFloat(scale)) : []
           let content: ImageContent? = RNMBXImages.convert(content: image["content"] as? [NSNumber], scale: CGFloat(scale))
+          var resolvedImage = image
+          if let actResolvedImage = resolvedImage["resolvedImage"] as? [String:Any] {
+            resolvedImage = actResolvedImage
+            if let scaleInResolvedImage = resolvedImage["scale"] as? NSNumber {
+              scale = scale * scaleInResolvedImage.floatValue
+            }
+          }
           
-          RNMBXImageQueue.sharedInstance.addImage(objects[imageName], scale: Double(scale), bridge:bridge) {
+          RNMBXImageQueue.sharedInstance.addImage(resolvedImage, scale: Double(scale), bridge:bridge) {
             (error,image) in
             if image == nil {
-              RNMBXLogWarn("Failed to fetch image: \(imageName) error:\(error)")
+              RNMBXLogWarn("Failed to fetch image: \(imageName) error:\(optional: error)")
             }
             else {
               DispatchQueue.main.async {

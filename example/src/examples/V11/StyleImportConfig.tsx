@@ -19,6 +19,8 @@ const StyleImportConfig = () => {
       >
         <Camera
           defaultSettings={{ centerCoordinate: [-74.00597, 40.71427] }}
+          centerCoordinate={[-74.00597, 40.71427]}
+          animationDuration={0}
           zoomLevel={18}
           pitch={33}
         />
@@ -37,6 +39,8 @@ const StyleImportConfig = () => {
 const styles = {
   mapView: { flex: 1 },
 };
+
+/* end-example-doc */
 
 StyleImportConfig.title = 'Style Import Config';
 StyleImportConfig.tags = ['StyleImport', 'v11'];

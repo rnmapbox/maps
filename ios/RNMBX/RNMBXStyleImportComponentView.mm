@@ -10,7 +10,7 @@
 #import <react/renderer/components/rnmapbox_maps_specs/Props.h>
 #import <react/renderer/components/rnmapbox_maps_specs/RCTComponentViewHelpers.h>
 
-#import "rnmapbox_maps-Swift.h.pre"
+#import "rnmapbox_maps-Swift.pre.h"
 
 using namespace facebook::react;
 

@@ -1,7 +1,7 @@
 {
   "name": "@rnmapbox/maps",
   "description": "A Mapbox react native module for creating custom maps",
-  "version": "10.1.0-beta.9",
+  "version": "10.1.0-beta.12",
   "publishConfig": {
     "access": "public"
   },
@@ -20,7 +20,7 @@
   },
   "main": "lib/commonjs/index",
   "module": "lib/module/index",
-  "types": "lib/typescript/index.d.ts",
+  "types": "lib/typescript/src/index.d.ts",
   "browser": "./src/index.web.js",
   "react-native": "src/index",
   "source": "src/index",
@@ -41,7 +41,7 @@
   ],
   "scripts": {
     "fetch:style:spec": ". ./scripts/download-style-spec.sh",
-    "generate": "node ./scripts/autogenerate",
+    "generate": "node ./scripts/autogenerate.mjs",
     "test": "yarn lint && yarn unittest",
     "unittest": "yarn jest",
     "unittest:single": "yarn jest --testNamePattern",
@@ -84,7 +84,7 @@
     "@babel/runtime": "7.19.0",
     "@react-native/eslint-config": "^0.72.2",
     "@sinonjs/fake-timers": "^8.0.1",
-    "@testing-library/react-native": "^11.0.0",
+    "@testing-library/react-native": "^12.0.0",
     "@types/debounce": "^1.2.1",
     "@types/mapbox-gl": "^2.7.5",
     "@types/react-native": ">=0.59.9",
@@ -102,18 +102,19 @@
     "expo": "^47.0.0",
     "expo-module-scripts": "^3.0.4",
     "husky": "^8.0.1",
-    "jest": "27.5.1",
-    "jest-cli": "27.5.1",
+    "jest": "29.7.0",
+    "jest-cli": "29.7.0",
     "lint-staged": "^12.1.2",
     "mapbox-gl": "^2.9.0",
     "metro-react-native-babel-preset": "0.71.1",
     "node-dir": "0.1.17",
     "prettier": "2.7.1",
     "react": "17.0.2",
-    "react-docgen": "rnmapbox/react-docgen#rnmapbox-dist",
-    "react-native": "0.67.0",
-    "react-native-builder-bob": "^0.20.0",
+    "react-docgen": "rnmapbox/react-docgen#rnmapbox-dist-react-docgen-v6",
+    "react-native": "0.67",
+    "react-native-builder-bob": "^0.22.0",
     "react-test-renderer": "17.0.2",
+    "ts-node": "10.9.1",
     "typescript": "4.8.4"
   },
   "codegenConfig": {
@@ -123,22 +124,6 @@
     "android": {
       "javaPackageName": "com.rnmapbox.rnmbx"
     }
-  },
-  "jest": {
-    "preset": "react-native",
-    "collectCoverageFrom": [
-      "src/**/*.js"
-    ],
-    "setupFiles": [
-      "./setup-jest.js",
-      "./__tests__/__mocks__/react-native.mock.js"
-    ],
-    "modulePathIgnorePatterns": [
-      "example",
-      "__tests__/__mocks__",
-      "fixtures",
-      "<rootDir>/lib/"
-    ]
   },
   "lint-staged": {
     "*.{js,jsx,ts,tsx}": "eslint --fix"

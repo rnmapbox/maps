@@ -7,7 +7,7 @@
 #import "RNMBXMapViewComponentView.h"
 #endif // RCT_NEW_ARCH_ENABLED
 
-#import "rnmapbox_maps-Swift.h.pre"
+#import "rnmapbox_maps-Swift.pre.h"
 
 @implementation RNMBXMapViewModule
 
