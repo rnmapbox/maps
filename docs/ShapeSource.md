@@ -192,22 +192,6 @@ FIX ME NO DESCRIPTION
 
 
 ## methods
-### features([filter])
-
-Returns all features from the source that match the query parameters whether the feature is currently<br/>rendered on the map.
-
-#### arguments
-| Name | Type | Required | Description  |
-| ---- | :--: | :------: | :----------: |
-| `filter` | `Array` | `No` | an optional filter statement to filter the returned Features. |
-
-
-
-```javascript
-shapeSource.features()
-```
-
-
 ### getClusterExpansionZoom(feature)
 
 Returns the zoom needed to expand the cluster.

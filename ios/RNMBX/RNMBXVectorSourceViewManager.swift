@@ -1,11 +1,11 @@
-@objc(RNMBXImageSourceManager)
-class RNMBXImageSourceManager: RCTViewManager {
+@objc(RNMBXVectorSourceViewManager)
+class RNMBXVectorSourceViewManager: RCTViewManager {
   @objc
   override static func requiresMainQueueSetup() -> Bool {
     return true
   }
-
+ 
   @objc override func view() -> UIView {
-    return RNMBXImageSource()
+    return RNMBXVectorSource()
   }
 }

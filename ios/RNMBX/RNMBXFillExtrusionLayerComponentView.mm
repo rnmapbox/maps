@@ -5,6 +5,7 @@
 
 #import <React/RCTConversions.h>
 #import <React/RCTFabricComponentsPlugins.h>
+#import <React/RCTBridge+Private.h>
 
 #import <react/renderer/components/rnmapbox_maps_specs/ComponentDescriptors.h>
 #import <react/renderer/components/rnmapbox_maps_specs/EventEmitters.h>
@@ -34,7 +35,8 @@ using namespace facebook::react;
 - (void)prepareView
 {
   _view =  [[RNMBXFillExtrusionLayer alloc] init];
-  self.contentView = _view;
+  _view.bridge = [RCTBridge currentBridge];
+ self.contentView = _view;
 }
 
 #pragma mark - RCTComponentViewProtocol

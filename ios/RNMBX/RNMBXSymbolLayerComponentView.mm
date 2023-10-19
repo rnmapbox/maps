@@ -5,6 +5,7 @@
 
 #import <React/RCTConversions.h>
 #import <React/RCTFabricComponentsPlugins.h>
+#import <React/RCTBridge+Private.h>
 
 #import <react/renderer/components/rnmapbox_maps_specs/ComponentDescriptors.h>
 #import <react/renderer/components/rnmapbox_maps_specs/EventEmitters.h>
@@ -34,6 +35,7 @@ using namespace facebook::react;
 - (void)prepareView
 {
   _view =  [[RNMBXSymbolLayer alloc] init];
+  _view.bridge = [RCTBridge currentBridge];
   self.contentView = _view;
 }
 

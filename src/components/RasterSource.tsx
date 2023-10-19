@@ -1,14 +1,13 @@
 import React from 'react';
-import { NativeModules, requireNativeComponent } from 'react-native';
+import { NativeModules } from 'react-native';
 
 import { cloneReactChildrenWithProps } from '../utils';
 import { BaseProps } from '../types/BaseProps';
+import RNMBXRasterSourceNativeComponent from '../specs/RNMBXRasterSourceNativeComponent';
 
 import AbstractSource from './AbstractSource';
 
 const MapboxGL = NativeModules.RNMBXModule;
-
-export const NATIVE_MODULE_NAME = 'RNMBXRasterSource';
 
 const isTileTemplateUrl = (url?: string): url is string =>
   !!url &&
@@ -115,16 +114,14 @@ class RasterSource extends AbstractSource<Props, NativeProps> {
       attribution: this.props.attribution,
     };
     return (
-      <RNMBXRasterSource ref={this.setNativeRef} {...props}>
+      // @ts-expect-error just codegen stuff
+      <RNMBXRasterSourceNativeComponent ref={this.setNativeRef} {...props}>
         {cloneReactChildrenWithProps(this.props.children, {
           sourceID: this.props.id,
         })}
-      </RNMBXRasterSource>
+      </RNMBXRasterSourceNativeComponent>
     );
   }
 }
-
-const RNMBXRasterSource =
-  requireNativeComponent<NativeProps>(NATIVE_MODULE_NAME);
 
 export default RasterSource;

@@ -8,7 +8,7 @@ import com.rnmapbox.rnmbx.components.mapview.RNMBXMapView
 import com.mapbox.maps.MapboxMap
 import com.rnmapbox.rnmbx.components.styles.sources.AbstractSourceConsumer
 import com.facebook.react.bridge.ReadableMap
-import com.rnmapbox.rnmbx.components.styles.sources.RCTSource
+import com.rnmapbox.rnmbx.components.styles.sources.RNMBXSource
 import android.graphics.PointF
 import android.view.View
 import com.facebook.react.common.MapBuilder
@@ -17,7 +17,7 @@ import com.mapbox.maps.Style
 import com.mapbox.maps.extension.style.StyleContract
 import com.mapbox.maps.extension.style.sources.Source
 import com.rnmapbox.rnmbx.components.RemovalReason
-import com.rnmapbox.rnmbx.components.styles.sources.RCTSource.OnPressEvent
+import com.rnmapbox.rnmbx.components.styles.sources.RNMBXSource.OnPressEvent
 import com.rnmapbox.rnmbx.utils.LatLng
 import com.rnmapbox.rnmbx.utils.Logger
 import java.lang.ClassCastException
@@ -27,9 +27,9 @@ import java.util.HashMap
 data class FeatureInfo(val feature: AbstractMapFeature?, var added: Boolean) {
 }
 
-abstract class RCTSource<T : Source?>(context: Context?) : AbstractMapFeature(context) {
+abstract class RNMBXSource<T : Source?>(context: Context?) : AbstractMapFeature(context) {
     @JvmField
-    protected var mMap: MapboxMap? = null
+    var mMap: MapboxMap? = null
     var iD: String? = null
     @JvmField
     protected var mSource: T? = null
@@ -61,7 +61,7 @@ abstract class RCTSource<T : Source?>(context: Context?) : AbstractMapFeature(co
                 if (hasNoDataSoRefersToExisting()) {
                     Logger.w(
                         LOG_TAG,
-                        "RCTSource: soure with id: $id seems to refer to existing value but existing flag is not set. This is deprecated."
+                        "RNMBXSource: soure with id: $id seems to refer to existing value but existing flag is not set. This is deprecated."
                     )
                     result = true
                 } else {
@@ -141,7 +141,7 @@ abstract class RCTSource<T : Source?>(context: Context?) : AbstractMapFeature(co
         mMap = mapView.getMapboxMap()
         val map = mMap
         if (map == null) {
-            Logger.e("RCTSource", "map is exepted to be valid but was null, $iD")
+            Logger.e("RNMBXSource", "map is exepted to be valid but was null, $iD")
             return
         }
         val style = map.getStyle()
@@ -171,7 +171,7 @@ abstract class RCTSource<T : Source?>(context: Context?) : AbstractMapFeature(co
             try {
                 iD?.let { mMap?.getStyle()?.removeStyleSource(it) }
             } catch (ex: Throwable) {
-                Logger.w(LOG_TAG, String.format("RCTSource.removeFromMap: %s - %s", mSource, ex.message), ex)
+                Logger.w(LOG_TAG, String.format("RNMBXSource.removeFromMap: %s - %s", mSource, ex.message), ex)
             }
         }
         return super.removeFromMap(mapView, reason)
@@ -227,7 +227,7 @@ abstract class RCTSource<T : Source?>(context: Context?) : AbstractMapFeature(co
 
     companion object {
         const val DEFAULT_ID = "composite"
-        const val LOG_TAG = "RCTSource"
+        const val LOG_TAG = "RNMBXSource"
         const val DEFAULT_HITBOX_WIDTH = 44.0
         const val DEFAULT_HITBOX_HEIGHT = 44.0
         @JvmStatic
