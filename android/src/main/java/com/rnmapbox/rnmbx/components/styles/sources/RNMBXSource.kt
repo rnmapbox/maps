@@ -29,7 +29,7 @@ data class FeatureInfo(val feature: AbstractMapFeature?, var added: Boolean) {
 
 abstract class RNMBXSource<T : Source?>(context: Context?) : AbstractMapFeature(context) {
     @JvmField
-    protected var mMap: MapboxMap? = null
+    var mMap: MapboxMap? = null
     var iD: String? = null
     @JvmField
     protected var mSource: T? = null

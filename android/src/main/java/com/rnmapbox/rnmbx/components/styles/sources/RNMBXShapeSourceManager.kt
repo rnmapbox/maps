@@ -1,13 +1,11 @@
 package com.rnmapbox.rnmbx.components.styles.sources
 
-import android.util.Log
 import android.view.View
 import com.facebook.react.bridge.ReactApplicationContext
 import com.rnmapbox.rnmbx.components.AbstractEventEmitter
 import com.facebook.react.uimanager.ThemedReactContext
 import com.facebook.react.uimanager.annotations.ReactProp
 import com.facebook.react.bridge.ReadableMap
-import com.facebook.react.bridge.ReadableArray
 import com.facebook.react.bridge.ReadableType
 import com.facebook.react.common.MapBuilder
 import com.mapbox.bindgen.Value
@@ -153,52 +151,8 @@ class RNMBXShapeSourceManager(private val mContext: ReactApplicationContext) :
             .build()
     }
 
-    override fun getCommandsMap(): Map<String, Int>? {
-        return MapBuilder.builder<String, Int>()
-            .put("features", METHOD_FEATURES)
-            .put("getClusterExpansionZoom", METHOD_GET_CLUSTER_EXPANSION_ZOOM)
-            .put("getClusterLeaves", METHOD_GET_CLUSTER_LEAVES)
-            .put("getClusterChildren", METHOD_GET_CLUSTER_CHILDREN)
-            .build()
-    }
-
-    override fun receiveCommand(source: RNMBXShapeSource, commandID: Int, args: ReadableArray?) {
-        if (args == null) {
-            return
-        }
-
-        val callbackID = args.getString(0);
-
-        when (commandID) {
-            METHOD_FEATURES -> source.querySourceFeatures(
-                callbackID,
-                ExpressionParser.from(args.getArray(1))
-            )
-            METHOD_GET_CLUSTER_EXPANSION_ZOOM -> source.getClusterExpansionZoom(
-                callbackID,
-                args.getString(1)
-            )
-            METHOD_GET_CLUSTER_LEAVES -> source.getClusterLeaves(
-                callbackID,
-                args.getString(1),
-                args.getInt(2),
-                args.getInt(3)
-            )
-            METHOD_GET_CLUSTER_CHILDREN -> source.getClusterChildren(
-                callbackID,
-                args.getString(1)
-            )
-        }
-    }
-
     companion object {
         const val LOG_TAG = "RNMBXShapeSourceMgr"
         const val REACT_CLASS = "RNMBXShapeSource"
-
-        //region React Methods
-        const val METHOD_FEATURES = 103
-        const val METHOD_GET_CLUSTER_EXPANSION_ZOOM = 104
-        const val METHOD_GET_CLUSTER_LEAVES = 105
-        const val METHOD_GET_CLUSTER_CHILDREN = 106
     }
 }

@@ -4,6 +4,7 @@ import android.content.Context
 import com.mapbox.maps.extension.style.sources.generated.GeoJsonSource
 import com.rnmapbox.rnmbx.utils.ImageEntry
 import android.graphics.drawable.BitmapDrawable
+import com.facebook.react.bridge.Promise
 import com.facebook.react.bridge.ReadableMap
 import com.rnmapbox.rnmbx.components.mapview.RNMBXMapView
 import com.rnmapbox.rnmbx.events.FeatureClickEvent
@@ -176,18 +177,14 @@ class RNMBXShapeSource(context: Context, private val mManager: RNMBXShapeSourceM
         }
     }
 
-    private fun callbackSuccess(callbackID: String, payload: WritableMap) {
-        val event = AndroidCallbackEvent(this, callbackID, payload)
-        mManager.handleEvent(event)
+    private fun callbackSuccess(payload: WritableMap, promise: Promise) {
+        promise.resolve(payload)
     }
-    private fun callbackError(callbackID: String, error: String, where: String) {
-        val payload: WritableMap = WritableNativeMap()
-        payload.putString("error", "$where: $error")
-        val event = AndroidCallbackEvent(this, callbackID, payload)
-        mManager.handleEvent(event)
+    private fun callbackError(error: String, where: String, promise: Promise) {
+        promise.reject("error", "$where: $error")
     }
 
-    fun getClusterExpansionZoom(callbackID: String, featureJSON: String) {
+    fun getClusterExpansionZoom(featureJSON: String, promise: Promise) {
         val feature = Feature.fromJson(featureJSON)
 
         mMap!!.getGeoJsonClusterExpansionZoom(iD!!, feature, QueryFeatureExtensionCallback { features ->
@@ -198,28 +195,29 @@ class RNMBXShapeSource(context: Context, private val mManager: RNMBXShapeSourceM
                 if (contents is Long) {
                     val payload: WritableMap = WritableNativeMap()
                     payload.putInt("data", contents.toInt())
-                    callbackSuccess(callbackID, payload)
+                    callbackSuccess(payload, promise)
                     return@QueryFeatureExtensionCallback
                 } else {
                     callbackError(
-                        callbackID,
+
                         "Not a number: $contents",
-                        "getClusterExpansionZoom/getGeoJsonClusterExpansionZoom"
+                        "getClusterExpansionZoom/getGeoJsonClusterExpansionZoom",
+                        promise
                     )
                     return@QueryFeatureExtensionCallback
                 }
             } else {
                 callbackError(
-                    callbackID,
                     features.error ?: "Unknown error",
-                    "getClusterExpansionZoom/getGeoJsonClusterExpansionZoom"
+                    "getClusterExpansionZoom/getGeoJsonClusterExpansionZoom",
+                    promise
                 )
                 return@QueryFeatureExtensionCallback
             }
         })
     }
 
-    fun getClusterLeaves(callbackID: String, featureJSON: String, number: Int, offset: Int) {
+    fun getClusterLeaves(featureJSON: String, number: Int, offset: Int, promise: Promise) {
         val feature = Feature.fromJson(featureJSON)
 
         val _this = this
@@ -232,19 +230,19 @@ class RNMBXShapeSource(context: Context, private val mManager: RNMBXShapeSourceM
                     "data",
                     FeatureCollection.fromFeatures(leaves!!).toJson()
                 )
-                callbackSuccess(callbackID, payload)
+                callbackSuccess(payload, promise)
             } else {
                 callbackError(
-                    callbackID,
                     features.error ?: "Unknown error",
-                    "getClusterLeaves/getGeoJsonClusterLeaves"
+                    "getClusterLeaves/getGeoJsonClusterLeaves",
+                    promise
                 )
                 return@QueryFeatureExtensionCallback
             }
         })
     }
 
-    fun getClusterChildren(callbackID: String, featureJSON: String) {
+    fun getClusterChildren(featureJSON: String, promise: Promise) {
         val feature = Feature.fromJson(featureJSON)
 
         val _this = this
@@ -257,12 +255,12 @@ class RNMBXShapeSource(context: Context, private val mManager: RNMBXShapeSourceM
                     "data",
                     FeatureCollection.fromFeatures(children!!).toJson()
                 )
-                callbackSuccess(callbackID, payload)
+                callbackSuccess(payload, promise)
             }else {
                 callbackError(
-                    callbackID,
                     features.error ?: "Unknown error",
-                    "getClusterLeaves/queryFeatureExtensions"
+                    "getClusterLeaves/queryFeatureExtensions",
+                    promise
                 )
                 return@QueryFeatureExtensionCallback
             }
