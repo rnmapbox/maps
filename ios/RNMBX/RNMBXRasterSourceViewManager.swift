@@ -1,8 +1,8 @@
 import Foundation
 import MapboxMaps
 
-@objc(RNMBXRasterSourceManager)
-class RNMBXRasterSourceManager : RCTViewManager {
+@objc(RNMBXRasterSourceViewManager)
+class RNMBXRasterSourceViewManager : RCTViewManager {
   @objc
   override static func requiresMainQueueSetup() -> Bool {
     return true
