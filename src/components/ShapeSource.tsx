@@ -3,9 +3,11 @@ import {
   NativeMethods,
   NativeModules,
   NativeSyntheticEvent,
-  requireNativeComponent,
+  findNodeHandle,
 } from 'react-native';
 
+import RNMBXShapeSourceNativeComponent from '../specs/RNMBXShapeSourceNativeComponent';
+import NativeRNMBXShapeSourceModule from '../specs/NativeRNMBXShapeSourceModule';
 import { getFilter } from '../utils/filterUtils';
 import {
   toJSONString,
@@ -209,19 +211,15 @@ export class ShapeSource extends NativeBridgeComponent(
       console.warn(
         'Using cluster_id is deprecated and will be removed from the future releases. Please use cluster as an argument instead.',
       );
-      const res: { data: number } = await this._runNativeCommand(
-        'getClusterExpansionZoomById',
-        this._nativeRef,
-        [feature],
-      );
-      return res.data;
     }
 
-    const res: { data: number } = await this._runNativeCommand(
-      'getClusterExpansionZoom',
-      this._nativeRef,
-      [JSON.stringify(feature)],
-    );
+    const handle = findNodeHandle(this._nativeRef);
+
+    const res: { data: number } =
+      await NativeRNMBXShapeSourceModule.getClusterExpansionZoom(
+        handle,
+        JSON.stringify(feature),
+      );
     return res.data;
   }
 
@@ -245,24 +243,17 @@ export class ShapeSource extends NativeBridgeComponent(
       console.warn(
         'Using cluster_id is deprecated and will be removed from the future releases. Please use cluster as an argument instead.',
       );
-      const res: { data: string } = await this._runNativeCommand(
-        'getClusterLeavesById',
-        this._nativeRef,
-        [feature, limit, offset],
-      );
-
-      if (isAndroid()) {
-        return JSON.parse(res.data);
-      }
-
-      return res.data;
     }
 
-    const res: { data: string } = await this._runNativeCommand(
-      'getClusterLeaves',
-      this._nativeRef,
-      [JSON.stringify(feature), limit, offset],
-    );
+    const handle = findNodeHandle(this._nativeRef);
+
+    const res: { data: string } =
+      await NativeRNMBXShapeSourceModule.getClusterLeaves(
+        handle,
+        JSON.stringify(feature),
+        limit,
+        offset,
+      );
 
     if (isAndroid()) {
       return JSON.parse(res.data);
@@ -285,24 +276,15 @@ export class ShapeSource extends NativeBridgeComponent(
       console.warn(
         'Using cluster_id is deprecated and will be removed from the future releases. Please use cluster as an argument instead.',
       );
-      const res: { data: string } = await this._runNativeCommand(
-        'getClusterChildrenById',
-        this._nativeRef,
-        [feature],
-      );
-
-      if (isAndroid()) {
-        return JSON.parse(res.data);
-      }
-
-      return res.data;
     }
 
-    const res: { data: string } = await this._runNativeCommand(
-      'getClusterChildren',
-      this._nativeRef,
-      [JSON.stringify(feature)],
-    );
+    const handle = findNodeHandle(this._nativeRef);
+
+    const res: { data: string } =
+      await NativeRNMBXShapeSourceModule.getClusterChildren(
+        handle,
+        JSON.stringify(feature),
+      );
 
     if (isAndroid()) {
       return JSON.parse(res.data);
@@ -329,16 +311,23 @@ export class ShapeSource extends NativeBridgeComponent(
     return toJSONString(this.props.shape);
   }
 
+  _decodePayload(payload: OnPressEvent | string): OnPressEvent {
+    // we check whether the payload is a string, since the strict type safety is enforced only on iOS on the new arch
+    // on Android, on both archs, the payload is an object
+    if (typeof payload === 'string') {
+      return JSON.parse(payload);
+    } else {
+      return payload;
+    }
+  }
+
   onPress(
     event: NativeSyntheticEvent<{
       payload: OnPressEvent;
     }>,
   ) {
-    const {
-      nativeEvent: {
-        payload: { features, coordinates, point },
-      },
-    } = event;
+    const payload = this._decodePayload(event.nativeEvent.payload);
+    const { features, coordinates, point } = payload;
     let newEvent: OnPressEventDeprecated = {
       features,
       coordinates,
@@ -388,11 +377,11 @@ export class ShapeSource extends NativeBridgeComponent(
     };
 
     return (
-      <RNMBXShapeSource {...props}>
+      <RNMBXShapeSourceNativeComponent {...props}>
         {cloneReactChildrenWithProps(this.props.children, {
           sourceID: this.props.id,
         })}
-      </RNMBXShapeSource>
+      </RNMBXShapeSourceNativeComponent>
     );
   }
 }
@@ -401,6 +390,3 @@ type NativeProps = {
   id: string;
   shape?: string;
 };
-
-const RNMBXShapeSource =
-  requireNativeComponent<NativeProps>(NATIVE_MODULE_NAME);
