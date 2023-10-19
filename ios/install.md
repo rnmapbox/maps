@@ -90,7 +90,7 @@ Add the following to your Podfile:
 
 ```ruby
 $RNMapboxMapsUseV11 = true # use 11 version
-$RNMapboxMapsVersion = '= 11.0.0-beta.3'
+$RNMapboxMapsVersion = '= 11.0.0-beta.5'
 ```
 
 
