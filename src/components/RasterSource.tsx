@@ -114,6 +114,7 @@ class RasterSource extends AbstractSource<Props, NativeProps> {
       attribution: this.props.attribution,
     };
     return (
+      // @ts-expect-error just codegen stuff
       <RNMBXRasterSourceNativeComponent ref={this.setNativeRef} {...props}>
         {cloneReactChildrenWithProps(this.props.children, {
           sourceID: this.props.id,

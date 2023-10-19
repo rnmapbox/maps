@@ -71,6 +71,7 @@ class ImageSource extends AbstractSource<Props, NativeProps> {
     };
 
     return (
+      // @ts-expect-error just codegen stuff
       <RNMBXImageSourceNativeComponent ref={this.setNativeRef} {...props}>
         {cloneReactChildrenWithProps(this.props.children, {
           sourceID: this.props.id,

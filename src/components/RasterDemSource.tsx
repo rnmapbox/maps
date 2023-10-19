@@ -95,6 +95,7 @@ class RasterDemSource extends AbstractSource<Props, NativeProps> {
       tileSize: this.props.tileSize,
     };
     return (
+      // @ts-expect-error just codegen stuff
       <RNMBXRasterDemSourceNativeComponent ref={this.setNativeRef} {...props}>
         {cloneReactChildrenWithProps(this.props.children, {
           sourceID: this.props.id,

@@ -207,7 +207,9 @@ class VectorSource extends NativeBridgeComponent(
       onAndroidCallback: isAndroid() ? this._onAndroidCallback : undefined,
     };
     return (
+      // @ts-expect-error just codegen stuff
       <RNMBXVectorSourceNativeComponent
+        // @ts-expect-error just codegen stuff
         ref={(r) => this._setNativeRef(r)}
         {...props}
       >

@@ -213,13 +213,12 @@ export class ShapeSource extends NativeBridgeComponent(
       );
     }
 
-    const handle = findNodeHandle(this._nativeRef);
+    const handle = findNodeHandle(this._nativeRef as any);
 
-    const res: { data: number } =
-      await NativeRNMBXShapeSourceModule.getClusterExpansionZoom(
-        handle,
-        JSON.stringify(feature),
-      );
+    const res = (await NativeRNMBXShapeSourceModule.getClusterExpansionZoom(
+      handle,
+      JSON.stringify(feature),
+    )) as { data: number };
     return res.data;
   }
 
@@ -245,15 +244,14 @@ export class ShapeSource extends NativeBridgeComponent(
       );
     }
 
-    const handle = findNodeHandle(this._nativeRef);
+    const handle = findNodeHandle(this._nativeRef as any);
 
-    const res: { data: string } =
-      await NativeRNMBXShapeSourceModule.getClusterLeaves(
-        handle,
-        JSON.stringify(feature),
-        limit,
-        offset,
-      );
+    const res = (await NativeRNMBXShapeSourceModule.getClusterLeaves(
+      handle,
+      JSON.stringify(feature),
+      limit,
+      offset,
+    )) as { data: string };
 
     if (isAndroid()) {
       return JSON.parse(res.data);
@@ -278,13 +276,12 @@ export class ShapeSource extends NativeBridgeComponent(
       );
     }
 
-    const handle = findNodeHandle(this._nativeRef);
+    const handle = findNodeHandle(this._nativeRef as any);
 
-    const res: { data: string } =
-      await NativeRNMBXShapeSourceModule.getClusterChildren(
-        handle,
-        JSON.stringify(feature),
-      );
+    const res = (await NativeRNMBXShapeSourceModule.getClusterChildren(
+      handle,
+      JSON.stringify(feature),
+    )) as { data: string };
 
     if (isAndroid()) {
       return JSON.parse(res.data);
@@ -377,6 +374,7 @@ export class ShapeSource extends NativeBridgeComponent(
     };
 
     return (
+      // @ts-expect-error just codegen stuff
       <RNMBXShapeSourceNativeComponent {...props}>
         {cloneReactChildrenWithProps(this.props.children, {
           sourceID: this.props.id,

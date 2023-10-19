@@ -136,6 +136,12 @@ NativeModules.RNMBXMapViewModule = {
   querySourceFeatures: jest.fn(),
 };
 
+NativeModules.RNMBXShapeSourceModule = {
+  getClusterExpansionZoom: jest.fn(),
+  getClusterLeaves: jest.fn(),
+  getClusterChildren: jest.fn(),
+};
+
 // Mock for global AbortController
 global.AbortController = class {
   signal = 'test-signal';
