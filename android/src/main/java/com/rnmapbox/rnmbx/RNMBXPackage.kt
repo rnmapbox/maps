@@ -46,12 +46,12 @@ import com.rnmapbox.rnmbx.utils.ViewTagResolver
 
 class RNMBXPackage : TurboReactPackage() {
 
-    var mapViewTagResolver: ViewTagResolver<RNMBXMapView>? = null
-    fun getMapViewTagResolver(context: ReactApplicationContext) : ViewTagResolver<RNMBXMapView> {
-        val viewTagResolver = mapViewTagResolver
+    var viewTagResolver: ViewTagResolver? = null
+    fun getViewTagResolver(context: ReactApplicationContext) : ViewTagResolver {
+        val viewTagResolver = viewTagResolver
         if (viewTagResolver == null) {
-            val viewTagResolver = ViewTagResolver<RNMBXMapView>(context)
-            mapViewTagResolver = viewTagResolver
+            val viewTagResolver = ViewTagResolver(context)
+            this.viewTagResolver = viewTagResolver
             return viewTagResolver
         }
         return viewTagResolver
@@ -67,8 +67,8 @@ class RNMBXPackage : TurboReactPackage() {
             RNMBXOfflineModule.REACT_CLASS -> return RNMBXOfflineModule(reactApplicationContext)
             RNMBXSnapshotModule.REACT_CLASS -> return RNMBXSnapshotModule(reactApplicationContext)
             RNMBXLogging.REACT_CLASS -> return RNMBXLogging(reactApplicationContext)
-            NativeMapViewModule.NAME -> return NativeMapViewModule(reactApplicationContext, getMapViewTagResolver(reactApplicationContext))
-            RNMBXShapeSourceModule.NAME -> return RNMBXShapeSourceModule(reactApplicationContext)
+            NativeMapViewModule.NAME -> return NativeMapViewModule(reactApplicationContext, getViewTagResolver(reactApplicationContext))
+            RNMBXShapeSourceModule.NAME -> return RNMBXShapeSourceModule(reactApplicationContext, getViewTagResolver(reactApplicationContext))
         }
         return null
     }
@@ -83,8 +83,8 @@ class RNMBXPackage : TurboReactPackage() {
 
         // components
         managers.add(RNMBXCameraManager(reactApplicationContext))
-        managers.add(RNMBXAndroidTextureMapViewManager(reactApplicationContext, getMapViewTagResolver(reactApplicationContext)))
-        managers.add(RNMBXMapViewManager(reactApplicationContext, getMapViewTagResolver(reactApplicationContext)))
+        managers.add(RNMBXAndroidTextureMapViewManager(reactApplicationContext, getViewTagResolver(reactApplicationContext)))
+        managers.add(RNMBXMapViewManager(reactApplicationContext, getViewTagResolver(reactApplicationContext)))
         managers.add(RNMBXStyleImportManager(reactApplicationContext))
 
         // annotations

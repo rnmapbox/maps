@@ -8,30 +8,19 @@ import com.facebook.react.uimanager.UIManagerHelper
 import com.facebook.react.uimanager.common.UIManagerType
 import com.rnmapbox.rnmbx.BuildConfig
 import com.rnmapbox.rnmbx.NativeRNMBXShapeSourceModuleSpec
+import com.rnmapbox.rnmbx.components.mapview.RNMBXMapView
+import com.rnmapbox.rnmbx.utils.ViewTagResolver
 
 @ReactModule(name = RNMBXShapeSourceModule.NAME)
-class RNMBXShapeSourceModule(reactContext: ReactApplicationContext?) :
+class RNMBXShapeSourceModule(reactContext: ReactApplicationContext?, private val viewTagResolver: ViewTagResolver) :
     NativeRNMBXShapeSourceModuleSpec(reactContext) {
 
-    private fun withShapeSourceOnUIThread(viewRef: Double?, promise: Promise, fn: (RNMBXShapeSource) -> Unit) {
+
+    private fun withShapeSourceOnUIThread(viewRef: Double?, reject: Promise, fn: (RNMBXShapeSource) -> Unit) {
         if (viewRef == null) {
-            promise.reject(Exception("viewRef is null for RNMBXShapeSource"))
+            reject.reject(Exception("viewRef is null for RNMBXShapeSource"))
         } else {
-
-            reactApplicationContext.runOnUiQueueThread {
-                val manager = if (BuildConfig.IS_NEW_ARCHITECTURE_ENABLED)
-                    UIManagerHelper.getUIManager(reactApplicationContext, UIManagerType.FABRIC)
-                else
-                    UIManagerHelper.getUIManager(reactApplicationContext, UIManagerType.DEFAULT)
-
-                val view = manager?.resolveView(viewRef.toInt()) as? RNMBXShapeSource
-
-                if (view != null) {
-                    fn(view)
-                } else {
-                    promise.reject(Exception("cannot find map view for tag ${viewRef.toInt()}"))
-                }
-            }
+            viewTagResolver.withViewResolved(viewRef.toInt(), reject, fn)
         }
     }
 

@@ -1,5 +1,6 @@
 package com.rnmapbox.rnmbx.utils
 
+import android.view.View
 import com.facebook.react.bridge.Promise
 import com.facebook.react.bridge.ReactApplicationContext
 import com.facebook.react.bridge.UIManager
@@ -14,9 +15,9 @@ data class ViewTagWaiter<V>(
 )
 
 // see https://github.com/rnmapbox/maps/pull/3074
-open class ViewTagResolver<V>(val context: ReactApplicationContext) {
+open class ViewTagResolver(val context: ReactApplicationContext) {
     private val createdViews: HashSet<Int> = hashSetOf<Int>()
-    private val viewWaiters: HashMap<Int, MutableList<ViewTagWaiter<V>>> = hashMapOf()
+    private val viewWaiters: HashMap<Int, MutableList<ViewTagWaiter<View>>> = hashMapOf()
 
     // to be called from view.setId
     fun tagAssigned(viewTag: Int) {
@@ -26,7 +27,7 @@ open class ViewTagResolver<V>(val context: ReactApplicationContext) {
         if (list != null) {
             context.runOnUiQueueThread {
                 try {
-                    val view = manager.resolveView(viewTag) as V
+                    val view = manager.resolveView(viewTag)
 
                     list.forEach { it.fn(view) }
                 } catch (err: IllegalViewOperationException) {
@@ -51,14 +52,14 @@ open class ViewTagResolver<V>(val context: ReactApplicationContext) {
             }
 
     // calls on UiQueueThread with resolved view
-    fun withViewResolved(viewTag: Int, reject: Promise? = null, fn: (V) -> Unit) {
+    fun <V>withViewResolved(viewTag: Int, reject: Promise? = null, fn: (V) -> Unit) {
         context.runOnUiQueueThread() {
             try {
                 val view = manager.resolveView(viewTag) as V
                 fn(view)
             } catch (err: IllegalViewOperationException) {
                 if (!createdViews.contains(viewTag)) {
-                    viewWaiters.getOrPut(viewTag) { mutableListOf<ViewTagWaiter<V>>() }.add(ViewTagWaiter(fn, reject))
+                    viewWaiters.getOrPut(viewTag) { mutableListOf<ViewTagWaiter<View>>() }.add(ViewTagWaiter<View>({ view -> fn(view as V) }, reject))
                 } else {
                     reject?.reject(err)
                 }
