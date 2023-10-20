@@ -93,6 +93,7 @@ $RNMapboxMapsUseV11 = true # use 11 version
 $RNMapboxMapsVersion = '= 11.0.0-beta.5'
 ```
 
+If using expo managed workflow, set the "RNMapboxMapsVersion" variable and the "RNMapboxMapsUseV11" variable to `true`. See the [expo guide](/plugin/install.md)
 
 ## Troubleshooting
 
