@@ -30,25 +30,16 @@ try {
 type InstallerBlockName = 'pre' | 'post';
 
 export type MapboxPlugProps = {
-  RNMapboxMapsImpl?: string;
-
   /**
-   * @platform ios
+   * @deprecated
    */
+  RNMapboxMapsImpl?: 'mapbox';
+
   RNMapboxMapsVersion?: string;
 
   RNMapboxMapsDownloadToken?: string;
 
-  /**
-   * @platform ios
-   */
   RNMapboxMapsUseV11?: boolean;
-
-  /**
-   * Enable if using static frameworks
-   * @platform ios
-   */
-  RNMapboxMapsUseFrameworks?: boolean;
 };
 
 export const addInstallerBlock = (
@@ -92,12 +83,15 @@ export const addConstantBlock = (
     RNMapboxMapsVersion,
     RNMapboxMapsDownloadToken,
     RNMapboxMapsUseV11,
-    RNMapboxMapsUseFrameworks,
   }: MapboxPlugProps,
 ): string => {
   const tag = `@rnmapbox/maps-rnmapboxmapsimpl`;
 
-  if (RNMapboxMapsImpl == null) {
+  if (
+    RNMapboxMapsVersion == null &&
+    RNMapboxMapsDownloadToken == null &&
+    RNMapboxMapsUseV11 == null
+  ) {
     const modified = removeGeneratedContents(src, tag);
     if (!modified) {
       return src;
@@ -106,10 +100,15 @@ export const addConstantBlock = (
     }
   }
 
-  const newSrc = [
-    `$RNMapboxMapsImpl = '${RNMapboxMapsImpl}'`,
-    `$RNMapboxMapsDownloadToken = '${RNMapboxMapsDownloadToken}'`,
-  ];
+  const newSrc = [];
+
+  if (RNMapboxMapsDownloadToken) {
+    newSrc.push(`$RNMapboxMapsDownloadToken = '${RNMapboxMapsDownloadToken}'`);
+  }
+
+  if (RNMapboxMapsImpl) {
+    newSrc.push(`$RNMapboxMapsImpl = '${RNMapboxMapsImpl}'`);
+  }
 
   if (RNMapboxMapsVersion) {
     newSrc.push(`$RNMapboxMapsVersion = '${RNMapboxMapsVersion}'`);
@@ -117,10 +116,6 @@ export const addConstantBlock = (
 
   if (RNMapboxMapsUseV11) {
     newSrc.push(`$RNMapboxMapsUseV11 = true`);
-  }
-
-  if (RNMapboxMapsUseFrameworks) {
-    newSrc.push(`$RNMapboxMapsUseFrameworks = true`);
   }
 
   return mergeContents({
@@ -143,7 +138,6 @@ export const applyCocoaPodsModifications = (
     RNMapboxMapsVersion,
     RNMapboxMapsDownloadToken,
     RNMapboxMapsUseV11,
-    RNMapboxMapsUseFrameworks,
   }: MapboxPlugProps,
 ): string => {
   // Ensure installer blocks exist
@@ -152,7 +146,6 @@ export const applyCocoaPodsModifications = (
     RNMapboxMapsVersion,
     RNMapboxMapsDownloadToken,
     RNMapboxMapsUseV11,
-    RNMapboxMapsUseFrameworks,
   });
   src = addInstallerBlock(src, 'pre');
   src = addInstallerBlock(src, 'post');
@@ -188,7 +181,6 @@ const withCocoaPodsInstallerBlocks: ConfigPlugin<MapboxPlugProps> = (
     RNMapboxMapsVersion,
     RNMapboxMapsDownloadToken,
     RNMapboxMapsUseV11,
-    RNMapboxMapsUseFrameworks,
   },
 ) =>
   withDangerousMod(config, [
@@ -207,7 +199,6 @@ const withCocoaPodsInstallerBlocks: ConfigPlugin<MapboxPlugProps> = (
           RNMapboxMapsVersion,
           RNMapboxMapsDownloadToken,
           RNMapboxMapsUseV11,
-          RNMapboxMapsUseFrameworks,
         }),
         'utf-8',
       );
@@ -242,19 +233,32 @@ const withAndroidPropertiesDownloadToken: ConfigPlugin<MapboxPlugProps> = (
 
 const withAndroidPropertiesImpl2: ConfigPlugin<MapboxPlugProps> = (
   config,
-  { RNMapboxMapsImpl },
+  { RNMapboxMapsImpl, RNMapboxMapsVersion, RNMapboxMapsUseV11 },
 ) => {
-  const key = 'expoRNMapboxMapsImpl';
+  const keyValues = {
+    expoRNMapboxMapsImpl: RNMapboxMapsImpl,
+    expoRNMapboxMapsVersion: RNMapboxMapsVersion,
+    expoRNMapboxMapsUseV11: RNMapboxMapsUseV11,
+  } as const;
+  type Keys = keyof typeof keyValues;
+  const keys = Object.keys(keyValues) as Keys[];
+  const values = Object.values(keyValues);
 
-  if (RNMapboxMapsImpl) {
+  if (values.filter((v) => v).length > 0) {
     return withGradleProperties(config, (exportedConfig) => {
       exportedConfig.modResults = exportedConfig.modResults.filter(
-        (item) => !(item.type === 'property' && item.key === key),
+        (item) =>
+          !(item.type === 'property' && (keys as string[]).includes(item.key)),
       );
-      exportedConfig.modResults.push({
-        type: 'property',
-        key: key,
-        value: RNMapboxMapsImpl,
+      keys.forEach((key) => {
+        const value = keyValues[key];
+        if (value != null) {
+          exportedConfig.modResults.push({
+            type: 'property',
+            key: key,
+            value: value.toString(),
+          });
+        }
       });
 
       return exportedConfig;
@@ -266,13 +270,20 @@ const withAndroidPropertiesImpl2: ConfigPlugin<MapboxPlugProps> = (
 
 const withAndroidProperties: ConfigPlugin<MapboxPlugProps> = (
   config,
-  { RNMapboxMapsImpl, RNMapboxMapsDownloadToken },
+  {
+    RNMapboxMapsImpl,
+    RNMapboxMapsDownloadToken,
+    RNMapboxMapsVersion,
+    RNMapboxMapsUseV11,
+  },
 ) => {
   config = withAndroidPropertiesDownloadToken(config, {
     RNMapboxMapsDownloadToken,
   });
   config = withAndroidPropertiesImpl2(config, {
     RNMapboxMapsImpl,
+    RNMapboxMapsVersion,
+    RNMapboxMapsUseV11,
   });
 
   return config;
@@ -394,11 +405,18 @@ const withAndroidProjectGradle: ConfigPlugin<MapboxPlugProps> = (config) =>
 
 const withMapboxAndroid: ConfigPlugin<MapboxPlugProps> = (
   config,
-  { RNMapboxMapsImpl, RNMapboxMapsDownloadToken },
+  {
+    RNMapboxMapsImpl,
+    RNMapboxMapsDownloadToken,
+    RNMapboxMapsVersion,
+    RNMapboxMapsUseV11,
+  },
 ) => {
   config = withAndroidProperties(config, {
     RNMapboxMapsImpl,
     RNMapboxMapsDownloadToken,
+    RNMapboxMapsVersion,
+    RNMapboxMapsUseV11,
   });
   config = withAndroidProjectGradle(config, { RNMapboxMapsImpl });
   config = withAndroidAppGradle(config, { RNMapboxMapsImpl });
@@ -413,12 +431,12 @@ const withMapbox: ConfigPlugin<MapboxPlugProps> = (
     RNMapboxMapsVersion,
     RNMapboxMapsDownloadToken,
     RNMapboxMapsUseV11,
-    RNMapboxMapsUseFrameworks,
   },
 ) => {
   config = withMapboxAndroid(config, {
     RNMapboxMapsImpl,
     RNMapboxMapsVersion,
+    RNMapboxMapsUseV11,
     RNMapboxMapsDownloadToken,
   });
   config = withCocoaPodsInstallerBlocks(config, {
@@ -426,7 +444,6 @@ const withMapbox: ConfigPlugin<MapboxPlugProps> = (
     RNMapboxMapsVersion,
     RNMapboxMapsDownloadToken,
     RNMapboxMapsUseV11,
-    RNMapboxMapsUseFrameworks,
   });
 
   return config;
