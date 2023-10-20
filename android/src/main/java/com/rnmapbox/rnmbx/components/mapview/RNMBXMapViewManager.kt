@@ -49,7 +49,7 @@ interface CommandResponse {
     fun error(message: String)
 }
 
-open class RNMBXMapViewManager(context: ReactApplicationContext, val viewTagResolver: ViewTagResolver<RNMBXMapView>) :
+open class RNMBXMapViewManager(context: ReactApplicationContext, val viewTagResolver: ViewTagResolver) :
     AbstractEventEmitter<RNMBXMapView>(context), RNMBXMapViewManagerInterface<RNMBXMapView> {
     private val mViews: MutableMap<Int, RNMBXMapView>
 

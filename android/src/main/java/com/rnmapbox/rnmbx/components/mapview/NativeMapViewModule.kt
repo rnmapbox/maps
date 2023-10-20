@@ -19,7 +19,7 @@ import com.rnmapbox.rnmbx.utils.ViewTagResolver
 import com.rnmapbox.rnmbx.utils.extensions.toCoordinate
 import com.rnmapbox.rnmbx.utils.extensions.toScreenCoordinate
 
-class NativeMapViewModule(context: ReactApplicationContext, val viewTagResolver: ViewTagResolver<RNMBXMapView>) : NativeMapViewModuleSpec(context) {
+class NativeMapViewModule(context: ReactApplicationContext, val viewTagResolver: ViewTagResolver) : NativeMapViewModuleSpec(context) {
     private fun withMapViewOnUIThread(
         viewRef: Double?,
         reject: Promise,

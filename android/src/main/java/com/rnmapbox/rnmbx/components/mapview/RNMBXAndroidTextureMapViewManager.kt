@@ -9,7 +9,7 @@ import com.facebook.react.viewmanagers.RNMBXMapViewManagerDelegate
 import com.mapbox.maps.MapInitOptions
 import com.rnmapbox.rnmbx.utils.ViewTagResolver
 
-class RNMBXAndroidTextureMapViewManager(context: ReactApplicationContext, viewTagResolver: ViewTagResolver<RNMBXMapView>) : RNMBXMapViewManager(
+class RNMBXAndroidTextureMapViewManager(context: ReactApplicationContext, viewTagResolver: ViewTagResolver) : RNMBXMapViewManager(
     context,
     viewTagResolver
 ), RNMBXAndroidTextureMapViewManagerInterface<RNMBXMapView> {

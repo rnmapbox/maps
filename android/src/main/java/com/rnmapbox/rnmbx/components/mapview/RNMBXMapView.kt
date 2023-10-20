@@ -309,7 +309,7 @@ open class RNMBXMapView(private val mContext: Context, var mManager: RNMBXMapVie
         savedStyle = style
         styleLoaded = true
         setUpImage(style)
-        addFeaturesToMap()
+        addFeaturesToMap(true)
         applyLocalizeLabels()
         style.setProjection(Projection(mProjection))
     }
