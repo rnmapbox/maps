@@ -1,4 +1,4 @@
-def defaultMapboxMapsImpl = "mabpox"
+def defaultMapboxMapsImpl = "mapbox"
 def defaultMapboxMapsVersion = "10.16.1"
 
 def safeExtGet(prop, fallback) {
