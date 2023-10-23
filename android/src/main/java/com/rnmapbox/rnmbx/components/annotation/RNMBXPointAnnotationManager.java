@@ -72,13 +72,4 @@ public class RNMBXPointAnnotationManager extends AbstractEventEmitter<RNMBXPoint
     public void setDraggable(RNMBXPointAnnotation annotation, Boolean draggable) {
         annotation.setDraggable(draggable);
     }
-
-    @Override
-    public void receiveCommand(RNMBXPointAnnotation annotation, int commandID, @Nullable ReadableArray args) {
-        switch (commandID) {
-            case METHOD_REFRESH:
-                annotation.refresh();
-                break;
-        }
-    }
 }
