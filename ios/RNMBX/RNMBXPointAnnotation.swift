@@ -8,8 +8,8 @@ final class WeakRef<T: AnyObject> {
     self.object = object
   }
 }
-
-class RNMBXPointAnnotation : RNMBXInteractiveElement {
+@objc
+public class RNMBXPointAnnotation : RNMBXInteractiveElement {
   static let key = "RNMBXPointAnnotation"
   static var gid = 0;
   
@@ -25,19 +25,20 @@ class RNMBXPointAnnotation : RNMBXInteractiveElement {
   var calloutId : String?
   var image : UIImage? = nil
   var reactSubviews : [UIView] = []
-
-  @objc var onDeselected: RCTBubblingEventBlock? = nil
-  @objc var onDrag: RCTBubblingEventBlock? = nil
-  @objc var onDragEnd: RCTBubblingEventBlock? = nil
-  @objc var onSelected: RCTBubblingEventBlock? = nil
+ 
+    
+  @objc public var onDeselected: RCTBubblingEventBlock? = nil
+  @objc public var onDrag: RCTBubblingEventBlock? = nil
+  @objc public var onDragEnd: RCTBubblingEventBlock? = nil
+  @objc public var onSelected: RCTBubblingEventBlock? = nil
   
-  @objc var coordinate : String? {
+  @objc public var coordinate : String? {
     didSet {
       _updateCoordinate()
     }
   }
   
-  @objc var anchor: [String:NSNumber] = [:] {
+  @objc public var anchor: [String:NSNumber] = [:] {
     didSet {
       update { annotation in
         _updateAnchor(&annotation)
@@ -105,12 +106,12 @@ class RNMBXPointAnnotation : RNMBXInteractiveElement {
   }
    
   func gid() -> Int {
-    RNMBXPointAnnotation.gid = RNMBXPointAnnotation.gid + 1
+      RNMBXPointAnnotation.gid = RNMBXPointAnnotation.gid + 1
     return RNMBXPointAnnotation.gid
   }
    
   @objc
-  func refresh() {
+  public func refresh() {
     if let image = _createViewSnapshot() {
       changeImage(image)
     }
@@ -177,32 +178,42 @@ class RNMBXPointAnnotation : RNMBXInteractiveElement {
   }
   
   @objc
-  override func insertReactSubview(_ subview: UIView!, at atIndex: Int) {
-    if let callout = subview as? RNMBXCallout {
-      self.callout = callout
-    } else {
-      reactSubviews.insert(subview, at: atIndex)
-      if reactSubviews.count > 1 {
-        Logger.log(level: .error, message: "PointAnnotation supports max 1 subview other than a callout")
-      }
-      if annotation.image == nil {
-        DispatchQueue.main.asyncAfter(deadline: .now() + .microseconds(10)) {
-          self.setAnnotationImage()
+  public override func insertReactSubview(_ subview: UIView!, at atIndex: Int) {
+    insertReactSubviewInternal(subview, at: atIndex)
+  }
+    
+    @objc
+    public func insertReactSubviewInternal(_ subview: UIView!, at atIndex: Int) {
+      if let callout = subview as? RNMBXCallout {
+        self.callout = callout
+      } else {
+        reactSubviews.insert(subview, at: atIndex)
+        if reactSubviews.count > 1 {
+          Logger.log(level: .error, message: "PointAnnotation supports max 1 subview other than a callout")
+        }
+        if annotation.image == nil {
+          DispatchQueue.main.asyncAfter(deadline: .now() + .microseconds(10)) {
+            self.setAnnotationImage()
+          }
         }
       }
     }
-  }
 
   @objc
-  override func removeReactSubview(_ subview: UIView!) {
-    if let callout = subview as? RNMBXCallout {
-      if self.callout == callout {
-        self.callout = nil
-      }
-    } else {
-      reactSubviews.removeAll(where: { $0 == subview })
-    }
+  public override func removeReactSubview(_ subview: UIView!) {
+    removeReactSubviewInternal(subview)
   }
+    
+    @objc
+    public func removeReactSubviewInternal(_ subview: UIView!) {
+      if let callout = subview as? RNMBXCallout {
+        if self.callout == callout {
+          self.callout = nil
+        }
+      } else {
+        reactSubviews.removeAll(where: { $0 == subview })
+      }
+    }
   
   // MARK: - RNMBXMapComponent
   

@@ -92,7 +92,6 @@ using namespace facebook::react;
               std::dynamic_pointer_cast<const facebook::react::RNMBXMapViewEventEmitter>(strongSelf->_eventEmitter)->onMapChange({type, json});
             }
       }];
-
     self.contentView = _view;
 }
 
