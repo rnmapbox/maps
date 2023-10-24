@@ -14,6 +14,52 @@ class FeatureEntry {
   }
 }
 
+class CustomHeadingProvider: HeadingProvider {
+  var latestHeading: Heading?
+  private let observers: NSHashTable<AnyObject> = .weakObjects()
+
+  func add(headingObserver: HeadingObserver) {
+    observers.add(headingObserver)
+  }
+
+  func remove(headingObserver: HeadingObserver) {
+    observers.remove(headingObserver)
+  }
+    
+  func setHeading(heading: NSNumber) {
+    let latestHeading = Heading(direction: CLLocationDirection(truncating: heading), accuracy: CLLocationDirection(truncating: 1))
+    self.latestHeading = latestHeading
+    for observer in observers.allObjects {
+      (observer as? HeadingObserver)?.onHeadingUpdate(latestHeading)
+    }
+  }
+}
+
+class CustomLocationProvider: LocationProvider {
+  private var observers: NSHashTable<AnyObject> = .weakObjects()
+  private var location: Location? = nil
+
+  func addLocationObserver(for observer: LocationObserver) {
+    observers.add(observer)
+  }
+
+  func removeLocationObserver(for observer: LocationObserver) {
+    observers.remove(observer)
+  }
+
+  func getLastObservedLocation() -> Location? {
+    return location
+  }
+
+  func setLocation(latitude: NSNumber, longitude: NSNumber, heading: NSNumber) {
+    let lat = CLLocationDegrees(truncating: latitude)
+    let lon = CLLocationDegrees(truncating: longitude)
+    self.location = Location(clLocation: CLLocation(latitude: lat, longitude: lon))
+    for observer in observers.allObjects {
+      (observer as? LocationObserver)?.onLocationUpdateReceived(for: [self.location!])
+    }
+  }
+}
 
 #if RNMBX_11
 extension QueriedRenderedFeature {
@@ -150,6 +196,9 @@ open class RNMBXMapView : MapView {
   var mapView : MapView {
     get { return self }
   }
+    
+  var customLocationProvider: CustomLocationProvider? = nil
+  var customHeadingProvider: CustomHeadingProvider? = nil
 
   @objc public func addToMap(_ subview: UIView) {
     if let mapComponent = subview as? RNMBXMapComponent {
@@ -534,6 +583,27 @@ open class RNMBXMapView : MapView {
         mapView.removeGestureRecognizer(recognizer)
       }
     }
+  }
+    
+  func setCustomLocation(
+    latitude: NSNumber,
+    longitude: NSNumber,
+    heading: NSNumber
+  ) -> Void {
+    if (customLocationProvider == nil && customHeadingProvider == nil) {
+      customLocationProvider = CustomLocationProvider()
+      customHeadingProvider = CustomHeadingProvider()
+      mapView.location.override(locationProvider: customLocationProvider!, headingProvider: customHeadingProvider)
+    }
+    
+    customLocationProvider?.setLocation(latitude: latitude, longitude: longitude, heading: heading)
+    customHeadingProvider?.setHeading(heading: heading)
+  }
+    
+  func removeCustomLocationProvider() {
+    mapView.location.override(provider: AppleLocationProvider())
+    customLocationProvider = nil
+    customHeadingProvider = nil
   }
 }
 
