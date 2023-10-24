@@ -1,5 +1,6 @@
 import React, { memo, forwardRef, ReactElement } from 'react';
-import { requireNativeComponent } from 'react-native';
+
+import RNMBXImageNativeComponent from '../specs/RNMBXImageNativeComponent';
 
 interface Props {
   /** ID of the image */
@@ -42,21 +43,10 @@ const Image = memo(
       stretchY,
       children,
     };
-    return <RNMBXImage {...nativeProps} />;
+    // @ts-expect-error just codegen stuff
+    return <RNMBXImageNativeComponent {...nativeProps} />;
   }),
 );
-
-interface NativeProps {
-  name: string;
-  children: ReactElement;
-  sdf?: boolean;
-  stretchX?: [number, number][];
-  stretchY?: [number, number][];
-}
-
-export const NATIVE_MODULE_NAME = 'RNMBXImage';
-
-const RNMBXImage = requireNativeComponent<NativeProps>(NATIVE_MODULE_NAME);
 
 Image.displayName = 'Image';
 
