@@ -1,6 +1,7 @@
 package com.rnmapbox.rnmbx.components.location
 
 import android.content.Context
+import android.graphics.BitmapFactory
 import android.graphics.Color
 import android.graphics.drawable.BitmapDrawable
 import androidx.lifecycle.Lifecycle
@@ -12,6 +13,9 @@ import com.rnmapbox.rnmbx.components.mapview.RNMBXMapView
 import com.rnmapbox.rnmbx.location.LocationManager
 import com.rnmapbox.rnmbx.v11compat.image.AppCompatResourcesV11
 import com.rnmapbox.rnmbx.v11compat.image.ImageHolder
+import com.rnmapbox.rnmbx.v11compat.image.toBitmapImageHolder
+import com.rnmapbox.rnmbx.v11compat.image.toByteArray
+import com.rnmapbox.rnmbx.v11compat.image.toImageData
 import com.rnmapbox.rnmbx.v11compat.location.PuckBearingSource
 
 /**
@@ -113,9 +117,10 @@ class LocationComponentManager(mapView: RNMBXMapView, context: Context) {
                     val tintColor = newState.tintColor
                     var topImage = newState.topImage
                     if (tintColor != null && topImage != null) {
-                        val drawable = BitmapDrawable(mContext.resources, topImage.bitmap)
+                        val imageData = (topImage as ByteArray).toImageData().toByteArray()
+                        val drawable = BitmapDrawable(mContext.resources, BitmapFactory.decodeByteArray(imageData, 0, imageData.size))
                         drawable.setTint(tintColor)
-                        topImage = com.mapbox.maps.ImageHolder.Companion.from(drawable.bitmap)
+                        topImage = drawable.toBitmapImageHolder()
                     }
                     val scaleExpression = if (newState.scale != 1.0) {
                         interpolate {
