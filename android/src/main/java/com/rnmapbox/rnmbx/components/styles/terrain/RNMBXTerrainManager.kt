@@ -1,11 +1,13 @@
 package com.rnmapbox.rnmbx.components.styles.terrain
 
-import com.facebook.react.bridge.ReadableMap
+import com.facebook.react.bridge.Dynamic
 import com.facebook.react.uimanager.ThemedReactContext
 import com.facebook.react.uimanager.ViewGroupManager
 import com.facebook.react.uimanager.annotations.ReactProp
+import com.facebook.react.viewmanagers.RNMBXTerrainManagerInterface
 
-class RNMBXTerrainManager : ViewGroupManager<RNMBXTerrain>() {
+class RNMBXTerrainManager : ViewGroupManager<RNMBXTerrain>(),
+    RNMBXTerrainManagerInterface<RNMBXTerrain> {
     override fun getName(): String {
         return REACT_CLASS
     }
@@ -14,19 +16,20 @@ class RNMBXTerrainManager : ViewGroupManager<RNMBXTerrain>() {
         return RNMBXTerrain(reactContext)
     }
 
-    @ReactProp(name = "id")
-    fun setId(layer: RNMBXTerrain, id: String?) {
-        layer.iD = id
-    }
+    // TODO: it is not present in props so should we add it?
+//    @ReactProp(name = "id")
+//    override fun setId(layer: RNMBXTerrain, id: Dynamic) {
+//        layer.iD = id.asString()
+//    }
 
     @ReactProp(name = "sourceID")
-    fun setSourceID(layer: RNMBXTerrain, sourceID: String?) {
-        layer.setSourceID(sourceID)
+    override fun setSourceID(layer: RNMBXTerrain, sourceID: Dynamic) {
+        layer.setSourceID(sourceID.asString())
     }
 
     @ReactProp(name = "reactStyle")
-    fun setReactStyle(terrain: RNMBXTerrain, reactStyle: ReadableMap?) {
-        terrain.setReactStyle(reactStyle)
+    override fun setReactStyle(terrain: RNMBXTerrain, reactStyle: Dynamic) {
+        terrain.setReactStyle(reactStyle.asMap())
     }
 
     companion object {
