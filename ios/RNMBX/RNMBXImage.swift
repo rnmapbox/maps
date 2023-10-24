@@ -1,38 +1,38 @@
 import MapboxMaps
 
-class RNMBXImage : UIView {
+public class RNMBXImage : UIView {
   @objc
-  var name: String = "" {
+  public var name: String = "" {
     didSet {
       _addImageToStyle()
     }
   }
 
-  var image: UIImage? = nil
+  @objc public var image: UIImage? = nil
   
   @objc
-  var sdf: Bool = false {
+    public var sdf: Bool = false {
     didSet {
       _addImageToStyle()
     }
   }
 
   @objc
-  var stretchX: [[NSNumber]] = [] {
+    public var stretchX: [[NSNumber]] = [] {
     didSet {
       _addImageToStyle()
     }
   }
 
   @objc
-  var stretchY: [[NSNumber]] = [] {
+    public var stretchY: [[NSNumber]] = [] {
     didSet {
       _addImageToStyle()
     }
   }
 
   @objc
-  var content: [NSNumber]? = nil {
+    public var content: [NSNumber]? = nil {
     didSet {
       _addImageToStyle()
     }
@@ -43,28 +43,36 @@ class RNMBXImage : UIView {
       DispatchQueue.main.async { self.setImage() }
     }
   }
-  weak var bridge : RCTBridge! = nil
   
-  var reactSubviews : [UIView] = []
+ var reactSubviews : [UIView] = []
   
   // MARK: - subview management
   
-  @objc open override func insertReactSubview(_ subview: UIView!, at atIndex: Int) {
-    reactSubviews.insert(subview, at: atIndex)
-    if reactSubviews.count > 1 {
-      Logger.log(level: .error, message: "Image supports max 1 subview")
-    }
-    if image == nil {
-      DispatchQueue.main.asyncAfter(deadline: .now() + .microseconds(10)) {
-        self.setImage()
+    public override func insertReactSubview(_ subview: UIView!, at atIndex: Int) {
+      insertReactSubviewInternal(subview, at: atIndex)
+  }
+    
+    @objc public func insertReactSubviewInternal(_ subview: UIView!, at atIndex: Int) {
+        reactSubviews.insert(subview, at: atIndex)
+      if reactSubviews.count > 1 {
+        Logger.log(level: .error, message: "Image supports max 1 subview")
+      }
+      if image == nil {
+        DispatchQueue.main.asyncAfter(deadline: .now() + .microseconds(10)) {
+          self.setImage()
+        }
       }
     }
-  }
 
-  @objc
-  open override func removeReactSubview(_ subview: UIView!) {
-    reactSubviews.removeAll(where: { $0 == subview })
+  
+  public override func removeReactSubview(_ subview: UIView!) {
+      removeReactSubviewInternal(subview)
   }
+    
+    @objc
+    open func removeReactSubviewInternal(_ subview: UIView!) {
+        reactSubviews.removeAll(where: { $0 == subview })
+    }
   
   // MARK: - view shnapshot
   
@@ -79,7 +87,7 @@ class RNMBXImage : UIView {
     _addImageToStyle()
   }
   
-  func setImage() {
+  @objc public func setImage() {
     if let image = _createViewSnapshot() {
       changeImage(image, name: name)
     }

@@ -1,7 +1,7 @@
 import MapboxMaps
 
 @objc
-class RNMBXNativeUserLocation : UIView, RNMBXMapComponent {
+public class RNMBXNativeUserLocation : UIView, RNMBXMapComponent {
   weak var map : RNMBXMapView! = nil
   
   let locationLayerId = "location-layer"
@@ -9,7 +9,7 @@ class RNMBXNativeUserLocation : UIView, RNMBXMapComponent {
   var locationLayer : LocationIndicatorLayer? = nil
 
   @objc
-  var iosShowsUserHeadingIndicator : Bool = false {
+  public var iosShowsUserHeadingIndicator : Bool = false {
     didSet {
       if let map = self.map { _applySettings(map) }
     }
@@ -18,11 +18,7 @@ class RNMBXNativeUserLocation : UIView, RNMBXMapComponent {
   func _applySettings(_ map: RNMBXMapView) {
     map.location.options.puckType = .puck2D(.makeDefault(showBearing: iosShowsUserHeadingIndicator))
     if (iosShowsUserHeadingIndicator) {
-      #if RNMBX_11
-      map.location.options.puckBearing = .heading
-      #else
       map.location.options.puckBearingSource = .heading
-      #endif
       map.location.options.puckBearingEnabled = true
     } else {
       map.location.options.puckBearingEnabled = false
