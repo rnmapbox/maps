@@ -55,7 +55,7 @@ const UserLocationNativeAnimated = () => {
         idx = 0;
       }
       const coordinates = route.geometry.coordinates[idx++];
-      ref?.setCustomLocation(coordinates[1], coordinates[0], idx % 360);
+      ref?.setCustomLocation(coordinates[1], coordinates[0]);
       timer = setTimeout(setPosition, 1000);
     };
 
