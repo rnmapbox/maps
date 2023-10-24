@@ -30,7 +30,6 @@ The distance from the edges of the map view’s frame to the edges of the map vi
 ```
 The projection used when rendering the map
 
-  _defaults to:_ `'mercator'`
 
   
 ### styleURL
@@ -272,6 +271,35 @@ when embedded into a scroll view
 ```
 [`mapbox` (v10) implementation only]
 Set map's label locale, e.g. { "locale": "es" } will localize labels to Spanish, { "locale": "current" } will localize labels to system locale.
+
+
+  
+### gestureSettings
+
+```tsx
+type GestureSettings = {
+  doubleTapToZoomInEnabled: boolean; /* Whether double tapping the map with one touch results in a zoom-in animation. */
+  doubleTouchToZoomOutEnabled: boolean; /* Whether single tapping the map with two touches results in a zoom-out animation. */
+  pinchPanEnabled: boolean; /* Whether pan/scroll is enabled for the pinch gesture. */
+  pinchZoomEnabled: boolean; /* Whether zoom is enabled for the pinch gesture. */
+  pinchZoomDecelerationEnabled: boolean; /* Whether a deceleration animation following a pinch-zoom gesture is enabled. True by default.
+(Android only) */
+  pitchEnabled: boolean; /* Whether the pitch gesture is enabled. */
+  quickZoomEnabled: boolean; /* Whether the quick zoom gesture is enabled. */
+  rotateEnabled: boolean; /* Whether the rotate gesture is enabled. */
+  rotateDecelerationEnabled: boolean; /* Whether a deceleration animation following a rotate gesture is enabled. True by default.
+(Android only) */
+  panEnabled: boolean; /* Whether the single-touch pan/scroll gesture is enabled. */
+  panDecelerationFactor: number; /* A constant factor that determines how quickly pan deceleration animations happen. Multiplied with the velocity vector once per millisecond during deceleration animations.
+
+On iOS Defaults to UIScrollView.DecelerationRate.normal.rawValue
+On android set to 0 to disable deceleration, and non zero to enabled it. */
+  simultaneousRotateAndPinchZoomEnabled: boolean; /* Whether rotation is enabled for the pinch zoom gesture. */
+  zoomAnimationAmount: number; /* The amount by which the zoom level increases or decreases during a double-tap-to-zoom-in or double-touch-to-zoom-out gesture. 1.0 by default. Must be positive.
+(Android only) */
+}
+```
+Gesture configuration allows to control the user touch interaction.
 
 
   

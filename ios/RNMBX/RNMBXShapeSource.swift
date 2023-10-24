@@ -2,8 +2,8 @@ import MapboxMaps
 import Turf
 
 @objc
-class RNMBXShapeSource : RNMBXSource {
-  @objc var url : String? {
+public class RNMBXShapeSource : RNMBXSource {
+  @objc public var url : String? {
     didSet {
       parseJSON(url) { [weak self] result in
         guard let self = self else { return }
@@ -23,7 +23,7 @@ class RNMBXShapeSource : RNMBXSource {
     }
   }
 
-  @objc var shape : String? {
+  @objc public var shape : String? {
     didSet {
       logged("RNMBXShapeSource.updateShape") {
         let obj : GeoJSONObject = try parse(shape)
@@ -37,9 +37,9 @@ class RNMBXShapeSource : RNMBXSource {
     }
   }
 
-  @objc var cluster : NSNumber?
-  @objc var clusterRadius : NSNumber?
-  @objc var clusterMaxZoomLevel : NSNumber? {
+  @objc public var cluster : NSNumber?
+  @objc public var clusterRadius : NSNumber?
+  @objc public var clusterMaxZoomLevel : NSNumber? {
     didSet {
       logged("RNMBXShapeSource.clusterMaxZoomLevel") {
         if let number = clusterMaxZoomLevel?.doubleValue {
@@ -52,12 +52,12 @@ class RNMBXShapeSource : RNMBXSource {
       }
     }
   }
-  @objc var clusterProperties : [String: [Any]]?;
+  @objc public var clusterProperties : [String: [Any]]?;
 
-  @objc var maxZoomLevel : NSNumber?
-  @objc var buffer : NSNumber?
-  @objc var tolerance : NSNumber?
-  @objc var lineMetrics : NSNumber?
+  @objc public var maxZoomLevel : NSNumber?
+  @objc public var buffer : NSNumber?
+  @objc public var tolerance : NSNumber?
+  @objc public var lineMetrics : NSNumber?
 
   override func sourceType() -> Source.Type {
     return GeoJSONSource.self

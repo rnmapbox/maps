@@ -69,6 +69,67 @@ export type RegionPayload = {
   pitch: number;
 };
 
+export type GestureSettings = {
+  /**
+   * Whether double tapping the map with one touch results in a zoom-in animation.
+   */
+  doubleTapToZoomInEnabled?: boolean;
+  /**
+   * Whether single tapping the map with two touches results in a zoom-out animation.
+   */
+  doubleTouchToZoomOutEnabled?: boolean;
+  /**
+   * Whether pan/scroll is enabled for the pinch gesture.
+   */
+  pinchPanEnabled?: boolean;
+  /**
+   * Whether zoom is enabled for the pinch gesture.
+   */
+  pinchZoomEnabled?: boolean;
+  /**
+   * Whether a deceleration animation following a pinch-zoom gesture is enabled. True by default.
+   * (Android only)
+   */
+  pinchZoomDecelerationEnabled?: boolean;
+  /**
+   * Whether the pitch gesture is enabled.
+   */
+  pitchEnabled?: boolean;
+  /**
+   * Whether the quick zoom gesture is enabled.
+   */
+  quickZoomEnabled?: boolean;
+  /**
+   * Whether the rotate gesture is enabled.
+   */
+  rotateEnabled?: boolean;
+  /**
+   * Whether a deceleration animation following a rotate gesture is enabled. True by default.
+   * (Android only)
+   */
+  rotateDecelerationEnabled?: boolean;
+  /**
+   * Whether the single-touch pan/scroll gesture is enabled.
+   */
+  panEnabled?: boolean;
+  /**
+   * A constant factor that determines how quickly pan deceleration animations happen. Multiplied with the velocity vector once per millisecond during deceleration animations.
+   *
+   * On iOS Defaults to UIScrollView.DecelerationRate.normal.rawValue
+   * On android set to 0 to disable deceleration, and non zero to enabled it.
+   */
+  panDecelerationFactor?: number;
+  /**
+   * Whether rotation is enabled for the pinch zoom gesture.
+   */
+  simultaneousRotateAndPinchZoomEnabled?: boolean;
+  /**
+   * The amount by which the zoom level increases or decreases during a double-tap-to-zoom-in or double-touch-to-zoom-out gesture. 1.0 by default. Must be positive.
+   * (Android only)
+   */
+  zoomAnimationAmount?: number;
+};
+
 /**
  * v10 only
  */
@@ -245,6 +306,11 @@ type Props = ViewProps & {
   localizeLabels?: LocalizeLabels;
 
   /**
+   * Gesture configuration allows to control the user touch interaction.
+   */
+  gestureSettings?: GestureSettings;
+
+  /**
    * Map press listener, gets called when a user presses the map
    */
   onPress?: (feature: GeoJSON.Feature) => void;
@@ -400,7 +466,6 @@ class MapView extends NativeBridgeComponent(
   NATIVE_MODULE_NAME,
 ) {
   static defaultProps: Props = {
-    projection: 'mercator',
     scrollEnabled: true,
     pitchEnabled: true,
     rotateEnabled: true,

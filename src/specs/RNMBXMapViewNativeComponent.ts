@@ -7,6 +7,16 @@ import {
 
 import type { LocalizeLabels, Point, UnsafeMixed } from './codegenUtils';
 
+// see https://github.com/rnmapbox/maps/wiki/FabricOptionalProp
+type OptionalProp<T> = UnsafeMixed<T>;
+
+type GestureSettings = {
+  doubleTapToZoomInEnabled?: boolean;
+  doubleTouchToZoomOutEnabled?: boolean;
+  pinchScrollEnabled?: boolean;
+  pinchToZoomDecelerationEnabled?: boolean;
+};
+
 type OnCameraChangedEventType = { type: string; payload: string };
 type OnPressEventType = { type: string; payload: string };
 type OnMapChangeEventType = { type: string; payload: string };
@@ -14,32 +24,34 @@ type OnMapChangeEventType = { type: string; payload: string };
 export interface NativeProps extends ViewProps {
   onCameraChanged?: DirectEventHandler<OnCameraChangedEventType>;
 
-  attributionEnabled?: UnsafeMixed<boolean>;
+  attributionEnabled?: OptionalProp<boolean>;
   attributionPosition?: UnsafeMixed<any>;
 
-  logoEnabled?: UnsafeMixed<boolean>;
+  logoEnabled?: OptionalProp<boolean>;
   logoPosition?: UnsafeMixed<any>;
 
-  compassEnabled?: UnsafeMixed<boolean>;
-  compassFadeWhenNorth?: UnsafeMixed<boolean>;
+  compassEnabled?: OptionalProp<boolean>;
+  compassFadeWhenNorth?: OptionalProp<boolean>;
   compassPosition?: UnsafeMixed<any>;
-  compassViewPosition?: UnsafeMixed<Int32>;
-  compassViewMargins?: UnsafeMixed<Point>;
+  compassViewPosition?: OptionalProp<Int32>;
+  compassViewMargins?: OptionalProp<Point>;
 
-  scaleBarEnabled?: UnsafeMixed<boolean>;
+  scaleBarEnabled?: OptionalProp<boolean>;
   scaleBarPosition?: UnsafeMixed<any>;
 
-  zoomEnabled?: UnsafeMixed<boolean>;
-  scrollEnabled?: UnsafeMixed<boolean>;
-  rotateEnabled?: UnsafeMixed<boolean>;
-  pitchEnabled?: UnsafeMixed<boolean>;
+  zoomEnabled?: OptionalProp<boolean>;
+  scrollEnabled?: OptionalProp<boolean>;
+  rotateEnabled?: OptionalProp<boolean>;
+  pitchEnabled?: OptionalProp<boolean>;
 
-  requestDisallowInterceptTouchEvent?: UnsafeMixed<boolean>;
+  requestDisallowInterceptTouchEvent?: OptionalProp<boolean>;
 
-  projection?: UnsafeMixed<string>;
+  projection?: OptionalProp<string>;
   localizeLabels?: UnsafeMixed<LocalizeLabels>;
 
-  styleURL?: UnsafeMixed<string>;
+  styleURL?: OptionalProp<string>;
+
+  gestureSettings?: UnsafeMixed<GestureSettings>;
 
   // Android only
   scaleBarViewMargins?: UnsafeMixed<any>;
@@ -47,7 +59,7 @@ export interface NativeProps extends ViewProps {
   attributionViewPosition?: UnsafeMixed<any>;
 
   // iOS only
-  compassImage?: UnsafeMixed<string>;
+  compassImage?: OptionalProp<string>;
 
   onPress?: DirectEventHandler<OnPressEventType>;
   onLongPress?: DirectEventHandler<OnPressEventType>;

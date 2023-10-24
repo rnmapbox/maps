@@ -34,6 +34,7 @@ import com.rnmapbox.rnmbx.components.styles.sources.RNMBXImageSourceManager
 import com.rnmapbox.rnmbx.components.styles.sources.RNMBXRasterDemSourceManager
 import com.rnmapbox.rnmbx.components.styles.sources.RNMBXRasterSourceManager
 import com.rnmapbox.rnmbx.components.styles.sources.RNMBXShapeSourceManager
+import com.rnmapbox.rnmbx.components.styles.sources.RNMBXShapeSourceModule
 import com.rnmapbox.rnmbx.components.styles.sources.RNMBXVectorSourceManager
 import com.rnmapbox.rnmbx.components.styles.terrain.RNMBXTerrainManager
 import com.rnmapbox.rnmbx.modules.RNMBXLocationModule
@@ -45,12 +46,12 @@ import com.rnmapbox.rnmbx.utils.ViewTagResolver
 
 class RNMBXPackage : TurboReactPackage() {
 
-    var mapViewTagResolver: ViewTagResolver<RNMBXMapView>? = null
-    fun getMapViewTagResolver(context: ReactApplicationContext) : ViewTagResolver<RNMBXMapView> {
-        val viewTagResolver = mapViewTagResolver
+    var viewTagResolver: ViewTagResolver? = null
+    fun getViewTagResolver(context: ReactApplicationContext) : ViewTagResolver {
+        val viewTagResolver = viewTagResolver
         if (viewTagResolver == null) {
-            val viewTagResolver = ViewTagResolver<RNMBXMapView>(context)
-            mapViewTagResolver = viewTagResolver
+            val viewTagResolver = ViewTagResolver(context)
+            this.viewTagResolver = viewTagResolver
             return viewTagResolver
         }
         return viewTagResolver
@@ -66,7 +67,8 @@ class RNMBXPackage : TurboReactPackage() {
             RNMBXOfflineModule.REACT_CLASS -> return RNMBXOfflineModule(reactApplicationContext)
             RNMBXSnapshotModule.REACT_CLASS -> return RNMBXSnapshotModule(reactApplicationContext)
             RNMBXLogging.REACT_CLASS -> return RNMBXLogging(reactApplicationContext)
-            NativeMapViewModule.NAME -> return NativeMapViewModule(reactApplicationContext, getMapViewTagResolver(reactApplicationContext))
+            NativeMapViewModule.NAME -> return NativeMapViewModule(reactApplicationContext, getViewTagResolver(reactApplicationContext))
+            RNMBXShapeSourceModule.NAME -> return RNMBXShapeSourceModule(reactApplicationContext, getViewTagResolver(reactApplicationContext))
         }
         return null
     }
@@ -81,8 +83,8 @@ class RNMBXPackage : TurboReactPackage() {
 
         // components
         managers.add(RNMBXCameraManager(reactApplicationContext))
-        managers.add(RNMBXAndroidTextureMapViewManager(reactApplicationContext, getMapViewTagResolver(reactApplicationContext)))
-        managers.add(RNMBXMapViewManager(reactApplicationContext, getMapViewTagResolver(reactApplicationContext)))
+        managers.add(RNMBXAndroidTextureMapViewManager(reactApplicationContext, getViewTagResolver(reactApplicationContext)))
+        managers.add(RNMBXMapViewManager(reactApplicationContext, getViewTagResolver(reactApplicationContext)))
         managers.add(RNMBXStyleImportManager(reactApplicationContext))
 
         // annotations
@@ -170,6 +172,15 @@ class RNMBXPackage : TurboReactPackage() {
             moduleInfos[NativeMapViewModule.NAME] = ReactModuleInfo(
                 NativeMapViewModule.NAME,
                 NativeMapViewModule.NAME,
+                false,  // canOverrideExistingModule
+                false,  // needsEagerInit
+                false,  // hasConstants
+                false,  // isCxxModule
+                isTurboModule // isTurboModule
+            )
+            moduleInfos[RNMBXShapeSourceModule.NAME] = ReactModuleInfo(
+                RNMBXShapeSourceModule.NAME,
+                RNMBXShapeSourceModule.NAME,
                 false,  // canOverrideExistingModule
                 false,  // needsEagerInit
                 false,  // hasConstants

@@ -8,7 +8,7 @@ import com.mapbox.maps.extension.style.sources.generated.ImageSource
 import com.rnmapbox.rnmbx.utils.LatLngQuad
 import java.net.URL
 
-class RNMBXImageSource(context: Context?) : RCTSource<ImageSource?>(context) {
+class RNMBXImageSource(context: Context?) : RNMBXSource<ImageSource?>(context) {
     private var mURL: URL? = null
     private var mResourceId = 0
     private var mCoordQuad: LatLngQuad? = null

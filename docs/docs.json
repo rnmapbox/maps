@@ -3587,7 +3587,7 @@
         "name": "projection",
         "required": false,
         "type": "'mercator' \\| 'globe'",
-        "default": "'mercator'",
+        "default": "none",
         "description": "The projection used when rendering the map"
       },
       {
@@ -3768,6 +3768,108 @@
         "type": "\\| {\n    /** locale code like `es` or `current` for the device's current locale */\n    locale: string;\n    /** layer id to localize. If not specified, all layers will be localized */\n    layerIds?: string[];\n  }\n\\| true",
         "default": "none",
         "description": "[`mapbox` (v10) implementation only]\nSet map's label locale, e.g. { \"locale\": \"es\" } will localize labels to Spanish, { \"locale\": \"current\" } will localize labels to system locale."
+      },
+      {
+        "name": "gestureSettings",
+        "required": false,
+        "type": {
+          "name": "shape",
+          "value": [
+            {
+              "name": "doubleTapToZoomInEnabled",
+              "required": false,
+              "type": "boolean",
+              "default": "none",
+              "description": "Whether double tapping the map with one touch results in a zoom-in animation."
+            },
+            {
+              "name": "doubleTouchToZoomOutEnabled",
+              "required": false,
+              "type": "boolean",
+              "default": "none",
+              "description": "Whether single tapping the map with two touches results in a zoom-out animation."
+            },
+            {
+              "name": "pinchPanEnabled",
+              "required": false,
+              "type": "boolean",
+              "default": "none",
+              "description": "Whether pan/scroll is enabled for the pinch gesture."
+            },
+            {
+              "name": "pinchZoomEnabled",
+              "required": false,
+              "type": "boolean",
+              "default": "none",
+              "description": "Whether zoom is enabled for the pinch gesture."
+            },
+            {
+              "name": "pinchZoomDecelerationEnabled",
+              "required": false,
+              "type": "boolean",
+              "default": "none",
+              "description": "Whether a deceleration animation following a pinch-zoom gesture is enabled. True by default.\n(Android only)"
+            },
+            {
+              "name": "pitchEnabled",
+              "required": false,
+              "type": "boolean",
+              "default": "none",
+              "description": "Whether the pitch gesture is enabled."
+            },
+            {
+              "name": "quickZoomEnabled",
+              "required": false,
+              "type": "boolean",
+              "default": "none",
+              "description": "Whether the quick zoom gesture is enabled."
+            },
+            {
+              "name": "rotateEnabled",
+              "required": false,
+              "type": "boolean",
+              "default": "none",
+              "description": "Whether the rotate gesture is enabled."
+            },
+            {
+              "name": "rotateDecelerationEnabled",
+              "required": false,
+              "type": "boolean",
+              "default": "none",
+              "description": "Whether a deceleration animation following a rotate gesture is enabled. True by default.\n(Android only)"
+            },
+            {
+              "name": "panEnabled",
+              "required": false,
+              "type": "boolean",
+              "default": "none",
+              "description": "Whether the single-touch pan/scroll gesture is enabled."
+            },
+            {
+              "name": "panDecelerationFactor",
+              "required": false,
+              "type": "number",
+              "default": "none",
+              "description": "A constant factor that determines how quickly pan deceleration animations happen. Multiplied with the velocity vector once per millisecond during deceleration animations.\n\nOn iOS Defaults to UIScrollView.DecelerationRate.normal.rawValue\nOn android set to 0 to disable deceleration, and non zero to enabled it."
+            },
+            {
+              "name": "simultaneousRotateAndPinchZoomEnabled",
+              "required": false,
+              "type": "boolean",
+              "default": "none",
+              "description": "Whether rotation is enabled for the pinch zoom gesture."
+            },
+            {
+              "name": "zoomAnimationAmount",
+              "required": false,
+              "type": "number",
+              "default": "none",
+              "description": "The amount by which the zoom level increases or decreases during a double-tap-to-zoom-in or double-touch-to-zoom-out gesture. 1.0 by default. Must be positive.\n(Android only)"
+            }
+          ]
+        },
+        "default": "none",
+        "description": "Gesture configuration allows to control the user touch interaction."
       },
       {
         "name": "onPress",
@@ -4707,32 +4809,6 @@
     "description": "ShapeSource is a map content source that supplies vector shapes to be shown on the map.\nThe shape may be an url or a GeoJSON object",
     "displayName": "ShapeSource",
     "methods": [
-      {
-        "name": "features",
-        "docblock": "Returns all features from the source that match the query parameters whether the feature is currently\nrendered on the map.\n\n@example\nshapeSource.features()\n\n@param  {Array=} filter - an optional filter statement to filter the returned Features.\n@return {FeatureCollection}",
-        "modifiers": [
-          "async"
-        ],
-        "params": [
-          {
-            "name": "filter",
-            "description": "an optional filter statement to filter the returned Features.",
-            "type": {
-              "name": "Array"
-            },
-            "optional": true
-          }
-        ],
-        "returns": {
-          "type": {
-            "name": "FeatureCollection"
-          }
-        },
-        "description": "Returns all features from the source that match the query parameters whether the feature is currently\nrendered on the map.",
-        "examples": [
-          "\nshapeSource.features()\n\n"
-        ]
-      },
       {
         "name": "getClusterExpansionZoom",
         "docblock": "Returns the zoom needed to expand the cluster.\n\n@example\nconst zoom = await shapeSource.getClusterExpansionZoom(clusterId);\n\n@param  {Feature} feature - The feature cluster to expand.\n@return {number}",
@@ -7247,40 +7323,6 @@
     "description": "VectorSource is a map content source that supplies tiled vector data in Mapbox Vector Tile format to be shown on the map.\nThe location of and metadata about the tiles are defined either by an option dictionary or by an external file that conforms to the TileJSON specification.",
     "displayName": "VectorSource",
     "methods": [
-      {
-        "name": "features",
-        "docblock": "Returns all features that match the query parameters regardless of whether or not the feature is\ncurrently rendered on the map. The domain of the query includes all currently-loaded vector tiles\nand GeoJSON source tiles. This function does not check tiles outside of the visible viewport.\n\n@example\nvectorSource.features(['id1', 'id2'])\n\n@param  {Array=} layerIDs - A set of strings that correspond to the names of layers defined in the current style. Only the features contained in these layers are included in the returned array.\n@param  {Array=} filter - an optional filter statement to filter the returned Features.\n@return {FeatureCollection}",
-        "modifiers": [
-          "async"
-        ],
-        "params": [
-          {
-            "name": "layerIDs",
-            "description": "A set of strings that correspond to the names of layers defined in the current style. Only the features contained in these layers are included in the returned array.",
-            "type": {
-              "name": "Array"
-            },
-            "optional": true
-          },
-          {
-            "name": "filter",
-            "description": "an optional filter statement to filter the returned Features.",
-            "type": {
-              "name": "Array"
-            },
-            "optional": true
-          }
-        ],
-        "returns": {
-          "type": {
-            "name": "FeatureCollection"
-          }
-        },
-        "description": "Returns all features that match the query parameters regardless of whether or not the feature is\ncurrently rendered on the map. The domain of the query includes all currently-loaded vector tiles\nand GeoJSON source tiles. This function does not check tiles outside of the visible viewport.",
-        "examples": [
-          "\nvectorSource.features(['id1', 'id2'])\n\n"
-        ]
-      },
       {
         "name": "onPress",
         "docblock": null,

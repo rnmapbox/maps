@@ -1,6 +1,17 @@
 import MapboxMaps
 
 class CustomHttpHeaders : HttpServiceInterceptorInterface {
+  #if RNMBX_11
+  func onRequest(for request: HttpRequest, continuation: @escaping HttpServiceInterceptorRequestContinuation) {
+    let request = onRequest(for: request)
+    continuation(HttpRequestOrResponse.fromHttpRequest(request))
+  }
+
+  func onResponse(for response: HttpResponse, continuation: @escaping HttpServiceInterceptorResponseContinuation) {
+    continuation(response)
+  }
+  #endif
+
   static var shared : CustomHttpHeaders = {
     let headers = CustomHttpHeaders()
     headers.install()

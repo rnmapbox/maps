@@ -1,5 +1,5 @@
 @objc
-class RNMBXTileSource : RNMBXSource {
-  @objc var url: String? = nil
+public class RNMBXTileSource : RNMBXSource {
+  @objc public var url: String? = nil
   
 }

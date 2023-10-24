@@ -396,6 +396,55 @@ end
 "
 `;
 
+exports[`applyCocoaPodsModifications adds blocks to a react native template podfile with params 1`] = `
+"
+require_relative '../node_modules/react-native/scripts/react_native_pods'
+require_relative '../node_modules/@react-native-community/cli-platform-ios/native_modules'
+
+platform :ios, '11.0'
+
+# @generated begin @rnmapbox/maps-rnmapboxmapsimpl - expo prebuild (DO NOT MODIFY) sync-34c61e5da1766e1b145fac98d54e353b10c6b74f
+$RNMapboxMapsDownloadToken = 'pk.123'
+$RNMapboxMapsVersion = '11.0.0.beta4'
+$RNMapboxMapsUseV11 = true
+# @generated end @rnmapbox/maps-rnmapboxmapsimpl
+target 'HelloWorld' do
+  config = use_native_modules!
+
+# @generated begin pre_installer - expo prebuild (DO NOT MODIFY) sync-c8812095000d6054b846ce74840f0ffb540c2757
+  pre_install do |installer|
+# @generated begin @rnmapbox/maps-pre_installer - expo prebuild (DO NOT MODIFY) sync-ea4905840bf9fcea0acc62e92aa2e784f9d760f8
+    $RNMapboxMaps.pre_install(installer)
+# @generated end @rnmapbox/maps-pre_installer
+  end
+# @generated end pre_installer
+  use_react_native!(
+    :path => config[:reactNativePath],
+    # to enable hermes on iOS, change \`false\` to \`true\` and then install pods
+    :hermes_enabled => false
+  )
+
+  target 'HelloWorldTests' do
+    inherit! :complete
+    # Pods for testing
+  end
+
+  # Enables Flipper.
+  #
+  # Note that if you have use_frameworks! enabled, Flipper will not work and
+  # you should disable the next line.
+  use_flipper!()
+
+  post_install do |installer|
+# @generated begin @rnmapbox/maps-post_installer - expo prebuild (DO NOT MODIFY) sync-c4e8f90e96f6b6c6ea9241dd7b52ab5f57f7bf36
+    $RNMapboxMaps.post_install(installer)
+# @generated end @rnmapbox/maps-post_installer
+    react_native_post_install(installer)
+  end
+end
+"
+`;
+
 exports[`applyCocoaPodsModifications does not work with revisions to blocks after comments 1`] = `
 "
 require_relative '../node_modules/react-native/scripts/react_native_pods'

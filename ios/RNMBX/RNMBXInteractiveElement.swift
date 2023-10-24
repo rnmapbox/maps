@@ -1,21 +1,21 @@
 import MapboxMaps
 
 @objc
-class RNMBXInteractiveElement : UIView, RNMBXMapComponent {
+public class RNMBXInteractiveElement : UIView, RNMBXMapComponent {
   weak var map : RNMBXMapView? = nil
 
   static let hitboxDefault = 44.0
 
-  @objc var draggable: Bool = false
+  @objc public var draggable: Bool = false
   
-  @objc var hasPressListener: Bool = false
+  @objc public var hasPressListener: Bool = false
   
-  @objc var hitbox : [String:NSNumber] = [
+  @objc public var hitbox : [String:NSNumber] = [
     "width": NSNumber(value: hitboxDefault),
     "height": NSNumber(value: hitboxDefault)
   ]
   
-  @objc var id: String! = nil {
+  @objc public var id: String! = nil {
     willSet {
       if id != nil && newValue != id {
         Logger.log(level:.warn, message: "Changing id from: \(optional: id) to \(optional: newValue), changing of id is supported")
@@ -29,9 +29,9 @@ class RNMBXInteractiveElement : UIView, RNMBXMapComponent {
     }
   }
   
-  @objc var onDragStart: RCTBubblingEventBlock? = nil
+  @objc public var onDragStart: RCTBubblingEventBlock? = nil
   
-  @objc var onPress: RCTBubblingEventBlock? = nil
+  @objc public var onPress: RCTBubblingEventBlock? = nil
   
   func getLayerIDs() -> [String] {
     return []

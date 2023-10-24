@@ -15,7 +15,7 @@ func styleLayerExists(_ style: Style, id: String) -> Bool {
 
 @objc(RNMBXLayer)
 public class RNMBXLayer : UIView, RNMBXMapComponent, RNMBXSourceConsumer {
-  weak var bridge : RCTBridge? = nil
+  @objc public weak var bridge : RCTBridge? = nil
 
   var waitingForID: String? = nil
 
