@@ -58,12 +58,6 @@ public class RNMBXShapeSourceManagerDelegate<T extends View, U extends BaseViewM
       case "lineMetrics":
         mViewManager.setLineMetrics(view, new DynamicFromObject(value));
         break;
-      case "images":
-        mViewManager.setImages(view, new DynamicFromObject(value));
-        break;
-      case "nativeImages":
-        mViewManager.setNativeImages(view, new DynamicFromObject(value));
-        break;
       case "hasPressListener":
         mViewManager.setHasPressListener(view, new DynamicFromObject(value));
         break;

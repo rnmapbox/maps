@@ -1,13 +1,14 @@
 package com.rnmapbox.rnmbx.components.styles.sources
 
 import android.view.View
+import com.facebook.react.bridge.Dynamic
 import com.facebook.react.bridge.ReactApplicationContext
 import com.rnmapbox.rnmbx.components.AbstractEventEmitter
 import com.facebook.react.uimanager.ThemedReactContext
 import com.facebook.react.uimanager.annotations.ReactProp
-import com.facebook.react.bridge.ReadableMap
 import com.facebook.react.bridge.ReadableType
 import com.facebook.react.common.MapBuilder
+import com.facebook.react.viewmanagers.RNMBXShapeSourceManagerInterface
 import com.mapbox.bindgen.Value
 import com.mapbox.maps.extension.style.expressions.generated.Expression
 import com.rnmapbox.rnmbx.events.constants.EventKeys
@@ -22,7 +23,7 @@ import java.util.HashMap
 class RNMBXShapeSourceManager(private val mContext: ReactApplicationContext) :
     AbstractEventEmitter<RNMBXShapeSource>(
         mContext
-    ) {
+    ), RNMBXShapeSourceManagerInterface<RNMBXShapeSource> {
     override fun getName(): String {
         return REACT_CLASS
     }
@@ -48,51 +49,51 @@ class RNMBXShapeSourceManager(private val mContext: ReactApplicationContext) :
     }
 
     @ReactProp(name = "id")
-    fun setId(source: RNMBXShapeSource, id: String) {
-        source.iD = id
+    override fun setId(source: RNMBXShapeSource, id: Dynamic) {
+        source.iD = id.asString()
     }
 
     @ReactProp(name = "existing")
-    fun setExisting(source: RNMBXShapeSource, existing: Boolean) {
-        source.mExisting = existing;
+    override fun setExisting(source: RNMBXShapeSource, existing: Dynamic) {
+        source.mExisting = existing.asBoolean()
     }
 
     @ReactProp(name = "url")
-    fun setURL(source: RNMBXShapeSource, urlStr: String) {
+    override fun setUrl(source: RNMBXShapeSource, urlStr: Dynamic) {
         try {
-            source.setURL(URL(urlStr))
+            source.setURL(URL(urlStr.asString()))
         } catch (e: MalformedURLException) {
             Logger.w(LOG_TAG, e.localizedMessage ?: "Unknown URL error")
         }
     }
 
     @ReactProp(name = "shape")
-    fun setGeometry(source: RNMBXShapeSource, geoJSONStr: String) {
-        source.setShape(geoJSONStr)
+    override fun setShape(source: RNMBXShapeSource, geoJSONStr: Dynamic) {
+        source.setShape(geoJSONStr.asString())
     }
 
     @ReactProp(name = "cluster")
-    fun setCluster(source: RNMBXShapeSource, cluster: Int) {
-        source.setCluster(cluster == 1)
+    override fun setCluster(source: RNMBXShapeSource, cluster: Dynamic) {
+        source.setCluster(cluster.asInt() == 1)
     }
 
     @ReactProp(name = "clusterRadius")
-    fun setClusterRadius(source: RNMBXShapeSource, radius: Int) {
-        source.setClusterRadius(radius.toLong())
+    override fun setClusterRadius(source: RNMBXShapeSource, radius: Dynamic) {
+        source.setClusterRadius(radius.asInt().toLong())
     }
 
     @ReactProp(name = "clusterMaxZoomLevel")
-    fun setClusterMaxZoomLevel(source: RNMBXShapeSource, clusterMaxZoom: Int) {
-        source.setClusterMaxZoom(clusterMaxZoom.toLong())
+    override fun setClusterMaxZoomLevel(source: RNMBXShapeSource, clusterMaxZoom: Dynamic) {
+        source.setClusterMaxZoom(clusterMaxZoom.asInt().toLong())
     }
 
     @ReactProp(name = "clusterProperties")
-    fun setClusterProperties(source: RNMBXShapeSource, map: ReadableMap) {
+    override fun setClusterProperties(source: RNMBXShapeSource, map: Dynamic) {
         val properties = HashMap<String, Any>()
-        val iterator = map.keySetIterator()
+        val iterator = map.asMap().keySetIterator()
         while (iterator.hasNextKey()) {
             val name = iterator.nextKey()
-            val expressions = map.getArray(name)
+            val expressions = map.asMap().getArray(name)
             val builder: MutableList<Value> = ArrayList()
             for (iExp in 0 until expressions!!.size()) {
                 var argument: Expression
@@ -115,33 +116,33 @@ class RNMBXShapeSourceManager(private val mContext: ReactApplicationContext) :
     }
 
     @ReactProp(name = "maxZoomLevel")
-    fun setMaxZoomLevel(source: RNMBXShapeSource, maxZoom: Int) {
-        source.setMaxZoom(maxZoom.toLong())
+    override fun setMaxZoomLevel(source: RNMBXShapeSource, maxZoom: Dynamic) {
+        source.setMaxZoom(maxZoom.asInt().toLong())
     }
 
     @ReactProp(name = "buffer")
-    fun setBuffer(source: RNMBXShapeSource, buffer: Int) {
-        source.setBuffer(buffer.toLong())
+    override fun setBuffer(source: RNMBXShapeSource, buffer: Dynamic) {
+        source.setBuffer(buffer.asInt().toLong())
     }
 
     @ReactProp(name = "tolerance")
-    fun setTolerance(source: RNMBXShapeSource, tolerance: Double) {
-        source.setTolerance(tolerance)
+    override fun setTolerance(source: RNMBXShapeSource, tolerance: Dynamic) {
+        source.setTolerance(tolerance.asDouble())
     }
 
     @ReactProp(name = "lineMetrics")
-    fun setLineMetrics(source: RNMBXShapeSource, lineMetrics: Boolean) {
-        source.setLineMetrics(lineMetrics)
+    override fun setLineMetrics(source: RNMBXShapeSource, lineMetrics: Dynamic) {
+        source.setLineMetrics(lineMetrics.asBoolean())
     }
 
     @ReactProp(name = "hasPressListener")
-    fun setHasPressListener(source: RNMBXShapeSource, hasPressListener: Boolean) {
-        source.setHasPressListener(hasPressListener)
+    override fun setHasPressListener(source: RNMBXShapeSource, hasPressListener: Dynamic) {
+        source.setHasPressListener(hasPressListener.asBoolean())
     }
 
     @ReactProp(name = "hitbox")
-    fun setHitbox(source: RNMBXShapeSource, map: ReadableMap) {
-        source.setHitbox(map)
+    override fun setHitbox(source: RNMBXShapeSource, map: Dynamic) {
+        source.setHitbox(map.asMap())
     }
 
     override fun customEvents(): Map<String, String>? {
