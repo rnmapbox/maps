@@ -2,7 +2,6 @@ package com.rnmapbox.rnmbx.components.location
 
 import android.annotation.SuppressLint
 import android.content.Context
-import android.util.Log
 import com.mapbox.android.core.permissions.PermissionsManager
 import com.mapbox.maps.MapboxMap
 import com.mapbox.maps.Style
@@ -85,10 +84,6 @@ class RNMBXNativeUserLocation(context: Context) : AbstractMapFeature(context), O
 
     @SuppressLint("DiscouragedApi")
     fun applyChanges() {
-        Log.d(
-            "***",
-            "mTopImage: ${mTopImage}, mBearingImage: ${mBearingImage}, mShadowImage: ${mShadowImage}"
-        )
         val useCustomImages = mTopImage != null || mBearingImage != null || mShadowImage != null
 
         val bearingImageResourceId = if (mBearingImage != null) {

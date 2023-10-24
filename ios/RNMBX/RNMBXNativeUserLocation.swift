@@ -44,13 +44,16 @@ class RNMBXNativeUserLocation : UIView, RNMBXMapComponent {
   }
   
   func _applySettings(_ map: RNMBXMapView) {
+    if (self.topImage != nil || self.bearingImage != nil || self.shadowImage != nil) {
       map.location.options.puckType = .puck2D(Puck2DConfiguration(
         topImage: self.topImage != nil ? UIImage(named: self.topImage! as String, in: .main, compatibleWith: nil)! : nil,
         bearingImage: self.bearingImage != nil ? UIImage(named: self.bearingImage! as String, in: .main, compatibleWith: nil)! : nil,
         shadowImage: self.shadowImage != nil ? UIImage(named: self.shadowImage! as String, in: .main, compatibleWith: nil)! : nil,
         scale: self.scale != nil ? .constant(scale as! Double) : nil
       ))
-//    map.location.options.puckType = .puck2D(.makeDefault(showBearing: iosShowsUserHeadingIndicator))
+    } else {
+      map.location.options.puckType = .puck2D(.makeDefault(showBearing: iosShowsUserHeadingIndicator))
+    }
     if (iosShowsUserHeadingIndicator) {
       #if RNMBX_11
       map.location.options.puckBearing = .heading

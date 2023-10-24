@@ -929,7 +929,7 @@ class MapView extends NativeBridgeComponent(
     return this._runNative<void>('setCustomLocation', [
       latitude,
       longitude,
-      heading ?? null,
+      heading ?? 0,
     ]);
   }
 
