@@ -4,6 +4,8 @@ require Pod::Executable.execute_command('node', ['-p',
     "react-native/scripts/react_native_pods.rb",
     {paths: [process.argv[1]]},
   )', __dir__]).strip
+
+platform :ios, '13.4'
 prepare_react_native_project!
 
 $RNMapboxMapsImpl = 'mapbox'
@@ -11,7 +13,6 @@ if ENV['RNMBX11']
   $RNMapboxMapsUseV11 = true # use 11 version
   $RNMapboxMapsVersion = '= 11.0.0-beta.5'
 end
-
 
 if ENV['CI_MAP_IMPL']
   fail "Invalid CI_MAP_IMPL value" unless ["mapbox","mapbox11"].include?(ENV['CI_MAP_IMPL'])
@@ -26,13 +27,6 @@ if ENV['CI_MAP_IMPL']
     fail "Invalid CI_MAP_IMPL value: #{ENV['CI_MAP_IMPL']}"
   end
 end
-
-#if $RNMapboxMapsImpl == 'mapbox'
-#  platform :ios, '13.0'
-#else
-#  platform :ios, '12.4'
-#end
-platform :ios, '13.0'
 
 # If you are using a `react-native-flipper` your iOS build will fail when `NO_FLIPPER=1` is set.
 # because `react-native-flipper` depends on (FlipperKit,...) that will be excluded
@@ -77,7 +71,7 @@ if INHIBIT_WARNING_BY_DEFAULT
 end
 
 target 'RNMapboxGLExample' do
-  pod 'rnmapbox-maps', :path => '../../', :inhibit_warnings => false
+  #pod 'rnmapbox-maps', :path => '../../', :inhibit_warnings => false
 
   config = use_native_modules!
 
@@ -142,6 +136,7 @@ target 'RNMapboxGLExample' do
       )
       disable_optimizations_in_release(installer)
       $RNMapboxMaps.post_install(installer)
+      __apply_Xcode_12_5_M1_post_install_workaround(installer)
     end
   end
 end

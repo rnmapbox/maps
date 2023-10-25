@@ -78,7 +78,7 @@ jobs:
 
       - name: Install Pod Dependencies
         if: steps.pods-cache.outputs.cache-hit != 'true'
-        run: cd ios && pod --version && pod update MapboxMaps && pod install
+        run: cd ios && pod --version && pod update MapboxMaps hermes-engine && pod install
         env:
           CI_MAP_IMPL: ${{ inputs.MAP_IMPL }}
           RCT_NEW_ARCH_ENABLED: ${{ inputs.NEW_ARCH && 1 || 0 }}
@@ -91,7 +91,7 @@ jobs:
           brew install xcbeautify
 
       - name: Build for detox
-        run: set -o pipefail && NSUnbufferedIO=YES  yarn detox build --configuration ios.debug.ci 2>&1 | xcbeautify -qq --renderer github-actions
+        run: set -o pipefail && NSUnbufferedIO=YES  yarn detox build --configuration ios.debug.ci 2>&1
 
       - name: Test with detox
         if: inputs.NEW_ARCH != 1

@@ -82,6 +82,19 @@ import org.json.JSONException
 import org.json.JSONObject
 import java.util.*
 
+fun <T> MutableList<T>.removeIf21(predicate: (T) -> Boolean): Boolean {
+    var removed = false
+    val iterator = this.iterator()
+    while (iterator.hasNext()) {
+        val element = iterator.next()
+        if (predicate(element)) {
+            iterator.remove()
+            removed = true
+        }
+    }
+    return removed
+}
+
 data class OrnamentSettings(
     var enabled : Boolean? = false,
     var margins: ReadableMap? =null,
@@ -162,7 +175,7 @@ class RNMBXLifeCycle {
         } else {
             attachedToWindowWaiters.add(callback)
             return com.rnmapbox.rnmbx.components.mapview.Cancelable {
-                attachedToWindowWaiters.removeIf { it === callback }
+                attachedToWindowWaiters.removeIf21 { it === callback }
             }
         }
     }

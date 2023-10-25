@@ -1,77 +1,42 @@
-/**
- * Metro configuration
- * https://facebook.github.io/metro/docs/configuration
- *
- * @type {import('metro-config').MetroConfig}
- */
-
 const path = require('path');
-const fs = require('fs');
 
-const { getDefaultConfig, mergeConfig } = require('@react-native/metro-config');
-const blacklist = require('metro-config/src/defaults/exclusionList');
-const glob = require('glob-to-regexp');
+const exclusionList = require('metro-config/src/defaults/exclusionList');
+const escape = require('escape-string-regexp');
 
-const assetRegistryPath = fs
-  .realpathSync(require.resolve('react-native/Libraries/Image/AssetRegistry'))
-  .replace('.js', '');
+const libPackageJson = require('../package.json');
 
-const inlineRequireBlockList = new Proxy(
-  {},
-  {
-    has: (target, name) => {
-      if (
-        (name.endsWith('.js') &&
-          name.includes('/react-navigation-stack/lib/module/vendor/views/')) ||
-        (name.includes('@react-navigation/elements/src/') &&
-          name.endsWith('.tsx'))
-      ) {
-        return true;
-      }
-      return false;
-    },
-  },
-);
+const root = path.resolve(__dirname, '..');
 
-function getBlacklist() {
-  const nodeModuleDirs = [
-    glob(`${path.resolve(__dirname, '..')}/node_modules/*`),
-    glob(`${path.resolve(__dirname, '..')}/docs/*`),
-    glob(`${path.resolve(__dirname, '..')}/e2e/*`),
-    glob(
-      `${path.resolve(__dirname)}/node_modules/*/node_modules/lodash.isequal/*`,
-    ),
-    glob(
-      `${path.resolve(
-        __dirname,
-      )}/node_modules/*/node_modules/hoist-non-react-statics/*`,
-    ),
-    glob(
-      `${path.resolve(
-        __dirname,
-      )}/node_modules/react-native/node_modules/@babel/*`,
-    ),
-  ];
-  const webSupportSources = [
-    glob(`${path.resolve(__dirname, '..')}/src/web/*`),
-  ];
-  return blacklist([...nodeModuleDirs, ...webSupportSources]);
-}
+const libPeerDependencies = Object.keys(libPackageJson.peerDependencies)
+  .concat(['@babel/runtime'])
+  .concat(Object.keys(libPackageJson.dependencies));
 
-const config = {
+module.exports = {
+  projectRoot: __dirname,
+  watchFolders: [root],
+
+  // We need to make sure that only one version is loaded for peerDependencies
+  // So we exclude them at the root, and alias them to the versions in example's node_modules
   resolver: {
-    blacklistRE: getBlacklist(),
+    blacklistRE: exclusionList(
+      libPeerDependencies.map(
+        (m) =>
+          new RegExp(`^${escape(path.join(root, 'node_modules', m))}\\/.*$`),
+      ),
+    ),
+
+    extraNodeModules: libPeerDependencies.reduce((acc, name) => {
+      acc[name] = path.join(__dirname, 'node_modules', name);
+      return acc;
+    }, {}),
   },
-  watchFolders: [path.resolve(__dirname, '..')],
+
   transformer: {
-    assetRegistryPath: assetRegistryPath,
     getTransformOptions: async () => ({
       transform: {
         experimentalImportSupport: false,
-        inlineRequires: { blockList: inlineRequireBlockList },
+        inlineRequires: true,
       },
     }),
   },
 };
-
-module.exports = mergeConfig(getDefaultConfig(__dirname), config);
