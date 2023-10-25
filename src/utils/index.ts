@@ -1,24 +1,12 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import React from 'react';
 import {
-  NativeModules,
   findNodeHandle,
   Platform,
   Image,
   ImageSourcePropType,
+  TurboModule,
 } from 'react-native';
-
-function getAndroidManagerInstance(module: string) {
-  const haveViewManagerConfig =
-    NativeModules.UIManager && NativeModules.UIManager.getViewManagerConfig;
-  return haveViewManagerConfig
-    ? NativeModules.UIManager.getViewManagerConfig(module)
-    : NativeModules.UIManager[module];
-}
-
-function getIosManagerInstance(module: string): any {
-  return NativeModules[getIOSModuleName(module)];
-}
 
 export function isAndroid(): boolean {
   return Platform.OS === 'android';
@@ -65,8 +53,8 @@ export type NativeArg =
   | { [k: string]: NativeArg }
   | NativeArg[];
 
-export function runNativeCommand<ReturnType = NativeArg>(
-  module: string,
+export function runNativeMethod<ReturnType = NativeArg>(
+  turboModule: TurboModule,
   name: string,
   nativeRef: any,
   args: NativeArg[],
@@ -76,27 +64,9 @@ export function runNativeCommand<ReturnType = NativeArg>(
     throw new Error(`Could not find handle for native ref ${module}.${name}`);
   }
 
-  const managerInstance = isAndroid()
-    ? getAndroidManagerInstance(module)
-    : getIosManagerInstance(module);
-
-  if (!managerInstance) {
-    throw new Error(`Could not find ${module}`);
-  }
-
-  if (isAndroid()) {
-    const { Commands } = managerInstance;
-    return NativeModules.UIManager.dispatchViewManagerCommand(
-      handle,
-      Commands._useCommandName ? name : Commands[name],
-      args,
-    );
-  }
-
-  if (!managerInstance[name]) {
-    throw new Error(`Could not find ${name} for ${module}`);
-  }
-  return managerInstance[name](handle, ...args);
+  // @ts-expect-error TS says that string cannot be used to index Turbomodules.
+  // It can, it's just not pretty.
+  return turboModule[name](handle, ...args);
 }
 
 export function cloneReactChildrenWithProps(
@@ -124,13 +94,6 @@ export function cloneReactChildrenWithProps(
 export function resolveImagePath(imageRef: ImageSourcePropType): string {
   const res = Image.resolveAssetSource(imageRef);
   return res.uri;
-}
-
-export function getIOSModuleName(moduleName: string): string {
-  if (moduleName.startsWith('RCT')) {
-    return moduleName.substring(3);
-  }
-  return moduleName;
 }
 
 export function toJSONString(json: any = '') {

@@ -3,14 +3,12 @@ import {
   View,
   Text,
   Animated,
-  requireNativeComponent,
   StyleSheet,
   ViewStyle,
   ViewProps,
-  StyleProp,
 } from 'react-native';
 
-export const NATIVE_MODULE_NAME = 'RNMBXCallout';
+import RNMBXCalloutNativeComponent from '../specs/RNMBXCalloutNativeComponent';
 
 const styles = StyleSheet.create({
   container: {
@@ -47,11 +45,6 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
 });
-
-type NativeProps = {
-  children: ReactNode;
-  style: StyleProp<ViewStyle>;
-};
 
 type Props = Omit<ViewProps, 'style'> & {
   /**
@@ -135,11 +128,11 @@ class Callout extends React.PureComponent<Props> {
       ? this._renderCustomCallout()
       : this._renderDefaultCallout();
     return (
-      <RNMBXCallout style={this._containerStyle}>{calloutContent}</RNMBXCallout>
+      <RNMBXCalloutNativeComponent style={this._containerStyle}>
+        {calloutContent}
+      </RNMBXCalloutNativeComponent>
     );
   }
 }
-
-const RNMBXCallout = requireNativeComponent<NativeProps>(NATIVE_MODULE_NAME);
 
 export default Callout;

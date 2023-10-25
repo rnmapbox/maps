@@ -8,7 +8,6 @@ import {
   NativeMethods,
   HostComponent,
   LayoutChangeEvent,
-  findNodeHandle,
 } from 'react-native';
 import { debounce } from 'debounce';
 import { GeoJsonProperties, Geometry } from 'geojson';
@@ -43,9 +42,6 @@ if (!RNMBXModule.MapboxV10) {
     '@rnmapbox/maps: Non v10 implementations are deprecated and will be removed in next version - see https://github.com/rnmapbox/maps/wiki/Deprecated-RNMapboxImpl-Maplibre',
   );
 }
-
-// TODO: check if this can be removed
-export const NATIVE_MODULE_NAME = 'MBXMapView';
 
 const styles = StyleSheet.create({
   matchParent: { flex: 1 },
@@ -463,7 +459,7 @@ type Debounced<F> = F & { clear(): void; flush(): void };
  */
 class MapView extends NativeBridgeComponent(
   React.PureComponent<Props>,
-  NATIVE_MODULE_NAME,
+  NativeMapViewModule,
 ) {
   static defaultProps: Props = {
     scrollEnabled: true,
@@ -636,7 +632,7 @@ class MapView extends NativeBridgeComponent(
         );
       }
 
-      this._runNativeCommand('setHandledMapChangedEvents', this._nativeRef, [
+      this._runNativeMethod('setHandledMapChangedEvents', this._nativeRef, [
         events,
       ]);
     }
@@ -806,7 +802,7 @@ class MapView extends NativeBridgeComponent(
     methodName: string,
     args: NativeArg[] = [],
   ): Promise<ReturnType> {
-    return this._runNativeCommand<typeof RNMBXMapView, ReturnType>(
+    return super._runNativeMethod<typeof RNMBXMapView, ReturnType>(
       methodName,
       // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       // @ts-ignore TODO: fix types
@@ -939,32 +935,6 @@ class MapView extends NativeBridgeComponent(
    */
   removeCustomLocationProvider() {
     return this._runNative<void>('removeCustomLocationProvider');
-  }
-
-  _runNativeCommand<RefType, ReturnType = NativeArg>(
-    methodName: string,
-    nativeRef: RefType | undefined,
-    args: NativeArg[],
-  ): Promise<ReturnType> {
-    // when this method is called after component mounts, the ref is not yet set
-    // schedule it to be called after a timeout
-    if (!this._nativeRef) {
-      return new Promise<ReturnType>((resolve) => {
-        this._preRefMapMethodQueue.push({
-          method: { name: methodName, args },
-          resolver: resolve as (args: NativeArg) => void,
-        });
-      });
-    }
-
-    const handle = findNodeHandle(nativeRef as any);
-
-    // @ts-expect-error TS says that string cannot be used to index NativeMapViewModule.
-    // It can, it's just not pretty.
-    return NativeMapViewModule[methodName]?.(
-      handle,
-      ...(args ?? []),
-    ) as Promise<ReturnType>;
   }
 
   _decodePayload<G extends Geometry | null = Geometry, P = GeoJsonProperties>(
@@ -1146,7 +1116,7 @@ class MapView extends NativeBridgeComponent(
 
   _setNativeRef(nativeRef: RNMBXMapViewRefType) {
     this._nativeRef = nativeRef;
-    super._runPendingNativeCommands(nativeRef);
+    super._runPendingNativeMethods(nativeRef);
   }
 
   setNativeProps(props: NativeProps) {
@@ -1199,7 +1169,6 @@ class MapView extends NativeBridgeComponent(
       onPress: this._onPress,
       onLongPress: this._onLongPress,
       onMapChange: this._onChange,
-      onAndroidCallback: isAndroid() ? this._onAndroidCallback : undefined,
       onCameraChanged: this._onCameraChanged,
     };
 

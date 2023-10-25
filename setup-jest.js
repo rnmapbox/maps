@@ -155,6 +155,10 @@ NativeModules.RNMBXShapeSourceModule = {
   getClusterChildren: jest.fn(),
 };
 
+NativeModules.RNMBXPointAnnotationModule = {
+  refresh: jest.fn(),
+};
+
 NativeModules.RNMBXLogging = nativeModule({});
 
 // Mock for global AbortController

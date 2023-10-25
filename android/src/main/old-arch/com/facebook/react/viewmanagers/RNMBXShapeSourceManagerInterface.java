@@ -25,8 +25,6 @@ public interface RNMBXShapeSourceManagerInterface<T extends View> {
   void setBuffer(T view, Dynamic value);
   void setTolerance(T view, Dynamic value);
   void setLineMetrics(T view, Dynamic value);
-  void setImages(T view, Dynamic value);
-  void setNativeImages(T view, Dynamic value);
   void setHasPressListener(T view, Dynamic value);
   void setHitbox(T view, Dynamic value);
 }

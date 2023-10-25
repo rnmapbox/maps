@@ -23,8 +23,6 @@ export interface NativeProps extends ViewProps {
   buffer: UnsafeMixed<Double>;
   tolerance: UnsafeMixed<Double>;
   lineMetrics: UnsafeMixed<boolean>;
-  images: UnsafeMixed<any>; // unused ??
-  nativeImages: UnsafeMixed<Array<any>>; // unused ??
   hasPressListener: UnsafeMixed<boolean>;
   hitbox: UnsafeMixed<any>;
   onMapboxShapeSourcePress: DirectEventHandler<OnMapboxShapeSourcePressEventType>;
