@@ -101,5 +101,3 @@ export enum StyleURL {
 
 /** @deprecated UserTrackingModes is deprecated use UserTrackingMode */
 export const UserTrackingModes = UserTrackingMode;
-
-export { OnPressEvent } from './types/OnPressEvent';
