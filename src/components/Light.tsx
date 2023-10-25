@@ -42,7 +42,7 @@ function Light(props: Props, ref: React.ForwardedRef<LightMethods>) {
     <RNMBXLightNativeComponent
       // @ts-expect-error just codegen stuff
       ref={nativeLightRef}
-      testID="rctmglLight"
+      testID="RNMBXLight"
       {...propWithoutStyle}
       reactStyle={transformStyle(style)}
     />

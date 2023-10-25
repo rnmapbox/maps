@@ -54,12 +54,4 @@ mContext
         image.scale = value.asDouble()
     }
     // endregion
-
-    // region React methods
-    override fun receiveCommand(root: RNMBXImage, commandId: String?, args: ReadableArray?) {
-        if (commandId == "refresh") {
-            root.refresh()
-        }
-    }
-    // endregion
 }

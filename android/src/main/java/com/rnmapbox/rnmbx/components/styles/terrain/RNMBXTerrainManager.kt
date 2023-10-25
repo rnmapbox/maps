@@ -16,12 +16,6 @@ class RNMBXTerrainManager : ViewGroupManager<RNMBXTerrain>(),
         return RNMBXTerrain(reactContext)
     }
 
-    // TODO: it is not present in props so should we add it?
-//    @ReactProp(name = "id")
-//    override fun setId(layer: RNMBXTerrain, id: Dynamic) {
-//        layer.iD = id.asString()
-//    }
-
     @ReactProp(name = "sourceID")
     override fun setSourceID(layer: RNMBXTerrain, sourceID: Dynamic) {
         layer.setSourceID(sourceID.asString())

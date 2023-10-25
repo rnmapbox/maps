@@ -1,6 +1,8 @@
 import React, { memo, forwardRef, ReactElement } from 'react';
+import { findNodeHandle } from 'react-native';
 
 import RNMBXImageNativeComponent from '../specs/RNMBXImageNativeComponent';
+import NativeRNMBXImageModule from '../specs/NativeRNMBXImageModule';
 
 interface Props {
   /** ID of the image */
@@ -43,8 +45,20 @@ const Image = memo(
       stretchY,
       children,
     };
+
+    const imageRef = React.useRef(null);
+
+    const refresh = () => {
+      const handle = findNodeHandle(imageRef.current as any);
+      NativeRNMBXImageModule.refresh(handle);
+    };
+
+    React.useImperativeHandle(ref, () => {
+      return { refresh };
+    });
+
     // @ts-expect-error just codegen stuff
-    return <RNMBXImageNativeComponent {...nativeProps} />;
+    return <RNMBXImageNativeComponent {...nativeProps} ref={imageRef} />;
   }),
 );
 

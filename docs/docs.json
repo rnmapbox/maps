@@ -2236,7 +2236,15 @@
   "Image": {
     "description": "",
     "displayName": "Image",
-    "methods": [],
+    "methods": [
+      {
+        "name": "refresh",
+        "docblock": null,
+        "modifiers": [],
+        "params": [],
+        "returns": null
+      }
+    ],
     "props": [
       {
         "name": "name",
