@@ -159,6 +159,10 @@ NativeModules.RNMBXImageModule = {
   refresh: jest.fn(),
 };
 
+NativeModules.RNMBXPointAnnotationModule = {
+  refresh: jest.fn(),
+};
+
 NativeModules.RNMBXLogging = nativeModule({});
 
 // Mock for global AbortController

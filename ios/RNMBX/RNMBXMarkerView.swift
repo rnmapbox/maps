@@ -31,7 +31,8 @@ class RNMBXMarkerViewParentViewAnnotation : UIView {
   }
 }
 
-class RNMBXMarkerView: UIView, RNMBXMapComponent {
+@objc(RNMBXMarkerView)
+public class RNMBXMarkerView: UIView, RNMBXMapComponent {
   // MARK: - Instance variables
   
   static let key = "RNMBXMarkerView"
@@ -42,25 +43,25 @@ class RNMBXMarkerView: UIView, RNMBXMapComponent {
   
   var didAddToMap = false
   
-  @objc var coordinate: String? {
+  @objc public var coordinate: String? {
     didSet {
       update()
     }
   }
   
-  @objc var anchor: [String: NSNumber]? {
+  @objc public var anchor: [String: NSNumber]? {
     didSet {
       update()
     }
   }
   
-  @objc var allowOverlap: Bool = false {
+  @objc public var allowOverlap: Bool = false {
     didSet {
       update()
     }
   }
   
-  @objc var isSelected: Bool = false {
+  @objc public var isSelected: Bool = false {
     didSet {
       update()
     }
@@ -115,7 +116,7 @@ class RNMBXMarkerView: UIView, RNMBXMapComponent {
   
   // MARK: - React methods
   
-  override var isHidden: Bool {
+    public override var isHidden: Bool {
     get {
       return super.isHidden
     }
@@ -124,7 +125,7 @@ class RNMBXMarkerView: UIView, RNMBXMapComponent {
     }
   }
   
-  override func reactSetFrame(_ frame: CGRect) {
+    public override func reactSetFrame(_ frame: CGRect) {
     let prev = self.frame
     var next = frame
     
@@ -140,18 +141,24 @@ class RNMBXMarkerView: UIView, RNMBXMapComponent {
 
     super.reactSetFrame(next)
     if frameDidChange {
-      annotationView.updateSize(next.size, oldOffset:calcOffset(size: prev.size), newOffset: calcOffset(size: next.size))
+        updateAnnotationViewSize(next, prev)
     }
     addOrUpdate()
   }
-  
-  override func insertReactSubview(_ subview: UIView, at atIndex: Int) {
-    super.insertReactSubview(subview, at: atIndex)
+    
+    public override func insertReactSubview(_ subview: UIView, at atIndex: Int) {
+      super.insertReactSubview(subview, at: atIndex)
+    }
+    
+    public override func removeReactSubview(_ subview: UIView) {
+      super.removeReactSubview(subview)
+    }
+
+  @objc public func updateAnnotationViewSize(_ next: CGRect, _ prev: CGRect) {
+    annotationView.updateSize(next.size, oldOffset:calcOffset(size: prev.size), newOffset: calcOffset(size: next.size))
   }
   
-  override func removeReactSubview(_ subview: UIView) {
-    super.removeReactSubview(subview)
-  }
+    
   
   func waitForStyleLoad() -> Bool {
     true
@@ -159,7 +166,7 @@ class RNMBXMarkerView: UIView, RNMBXMapComponent {
 
   // MARK: - Create, update, and remove methods
 
-    private func addOrUpdate() {
+   @objc public func addOrUpdate() {
       if didAddToMap {
         update()
       } else {
@@ -253,7 +260,7 @@ class RNMBXMarkerView: UIView, RNMBXMapComponent {
     return result
   }
 
-  @objc override func didMoveToSuperview() {
+    @objc public override func didMoveToSuperview() {
     // React tends to add back us to our original superview,
     // https://github.com/facebook/react-native/blob/11ece22fc6955d169def9ef9f2809c24bc457ba8/React/Views/UIView%2BReact.m#L172-L177
     // fix that if we see that

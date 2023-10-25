@@ -1,8 +1,8 @@
 import Foundation
 import MapboxMaps
 
-@objc(RNMBXCalloutManager)
-class RNMBXCalloutManager  : RCTViewManager {
+@objc(RNMBXCalloutViewManager)
+class RNMBXCalloutViewManager  : RCTViewManager {
     @objc
     override static func requiresMainQueueSetup() -> Bool {
         return true

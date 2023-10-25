@@ -3,7 +3,6 @@ import {
   NativeMethods,
   NativeModules,
   NativeSyntheticEvent,
-  findNodeHandle,
 } from 'react-native';
 
 import RNMBXShapeSourceNativeComponent from '../specs/RNMBXShapeSourceNativeComponent';
@@ -18,10 +17,9 @@ import { copyPropertiesAsDeprecated } from '../utils/deprecation';
 import { OnPressEvent } from '../types/OnPressEvent';
 
 import AbstractSource from './AbstractSource';
+import NativeBridgeComponent from './NativeBridgeComponent';
 
 const MapboxGL = NativeModules.RNMBXModule;
-
-export const NATIVE_MODULE_NAME = 'RNMBXShapeSource';
 
 type OnPressEventDeprecated = OnPressEvent & {
   nativeEvent?: OnPressEvent;
@@ -148,7 +146,10 @@ export type Props = {
  * ShapeSource is a map content source that supplies vector shapes to be shown on the map.
  * The shape may be an url or a GeoJSON object
  */
-export class ShapeSource extends AbstractSource<Props, NativeProps> {
+export class ShapeSource extends NativeBridgeComponent(
+  AbstractSource<Props, NativeProps>,
+  NativeRNMBXShapeSourceModule,
+) {
   static NATIVE_ASSETS_KEY = 'assets';
 
   static defaultProps = {
@@ -163,6 +164,7 @@ export class ShapeSource extends AbstractSource<Props, NativeProps> {
     nativeRef: React.Component<NativeProps> & Readonly<NativeMethods>,
   ) {
     this.setNativeRef(nativeRef);
+    super._runPendingNativeMethods(nativeRef);
   }
 
   /**
@@ -177,18 +179,11 @@ export class ShapeSource extends AbstractSource<Props, NativeProps> {
   async getClusterExpansionZoom(
     feature: string | GeoJSON.Feature,
   ): Promise<number> {
-    if (typeof feature === 'number') {
-      console.warn(
-        'Using cluster_id is deprecated and will be removed from the future releases. Please use cluster as an argument instead.',
-      );
-    }
-
-    const handle = findNodeHandle(this._nativeRef as any);
-
-    const res = (await NativeRNMBXShapeSourceModule.getClusterExpansionZoom(
-      handle,
-      JSON.stringify(feature),
-    )) as { data: number };
+    const res: { data: number } = await this._runNativeMethod(
+      'getClusterExpansionZoom',
+      this._nativeRef,
+      [JSON.stringify(feature)],
+    );
     return res.data;
   }
 
@@ -208,25 +203,15 @@ export class ShapeSource extends AbstractSource<Props, NativeProps> {
     limit: number,
     offset: number,
   ) {
-    if (typeof feature === 'number') {
-      console.warn(
-        'Using cluster_id is deprecated and will be removed from the future releases. Please use cluster as an argument instead.',
-      );
-    }
-
-    const handle = findNodeHandle(this._nativeRef as any);
-
-    const res = (await NativeRNMBXShapeSourceModule.getClusterLeaves(
-      handle,
-      JSON.stringify(feature),
-      limit,
-      offset,
-    )) as { data: string };
+    const res: { data: string } = await this._runNativeMethod(
+      'getClusterLeaves',
+      this._nativeRef,
+      [JSON.stringify(feature), limit, offset],
+    );
 
     if (isAndroid()) {
       return JSON.parse(res.data);
     }
-
     return res.data;
   }
 
@@ -240,23 +225,15 @@ export class ShapeSource extends AbstractSource<Props, NativeProps> {
    * @return {FeatureCollection}
    */
   async getClusterChildren(feature: number | GeoJSON.Feature) {
-    if (typeof feature === 'number') {
-      console.warn(
-        'Using cluster_id is deprecated and will be removed from the future releases. Please use cluster as an argument instead.',
-      );
-    }
-
-    const handle = findNodeHandle(this._nativeRef as any);
-
-    const res = (await NativeRNMBXShapeSourceModule.getClusterChildren(
-      handle,
-      JSON.stringify(feature),
-    )) as { data: string };
+    const res: { data: string } = await this._runNativeMethod(
+      'getClusterChildren',
+      this._nativeRef,
+      [JSON.stringify(feature)],
+    );
 
     if (isAndroid()) {
       return JSON.parse(res.data);
     }
-
     return res.data;
   }
 

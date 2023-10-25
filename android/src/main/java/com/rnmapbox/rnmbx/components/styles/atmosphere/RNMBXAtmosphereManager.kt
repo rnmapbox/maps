@@ -28,11 +28,6 @@ class RNMBXAtmosphereManager : ViewGroupManager<RNMBXAtmosphere>(), RNMBXAtmosph
         return RNMBXAtmosphere(reactContext)
     }
 
-    @ReactProp(name = "id")
-    fun setId(layer: RNMBXAtmosphere, id: String?) {
-        layer.iD = id
-    }
-
     @ReactProp(name = "reactStyle")
     override fun setReactStyle(atmosphere: RNMBXAtmosphere, reactStyle: Dynamic) {
         atmosphere.setReactStyle(reactStyle.asMap())
