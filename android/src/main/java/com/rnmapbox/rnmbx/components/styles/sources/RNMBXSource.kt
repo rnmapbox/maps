@@ -61,7 +61,7 @@ abstract class RNMBXSource<T : Source?>(context: Context?) : AbstractMapFeature(
                 if (hasNoDataSoRefersToExisting()) {
                     Logger.w(
                         LOG_TAG,
-                        "RNMBXSource: soure with id: $id seems to refer to existing value but existing flag is not set. This is deprecated."
+                        "RNMBXSource: source with id: $id seems to refer to existing value but existing flag is not set. This is deprecated."
                     )
                     result = true
                 } else {

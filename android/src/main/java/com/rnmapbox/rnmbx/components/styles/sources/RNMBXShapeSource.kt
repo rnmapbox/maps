@@ -35,8 +35,6 @@ class RNMBXShapeSource(context: Context, private val mManager: RNMBXShapeSourceM
     private var mBuffer: Long? = null
     private var mTolerance: Double? = null
     private var mLineMetrics: Boolean? = null
-    private val mImages: List<Map.Entry<String, ImageEntry>>? = null
-    private val mNativeImages: List<Map.Entry<String, BitmapDrawable>>? = null
 
     override fun hasNoDataSoRefersToExisting(): Boolean {
         return (mURL == null) && (mShape == null)
