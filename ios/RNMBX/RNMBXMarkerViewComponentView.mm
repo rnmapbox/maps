@@ -37,6 +37,12 @@ using namespace facebook::react;
   self.contentView = _view;
 }
 
+- (void)prepareForRecycle
+{
+    [super prepareForRecycle];
+    [self prepareView];
+}
+
 - (void)mountChildComponentView:(UIView<RCTComponentViewProtocol> *)childComponentView index:(NSInteger)index
 {
     if ([childComponentView isKindOfClass:[RCTViewComponentView class]] && ((RCTViewComponentView *)childComponentView).contentView != nil) {
