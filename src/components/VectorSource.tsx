@@ -1,9 +1,5 @@
 import React from 'react';
-import {
-  NativeMethods,
-  NativeModules,
-  NativeSyntheticEvent,
-} from 'react-native';
+import { NativeModules, NativeSyntheticEvent } from 'react-native';
 
 import RNMBXVectorSourceNativeComponent from '../specs/RNMBXVectorSourceNativeComponent';
 import { cloneReactChildrenWithProps, isFunction } from '../utils';
@@ -106,15 +102,6 @@ class VectorSource extends AbstractSource<Props, NativeProps> {
     super(props);
   }
 
-  _setNativeRef(
-    nativeRef: (React.Component<NativeProps> & Readonly<NativeMethods>) | null,
-  ) {
-    if (nativeRef) {
-      this.setNativeRef(nativeRef);
-      // this._nativeRef = nativeRef;
-    }
-  }
-
   _decodePayload(payload: OnPressEvent | string): OnPressEvent {
     // we check whether the payload is a string, since the strict type safety is enforced only on iOS on the new arch
     // on Android, on both archs, the payload is an object
@@ -175,11 +162,7 @@ class VectorSource extends AbstractSource<Props, NativeProps> {
     };
     return (
       // @ts-expect-error just codegen stuff
-      <RNMBXVectorSourceNativeComponent
-        // @ts-expect-error just codegen stuff
-        ref={(r) => this._setNativeRef(r)}
-        {...props}
-      >
+      <RNMBXVectorSourceNativeComponent ref={this.setNativeRef} {...props}>
         {cloneReactChildrenWithProps(this.props.children, {
           sourceID: this.props.id,
         })}

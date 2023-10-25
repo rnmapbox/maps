@@ -1,3 +1,3 @@
-class RNMBXCallout : UIView {
+@objc public class RNMBXCallout : UIView {
   
 }

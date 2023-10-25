@@ -3,7 +3,7 @@ import MapboxMaps
 /// RNMBXSingletonLayer is absract superclass for Light, Atmosphere, Terrain
 @objc
 public class RNMBXSingletonLayer : UIView {
-  weak var bridge : RCTBridge? = nil
+  @objc public weak var bridge : RCTBridge? = nil
   weak var map : RNMBXMapView? = nil
   var style: Style? = nil
   
