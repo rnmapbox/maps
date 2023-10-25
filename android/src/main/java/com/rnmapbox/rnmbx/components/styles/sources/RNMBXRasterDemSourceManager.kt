@@ -6,6 +6,7 @@ import com.facebook.react.common.MapBuilder
 import com.facebook.react.uimanager.ThemedReactContext
 import com.facebook.react.uimanager.annotations.ReactProp
 import com.facebook.react.viewmanagers.RNMBXRasterDemSourceManagerInterface
+import com.rnmapbox.rnmbx.utils.Logger
 
 // import com.rnmapbox.rnmbx.components.annotation.RNMBXCallout;
 // import com.rnmapbox.rnmbx.utils.ResourceUtils;
@@ -38,6 +39,6 @@ class RNMBXRasterDemSourceManager(private val mContext: ReactApplicationContext)
 
     @ReactProp(name = "tileSize")
     override fun setTileSize(view: RNMBXRasterDemSource, value: Dynamic) {
-        // TODO: it does not exist on this class
+        Logger.e("RNMBXRasterDemSourceManager", "tileSize not implemented")
     }
 }
