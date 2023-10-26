@@ -10,9 +10,10 @@ import {
   LayoutChangeEvent,
 } from 'react-native';
 import { debounce } from 'debounce';
-import { GeoJsonProperties, Geometry } from 'geojson';
 
-import NativeMapView from '../specs/RNMBXMapViewNativeComponent';
+import NativeMapView, {
+  type NativeMapViewActual,
+} from '../specs/RNMBXMapViewNativeComponent';
 import NativeMapViewModule from '../specs/NativeMapViewModule';
 import {
   isFunction,
@@ -913,11 +914,7 @@ class MapView extends NativeBridgeComponent(
     return this._runNative<void>('showAttribution');
   }
 
-  _decodePayload<G extends Geometry | null = Geometry, P = GeoJsonProperties>(
-    payload: GeoJSON.Feature<G, P> | string,
-  ): GeoJSON.Feature<G, P> {
-    // we check whether the payload is a string, since the strict type safety is enforced only on iOS on the new arch
-    // on Android, on both archs, the payload is an object
+  _decodePayload<T>(payload: T | string): T {
     if (typeof payload === 'string') {
       return JSON.parse(payload);
     } else {
@@ -931,9 +928,9 @@ class MapView extends NativeBridgeComponent(
     }
   }
 
-  _onLongPress(e: NativeSyntheticEvent<{ payload: GeoJSON.Feature }>) {
+  _onLongPress(e: NativeSyntheticEvent<{ payload: GeoJSON.Feature | string }>) {
     if (isFunction(this.props.onLongPress)) {
-      this.props.onLongPress(e.nativeEvent.payload);
+      this.props.onLongPress(this._decodePayload(e.nativeEvent.payload));
     }
   }
 
@@ -960,17 +957,19 @@ class MapView extends NativeBridgeComponent(
     this.setState({ region: payload });
   }
 
-  _onCameraChanged(e: NativeSyntheticEvent<{ payload: MapState }>) {
-    this.props.onCameraChanged?.(e.nativeEvent.payload);
+  _onCameraChanged(e: NativeSyntheticEvent<{ payload: MapState | string }>) {
+    this.props.onCameraChanged?.(this._decodePayload(e.nativeEvent.payload));
   }
 
   _onChange(
     e: NativeSyntheticEvent<{
       type: string;
-      payload: GeoJSON.Feature<
-        GeoJSON.Point,
-        RegionPayload & { isAnimatingFromUserInteraction: boolean }
-      >;
+      payload:
+        | GeoJSON.Feature<
+            GeoJSON.Point,
+            RegionPayload & { isAnimatingFromUserInteraction: boolean }
+          >
+        | string;
     }>,
   ) {
     const { regionWillChangeDebounceTime, regionDidChangeDebounceTime } =
@@ -1188,6 +1187,7 @@ type NativeProps = Omit<
 };
 
 type RNMBXMapViewRefType = Component<NativeProps> & Readonly<NativeMethods>;
-const RNMBXMapView = NativeMapView;
+
+const RNMBXMapView = NativeMapView as NativeMapViewActual;
 
 export default MapView;
