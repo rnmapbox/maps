@@ -49,7 +49,7 @@ using namespace facebook::react;
 
 - (void)updateProps:(const Props::Shared &)props oldProps:(const Props::Shared &)oldProps
 {
-  const auto &newProps = *std::static_pointer_cast<const RNMBXLightProps>(props);
+  const auto &newProps = static_cast<const RNMBXLightProps &>(*props);
     id reactStyle = RNMBXConvertFollyDynamicToId(newProps.reactStyle);
     if (reactStyle != nil) {
         _view.reactStyle = reactStyle;

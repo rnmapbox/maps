@@ -70,7 +70,7 @@ using namespace facebook::react;
 
 - (void)updateProps:(const Props::Shared &)props oldProps:(const Props::Shared &)oldProps
 {
-  const auto &newProps = *std::static_pointer_cast<const RNMBXImageSourceProps>(props);
+  const auto &newProps = static_cast<const RNMBXImageSourceProps &>(*props);
     id idx = RNMBXConvertFollyDynamicToId(newProps.id);
     if (idx != nil) {
         _view.id = idx;

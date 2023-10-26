@@ -47,7 +47,7 @@ using namespace facebook::react;
 
 - (void)updateProps:(const Props::Shared &)props oldProps:(const Props::Shared &)oldProps
 {
-  const auto &newProps = *std::static_pointer_cast<const RNMBXHeatmapLayerProps>(props);
+  const auto &newProps = static_cast<const RNMBXHeatmapLayerProps &>(*props);
   RNMBXSetCommonLayerProps(newProps, _view);
 
 

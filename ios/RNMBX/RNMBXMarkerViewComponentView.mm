@@ -70,7 +70,7 @@ using namespace facebook::react;
 
 - (void)updateProps:(const Props::Shared &)props oldProps:(const Props::Shared &)oldProps
 {
-  const auto &newProps = *std::static_pointer_cast<const RNMBXMarkerViewProps>(props);
+  const auto &newProps = static_cast<const RNMBXMarkerViewProps &>(*props);
     
     id coordinate = RNMBXConvertFollyDynamicToId(newProps.coordinate);
     if (coordinate != nil) {
