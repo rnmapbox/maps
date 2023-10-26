@@ -28,6 +28,11 @@ class RNMBXImage(private val mContext: ReactApplicationContext, private val mMan
 
     var mBitmap : Bitmap? = null
 
+    override fun setId(id: Int) {
+        super.setId(id)
+        mManager.tagAssigned(id)
+    }
+
     override fun onLayoutChange(v: View, left: Int, top: Int, right: Int, bottom: Int, oldLeft: Int, oldTop: Int,
                                 oldRight: Int, oldBottom: Int) {
         if (left == 0 && top == 0 && right == 0 && bottom == 0) {

@@ -7,8 +7,10 @@ import com.facebook.react.uimanager.ThemedReactContext
 import com.facebook.react.uimanager.annotations.ReactProp
 import com.facebook.react.viewmanagers.RNMBXImageManagerInterface
 import com.rnmapbox.rnmbx.components.AbstractEventEmitter
+import com.rnmapbox.rnmbx.components.styles.sources.RNMBXShapeSource
+import com.rnmapbox.rnmbx.utils.ViewTagResolver
 
-class RNMBXImageManager(private val mContext: ReactApplicationContext) : AbstractEventEmitter<RNMBXImage>(
+class RNMBXImageManager(private val mContext: ReactApplicationContext, val viewTagResolver: ViewTagResolver) : AbstractEventEmitter<RNMBXImage>(
 mContext
 ), RNMBXImageManagerInterface<RNMBXImage> {
     override fun getName(): String {
@@ -21,6 +23,17 @@ mContext
 
     override fun customEvents(): MutableMap<String, String>? {
         return mutableMapOf();
+    }
+
+    override fun onDropViewInstance(view: RNMBXImage) {
+        val reactTag = view.id
+
+        viewTagResolver.viewRemoved(reactTag)
+        super.onDropViewInstance(view)
+    }
+
+    fun tagAssigned(reactTag: Int) {
+        return viewTagResolver.tagAssigned(reactTag)
     }
 
     // region React properties

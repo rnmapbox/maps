@@ -92,20 +92,20 @@ class RNMBXPackage : TurboReactPackage() {
 
         // annotations
         managers.add(RNMBXMarkerViewManager(reactApplicationContext))
-        managers.add(RNMBXPointAnnotationManager(reactApplicationContext))
+        managers.add(RNMBXPointAnnotationManager(reactApplicationContext, getViewTagResolver(reactApplicationContext)))
         managers.add(RNMBXCalloutManager())
         managers.add(RNMBXNativeUserLocationManager())
 
         // sources
         managers.add(RNMBXVectorSourceManager(reactApplicationContext))
-        managers.add(RNMBXShapeSourceManager(reactApplicationContext))
+        managers.add(RNMBXShapeSourceManager(reactApplicationContext, getViewTagResolver(reactApplicationContext)))
         managers.add(RNMBXRasterDemSourceManager(reactApplicationContext))
         managers.add(RNMBXRasterSourceManager(reactApplicationContext))
         managers.add(RNMBXImageSourceManager())
 
         // images
         managers.add(RNMBXImagesManager(reactApplicationContext))
-        managers.add(RNMBXImageManager(reactApplicationContext))
+        managers.add(RNMBXImageManager(reactApplicationContext, getViewTagResolver(reactApplicationContext)))
 
         // layers
         managers.add(RNMBXFillLayerManager())
