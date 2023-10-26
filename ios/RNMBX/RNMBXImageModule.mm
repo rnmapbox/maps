@@ -7,15 +7,7 @@
 #import "RNMBXImageComponentView.h"
 #endif // RCT_NEW_ARCH_ENABLED
 
-// needed for compilation for some reason
-#import <CoreFoundation/CoreFoundation.h>
-#import <CoreLocation/CoreLocation.h>
-
-@interface MapView : UIView
-@end
-
-#import <rnmapbox_maps-Swift.h>
-
+#import "rnmapbox_maps-Swift.pre.h"
 
 @implementation RNMBXImageModule
 
