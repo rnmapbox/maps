@@ -33,6 +33,7 @@ public interface RNMBXMapViewManagerInterface<T extends View> {
   void setLocalizeLabels(T view, Dynamic value);
   void setStyleURL(T view, Dynamic value);
   void setGestureSettings(T view, Dynamic value);
+  void setSurfaceView(T view, Dynamic value);
   void setScaleBarViewMargins(T view, Dynamic value);
   void setAttributionViewMargins(T view, Dynamic value);
   void setAttributionViewPosition(T view, Dynamic value);

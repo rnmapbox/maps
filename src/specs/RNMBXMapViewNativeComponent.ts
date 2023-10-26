@@ -5,7 +5,7 @@ import {
   Int32,
 } from 'react-native/Libraries/Types/CodegenTypes';
 
-import type { LocalizeLabels, Point, UnsafeMixed } from './codegenUtils';
+import type { Point, UnsafeMixed } from './codegenUtils';
 
 // see https://github.com/rnmapbox/maps/wiki/FabricOptionalProp
 type OptionalProp<T> = UnsafeMixed<T>;
@@ -17,7 +17,38 @@ type GestureSettings = {
   pinchToZoomDecelerationEnabled?: boolean;
 };
 
-type OnCameraChangedEventType = { type: string; payload: string };
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+type MapState = {
+  properties: {
+    center: GeoJSON.Position;
+    bounds: {
+      ne: GeoJSON.Position;
+      sw: GeoJSON.Position;
+    };
+    zoom: number;
+    heading: number;
+    pitch: number;
+  };
+  gestures: {
+    isGestureActive: boolean;
+  };
+  timestamp?: number;
+};
+
+type LocalizeLabels =
+  | {
+      locale: string;
+      layerIds?: string[];
+    }
+  | true;
+
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+type PayloadType<_T> = string;
+
+type OnCameraChangedEventType = {
+  type: string;
+  payload: string /* | MapState */;
+};
 type OnPressEventType = { type: string; payload: string };
 type OnMapChangeEventType = { type: string; payload: string };
 
@@ -46,7 +77,7 @@ export interface NativeProps extends ViewProps {
 
   requestDisallowInterceptTouchEvent?: OptionalProp<boolean>;
 
-  projection?: OptionalProp<string>;
+  projection?: OptionalProp<'mercator' | 'globe'>;
   localizeLabels?: UnsafeMixed<LocalizeLabels>;
 
   styleURL?: OptionalProp<string>;
@@ -54,6 +85,7 @@ export interface NativeProps extends ViewProps {
   gestureSettings?: UnsafeMixed<GestureSettings>;
 
   // Android only
+  surfaceView?: OptionalProp<boolean>;
   scaleBarViewMargins?: UnsafeMixed<any>;
   attributionViewMargins?: UnsafeMixed<any>;
   attributionViewPosition?: UnsafeMixed<any>;
