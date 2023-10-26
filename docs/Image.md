@@ -85,4 +85,15 @@ Single react native view rendering the image
 
 
 
+## methods
+### refresh()
+
+
+
+#### arguments
+| Name | Type | Required | Description  |
+| ---- | :--: | :------: | :----------: |
+
+
+
 

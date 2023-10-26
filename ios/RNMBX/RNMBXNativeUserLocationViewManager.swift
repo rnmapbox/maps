@@ -1,5 +1,5 @@
-@objc(RNMBXNativeUserLocationManager)
-class RNMBXNativeUserLocationManager : RCTViewManager {
+@objc(RNMBXNativeUserLocationViewManager)
+class RNMBXNativeUserLocationViewManager : RCTViewManager {
   @objc
   override static func requiresMainQueueSetup() -> Bool {
     return true

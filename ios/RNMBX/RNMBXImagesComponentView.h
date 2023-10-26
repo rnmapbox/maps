@@ -7,7 +7,7 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface RNMBXRasterSourceComponentView : RCTViewComponentView
+@interface RNMBXImagesComponentView : RCTViewComponentView
 @end
 
 NS_ASSUME_NONNULL_END

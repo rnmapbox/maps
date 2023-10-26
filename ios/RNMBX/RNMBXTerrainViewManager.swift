@@ -1,5 +1,5 @@
-@objc(RNMBXTerrainManager)
-class RNMBXTerrainManager: RCTViewManager {
+@objc(RNMBXTerrainViewManager)
+class RNMBXTerrainViewManager: RCTViewManager {
     @objc
     override static func requiresMainQueueSetup() -> Bool {
         return true

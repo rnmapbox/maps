@@ -20,7 +20,6 @@ using namespace facebook::react;
     RNMBXVectorSource *_view;
 }
 
-@synthesize mapFeature;
 
 - (instancetype)initWithFrame:(CGRect)frame
 {
@@ -50,7 +49,6 @@ using namespace facebook::react;
     }];
 
     self.contentView = _view;
-    self.mapFeature = _view;
 }
 
 - (void)prepareForRecycle

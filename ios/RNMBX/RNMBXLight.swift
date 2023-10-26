@@ -1,15 +1,11 @@
-@_spi(Experimental) import MapboxMaps
-
-#if RNMBX_11
-typealias Light = FlatLight
-#endif
+import MapboxMaps
 
 @objc(RNMBXLight)
-class RNMBXLight: UIView, RNMBXMapComponent {
-  weak var bridge : RCTBridge! = nil
+public class RNMBXLight: UIView, RNMBXMapComponent {
+  @objc public weak var bridge : RCTBridge! = nil
   weak var map: MapboxMap! = nil
   var oldReactStyle: [String:Any]?
-  @objc var reactStyle : [String:Any]! = nil {
+  @objc public var reactStyle : [String:Any]! = nil {
     willSet {
       oldReactStyle = reactStyle
     }
@@ -21,15 +17,9 @@ class RNMBXLight: UIView, RNMBXMapComponent {
   }
   
   func apply(light: Light) {
-    logged("RNMBXLight.apply") {
-#if RNMBX_11
-      try self.map.setLights(light)
-#else
-      let lightData = try JSONEncoder().encode(light)
-      let lightDictionary = try JSONSerialization.jsonObject(with: lightData)
-      try self.map.style.setLight(properties: lightDictionary as! [String:Any])
-#endif
-    }
+    let lightData = try! JSONEncoder().encode(light)
+    let lightDictionary = try! JSONSerialization.jsonObject(with: lightData)
+    try! self.map.style.setLight(properties: lightDictionary as! [String:Any])
   }
 
   func addStyles() {

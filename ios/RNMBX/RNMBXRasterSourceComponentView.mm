@@ -20,7 +20,6 @@ using namespace facebook::react;
     RNMBXRasterSource *_view;
 }
 
-@synthesize mapFeature;
 
 - (instancetype)initWithFrame:(CGRect)frame
 {
@@ -37,7 +36,6 @@ using namespace facebook::react;
 {
   _view =  [[RNMBXRasterSource alloc] init];
   self.contentView = _view;
-  self.mapFeature = _view;
 }
 
 - (void)prepareForRecycle

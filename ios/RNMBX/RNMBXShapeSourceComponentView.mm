@@ -20,7 +20,6 @@ using namespace facebook::react;
     RNMBXShapeSource *_view;
 }
 
-@synthesize mapFeature;
 
 - (instancetype)initWithFrame:(CGRect)frame
 {
@@ -51,7 +50,6 @@ using namespace facebook::react;
     }];
       
     self.contentView = _view;
-    self.mapFeature = _view;
 }
 
 - (void)prepareForRecycle
@@ -62,19 +60,19 @@ using namespace facebook::react;
 
 - (void)mountChildComponentView:(UIView<RCTComponentViewProtocol> *)childComponentView index:(NSInteger)index
 {
-    if ([childComponentView isKindOfClass:[RCTViewComponentView class]]) {
+    if ([childComponentView isKindOfClass:[RCTViewComponentView class]] && ((RCTViewComponentView *)childComponentView).contentView != nil) {
         [_view insertReactSubviewInternal:((RCTViewComponentView *)childComponentView).contentView at:index];
     } else {
-        RCTLogError(@"Tried to add view that is not RCTViewComponentView: %@", childComponentView);
+        [_view insertReactSubviewInternal:childComponentView at:index];
     }
 }
 
 - (void)unmountChildComponentView:(UIView<RCTComponentViewProtocol> *)childComponentView index:(NSInteger)index
 {
-    if ([childComponentView isKindOfClass:[RCTViewComponentView class]]) {
+    if ([childComponentView isKindOfClass:[RCTViewComponentView class]] && ((RCTViewComponentView *)childComponentView).contentView != nil) {
         [_view removeReactSubviewInternal:((RCTViewComponentView *)childComponentView).contentView];
     } else {
-        RCTLogError(@"Tried to remove view that is not RCTViewComponentView: %@", childComponentView);
+        [_view removeReactSubviewInternal:childComponentView];
     }
 }
 

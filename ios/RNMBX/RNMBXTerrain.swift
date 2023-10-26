@@ -1,7 +1,7 @@
 import MapboxMaps
 
 @objc
-class RNMBXTerrain : RNMBXSingletonLayer, RNMBXMapComponent, RNMBXSourceConsumer {
+public class RNMBXTerrain : RNMBXSingletonLayer, RNMBXMapComponent, RNMBXSourceConsumer {
   var terrain : Terrain? = nil
   
   func makeTerrain() -> Terrain {
@@ -44,7 +44,7 @@ class RNMBXTerrain : RNMBXSingletonLayer, RNMBXMapComponent, RNMBXSourceConsumer
     }
   }
 
-  @objc var sourceID: String? = nil {
+  @objc public var sourceID: String? = nil {
     didSet {
       guard let sourceID = sourceID else {
         Logger.log(level: .error, message: "RNMBXTerrain cannot set source to nil")

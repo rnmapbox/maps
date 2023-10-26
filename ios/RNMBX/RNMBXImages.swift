@@ -4,29 +4,17 @@ protocol RNMBXImageSetter : AnyObject {
   func addImage(name: String, image: UIImage, sdf: Bool?, stretchX: [[NSNumber]], stretchY: [[NSNumber]], content: [NSNumber]?, log: String) -> Bool
 }
 
-func hasImage(style: Style, name: String) -> Bool {
-  #if RNMBX_11
-  return style.imageExists(withId: name)
-  #else
-  return (style.styleManager.getStyleImage(forImageId: name) != nil)
-  #endif
-}
-
-#if RNMBX_11
-typealias StyleImageMissingPayload = StyleImageMissing
-#endif
-
-class RNMBXImages : UIView, RNMBXMapComponent {
+open class RNMBXImages : UIView, RNMBXMapComponent {
   
-  weak var bridge : RCTBridge! = nil
+  @objc public weak var bridge : RCTBridge! = nil
   
   weak var style: Style? = nil
 
   @objc
-  var onImageMissing: RCTBubblingEventBlock? = nil
+  public var onImageMissing: RCTBubblingEventBlock? = nil
   
   @objc
-  var images : [String:Any] = [:] {
+  public var images : [String:Any] = [:] {
     didSet {
       updateImages(images: images, oldImages: oldValue)
     }
@@ -37,7 +25,7 @@ class RNMBXImages : UIView, RNMBXMapComponent {
   var imageViews: [RNMBXImage] = []
 
   @objc
-  var nativeImages: [Any] = [] {
+  public var nativeImages: [Any] = [] {
     didSet {
       nativeImageInfos = nativeImages.compactMap { decodeImage($0) }
     }
@@ -116,7 +104,7 @@ class RNMBXImages : UIView, RNMBXMapComponent {
         if !sameImage(oldValue: oldImages[name], newValue: images[name]) {
           missingImages[name] = images[name]
         } else {
-          if !hasImage(style: style, name: name) {
+          if style.styleManager.getStyleImage(forImageId: name) == nil {
             logged("RNMBXImages.addImagePlaceholder") {
               try? style.addImage(placeholderImage, id: name, stretchX: [], stretchY: [])
               missingImages[name] = images[name]
@@ -243,7 +231,7 @@ class RNMBXImages : UIView, RNMBXMapComponent {
   func addNativeImages(style: Style, nativeImages: [NativeImageInfo]) {
     for imageInfo in nativeImages {
       let imageName = imageInfo.name
-      if !hasImage(style: style, name: imageInfo.name) {
+      if style.styleManager.getStyleImage(forImageId: imageInfo.name) == nil {
         if let image = UIImage(named: imageName) {
           logged("RNMBXImage.addNativeImage: \(imageName)") {
             try style.addImage(image, id: imageName, sdf: imageInfo.sdf,
