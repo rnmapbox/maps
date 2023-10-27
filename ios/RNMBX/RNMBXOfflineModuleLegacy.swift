@@ -1,24 +1,16 @@
 import Foundation
 import MapboxMaps
 
-final class OfflineRegionObserverCustom: OfflineRegionObserver {
-  func statusChanged(for status: OfflineRegionStatus) {}
-
-  func responseError(forError error: ResponseError) {
-    print("Offline resource download error: \(error.reason), \(error.message)")
-  }
-
-  func mapboxTileCountLimitExceeded(forLimit limit: UInt64) {
-    print("Mapbox tile count max (\(limit)) has been exceeded!")
-  }
-}
-
 @objc(RNMBXOfflineModuleLegacy)
 class RNMBXOfflineModuleLegacy: RCTEventEmitter {
   final let CompleteRegionDownloadState = 2
-
+  
   lazy var offlineRegionManager: OfflineRegionManager = {
-      return OfflineRegionManager(resourceOptions: .init(accessToken: RNMBXModule.accessToken!))
+    #if RNMBX_11
+    return OfflineRegionManager()
+    #else
+    return OfflineRegionManager(resourceOptions: .init(accessToken: RNMBXModule.accessToken!))
+    #endif
   }()
 
   @objc
@@ -113,9 +105,6 @@ func convertRegionToPack(region: OfflineRegion) -> [String: Any]? {
                           resolver: @escaping RCTPromiseResolveBlock,
                           rejecter: @escaping RCTPromiseRejectBlock) {
 
-    let observer = OfflineRegionObserverCustom()
-
-    region.setOfflineRegionObserverFor(observer)
     region.setOfflineRegionDownloadStateFor(.active)
     region.setMetadata(metadata) { [weak self] result in
       switch result {

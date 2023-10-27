@@ -12,7 +12,7 @@ if ENV['RNMBX11']
   $RNMapboxMapsVersion = '= 11.0.0-beta.4'
 end
 
-$RNMBGL_USE_LEGACY_OFFLINE_MANAGER = false
+$RNMapboxMapsUseLegacyOfflineManager = false
 
 if ENV['CI_MAP_IMPL']
   fail "Invalid CI_MAP_IMPL value" unless ["mapbox","mapbox11"].include?(ENV['CI_MAP_IMPL'])

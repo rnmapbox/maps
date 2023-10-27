@@ -21,14 +21,12 @@ import com.mapbox.maps.OfflineRegionCallback
 import com.mapbox.maps.OfflineRegionCreateCallback
 import com.mapbox.maps.OfflineRegionDownloadState
 import com.mapbox.maps.OfflineRegionManager
-import com.mapbox.maps.OfflineRegionObserver
 import com.mapbox.maps.OfflineRegionStatus
 import com.mapbox.maps.OfflineRegionTilePyramidDefinition
-import com.mapbox.maps.ResourceOptions
-import com.mapbox.maps.ResponseError
 import com.rnmapbox.rnmbx.utils.ConvertUtils
 import com.rnmapbox.rnmbx.utils.extensions.toGeometryCollection
 import com.rnmapbox.rnmbx.utils.writableArrayOf
+import com.rnmapbox.rnmbx.v11compat.offlinemanager.getOfflineRegionManager
 import org.json.JSONException
 import org.json.JSONObject
 import java.io.File
@@ -58,11 +56,9 @@ class RNMBXOfflineModuleLegacy(private val mReactContext: ReactApplicationContex
     }
 
     val offlineRegionManager: OfflineRegionManager by lazy {
-        OfflineRegionManager(
-            ResourceOptions.Builder()
-                .accessToken(RNMBXModule.getAccessToken(mReactContext))
-                .build()
-        )
+        getOfflineRegionManager {
+            RNMBXModule.getAccessToken(mReactContext)
+        }
     }
 
     private fun makeDefinition(
@@ -97,7 +93,6 @@ class RNMBXOfflineModuleLegacy(private val mReactContext: ReactApplicationContex
         return OfflineRegionCreateCallback { expected ->
             if (expected.isValue) {
                 expected.value?.let {
-                    it.setOfflineRegionObserver(regionObserver)
                     it.setOfflineRegionDownloadState(OfflineRegionDownloadState.ACTIVE)
                     it.setMetadata(metadata) { expectedMetadata ->
                         if (expectedMetadata.isError) {
@@ -144,18 +139,6 @@ class RNMBXOfflineModuleLegacy(private val mReactContext: ReactApplicationContex
             Log.w(LOG_TAG, e.localizedMessage)
         }
         return metadataBytes
-    }
-
-    private val regionObserver: OfflineRegionObserver = object : OfflineRegionObserver {
-        override fun responseError(error: ResponseError) {
-            Log.d(LOG_TAG, "Error downloading some resources:  ${error}, ${error.message}")
-        }
-
-        override fun statusChanged(status: OfflineRegionStatus) {}
-
-        override fun mapboxTileCountLimitExceeded(Limit: Long) {
-            Log.d(LOG_TAG, "mapboxTileCountLimitExceeded")
-        }
     }
 
     private fun getRegionByName(
