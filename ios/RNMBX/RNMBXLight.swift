@@ -1,5 +1,9 @@
 import MapboxMaps
 
+#if RNMBX_11
+typealias Light = FlatLight
+#endif
+
 @objc(RNMBXLight)
 public class RNMBXLight: UIView, RNMBXMapComponent {
   @objc public weak var bridge : RCTBridge! = nil
@@ -19,7 +23,13 @@ public class RNMBXLight: UIView, RNMBXMapComponent {
   func apply(light: Light) {
     let lightData = try! JSONEncoder().encode(light)
     let lightDictionary = try! JSONSerialization.jsonObject(with: lightData)
-    try! self.map.style.setLight(properties: lightDictionary as! [String:Any])
+    logged("RNMBXLight.apply") {
+#if RNMBX_11
+      try self.map.setLights(light)
+#else
+      try! self.map.style.setLight(properties: lightDictionary as! [String:Any])
+#endif
+    }
   }
 
   func addStyles() {
