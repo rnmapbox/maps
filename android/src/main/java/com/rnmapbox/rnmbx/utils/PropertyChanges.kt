@@ -61,8 +61,8 @@ class PropertyChanges<T : Any> {
 
     fun apply(target: T) {
         for (entry in changes.entries.iterator()) {
-            print("key => ${entry.key}")
             entry.value.apply(target)
         }
+        changes.clear()
     }
 }
