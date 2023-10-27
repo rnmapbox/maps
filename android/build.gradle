@@ -43,6 +43,7 @@ if (safeExtGet("RNMapboxMapsImpl", defaultMapboxMapsImpl) == "mapbox") {
 }
 
 android {
+    namespace = "com.rnmapbox.rnmbx"
     if (safeExtGet("RNMapboxMapsImpl", defaultMapboxMapsImpl) == "maplibre") {
         msg = '@rnmapbox/maps: Maplibre implementation has been removed, set RNMapboxMapsImpl to mapbox- see https://github.com/rnmapbox/maps/wiki/Deprecated-RNMapboxImpl-Maplibre#android'
         logger.error(msg)
