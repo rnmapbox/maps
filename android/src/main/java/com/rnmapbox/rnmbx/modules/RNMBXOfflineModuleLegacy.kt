@@ -172,8 +172,6 @@ class RNMBXOfflineModuleLegacy(private val mReactContext: ReactApplicationContex
         val isCompleted = percentage == 100.0
         val downloadState = if (isCompleted) COMPLETE_REGION_DOWNLOAD_STATE else status.downloadState.ordinal
 
-        Log.d(LOG_TAG, "STATUS ${status.toString()}")
-
         map.putString("name", regionName)
         map.putInt("state", downloadState)
         map.putDouble("percentage", percentage)
@@ -183,16 +181,6 @@ class RNMBXOfflineModuleLegacy(private val mReactContext: ReactApplicationContex
         map.putInt("completedTileCount", status.completedTileCount.toInt())
         map.putInt("requiredResourceCount", status.requiredResourceCount.toInt())
         return map
-    }
-
-    @ReactMethod
-    fun addListener(eventName: String?) {
-        // Set up any upstream listeners or background tasks as necessary
-    }
-
-    @ReactMethod
-    fun removeListeners(count: Int?) {
-        // Remove upstream listeners, stop unnecessary background tasks
     }
 
     @ReactMethod
