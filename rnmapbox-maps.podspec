@@ -210,7 +210,7 @@ Pod::Spec.new do |s|
   end
   s.header_dir = "rnmapbox_maps"
 
-  if $RNMapboxMapsUseLegacyOfflineManager
+  if $RNMapboxMapsLegacyOfflineManager
     s.pod_target_xcconfig = { 'GCC_PREPROCESSOR_DEFINITIONS' => 'LEGACY_OFFLINE_MANAGER=1' }
   end
 
