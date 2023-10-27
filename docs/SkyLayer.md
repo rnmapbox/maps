@@ -161,7 +161,7 @@ Name: `skyAtmosphereSun`
 Mapbox spec: [sky-atmosphere-sun](https://docs.mapbox.com/style-spec/reference/layers/#paint-sky-sky-atmosphere-sun)
 
 #### Description
-Position of the sun center [a azimuthal angle, p polar angle]. The azimuthal angle indicates the position of the sun relative to 0° north, where degrees proceed clockwise. The polar angle indicates the height of the sun, where 0° is directly above, at zenith, and 90° at the horizon. When this property is ommitted, the sun center is directly inherited from the light position.
+Position of the sun center [a azimuthal angle, p polar angle]. The azimuthal angle indicates the position of the sun relative to 0° north, where degrees proceed clockwise. The polar angle indicates the height of the sun, where 0° is directly above, at zenith, and 90° at the horizon. When this property is omitted, the sun center is directly inherited from the light position.
 
 #### Type
 `array<number>`

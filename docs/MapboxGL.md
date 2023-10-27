@@ -6,7 +6,7 @@
 #### arguments
 | Name | Type | Required | Description  |
 | ---- | :--: | :------: | :----------: |
-| `accessToken` | `String` | `Yes` | required acessToken to pull mapbox tiles, can be `null` if other tiles are used |
+| `accessToken` | `String` | `Yes` | required accessToken to pull mapbox tiles, can be `null` if other tiles are used |
 
 #### Description
 sets the accessToken, which is required when you want to use mapbox tiles
@@ -27,7 +27,7 @@ No-op on non MapLibre implemntations. Use MapboxGL.TileServers.Mapbox to consume
 #### arguments
 | Name | Type | Required | Description  |
 | ---- | :--: | :------: | :----------: |
-| `accessToken` | `String` | `Yes` | required acessToken to pull mapbox tiles, can be `null` if other tiles are used |
+| `accessToken` | `String` | `Yes` | required accessToken to pull mapbox tiles, can be `null` if other tiles are used |
 
 #### Description
 gets the accessToken

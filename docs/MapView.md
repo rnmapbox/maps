@@ -417,7 +417,7 @@ This event is triggered when the map has failed to load a new map style. On v10 
 ```tsx
 func
 ```
-This event is tiggered when there is an error during map load. V10 only, replaces onDidFailLoadingMap, might be called multiple times and not exclusive with onDidFinishLoadingMap.
+This event is triggered when there is an error during map load. V10 only, replaces onDidFailLoadingMap, might be called multiple times and not exclusive with onDidFinishLoadingMap.
 *signature:*`() =&gt; void`
 
 
