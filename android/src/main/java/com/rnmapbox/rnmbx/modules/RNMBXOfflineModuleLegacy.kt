@@ -410,7 +410,6 @@ class RNMBXOfflineModuleLegacy(private val mReactContext: ReactApplicationContex
     fun migrateOfflineCache(promise: Promise) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             // Old and new cache file paths
-            Log.d(LOG_TAG, "v10 cache moving started")
             val targetDirectoryPathName = mReactContext.filesDir.absolutePath + "/.mapbox/map_data"
             val sourcePathName = mReactContext.filesDir.absolutePath + "/mbgl-offline.db"
             val sourcePath = Paths.get(sourcePathName)
