@@ -40,6 +40,7 @@ import com.rnmapbox.rnmbx.modules.RNMBXLocationModule
 import com.rnmapbox.rnmbx.modules.RNMBXLogging
 import com.rnmapbox.rnmbx.modules.RNMBXModule
 import com.rnmapbox.rnmbx.modules.RNMBXOfflineModule
+import com.rnmapbox.rnmbx.modules.RNMBXOfflineModuleLegacy
 import com.rnmapbox.rnmbx.modules.RNMBXSnapshotModule
 import com.rnmapbox.rnmbx.utils.ViewTagResolver
 
@@ -63,7 +64,8 @@ class RNMBXPackage : TurboReactPackage() {
         when (s) {
             RNMBXModule.REACT_CLASS -> return RNMBXModule(reactApplicationContext)
             RNMBXLocationModule.REACT_CLASS -> return RNMBXLocationModule(reactApplicationContext)
-            RNMBXOfflineModule.REACT_CLASS -> return RNMBXOfflineModule(reactApplicationContext)
+            RNMBXOfflineModule.REACT_CLASS -> return if (BuildConfig.LEGACY_OFFLINE_MANAGER)
+                RNMBXOfflineModuleLegacy(reactApplicationContext) else RNMBXOfflineModule(reactApplicationContext)
             RNMBXSnapshotModule.REACT_CLASS -> return RNMBXSnapshotModule(reactApplicationContext)
             RNMBXLogging.REACT_CLASS -> return RNMBXLogging(reactApplicationContext)
             NativeMapViewModule.NAME -> return NativeMapViewModule(reactApplicationContext, getMapViewTagResolver(reactApplicationContext))

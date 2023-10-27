@@ -3,6 +3,7 @@
 buildscript {
     ext {
         RNMapboxMapsImpl = "mapbox"
+        RNMapboxMapsLegacyOfflineManager = false
 
         if (project.hasProperty('RNMBX11') && project.getProperty('RNMBX11').toBoolean()) {
             RNMapboxMapsUseV11 = true

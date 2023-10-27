@@ -95,6 +95,7 @@ android {
         versionCode 1
         versionName "1.0"
         buildConfigField "boolean", "IS_NEW_ARCHITECTURE_ENABLED", isNewArchitectureEnabled().toString()
+        buildConfigField "boolean", "LEGACY_OFFLINE_MANAGER", safeExtGet("RNMapboxMapsLegacyOfflineManager", false).toString()
     }
 
     compileOptions {
