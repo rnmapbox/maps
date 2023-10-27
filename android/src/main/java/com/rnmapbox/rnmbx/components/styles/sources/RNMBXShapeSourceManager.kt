@@ -14,13 +14,14 @@ import com.mapbox.maps.extension.style.expressions.generated.Expression
 import com.rnmapbox.rnmbx.events.constants.EventKeys
 import com.rnmapbox.rnmbx.utils.ExpressionParser
 import com.rnmapbox.rnmbx.utils.Logger
+import com.rnmapbox.rnmbx.utils.ViewTagResolver
 import java.net.MalformedURLException
 import java.net.URL
 import java.util.ArrayList
 import java.util.HashMap
 
 
-class RNMBXShapeSourceManager(private val mContext: ReactApplicationContext) :
+class RNMBXShapeSourceManager(private val mContext: ReactApplicationContext, val viewTagResolver: ViewTagResolver) :
     AbstractEventEmitter<RNMBXShapeSource>(
         mContext
     ), RNMBXShapeSourceManagerInterface<RNMBXShapeSource> {
@@ -46,6 +47,17 @@ class RNMBXShapeSourceManager(private val mContext: ReactApplicationContext) :
 
     override fun removeViewAt(source: RNMBXShapeSource, childPosition: Int) {
         source.removeLayer(childPosition)
+    }
+
+    override fun onDropViewInstance(view: RNMBXShapeSource) {
+        val reactTag = view.id
+
+        viewTagResolver.viewRemoved(reactTag)
+        super.onDropViewInstance(view)
+    }
+
+    fun tagAssigned(reactTag: Int) {
+        return viewTagResolver.tagAssigned(reactTag)
     }
 
     @ReactProp(name = "id")

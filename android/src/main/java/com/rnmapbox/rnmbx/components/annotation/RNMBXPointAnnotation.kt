@@ -74,6 +74,11 @@ class RNMBXPointAnnotation(private val mContext: Context, private val mManager: 
         mMapView?.offscreenAnnotationViewContainer?.removeView(childView)
     }
 
+    override fun setId(id: Int) {
+        super.setId(id)
+        mManager.tagAssigned(id)
+    }
+
     override fun addToMap(mapView: RNMBXMapView) {
         super.addToMap(mapView)
         mMap = mapView.getMapboxMap()

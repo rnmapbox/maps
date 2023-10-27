@@ -69,7 +69,7 @@ using namespace facebook::react;
 
 - (void)updateProps:(const Props::Shared &)props oldProps:(const Props::Shared &)oldProps
 {
-  const auto &newProps = *std::static_pointer_cast<const RNMBXCameraProps>(props);
+  const auto &newProps = static_cast<const RNMBXCameraProps &>(*props);
     id maxBounds = RNMBXConvertFollyDynamicToId(newProps.maxBounds);
     if (maxBounds != nil) {
         _view.maxBounds = maxBounds;

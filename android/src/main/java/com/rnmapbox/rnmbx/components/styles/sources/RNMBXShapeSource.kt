@@ -48,6 +48,11 @@ class RNMBXShapeSource(context: Context, private val mManager: RNMBXShapeSourceM
         }
     }
 
+    override fun setId(id: Int) {
+        super.setId(id)
+        mManager.tagAssigned(id)
+    }
+
     override fun makeSource(): GeoJsonSource {
         val builder = GeoJsonSource.Builder(iD.toString())
         getOptions(builder)

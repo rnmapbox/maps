@@ -9,10 +9,12 @@ import com.facebook.react.uimanager.annotations.ReactProp
 import com.facebook.react.viewmanagers.RNMBXPointAnnotationManagerDelegate
 import com.facebook.react.viewmanagers.RNMBXPointAnnotationManagerInterface
 import com.rnmapbox.rnmbx.components.AbstractEventEmitter
+import com.rnmapbox.rnmbx.components.styles.sources.RNMBXShapeSource
 import com.rnmapbox.rnmbx.events.constants.EventKeys
 import com.rnmapbox.rnmbx.utils.GeoJSONUtils.toPointGeometry
+import com.rnmapbox.rnmbx.utils.ViewTagResolver
 
-class RNMBXPointAnnotationManager(reactApplicationContext: ReactApplicationContext) : AbstractEventEmitter<RNMBXPointAnnotation>(reactApplicationContext),
+class RNMBXPointAnnotationManager(reactApplicationContext: ReactApplicationContext, val viewTagResolver: ViewTagResolver) : AbstractEventEmitter<RNMBXPointAnnotation>(reactApplicationContext),
   RNMBXPointAnnotationManagerInterface<RNMBXPointAnnotation> {
 
     private val mDelegate: ViewManagerDelegate<RNMBXPointAnnotation>
@@ -42,6 +44,17 @@ class RNMBXPointAnnotationManager(reactApplicationContext: ReactApplicationConte
     // TODO: check why it does not work correctly
     override fun createViewInstance(reactContext: ThemedReactContext): RNMBXPointAnnotation {
         return RNMBXPointAnnotation(reactContext!!, this)
+    }
+
+    override fun onDropViewInstance(view: RNMBXPointAnnotation) {
+        val reactTag = view.id
+
+        viewTagResolver.viewRemoved(reactTag)
+        super.onDropViewInstance(view)
+    }
+
+    fun tagAssigned(reactTag: Int) {
+        return viewTagResolver.tagAssigned(reactTag)
     }
 
     @ReactProp(name = "id")

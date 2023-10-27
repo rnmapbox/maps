@@ -65,7 +65,7 @@ using namespace facebook::react;
 
 - (void)updateProps:(const Props::Shared &)props oldProps:(const Props::Shared &)oldProps
 {
-  const auto &newProps = *std::static_pointer_cast<const RNMBXImageProps>(props);
+  const auto &newProps = static_cast<const RNMBXImageProps &>(*props);
     id stretchX = RNMBXConvertFollyDynamicToId(newProps.stretchX);
     if (stretchX != nil) {
         _view.stretchX = stretchX;

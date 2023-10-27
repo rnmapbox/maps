@@ -125,7 +125,7 @@ using namespace facebook::react;
 
 - (void)updateProps:(const Props::Shared &)props oldProps:(const Props::Shared &)oldProps
 {
-  const auto &newProps = *std::static_pointer_cast<const RNMBXMapViewProps>(props);
+  const auto &newProps = static_cast<const RNMBXMapViewProps &>(*props);
     id attributionEnabled = RNMBXConvertFollyDynamicToId(newProps.attributionEnabled);
     if (attributionEnabled != nil) {
         _view.reactAttributionEnabled = attributionEnabled;
