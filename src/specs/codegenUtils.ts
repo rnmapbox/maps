@@ -14,11 +14,6 @@ export type Point = {
   y: Int32;
 };
 
-export type LocalizeLabels = {
-  locale: string;
-  layerIds?: string[];
-};
-
 export type NativeCameraStop = {
   centerCoordinate?: string;
   bounds?: string;

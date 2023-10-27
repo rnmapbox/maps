@@ -77,7 +77,9 @@ open class RNMBXMapViewManager(context: ReactApplicationContext, val viewTagReso
 
     override fun onAfterUpdateTransaction(mapView: RNMBXMapView) {
         super.onAfterUpdateTransaction(mapView)
-        if (mapView.getMapboxMap() == null) {
+        val first = !mapView.isInitialized
+        mapView.applyAllChanges()
+        if (first) {
             mViews[mapView.id] = mapView
             mapView.init()
         }
@@ -141,53 +143,63 @@ open class RNMBXMapViewManager(context: ReactApplicationContext, val viewTagReso
         mapView.setReactLocalizeLabels(locale, layerIds)
     }
 
+    @ReactProp(name = "surfaceView")
+    override fun setSurfaceView(mapView: RNMBXMapView, value: Dynamic) {
+        if (mapView.isInitialized) {
+            Logger.d(LOG_TAG, "setSurafaceView cannot be changed")
+        } else {
+            mapView.surfaceView = value.asBoolean()
+        }
+    }
+
     @ReactProp(name = "gestureSettings")
     override fun setGestureSettings(mapView: RNMBXMapView, settings: Dynamic) {
-        mapView.getMapboxMap().gesturesPlugin {
-            val map = settings.asMap()
-            this.updateSettings {
-                map.getAndLogIfNotBoolean("doubleTapToZoomInEnabled", LOG_TAG)?.let {
-                    this.doubleTapToZoomInEnabled = it
-                }
-                map.getAndLogIfNotBoolean("doubleTouchToZoomOutEnabled", LOG_TAG)?.let {
-                    this.doubleTouchToZoomOutEnabled = it
-                }
-                map.getAndLogIfNotBoolean("pinchPanEnabled", LOG_TAG)?.let {
-                    this.pinchScrollEnabled = it
-                }
-                map.getAndLogIfNotBoolean("pinchZoomEnabled", LOG_TAG)?.let {
-                    this.pinchToZoomEnabled = it
-                }
-                map.getAndLogIfNotBoolean("pinchZoomDecelerationEnabled", LOG_TAG)?.let {
-                    this.pinchToZoomDecelerationEnabled = it
-                }
-                map.getAndLogIfNotBoolean("pitchEnabled", LOG_TAG)?.let {
-                    this.pitchEnabled = it
-                }
-                map.getAndLogIfNotBoolean("quickZoomEnabled", LOG_TAG)?.let {
-                    this.quickZoomEnabled = it
-                }
-                map.getAndLogIfNotBoolean("rotateEnabled", LOG_TAG)?.let {
-                    this.rotateEnabled = it
-                }
-                map.getAndLogIfNotBoolean("rotateDecelerationEnabled", LOG_TAG)?.let {
-                    this.rotateDecelerationEnabled = it
-                }
-                map.getAndLogIfNotBoolean("panEnabled", LOG_TAG)?.let {
-                    this.scrollEnabled = it
-                }
-                map.getAndLogIfNotDouble("panDecelerationFactor", LOG_TAG)?.let {
-                    this.scrollDecelerationEnabled = it > 0.0
-                }
-                map.getAndLogIfNotBoolean("simultaneousRotateAndPinchToZoomEnabled", LOG_TAG)?.let {
-                    this.simultaneousRotateAndPinchToZoomEnabled = it
-                }
-                map.getAndLogIfNotDouble("zoomAnimationAmount", LOG_TAG)?.let {
-                    this.zoomAnimationAmount = it.toFloat()
-                }
-            }
+        mapView.withMap {
+           it.gesturesPlugin {
+               val map = settings.asMap()
+               this.updateSettings {
+                   map.getAndLogIfNotBoolean("doubleTapToZoomInEnabled", LOG_TAG)?.let {
+                       this.doubleTapToZoomInEnabled = it
+                   }
+                   map.getAndLogIfNotBoolean("doubleTouchToZoomOutEnabled", LOG_TAG)?.let {
+                       this.doubleTouchToZoomOutEnabled = it
+                   }
+                   map.getAndLogIfNotBoolean("pinchPanEnabled", LOG_TAG)?.let {
+                       this.pinchScrollEnabled = it
+                   }
+                   map.getAndLogIfNotBoolean("pinchZoomEnabled", LOG_TAG)?.let {
+                       this.pinchToZoomEnabled = it
+                   }
+                   map.getAndLogIfNotBoolean("pinchZoomDecelerationEnabled", LOG_TAG)?.let {
+                       this.pinchToZoomDecelerationEnabled = it
+                   }
+                   map.getAndLogIfNotBoolean("pitchEnabled", LOG_TAG)?.let {
+                       this.pitchEnabled = it
+                   }
+                   map.getAndLogIfNotBoolean("quickZoomEnabled", LOG_TAG)?.let {
+                       this.quickZoomEnabled = it
+                   }
+                   map.getAndLogIfNotBoolean("rotateEnabled", LOG_TAG)?.let {
+                       this.rotateEnabled = it
+                   }
+                   map.getAndLogIfNotBoolean("rotateDecelerationEnabled", LOG_TAG)?.let {
+                       this.rotateDecelerationEnabled = it
+                   }
+                   map.getAndLogIfNotBoolean("panEnabled", LOG_TAG)?.let {
+                       this.scrollEnabled = it
+                   }
+                   map.getAndLogIfNotDouble("panDecelerationFactor", LOG_TAG)?.let {
+                       this.scrollDecelerationEnabled = it > 0.0
+                   }
+                   map.getAndLogIfNotBoolean("simultaneousRotateAndPinchToZoomEnabled", LOG_TAG)?.let {
+                       this.simultaneousRotateAndPinchToZoomEnabled = it
+                   }
+                   map.getAndLogIfNotDouble("zoomAnimationAmount", LOG_TAG)?.let {
+                       this.zoomAnimationAmount = it.toFloat()
+                   }
+               }
+           }
         }
-
     }
 
     @ReactProp(name = "styleURL")
@@ -202,28 +214,32 @@ open class RNMBXMapViewManager(context: ReactApplicationContext, val viewTagReso
 
     @ReactProp(name = "zoomEnabled")
     override fun setZoomEnabled(map: RNMBXMapView, zoomEnabled: Dynamic) {
-        val mapView = map.mapView
-        mapView.gestures.pinchToZoomEnabled = zoomEnabled.asBoolean()
-        mapView.gestures.doubleTouchToZoomOutEnabled = zoomEnabled.asBoolean()
-        mapView.gestures.doubleTapToZoomInEnabled = zoomEnabled.asBoolean()
+        map.withMapView {
+            it.gestures.pinchToZoomEnabled = zoomEnabled.asBoolean()
+            it.gestures.doubleTouchToZoomOutEnabled = zoomEnabled.asBoolean()
+            it.gestures.doubleTapToZoomInEnabled = zoomEnabled.asBoolean()
+        }
     }
 
     @ReactProp(name = "scrollEnabled")
     override fun setScrollEnabled(map: RNMBXMapView, scrollEnabled: Dynamic) {
-        val mapView = map.mapView
-        mapView.gestures.scrollEnabled = scrollEnabled.asBoolean()
+        map.withMapView {
+            it.gestures.scrollEnabled = scrollEnabled.asBoolean()
+        }
     }
 
     @ReactProp(name = "pitchEnabled")
     override fun setPitchEnabled(map: RNMBXMapView, pitchEnabled: Dynamic) {
-        val mapView = map.mapView
-        mapView.gestures.pitchEnabled = pitchEnabled.asBoolean()
+        map.withMapView {
+            it.gestures.pitchEnabled = pitchEnabled.asBoolean()
+        }
     }
 
     @ReactProp(name = "rotateEnabled")
     override fun setRotateEnabled(map: RNMBXMapView, rotateEnabled: Dynamic) {
-        val mapView = map.mapView
-        mapView.gestures.rotateEnabled = rotateEnabled.asBoolean()
+        map.withMapView {
+           it.gestures.rotateEnabled = rotateEnabled.asBoolean()
+        }
     }
 
     @ReactProp(name = "attributionEnabled")

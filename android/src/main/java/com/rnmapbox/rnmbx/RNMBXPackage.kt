@@ -17,7 +17,6 @@ import com.rnmapbox.rnmbx.components.images.RNMBXImageModule
 import com.rnmapbox.rnmbx.components.images.RNMBXImagesManager
 import com.rnmapbox.rnmbx.components.location.RNMBXNativeUserLocationManager
 import com.rnmapbox.rnmbx.components.mapview.NativeMapViewModule
-import com.rnmapbox.rnmbx.components.mapview.RNMBXAndroidTextureMapViewManager
 import com.rnmapbox.rnmbx.components.mapview.RNMBXMapViewManager
 import com.rnmapbox.rnmbx.components.styles.RNMBXStyleImportManager
 import com.rnmapbox.rnmbx.components.styles.atmosphere.RNMBXAtmosphereManager
@@ -86,7 +85,6 @@ class RNMBXPackage : TurboReactPackage() {
 
         // components
         managers.add(RNMBXCameraManager(reactApplicationContext))
-        managers.add(RNMBXAndroidTextureMapViewManager(reactApplicationContext, getViewTagResolver(reactApplicationContext)))
         managers.add(RNMBXMapViewManager(reactApplicationContext, getViewTagResolver(reactApplicationContext)))
         managers.add(RNMBXStyleImportManager(reactApplicationContext))
 

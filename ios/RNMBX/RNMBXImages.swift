@@ -4,6 +4,18 @@ protocol RNMBXImageSetter : AnyObject {
   func addImage(name: String, image: UIImage, sdf: Bool?, stretchX: [[NSNumber]], stretchY: [[NSNumber]], content: [NSNumber]?, log: String) -> Bool
 }
 
+func hasImage(style: Style, name: String) -> Bool {
+  #if RNMBX_11
+  return style.imageExists(withId: name)
+  #else
+  return (style.styleManager.getStyleImage(forImageId: name) != nil)
+  #endif
+}
+
+#if RNMBX_11
+typealias StyleImageMissingPayload = StyleImageMissing
+#endif
+
 open class RNMBXImages : UIView, RNMBXMapComponent {
   
   @objc public weak var bridge : RCTBridge! = nil
@@ -104,9 +116,9 @@ open class RNMBXImages : UIView, RNMBXMapComponent {
         if !sameImage(oldValue: oldImages[name], newValue: images[name]) {
           missingImages[name] = images[name]
         } else {
-          if style.styleManager.getStyleImage(forImageId: name) == nil {
+          if hasImage(style: style, name: name) {
             logged("RNMBXImages.addImagePlaceholder") {
-              try? style.addImage(placeholderImage, id: name, stretchX: [], stretchY: [])
+              try style.addImage(placeholderImage, id: name, stretchX: [], stretchY: [])
               missingImages[name] = images[name]
             }
           }
@@ -125,7 +137,7 @@ open class RNMBXImages : UIView, RNMBXMapComponent {
     }
   }
   
-  public func addMissingImageToStyle(style: Style, imageName: String) -> Bool {
+  internal func addMissingImageToStyle(style: Style, imageName: String) -> Bool {
     if let nativeImage = nativeImageInfos.first(where: { $0.name == imageName }) {
       addNativeImages(style: style, nativeImages: [nativeImage])
       return true
@@ -138,7 +150,7 @@ open class RNMBXImages : UIView, RNMBXMapComponent {
     return false
   }
   
-  public func sendImageMissingEvent(imageName: String, payload: StyleImageMissingPayload) {
+  internal func sendImageMissingEvent(imageName: String, payload: StyleImageMissingPayload) {
     let payload = ["imageKey":imageName]
     let event = RNMBXEvent(type: .imageMissing, payload: payload)
     if let onImageMissing = onImageMissing {
@@ -231,7 +243,7 @@ open class RNMBXImages : UIView, RNMBXMapComponent {
   func addNativeImages(style: Style, nativeImages: [NativeImageInfo]) {
     for imageInfo in nativeImages {
       let imageName = imageInfo.name
-      if style.styleManager.getStyleImage(forImageId: imageInfo.name) == nil {
+      if  hasImage(style: style, name:imageName) {
         if let image = UIImage(named: imageName) {
           logged("RNMBXImage.addNativeImage: \(imageName)") {
             try style.addImage(image, id: imageName, sdf: imageInfo.sdf,
