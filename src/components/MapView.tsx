@@ -10,10 +10,10 @@ import {
   LayoutChangeEvent,
 } from 'react-native';
 import { debounce } from 'debounce';
-import { GeoJsonProperties, Geometry } from 'geojson';
 
-import NativeMapView from '../specs/RNMBXMapViewNativeComponent';
-import NativeAndroidTextureMapView from '../specs/RNMBXAndroidTextureMapViewNativeComponent';
+import NativeMapView, {
+  type NativeMapViewActual,
+} from '../specs/RNMBXMapViewNativeComponent';
 import NativeMapViewModule from '../specs/NativeMapViewModule';
 import {
   isFunction,
@@ -937,11 +937,7 @@ class MapView extends NativeBridgeComponent(
     return this._runNative<void>('removeCustomLocationProvider');
   }
 
-  _decodePayload<G extends Geometry | null = Geometry, P = GeoJsonProperties>(
-    payload: GeoJSON.Feature<G, P> | string,
-  ): GeoJSON.Feature<G, P> {
-    // we check whether the payload is a string, since the strict type safety is enforced only on iOS on the new arch
-    // on Android, on both archs, the payload is an object
+  _decodePayload<T>(payload: T | string): T {
     if (typeof payload === 'string') {
       return JSON.parse(payload);
     } else {
@@ -949,15 +945,15 @@ class MapView extends NativeBridgeComponent(
     }
   }
 
-  _onPress(e: NativeSyntheticEvent<{ payload: GeoJSON.Feature }>) {
+  _onPress(e: NativeSyntheticEvent<{ payload: GeoJSON.Feature | string }>) {
     if (isFunction(this.props.onPress)) {
       this.props.onPress(this._decodePayload(e.nativeEvent.payload));
     }
   }
 
-  _onLongPress(e: NativeSyntheticEvent<{ payload: GeoJSON.Feature }>) {
+  _onLongPress(e: NativeSyntheticEvent<{ payload: GeoJSON.Feature | string }>) {
     if (isFunction(this.props.onLongPress)) {
-      this.props.onLongPress(e.nativeEvent.payload);
+      this.props.onLongPress(this._decodePayload(e.nativeEvent.payload));
     }
   }
 
@@ -984,17 +980,19 @@ class MapView extends NativeBridgeComponent(
     this.setState({ region: payload });
   }
 
-  _onCameraChanged(e: NativeSyntheticEvent<{ payload: MapState }>) {
-    this.props.onCameraChanged?.(e.nativeEvent.payload);
+  _onCameraChanged(e: NativeSyntheticEvent<{ payload: MapState | string }>) {
+    this.props.onCameraChanged?.(this._decodePayload(e.nativeEvent.payload));
   }
 
   _onChange(
     e: NativeSyntheticEvent<{
       type: string;
-      payload: GeoJSON.Feature<
-        GeoJSON.Point,
-        RegionPayload & { isAnimatingFromUserInteraction: boolean }
-      >;
+      payload:
+        | GeoJSON.Feature<
+            GeoJSON.Point,
+            RegionPayload & { isAnimatingFromUserInteraction: boolean }
+          >
+        | string;
     }>,
   ) {
     const { regionWillChangeDebounceTime, regionDidChangeDebounceTime } =
@@ -1114,9 +1112,11 @@ class MapView extends NativeBridgeComponent(
     return this.props.contentInset;
   }
 
-  _setNativeRef(nativeRef: RNMBXMapViewRefType) {
-    this._nativeRef = nativeRef;
-    super._runPendingNativeMethods(nativeRef);
+  _setNativeRef(nativeRef: RNMBXMapViewRefType | null) {
+    if (nativeRef != null) {
+      this._nativeRef = nativeRef;
+      super._runPendingNativeMethods(nativeRef);
+    }
   }
 
   setNativeProps(props: NativeProps) {
@@ -1165,7 +1165,8 @@ class MapView extends NativeBridgeComponent(
     this._setLocalizeLabels(props);
 
     const callbacks = {
-      ref: (nativeRef: RNMBXMapViewRefType) => this._setNativeRef(nativeRef),
+      ref: (nativeRef: RNMBXMapViewRefType | null) =>
+        this._setNativeRef(nativeRef),
       onPress: this._onPress,
       onLongPress: this._onLongPress,
       onMapChange: this._onChange,
@@ -1173,16 +1174,8 @@ class MapView extends NativeBridgeComponent(
     };
 
     let mapView = null;
-    if (isAndroid() && !this.props.surfaceView && this.state.isReady) {
+    if (this.state.isReady) {
       mapView = (
-        <RNMBXAndroidTextureMapView {...props} {...callbacks}>
-          {this.props.children}
-        </RNMBXAndroidTextureMapView>
-      );
-    } else if (this.state.isReady) {
-      mapView = (
-        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-        // @ts-ignore TODO: fix types
         <RNMBXMapView {...props} {...callbacks}>
           {this.props.children}
         </RNMBXMapView>
@@ -1205,19 +1198,19 @@ type NativeProps = Omit<
   Props,
   'onPress' | 'onLongPress' | 'onCameraChanged'
 > & {
-  onPress(event: NativeSyntheticEvent<{ payload: GeoJSON.Feature }>): void;
-  onLongPress(event: NativeSyntheticEvent<{ payload: GeoJSON.Feature }>): void;
-  onCameraChanged(event: NativeSyntheticEvent<{ payload: MapState }>): void;
+  onPress?: (
+    event: NativeSyntheticEvent<{ type: string; payload: string }>,
+  ) => void;
+  onLongPress?: (
+    event: NativeSyntheticEvent<{ type: string; payload: string }>,
+  ) => void;
+  onCameraChanged?: (
+    event: NativeSyntheticEvent<{ type: string; payload: string }>,
+  ) => void;
 };
 
 type RNMBXMapViewRefType = Component<NativeProps> & Readonly<NativeMethods>;
-// const RNMBXMapView = requireNativeComponent<NativeProps>(NATIVE_MODULE_NAME);
-// TODO: figure out how to pick the correct implementation
-const RNMBXMapView = NativeMapView;
 
-let RNMBXAndroidTextureMapView: any;
-if (isAndroid()) {
-  RNMBXAndroidTextureMapView = NativeAndroidTextureMapView;
-}
+const RNMBXMapView = NativeMapView as NativeMapViewActual;
 
 export default MapView;

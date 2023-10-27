@@ -1,5 +1,3 @@
-// ideally the file extension would be just `.h` but then it gets picked up as a header part of the umbrella header
-
 #import <CoreFoundation/CoreFoundation.h>
 #import <CoreLocation/CoreLocation.h>
 

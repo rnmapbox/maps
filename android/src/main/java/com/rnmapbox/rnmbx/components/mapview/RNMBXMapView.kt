@@ -213,12 +213,14 @@ open class RNMBXMapView(private val mContext: Context, var mManager: RNMBXMapVie
     private var mQueuedFeatures: MutableList<AbstractMapFeature>? = ArrayList()
     private val mPointAnnotations: MutableMap<String, RNMBXPointAnnotation>
     private val mCameraChangeTracker = CameraChangeTracker()
-    private val mMap: MapboxMap?
+    private lateinit var mMap: MapboxMap
 
-    private val mMapView: MapView
+    private lateinit var mMapView: MapView
     private var mLocationConsumers = mutableListOf<LocationConsumer>()
     private var mCustomLocationProvider: LocationProvider? = null
     private var mDefaultLocationProvider: LocationProvider? = null
+    val isInitialized: Boolean
+        get() = this::mMapView.isInitialized
 
     var savedStyle: Style? = null
         private set
@@ -326,8 +328,8 @@ open class RNMBXMapView(private val mContext: Context, var mManager: RNMBXMapVie
         style.setProjection(Projection(mProjection))
     }
 
-    private fun setupEvents() {
-       mMap?.addOnRenderFrameFinishedListener(
+    private fun setupEvents(map: MapboxMap) {
+       map.addOnRenderFrameFinishedListener(
            object: OnRenderFrameFinishedListener {
                override fun onRenderFrameFinished(eventData: RenderFrameFinishedEventData) {
                    handleMapChangedEvent(EventTypes.DID_FINISH_RENDERING_FRAME_FULLY)
@@ -484,10 +486,10 @@ open class RNMBXMapView(private val mContext: Context, var mManager: RNMBXMapVie
             feature = childView as AbstractMapFeature
         } else if (childView is ViewGroup) {
             val children = childView
-            Logger.w(LOG_TAG, "Adding non map components as a child of a map is deprecated!")
-            for (i in 0 until children.childCount) {
-                addView(children.getChildAt(i), childPosition)
-            }
+            Logger.w(LOG_TAG, "Adding non map components:${children.javaClass.name} as a child of a map is deprecated!")
+            //for (i in 0 until children.childCount) {
+            //    addView(children.getChildAt(i), childPosition)
+            //}
         }
 
         val addToMap = styleLoaded || (feature?.requiresStyleLoad == false)
@@ -618,13 +620,60 @@ open class RNMBXMapView(private val mContext: Context, var mManager: RNMBXMapVie
         return true
     }
 
+    // region properties
+    var surfaceView: Boolean? = null
+
+    enum class Property(val _apply: (RNMBXMapView) -> Unit) : PropertyUpdaterWithName<RNMBXMapView> {
+        PROJECTION(RNMBXMapView::applyProjection),
+        LOCALIZE_LABELS(RNMBXMapView::applyLocalizeLabels),
+        STYLE_URL(RNMBXMapView::applyStyleURL),
+        ATTRIBUTION(RNMBXMapView::applyAttribution),
+        LOGO(RNMBXMapView::applyLogo),
+        SCALEBAR(RNMBXMapView::applyScaleBar),
+        COMPASS(RNMBXMapView::applyCompass),;
+
+        override fun apply(mapView: RNMBXMapView) {
+           _apply(mapView)
+        }
+    }
+
+    val changes = PropertyChanges<RNMBXMapView>();
+
+    var withMapWaiters = mutableListOf<(map: MapView)->Unit>();
+    fun withMap(callback: (map: MapboxMap) -> Unit) {
+        if (! this::mMap.isInitialized) {
+            withMapWaiters.add { it -> callback(it.getMapboxMap()) }
+        } else {
+            callback(mMap)
+        }
+    }
+    fun withMapView(callback: (map: MapView) -> Unit) {
+        if (! this::mMapView.isInitialized) {
+            withMapWaiters.add(callback)
+        } else {
+            callback(mMapView)
+        }
+    }
+    fun applyAllChanges() {
+        if (! this::mMapView.isInitialized) {
+            createMapView()
+            withMapWaiters.forEach { it(mMapView) }
+            withMapWaiters.clear()
+        }
+        changes.apply(this)
+    }
+
+
     fun setReactProjection(projection: ProjectionName) {
         if (projection != null) {
             mProjection = projection
         }
+        changes.add(Property.PROJECTION)
+    }
 
+    fun applyProjection() {
         if (mMap != null) {
-            mMap.getStyle()?.setProjection(Projection(projection))
+            mMap.getStyle()?.setProjection(Projection(mProjection))
         }
     }
 
@@ -641,14 +690,18 @@ open class RNMBXMapView(private val mContext: Context, var mManager: RNMBXMapVie
             mLocaleString = localeStr
             mLocaleLayerIds = layerIds
         }
-        applyLocalizeLabels()
+        changes.add(Property.LOCALIZE_LABELS)
     }
 
     fun setReactStyleURL(styleURL: String) {
         mStyleURL = styleURL
-        if (mMap != null) {
+        changes.add(Property.STYLE_URL)
+    }
+    fun applyStyleURL() {
+        val styleURL = mStyleURL
+        if (mMap != null && styleURL != null) {
             removeAllFeatureFromMap(RemovalReason.STYLE_CHANGE)
-            if (isJSONValid(mStyleURL)) {
+            if (isJSONValid(styleURL)) {
                 styleLoaded = false
                 mMap.loadStyleJson(styleURL, object : Style.OnStyleLoaded {
                     override fun onStyleLoaded(style: Style) {
@@ -662,16 +715,17 @@ open class RNMBXMapView(private val mContext: Context, var mManager: RNMBXMapVie
                         styleLoaded(style)
                     }
                 },
-                        object : OnMapLoadErrorListener {
-                            override fun onMapLoadError(mapLoadingErrorEventData: MapLoadingErrorEventData) {
-                                Logger.w("MapLoadError", mapLoadingErrorEventData.message)
-                            }
+                    object : OnMapLoadErrorListener {
+                        override fun onMapLoadError(mapLoadingErrorEventData: MapLoadingErrorEventData) {
+                            Logger.w("MapLoadError", mapLoadingErrorEventData.message)
                         }
+                    }
                 )
                 addFeaturesToMap(false)
             }
         }
     }
+    //endregion
 
     interface HandleTap {
         fun run(hitTouchableSources: List<RNMBXSource<*>?>?, hits: Map<String?, List<Feature?>?>)
@@ -946,7 +1000,7 @@ open class RNMBXMapView(private val mContext: Context, var mManager: RNMBXMapVie
     //    }
     //}
 
-    // region Callbacks
+    // region Methods
 
     fun getCenter(response: CommandResponse) {
         var center = mMap!!.cameraState!!.center
@@ -1198,11 +1252,49 @@ open class RNMBXMapView(private val mContext: Context, var mManager: RNMBXMapVie
             }
         }
     }
-
     // endregion
 
     companion object {
         const val LOG_TAG = "RNMBXMapView"
+    }
+
+    fun createMapView() : MapView {
+        var options: MapInitOptions? = null
+        if (surfaceView == false) {
+            options = MapInitOptions(context= mContext, textureView= true)
+        }
+        val mapView = if (options != null) MapView(mContext, options) else MapView(mContext)
+        mMapView = mapView
+
+        val matchParent = FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT)
+        mapView.setLayoutParams(matchParent)
+        addView(mapView)
+        this.addOnLayoutChangeListener(this)
+
+        val map = mapView.getMapboxMap()
+        mMap = map
+
+        val _this = this
+
+        onMapReady(map)
+
+        map.addOnMapLoadedListener(OnMapLoadedListener { (begin, end) -> _this.handleMapChangedEvent(EventTypes.DID_FINISH_LOADING_MAP) })
+        map.addOnStyleLoadedListener(OnStyleLoadedListener { (begin, end) -> _this.handleMapChangedEvent(EventTypes.DID_FINISH_LOADING_STYLE) })
+        map.addOnStyleImageMissingListener(OnStyleImageMissingListener { (begin, end, id) ->
+            for (images in mImages) {
+                if (images.addMissingImageToStyle(id, map)) {
+                    return@OnStyleImageMissingListener
+                }
+            }
+            for (images in mImages) {
+                images.sendImageMissingEvent(id, map)
+            }
+        })
+
+        RNMBXMarkerViewManager.markerViewContainerSizeFixer(this, mapView.viewAnnotationManager)
+
+        this.setupEvents(map)
+        return mapView
     }
 
     init {
@@ -1212,37 +1304,9 @@ open class RNMBXMapView(private val mContext: Context, var mManager: RNMBXMapVie
         offscreenAnnotationViewContainer?.setLayoutParams(p)
         addView(offscreenAnnotationViewContainer)
 
-        mMapView = if (options != null) MapView(mContext, options) else MapView(mContext)
-
-        val matchParent = FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT)
-        mMapView.setLayoutParams(matchParent)
-        addView(mMapView)
-
-        mMap = mapView.getMapboxMap()
         mSources = HashMap()
         mImages = ArrayList()
         mPointAnnotations = HashMap()
-
-        onMapReady(mMap)
-
-        val _this = this
-        mMap.addOnMapLoadedListener(OnMapLoadedListener { (begin, end) -> _this.handleMapChangedEvent(EventTypes.DID_FINISH_LOADING_MAP) })
-        mMap.addOnStyleLoadedListener(OnStyleLoadedListener { (begin, end) -> _this.handleMapChangedEvent(EventTypes.DID_FINISH_LOADING_STYLE) })
-        mMap.addOnStyleImageMissingListener(OnStyleImageMissingListener { (begin, end, id) ->
-            for (images in mImages) {
-                if (images.addMissingImageToStyle(id, mMap)) {
-                    return@OnStyleImageMissingListener
-                }
-            }
-            for (images in mImages) {
-                images.sendImageMissingEvent(id, mMap)
-            }
-        })
-
-        RNMBXMarkerViewManager.markerViewContainerSizeFixer(this, mapView.viewAnnotationManager)
-
-        this.addOnLayoutChangeListener(this)
-        this.setupEvents()
     }
 
     // region Ornaments
@@ -1303,30 +1367,30 @@ open class RNMBXMapView(private val mContext: Context, var mManager: RNMBXMapVie
 
     fun setReactCompassEnabled(compassEnabled: Boolean) {
         mCompassSettings.enabled = compassEnabled
-        updateCompass()
+        changes.add(Property.COMPASS)
     }
 
     fun setReactCompassFadeWhenNorth(compassFadeWhenNorth: Boolean) {
         mCompassFadeWhenNorth = compassFadeWhenNorth
-        updateCompass()
+        changes.add(Property.COMPASS)
     }
 
     fun setReactCompassViewMargins(compassViewMargins: ReadableMap) {
         mCompassSettings.margins = compassViewMargins
-        updateCompass()
+        changes.add(Property.COMPASS)
     }
 
     fun setReactCompassViewPosition(compassViewPosition: Int) {
         mCompassSettings.position = compassViewPosition
-        updateCompass()
+        changes.add(Property.COMPASS)
     }
 
     fun setReactCompassPosition(compassPosition: ReadableMap) {
         mCompassSettings.setPosAndMargins(compassPosition)
-        updateCompass()
+        changes.add(Property.COMPASS)
     }
 
-    private fun updateCompass() {
+    private fun applyCompass() {
         mapView.compass.updateSettings {
             fadeWhenFacingNorth = mCompassFadeWhenNorth
             updateOrnament("compass", mCompassSettings, this.toGenericOrnamentSettings())
@@ -1338,25 +1402,25 @@ open class RNMBXMapView(private val mContext: Context, var mManager: RNMBXMapVie
 
     fun setReactScaleBarEnabled(scaleBarEnabled: Boolean) {
         mScaleBarSettings.enabled = scaleBarEnabled
-        updateScaleBar()
+        changes.add(Property.SCALEBAR)
     }
 
     fun setReactScaleBarViewMargins(scaleBarMargins: ReadableMap) {
         mScaleBarSettings.margins = scaleBarMargins
-        updateScaleBar()
+        changes.add(Property.SCALEBAR)
     }
 
     fun setReactScaleBarViewPosition(scaleBarPosition: Int) {
         mScaleBarSettings.position = scaleBarPosition
-        updateScaleBar()
+        changes.add(Property.SCALEBAR)
     }
 
     fun setReactScaleBarPosition(scaleBarPosition: ReadableMap) {
         mScaleBarSettings.setPosAndMargins(scaleBarPosition)
-        updateScaleBar()
+        changes.add(Property.SCALEBAR)
     }
 
-    private fun updateScaleBar() {
+    private fun applyScaleBar() {
         mapView.scalebar.updateSettings {
             updateOrnament("scaleBar", mScaleBarSettings, this.toGenericOrnamentSettings())
         }
@@ -1409,25 +1473,25 @@ open class RNMBXMapView(private val mContext: Context, var mManager: RNMBXMapVie
 
     fun setReactAttributionEnabled(attributionEnabled: Boolean?) {
         mAttributionSettings.enabled = attributionEnabled
-        updateAttribution()
+        changes.add(Property.ATTRIBUTION)
     }
 
     fun setReactAttributionViewMargins(margins: ReadableMap) {
         mAttributionSettings.margins = margins
-        updateAttribution()
+        changes.add(Property.ATTRIBUTION)
     }
 
     fun setReactAttributionViewPosition(position: Int) {
         mAttributionSettings.position = position
-        updateAttribution()
+        changes.add(Property.ATTRIBUTION)
     }
 
     fun setReactAttributionPosition(position: ReadableMap?) {
         mAttributionSettings.setPosAndMargins(position)
-        updateAttribution()
+        changes.add(Property.ATTRIBUTION)
     }
 
-    private fun updateAttribution() {
+    private fun applyAttribution() {
         mapView.attribution.updateSettings {
             updateOrnament("attribution", mAttributionSettings, this.toGenericOrnamentSettings())
         }
@@ -1444,25 +1508,25 @@ open class RNMBXMapView(private val mContext: Context, var mManager: RNMBXMapVie
 
     fun setReactLogoEnabled(enabled: Boolean?) {
         mLogoSettings.enabled = enabled
-        updateLogo()
+        changes.add(Property.LOGO)
     }
 
     fun setReactLogoMargins(margins: ReadableMap) {
         mLogoSettings.margins = margins
-        updateLogo()
+        changes.add(Property.LOGO)
     }
 
     fun setReactLogoViewPosition(position: Int) {
         mLogoSettings.position = position
-        updateLogo()
+        changes.add(Property.LOGO)
     }
 
     fun setReactLogoPosition(position: ReadableMap?) {
         mLogoSettings.setPosAndMargins(position)
-        updateLogo()
+        changes.add(Property.LOGO)
     }
 
-    private fun updateLogo() {
+    private fun applyLogo() {
         mapView.logo.updateSettings {
             updateOrnament("logo", mLogoSettings, this.toGenericOrnamentSettings())
         }

@@ -13,10 +13,10 @@ import com.rnmapbox.rnmbx.components.annotation.RNMBXPointAnnotationManager
 import com.rnmapbox.rnmbx.components.annotation.RNMBXPointAnnotationModule
 import com.rnmapbox.rnmbx.components.camera.RNMBXCameraManager
 import com.rnmapbox.rnmbx.components.images.RNMBXImageManager
+import com.rnmapbox.rnmbx.components.images.RNMBXImageModule
 import com.rnmapbox.rnmbx.components.images.RNMBXImagesManager
 import com.rnmapbox.rnmbx.components.location.RNMBXNativeUserLocationManager
 import com.rnmapbox.rnmbx.components.mapview.NativeMapViewModule
-import com.rnmapbox.rnmbx.components.mapview.RNMBXAndroidTextureMapViewManager
 import com.rnmapbox.rnmbx.components.mapview.RNMBXMapViewManager
 import com.rnmapbox.rnmbx.components.styles.RNMBXStyleImportManager
 import com.rnmapbox.rnmbx.components.styles.atmosphere.RNMBXAtmosphereManager
@@ -69,6 +69,7 @@ class RNMBXPackage : TurboReactPackage() {
             RNMBXLogging.REACT_CLASS -> return RNMBXLogging(reactApplicationContext)
             NativeMapViewModule.NAME -> return NativeMapViewModule(reactApplicationContext, getViewTagResolver(reactApplicationContext))
             RNMBXShapeSourceModule.NAME -> return RNMBXShapeSourceModule(reactApplicationContext, getViewTagResolver(reactApplicationContext))
+            RNMBXImageModule.NAME -> return RNMBXImageModule(reactApplicationContext, getViewTagResolver(reactApplicationContext))
             RNMBXPointAnnotationModule.NAME -> return RNMBXPointAnnotationModule(reactApplicationContext, getViewTagResolver(reactApplicationContext))
         }
         return null
@@ -84,7 +85,6 @@ class RNMBXPackage : TurboReactPackage() {
 
         // components
         managers.add(RNMBXCameraManager(reactApplicationContext))
-        managers.add(RNMBXAndroidTextureMapViewManager(reactApplicationContext, getViewTagResolver(reactApplicationContext)))
         managers.add(RNMBXMapViewManager(reactApplicationContext, getViewTagResolver(reactApplicationContext)))
         managers.add(RNMBXStyleImportManager(reactApplicationContext))
 
@@ -182,6 +182,15 @@ class RNMBXPackage : TurboReactPackage() {
             moduleInfos[RNMBXShapeSourceModule.NAME] = ReactModuleInfo(
                 RNMBXShapeSourceModule.NAME,
                 RNMBXShapeSourceModule.NAME,
+                false,  // canOverrideExistingModule
+                false,  // needsEagerInit
+                false,  // hasConstants
+                false,  // isCxxModule
+                isTurboModule // isTurboModule
+            )
+            moduleInfos[RNMBXImageModule.NAME] = ReactModuleInfo(
+                RNMBXImageModule.NAME,
+                RNMBXImageModule.NAME,
                 false,  // canOverrideExistingModule
                 false,  // needsEagerInit
                 false,  // hasConstants

@@ -16,17 +16,17 @@ func hasImage(style: Style, name: String) -> Bool {
 typealias StyleImageMissingPayload = StyleImageMissing
 #endif
 
-class RNMBXImages : UIView, RNMBXMapComponent {
+open class RNMBXImages : UIView, RNMBXMapComponent {
   
-  weak var bridge : RCTBridge! = nil
+  @objc public weak var bridge : RCTBridge! = nil
   
   weak var style: Style? = nil
 
   @objc
-  var onImageMissing: RCTBubblingEventBlock? = nil
+  public var onImageMissing: RCTBubblingEventBlock? = nil
   
   @objc
-  var images : [String:Any] = [:] {
+  public var images : [String:Any] = [:] {
     didSet {
       updateImages(images: images, oldImages: oldValue)
     }
@@ -37,7 +37,7 @@ class RNMBXImages : UIView, RNMBXMapComponent {
   var imageViews: [RNMBXImage] = []
 
   @objc
-  var nativeImages: [Any] = [] {
+  public var nativeImages: [Any] = [] {
     didSet {
       nativeImageInfos = nativeImages.compactMap { decodeImage($0) }
     }
@@ -116,9 +116,9 @@ class RNMBXImages : UIView, RNMBXMapComponent {
         if !sameImage(oldValue: oldImages[name], newValue: images[name]) {
           missingImages[name] = images[name]
         } else {
-          if !hasImage(style: style, name: name) {
+          if hasImage(style: style, name: name) {
             logged("RNMBXImages.addImagePlaceholder") {
-              try? style.addImage(placeholderImage, id: name, stretchX: [], stretchY: [])
+              try style.addImage(placeholderImage, id: name, stretchX: [], stretchY: [])
               missingImages[name] = images[name]
             }
           }
@@ -137,7 +137,7 @@ class RNMBXImages : UIView, RNMBXMapComponent {
     }
   }
   
-  public func addMissingImageToStyle(style: Style, imageName: String) -> Bool {
+  internal func addMissingImageToStyle(style: Style, imageName: String) -> Bool {
     if let nativeImage = nativeImageInfos.first(where: { $0.name == imageName }) {
       addNativeImages(style: style, nativeImages: [nativeImage])
       return true
@@ -150,7 +150,7 @@ class RNMBXImages : UIView, RNMBXMapComponent {
     return false
   }
   
-  public func sendImageMissingEvent(imageName: String, payload: StyleImageMissingPayload) {
+  internal func sendImageMissingEvent(imageName: String, payload: StyleImageMissingPayload) {
     let payload = ["imageKey":imageName]
     let event = RNMBXEvent(type: .imageMissing, payload: payload)
     if let onImageMissing = onImageMissing {
@@ -243,7 +243,7 @@ class RNMBXImages : UIView, RNMBXMapComponent {
   func addNativeImages(style: Style, nativeImages: [NativeImageInfo]) {
     for imageInfo in nativeImages {
       let imageName = imageInfo.name
-      if !hasImage(style: style, name: imageInfo.name) {
+      if  hasImage(style: style, name:imageName) {
         if let image = UIImage(named: imageName) {
           logged("RNMBXImage.addNativeImage: \(imageName)") {
             try style.addImage(image, id: imageName, sdf: imageInfo.sdf,

@@ -8,7 +8,6 @@ class RNMBXImageManager : RCTViewManager {
 
   override func view() -> UIView! {
     let layer = RNMBXImage()
-    layer.bridge = self.bridge
     return layer
   }
 }

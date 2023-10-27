@@ -2236,7 +2236,15 @@
   "Image": {
     "description": "",
     "displayName": "Image",
-    "methods": [],
+    "methods": [
+      {
+        "name": "refresh",
+        "docblock": null,
+        "modifiers": [],
+        "params": [],
+        "returns": null
+      }
+    ],
     "props": [
       {
         "name": "name",
@@ -2378,13 +2386,6 @@
         },
         "default": "none",
         "description": "Gets called when a Layer is trying to render an image whose key is not present in\nany of the `Images` component of the Map.\n*signature:*`(imageKey:string) => void`"
-      },
-      {
-        "name": "id",
-        "required": false,
-        "type": "string",
-        "default": "none",
-        "description": "FIX ME NO DESCRIPTION"
       },
       {
         "name": "children",

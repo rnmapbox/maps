@@ -2,14 +2,7 @@
 #import <folly/dynamic.h>
 #import <react/renderer/components/rnmapbox_maps_specs/Props.h>
 
-// needed for compilation for some reason
-#import <CoreFoundation/CoreFoundation.h>
-#import <CoreLocation/CoreLocation.h>
-
-@interface MapView : UIView
-@end
-
-#import <rnmapbox_maps-Swift.h>
+#import "rnmapbox_maps-Swift.pre.h"
 
 // copied from RCTFollyConvert
 static id RNMBXConvertFollyDynamicToId(const folly::dynamic &dyn)

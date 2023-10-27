@@ -1,7 +1,6 @@
 import React, { memo } from 'react';
-import { requireNativeComponent } from 'react-native';
 
-const NATIVE_MODULE_NAME = 'RNMBXNativeUserLocation';
+import RNMBXNativeUserLocationNativeComponent from '../specs/RNMBXNativeUserLocationNativeComponent';
 
 export type Props = {
   /**
@@ -43,13 +42,8 @@ export type Props = {
   scale?: number;
 };
 
-type NativeProps = Props;
-
-const RNMBXNativeUserLocation =
-  requireNativeComponent<NativeProps>(NATIVE_MODULE_NAME);
-
 const NativeUserLocation = memo((props: Props) => {
-  return <RNMBXNativeUserLocation {...props} />;
+  return <RNMBXNativeUserLocationNativeComponent {...props} />;
 });
 
 export default NativeUserLocation;

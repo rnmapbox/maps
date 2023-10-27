@@ -5,7 +5,7 @@ import {
   Int32,
 } from 'react-native/Libraries/Types/CodegenTypes';
 
-import type { LocalizeLabels, Point, UnsafeMixed } from './codegenUtils';
+import type { Point, UnsafeMixed } from './codegenUtils';
 
 // see https://github.com/rnmapbox/maps/wiki/FabricOptionalProp
 type OptionalProp<T> = UnsafeMixed<T>;
@@ -17,13 +17,21 @@ type GestureSettings = {
   pinchToZoomDecelerationEnabled?: boolean;
 };
 
-type OnCameraChangedEventType = { type: string; payload: string };
+type LocalizeLabels =
+  | {
+      locale: string;
+      layerIds?: string[];
+    }
+  | true;
+
+type OnCameraChangedEventType = {
+  type: string;
+  payload: string;
+};
 type OnPressEventType = { type: string; payload: string };
 type OnMapChangeEventType = { type: string; payload: string };
 
 export interface NativeProps extends ViewProps {
-  onCameraChanged?: DirectEventHandler<OnCameraChangedEventType>;
-
   attributionEnabled?: OptionalProp<boolean>;
   attributionPosition?: UnsafeMixed<any>;
 
@@ -46,7 +54,7 @@ export interface NativeProps extends ViewProps {
 
   requestDisallowInterceptTouchEvent?: OptionalProp<boolean>;
 
-  projection?: OptionalProp<string>;
+  projection?: OptionalProp<'mercator' | 'globe'>;
   localizeLabels?: UnsafeMixed<LocalizeLabels>;
 
   styleURL?: OptionalProp<string>;
@@ -54,6 +62,7 @@ export interface NativeProps extends ViewProps {
   gestureSettings?: UnsafeMixed<GestureSettings>;
 
   // Android only
+  surfaceView?: OptionalProp<boolean>;
   scaleBarViewMargins?: UnsafeMixed<any>;
   attributionViewMargins?: UnsafeMixed<any>;
   attributionViewPosition?: UnsafeMixed<any>;
@@ -64,8 +73,63 @@ export interface NativeProps extends ViewProps {
   onPress?: DirectEventHandler<OnPressEventType>;
   onLongPress?: DirectEventHandler<OnPressEventType>;
   onMapChange?: DirectEventHandler<OnMapChangeEventType>;
+  onCameraChanged?: DirectEventHandler<OnCameraChangedEventType>;
 }
 
 export default codegenNativeComponent<NativeProps>(
   'RNMBXMapView',
 ) as HostComponent<NativeProps>;
+
+// The actually types for callbacks are sometwhat different due to codegen limitations:
+
+type MapState = {
+  properties: {
+    center: GeoJSON.Position;
+    bounds: {
+      ne: GeoJSON.Position;
+      sw: GeoJSON.Position;
+    };
+    zoom: number;
+    heading: number;
+    pitch: number;
+  };
+  gestures: {
+    isGestureActive: boolean;
+  };
+  timestamp?: number;
+};
+type RegionPayload = {
+  zoomLevel: number;
+  heading: number;
+  animated: boolean;
+  isUserInteraction: boolean;
+  visibleBounds: GeoJSON.Position[];
+  pitch: number;
+};
+
+type OnPressEventTypeActual = {
+  type: string;
+  payload: GeoJSON.Feature | string;
+};
+type OnCameraChangedEventTypeActual = {
+  type: string;
+  payload: MapState | string;
+};
+type OnMapChangeEventTypeActual = {
+  type: string;
+  payload:
+    | GeoJSON.Feature<
+        GeoJSON.Point,
+        RegionPayload & { isAnimatingFromUserInteraction: boolean }
+      >
+    | string;
+};
+
+export type NativeMapViewActual = HostComponent<
+  Omit<NativeProps, 'onCameraChanged' | 'onLongPress' | 'onMapChange'> & {
+    onCameraChanged?: DirectEventHandler<OnCameraChangedEventTypeActual>;
+    onLongPress?: DirectEventHandler<OnPressEventTypeActual>;
+    onPress?: DirectEventHandler<OnPressEventTypeActual>;
+    onMapChange?: DirectEventHandler<OnMapChangeEventTypeActual>;
+  }
+>;

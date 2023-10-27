@@ -1,6 +1,6 @@
 
-@objc(RNMBXImagesManager)
-class RNMBXImagesManager : RCTViewManager {
+@objc(RNMBXImagesViewManager)
+class RNMBXImagesViewManager : RCTViewManager {
   @objc
   override static func requiresMainQueueSetup() -> Bool {
     return true

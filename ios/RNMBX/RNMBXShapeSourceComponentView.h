@@ -5,11 +5,9 @@
 #import <React/RCTUIManager.h>
 #import <React/RCTViewComponentView.h>
 
-#import "RNMBXMapFeatureView.h"
-
 NS_ASSUME_NONNULL_BEGIN
 
-@interface RNMBXShapeSourceComponentView : RCTViewComponentView <RNMBXMapFeatureView>
+@interface RNMBXShapeSourceComponentView : RCTViewComponentView
 @end
 
 NS_ASSUME_NONNULL_END

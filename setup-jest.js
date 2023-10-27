@@ -155,6 +155,10 @@ NativeModules.RNMBXShapeSourceModule = {
   getClusterChildren: jest.fn(),
 };
 
+NativeModules.RNMBXImageModule = {
+  refresh: jest.fn(),
+};
+
 NativeModules.RNMBXPointAnnotationModule = {
   refresh: jest.fn(),
 };
