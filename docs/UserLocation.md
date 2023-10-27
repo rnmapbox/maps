@@ -13,64 +13,111 @@ UserLocation
 ## props
 
   
+### androidRenderMode
+
+```tsx
+'normal' | 'compass' | 'gps'
+```
+native/android only render mode
+
+ - normal: just a circle
+ - compass: triangle with heading
+ - gps: large arrow
+
+@platform android
+
+
+  
 ### animated
 
 ```tsx
-FIX ME UNKNOWN TYPE
+boolean
 ```
-FIX ME NO DESCRIPTION
+Whether location icon is animated between updates
 
   _defaults to:_ `true`
 
   
-### visible
+### children
 
 ```tsx
-FIX ME UNKNOWN TYPE
+ReactElement | ReactElement[]
 ```
-FIX ME NO DESCRIPTION
+Custom location icon of type mapbox-gl-native components
 
-  _defaults to:_ `true`
-[User Location Render Mode](../examples/UserLocation/UserLocationRenderMode)
-  
-### showsUserHeadingIndicator
-
-```tsx
-FIX ME UNKNOWN TYPE
-```
-FIX ME NO DESCRIPTION
-
-  _defaults to:_ `false`
-
-  
-### requestsAlwaysUse
-
-```tsx
-FIX ME UNKNOWN TYPE
-```
-FIX ME NO DESCRIPTION
-
-  _defaults to:_ `false`
 
   
 ### minDisplacement
 
 ```tsx
-FIX ME UNKNOWN TYPE
+number
 ```
-FIX ME NO DESCRIPTION
+Minimum amount of movement before GPS location is updated in meters
 
   _defaults to:_ `0`
 [Set Displacement](../examples/UserLocation/SetDisplacement)
   
+### onPress
+
+```tsx
+func
+```
+Callback that is triggered on location icon press
+*signature:*`() =&gt; void`
+
+
+  
+### onUpdate
+
+```tsx
+func
+```
+Callback that is triggered on location update
+*signature:*`(location:Location) =&gt; void`
+
+[User Location Updates](../examples/UserLocation/UserLocationUpdates)
+  
 ### renderMode
 
 ```tsx
-FIX ME UNKNOWN TYPE
+UserLocationRenderMode
 ```
-FIX ME NO DESCRIPTION
+@deprecated use NativeUserLocation component instead of UserLocationRenderMode.Native
+Which render mode to use.
 
   _defaults to:_ `UserLocationRenderMode.Normal`
+[User Location Render Mode](../examples/UserLocation/UserLocationRenderMode)
+  
+### requestsAlwaysUse
+
+```tsx
+boolean
+```
+Request the always location permission, and listen to the location even when the app is in background
+
+@platform ios
+
+  _defaults to:_ `false`
+
+  
+### showsUserHeadingIndicator
+
+```tsx
+boolean
+```
+Show or hide small arrow which indicates direction the device is pointing relative to north.
+
+  _defaults to:_ `false`
+
+  
+### visible
+
+```tsx
+boolean
+```
+Whether location icon is visible
+
+  _defaults to:_ `true`
 [User Location Render Mode](../examples/UserLocation/UserLocationRenderMode)
   
 

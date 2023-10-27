@@ -28,6 +28,18 @@ public class RNMBXNativeUserLocationManagerDelegate<T extends View, U extends Ba
       case "iosShowsUserHeadingIndicator":
         mViewManager.setIosShowsUserHeadingIndicator(view, new DynamicFromObject(value));
         break;
+      case "bearingImage":
+        mViewManager.setBearingImage(view, new DynamicFromObject(value));
+        break;
+      case "shadowImage":
+        mViewManager.setShadowImage(view, new DynamicFromObject(value));
+        break;
+      case "topImage":
+        mViewManager.setTopImage(view, new DynamicFromObject(value));
+        break;
+      case "scale":
+        mViewManager.setScale(view, new DynamicFromObject(value));
+        break;
       default:
         super.setProperty(view, propName, value);
     }

@@ -62,11 +62,37 @@ export enum UserLocationRenderMode {
   Normal = 'normal',
 }
 
-type SharedProps = {
+type Props = {
+  /**
+   * native/android only render mode
+   *
+   *  - normal: just a circle
+   *  - compass: triangle with heading
+   *  - gps: large arrow
+   *
+   * @platform android
+   */
+  androidRenderMode?: 'normal' | 'compass' | 'gps';
+
+  /**
+   * Whether location icon is animated between updates
+   */
+  animated?: boolean;
+
+  /**
+   * Custom location icon of type mapbox-gl-native components
+   */
+  children?: ReactElement | ReactElement[];
+
   /**
    * Minimum amount of movement before GPS location is updated in meters
    */
   minDisplacement?: number;
+
+  /**
+   * Callback that is triggered on location icon press
+   */
+  onPress?: () => void;
 
   /**
    * Callback that is triggered on location update
@@ -74,6 +100,7 @@ type SharedProps = {
   onUpdate?: (location: Location) => void;
 
   /**
+   * @deprecated use NativeUserLocation component instead of UserLocationRenderMode.Native
    * Which render mode to use.
    */
   renderMode?: UserLocationRenderMode;
@@ -95,68 +122,6 @@ type SharedProps = {
    */
   visible?: boolean;
 };
-
-type NativeProps = SharedProps & {
-  /**
-   * native render mode, can be customized using nativeTopImage, nativeBearingImage & nativeShadowImage props
-   */
-  renderMode: UserLocationRenderMode.Native;
-
-  /**
-   * native/android only render mode
-   *
-   *  - normal: just a circle
-   *  - compass: triangle with heading
-   *  - gps: large arrow
-   *
-   * @platform android
-   */
-  androidRenderMode?: 'normal' | 'compass' | 'gps';
-
-  /**
-   * The image to use as the top layer for the location indicator when render mode is set to UserLocationRenderMode.Native
-   */
-  nativeTopImage?: string;
-
-  /**
-   * The image used as the middle of the location indicator when render mode is set to UserLocationRenderMode.Native
-   */
-  nativeBearingImage?: string;
-
-  /**
-   * The image that acts as a background of the location indicator when render mode is set to UserLocationRenderMode.Native
-   */
-  nativeShadowImage?: string;
-
-  /**
-   * The size of the images, as a scale factor applied to the size of the specified image when render mode is set to UserLocationRenderMode.Native
-   */
-  nativeScale?: number;
-};
-
-type NormalProps = SharedProps & {
-  /**
-   * normal render mode using Annotation and supporting child components
-   */
-  renderMode: UserLocationRenderMode.Normal;
-
-  /**
-   * Whether location icon is animated between updates
-   */
-  animated?: boolean;
-
-  /**
-   * Custom location icon of type mapbox-gl-native components
-   */
-  children?: ReactElement | ReactElement[];
-
-  /**
-   * Callback that is triggered on location icon press
-   */
-  onPress?: () => void;
-};
-
-type Props = NormalProps | NativeProps;
 
 type UserLocationState = {
   shouldShowUserLocation: false;
@@ -287,33 +252,19 @@ class UserLocation extends React.Component<Props, UserLocationState> {
   }
 
   _renderNative() {
-    if (this.props.renderMode === UserLocationRenderMode.Normal) {
-      return null;
-    }
-
-    const {
-      androidRenderMode,
-      showsUserHeadingIndicator,
-      nativeBearingImage,
-      nativeScale,
-      nativeShadowImage,
-      nativeTopImage,
-    } = this.props;
+    const { androidRenderMode, showsUserHeadingIndicator } = this.props;
 
     const props = {
       androidRenderMode,
       iosShowsUserHeadingIndicator: showsUserHeadingIndicator,
-      bearingImage: nativeBearingImage,
-      scale: nativeScale,
-      shadowImage: nativeShadowImage,
-      topImage: nativeTopImage,
     };
     return <NativeUserLocation {...props} />;
   }
 
   render() {
     const { heading, coordinates } = this.state;
-    const { visible, showsUserHeadingIndicator } = this.props;
+    const { children, visible, showsUserHeadingIndicator, onPress, animated } =
+      this.props;
 
     if (!visible) {
       return null;
@@ -326,8 +277,6 @@ class UserLocation extends React.Component<Props, UserLocationState> {
     if (!coordinates) {
       return null;
     }
-
-    const { children, onPress, animated } = this.props;
 
     return (
       <Annotation

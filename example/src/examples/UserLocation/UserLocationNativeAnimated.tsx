@@ -3,9 +3,8 @@ import { SafeAreaView } from 'react-native';
 import {
   MapView,
   Camera,
-  UserLocation,
-  UserLocationRenderMode,
   UserTrackingMode,
+  NativeUserLocation,
 } from '@rnmapbox/maps';
 import {
   Feature,
@@ -19,13 +18,6 @@ import { DEFAULT_CENTER_COORDINATE, SF_OFFICE_COORDINATE } from '../../utils';
 import { ExampleWithMetadata } from '../common/ExampleMetadata';
 
 const styles = { matchParent: { flex: 1 } };
-const userLocationProps: UserLocation['props'] = {
-  renderMode: UserLocationRenderMode.Native,
-  showsUserHeadingIndicator: true,
-  androidRenderMode: 'compass',
-  visible: true,
-  nativeTopImage: 'pin',
-};
 const SF_ZOO_COORDINATE = [-122.505412, 37.737463];
 
 const UserLocationNativeAnimated = () => {
@@ -62,6 +54,8 @@ const UserLocationNativeAnimated = () => {
     directionsClient
       .getDirections(reqOptions)
       .send()
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      /* @ts-ignore */
       .then((res) => {
         route = makeLineString(res.body.routes[0].geometry.coordinates);
         setPosition();
@@ -87,7 +81,11 @@ const UserLocationNativeAnimated = () => {
           followUserMode={UserTrackingMode.Follow}
           followZoomLevel={14}
         />
-        <UserLocation {...userLocationProps} />
+        <NativeUserLocation
+          iosShowsUserHeadingIndicator={true}
+          androidRenderMode="compass"
+          topImageAsset="pin"
+        />
       </MapView>
     </SafeAreaView>
   );

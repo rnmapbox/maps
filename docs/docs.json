@@ -4164,25 +4164,25 @@
         "description": "iOS only. A Boolean value indicating whether the user location annotation may display a permanent heading indicator.\n\n@platform ios"
       },
       {
-        "name": "topImage",
+        "name": "topImageAsset",
         "required": false,
         "type": "string",
         "default": "none",
-        "description": "The image to use as the top layer for the location indicator."
+        "description": "The name of native image asset to use as the top layer for the location indicator. Native asset are under Image.xcassets on iOS and the drawables directory on android"
       },
       {
-        "name": "bearingImage",
+        "name": "bearingImageAsset",
         "required": false,
         "type": "string",
         "default": "none",
-        "description": "The image used as the middle of the location indicator."
+        "description": "The name of native image asset to use as the middle layer for the location indicator. Native asset are under Image.xcassets on iOS and the drawables directory on android"
       },
       {
-        "name": "shadowImage",
+        "name": "shadowImageAsset",
         "required": false,
         "type": "string",
         "default": "none",
-        "description": "The image that acts as a background of the location indicator."
+        "description": "The name of native image asset to use as the background0 for the location indicator. Native asset are under Image.xcassets on iOS and the drawables directory on android"
       },
       {
         "name": "scale",
@@ -4190,6 +4190,13 @@
         "type": "number",
         "default": "none",
         "description": "The size of the images, as a scale factor applied to the size of the specified image."
+      },
+      {
+        "name": "visible",
+        "required": false,
+        "type": "boolean",
+        "default": "none",
+        "description": "Whether location icon is visible"
       }
     ],
     "fileNameWithExt": "NativeUserLocation.tsx",
@@ -7274,46 +7281,80 @@
     ],
     "props": [
       {
+        "name": "androidRenderMode",
+        "required": false,
+        "type": "'normal' \\| 'compass' \\| 'gps'",
+        "default": "none",
+        "description": "native/android only render mode\n\n - normal: just a circle\n - compass: triangle with heading\n - gps: large arrow\n\n@platform android"
+      },
+      {
         "name": "animated",
         "required": false,
-        "type": "FIX ME UNKNOWN TYPE",
+        "type": "boolean",
         "default": "true",
-        "description": "FIX ME NO DESCRIPTION"
+        "description": "Whether location icon is animated between updates"
       },
       {
-        "name": "visible",
+        "name": "children",
         "required": false,
-        "type": "FIX ME UNKNOWN TYPE",
-        "default": "true",
-        "description": "FIX ME NO DESCRIPTION"
-      },
-      {
-        "name": "showsUserHeadingIndicator",
-        "required": false,
-        "type": "FIX ME UNKNOWN TYPE",
-        "default": "false",
-        "description": "FIX ME NO DESCRIPTION"
-      },
-      {
-        "name": "requestsAlwaysUse",
-        "required": false,
-        "type": "FIX ME UNKNOWN TYPE",
-        "default": "false",
-        "description": "FIX ME NO DESCRIPTION"
+        "type": "ReactElement \\| ReactElement[]",
+        "default": "none",
+        "description": "Custom location icon of type mapbox-gl-native components"
       },
       {
         "name": "minDisplacement",
         "required": false,
-        "type": "FIX ME UNKNOWN TYPE",
+        "type": "number",
         "default": "0",
-        "description": "FIX ME NO DESCRIPTION"
+        "description": "Minimum amount of movement before GPS location is updated in meters"
+      },
+      {
+        "name": "onPress",
+        "required": false,
+        "type": {
+          "name": "func",
+          "funcSignature": "() => void"
+        },
+        "default": "none",
+        "description": "Callback that is triggered on location icon press\n*signature:*`() => void`"
+      },
+      {
+        "name": "onUpdate",
+        "required": false,
+        "type": {
+          "name": "func",
+          "funcSignature": "(location:Location) => void"
+        },
+        "default": "none",
+        "description": "Callback that is triggered on location update\n*signature:*`(location:Location) => void`"
       },
       {
         "name": "renderMode",
         "required": false,
-        "type": "FIX ME UNKNOWN TYPE",
+        "type": "UserLocationRenderMode",
         "default": "UserLocationRenderMode.Normal",
-        "description": "FIX ME NO DESCRIPTION"
+        "description": "@deprecated use NativeUserLocation component instead of UserLocationRenderMode.Native\nWhich render mode to use."
+      },
+      {
+        "name": "requestsAlwaysUse",
+        "required": false,
+        "type": "boolean",
+        "default": "false",
+        "description": "Request the always location permission, and listen to the location even when the app is in background\n\n@platform ios"
+      },
+      {
+        "name": "showsUserHeadingIndicator",
+        "required": false,
+        "type": "boolean",
+        "default": "false",
+        "description": "Show or hide small arrow which indicates direction the device is pointing relative to north."
+      },
+      {
+        "name": "visible",
+        "required": false,
+        "type": "boolean",
+        "default": "true",
+        "description": "Whether location icon is visible"
       }
     ],
     "fileNameWithExt": "UserLocation.tsx",
