@@ -54,7 +54,7 @@ using namespace facebook::react;
 
 - (void)updateProps:(const Props::Shared &)props oldProps:(const Props::Shared &)oldProps
 {
-  const auto &newProps = *std::static_pointer_cast<const RNMBXTerrainProps>(props);
+  const auto &newProps = static_cast<const RNMBXTerrainProps &>(*props);
 
     id sourceID = RNMBXConvertFollyDynamicToId(newProps.sourceID);
     if (sourceID != nil) {

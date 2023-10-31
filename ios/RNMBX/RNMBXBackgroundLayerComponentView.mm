@@ -48,7 +48,7 @@ using namespace facebook::react;
 
 - (void)updateProps:(const Props::Shared &)props oldProps:(const Props::Shared &)oldProps
 {
-  const auto &newProps = *std::static_pointer_cast<const RNMBXBackgroundLayerProps>(props);
+  const auto &newProps = static_cast<const RNMBXBackgroundLayerProps &>(*props);
   RNMBXSetCommonLayerPropsWithoutSourceID(newProps, _view);
 
 

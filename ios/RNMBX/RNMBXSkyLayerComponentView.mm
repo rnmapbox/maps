@@ -48,7 +48,7 @@ using namespace facebook::react;
 
 - (void)updateProps:(const Props::Shared &)props oldProps:(const Props::Shared &)oldProps
 {
-  const auto &newProps = *std::static_pointer_cast<const RNMBXSkyLayerProps>(props);
+  const auto &newProps = static_cast<const RNMBXSkyLayerProps &>(*props);
   RNMBXSetCommonLayerPropsWithoutSourceID(newProps, _view);
     
   [super updateProps:props oldProps:oldProps];

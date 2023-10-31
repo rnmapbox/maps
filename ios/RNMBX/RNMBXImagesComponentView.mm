@@ -68,7 +68,7 @@ using namespace facebook::react;
 
 - (void)updateProps:(const Props::Shared &)props oldProps:(const Props::Shared &)oldProps
 {
-  const auto &newProps = *std::static_pointer_cast<const RNMBXImagesProps>(props);
+  const auto &newProps = static_cast<const RNMBXImagesProps &>(*props);
     id images = RNMBXConvertFollyDynamicToId(newProps.images);
     if (images != nil) {
         _view.images = images;
