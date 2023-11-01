@@ -116,7 +116,7 @@ open class RNMBXImages : UIView, RNMBXMapComponent {
         if !sameImage(oldValue: oldImages[name], newValue: images[name]) {
           missingImages[name] = images[name]
         } else {
-          if hasImage(style: style, name: name) {
+          if !hasImage(style: style, name: name) {
             logged("RNMBXImages.addImagePlaceholder") {
               try style.addImage(placeholderImage, id: name, stretchX: [], stretchY: [])
               missingImages[name] = images[name]
@@ -243,7 +243,7 @@ open class RNMBXImages : UIView, RNMBXMapComponent {
   func addNativeImages(style: Style, nativeImages: [NativeImageInfo]) {
     for imageInfo in nativeImages {
       let imageName = imageInfo.name
-      if  hasImage(style: style, name:imageName) {
+      if  !hasImage(style: style, name: imageName) {
         if let image = UIImage(named: imageName) {
           logged("RNMBXImage.addNativeImage: \(imageName)") {
             try style.addImage(image, id: imageName, sdf: imageInfo.sdf,
