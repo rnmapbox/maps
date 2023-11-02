@@ -70,7 +70,7 @@ public class RNMBXMarkerView: UIView, RNMBXMapComponent {
   // MARK: - Derived variables
   
   var annotationManager: ViewAnnotationManager? {
-    self.map?.viewAnnotations
+    self.map?.mapView?.viewAnnotations
   }
 
   var point: Point? {
