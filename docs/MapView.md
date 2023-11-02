@@ -120,7 +120,7 @@ Enable/Disable attribution on map. For iOS you need to add MGLMapboxMetricsEnabl
 to your Info.plist
 
   _defaults to:_ `true`
-
+[Ornaments](../examples/Map/Ornaments)
   
 ### attributionPosition
 
@@ -129,7 +129,7 @@ OrnamentPositonProp
 ```
 Adds attribution offset, e.g. `{top: 8, left: 8}` will put attribution button in top-left corner of the map. By default on Android, the attribution with information icon (i) will be on the bottom left, while on iOS the mapbox logo will be on bottom left with information icon (i) on bottom right. Read more about mapbox attribution [here](https://docs.mapbox.com/help/getting-started/attribution/)
 
-
+[Ornaments](../examples/Map/Ornaments)
   
 ### tintColor
 
@@ -148,7 +148,7 @@ boolean
 Enable/Disable the logo on the map.
 
   _defaults to:_ `true`
-
+[Ornaments](../examples/Map/Ornaments)
   
 ### logoPosition
 
@@ -157,7 +157,7 @@ OrnamentPositonProp
 ```
 Adds logo offset, e.g. `{top: 8, left: 8}` will put the logo in top-left corner of the map
 
-
+[Ornaments](../examples/Map/Ornaments)
   
 ### compassEnabled
 
@@ -167,7 +167,7 @@ boolean
 Enable/Disable the compass from appearing on the map
 
   _defaults to:_ `false`
-
+[Ornaments](../examples/Map/Ornaments)
   
 ### compassFadeWhenNorth
 
@@ -177,7 +177,7 @@ boolean
 [`mapbox` (v10) implementation only] Enable/Disable if the compass should fade out when the map is pointing north
 
   _defaults to:_ `false`
-
+[Ornaments](../examples/Map/Ornaments)
   
 ### compassPosition
 
@@ -186,7 +186,7 @@ OrnamentPositonProp
 ```
 [`mapbox` (v10) implementation only] Adds compass offset, e.g. `{top: 8, left: 8}` will put the compass in top-left corner of the map
 
-
+[Ornaments](../examples/Map/Ornaments)
   
 ### compassViewPosition
 
@@ -216,7 +216,7 @@ string
 ```
 [iOS, `mapbox` (v10) implementation only] A string referencing an image key. Requires an `Images` component.
 
-
+[Ornaments](../examples/Map/Ornaments)
   
 ### scaleBarEnabled
 
@@ -226,7 +226,7 @@ boolean
 [`mapbox` (v10) implementation only] Enable/Disable the scale bar from appearing on the map
 
   _defaults to:_ `true`
-
+[Ornaments](../examples/Map/Ornaments)
   
 ### scaleBarPosition
 
@@ -235,7 +235,7 @@ OrnamentPositonProp
 ```
 [`mapbox` (v10) implementation only] Adds scale bar offset, e.g. `{top: 8, left: 8}` will put the scale bar in top-left corner of the map
 
-
+[Ornaments](../examples/Map/Ornaments)
   
 ### surfaceView
 
@@ -272,7 +272,7 @@ when embedded into a scroll view
 [`mapbox` (v10) implementation only]
 Set map's label locale, e.g. { "locale": "es" } will localize labels to Spanish, { "locale": "current" } will localize labels to system locale.
 
-
+[Localize Labels](../examples/Map/LocalizeLabels)
   
 ### gestureSettings
 
@@ -311,7 +311,7 @@ func
 Map press listener, gets called when a user presses the map
 *signature:*`(feature:GeoJSON.Feature) =&gt; void`
 
-
+[Show Click](../examples/Map/ShowClick)
   
 ### onLongPress
 
@@ -335,7 +335,7 @@ This event is triggered whenever the currently displayed map region is about to 
 @param {PointFeature} feature - The geojson point feature at the camera center, properties contains zoomLevel, visibleBounds
 *signature:*`(feature:GeoJSON.Feature) =&gt; void`
 
-
+[Show Region Did Change](../examples/Map/ShowRegionDidChange)
   
 ### onRegionIsChanging
 
@@ -347,7 +347,7 @@ This event is triggered whenever the currently displayed map region is changing.
 @param {PointFeature} feature - The geojson point feature at the camera center, properties contains zoomLevel, visibleBounds
 *signature:*`(feature:GeoJSON.Feature) =&gt; void`
 
-
+[Show Region Did Change](../examples/Map/ShowRegionDidChange)
   
 ### onRegionDidChange
 
@@ -359,7 +359,7 @@ This event is triggered whenever the currently displayed map region finished cha
 @param {PointFeature} feature - The geojson point feature at the camera center, properties contains zoomLevel, visibleBounds
 *signature:*`(feature:GeoJSON.Feature) =&gt; void`
 
-
+[Show Region Did Change](../examples/Map/ShowRegionDidChange)
   
 ### onCameraChanged
 

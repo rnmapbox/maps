@@ -65,7 +65,7 @@ func
 Callback that is triggered on location icon press
 *signature:*`() =&gt; void`
 
-
+[Show Map](../examples/Map/ShowMap)
   
 ### onUpdate
 

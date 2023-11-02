@@ -1,13 +1,10 @@
 import React, { useState } from 'react';
-import MapboxGL from '@rnmapbox/maps';
+import { MapView, Camera, Images } from '@rnmapbox/maps';
 import { Button, StyleSheet, Text, ImageSourcePropType } from 'react-native';
 import { Divider } from '@rneui/base';
 
-import sheet from '../../styles/sheet';
-import Page from '../common/Page';
 import Bubble from '../common/Bubble';
-import { Images } from '../../../../src';
-import { BaseExampleProps } from '../common/BaseExamplePropTypes';
+import { ExampleWithMetadata } from '../common/ExampleMetadata'; // exclude-from-doc
 
 type CompassImage = 'compass1' | 'compass2';
 const images: Record<CompassImage, ImageSourcePropType> = {
@@ -63,7 +60,7 @@ const OrnamentButtons = ({
   </>
 );
 
-const Ornaments = (props: BaseExampleProps) => {
+const Ornaments = () => {
   const [visibility, setVisibility] = useState({
     [OrnamentType.Logo]: undefined,
     [OrnamentType.Attribution]: undefined,
@@ -118,9 +115,9 @@ const Ornaments = (props: BaseExampleProps) => {
   };
 
   return (
-    <Page {...props}>
-      <MapboxGL.MapView
-        style={sheet.matchParent}
+    <>
+      <MapView
+        style={styles.matchParent}
         logoEnabled={visibility[OrnamentType.Logo]}
         logoPosition={POSITIONS[position[OrnamentType.Logo]]}
         attributionEnabled={visibility[OrnamentType.Attribution]}
@@ -133,8 +130,8 @@ const Ornaments = (props: BaseExampleProps) => {
         scaleBarPosition={POSITIONS[position[OrnamentType.ScaleBar]]}
       >
         <Images images={images} />
-        <MapboxGL.Camera />
-      </MapboxGL.MapView>
+        <Camera />
+      </MapView>
 
       <Bubble style={styles.bubble}>
         <Text>Logo</Text>
@@ -203,7 +200,7 @@ const Ornaments = (props: BaseExampleProps) => {
           onPressPosition={handlePressPosition}
         />
       </Bubble>
-    </Page>
+    </>
   );
 };
 
@@ -219,6 +216,29 @@ const styles = StyleSheet.create({
     padding: 10,
     marginBottom: 96,
   },
+  matchParent: {
+    flex: 1,
+  },
 });
 
 export default Ornaments;
+
+const metadata: ExampleWithMetadata['metadata'] = {
+  title: 'Ornaments',
+  tags: [
+    'MapView#logoEnabled',
+    'MapView#logoPosition',
+    'MapView#attributionEnabled',
+    'MapView#attributionPosition',
+    'MapView#compassEnabled',
+    'MapView#compassPosition',
+    'MapView#compassImage',
+    'MapView#compassFadeWhenNorth',
+    'MapView#scaleBarEnabled',
+    'MapView#scaleBarPosition',
+  ],
+  docs: `
+Customize ornaments of the map(logo, compass, scalebar, attribution)
+`,
+};
+Ornaments.metadata = metadata;

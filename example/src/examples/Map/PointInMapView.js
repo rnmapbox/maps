@@ -1,9 +1,7 @@
 import React from 'react';
 import { Text } from 'react-native';
-import MapboxGL from '@rnmapbox/maps';
+import { MapView, Camera } from '@rnmapbox/maps';
 
-import BaseExamplePropTypes from '../common/BaseExamplePropTypes';
-import Page from '../common/Page';
 import Bubble from '../common/Bubble';
 
 const styles = {
@@ -11,10 +9,6 @@ const styles = {
 };
 
 class PointInMapView extends React.Component {
-  static propTypes = {
-    ...BaseExamplePropTypes,
-  };
-
   constructor(props) {
     super(props);
 
@@ -43,22 +37,31 @@ class PointInMapView extends React.Component {
 
   render() {
     return (
-      <Page {...this.props}>
-        <MapboxGL.MapView
+      <>
+        <MapView
           ref={(c) => (this._map = c)}
           onPress={this.onPress}
           style={styles.mapView}
         >
-          <MapboxGL.Camera
-            zoomLevel={9}
-            centerCoordinate={[-73.970895, 40.723279]}
-          />
-        </MapboxGL.MapView>
+          <Camera zoomLevel={9} centerCoordinate={[-73.970895, 40.723279]} />
+        </MapView>
 
         <Bubble>{this.renderPointInView()}</Bubble>
-      </Page>
+      </>
     );
   }
 }
 
 export default PointInMapView;
+
+/* end-example-doc */
+
+/** @type ExampleWithMetadata['metadata'] */
+const metadata = {
+  title: 'Point in Map View',
+  tags: ['MapView#pointInMapView'],
+  docs: `
+Converts a coordinate to a point in the current view.
+`,
+};
+PointInMapView.metadata = metadata;

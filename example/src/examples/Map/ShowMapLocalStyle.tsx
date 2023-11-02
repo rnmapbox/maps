@@ -1,20 +1,19 @@
 import React, { useEffect } from 'react';
 import { Alert } from 'react-native';
-import MapboxGL from '@rnmapbox/maps';
+import Mapbox from '@rnmapbox/maps';
 
 import sheet from '../../styles/sheet';
-import Page from '../common/Page';
-import { BaseExampleProps } from '../common/BaseExamplePropTypes';
+import { ExampleWithMetadata } from '../common/ExampleMetadata'; // exclude-from-doc
 
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const style = JSON.stringify(require('../../assets/map-styleURL-style.json'));
 
-const ShowMap = (props: BaseExampleProps) => {
+const ShowMap = () => {
   useEffect(() => {
-    MapboxGL.locationManager.start();
+    Mapbox.locationManager.start();
 
     return (): void => {
-      MapboxGL.locationManager.stop();
+      Mapbox.locationManager.stop();
     };
   }, []);
 
@@ -23,14 +22,23 @@ const ShowMap = (props: BaseExampleProps) => {
   };
 
   return (
-    <Page {...props}>
-      <MapboxGL.MapView styleURL={style} style={sheet.matchParent}>
-        <MapboxGL.Camera followZoomLevel={3} followUserLocation />
+    <Mapbox.MapView styleURL={style} style={sheet.matchParent}>
+      <Mapbox.Camera followZoomLevel={3} followUserLocation />
 
-        <MapboxGL.UserLocation onPress={onUserMarkerPress} />
-      </MapboxGL.MapView>
-    </Page>
+      <Mapbox.UserLocation onPress={onUserMarkerPress} />
+    </Mapbox.MapView>
   );
 };
 
 export default ShowMap;
+
+/* end-example-doc */
+
+const metadata: ExampleWithMetadata['metadata'] = {
+  title: 'Show Map Local Style',
+  tags: [],
+  docs: `
+Customize ornaments of the map(logo, compass, scalebar, attribution)
+`,
+};
+ShowMap.metadata = metadata;

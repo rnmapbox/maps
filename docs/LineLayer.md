@@ -31,7 +31,7 @@ boolean
 ```
 The id refers to en existing layer in the style. Does not create a new layer.
 
-
+[Show and hide layer](../examples/Map/ShowAndHideLayer)
   
 ### sourceID
 

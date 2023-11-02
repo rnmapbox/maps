@@ -145,7 +145,7 @@ number
 ```
 The zoom level used when following the user location.
 
-
+[Show Map](../examples/Map/ShowMap)
   
 ### followPitch
 

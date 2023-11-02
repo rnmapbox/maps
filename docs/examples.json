@@ -23,6 +23,22 @@
       },
       {
         "metadata": {
+          "title": "Custom Icon Native Asset",
+          "tags": [
+            "ShapeSource",
+            "ShapeSource#onPress",
+            "SymbolLayer",
+            "Images",
+            "SymbolLayer#iconImage"
+          ],
+          "docs": "\nRenders a symbol layer with custom icon (native asset) defined using the Images component. Clicking a location on a map add a new icon.\n"
+        },
+        "fullPath": "example/src/examples/SymbolCircleLayer/CustomIconNativeAsset.tsx",
+        "relPath": "SymbolCircleLayer/CustomIconNativeAsset.tsx",
+        "name": "CustomIconNativeAsset"
+      },
+      {
+        "metadata": {
           "title": "Data driven circle colors",
           "tags": [
             "VectorSource",
@@ -160,6 +176,222 @@
         "fullPath": "example/src/examples/UserLocation/UserLocationUpdates.tsx",
         "relPath": "UserLocation/UserLocationUpdates.tsx",
         "name": "UserLocationUpdates"
+      }
+    ]
+  },
+  {
+    "groupName": "Map",
+    "metadata": {
+      "title": "Map"
+    },
+    "examples": [
+      {
+        "metadata": {
+          "title": "Change Layer Color",
+          "tags": [
+            "FillLayer#existing",
+            "FillLayer#fillColor"
+          ],
+          "docs": "\nChange style of a layer part of the map on the fly.\n"
+        },
+        "fullPath": "example/src/examples/Map/ChangeLayerColor.js",
+        "relPath": "Map/ChangeLayerColor.js",
+        "name": "ChangeLayerColor"
+      },
+      {
+        "metadata": {
+          "title": "Change Offline Region",
+          "tags": [
+            "offlineManage#createPack"
+          ],
+          "docs": "\nCreates offline pack and montiors them\n"
+        },
+        "fullPath": "example/src/examples/Map/CreateOfflineRegion.js",
+        "relPath": "Map/CreateOfflineRegion.js",
+        "name": "CreateOfflineRegion"
+      },
+      {
+        "metadata": {
+          "title": "Dynamic URL",
+          "tags": [
+            "ShapeSource#url"
+          ],
+          "docs": "\nChange shape source URL on press of the bubble.\n"
+        },
+        "fullPath": "example/src/examples/Map/DynamicUrl.tsx",
+        "relPath": "Map/DynamicUrl.tsx",
+        "name": "DynamicUrl"
+      },
+      {
+        "metadata": {
+          "title": "Localize Labels",
+          "tags": [
+            "MapView#localizeLabels"
+          ],
+          "docs": "\nLocalize labels to a specific locale(es).\n"
+        },
+        "fullPath": "example/src/examples/Map/LocalizeLabels.tsx",
+        "relPath": "Map/LocalizeLabels.tsx",
+        "name": "LocalizeLabels"
+      },
+      {
+        "metadata": {
+          "title": "Map and React Navigation",
+          "tags": [
+            "MapView"
+          ],
+          "docs": "\nDemonstrates various ways to embedd map via (Navigation, Page, modal, etc)\n"
+        },
+        "fullPath": "example/src/examples/Map/MapAndRNNavigation.js",
+        "relPath": "Map/MapAndRNNavigation.js",
+        "name": "MapAndRNNavigation"
+      },
+      {
+        "metadata": {
+          "title": "Offline Example",
+          "tags": [
+            "offlineManager#createPack",
+            "offlineManager#getPack",
+            "offlineManager#getPacks"
+          ],
+          "docs": "\nDemonstates basic use of offlineManager api.\n"
+        },
+        "fullPath": "example/src/examples/Map/OfflineExample.tsx",
+        "relPath": "Map/OfflineExample.tsx",
+        "name": "OfflineExample"
+      },
+      {
+        "metadata": {
+          "title": "Ornaments",
+          "tags": [
+            "MapView#logoEnabled",
+            "MapView#logoPosition",
+            "MapView#attributionEnabled",
+            "MapView#attributionPosition",
+            "MapView#compassEnabled",
+            "MapView#compassPosition",
+            "MapView#compassImage",
+            "MapView#compassFadeWhenNorth",
+            "MapView#scaleBarEnabled",
+            "MapView#scaleBarPosition"
+          ],
+          "docs": "\nCustomize ornaments of the map(logo, compass, scalebar, attribution)\n"
+        },
+        "fullPath": "example/src/examples/Map/Ornaments.tsx",
+        "relPath": "Map/Ornaments.tsx",
+        "name": "Ornaments"
+      },
+      {
+        "metadata": {
+          "title": "Point in Map View",
+          "tags": [
+            "MapView#pointInMapView"
+          ],
+          "docs": "\nConverts a coordinate to a point in the current view.\n"
+        },
+        "fullPath": "example/src/examples/Map/PointInMapView.js",
+        "relPath": "Map/PointInMapView.js",
+        "name": "PointInMapView"
+      },
+      {
+        "metadata": {
+          "title": "Show and hide layer",
+          "tags": [
+            "FillLayer#existing",
+            "LineLayer#existing",
+            "FillLayer#visibility",
+            "FillLayer#visibility"
+          ],
+          "docs": "\nChanges visibility of layers part of the map\n"
+        },
+        "fullPath": "example/src/examples/Map/ShowAndHideLayer.js",
+        "relPath": "Map/ShowAndHideLayer.js",
+        "name": "ShowAndHideLayer"
+      },
+      {
+        "metadata": {
+          "title": "Show Click",
+          "tags": [
+            "MapView#onPress"
+          ],
+          "docs": "\nDemonstates onPress event and how to get the screen point of the click.\n"
+        },
+        "fullPath": "example/src/examples/Map/ShowClick.js",
+        "relPath": "Map/ShowClick.js",
+        "name": "ShowClick"
+      },
+      {
+        "metadata": {
+          "title": "Show Map",
+          "tags": [
+            "Camera#followZoomLevel",
+            "UserLocation#onPress"
+          ],
+          "docs": "\nShows a map with the user location annotation enabled, and on press of the user location annotation, an alert is shown.\n"
+        },
+        "fullPath": "example/src/examples/Map/ShowMap.tsx",
+        "relPath": "Map/ShowMap.tsx",
+        "name": "ShowMap"
+      },
+      {
+        "metadata": {
+          "title": "Show Map Local Style",
+          "tags": [],
+          "docs": "\nCustomize ornaments of the map(logo, compass, scalebar, attribution)\n"
+        },
+        "fullPath": "example/src/examples/Map/ShowMapLocalStyle.tsx",
+        "relPath": "Map/ShowMapLocalStyle.tsx",
+        "name": "ShowMapLocalStyle"
+      },
+      {
+        "metadata": {
+          "title": "Show Region Did Change",
+          "tags": [
+            "MapView#onRegionWillChange",
+            "MapView#onRegionIsChanging",
+            "MapView#onRegionDidChange"
+          ],
+          "docs": "\nDemonstates MapView region change events.\n"
+        },
+        "fullPath": "example/src/examples/Map/ShowRegionDidChange.js",
+        "relPath": "Map/ShowRegionDidChange.js",
+        "name": "ShowRegionDidChange"
+      },
+      {
+        "metadata": {
+          "title": "Source Layer Visibility",
+          "tags": [
+            "MapView#setSoruceVisibility"
+          ],
+          "docs": "\nChanges visibility of layers using a source in the map\n"
+        },
+        "fullPath": "example/src/examples/Map/SourceLayerVisibility.js",
+        "relPath": "Map/SourceLayerVisibility.js",
+        "name": "SourceLayerVisibility"
+      },
+      {
+        "metadata": {
+          "title": "Style JSON",
+          "tags": [
+            "Style#json"
+          ],
+          "docs": "\nChange style of a MapView on the fly.\n"
+        },
+        "fullPath": "example/src/examples/Map/StyleJson.js",
+        "relPath": "Map/StyleJson.js",
+        "name": "StyleJson"
+      },
+      {
+        "metadata": {
+          "title": "Two Map Views",
+          "tags": [
+            "MapView"
+          ],
+          "docs": "\nDisplay two map views side by side\n"
+        },
+        "fullPath": "example/src/examples/Map/TwoByTwo.js",
+        "relPath": "Map/TwoByTwo.js",
+        "name": "TwoByTwo"
       }
     ]
   }

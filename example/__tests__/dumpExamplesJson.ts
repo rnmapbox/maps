@@ -6,6 +6,7 @@ import fs from 'fs';
 
 import * as SymbolCircleLayer from '../src/examples/SymbolCircleLayer';
 import * as UserLocation from '../src/examples/UserLocation';
+import * as Map from '../src/examples/Map';
 import type {
   Examples,
   Example,
@@ -22,6 +23,7 @@ jest.mock('../src/assets/scale-test-icon4.png', () => null, {
 const allTests = {
   SymbolCircleLayer,
   UserLocation,
+  Map,
 } as const;
 
 const relExamplesPath = path.join('example', 'src', 'examples');
