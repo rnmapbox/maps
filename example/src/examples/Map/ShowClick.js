@@ -1,18 +1,12 @@
 import React from 'react';
 import { Text } from 'react-native';
-import MapboxGL from '@rnmapbox/maps';
+import { MapView, Camera } from '@rnmapbox/maps';
 
-import sheet from '../../styles/sheet';
-import { DEFAULT_CENTER_COORDINATE } from '../../utils';
-import BaseExamplePropTypes from '../common/BaseExamplePropTypes';
-import Page from '../common/Page';
 import Bubble from '../common/Bubble';
 
-class ShowClick extends React.Component {
-  static propTypes = {
-    ...BaseExamplePropTypes,
-  };
+const styles = { matchParent: { flex: 1 } };
 
+class ShowClick extends React.Component {
   constructor(props) {
     super(props);
 
@@ -69,18 +63,31 @@ class ShowClick extends React.Component {
 
   render() {
     return (
-      <Page {...this.props}>
-        <MapboxGL.MapView
-          style={sheet.matchParent}
+      <>
+        <MapView
+          style={styles.matchParent}
           onPress={this.onPress}
           testID={'show-click-map-view'}
         >
-          <MapboxGL.Camera centerCoordinate={DEFAULT_CENTER_COORDINATE} />
-        </MapboxGL.MapView>
+          <Camera
+            defaultSettings={{ centerCoordinate: [-77.036086, 38.910233] }}
+          />
+        </MapView>
         {this.renderLastClicked()}
-      </Page>
+      </>
     );
   }
 }
 
 export default ShowClick;
+
+/* end-example-doc */
+
+const metadata = {
+  title: 'Show Click',
+  tags: ['MapView#onPress'],
+  docs: `
+Demonstates onPress event and how to get the screen point of the click.
+`,
+};
+ShowClick.metadata = metadata;

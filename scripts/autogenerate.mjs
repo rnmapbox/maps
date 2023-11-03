@@ -490,6 +490,10 @@ async function generate() {
   execSync('yarn build:plugin', { stdio: 'inherit' });
   outputPaths.push('plugin/build');
 
+  // autogenerate examples.json
+  execSync('yarn build:examples.json', { stdio: 'inherit' });
+  outputPaths.push('docs/examples.json');
+
   // autogenerate docs
 
   const docsRoot = path.join(__dirname, '..', 'docs');

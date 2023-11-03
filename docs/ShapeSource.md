@@ -40,7 +40,7 @@ string
 ```
 An HTTP(S) URL, absolute file URL, or local file URL relative to the current application’s resource bundle.
 
-
+[Dynamic URL](../examples/Map/DynamicUrl)
   
 ### shape
 
@@ -163,7 +163,7 @@ if that layer has a higher z-index than another source layers
 @return void
 *signature:*`(event:OnPressEvent) =&gt; void`
 
-[Custom Icon](../examples/SymbolCircleLayer/CustomIcon)
+[Custom Icon](../examples/SymbolCircleLayer/CustomIcon), [Custom Icon Native Asset](../examples/SymbolCircleLayer/CustomIconNativeAsset)
   
 ### hitbox
 
@@ -252,4 +252,4 @@ const collection = await shapeSource.getClusterChildren(clusterId);
 | `event` | `NativeSyntheticEvent` | `Yes` | undefined |
 
 
-[Custom Icon](../examples/SymbolCircleLayer/CustomIcon)
+[Custom Icon](../examples/SymbolCircleLayer/CustomIcon), [Custom Icon Native Asset](../examples/SymbolCircleLayer/CustomIconNativeAsset)

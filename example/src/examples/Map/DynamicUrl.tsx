@@ -8,10 +8,8 @@ import {
   StyleURL,
 } from '@rnmapbox/maps';
 
-import sheet from '../../styles/sheet';
-import { BaseExampleProps } from '../common/BaseExamplePropTypes';
-import Page from '../common/Page';
 import Bubble from '../common/Bubble';
+import { ExampleWithMetadata } from '../common/ExampleMetadata'; // exclude-from-doc
 
 const randomCountries = [
   {
@@ -36,7 +34,9 @@ const randomCountries = [
   },
 ];
 
-const DynamicUrl = (props: BaseExampleProps) => {
+const styles = { matchParent: { flex: 1 } };
+
+const DynamicUrl = () => {
   const [country, setCountry] = useState(randomCountries[0]);
 
   const handleUpdate = () => {
@@ -46,10 +46,10 @@ const DynamicUrl = (props: BaseExampleProps) => {
   };
 
   return (
-    <Page {...props}>
+    <>
       <MapView
         styleURL={StyleURL.Satellite}
-        style={sheet.matchParent}
+        style={styles.matchParent}
         testID={'dynamic-url'}
       >
         <Camera
@@ -74,8 +74,19 @@ const DynamicUrl = (props: BaseExampleProps) => {
       <Bubble onPress={handleUpdate}>
         <Text>Update country (active: {country.id})</Text>
       </Bubble>
-    </Page>
+    </>
   );
 };
 
 export default DynamicUrl;
+
+/* end-example-doc */
+
+const metadata: ExampleWithMetadata['metadata'] = {
+  title: 'Dynamic URL',
+  tags: ['ShapeSource#url'],
+  docs: `
+Change shape source URL on press of the bubble.
+`,
+};
+DynamicUrl.metadata = metadata;

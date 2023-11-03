@@ -12,8 +12,6 @@ import Mapbox, { offlineManager, MapView, Camera } from '@rnmapbox/maps';
 import geoViewport from '@mapbox/geo-viewport';
 
 import sheet from '../../styles/sheet';
-import BaseExamplePropTypes from '../common/BaseExamplePropTypes';
-import Page from '../common/Page';
 import Bubble from '../common/Bubble';
 
 const CENTER_COORD = [-73.970895, 40.723279];
@@ -40,10 +38,6 @@ const styles = StyleSheet.create({
 });
 
 class CreateOfflineRegion extends React.Component {
-  static propTypes = {
-    ...BaseExamplePropTypes,
-  };
-
   constructor(props) {
     super(props);
 
@@ -154,7 +148,7 @@ class CreateOfflineRegion extends React.Component {
     const { offlineRegionStatus } = this.state;
 
     return (
-      <Page {...this.props}>
+      <>
         <MapView
           ref={(c) => (this._map = c)}
           onPress={this.onPress}
@@ -211,9 +205,21 @@ class CreateOfflineRegion extends React.Component {
             </View>
           </Bubble>
         ) : null}
-      </Page>
+      </>
     );
   }
 }
 
 export default CreateOfflineRegion;
+
+/* end-example-doc */
+
+/** @type ExampleWithMetadata['metadata'] */
+const metadata = {
+  title: 'Change Offline Region',
+  tags: ['offlineManage#createPack'],
+  docs: `
+Creates offline pack and montiors them
+`,
+};
+CreateOfflineRegion.metadata = metadata;

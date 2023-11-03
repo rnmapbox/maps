@@ -50,22 +50,7 @@ import WatercolorRasterTiles from '../examples/FillRasterLayer/WatercolorRasterT
 import GradientLine from '../examples/LineLayer/GradientLine';
 import DrawPolyline from '../examples/LineLayer/DrawPolyline';
 // MAP
-import ChangeLayerColor from '../examples/Map/ChangeLayerColor';
-import CreateOfflineRegion from '../examples/Map/CreateOfflineRegion';
-import OfflineExample from '../examples/Map/OfflineExample';
-import Ornaments from '../examples/Map/Ornaments';
-import PointInMapView from '../examples/Map/PointInMapView';
-import ShowAndHideLayer from '../examples/Map/ShowAndHideLayer';
-import ShowClick from '../examples/Map/ShowClick';
-import ShowMap from '../examples/Map/ShowMap';
-import ShowMapLocalStyle from '../examples/Map/ShowMapLocalStyle';
-import ShowRegionDidChange from '../examples/Map/ShowRegionDidChange';
-import SourceLayerVisibility from '../examples/Map/SourceLayerVisibility';
-import StyleJson from '../examples/Map/StyleJson';
-import TwoByTwo from '../examples/Map/TwoByTwo';
-import MapAndRNNavigation from '../examples/Map/MapAndRNNavigation';
-import DynamicUrl from '../examples/Map/DynamicUrl';
-import LocalizeLabels from '../examples/Map/LocalizeLabels';
+import * as Map from '../examples/Map';
 // SYMBOLCIRCLELAYER
 import * as SymbolCircleLayer from '../examples/SymbolCircleLayer';
 // USERLOCATION
@@ -331,24 +316,7 @@ const Examples = new ExampleGroup('React Native Mapbox', [
     new ExampleItem('Map Handlers', MapHandlers),
   ]),
   new ExampleGroup('V11', [example(StyleImportConfig)]),
-  new ExampleGroup('Map', [
-    new ExampleItem('Show Map', ShowMap),
-    new ExampleItem('Show Map With Local Style.JSON', ShowMapLocalStyle),
-    new ExampleItem('Show Click', ShowClick),
-    new ExampleItem('Show Region Did Change', ShowRegionDidChange),
-    new ExampleItem('Two Map Views', TwoByTwo),
-    new ExampleItem('Create Offline Region', CreateOfflineRegion),
-    new ExampleItem('Offline example', OfflineExample),
-    new ExampleItem('Localize labels', LocalizeLabels),
-    new ExampleItem('Get Pixel Point in MapView', PointInMapView),
-    new ExampleItem('Show and hide a layer', ShowAndHideLayer),
-    new ExampleItem('Change Layer Color', ChangeLayerColor),
-    new ExampleItem('Source Layer Visiblity', SourceLayerVisibility),
-    new ExampleItem('Style JSON', StyleJson),
-    new ExampleItem('Ornaments', Ornaments),
-    new ExampleItem('Map and rn-navigation', MapAndRNNavigation),
-    new ExampleItem('Dynamic Url', DynamicUrl),
-  ]),
+  exampleGroup(Map),
   new ExampleGroup('Camera', [
     new ExampleItem('Fit (Bounds, Center/Zoom, Padding)', Fit),
     new ExampleItem('Set Pitch', SetPitch),

@@ -50,6 +50,7 @@
     "type:check": "yarn tsc --noEmit",
     "test:plugin": "yarn expo-module test plugin",
     "build:plugin": "yarn tsc --build plugin",
+    "build:examples.json": "cd example; jest __tests__/dumpExamplesJson.ts",
     "lint:plugin": "yarn eslint plugin/src/*",
     "build": "yarn bob build",
     "prepare": "yarn bob build && yarn husky install"
