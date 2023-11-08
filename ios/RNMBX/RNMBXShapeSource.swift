@@ -81,7 +81,7 @@ public class RNMBXShapeSource : RNMBXSource {
 
   private func getGeometryAsPoint(_ str: String?) throws -> Point {
     guard let data = str?.data(using: .utf8) else {
-      throw RCTMGLError.parseError("point data could not be parsed as utf-8")
+      throw RNMBXError.parseError("point data could not be parsed as utf-8")
     }
     
     var point: Point?
@@ -92,7 +92,7 @@ public class RNMBXShapeSource : RNMBXSource {
       case .point(let p):
         point = p
       default:
-        throw RCTMGLError.parseError("point data could not be decoded because geometry is not of type Point")
+        throw RNMBXError.parseError("point data could not be decoded because geometry is not of type Point")
       }
     } catch {
       // Continue and test for Point.
@@ -103,12 +103,12 @@ public class RNMBXShapeSource : RNMBXSource {
         let obj = try JSONDecoder().decode(Point.self, from: data)
         point = obj
       } catch {
-        throw RCTMGLError.parseError("point data could not be decoded: \(error.localizedDescription)")
+        throw RNMBXError.parseError("point data could not be decoded: \(error.localizedDescription)")
       }
     }
     
     guard let point = point else {
-      throw RCTMGLError.parseError("point not found")
+      throw RNMBXError.parseError("point not found")
     }
     
     return point
@@ -166,7 +166,7 @@ public class RNMBXShapeSource : RNMBXSource {
 
   private func getGeometryAsLine(_ str: String?) throws -> LineString {
     guard let data = str?.data(using: .utf8) else {
-      throw RCTMGLError.parseError("line data could not be parsed as utf-8")
+      throw RNMBXError.parseError("line data could not be parsed as utf-8")
     }
 
     var lineString: LineString?
@@ -177,7 +177,7 @@ public class RNMBXShapeSource : RNMBXSource {
       case .lineString(let ls):
         lineString = ls
       default:
-        throw RCTMGLError.parseError("line data could not be decoded because geometry is not of type LineString")
+        throw RNMBXError.parseError("line data could not be decoded because geometry is not of type LineString")
       }
     } catch {
       // Continue and test for LineString.
@@ -188,12 +188,12 @@ public class RNMBXShapeSource : RNMBXSource {
         let obj = try JSONDecoder().decode(LineString.self, from: data)
         lineString = obj
       } catch {
-        throw RCTMGLError.parseError("line data could not be decoded: \(error.localizedDescription)")
+        throw RNMBXError.parseError("line data could not be decoded: \(error.localizedDescription)")
       }
     }
     
     guard let lineString = lineString else {
-      throw RCTMGLError.parseError("line not found")
+      throw RNMBXError.parseError("line not found")
     }
     
     return lineString
@@ -492,7 +492,7 @@ extension RNMBXShapeSource {
 
   func getFeature(_ shape: String) throws -> Feature {
     guard let data = shape.data(using: .utf8) else {
-      throw RCTMGLError.parseError("shape is not utf8")
+      throw RNMBXError.parseError("shape is not utf8")
     }
     
     return try JSONDecoder().decode(Feature.self, from: data)
