@@ -10,12 +10,12 @@ PR Title ([#123](link to my pr))
 #### Breaking changes:
 
 The setup was changed - see install instructions for more details. In a nuthsell:
-* On both android/ios to select mapbox implementation use `RNMapboxMapsImpl`/`$RNMapboxMapsImpl` variable which can be one of (`maplibre`,`mapbox`(aka v10),`mapbox-gl`)
-* Default implementation is `maplibre` as it requires not further setup. *WARNING* using mapbox styles from `maplibre` has different pricing than mapbox native sdk-s.
-* On Podfile `$RNMBGL.(pre|post)_install` was changed `$RNMapboxMaps.(pre|post)_install`
-* Package name was changed from `@react-native-mapbox-gl/maps` to `@rnmapbox/maps`. If you just testing with the v10 version you can use something like [babel-plugin-transform-rename-import](https://www.npmjs.com/package/babel-plugin-transform-rename-import) to keep using the old imports for a while.
-* `MapboxGL.setAccessToken` now requires `MapboxGL.setWellKnownTileServer` on maplibre.
 
+- On both android/ios to select mapbox implementation use `RNMapboxMapsImpl`/`$RNMapboxMapsImpl` variable which can be one of (`maplibre`,`mapbox`(aka v10),`mapbox-gl`)
+- Default implementation is `maplibre` as it requires not further setup. _WARNING_ using mapbox styles from `maplibre` has different pricing than mapbox native sdk-s.
+- On Podfile `$RNMBGL.(pre|post)_install` was changed `$RNMapboxMaps.(pre|post)_install`
+- Package name was changed from `@react-native-mapbox-gl/maps` to `@rnmapbox/maps`. If you just testing with the v10 version you can use something like [babel-plugin-transform-rename-import](https://www.npmjs.com/package/babel-plugin-transform-rename-import) to keep using the old imports for a while.
+- `MapboxGL.setAccessToken` now requires `MapboxGL.setWellKnownTileServer` on maplibre.
 
 #### Changes:
 
@@ -97,7 +97,7 @@ Add Expo config plugin ([#1388](https://github.com/rnmapbox/maps/pull/1388))
 Android: Bump `okhttp` to `4.9.0` ([#1390](https://github.com/rnmapbox/maps/pull/1390))
 Support dynamically changing local JSON in styleURL ([#1399](https://github.com/rnmapbox/maps/pull/1399))
 Add missing types to `SymbolLayerStyle` & `ImagesProps` ([#1360](https://github.com/rnmapbox/maps/pull/1360))
-Fix error while updating coordinates of RCTMGLImageSource ([#1310](https://github.com/rnmapbox/maps/pull/1310))
+Fix error while updating coordinates of RNMBXImageSource ([#1310](https://github.com/rnmapbox/maps/pull/1310))
 
 ## 8.2.0-beta2
 

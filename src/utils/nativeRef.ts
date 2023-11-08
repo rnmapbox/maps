@@ -4,10 +4,10 @@ import { type NativeMethods, type HostComponent } from 'react-native';
 /**
  * Helper for useRef and requireNativeComponent:
  * @example
- * RCTMGLCamera = requireNativeComponent<NativeProps>('RCTMGLCamera');
- * const ref = useRef<typeof RCTMGLCamera)(null) as NativeRefType<NativeProps>;
+ * RNMBXCamera = requireNativeComponent<NativeProps>('RNMBXCamera');
+ * const ref = useRef<typeof RNMBXCamera)(null) as NativeRefType<NativeProps>;
  * ...
- * <RCTMGLCamera ref={ref} ... />
+ * <RNMBXCamera ref={ref} ... />
  */
 export type NativeRefType<P> = MutableRefObject<
   (Component<P> & Readonly<NativeMethods>) | null
@@ -16,10 +16,10 @@ export type NativeRefType<P> = MutableRefObject<
 /**
  * Helper for useRef and requireNativeComponent:
  * @example
- * RCTMGLCamera = requireNativeComponent<NativeProps>('RCTMGLCamera');
- * const ref = nativeRef(useRef<typeof RCTMGLCamera)(null));
+ * RNMBXCamera = requireNativeComponent<NativeProps>('RNMBXCamera');
+ * const ref = nativeRef(useRef<typeof RNMBXCamera)(null));
  * ...
- * <RCTMGLCamera ref={ref} ... />
+ * <RNMBXCamera ref={ref} ... />
  */
 export default function nativeRef<P>(
   c: RefObject<HostComponent<P> | null>,

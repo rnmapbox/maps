@@ -5,7 +5,7 @@ import BackgroundLayer from '../../src/components/BackgroundLayer';
 
 describe('BackgroundLayer', () => {
   test('renders correctly with default props', () => {
-    const { container: backgroundLayer } = render(
+    const { UNSAFE_root: backgroundLayer } = render(
       <BackgroundLayer id="requiredBackgroundLayerID" />,
     );
 
@@ -28,7 +28,7 @@ describe('BackgroundLayer', () => {
       style: { visibility: 'none' },
     };
 
-    const { container: backgroundLayer } = render(
+    const { UNSAFE_root: backgroundLayer } = render(
       <BackgroundLayer {...testProps} />,
     );
     const { props } = backgroundLayer;

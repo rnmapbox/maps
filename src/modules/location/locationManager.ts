@@ -7,8 +7,8 @@ import {
   type AppStateStatus,
 } from 'react-native';
 
-const MapboxGL = NativeModules.MGLModule;
-const MapboxGLLocationManager = NativeModules.MGLLocationModule;
+const MapboxGL = NativeModules.RNMBXModule;
+const MapboxGLLocationManager = NativeModules.RNMBXLocationModule;
 
 export const LocationModuleEventEmitter = new NativeEventEmitter(
   MapboxGLLocationManager,

@@ -3,7 +3,7 @@ import {
   NativeEventEmitter,
   NativeModules,
 } from 'react-native';
-const { MGLLogging } = NativeModules;
+const { RNMBXLogging } = NativeModules;
 
 export type LogLevel = 'error' | 'warning' | 'info' | 'debug' | 'verbose';
 
@@ -31,7 +31,7 @@ class Logger {
   }
 
   constructor() {
-    this.loggerEmitter = new NativeEventEmitter(MGLLogging);
+    this.loggerEmitter = new NativeEventEmitter(RNMBXLogging);
     this.startedCount = 0;
     this.logCallback = undefined;
   }
@@ -68,7 +68,7 @@ class Logger {
    * @param {LogLevel} level
    */
   static setLogLevel(level: LogLevel) {
-    MGLLogging.setLogLevel(level);
+    RNMBXLogging.setLogLevel(level);
   }
 
   /**

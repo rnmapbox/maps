@@ -1,92 +1,16 @@
 import React, { useState } from 'react';
-import {
-  Button,
-  Image,
-  Pressable,
-  View,
-  StyleSheet,
-  Modal,
-  Text,
-} from 'react-native';
-import MapboxGL, {
-  MapView,
-  ShapeSource,
-  SymbolLayer,
-  CircleLayer,
-  UserLocation,
-  Camera,
-} from '@rnmapbox/maps';
+import { Button, Modal, Text, SafeAreaView } from 'react-native';
+import { MapView, UserLocation, Camera } from '@rnmapbox/maps';
 
-import Page from '../common/Page';
-
-const styles = {
-  mapView: { flex: 1 },
-  circleLayer: {
-    circleRadiusTransition: { duration: 5000, delay: 0 },
-    circleColor: '#ff0000',
-  },
-};
-
-const features = {
-  type: 'FeatureCollection',
-  features: [
-    {
-      type: 'Feature',
-      id: 'a-feature',
-      properties: {
-        icon: 'example',
-        text: 'example-icon-and-label',
-      },
-      geometry: {
-        type: 'Point',
-        coordinates: [-74.00597, 40.71427],
-      },
-    },
-    {
-      type: 'Feature',
-      id: 'b-feature',
-      properties: {
-        text: 'just-label',
-      },
-      geometry: {
-        type: 'Point',
-        coordinates: [-74.001097, 40.71527],
-      },
-    },
-    {
-      type: 'Feature',
-      id: 'c-feature',
-      properties: {
-        icon: 'example',
-      },
-      geometry: {
-        type: 'Point',
-        coordinates: [-74.00697, 40.72427],
-      },
-    },
-  ],
-};
-
-export default function MapAndNavigation({
-  navigation,
-  label,
-  onDismissExample,
-}) {
+/**
+ * @param {ItempProps['navigation']} navigation
+ */
+export default function MapAndNavigation({ navigation }) {
   const [modalVisible, setModalVisible] = useState(false);
   const [showMap, setShowMap] = useState(false);
-  const [radius, setRadius] = useState(20);
-
-  const circleLayerStyle = {
-    ...styles.circleLayer,
-    ...{ circleRadius: radius },
-  };
-
-  console.log('+++ modalVisible', modalVisible);
-  console.log('### rendering...');
 
   return (
-    <Page label={label} onDismissExample={onDismissExample}>
-      <Button title="Grow" onPress={() => setRadius((radius) => radius + 20)} />
+    <>
       <Button title="Modal" onPress={() => setModalVisible(true)} />
       <Button
         title="Toggle map"
@@ -101,17 +25,19 @@ export default function MapAndNavigation({
         transparent={false}
         visible={modalVisible}
         onRequestClose={() => {
-          this.setState({ modalVisbile: false });
+          setModalVisible(false);
         }}
       >
-        <Text>this is a modal</Text>
-        <Button
-          title="close"
-          onPress={() => {
-            this.setState({ modalVisbile: false });
-          }}
-        />
-        <MapView style={{ flex: 1 }} />
+        <SafeAreaView style={{ flex: 1 }}>
+          <Text>this is a modal</Text>
+          <Button
+            title="close"
+            onPress={() => {
+              setModalVisible(false);
+            }}
+          />
+          <MapView style={{ flex: 1 }} />
+        </SafeAreaView>
       </Modal>
       {showMap && (
         <MapView style={{ flex: 1 }}>
@@ -128,6 +54,18 @@ export default function MapAndNavigation({
           />
         </MapView>
       )}
-    </Page>
+    </>
   );
 }
+
+/* end-example-doc */
+
+/** @type ExampleWithMetadata['metadata'] */
+const metadata = {
+  title: 'Map and React Navigation',
+  tags: ['MapView'],
+  docs: `
+Demonstrates various ways to embedd map via (Navigation, Page, modal, etc)
+`,
+};
+MapAndNavigation.metadata = metadata;

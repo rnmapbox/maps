@@ -1,7 +1,6 @@
 import React, { memo } from 'react';
-import { requireNativeComponent } from 'react-native';
 
-const NATIVE_MODULE_NAME = 'RCTMGLNativeUserLocation';
+import RNMBXNativeUserLocationNativeComponent from '../specs/RNMBXNativeUserLocationNativeComponent';
 
 export type Props = {
   /**
@@ -23,13 +22,8 @@ export type Props = {
   iosShowsUserHeadingIndicator?: boolean;
 };
 
-type NativeProps = Props;
-
-const RCTMGLNativeUserLocation =
-  requireNativeComponent<NativeProps>(NATIVE_MODULE_NAME);
-
 const NativeUserLocation = memo((props: Props) => {
-  return <RCTMGLNativeUserLocation {...props} />;
+  return <RNMBXNativeUserLocationNativeComponent {...props} />;
 });
 
 export default NativeUserLocation;

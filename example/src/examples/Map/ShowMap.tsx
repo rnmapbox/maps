@@ -1,13 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { Alert } from 'react-native';
 import Mapbox from '@rnmapbox/maps';
+import { ButtonGroup } from '@rneui/base';
 
 import sheet from '../../styles/sheet';
 import { onSortOptions } from '../../utils';
-import TabBarPage from '../common/TabBarPage';
-import { BaseExampleProps } from '../common/BaseExamplePropTypes';
+import { ExampleWithMetadata } from '../common/ExampleMetadata'; // exclude-from-doc
 
-const ShowMap = (props: BaseExampleProps) => {
+const ShowMap = () => {
   const _mapOptions = Object.keys(Mapbox.StyleURL)
     .map((key) => {
       return {
@@ -36,12 +36,14 @@ const ShowMap = (props: BaseExampleProps) => {
   };
 
   return (
-    <TabBarPage
-      {...props}
-      scrollable
-      options={_mapOptions}
-      onOptionPress={onMapChange}
-    >
+    <>
+      <ButtonGroup
+        buttons={_mapOptions.map((i) => i.label)}
+        selectedIndex={_mapOptions.findIndex(
+          (i) => i.data === styleURL.styleURL,
+        )}
+        onPress={(index) => onMapChange(index, _mapOptions[index].data)}
+      />
       <Mapbox.MapView
         styleURL={styleURL.styleURL}
         style={sheet.matchParent}
@@ -51,8 +53,19 @@ const ShowMap = (props: BaseExampleProps) => {
 
         <Mapbox.UserLocation onPress={onUserMarkerPress} />
       </Mapbox.MapView>
-    </TabBarPage>
+    </>
   );
 };
 
 export default ShowMap;
+
+/* end-example-doc */
+
+const metadata: ExampleWithMetadata['metadata'] = {
+  title: 'Show Map',
+  tags: ['Camera#followZoomLevel', 'UserLocation#onPress'],
+  docs: `
+Shows a map with the user location annotation enabled, and on press of the user location annotation, an alert is shown.
+`,
+};
+ShowMap.metadata = metadata;

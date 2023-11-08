@@ -1,16 +1,13 @@
 import React from 'react';
-import {
-  HostComponent,
-  NativeModules,
-  requireNativeComponent,
-} from 'react-native';
+import { NativeModules } from 'react-native';
 
 import { FilterExpression, CircleLayerStyleProps } from '../utils/MapboxStyles';
 import { StyleValue } from '../utils/StyleValue';
+import RNMBXCircleLayerNativeComponent from '../specs/RNMBXCircleLayerNativeComponent';
 
 import AbstractLayer from './AbstractLayer';
 
-const MapboxGL = NativeModules.MGLModule;
+const MapboxGL = NativeModules.RNMBXModule;
 
 export type Props = {
   /**
@@ -72,8 +69,6 @@ export type Props = {
   style?: CircleLayerStyleProps;
 } & React.ComponentProps<typeof AbstractLayer>;
 
-export const NATIVE_MODULE_NAME = 'RCTMGLCircleLayer';
-
 type NativeTypeProps = Omit<Props, 'style'> & {
   reactStyle?: { [key: string]: StyleValue };
 };
@@ -92,11 +87,11 @@ class CircleLayer extends AbstractLayer<Props, NativeTypeProps> {
       ...this.baseProps,
       sourceLayerID: this.props.sourceLayerID,
     };
-    return <RCTMGLCircleLayer ref={this.setNativeLayer} {...props} />;
+    return (
+      // @ts-expect-error just codegen stuff
+      <RNMBXCircleLayerNativeComponent ref={this.setNativeLayer} {...props} />
+    );
   }
 }
-
-const RCTMGLCircleLayer: HostComponent<Props> =
-  requireNativeComponent<NativeTypeProps>(NATIVE_MODULE_NAME);
 
 export default CircleLayer;

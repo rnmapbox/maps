@@ -1,4 +1,8 @@
+// copied from `react-16-node-hanging-test-fix` module. Without it we get jest hangs.
+delete global.MessageChannel;
 import { NativeModules } from 'react-native';
+
+jest.useFakeTimers('legacy');
 
 function keyMirror(keys) {
   const obj = {};
@@ -6,8 +10,16 @@ function keyMirror(keys) {
   return obj;
 }
 
+function nativeModule(properties) {
+  return {
+    addListener: jest.fn(),
+    removeListeners: jest.fn(),
+    ...properties,
+  };
+}
+
 // Mock of what the native code puts on the JS object
-NativeModules.MGLModule = {
+NativeModules.RNMBXModule = {
   // constants
   UserTrackingModes: keyMirror([
     'None',
@@ -86,9 +98,11 @@ NativeModules.MGLModule = {
   getAccessToken: () => Promise.resolve('test-token'),
   setTelemetryEnabled: jest.fn(),
   setConnected: jest.fn(),
+
+  MapboxV10: true,
 };
 
-NativeModules.MGLOfflineModule = {
+NativeModules.RNMBXOfflineModule = nativeModule({
   createPack: (packOptions) => {
     return Promise.resolve({
       bounds: packOptions.bounds,
@@ -104,19 +118,52 @@ NativeModules.MGLOfflineModule = {
   setPackObserver: () => Promise.resolve(),
   setTileCountLimit: jest.fn(),
   setProgressEventThrottle: jest.fn(),
-};
+});
 
-NativeModules.MGLSnapshotModule = {
+NativeModules.RNMBXSnapshotModule = {
   takeSnap: () => {
     return Promise.resolve('file://test.png');
   },
 };
 
-NativeModules.MGLLocationModule = {
+NativeModules.RNMBXLocationModule = nativeModule({
   getLastKnownLocation: jest.fn(),
   start: jest.fn(),
   pause: jest.fn(),
+  stop: jest.fn(),
+});
+
+NativeModules.RNMBXMapViewModule = {
+  takeSnap: jest.fn(),
+  queryTerrainElevation: jest.fn(),
+  setSourceVisibility: jest.fn(),
+  getCenter: jest.fn(),
+  getCoordinateFromView: jest.fn(),
+  getPointInView: jest.fn(),
+  getZoom: jest.fn(),
+  getVisibleBounds: jest.fn(),
+  queryRenderedFeaturesAtPoint: jest.fn(),
+  queryRenderedFeaturesInRect: jest.fn(),
+  setHandledMapChangedEvents: jest.fn(),
+  clearData: jest.fn(),
+  querySourceFeatures: jest.fn(),
 };
+
+NativeModules.RNMBXShapeSourceModule = {
+  getClusterExpansionZoom: jest.fn(),
+  getClusterLeaves: jest.fn(),
+  getClusterChildren: jest.fn(),
+};
+
+NativeModules.RNMBXImageModule = {
+  refresh: jest.fn(),
+};
+
+NativeModules.RNMBXPointAnnotationModule = {
+  refresh: jest.fn(),
+};
+
+NativeModules.RNMBXLogging = nativeModule({});
 
 // Mock for global AbortController
 global.AbortController = class {

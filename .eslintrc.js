@@ -39,7 +39,7 @@ module.exports = {
     'eslint:recommended',
     'plugin:react/recommended',
     'plugin:jest/recommended',
-    '@react-native-community',
+    '@react-native',
     'prettier',
   ],
   rules: {
@@ -90,6 +90,8 @@ module.exports = {
         project: [
           './tsconfig.json',
           './example/tsconfig.json',
+          './scripts/tsconfig.json',
+          './fabricexample/tsconfig.json',
           './plugin/src/__tests__/tsconfig.eslint.json',
         ],
       },
@@ -97,7 +99,7 @@ module.exports = {
       extends: [
         'eslint:recommended',
         'plugin:react/recommended',
-        '@react-native-community',
+        '@react-native',
         'plugin:@typescript-eslint/recommended',
         'prettier',
       ],

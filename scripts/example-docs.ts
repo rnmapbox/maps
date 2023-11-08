@@ -1,0 +1,84 @@
+/**
+ * @file Generates markdown for each example. Reads docs/examples.json, <docRepo>/screenshots/screenshots.json and generates <docRepo>/docs/examples/
+ */
+
+import * as path from 'path';
+import * as fs from 'fs';
+import { execSync } from 'child_process';
+
+// eslint-disable-next-line import/order
+import {
+  docSiteRootPath,
+  screenshotsJSONPath,
+  examplesJSONPath,
+  mapsRootPath,
+} from './autogenHelpers/docconfig.js';
+
+const endOfExampleMarker = '/* end-example-doc */';
+
+import type { Examples, Example } from './autogenHelpers/examplesJsonSchema';
+import type { Screenshots } from './autogenHelpers/screenshotsJsonSchema';
+
+const examples: Examples = JSON.parse(
+  fs.readFileSync(examplesJSONPath, 'utf8'),
+);
+const screenshots: Screenshots = JSON.parse(
+  fs.readFileSync(screenshotsJSONPath, 'utf8'),
+);
+
+const destdir = path.join(docSiteRootPath, 'docs/examples');
+
+examples.forEach(({ groupName, examples, metadata }) => {
+  const destGroupDir = path.join(destdir, groupName);
+  examples.forEach(({ metadata, fullPath, relPath, name }) => {
+    if (!metadata) {
+      return;
+    }
+
+    const { title, tags, docs } = metadata;
+
+    let jscode: string = fs.readFileSync(
+      path.join(mapsRootPath, fullPath),
+      'utf8',
+    );
+
+    const endOfMarkerIndex = jscode.indexOf(endOfExampleMarker);
+    if (endOfMarkerIndex > 0) {
+      jscode = jscode.slice(0, endOfMarkerIndex);
+    }
+
+    const mdPath = path.join(destGroupDir, `${name}.md`);
+
+    const basename = path.basename(name);
+
+    const exampleScreenshots = screenshots[groupName][name];
+
+    fs.mkdirSync(destGroupDir, { recursive: true });
+    const images: { title: string; filename: string }[] =
+      exampleScreenshots.images.map((imagePath) => {
+        const imageName = path.basename(imagePath);
+        const imageDestPath = path.join(destGroupDir, imageName);
+        fs.copyFileSync(path.join(docSiteRootPath, imagePath), imageDestPath);
+        execSync(`sips -Z 640 ${imageDestPath}`);
+        return { title: imageName, filename: imageName };
+      });
+
+    const md = `---
+title: ${title}
+tags: [${tags.join(', ')}]
+custom_props:
+  example_rel_path: ${relPath}
+custom_edit_url: https://github.com/rnmapbox/maps/tree/master/example/src/examples/${relPath}
+---
+${docs}
+
+\`\`\`jsx
+${jscode}
+\`\`\`
+
+${images.map((image) => `![${image.title}](./${image.filename})`).join('\n')}}
+
+`;
+    fs.writeFileSync(mdPath, md);
+  });
+});

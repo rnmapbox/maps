@@ -1,22 +1,16 @@
 import React from 'react';
-import {
-  NativeMethods,
-  NativeModules,
-  NativeSyntheticEvent,
-  requireNativeComponent,
-} from 'react-native';
+import { NativeModules, NativeSyntheticEvent } from 'react-native';
 
-import { cloneReactChildrenWithProps, isFunction, isAndroid } from '../utils';
-import { getFilter } from '../utils/filterUtils';
+import RNMBXVectorSourceNativeComponent from '../specs/RNMBXVectorSourceNativeComponent';
+import { cloneReactChildrenWithProps, isFunction } from '../utils';
 import { copyPropertiesAsDeprecated } from '../utils/deprecation';
 import { OnPressEvent } from '../types/OnPressEvent';
 
 import AbstractSource from './AbstractSource';
-import NativeBridgeComponent from './NativeBridgeComponent';
 
-const MapboxGL = NativeModules.MGLModule;
+const MapboxGL = NativeModules.RNMBXModule;
 
-export const NATIVE_MODULE_NAME = 'RCTMGLVectorSource';
+export const NATIVE_MODULE_NAME = 'RNMBXVectorSource';
 
 interface Props {
   /**
@@ -99,10 +93,7 @@ type NativeProps = Props; // Omit<Props, 'children'>;
  * VectorSource is a map content source that supplies tiled vector data in Mapbox Vector Tile format to be shown on the map.
  * The location of and metadata about the tiles are defined either by an option dictionary or by an external file that conforms to the TileJSON specification.
  */
-class VectorSource extends NativeBridgeComponent(
-  AbstractSource<Props, NativeProps>,
-  NATIVE_MODULE_NAME,
-) {
+class VectorSource extends AbstractSource<Props, NativeProps> {
   static defaultProps = {
     id: MapboxGL.StyleSource.DefaultSourceID,
   };
@@ -111,52 +102,23 @@ class VectorSource extends NativeBridgeComponent(
     super(props);
   }
 
-  _setNativeRef(
-    nativeRef: (React.Component<NativeProps> & Readonly<NativeMethods>) | null,
-  ) {
-    if (nativeRef) {
-      this.setNativeRef(nativeRef);
-      // this._nativeRef = nativeRef;
-      super._runPendingNativeCommands(nativeRef);
+  _decodePayload(payload: OnPressEvent | string): OnPressEvent {
+    // we check whether the payload is a string, since the strict type safety is enforced only on iOS on the new arch
+    // on Android, on both archs, the payload is an object
+    if (typeof payload === 'string') {
+      return JSON.parse(payload);
+    } else {
+      return payload;
     }
-  }
-
-  /**
-   * Returns all features that match the query parameters regardless of whether or not the feature is
-   * currently rendered on the map. The domain of the query includes all currently-loaded vector tiles
-   * and GeoJSON source tiles. This function does not check tiles outside of the visible viewport.
-   *
-   * @example
-   * vectorSource.features(['id1', 'id2'])
-   *
-   * @param  {Array=} layerIDs - A set of strings that correspond to the names of layers defined in the current style. Only the features contained in these layers are included in the returned array.
-   * @param  {Array=} filter - an optional filter statement to filter the returned Features.
-   * @return {FeatureCollection}
-   */
-  async features(layerIDs = [], filter = []) {
-    const res: { data: string } = await this._runNativeCommand(
-      'features',
-      this._nativeRef,
-      [layerIDs, getFilter(filter)],
-    );
-
-    if (isAndroid()) {
-      return JSON.parse(res.data);
-    }
-
-    return res.data;
   }
 
   onPress(
     event: NativeSyntheticEvent<{
-      payload: OnPressEvent;
+      payload: OnPressEvent | string;
     }>,
   ) {
-    const {
-      nativeEvent: {
-        payload: { features, coordinates, point },
-      },
-    } = event;
+    const payload = this._decodePayload(event.nativeEvent.payload);
+    const { features, coordinates, point } = payload;
     let newEvent = {
       features,
       coordinates,
@@ -197,19 +159,16 @@ class VectorSource extends NativeBridgeComponent(
       hasPressListener: isFunction(this.props.onPress),
       onMapboxVectorSourcePress: this.onPress.bind(this),
       onPress: undefined,
-      onAndroidCallback: isAndroid() ? this._onAndroidCallback : undefined,
     };
     return (
-      <RCTMGLVectorSource ref={(r) => this._setNativeRef(r)} {...props}>
+      // @ts-expect-error just codegen stuff
+      <RNMBXVectorSourceNativeComponent ref={this.setNativeRef} {...props}>
         {cloneReactChildrenWithProps(this.props.children, {
           sourceID: this.props.id,
         })}
-      </RCTMGLVectorSource>
+      </RNMBXVectorSourceNativeComponent>
     );
   }
 }
-
-const RCTMGLVectorSource =
-  requireNativeComponent<NativeProps>(NATIVE_MODULE_NAME);
 
 export default VectorSource;

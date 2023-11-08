@@ -1,11 +1,16 @@
 import React from 'react';
-import MapboxGL from '@rnmapbox/maps';
+import {
+  MapView,
+  Images,
+  Camera,
+  Image,
+  SymbolLayer,
+  ShapeSource,
+} from '@rnmapbox/maps';
+import { Text, View } from 'react-native';
 
-import sheet from '../../styles/sheet';
 import exampleIcon from '../../assets/example.png';
 import pinIcon from '../../assets/pin.png';
-import BaseExamplePropTypes from '../common/BaseExamplePropTypes';
-import Page from '../common/Page';
 
 const styles = {
   icon: {
@@ -20,7 +25,9 @@ const styles = {
       1.2,
       /* default */ 1,
     ],
+    iconAllowOverlap: true,
   },
+  matchParent: { flex: 1 },
 };
 
 const featureCollection = {
@@ -70,14 +77,21 @@ const featureCollection = {
         coordinates: [-117.206862, 52.180897],
       },
     },
+    {
+      type: 'Feature',
+      id: '9d10456e-bdda-4aa9-9269-04c1667d4555',
+      properties: {
+        icon: 'pin-rn',
+      },
+      geometry: {
+        type: 'Point',
+        coordinates: [-117.205862, 52.180697],
+      },
+    },
   ],
 };
 
 class ShapeSourceIcon extends React.Component {
-  static propTypes = {
-    ...BaseExamplePropTypes,
-  };
-
   state = {
     images: {
       example: exampleIcon,
@@ -88,31 +102,74 @@ class ShapeSourceIcon extends React.Component {
     const { images } = this.state;
 
     return (
-      <Page {...this.props}>
-        <MapboxGL.MapView style={sheet.matchParent}>
-          <MapboxGL.Camera
-            zoomLevel={17}
-            centerCoordinate={[-117.20611157485, 52.180961084261]}
-          />
-          <MapboxGL.Images
-            nativeAssetImages={['pin']}
-            images={images}
-            onImageMissing={(imageKey) =>
+      <MapView style={styles.matchParent}>
+        <Camera
+          defaultSettings={{
+            zoomLevel: 16,
+            centerCoordinate: [-117.20611157485, 52.180961084261],
+          }}
+        />
+        <Images
+          nativeAssetImages={['pin']}
+          images={images}
+          onImageMissing={(imageKey) => {
+            if (imageKey != 'pin-rn') {
               this.setState({
                 images: { ...this.state.images, [imageKey]: pinIcon },
-              })
+              });
             }
-          />
-          <MapboxGL.ShapeSource
-            id="exampleShapeSource"
-            shape={featureCollection}
-          >
-            <MapboxGL.SymbolLayer id="exampleIconName" style={styles.icon} />
-          </MapboxGL.ShapeSource>
-        </MapboxGL.MapView>
-      </Page>
+          }}
+        >
+          <Image name="pin-rn">
+            <View>
+              <View
+                style={{
+                  borderRadius: 10,
+                  backgroundColor: 'gray',
+                  padding: 8,
+                  margin: 16,
+                  width: 100,
+                  shadowOffset: { width: 0, height: 8 },
+                  shadowOpacity: 0.2,
+                }}
+              >
+                <Text style={{ fontWeight: 'bold', color: 'white' }}>
+                  RN Pin 3
+                </Text>
+              </View>
+            </View>
+          </Image>
+        </Images>
+        <ShapeSource id="exampleShapeSource" shape={featureCollection}>
+          <SymbolLayer id="exampleIconName" style={styles.icon} />
+        </ShapeSource>
+      </MapView>
     );
   }
 }
 
 export default ShapeSourceIcon;
+
+/* end-example-doc */
+/** @type {import('../common/ExampleMetadata').ExampleMetadata} */
+const metadata = {
+  title: 'Shape Source Icons',
+  tags: [
+    'ShapeSource',
+    'SymbolLayer',
+    'Images',
+    'Images#nativeAssetImages',
+    'Images#onImageMissing',
+  ],
+  docs: `
+Render icons with various methods.
+
+* pin-rn: Rendered with a React Native View
+* pin: Rendered with a native asset image
+* pin3: Resolved as a result of onImageMissing
+* example: Rendered with a js asset image (require)
+
+`,
+};
+
+ShapeSourceIcon.metadata = metadata;

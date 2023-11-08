@@ -5,7 +5,7 @@ import CircleLayer from '../../src/components/CircleLayer';
 
 describe('CircleLayer', () => {
   test('renders correctly with default props', () => {
-    const { container: circleLayer } = render(
+    const { UNSAFE_root: circleLayer } = render(
       <CircleLayer id="requiredCircleLayerID" />,
     );
     const { props } = circleLayer;
@@ -27,7 +27,9 @@ describe('CircleLayer', () => {
       style: { visibility: 'none' },
     };
 
-    const { container: circleLayer } = render(<CircleLayer {...customProps} />);
+    const { UNSAFE_root: circleLayer } = render(
+      <CircleLayer {...customProps} />,
+    );
     const { props } = circleLayer;
 
     expect(props.id).toStrictEqual(customProps.id);
