@@ -17,7 +17,9 @@ public class RNMBXNativeUserLocation : UIView, RNMBXMapComponent {
   
   func _applySettings(_ map: RNMBXMapView) {
     let location = map.mapView.location!
-    location.options.puckType = .puck2D(.makeDefault(showBearing: iosShowsUserHeadingIndicator))
+    var configuration: Puck2DConfiguration = .makeDefault(showBearing: iosShowsUserHeadingIndicator)
+    configuration.pulsing = .default
+    location.options.puckType = .puck2D(configuration)
     if (iosShowsUserHeadingIndicator) {
        #if RNMBX_11
       location.options.puckBearing = .heading
