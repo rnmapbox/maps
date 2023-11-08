@@ -1,0 +1,626 @@
+import MapboxMaps
+import Turf
+
+@objc
+public class RNMBXShapeSource : RNMBXSource {
+  @objc public var url : String? {
+    didSet {
+      parseJSON(url) { [weak self] result in
+        guard let self = self else { return }
+
+        switch result {
+          case .success(let obj):
+            self.doUpdate { (style) in
+              logged("RNMBXShapeSource.setUrl") {
+                try style.updateGeoJSONSource(withId: self.id, geoJSON: obj)
+              }
+            }
+
+          case .failure(let error):
+            Logger.log(level: .error, message: ":: Error - update url failed \(error) \(error.localizedDescription)")
+        }
+      }
+    }
+  }
+
+  @objc public var shape : String? {
+    didSet {
+      let type = getGeoJSONType(shape)
+      switch type {
+      case .FeatureCollection, .Feature, .Geometry:
+        do {
+          let geoJSONObj = try getGeoJSONObject(shape!)
+          try map?.mapboxMap.style.updateGeoJSONSource(withId: id, geoJSON: geoJSONObj)
+        } catch {
+          Logger.log(level: .error, message: ":: Cannot get geoJSON object from shape \(error) \(error.localizedDescription)")
+        }
+      case .LineString:
+        timer?.invalidate()
+        currentLineStartOffset = 0.0
+        currentLineEndOffset = 0.0
+        let targetLine = try? getGeometryAsLine(shape)
+        applyGeometryFromLine(targetLine)
+      case .Point:
+        let targetPoint = try? getGeometryAsPoint(shape)
+        let prevPoint = lastUpdatedPoint ?? targetPoint
+        if let prevPoint = prevPoint, let targetPoint = targetPoint {
+          animateToNewPoint(prevPoint: prevPoint, targetPoint: targetPoint)
+        }
+      default:
+        break
+      }
+    }
+  }
+  
+  @objc var lineStartOffset: NSNumber? {
+    didSet {
+      animateToNewLineStartOffset(
+        prevOffset: currentLineStartOffset,
+        targetOffset: lineStartOffset?.doubleValue
+      )
+    }
+  }
+  
+  @objc var lineEndOffset: NSNumber? {
+    didSet {
+      animateToNewLineEndOffset(
+        prevOffset: currentLineEndOffset,
+        targetOffset: lineEndOffset?.doubleValue
+      )
+    }
+  }
+  
+  @objc var animationDuration: NSNumber?
+  
+  @objc var snapIfDistanceIsGreaterThan: NSNumber?
+
+  private func getGeometryAsPoint(_ str: String?) throws -> Point? {
+    guard let data = str?.data(using: .utf8) else {
+      throw RCTMGLError.parseError("point data could not be parsed as utf-8")
+    }
+    
+    var point: Point?
+
+    do {
+      let obj = try JSONDecoder().decode(Feature.self, from: data)
+      switch obj.geometry {
+      case .point(let p):
+        point = p
+      default:
+        throw RCTMGLError.parseError("point data could not be decoded because geometry is not of type Point")
+      }
+    } catch {
+      throw RCTMGLError.parseError("feature data could not be decoded: \(error.localizedDescription)")
+    }
+    
+    if point == nil {
+      do {
+        let obj = try JSONDecoder().decode(Point.self, from: data)
+        point = obj
+      } catch {
+        throw RCTMGLError.parseError("point data could not be decoded: \(error.localizedDescription)")
+      }
+    }
+    
+    return point
+  }
+
+  private func applyGeometryFromPoint(_ point: Point?) {
+    guard let style = map?.mapboxMap.style, let geometry = point else {
+      return
+    }
+    
+    lastUpdatedPoint = point
+    
+    let obj = GeoJSONObject.geometry(.point(geometry))
+    try? style.updateGeoJSONSource(withId: id, geoJSON: obj)
+  }
+
+  private func animateToNewPoint(prevPoint: Point, targetPoint: Point) {
+    self.timer?.invalidate()
+    
+    let lineBetween = LineString.init([
+      prevPoint.coordinates,
+      targetPoint.coordinates
+    ])
+    let distanceBetween = lineBetween.distance() ?? 0
+    
+    if let snapThreshold = snapIfDistanceIsGreaterThan?.doubleValue, distanceBetween > snapThreshold {
+      self.applyGeometryFromPoint(targetPoint)
+      return
+    }
+    
+    guard let animationDuration = animationDuration?.doubleValue, animationDuration > 0 else {
+      self.applyGeometryFromPoint(targetPoint)
+      return
+    }
+    
+    let fps: Double = 30
+    var ratio: Double = 0
+    
+    let durationSec = animationDuration / 1000
+    let ratioIncr = 1 / (fps * durationSec)
+    let period = 1000 / fps
+    
+    self.timer = Timer.scheduledTimer(withTimeInterval: period / 1000, repeats: true, block: { t in
+      ratio += ratioIncr
+      if ratio >= 1 {
+        t.invalidate()
+        return
+      }
+      
+      let coord = lineBetween.coordinateFromStart(distance: distanceBetween * ratio)!
+      let point = Point(coord)
+      self.applyGeometryFromPoint(point)
+    })
+  }
+
+  private func getGeometryAsLine(_ str: String?) throws -> LineString? {
+    guard let data = str?.data(using: .utf8) else {
+      throw RCTMGLError.parseError("line data could not be parsed as utf-8")
+    }
+
+    var lineString: LineString?
+    
+    do {
+      let obj = try JSONDecoder().decode(Feature.self, from: data)
+      switch obj.geometry {
+      case .lineString(let ls):
+        lineString = ls
+      default:
+        throw RCTMGLError.parseError("line data could not be decoded because geometry is not of type LineString")
+      }
+    } catch {
+      throw RCTMGLError.parseError("feature data could not be decoded: \(error.localizedDescription)")
+    }
+    
+    if lineString == nil {
+      do {
+        let obj = try JSONDecoder().decode(LineString.self, from: data)
+        lineString = obj
+      } catch {
+        throw RCTMGLError.parseError("line data could not be decoded: \(error.localizedDescription)")
+      }
+    }
+    
+    return lineString
+  }
+
+  func applyGeometryFromLine(_ line: LineString?) {
+    guard let style = map?.mapboxMap.style, let geometry = line else {
+      return
+    }
+    
+    guard let geometryTrimmed = geometry.trimmed(
+      from: currentLineStartOffset,
+      to: geometry.distance()! - currentLineEndOffset
+    ) else {
+      Logger.error("[RCTMGLShapeSource] line could not be trimmed")
+      return
+    }
+    
+    let obj = GeoJSONObject.geometry(.lineString(geometryTrimmed))
+    try? style.updateGeoJSONSource(withId: id, geoJSON: obj)
+  }
+
+  func animateToNewLineStartOffset(prevOffset: Double, targetOffset: Double?) {
+    guard let targetOffset = targetOffset else {
+      return
+    }
+
+    self.timer?.invalidate()
+
+    guard let duration = animationDuration?.doubleValue, duration > 0 else {
+      currentLineStartOffset = targetOffset
+      let lineString = try? getGeometryAsLine(shape)
+      applyGeometryFromLine(lineString)
+      return
+    }
+    
+    let fps: Double = 30
+    var ratio: Double = 0
+
+    let durationSec = duration / 1000
+    let ratioIncr = 1 / (fps * durationSec)
+    let period = 1000 / fps
+    
+    self.timer = Timer.scheduledTimer(withTimeInterval: period / 1000, repeats: true, block: { t in
+      ratio += ratioIncr
+      if ratio >= 1 {
+        t.invalidate()
+        return
+      }
+      
+      let progress = (targetOffset - prevOffset) * ratio
+      self.currentLineStartOffset = prevOffset + progress
+      
+      let lineString = try? self.getGeometryAsLine(self.shape)
+      self.applyGeometryFromLine(lineString)
+    })
+  }
+
+  func animateToNewLineEndOffset(prevOffset: Double, targetOffset: Double?) {
+      print("[RCTMGLShapeSource] animateToNewLineEndOffset is not implemented")
+  }
+
+
+  @objc public var cluster : NSNumber?
+  @objc public var clusterRadius : NSNumber?
+  @objc public var clusterMaxZoomLevel : NSNumber? {
+    didSet {
+      logged("RNMBXShapeSource.clusterMaxZoomLevel") {
+        if let number = clusterMaxZoomLevel?.doubleValue {
+          doUpdate { (style) in
+            logged("RNMBXShapeSource.doUpdate") {
+              try style.setSourceProperty(for: id, property: "clusterMaxZoom", value: number)
+            }
+          }
+        }
+      }
+    }
+  }
+  @objc public var clusterProperties : [String: [Any]]?;
+
+  @objc public var maxZoomLevel : NSNumber?
+  @objc public var buffer : NSNumber?
+  @objc public var tolerance : NSNumber?
+  @objc public var lineMetrics : NSNumber?
+
+  private var lastUpdatedPoint: Point?
+  private var currentLineStartOffset: Double = 0.0
+  private var currentLineEndOffset: Double = 0.0
+  private var timer: Timer?
+  
+  override func sourceType() -> Source.Type {
+    return GeoJSONSource.self
+  }
+
+  override func makeSource() -> Source
+  {
+    #if RNMBX_11
+    var result =  GeoJSONSource(id: id)
+    #else
+    var result =  GeoJSONSource()
+    #endif
+
+    if let shape = shape {
+      do {
+        result.data = try getGeoJSONSourceData(shape)
+      } catch {
+        Logger.log(level: .error, message: "Unable to read shape: \(shape) \(error) setting it to empty")
+        result.data = emptyShape()
+      }
+    }
+
+    if let url = url {
+      result.data = .url(URL(string: url)!)
+    }
+
+    if let cluster = cluster {
+      result.cluster = cluster.boolValue
+    }
+
+    if let clusterRadius = clusterRadius {
+      result.clusterRadius = clusterRadius.doubleValue
+    }
+
+    if let clusterMaxZoomLevel = clusterMaxZoomLevel {
+      result.clusterMaxZoom = clusterMaxZoomLevel.doubleValue
+    }
+
+    do {
+      if let clusterProperties = clusterProperties {
+        result.clusterProperties = try clusterProperties.mapValues { (params : [Any]) in
+          let data = try JSONSerialization.data(withJSONObject: params, options: .prettyPrinted)
+          let decodedExpression = try JSONDecoder().decode(Expression.self, from: data)
+
+          return decodedExpression
+        }
+      }
+    } catch {
+      Logger.log(level: .error, message: "RNMBXShapeSource.parsing clusterProperties failed", error: error)
+    }
+
+    if let maxZoomLevel = maxZoomLevel {
+      result.maxzoom = maxZoomLevel.doubleValue
+    }
+
+    if let buffer = buffer {
+      result.buffer = buffer.doubleValue
+    }
+
+    if let tolerance = tolerance {
+      result.tolerance = tolerance.doubleValue
+    }
+
+    if let lineMetrics = lineMetrics {
+      result.lineMetrics = lineMetrics.boolValue
+    }
+
+    return result
+  }
+
+  func doUpdate(_ update:(Style) -> Void) {
+    guard let map = self.map,
+          let _ = self.source,
+          map.mapboxMap.style.sourceExists(withId: id) else {
+      return
+    }
+
+    let style = map.mapboxMap.style
+    update(style)
+  }
+
+  func updateSource(property: String, value: Any) {
+    doUpdate { style in
+      try! style.setSourceProperty(for: id, property: property, value: value)
+    }
+  }
+}
+
+// MARK: - parseJSON(url)
+
+extension RNMBXShapeSource
+{
+  func parseJSON(_ url: String?, completion: @escaping (Result<GeoJSONObject, Error>) -> Void) {
+    guard let url = url else { return }
+
+    DispatchQueue.global().async { [url] in
+      let result: Result<GeoJSONObject, Error>
+
+      do {
+        let data = try Data(contentsOf: URL(string: url)!)
+        let obj = try JSONDecoder().decode(GeoJSONObject.self, from: data)
+
+        result = .success(obj)
+      } catch {
+        result = .failure(error)
+      }
+
+      DispatchQueue.main.async {
+        completion(result)
+      }
+    }
+  }
+}
+
+// MARK: - parse(shape)
+
+enum ShapeType {
+  case Geometry, LineString, Point, Feature, FeatureCollection, Url, Unknown
+}
+
+extension RNMBXShapeSource {
+  func getGeoJSONType(_ shape: String?) -> ShapeType {
+    let data: GeoJSONSourceData
+    do {
+      data = try getGeoJSONSourceData(shape)
+    } catch {
+      return .Unknown
+    }
+
+    switch data {
+    case .feature(let feature):
+      return getGeometryType(feature.geometry) ?? .Feature
+    case .featureCollection:
+      return .FeatureCollection
+    case .geometry(let geometry):
+      return getGeometryType(geometry) ?? .Geometry
+    case .url:
+      return .Url
+    default:
+      return .Unknown
+    }
+  }
+  
+  func getGeometryType(_ geometry: Geometry?) -> ShapeType? {
+    switch geometry {
+    case .lineString:
+      return .LineString
+    case .point:
+      return .Point
+    default:
+      return nil
+    }
+  }
+
+  func getGeoJSONSourceData(_ shape: String?) throws -> GeoJSONSourceData {
+    guard let data = shape?.data(using: .utf8) else {
+      throw RNMBXError.parseError("shape is not utf8")
+    }
+    
+    do {
+      return try JSONDecoder().decode(GeoJSONSourceData.self, from: data)
+    } catch {
+      let origError = error
+      do {
+        // workaround for mapbox issue, GeoJSONSourceData can't decode a single geometry
+        let geometry = try JSONDecoder().decode(Geometry.self, from: data)
+        return .geometry(geometry)
+      } catch {
+        throw origError
+      }
+    }
+  }
+
+  func getGeoJSONObject(_ shape: String?) throws -> GeoJSONObject {
+    guard let shape = shape else {
+      return emptyGeoJSONObject()
+    }
+    
+    let data = try getGeoJSONSourceData(shape)
+    switch data {
+    case .empty:
+      return emptyGeoJSONObject()
+    case .feature(let feature):
+      return .feature(feature)
+    case .featureCollection(let featureCollection):
+      return .featureCollection(featureCollection)
+    case .geometry(let geometry):
+      return .geometry(geometry)
+    #if RNMBX_11
+    case .string(_):
+      // RNMBX_11_TODO
+      throw RNMBXError.parseError("url as shape is not supported when updating a ShapeSource")
+    #else
+    case .url(_):
+      throw RNMBXError.parseError("url as shape is not supported when updating a ShapeSource")
+      #endif
+    }
+  }
+
+  func getFeature(_ shape: String) throws -> Feature {
+    guard let data = shape.data(using: .utf8) else {
+      throw RCTMGLError.parseError("shape is not utf8")
+    }
+    
+    return try JSONDecoder().decode(Feature.self, from: data)
+  }
+
+  func emptyGeoJSONObject() -> GeoJSONObject {
+    return .featureCollection(emptyFeatureCollection())
+  }
+
+  func emptyShape() -> GeoJSONSourceData {
+    return GeoJSONSourceData.featureCollection(FeatureCollection(features:[]))
+  }
+
+  func emptyFeatureCollection() -> FeatureCollection {
+    return FeatureCollection(features:[])
+  }
+}
+
+#if !RNMBX_11
+class DummyCancellable : Cancelable {
+  func cancel() {}
+}
+
+#if false
+extension MapboxMap {
+  @discardableResult
+  public func getGeoJsonClusterExpansionZoom(forSourceId sourceId: String,
+                                             feature: Feature,
+                                             completion: @escaping (Result<FeatureExtensionValue, Error>) -> Void) -> Cancelable {
+    self.queryFeatureExtension(for: sourceId,
+                               feature: feature,
+                               extension: "supercluster",
+                               extensionField: "expansion-zoom",
+                               args: nil,
+                               completion: completion)
+    return DummyCancellable()
+  }
+  @discardableResult
+  public func getGeoJsonClusterChildren(forSourceId sourceId: String,
+                                        feature: Feature,
+                                        completion: @escaping (Result<FeatureExtensionValue, Error>) -> Void) -> Cancelable {
+    self.queryFeatureExtension(for: sourceId,
+                                   feature: feature,
+                                   extension: "supercluster",
+                                   extensionField: "children",
+                                   args: nil,
+                                   completion: completion)
+    return DummyCancellable()
+  }
+
+  @discardableResult
+  public func getGeoJsonClusterLeaves(forSourceId sourceId: String,
+                                      feature: Feature,
+                                      limit: UInt64 = 10,
+                                      offset: UInt64 = 0,
+                                      completion: @escaping (Result<FeatureExtensionValue, Error>) -> Void) -> Cancelable {
+      self.queryFeatureExtension(for: sourceId,
+                                   feature: /*MapboxCommon.Feature(*/feature/*)*/,
+                                   extension: "supercluster",
+                                   extensionField: "leaves",
+                                   args: ["limit": limit, "offset": offset],
+                                   completion: completion)
+    return DummyCancellable()
+  }
+  
+  
+}
+#endif
+#endif
+
+// MARK: - getClusterExpansionZoom/getClusterLeaves
+
+extension RNMBXShapeSource
+{
+  func getClusterExpansionZoom(
+    _ featureJSON: String,
+    completion: @escaping (Result<Int, Error>) -> Void)
+  {
+    guard let mapView = map?.mapView else {
+      completion(.failure(RNMBXError.failed("getClusterExpansionZoom: no mapView")))
+      return
+    }
+
+    logged("RNMBXShapeSource.getClusterExpansionZoom", rejecter: { (_,_,error) in
+      completion(.failure(error!))
+    }) {
+      let cluster: Feature = try getFeature(featureJSON);
+
+      mapView.mapboxMap.getGeoJsonClusterExpansionZoom(forSourceId: self.id, feature: cluster) { result in
+        switch result {
+        case .success(let features):
+          guard let value = features.value as? NSNumber else {
+            completion(.failure(RNMBXError.failed("getClusterExpansionZoom: not a number")))
+            return
+          }
+
+          completion(.success(value.intValue))
+        case .failure(let error):
+          completion(.failure(error))
+        }
+      }
+    }
+  }
+
+  func getClusterLeaves(_ featureJSON: String,
+                              number: uint,
+                              offset: uint,
+                              completion: @escaping (Result<FeatureExtensionValue, Error>) -> Void)
+  {
+    guard let mapView = map?.mapView else {
+      completion(.failure(RNMBXError.failed("getClusterLeaves: no mapView")))
+      return
+    }
+
+    logged("RNMBXShapeSource.getClusterLeaves", rejecter: { (_,_,error) in
+      completion(.failure(error!))
+    }) {
+      let cluster : Feature = try getFeature(featureJSON);
+      mapView.mapboxMap.getGeoJsonClusterLeaves(forSourceId: self.id, feature: cluster, limit: UInt64(number), offset: UInt64(offset)) {
+        result in
+        switch result {
+        case .success(let features):
+          completion(.success(features))
+        case .failure(let error):
+          completion(.failure(error))
+        }
+      }
+    }
+  }
+
+  func getClusterChildren(_ featureJSON: String, completion: @escaping (Result<FeatureExtensionValue, Error>) -> Void) {
+    guard let mapView = map?.mapView else {
+      completion(.failure(RNMBXError.failed("getClusterChildren: no mapView")))
+      return
+    }
+
+    logged("RNMBXShapeSource.getClusterChildren", rejecter: { (_,_,error) in
+      completion(.failure(error!))
+    }) {
+      let cluster : Feature = try getFeature(featureJSON);
+      mapView.mapboxMap.getGeoJsonClusterChildren(forSourceId: self.id, feature: cluster) {
+        result in
+        switch result {
+        case .success(let features):
+          completion(.success(features))
+        case .failure(let error):
+          completion(.failure(error))
+        }
+      }
+    }
+  }
+}

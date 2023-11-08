@@ -7,10 +7,10 @@ export const getAnnotationsLayerID = (
   type: 'PointAnnotations' | 'Callouts',
 ) => {
   return Platform.select({
-    android: 'rctmgl-mapview-annotations',
+    android: 'RNMBX-mapview-annotations',
     ios: {
-      PointAnnotations: 'rctmgl-mapview-point-annotations',
-      Callouts: 'rctmgl-mapview-callouts',
+      PointAnnotations: 'RNMBX-mapview-point-annotations',
+      Callouts: 'RNMBX-mapview-callouts',
     }[type],
   });
 };

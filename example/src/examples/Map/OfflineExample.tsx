@@ -1,21 +1,28 @@
 import geoViewport from '@mapbox/geo-viewport';
-import Mapbox, { Camera, MapView, offlineManager } from '@rnmapbox/maps';
+import Mapbox, {
+  Camera,
+  MapView,
+  offlineManager,
+  StyleURL,
+} from '@rnmapbox/maps';
 import React, { useState } from 'react';
 import { Button, Dimensions, TextInput } from 'react-native';
 
-import Page from '../common/Page';
-import { BaseExampleProps } from '../common/BaseExamplePropTypes';
+import { ExampleWithMetadata } from '../common/ExampleMetadata'; // exclude-from-doc
 
 const CENTER_COORD: [number, number] = [-73.970895, 40.723279];
 const MAPBOX_VECTOR_TILE_SIZE = 512;
+console.log('=> Mapbox[0]:', Mapbox);
+console.log('=> Mapbox.StyleURL[1]:', Mapbox.StyleURL);
+console.log('=> StyleURL[2]:', StyleURL);
 const STYLE_URL = Mapbox.StyleURL.Satellite;
 
-const OfflineExample = (props: BaseExampleProps) => {
+const OfflineExample = () => {
   const [packName, setPackName] = useState('pack-1');
   const [showEditTitle, setShowEditTitle] = useState(false);
 
   return (
-    <Page {...props}>
+    <>
       <Button
         title={`Pack name: ${packName}`}
         onPress={() => {
@@ -110,20 +117,30 @@ const OfflineExample = (props: BaseExampleProps) => {
             },
           };
           offlineManager.createPack(options, (region, status) =>
-            console.log(
-              '=> progress callback region:',
-              props,
-              'status: ',
-              status,
-            ),
+            console.log('=> progress callback region:', 'status: ', status),
           );
         }}
       />
       <MapView style={{ flex: 1 }} styleURL={STYLE_URL}>
         <Camera zoomLevel={10} centerCoordinate={CENTER_COORD} />
       </MapView>
-    </Page>
+    </>
   );
 };
 
 export default OfflineExample;
+
+/* end-example-doc */
+
+const metadata: ExampleWithMetadata['metadata'] = {
+  title: 'Offline Example',
+  tags: [
+    'offlineManager#createPack',
+    'offlineManager#getPack',
+    'offlineManager#getPacks',
+  ],
+  docs: `
+Demonstates basic use of offlineManager api.
+`,
+};
+OfflineExample.metadata = metadata;

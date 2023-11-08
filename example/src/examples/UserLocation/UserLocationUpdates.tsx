@@ -2,17 +2,15 @@ import React, { useState } from 'react';
 import { Text } from 'react-native';
 import MapboxGL, { Location } from '@rnmapbox/maps';
 
-import sheet from '../../styles/sheet';
-import { BaseExampleProps } from '../common/BaseExamplePropTypes';
-import Page from '../common/Page';
 import Bubble from '../common/Bubble';
+import { ExampleWithMetadata } from '../common/ExampleMetadata'; // exclude-from-example-doc
 
-const UserLocationUpdates = (props: BaseExampleProps) => {
+const UserLocationUpdates = () => {
   const [location, setLocation] = useState<Location>();
 
   return (
-    <Page {...props}>
-      <MapboxGL.MapView style={sheet.matchParent}>
+    <>
+      <MapboxGL.MapView style={styles.matchParent}>
         <MapboxGL.UserLocation
           onUpdate={(newLocation) => setLocation(newLocation)}
         />
@@ -32,8 +30,24 @@ const UserLocationUpdates = (props: BaseExampleProps) => {
           </>
         )}
       </Bubble>
-    </Page>
+    </>
   );
 };
 
+const styles = {
+  matchParent: {
+    flex: 1,
+  },
+};
+
 export default UserLocationUpdates;
+/* end-example-doc */
+
+const metadata: ExampleWithMetadata['metadata'] = {
+  title: 'User Location Updates',
+  tags: ['UserLocation', 'UserLocation#onUpdate'],
+  docs: `
+Retrieves and shows location updates from UserLocation componen via the \`onUpdate\` callback
+`,
+};
+UserLocationUpdates.metadata = metadata;

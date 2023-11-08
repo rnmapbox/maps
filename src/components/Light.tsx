@@ -1,23 +1,16 @@
 import React, { forwardRef, memo, useImperativeHandle, useRef } from 'react';
-import { requireNativeComponent } from 'react-native';
 
+import RNMBXLightNativeComponent from '../specs/RNMBXLightNativeComponent';
 import { LightLayerStyleProps } from '../utils/MapboxStyles';
-import { StyleValue } from '../utils/StyleValue';
 import { type BaseProps } from '../types/BaseProps';
 import { transformStyle } from '../utils/StyleValue';
 import nativeRef from '../utils/nativeRef';
-
-export const NATIVE_MODULE_NAME = 'RCTMGLLight';
 
 type Props = BaseProps & {
   /**
    * Customizable style attributes
    */
   style: LightLayerStyleProps;
-};
-
-type NativeProps = Omit<Props, 'style'> & {
-  reactStyle?: { [key: string]: StyleValue };
 };
 
 interface LightMethods {
@@ -30,7 +23,7 @@ interface LightMethods {
 function Light(props: Props, ref: React.ForwardedRef<LightMethods>) {
   const { style, ...propWithoutStyle } = props;
 
-  const nativeLightRef = nativeRef(useRef<typeof RCTMGLLight>(null));
+  const nativeLightRef = nativeRef(useRef(null));
 
   useImperativeHandle(ref, () => ({
     setNativeProps(_props: { [key: string]: unknown }) {
@@ -46,15 +39,14 @@ function Light(props: Props, ref: React.ForwardedRef<LightMethods>) {
   }));
 
   return (
-    <RCTMGLLight
+    <RNMBXLightNativeComponent
+      // @ts-expect-error just codegen stuff
       ref={nativeLightRef}
-      testID="rctmglLight"
+      testID="RNMBXLight"
       {...propWithoutStyle}
       reactStyle={transformStyle(style)}
     />
   );
 }
-
-const RCTMGLLight = requireNativeComponent<NativeProps>(NATIVE_MODULE_NAME);
 
 export default memo(forwardRef(Light));

@@ -1,9 +1,7 @@
 import React from 'react';
 import { Text } from 'react-native';
-import MapboxGL from '@rnmapbox/maps';
+import { MapView, FillLayer, Camera } from '@rnmapbox/maps';
 
-import BaseExamplePropTypes from '../common/BaseExamplePropTypes';
-import Page from '../common/Page';
 import Bubble from '../common/Bubble';
 
 const defaultCamera = {
@@ -16,10 +14,6 @@ const styles = {
 };
 
 class ChangeLayerColor extends React.Component {
-  static propTypes = {
-    ...BaseExamplePropTypes,
-  };
-
   state = {
     fillColor: '',
   };
@@ -32,23 +26,35 @@ class ChangeLayerColor extends React.Component {
   render() {
     const { fillColor } = this.state;
     return (
-      <Page {...this.props}>
-        <MapboxGL.MapView
+      <>
+        <MapView
           ref={(c) => (this._map = c)}
           onPress={this.onPress}
           style={styles.mapView}
         >
-          <MapboxGL.Camera defaultSettings={defaultCamera} />
+          <Camera defaultSettings={defaultCamera} />
           {!!fillColor && (
-            <MapboxGL.FillLayer id="water" style={{ fillColor }} />
+            <FillLayer id="water" existing style={{ fillColor }} />
           )}
-        </MapboxGL.MapView>
+        </MapView>
         <Bubble onPress={this.onPress}>
           <Text>Paint Water</Text>
         </Bubble>
-      </Page>
+      </>
     );
   }
 }
 
 export default ChangeLayerColor;
+
+/* end-example-doc */
+
+/** @type ExampleWithMetadata['metadata'] */
+const metadata = {
+  title: 'Change Layer Color',
+  tags: ['FillLayer#existing', 'FillLayer#fillColor'],
+  docs: `
+Change style of a layer part of the map on the fly.
+`,
+};
+ChangeLayerColor.metadata = metadata;

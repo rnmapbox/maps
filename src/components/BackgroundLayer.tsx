@@ -1,15 +1,16 @@
 import React from 'react';
-import { NativeModules, requireNativeComponent } from 'react-native';
+import { NativeModules } from 'react-native';
 
 import {
   FilterExpression,
   BackgroundLayerStyleProps,
 } from '../utils/MapboxStyles';
 import { StyleValue } from '../utils/StyleValue';
+import RNMBXBackgroundLayerNativeComponent from '../specs/RNMBXBackgroundLayerNativeComponent';
 
 import AbstractLayer from './AbstractLayer';
 
-const MapboxGL = NativeModules.MGLModule;
+const MapboxGL = NativeModules.RNMBXModule;
 
 export type Props = {
   /**
@@ -70,8 +71,6 @@ export type Props = {
   style?: BackgroundLayerStyleProps;
 } & React.ComponentProps<typeof AbstractLayer>;
 
-export const NATIVE_MODULE_NAME = 'RCTMGLBackgroundLayer';
-
 type NativeTypeProps = Omit<Props, 'style'> & {
   reactStyle?: { [key: string]: StyleValue };
 };
@@ -86,11 +85,14 @@ class BackgroundLayer extends AbstractLayer<Props, NativeTypeProps> {
       ...this.baseProps,
       sourceLayerID: this.props.sourceLayerID,
     };
-    return <RCTMGLBackgroundLayer ref={this.setNativeLayer} {...props} />;
+    return (
+      <RNMBXBackgroundLayerNativeComponent
+        // @ts-expect-error just codegen stuff
+        ref={this.setNativeLayer}
+        {...props}
+      />
+    );
   }
 }
-
-const RCTMGLBackgroundLayer =
-  requireNativeComponent<NativeTypeProps>(NATIVE_MODULE_NAME);
 
 export default BackgroundLayer;

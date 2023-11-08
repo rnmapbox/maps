@@ -1,11 +1,9 @@
 import React, { memo, useMemo } from 'react';
-import { requireNativeComponent } from 'react-native';
 
 import type { TerrainLayerStyleProps, Value } from '../utils/MapboxStyles';
-import { StyleValue, transformStyle } from '../utils/StyleValue';
+import { transformStyle } from '../utils/StyleValue';
 import type { BaseProps } from '../types/BaseProps';
-
-export const NATIVE_MODULE_NAME = 'RCTMGLTerrain';
+import RNMBXATerrainNativeComponent from '../specs/RNMBXTerrainNativeComponent';
 
 type Props = BaseProps & {
   /**
@@ -22,10 +20,6 @@ type Props = BaseProps & {
    * Customizable style attributes
    */
   style?: TerrainLayerStyleProps;
-};
-
-type NativeProps = Omit<Props, 'style'> & {
-  reactStyle?: { [key: string]: StyleValue };
 };
 
 export const Terrain = memo((props: Props) => {
@@ -46,7 +40,5 @@ export const Terrain = memo((props: Props) => {
     };
   }, [props, style]);
 
-  return <RCTMGLTerrain {...baseProps} />;
+  return <RNMBXATerrainNativeComponent {...baseProps} />;
 });
-
-const RCTMGLTerrain = requireNativeComponent<NativeProps>(NATIVE_MODULE_NAME);

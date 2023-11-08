@@ -7,13 +7,11 @@ import MapboxGL, {
   SymbolLayer,
   Images,
 } from '@rnmapbox/maps';
-import { featureCollection, feature } from '@turf/helpers';
+import { featureCollection, feature, point } from '@turf/helpers';
 
-import sheet from '../../styles/sheet';
-import exampleIcon from '../../assets/example.png';
-import Page from '../common/Page';
 import Bubble from '../common/Bubble';
-import { BaseExampleProps } from '../common/BaseExamplePropTypes';
+import type { ExampleWithMetadata } from '../common/ExampleMetadata';
+import exampleIcon from '../../assets/example.png';
 
 const styles = {
   icon: {
@@ -22,10 +20,12 @@ const styles = {
   },
 };
 
-const CustomIcon = memo((props: BaseExampleProps) => {
+const CustomIcon = memo(() => {
   const cameraRef = useRef<Camera>(null);
   const [stateFeatureCollection, setStateFeatureCollection] =
-    useState<GeoJSON.FeatureCollection>(featureCollection([]));
+    useState<GeoJSON.FeatureCollection>(
+      featureCollection([point([-73.970895, 40.723279])]),
+    );
 
   const onPress = (e: GeoJSON.Feature) => {
     const aFeature = feature(e.geometry);
@@ -46,16 +46,18 @@ const CustomIcon = memo((props: BaseExampleProps) => {
   };
 
   return (
-    <Page {...props}>
+    <>
       <MapView
-        style={sheet.matchParent}
+        style={{ flex: 1 }}
         styleURL={MapboxGL.StyleURL.Light}
         onPress={onPress}
       >
         <Camera
           ref={cameraRef}
-          zoomLevel={9}
-          centerCoordinate={[-73.970895, 40.723279]}
+          defaultSettings={{
+            zoomLevel: 9,
+            centerCoordinate: [-73.970895, 40.723279],
+          }}
         />
         <ShapeSource
           id="symbolLocationSource"
@@ -74,8 +76,25 @@ const CustomIcon = memo((props: BaseExampleProps) => {
       <Bubble>
         <Text>Tap on Map to add an icon</Text>
       </Bubble>
-    </Page>
+    </>
   );
 });
 
 export default CustomIcon;
+/* end-example-doc */
+
+const metadata: ExampleWithMetadata['metadata'] = {
+  title: 'Custom Icon',
+  tags: [
+    'ShapeSource',
+    'ShapeSource#onPress',
+    'SymbolLayer',
+    'Images',
+    'SymbolLayer#iconImage',
+  ],
+  docs: `
+Renders a symbol layer with custom icon defined using the Images component. Clicking a location on a map add a new icon.
+`,
+};
+
+(CustomIcon as unknown as ExampleWithMetadata).metadata = metadata;

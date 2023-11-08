@@ -1,9 +1,5 @@
 import React from 'react';
-import MapboxGL from '@rnmapbox/maps';
-
-import sheet from '../../styles/sheet';
-import BaseExamplePropTypes from '../common/BaseExamplePropTypes';
-import Page from '../common/Page';
+import Mapbox from '@rnmapbox/maps';
 
 const styles = {
   circles: {
@@ -31,40 +27,58 @@ const styles = {
       /* other */ '#ccc',
     ],
   },
+  matchParent: { flex: 1 },
 };
 
 class DataDrivenCircleColors extends React.PureComponent {
-  static propTypes = {
-    ...BaseExamplePropTypes,
-  };
-
   render() {
     return (
-      <Page {...this.props}>
-        <MapboxGL.MapView
-          styleURL={MapboxGL.StyleURL.Light}
-          style={sheet.matchParent}
+      <>
+        <Mapbox.MapView
+          styleURL={Mapbox.StyleURL.Light}
+          style={styles.matchParent}
         >
-          <MapboxGL.Camera
-            zoomLevel={10}
-            pitch={45}
-            centerCoordinate={[-122.400021, 37.789085]}
+          <Mapbox.Camera
+            defaultSettings={{
+              centerCoordinate: [-122.400021, 37.789085],
+              pitch: 45,
+              zoomLevel: 10,
+            }}
           />
 
-          <MapboxGL.VectorSource
+          <Mapbox.VectorSource
             id="population"
             url={'mapbox://examples.8fgz4egr'}
           >
-            <MapboxGL.CircleLayer
+            <Mapbox.CircleLayer
               id="sf2010CircleFill"
               sourceLayerID="sf2010"
               style={styles.circles}
             />
-          </MapboxGL.VectorSource>
-        </MapboxGL.MapView>
-      </Page>
+          </Mapbox.VectorSource>
+        </Mapbox.MapView>
+      </>
     );
   }
 }
-
 export default DataDrivenCircleColors;
+
+/* end-example-doc */
+/** @type {import('../common/ExampleMetadata').ExampleMetadata} */
+const metadata = {
+  title: 'Data driven circle colors',
+  tags: [
+    'VectorSource',
+    'CircleLayer',
+    'CircleLayer#circleRadius',
+    'CircleLayer#circleColor',
+    'expressions',
+  ],
+  docs: `
+Renders circles with radius and color based on data-driven expressions.
+
+Color is based on the \`ethnicity\` property of the feature, radius is based on zoom level.
+`,
+};
+
+DataDrivenCircleColors.metadata = metadata;

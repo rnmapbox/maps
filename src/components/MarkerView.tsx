@@ -1,21 +1,16 @@
 import React from 'react';
-import {
-  Platform,
-  NativeModules,
-  requireNativeComponent,
-  type ViewProps,
-  View,
-} from 'react-native';
+import { Platform, NativeModules, type ViewProps, View } from 'react-native';
 
 import { toJSONString } from '../utils';
 import { makePoint } from '../utils/geoUtils';
 import { type Position } from '../types/Position';
+import NativeMarkerViewComponent from '../specs/RNMBXMarkerViewNativeComponent';
 
 import PointAnnotation from './PointAnnotation';
 
-const Mapbox = NativeModules.MGLModule;
+const Mapbox = NativeModules.RNMBXModule;
 
-export const NATIVE_MODULE_NAME = 'RCTMGLMarkerView';
+export const NATIVE_MODULE_NAME = 'RNMBXMarkerView';
 
 type Props = ViewProps & {
   /**
@@ -107,7 +102,7 @@ class MarkerView extends React.PureComponent<Props> {
     const { anchor = { x: 0.5, y: 0.5 } } = this.props;
 
     return (
-      <RCTMGLMarkerView
+      <RNMBXMarkerView
         style={[
           {
             flex: 0,
@@ -134,19 +129,11 @@ class MarkerView extends React.PureComponent<Props> {
         >
           {this.props.children}
         </View>
-      </RCTMGLMarkerView>
+      </RNMBXMarkerView>
     );
   }
 }
 
-type NativeProps = ViewProps & {
-  coordinate: string | undefined;
-  anchor: { x: number; y: number };
-  allowOverlap: boolean;
-  isSelected: boolean;
-};
-
-const RCTMGLMarkerView =
-  requireNativeComponent<NativeProps>(NATIVE_MODULE_NAME);
+const RNMBXMarkerView = NativeMarkerViewComponent;
 
 export default MarkerView;

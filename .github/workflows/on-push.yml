@@ -4,6 +4,7 @@ on:
     branches:
     - 'main'
     - 'v8'
+    - 'v10.0'
   pull_request:
 
 concurrency: 
@@ -76,13 +77,28 @@ jobs:
       MAPBOX_ACCESS_TOKEN: ${{ secrets.MAPBOX_ACCESS_TOKEN }}
       MAPBOX_DOWNLOAD_TOKEN: ${{ secrets.MAPBOX_DOWNLOAD_TOKEN }}
 
-  call_maplibre_android_workflow:
-    name: "Android/MapLibre"
-    needs: lint_test_generate
+  call_android_workflow_fabric:
+    name: "Android/Mapbox/Fabric"
+    needs: [lint_test_generate,has_mapbox_token]
     uses: ./.github/workflows/android-actions.yml
     with:
       NVMRC: ${{ needs.lint_test_generate.outputs.NVMRC }}
-      MAP_IMPL: maplibre
+      MAP_IMPL: mapbox
+      NEW_ARCH: true
+    if: needs.has_mapbox_token.outputs.has-mapbox-token == 'true'
+    secrets:
+      MAPBOX_ACCESS_TOKEN: ${{ secrets.MAPBOX_ACCESS_TOKEN }}
+      MAPBOX_DOWNLOAD_TOKEN: ${{ secrets.MAPBOX_DOWNLOAD_TOKEN }}
+
+
+  call_android_workflow_11:
+    name: "Android/Mapbox11"
+    needs: [lint_test_generate,has_mapbox_token]
+    uses: ./.github/workflows/android-actions.yml
+    with:
+      NVMRC: ${{ needs.lint_test_generate.outputs.NVMRC }}
+      MAP_IMPL: mapbox11
+    if: needs.has_mapbox_token.outputs.has-mapbox-token == 'true'
     secrets:
       MAPBOX_ACCESS_TOKEN: ${{ secrets.MAPBOX_ACCESS_TOKEN }}
       MAPBOX_DOWNLOAD_TOKEN: ${{ secrets.MAPBOX_DOWNLOAD_TOKEN }}
@@ -99,20 +115,34 @@ jobs:
       MAPBOX_ACCESS_TOKEN: ${{ secrets.MAPBOX_ACCESS_TOKEN }}
       MAPBOX_DOWNLOAD_TOKEN: ${{ secrets.MAPBOX_DOWNLOAD_TOKEN }}
 
-  call_maplibre_ios_workflow:
-    name: "iOS/MapLibre"
-    needs: lint_test_generate
+  call_ios_workflow_fabric:
+    name: "iOS/Mapbox/Fabric"
+    needs: [lint_test_generate,has_mapbox_token]
     uses: ./.github/workflows/ios-actions.yml
+    if: needs.has_mapbox_token.outputs.has-mapbox-token == 'true'
     with:
       NVMRC: ${{ needs.lint_test_generate.outputs.NVMRC }}
-      MAP_IMPL: maplibre
+      MAP_IMPL: mapbox
+      NEW_ARCH: true
+    secrets:
+      MAPBOX_ACCESS_TOKEN: ${{ secrets.MAPBOX_ACCESS_TOKEN }}
+      MAPBOX_DOWNLOAD_TOKEN: ${{ secrets.MAPBOX_DOWNLOAD_TOKEN }}
+
+  call_ios_workflow_11:
+    name: "iOS/Mapbox11"
+    needs: [lint_test_generate,has_mapbox_token]
+    uses: ./.github/workflows/ios-actions.yml
+    if: needs.has_mapbox_token.outputs.has-mapbox-token == 'true'
+    with:
+      NVMRC: ${{ needs.lint_test_generate.outputs.NVMRC }}
+      MAP_IMPL: mapbox11
     secrets:
       MAPBOX_ACCESS_TOKEN: ${{ secrets.MAPBOX_ACCESS_TOKEN }}
       MAPBOX_DOWNLOAD_TOKEN: ${{ secrets.MAPBOX_DOWNLOAD_TOKEN }}
 
   publish:
     if: startsWith(github.ref, 'refs/tags/') && (github.event_name == 'push')
-    needs: [lint_test_generate, call_maplibre_android_workflow, call_maplibre_ios_workflow]
+    needs: [lint_test_generate]
     runs-on: ubuntu-latest
 
     steps:

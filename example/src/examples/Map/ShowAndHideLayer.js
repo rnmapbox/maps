@@ -1,9 +1,7 @@
 import React from 'react';
 import { Text } from 'react-native';
-import MapboxGL from '@rnmapbox/maps';
+import { MapView, Camera, FillLayer, LineLayer } from '@rnmapbox/maps';
 
-import BaseExamplePropTypes from '../common/BaseExamplePropTypes';
-import Page from '../common/Page';
 import Bubble from '../common/Bubble';
 
 const defaultCamera = {
@@ -16,10 +14,6 @@ const styles = {
 };
 
 class ShowAndHideLayer extends React.Component {
-  static propTypes = {
-    ...BaseExamplePropTypes,
-  };
-
   state = {
     show: true,
   };
@@ -33,26 +27,39 @@ class ShowAndHideLayer extends React.Component {
   render() {
     const visibility = this.state.show ? 'visible' : 'none';
     return (
-      <Page {...this.props}>
-        <MapboxGL.MapView
+      <>
+        <MapView
           ref={(c) => (this._map = c)}
           onPress={this.onPress}
           style={styles.mapView}
         >
-          <MapboxGL.Camera defaultSettings={defaultCamera} />
-          <MapboxGL.FillLayer id="building" existing style={{ visibility }} />
-          <MapboxGL.LineLayer
-            id="building-outline"
-            existing
-            style={{ visibility }}
-          />
-        </MapboxGL.MapView>
+          <Camera defaultSettings={defaultCamera} />
+          <FillLayer id="building" existing style={{ visibility }} />
+          <LineLayer id="building-outline" existing style={{ visibility }} />
+        </MapView>
         <Bubble onPress={this.onPress}>
           <Text>{this.state.show ? 'Hide Buildings' : 'Show Buildings'}</Text>
         </Bubble>
-      </Page>
+      </>
     );
   }
 }
 
 export default ShowAndHideLayer;
+
+/* end-example-doc */
+
+/** @type ExampleWithMetadata['metadata'] */
+const metadata = {
+  title: 'Show and hide layer',
+  tags: [
+    'FillLayer#existing',
+    'LineLayer#existing',
+    'FillLayer#visibility',
+    'FillLayer#visibility',
+  ],
+  docs: `
+Changes visibility of layers part of the map
+`,
+};
+ShowAndHideLayer.metadata = metadata;

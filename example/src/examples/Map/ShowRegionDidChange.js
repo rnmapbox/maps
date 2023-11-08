@@ -1,11 +1,10 @@
 import React from 'react';
 import { Text } from 'react-native';
-import MapboxGL from '@rnmapbox/maps';
+import { MapView, Camera } from '@rnmapbox/maps';
+import { ButtonGroup } from '@rneui/base';
 
 import sheet from '../../styles/sheet';
 import { DEFAULT_CENTER_COORDINATE, SF_OFFICE_COORDINATE } from '../../utils';
-import BaseExamplePropTypes from '../common/BaseExamplePropTypes';
-import TabBarPage from '../common/TabBarPage';
 import Bubble from '../common/Bubble';
 
 const styles = {
@@ -20,10 +19,6 @@ const isValidCoordinate = (geometry) => {
 };
 
 class ShowRegionDidChange extends React.Component {
-  static propTypes = {
-    ...BaseExamplePropTypes,
-  };
-
   constructor(props) {
     super(props);
 
@@ -34,6 +29,7 @@ class ShowRegionDidChange extends React.Component {
         zoomLevel: 12,
       },
       regionFeature: undefined,
+      selectedIndex: 0,
     };
 
     this._tabOptions = [
@@ -57,7 +53,7 @@ class ShowRegionDidChange extends React.Component {
         cameraConfig: {
           triggerKey: Date.now(),
           centerCoordinate: optionData,
-          animationMode: MapboxGL.Camera.Mode.Flight,
+          animationMode: Camera.Mode.Flight,
           animationDuration: 2000,
         },
       });
@@ -131,24 +127,43 @@ class ShowRegionDidChange extends React.Component {
 
   render() {
     return (
-      <TabBarPage
-        {...this.props}
-        options={this._tabOptions}
-        onOptionPress={this.onOptionPress}
-      >
-        <MapboxGL.MapView
+      <>
+        <ButtonGroup
+          buttons={this._tabOptions.map((i) => i.label)}
+          selectedIndex={this.state.selectedIndex}
+          onPress={(index) => {
+            this.setState({ selectedIndex: index });
+            this.onOptionPress(index, this._tabOptions[index].data);
+          }}
+        />
+        <MapView
           ref={(c) => (this.map = c)}
           style={sheet.matchParent}
           onRegionWillChange={this.onRegionWillChange}
           onRegionIsChanging={this.onRegionIsChanging}
           onRegionDidChange={this.onRegionDidChange}
         >
-          <MapboxGL.Camera {...this.state.cameraConfig} />
-        </MapboxGL.MapView>
+          <Camera {...this.state.cameraConfig} />
+        </MapView>
         {this.renderRegionChange()}
-      </TabBarPage>
+      </>
     );
   }
 }
 
 export default ShowRegionDidChange;
+
+/* end-example-doc */
+
+const metadata = {
+  title: 'Show Region Did Change',
+  tags: [
+    'MapView#onRegionWillChange',
+    'MapView#onRegionIsChanging',
+    'MapView#onRegionDidChange',
+  ],
+  docs: `
+Demonstates MapView region change events.
+`,
+};
+ShowRegionDidChange.metadata = metadata;

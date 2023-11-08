@@ -11,13 +11,11 @@ import MapboxGL, {
 import { FeatureCollection } from 'geojson';
 import moment from 'moment';
 import React, { useRef, useState } from 'react';
-import { FlatList } from 'react-native';
+import { FlatList, SafeAreaView } from 'react-native';
 
 import earthQuakesJSON from '../../assets/earthquakes.json';
-import sheet from '../../styles/sheet';
 import { SF_OFFICE_COORDINATE } from '../../utils';
-import { BaseExampleProps } from '../common/BaseExamplePropTypes';
-import Page from '../common/Page';
+import { ExampleWithMetadata } from '../common/ExampleMetadata';
 
 const layerStyles: {
   singlePoint: CircleLayerStyle;
@@ -84,6 +82,9 @@ const styles = {
     elevation: 9999,
     zIndex: 9999,
   },
+  matchParent: {
+    flex: 1,
+  },
 } as const;
 
 const mag1 = ['<', ['get', 'mag'], 2];
@@ -92,130 +93,150 @@ const mag3 = ['all', ['>=', ['get', 'mag'], 3], ['<', ['get', 'mag'], 4]];
 const mag4 = ['all', ['>=', ['get', 'mag'], 4], ['<', ['get', 'mag'], 5]];
 const mag5 = ['>=', ['get', 'mag'], 5];
 
-const Earthquakes = ({ label, onDismissExample }: BaseExampleProps) => {
+const Earthquakes = () => {
   const shapeSource = useRef<ShapeSource>(null);
   const [selectedCluster, setSelectedCluster] = useState<FeatureCollection>();
 
   return (
     <>
       <Overlay isVisible={!!selectedCluster} fullScreen>
-        <FAB
-          onPress={() => {
-            setSelectedCluster(undefined);
-          }}
-          icon={<Icon name="close" />}
-          size="large"
-          style={styles.fab}
-        />
-        {selectedCluster && (
-          <FlatList
-            keyExtractor={({ properties: earthquakeInfo }) => {
-              return earthquakeInfo?.code;
+        <SafeAreaView style={{ flex: 1 }}>
+          <FAB
+            onPress={() => {
+              setSelectedCluster(undefined);
             }}
-            data={selectedCluster.features}
-            renderItem={({ item: { properties: earthquakeInfo } }) => {
-              const magnitude = `Magnitude: ${earthquakeInfo?.mag}`;
-              const place = `Place: ${earthquakeInfo?.place}`;
-              const code = `Code: ${earthquakeInfo?.code}`;
-              const time = `Time: ${moment(earthquakeInfo?.time).format(
-                'MMMM Do YYYY, h:mm:ss a',
-              )}`;
-
-              return (
-                <ListItem bottomDivider>
-                  <ListItem.Content>
-                    <ListItem.Title>{earthquakeInfo?.title}</ListItem.Title>
-                    <ListItem.Subtitle>{magnitude}</ListItem.Subtitle>
-                    <ListItem.Subtitle>{place}</ListItem.Subtitle>
-                    <ListItem.Subtitle>{code}</ListItem.Subtitle>
-                    <ListItem.Subtitle>{time}</ListItem.Subtitle>
-                  </ListItem.Content>
-                </ListItem>
-              );
-            }}
+            icon={<Icon name="close" />}
+            size="large"
+            style={styles.fab}
           />
-        )}
+          {selectedCluster && (
+            <FlatList
+              keyExtractor={({ properties: earthquakeInfo }) => {
+                return earthquakeInfo?.code;
+              }}
+              data={selectedCluster.features}
+              renderItem={({ item: { properties: earthquakeInfo } }) => {
+                const magnitude = `Magnitude: ${earthquakeInfo?.mag}`;
+                const place = `Place: ${earthquakeInfo?.place}`;
+                const code = `Code: ${earthquakeInfo?.code}`;
+                const time = `Time: ${moment(earthquakeInfo?.time).format(
+                  'MMMM Do YYYY, h:mm:ss a',
+                )}`;
+
+                return (
+                  <ListItem bottomDivider>
+                    <ListItem.Content>
+                      <ListItem.Title>{earthquakeInfo?.title}</ListItem.Title>
+                      <ListItem.Subtitle>{magnitude}</ListItem.Subtitle>
+                      <ListItem.Subtitle>{place}</ListItem.Subtitle>
+                      <ListItem.Subtitle>{code}</ListItem.Subtitle>
+                      <ListItem.Subtitle>{time}</ListItem.Subtitle>
+                    </ListItem.Content>
+                  </ListItem>
+                );
+              }}
+            />
+          )}
+        </SafeAreaView>
       </Overlay>
-      <Page label={label} onDismissExample={onDismissExample}>
-        <MapView style={sheet.matchParent} styleURL={MapboxGL.StyleURL.Dark}>
-          <Camera
-            defaultSettings={{
-              centerCoordinate: SF_OFFICE_COORDINATE,
-              zoomLevel: 6,
-            }}
-          />
+      <MapView style={styles.matchParent} styleURL={MapboxGL.StyleURL.Dark}>
+        <Camera
+          defaultSettings={{
+            centerCoordinate: SF_OFFICE_COORDINATE,
+            zoomLevel: 6,
+          }}
+        />
 
-          <ShapeSource
-            id="earthquakes"
-            onPress={async (pressedShape) => {
-              if (shapeSource.current) {
-                try {
-                  const [cluster] = pressedShape.features;
+        <ShapeSource
+          id="earthquakes"
+          onPress={async (pressedShape) => {
+            if (shapeSource.current) {
+              try {
+                const [cluster] = pressedShape.features;
 
-                  const collection = await shapeSource.current.getClusterLeaves(
-                    cluster,
-                    999,
-                    0,
-                  );
+                const collection = await shapeSource.current.getClusterLeaves(
+                  cluster,
+                  999,
+                  0,
+                );
 
-                  setSelectedCluster(collection);
-                } catch {
-                  if (!pressedShape.features[0].properties?.cluster) {
-                    setSelectedCluster({
-                      type: 'FeatureCollection',
-                      features: [pressedShape.features[0]],
-                    });
-                  }
+                setSelectedCluster(collection);
+              } catch {
+                if (!pressedShape.features[0].properties?.cluster) {
+                  setSelectedCluster({
+                    type: 'FeatureCollection',
+                    features: [pressedShape.features[0]],
+                  });
                 }
               }
-            }}
-            ref={shapeSource}
-            cluster
-            clusterRadius={50}
-            clusterMaxZoomLevel={14}
-            clusterProperties={{
-              mag1: [
-                ['+', ['accumulated'], ['get', 'mag1']],
-                ['case', mag1, 1, 0],
-              ],
-              mag2: [
-                ['+', ['accumulated'], ['get', 'mag2']],
-                ['case', mag2, 1, 0],
-              ],
-              mag3: [
-                ['+', ['accumulated'], ['get', 'mag3']],
-                ['case', mag3, 1, 0],
-              ],
-              mag4: [
-                ['+', ['accumulated'], ['get', 'mag4']],
-                ['case', mag4, 1, 0],
-              ],
-              mag5: [
-                ['+', ['accumulated'], ['get', 'mag5']],
-                ['case', mag5, 1, 0],
-              ],
-            }}
-            shape={earthQuakesJSON as unknown as FeatureCollection}
-          >
-            <SymbolLayer id="pointCount" style={layerStyles.clusterCount} />
+            }
+          }}
+          ref={shapeSource}
+          cluster
+          clusterRadius={50}
+          clusterMaxZoomLevel={14}
+          clusterProperties={{
+            mag1: [
+              ['+', ['accumulated'], ['get', 'mag1']],
+              ['case', mag1, 1, 0],
+            ],
+            mag2: [
+              ['+', ['accumulated'], ['get', 'mag2']],
+              ['case', mag2, 1, 0],
+            ],
+            mag3: [
+              ['+', ['accumulated'], ['get', 'mag3']],
+              ['case', mag3, 1, 0],
+            ],
+            mag4: [
+              ['+', ['accumulated'], ['get', 'mag4']],
+              ['case', mag4, 1, 0],
+            ],
+            mag5: [
+              ['+', ['accumulated'], ['get', 'mag5']],
+              ['case', mag5, 1, 0],
+            ],
+          }}
+          shape={earthQuakesJSON as unknown as FeatureCollection}
+        >
+          <SymbolLayer id="pointCount" style={layerStyles.clusterCount} />
 
-            <CircleLayer
-              id="clusteredPoints"
-              belowLayerID="pointCount"
-              filter={['has', 'point_count']}
-              style={layerStyles.clusteredPoints}
-            />
+          <CircleLayer
+            id="clusteredPoints"
+            belowLayerID="pointCount"
+            filter={['has', 'point_count']}
+            style={layerStyles.clusteredPoints}
+          />
 
-            <CircleLayer
-              id="singlePoint"
-              filter={['!', ['has', 'point_count']]}
-              style={layerStyles.singlePoint}
-            />
-          </ShapeSource>
-        </MapView>
-      </Page>
+          <CircleLayer
+            id="singlePoint"
+            filter={['!', ['has', 'point_count']]}
+            style={layerStyles.singlePoint}
+          />
+        </ShapeSource>
+      </MapView>
     </>
   );
 };
 
 export default Earthquakes;
+
+/* end-example-doc */
+const metadata: ExampleWithMetadata['metadata'] = {
+  title: 'Earthquakes',
+  tags: [
+    'ShapeSource',
+    'SymbolLayer',
+    'ShapeSource#getClusterLeaves',
+    'CircleLayer',
+    'CircleLayer#clusterProperties',
+    'expressions',
+  ],
+  docs: `
+Renders earthqueke with clustering.
+
+Click a cluster to show list of contents in the cluster \`getClusterLeaves\`.
+`,
+};
+
+(Earthquakes as unknown as ExampleWithMetadata).metadata = metadata;

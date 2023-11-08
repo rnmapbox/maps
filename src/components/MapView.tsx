@@ -3,7 +3,6 @@ import {
   View,
   StyleSheet,
   NativeModules,
-  requireNativeComponent,
   ViewProps,
   NativeSyntheticEvent,
   NativeMethods,
@@ -12,6 +11,10 @@ import {
 } from 'react-native';
 import { debounce } from 'debounce';
 
+import NativeMapView, {
+  type NativeMapViewActual,
+} from '../specs/RNMBXMapViewNativeComponent';
+import NativeMapViewModule from '../specs/NativeMapViewModule';
 import {
   isFunction,
   isAndroid,
@@ -26,29 +29,25 @@ import { type Location } from '../modules/location/locationManager';
 
 import NativeBridgeComponent from './NativeBridgeComponent';
 
-const { MGLModule } = NativeModules;
-const { EventTypes } = MGLModule;
+const { RNMBXModule } = NativeModules;
+const { EventTypes } = RNMBXModule;
 
-if (MGLModule == null) {
+if (RNMBXModule == null) {
   console.error(
     'Native part of Mapbox React Native libraries were not registered properly, double check our native installation guides.',
   );
 }
-if (!MGLModule.MapboxV10) {
+if (!RNMBXModule.MapboxV10) {
   console.warn(
     '@rnmapbox/maps: Non v10 implementations are deprecated and will be removed in next version - see https://github.com/rnmapbox/maps/wiki/Deprecated-RNMapboxImpl-Maplibre',
   );
 }
 
-export const NATIVE_MODULE_NAME = 'RCTMGLMapView';
-
-export const ANDROID_TEXTURE_NATIVE_MODULE_NAME = 'RCTMGLAndroidTextureMapView';
-
 const styles = StyleSheet.create({
   matchParent: { flex: 1 },
 });
 
-const defaultStyleURL = MGLModule.StyleURL.Street;
+const defaultStyleURL = RNMBXModule.StyleURL.Street;
 
 export type Point = {
   x: number;
@@ -64,6 +63,67 @@ export type RegionPayload = {
   isUserInteraction: boolean;
   visibleBounds: GeoJSON.Position[];
   pitch: number;
+};
+
+export type GestureSettings = {
+  /**
+   * Whether double tapping the map with one touch results in a zoom-in animation.
+   */
+  doubleTapToZoomInEnabled?: boolean;
+  /**
+   * Whether single tapping the map with two touches results in a zoom-out animation.
+   */
+  doubleTouchToZoomOutEnabled?: boolean;
+  /**
+   * Whether pan/scroll is enabled for the pinch gesture.
+   */
+  pinchPanEnabled?: boolean;
+  /**
+   * Whether zoom is enabled for the pinch gesture.
+   */
+  pinchZoomEnabled?: boolean;
+  /**
+   * Whether a deceleration animation following a pinch-zoom gesture is enabled. True by default.
+   * (Android only)
+   */
+  pinchZoomDecelerationEnabled?: boolean;
+  /**
+   * Whether the pitch gesture is enabled.
+   */
+  pitchEnabled?: boolean;
+  /**
+   * Whether the quick zoom gesture is enabled.
+   */
+  quickZoomEnabled?: boolean;
+  /**
+   * Whether the rotate gesture is enabled.
+   */
+  rotateEnabled?: boolean;
+  /**
+   * Whether a deceleration animation following a rotate gesture is enabled. True by default.
+   * (Android only)
+   */
+  rotateDecelerationEnabled?: boolean;
+  /**
+   * Whether the single-touch pan/scroll gesture is enabled.
+   */
+  panEnabled?: boolean;
+  /**
+   * A constant factor that determines how quickly pan deceleration animations happen. Multiplied with the velocity vector once per millisecond during deceleration animations.
+   *
+   * On iOS Defaults to UIScrollView.DecelerationRate.normal.rawValue
+   * On android set to 0 to disable deceleration, and non zero to enabled it.
+   */
+  panDecelerationFactor?: number;
+  /**
+   * Whether rotation is enabled for the pinch zoom gesture.
+   */
+  simultaneousRotateAndPinchZoomEnabled?: boolean;
+  /**
+   * The amount by which the zoom level increases or decreases during a double-tap-to-zoom-in or double-touch-to-zoom-out gesture. 1.0 by default. Must be positive.
+   * (Android only)
+   */
+  zoomAnimationAmount?: number;
 };
 
 /**
@@ -242,6 +302,11 @@ type Props = ViewProps & {
   localizeLabels?: LocalizeLabels;
 
   /**
+   * Gesture configuration allows to control the user touch interaction.
+   */
+  gestureSettings?: GestureSettings;
+
+  /**
    * Map press listener, gets called when a user presses the map
    */
   onPress?: (feature: GeoJSON.Feature) => void;
@@ -394,10 +459,9 @@ type Debounced<F> = F & { clear(): void; flush(): void };
  */
 class MapView extends NativeBridgeComponent(
   React.PureComponent<Props>,
-  NATIVE_MODULE_NAME,
+  NativeMapViewModule,
 ) {
   static defaultProps: Props = {
-    projection: 'mercator',
     scrollEnabled: true,
     pitchEnabled: true,
     rotateEnabled: true,
@@ -406,7 +470,7 @@ class MapView extends NativeBridgeComponent(
     compassFadeWhenNorth: false,
     logoEnabled: true,
     scaleBarEnabled: true,
-    surfaceView: MGLModule.MapboxV10 ? true : false,
+    surfaceView: RNMBXModule.MapboxV10 ? true : false,
     requestDisallowInterceptTouchEvent: false,
     regionWillChangeDebounceTime: 10,
     regionDidChangeDebounceTime: 500,
@@ -438,7 +502,7 @@ class MapView extends NativeBridgeComponent(
       >,
     ) => void
   >;
-  _nativeRef?: RCTMGLMapViewRefType;
+  _nativeRef?: RNMBXMapViewRefType;
   state: {
     isReady: boolean | null;
     region: null;
@@ -495,7 +559,7 @@ class MapView extends NativeBridgeComponent(
   }
 
   _setHandledMapChangedEvents(props: Props) {
-    if (isAndroid() || MGLModule.MapboxV10) {
+    if (isAndroid() || RNMBXModule.MapboxV10) {
       const events: string[] = [];
 
       function addIfHasHandler(name: CallbablePropKeysWithoutOn) {
@@ -568,7 +632,7 @@ class MapView extends NativeBridgeComponent(
         );
       }
 
-      this._runNativeCommand('setHandledMapChangedEvents', this._nativeRef, [
+      this._runNativeMethod('setHandledMapChangedEvents', this._nativeRef, [
         events,
       ]);
     }
@@ -676,7 +740,7 @@ class MapView extends NativeBridgeComponent(
   ): Promise<GeoJSON.FeatureCollection | undefined> {
     if (
       bbox != null &&
-      (bbox.length === 4 || (MGLModule.MapboxV10 && bbox.length === 0))
+      (bbox.length === 4 || (RNMBXModule.MapboxV10 && bbox.length === 0))
     ) {
       const res = await this._runNative<{ data: GeoJSON.FeatureCollection }>(
         'queryRenderedFeaturesInRect',
@@ -696,6 +760,35 @@ class MapView extends NativeBridgeComponent(
   }
 
   /**
+   * Returns an array of GeoJSON Feature objects representing features within the specified vector tile or GeoJSON source that satisfy the query parameters.
+   *
+   * @example
+   * this._map.querySourceFeatures('your-source-id', [], ['your-source-layer'])
+   *
+   * @param  {String} sourceId - Style source identifier used to query for source features.
+   * @param  {Array=} filter - A filter to limit query results.
+   * @param  {Array=} sourceLayerIDs - The name of the source layers to query. For vector tile sources, this parameter is required. For GeoJSON sources, it is ignored.
+   * @return {FeatureCollection}
+   */
+  async querySourceFeatures(
+    sourceId: string,
+    filter: FilterExpression | [] = [],
+    sourceLayerIDs: string[] = [],
+  ): Promise<GeoJSON.FeatureCollection> {
+    const args = [sourceId, getFilter(filter), sourceLayerIDs];
+    const res = await this._runNative<{ data: GeoJSON.FeatureCollection }>(
+      'querySourceFeatures',
+      args,
+    );
+
+    if (isAndroid()) {
+      return JSON.parse(res.data as unknown as string);
+    }
+
+    return res.data;
+  }
+
+  /**
    * Map camera will perform updates based on provided config. Deprecated use Camera#setCamera.
    * @deprecated use Camera#setCamera
    */
@@ -709,8 +802,10 @@ class MapView extends NativeBridgeComponent(
     methodName: string,
     args: NativeArg[] = [],
   ): Promise<ReturnType> {
-    return super._runNativeCommand<typeof RCTMGLMapView, ReturnType>(
+    return super._runNativeMethod<typeof RNMBXMapView, ReturnType>(
       methodName,
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore TODO: fix types
       this._nativeRef as HostComponent<NativeProps> | undefined,
       args,
     );
@@ -764,7 +859,7 @@ class MapView extends NativeBridgeComponent(
    * v10 only
    */
   async clearData(): Promise<void> {
-    if (!MGLModule.MapboxV10) {
+    if (!RNMBXModule.MapboxV10) {
       console.warn(
         'RNMapbox: clearData is only implemented in v10 implementation or later',
       );
@@ -816,18 +911,26 @@ class MapView extends NativeBridgeComponent(
    * If you implement a custom attribution button, you should add this action to the button.
    */
   showAttribution() {
-    return this._runNativeCommand('showAttribution', this._nativeRef);
+    return this._runNative<void>('showAttribution');
   }
 
-  _onPress(e: NativeSyntheticEvent<{ payload: GeoJSON.Feature }>) {
-    if (isFunction(this.props.onPress)) {
-      this.props.onPress(e.nativeEvent.payload);
+  _decodePayload<T>(payload: T | string): T {
+    if (typeof payload === 'string') {
+      return JSON.parse(payload);
+    } else {
+      return payload;
     }
   }
 
-  _onLongPress(e: NativeSyntheticEvent<{ payload: GeoJSON.Feature }>) {
+  _onPress(e: NativeSyntheticEvent<{ payload: GeoJSON.Feature | string }>) {
+    if (isFunction(this.props.onPress)) {
+      this.props.onPress(this._decodePayload(e.nativeEvent.payload));
+    }
+  }
+
+  _onLongPress(e: NativeSyntheticEvent<{ payload: GeoJSON.Feature | string }>) {
     if (isFunction(this.props.onLongPress)) {
-      this.props.onLongPress(e.nativeEvent.payload);
+      this.props.onLongPress(this._decodePayload(e.nativeEvent.payload));
     }
   }
 
@@ -854,22 +957,26 @@ class MapView extends NativeBridgeComponent(
     this.setState({ region: payload });
   }
 
-  _onCameraChanged(e: NativeSyntheticEvent<{ payload: MapState }>) {
-    this.props.onCameraChanged?.(e.nativeEvent.payload);
+  _onCameraChanged(e: NativeSyntheticEvent<{ payload: MapState | string }>) {
+    this.props.onCameraChanged?.(this._decodePayload(e.nativeEvent.payload));
   }
 
   _onChange(
     e: NativeSyntheticEvent<{
       type: string;
-      payload: GeoJSON.Feature<
-        GeoJSON.Point,
-        RegionPayload & { isAnimatingFromUserInteraction: boolean }
-      >;
+      payload:
+        | GeoJSON.Feature<
+            GeoJSON.Point,
+            RegionPayload & { isAnimatingFromUserInteraction: boolean }
+          >
+        | string;
     }>,
   ) {
     const { regionWillChangeDebounceTime, regionDidChangeDebounceTime } =
       this.props;
-    const { type, payload } = e.nativeEvent;
+    const { type } = e.nativeEvent;
+    const payload = this._decodePayload(e.nativeEvent.payload);
+
     let propName: CallbablePropKeys | '' = '';
     let deprecatedPropName: CallbablePropKeys | '' = '';
 
@@ -966,7 +1073,7 @@ class MapView extends NativeBridgeComponent(
       return;
     }
 
-    if (MGLModule.MapboxV10) {
+    if (RNMBXModule.MapboxV10) {
       if (!this.deprecationLogged.contentInset) {
         console.warn(
           '@rnmapbox/maps: contentInset is deprecated, use Camera padding instead.',
@@ -982,9 +1089,11 @@ class MapView extends NativeBridgeComponent(
     return this.props.contentInset;
   }
 
-  _setNativeRef(nativeRef: RCTMGLMapViewRefType) {
-    this._nativeRef = nativeRef;
-    super._runPendingNativeCommands(nativeRef);
+  _setNativeRef(nativeRef: RNMBXMapViewRefType | null) {
+    if (nativeRef != null) {
+      this._nativeRef = nativeRef;
+      super._runPendingNativeMethods(nativeRef);
+    }
   }
 
   setNativeProps(props: NativeProps) {
@@ -1012,7 +1121,7 @@ class MapView extends NativeBridgeComponent(
   }
 
   _setLocalizeLabels(props: Props) {
-    if (!MGLModule.MapboxV10) {
+    if (!RNMBXModule.MapboxV10) {
       return;
     }
     if (typeof props.localizeLabels === 'boolean') {
@@ -1033,26 +1142,20 @@ class MapView extends NativeBridgeComponent(
     this._setLocalizeLabels(props);
 
     const callbacks = {
-      ref: (nativeRef: RCTMGLMapViewRefType) => this._setNativeRef(nativeRef),
+      ref: (nativeRef: RNMBXMapViewRefType | null) =>
+        this._setNativeRef(nativeRef),
       onPress: this._onPress,
       onLongPress: this._onLongPress,
       onMapChange: this._onChange,
-      onAndroidCallback: isAndroid() ? this._onAndroidCallback : undefined,
       onCameraChanged: this._onCameraChanged,
     };
 
     let mapView = null;
-    if (isAndroid() && !this.props.surfaceView && this.state.isReady) {
+    if (this.state.isReady) {
       mapView = (
-        <RCTMGLAndroidTextureMapView {...props} {...callbacks}>
+        <RNMBXMapView {...props} {...callbacks}>
           {this.props.children}
-        </RCTMGLAndroidTextureMapView>
-      );
-    } else if (this.state.isReady) {
-      mapView = (
-        <RCTMGLMapView {...props} {...callbacks}>
-          {this.props.children}
-        </RCTMGLMapView>
+        </RNMBXMapView>
       );
     }
 
@@ -1072,19 +1175,19 @@ type NativeProps = Omit<
   Props,
   'onPress' | 'onLongPress' | 'onCameraChanged'
 > & {
-  onPress(event: NativeSyntheticEvent<{ payload: GeoJSON.Feature }>): void;
-  onLongPress(event: NativeSyntheticEvent<{ payload: GeoJSON.Feature }>): void;
-  onCameraChanged(event: NativeSyntheticEvent<{ payload: MapState }>): void;
+  onPress?: (
+    event: NativeSyntheticEvent<{ type: string; payload: string }>,
+  ) => void;
+  onLongPress?: (
+    event: NativeSyntheticEvent<{ type: string; payload: string }>,
+  ) => void;
+  onCameraChanged?: (
+    event: NativeSyntheticEvent<{ type: string; payload: string }>,
+  ) => void;
 };
 
-type RCTMGLMapViewRefType = Component<NativeProps> & Readonly<NativeMethods>;
-const RCTMGLMapView = requireNativeComponent<NativeProps>(NATIVE_MODULE_NAME);
+type RNMBXMapViewRefType = Component<NativeProps> & Readonly<NativeMethods>;
 
-let RCTMGLAndroidTextureMapView: typeof RCTMGLMapView;
-if (isAndroid()) {
-  RCTMGLAndroidTextureMapView = requireNativeComponent<NativeProps>(
-    ANDROID_TEXTURE_NATIVE_MODULE_NAME,
-  );
-}
+const RNMBXMapView = NativeMapView as NativeMapViewActual;
 
 export default MapView;

@@ -1,5 +1,4 @@
 import React from 'react';
-import { requireNativeComponent } from 'react-native';
 
 import {
   cloneReactChildrenWithProps,
@@ -7,10 +6,11 @@ import {
   resolveImagePath,
 } from '../utils';
 import { BaseProps } from '../types/BaseProps';
+import RNMBXImageSourceNativeComponent from '../specs/RNMBXImageSourceNativeComponent';
 
 import AbstractSource from './AbstractSource';
 
-export const NATIVE_MODULE_NAME = 'RCTMGLImageSource';
+export const NATIVE_MODULE_NAME = 'RNMBXImageSource';
 
 type Position = [number, number];
 
@@ -71,16 +71,14 @@ class ImageSource extends AbstractSource<Props, NativeProps> {
     };
 
     return (
-      <RCTMGLImageSource ref={this.setNativeRef} {...props}>
+      // @ts-expect-error just codegen stuff
+      <RNMBXImageSourceNativeComponent ref={this.setNativeRef} {...props}>
         {cloneReactChildrenWithProps(this.props.children, {
           sourceID: this.props.id,
         })}
-      </RCTMGLImageSource>
+      </RNMBXImageSourceNativeComponent>
     );
   }
 }
-
-const RCTMGLImageSource =
-  requireNativeComponent<NativeProps>(NATIVE_MODULE_NAME);
 
 export default ImageSource;
