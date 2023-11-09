@@ -163,6 +163,12 @@ NativeModules.RNMBXPointAnnotationModule = {
   refresh: jest.fn(),
 };
 
+NativeModules.RNMBXViewportModule = {
+  idle: jest.fn(),
+  transitionTo: jest.fn(),
+  getState: jest.fn(),
+};
+
 NativeModules.RNMBXLogging = nativeModule({});
 
 // Mock for global AbortController

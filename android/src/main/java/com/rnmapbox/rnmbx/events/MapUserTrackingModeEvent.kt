@@ -9,13 +9,13 @@ import com.rnmapbox.rnmbx.events.constants.EventTypes
 
 class MapUserTrackingModeEvent(view: View?, val userTrackingMode: Int, val basePayload: WritableMap? = null) : AbstractEvent(view, EventTypes.MAP_USER_TRACKING_MODE_CHANGE) {
     override val key
-        get() = EventKeys.MAP_USER_TRACKING_MODE_CHANGE;
+        get() = EventKeys.MAP_USER_TRACKING_MODE_CHANGE.value
 
     override val payload : WritableMap
-        get() = {
+        get() {
             val payload = basePayload?.copy() ?: Arguments.createMap()
             payload.putBoolean("followUserLocation", userTrackingMode != UserTrackingMode.NONE)
             payload.putString("followUserMode", UserTrackingMode.toString(userTrackingMode))
-            payload
-        }.invoke()
+            return payload
+        }
 }

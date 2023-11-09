@@ -28,7 +28,7 @@ public class PointAnnotationClickEvent extends MapClickEvent {
 
     @Override
     public String getKey() {
-        return getType().equals(EventTypes.ANNOTATION_SELECTED) ? EventKeys.POINT_ANNOTATION_SELECTED : EventKeys.POINT_ANNOTATION_DESELECTED;
+        return getType().equals(EventTypes.ANNOTATION_SELECTED) ? EventKeys.POINT_ANNOTATION_SELECTED.getValue() : EventKeys.POINT_ANNOTATION_DESELECTED.getValue();
     }
 
     @Override

@@ -7,6 +7,7 @@ import com.facebook.react.uimanager.ThemedReactContext
 import com.facebook.react.uimanager.annotations.ReactProp
 import com.facebook.react.viewmanagers.RNMBXVectorSourceManagerInterface
 import com.rnmapbox.rnmbx.events.constants.EventKeys
+import com.rnmapbox.rnmbx.events.constants.eventMapOf
 import javax.annotation.Nonnull
 
 class RNMBXVectorSourceManager(reactApplicationContext: ReactApplicationContext) :
@@ -38,10 +39,10 @@ class RNMBXVectorSourceManager(reactApplicationContext: ReactApplicationContext)
     }
 
     override fun customEvents(): Map<String, String>? {
-        return MapBuilder.builder<String, String>()
-            .put(EventKeys.VECTOR_SOURCE_LAYER_CLICK, "onMapboxVectorSourcePress")
-            .put(EventKeys.MAP_ANDROID_CALLBACK, "onAndroidCallback")
-            .build()
+        return eventMapOf(
+            EventKeys.VECTOR_SOURCE_LAYER_CLICK to "onMapboxVectorSourcePress",
+            EventKeys.MAP_ANDROID_CALLBACK to "onAndroidCallback"
+        )
     }
 
     companion object {

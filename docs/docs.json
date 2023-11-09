@@ -7406,6 +7406,72 @@
     "relPath": "src/components/VectorSource.tsx",
     "name": "VectorSource"
   },
+  "Viewport": {
+    "description": "provides a structured approach to organizing camera management logic into states and transitions between them.\n\nAt any given time, the viewport is either:\n - idle\n - in a state (camera is being managed by a ViewportState)\n - transitioning between states\n\nSee [android](https://docs.mapbox.com/android/maps/api/${ANDROID_SDK_VERSION}/mapbox-maps-android/com.mapbox.maps.plugin.viewport/viewport.html),\n[ios](https://docs.mapbox.com/ios/maps/api/${IOS_SDK_VERSION}/Viewport.html#/s:10MapboxMaps8ViewportC)",
+    "displayName": "Viewport",
+    "methods": [
+      {
+        "name": "getState",
+        "docblock": null,
+        "modifiers": [],
+        "params": [],
+        "returns": null
+      },
+      {
+        "name": "idle",
+        "docblock": null,
+        "modifiers": [
+          "async"
+        ],
+        "params": [],
+        "returns": null
+      },
+      {
+        "name": "transitionTo",
+        "docblock": null,
+        "modifiers": [],
+        "params": [
+          {
+            "name": "state",
+            "optional": false,
+            "type": {
+              "name": null
+            }
+          },
+          {
+            "name": "transition",
+            "optional": false,
+            "type": {
+              "name": null
+            }
+          }
+        ],
+        "returns": null
+      }
+    ],
+    "props": [
+      {
+        "name": "transitionsToIdleUponUserInteraction",
+        "required": false,
+        "type": "boolean",
+        "default": "none",
+        "description": "Indicates whether the Viewport should idle when the MapView receives touch input.\n\nSet this property to false to enable building custom ViewportStates that can work simultaneously with certain types of gestures.\n\nDefaults to true."
+      },
+      {
+        "name": "onStatusChanged",
+        "required": false,
+        "type": {
+          "name": "func",
+          "funcSignature": "(event:{from: union, to: union, reason: union}) => void"
+        },
+        "default": "none",
+        "description": "Subscribes to status changes, will be called when the status changes.\n\nObservers are notified of status changes asynchronously on the main queue.\nThis means that by the time the notification is delivered, the status may have already changed again.\nThis behavior is necessary to allow observers to trigger further transitions while avoiding out-of-order\ndelivery of status changed notifications.\n*signature:*`(event:{from: union, to: union, reason: union}) => void`"
+      }
+    ],
+    "fileNameWithExt": "Viewport.tsx",
+    "relPath": "src/components/Viewport.tsx",
+    "name": "Viewport"
+  },
   "coordinates": {
     "name": "coordinates",
     "fileNameWithExt": "locationManager.ts",

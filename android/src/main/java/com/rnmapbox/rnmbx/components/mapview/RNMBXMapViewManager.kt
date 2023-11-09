@@ -19,6 +19,7 @@ import com.mapbox.maps.extension.style.layers.properties.generated.ProjectionNam
 import com.mapbox.maps.plugin.gestures.gestures
 import com.mapbox.maps.plugin.logo.logo
 import com.rnmapbox.rnmbx.events.AndroidCallbackEvent
+import com.rnmapbox.rnmbx.events.constants.eventMapOf
 import com.rnmapbox.rnmbx.utils.ConvertUtils
 import com.rnmapbox.rnmbx.utils.ExpressionParser
 import com.rnmapbox.rnmbx.utils.Logger
@@ -336,14 +337,14 @@ open class RNMBXMapViewManager(context: ReactApplicationContext, val viewTagReso
     //endregion
     //region Custom Events
     override fun customEvents(): Map<String, String>? {
-        return MapBuilder.builder<String, String>()
-            .put(EventKeys.MAP_CLICK, "onPress")
-            .put(EventKeys.MAP_LONG_CLICK, "onLongPress")
-            .put(EventKeys.MAP_ONCHANGE, "onMapChange")
-            .put(EventKeys.MAP_ON_LOCATION_CHANGE, "onLocationChange")
-            .put(EventKeys.MAP_USER_TRACKING_MODE_CHANGE, "onUserTrackingModeChange")
-            .put(EventKeys.MAP_ANDROID_CALLBACK, "onAndroidCallback")
-            .build()
+        return eventMapOf(
+            EventKeys.MAP_CLICK to "onPress",
+            EventKeys.MAP_LONG_CLICK to "onLongPress",
+            EventKeys.MAP_ONCHANGE to "onMapChange",
+            EventKeys.MAP_ON_LOCATION_CHANGE to "onLocationChange",
+            EventKeys.MAP_USER_TRACKING_MODE_CHANGE to "onUserTrackingModeChange",
+            EventKeys.MAP_ANDROID_CALLBACK to "onAndroidCallback"
+        )
     }
 
     override fun getCommandsMap(): Map<String, Int>? {

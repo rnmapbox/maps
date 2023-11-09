@@ -31,7 +31,7 @@ public class ImageMissingEvent extends AbstractEvent {
     }
 
     public static ImageMissingEvent makeImageMissingEvent(View view, String imageKey) {
-        return new ImageMissingEvent(view, EventKeys.IMAGES_MISSING,
+        return new ImageMissingEvent(view, EventKeys.IMAGES_MISSING.getValue(),
                 EventTypes.IMAGES_MISSING, imageKey);
     }
 

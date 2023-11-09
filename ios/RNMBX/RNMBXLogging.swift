@@ -115,6 +115,14 @@ func logged<T>(_ msg: String, info: (() -> String)? = nil, errorResult: (Error) 
   }
 }
 
+@objc(RNMBXLogger)
+public class RNMBXLogger : NSObject {
+  @objc
+  static public func error(_ message: String) {
+    Logger.error(message)
+  }
+}
+
 @objc(RNMBXLogging)
 class RNMBXLogging: RCTEventEmitter {
   static var shared : RNMBXLogging? = nil
