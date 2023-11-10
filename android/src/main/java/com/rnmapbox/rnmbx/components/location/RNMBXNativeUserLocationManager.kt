@@ -17,10 +17,30 @@ class RNMBXNativeUserLocationManager : ViewGroupManager<RNMBXNativeUserLocation>
     @ReactProp(name = "androidRenderMode")
     override fun setAndroidRenderMode(userLocation: RNMBXNativeUserLocation, mode: Dynamic) {
         when (mode.asString()) {
-            "compass" -> userLocation.setAndroidRenderMode(RenderMode.COMPASS);
-            "gps" -> userLocation.setAndroidRenderMode(RenderMode.GPS);
-            "normal" -> userLocation.setAndroidRenderMode(RenderMode.NORMAL);
+            "compass" -> userLocation.setAndroidRenderMode(RenderMode.COMPASS)
+            "gps" -> userLocation.setAndroidRenderMode(RenderMode.GPS)
+            "normal" -> userLocation.setAndroidRenderMode(RenderMode.NORMAL)
         }
+    }
+
+    @ReactProp(name = "topImage")
+    override fun setTopImage(view: RNMBXNativeUserLocation, value: Dynamic?) {
+        view.mTopImage = value?.asString()
+    }
+
+    @ReactProp(name = "bearingImage")
+    override fun setBearingImage(view: RNMBXNativeUserLocation, value: Dynamic?) {
+        view.mBearingImage = value?.asString()
+    }
+
+    @ReactProp(name = "shadowImage")
+    override fun setShadowImage(view: RNMBXNativeUserLocation, value: Dynamic?) {
+        view.mShadowImage = value?.asString()
+    }
+
+    @ReactProp(name = "scale", defaultDouble = 1.0)
+    override fun setScale(view: RNMBXNativeUserLocation, value: Dynamic?) {
+        view.mScale = value?.asDouble() ?: 1.0
     }
 
     @ReactProp(name = "iosShowsUserHeadingIndicator")

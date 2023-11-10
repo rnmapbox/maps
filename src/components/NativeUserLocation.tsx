@@ -20,10 +20,58 @@ export type Props = {
    * @platform ios
    */
   iosShowsUserHeadingIndicator?: boolean;
+
+  /**
+   * The name of native image asset to use as the top layer for the location indicator. Native asset are under Image.xcassets on iOS and the drawables directory on android
+   */
+  topImage?: string;
+
+  /**
+   * The name of native image asset to use as the middle layer for the location indicator. Native asset are under Image.xcassets on iOS and the drawables directory on android
+   */
+  bearingImage?: string;
+
+  /**
+   * The name of native image asset to use as the background0 for the location indicator. Native asset are under Image.xcassets on iOS and the drawables directory on android
+   */
+  shadowImage?: string;
+
+  /**
+   * The size of the images, as a scale factor applied to the size of the specified image.
+   */
+  scale?: number;
+
+  /**
+   * Whether location icon is visible
+   */
+  visible?: boolean;
 };
 
 const NativeUserLocation = memo((props: Props) => {
-  return <RNMBXNativeUserLocationNativeComponent {...props} />;
+  const {
+    bearingImageAsset: bearingImage,
+    shadowImageAsset: shadowImage,
+    topImageAsset: topImage,
+    androidRenderMode,
+    iosShowsUserHeadingIndicator,
+    scale,
+    visible,
+  } = props;
+
+  if (visible === false) {
+    return null;
+  }
+
+  return (
+    <RNMBXNativeUserLocationNativeComponent
+      bearingImage={bearingImage}
+      shadowImage={shadowImage}
+      topImage={topImage}
+      androidRenderMode={androidRenderMode}
+      iosShowsUserHeadingIndicator={iosShowsUserHeadingIndicator}
+      scale={scale}
+    />
+  );
 });
 
 export default NativeUserLocation;

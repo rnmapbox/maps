@@ -4118,6 +4118,41 @@
         "type": "boolean",
         "default": "none",
         "description": "iOS only. A Boolean value indicating whether the user location annotation may display a permanent heading indicator.\n\n@platform ios"
+      },
+      {
+        "name": "topImageAsset",
+        "required": false,
+        "type": "string",
+        "default": "none",
+        "description": "The name of native image asset to use as the top layer for the location indicator. Native asset are under Image.xcassets on iOS and the drawables directory on android"
+      },
+      {
+        "name": "bearingImageAsset",
+        "required": false,
+        "type": "string",
+        "default": "none",
+        "description": "The name of native image asset to use as the middle layer for the location indicator. Native asset are under Image.xcassets on iOS and the drawables directory on android"
+      },
+      {
+        "name": "shadowImageAsset",
+        "required": false,
+        "type": "string",
+        "default": "none",
+        "description": "The name of native image asset to use as the background0 for the location indicator. Native asset are under Image.xcassets on iOS and the drawables directory on android"
+      },
+      {
+        "name": "scale",
+        "required": false,
+        "type": "number",
+        "default": "none",
+        "description": "The size of the images, as a scale factor applied to the size of the specified image."
+      },
+      {
+        "name": "visible",
+        "required": false,
+        "type": "boolean",
+        "default": "none",
+        "description": "Whether location icon is visible"
       }
     ],
     "fileNameWithExt": "NativeUserLocation.tsx",
@@ -7254,7 +7289,7 @@
         "required": false,
         "type": "UserLocationRenderMode",
         "default": "UserLocationRenderMode.Normal",
-        "description": "Which render mode to use."
+        "description": "@deprecated use NativeUserLocation component instead of UserLocationRenderMode.Native\nWhich render mode to use."
       },
       {
         "name": "requestsAlwaysUse",

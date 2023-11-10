@@ -6,6 +6,10 @@ import { UnsafeMixed } from './codegenUtils';
 export interface NativeProps extends ViewProps {
   androidRenderMode?: UnsafeMixed<string>;
   iosShowsUserHeadingIndicator?: UnsafeMixed<boolean>;
+  bearingImage?: UnsafeMixed<string>;
+  shadowImage?: UnsafeMixed<string>;
+  topImage?: UnsafeMixed<string>;
+  scale?: UnsafeMixed<number>;
 }
 
 export default codegenNativeComponent<NativeProps>(

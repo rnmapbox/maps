@@ -100,6 +100,7 @@ type Props = {
   onUpdate?: (location: Location) => void;
 
   /**
+   * @deprecated use NativeUserLocation component instead of UserLocationRenderMode.Native
    * Which render mode to use.
    */
   renderMode?: UserLocationRenderMode;

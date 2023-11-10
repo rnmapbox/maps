@@ -136,6 +136,21 @@
       },
       {
         "metadata": {
+          "title": "User Location Native Animated",
+          "tags": [
+            "UserLocation",
+            "UserLocation#nativeTopImage",
+            "MapView#setCustomLocation",
+            "MapView#removeCustomLocationProvider"
+          ],
+          "docs": "\n  Demonstrates native UserLocation being natively animated using a custom location provider\n  "
+        },
+        "fullPath": "example/src/examples/UserLocation/UserLocationNativeAnimated.tsx",
+        "relPath": "UserLocation/UserLocationNativeAnimated.tsx",
+        "name": "UserLocationNativeAnimated"
+      },
+      {
+        "metadata": {
           "title": "User Location Padding",
           "tags": [
             "Images",

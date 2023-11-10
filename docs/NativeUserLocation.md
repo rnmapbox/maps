@@ -39,6 +39,51 @@ iOS only. A Boolean value indicating whether the user location annotation may di
 
 
   
+### topImageAsset
+
+```tsx
+string
+```
+The name of native image asset to use as the top layer for the location indicator. Native asset are under Image.xcassets on iOS and the drawables directory on android
+
+
+  
+### bearingImageAsset
+
+```tsx
+string
+```
+The name of native image asset to use as the middle layer for the location indicator. Native asset are under Image.xcassets on iOS and the drawables directory on android
+
+
+  
+### shadowImageAsset
+
+```tsx
+string
+```
+The name of native image asset to use as the background0 for the location indicator. Native asset are under Image.xcassets on iOS and the drawables directory on android
+
+
+  
+### scale
+
+```tsx
+number
+```
+The size of the images, as a scale factor applied to the size of the specified image.
+
+
+  
+### visible
+
+```tsx
+boolean
+```
+Whether location icon is visible
+
+
+  
 
 
 
