@@ -176,6 +176,24 @@ class NativeMapViewModule(context: ReactApplicationContext, val viewTagResolver:
         }
     }
 
+    override fun setCustomLocation(
+        viewRef: Double?,
+        latitude: Double,
+        longitude: Double,
+        heading: Double?,
+        promise: Promise
+    ) {
+        withMapViewOnUIThread(viewRef, promise) {
+            it.setCustomLocation(latitude, longitude, heading, createCommandResponse(promise))
+        }
+    }
+
+    override fun removeCustomLocationProvider(viewRef: Double?, promise: Promise) {
+        withMapViewOnUIThread(viewRef, promise) {
+            it.removeCustomLocationProvider(createCommandResponse(promise))
+        }
+    }
+
     companion object {
         const val NAME = "RNMBXMapViewModule"
     }

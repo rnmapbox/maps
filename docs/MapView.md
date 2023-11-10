@@ -730,4 +730,26 @@ Show the attribution and telemetry action sheet.<br/>If you implement a custom a
 
 
 
+### setCustomLocation(latitude, longitude[, heading])
+
+Sets up a custom location provider and applies the supplied location
+
+#### arguments
+| Name | Type | Required | Description  |
+| ---- | :--: | :------: | :----------: |
+| `latitude` | `number` | `Yes` | undefined |
+| `longitude` | `number` | `Yes` | undefined |
+| `heading` | `number` | `No` | undefined |
+
+
+### removeCustomLocationProvider()
+
+Removes any previously set custom location provider
+
+#### arguments
+| Name | Type | Required | Description  |
+| ---- | :--: | :------: | :----------: |
+
+
+
 
