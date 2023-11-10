@@ -16,7 +16,7 @@ public class AndroidCallbackEvent extends AbstractEvent {
 
     @Override
     public String getKey() {
-        return EventKeys.MAP_ANDROID_CALLBACK;
+        return EventKeys.MAP_ANDROID_CALLBACK.getValue();
     }
 
     @Override

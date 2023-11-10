@@ -31,13 +31,13 @@ public class PointAnnotationDragEvent extends MapClickEvent {
         String eventType = getType();
 
         if (eventType.equals(EventTypes.ANNOTATION_DRAG_START)) {
-            return EventKeys.POINT_ANNOTATION_DRAG_START;
+            return EventKeys.POINT_ANNOTATION_DRAG_START.getValue();
         }
         if (eventType.equals(EventTypes.ANNOTATION_DRAG_END)) {
-            return EventKeys.POINT_ANNOTATION_DRAG_END;
+            return EventKeys.POINT_ANNOTATION_DRAG_END.getValue();
         }
 
-        return EventKeys.POINT_ANNOTATION_DRAG;
+        return EventKeys.POINT_ANNOTATION_DRAG.getValue();
     }
 
     @Override

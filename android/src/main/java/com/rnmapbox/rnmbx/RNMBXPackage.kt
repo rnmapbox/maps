@@ -12,6 +12,9 @@ import com.rnmapbox.rnmbx.components.annotation.RNMBXMarkerViewManager
 import com.rnmapbox.rnmbx.components.annotation.RNMBXPointAnnotationManager
 import com.rnmapbox.rnmbx.components.annotation.RNMBXPointAnnotationModule
 import com.rnmapbox.rnmbx.components.camera.RNMBXCameraManager
+import com.rnmapbox.rnmbx.components.camera.RNMBXViewport
+import com.rnmapbox.rnmbx.components.camera.RNMBXViewportManager
+import com.rnmapbox.rnmbx.components.camera.RNMBXViewportModule
 import com.rnmapbox.rnmbx.components.images.RNMBXImageManager
 import com.rnmapbox.rnmbx.components.images.RNMBXImageModule
 import com.rnmapbox.rnmbx.components.images.RNMBXImagesManager
@@ -68,6 +71,7 @@ class RNMBXPackage : TurboReactPackage() {
             RNMBXSnapshotModule.REACT_CLASS -> return RNMBXSnapshotModule(reactApplicationContext)
             RNMBXLogging.REACT_CLASS -> return RNMBXLogging(reactApplicationContext)
             NativeMapViewModule.NAME -> return NativeMapViewModule(reactApplicationContext, getViewTagResolver(reactApplicationContext))
+            RNMBXViewportModule.NAME -> return RNMBXViewportModule(reactApplicationContext, getViewTagResolver(reactApplicationContext))
             RNMBXShapeSourceModule.NAME -> return RNMBXShapeSourceModule(reactApplicationContext, getViewTagResolver(reactApplicationContext))
             RNMBXImageModule.NAME -> return RNMBXImageModule(reactApplicationContext, getViewTagResolver(reactApplicationContext))
             RNMBXPointAnnotationModule.NAME -> return RNMBXPointAnnotationModule(reactApplicationContext, getViewTagResolver(reactApplicationContext))
@@ -85,6 +89,7 @@ class RNMBXPackage : TurboReactPackage() {
 
         // components
         managers.add(RNMBXCameraManager(reactApplicationContext))
+        managers.add(RNMBXViewportManager(reactApplicationContext))
         managers.add(RNMBXMapViewManager(reactApplicationContext, getViewTagResolver(reactApplicationContext)))
         managers.add(RNMBXStyleImportManager(reactApplicationContext))
 
@@ -173,6 +178,15 @@ class RNMBXPackage : TurboReactPackage() {
             moduleInfos[NativeMapViewModule.NAME] = ReactModuleInfo(
                 NativeMapViewModule.NAME,
                 NativeMapViewModule.NAME,
+                false,  // canOverrideExistingModule
+                false,  // needsEagerInit
+                false,  // hasConstants
+                false,  // isCxxModule
+                isTurboModule // isTurboModule
+            )
+            moduleInfos[RNMBXViewportModule.NAME] = ReactModuleInfo(
+                RNMBXViewportModule.NAME,
+                RNMBXViewportModule.NAME,
                 false,  // canOverrideExistingModule
                 false,  // needsEagerInit
                 false,  // hasConstants

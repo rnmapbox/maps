@@ -63,17 +63,17 @@ public class FeatureClickEvent extends AbstractEvent {
     }
 
     public static FeatureClickEvent makeShapeSourceEvent(View view, RNMBXSource.OnPressEvent event) {
-        return new FeatureClickEvent(view, EventKeys.SHAPE_SOURCE_LAYER_CLICK,
+        return new FeatureClickEvent(view, EventKeys.SHAPE_SOURCE_LAYER_CLICK.getValue(),
                 EventTypes.SHAPE_SOURCE_LAYER_CLICK, event.getFeatures(), event.getLatLng(), event.getScreenPoint());
     }
 
     public static FeatureClickEvent makeVectorSourceEvent(View view, RNMBXSource.OnPressEvent event) {
-        return new FeatureClickEvent(view, EventKeys.VECTOR_SOURCE_LAYER_CLICK,
+        return new FeatureClickEvent(view, EventKeys.VECTOR_SOURCE_LAYER_CLICK.getValue(),
                 EventTypes.VECTOR_SOURCE_LAYER_CLICK, event.getFeatures(), event.getLatLng(), event.getScreenPoint());
     }
 
     public static FeatureClickEvent makeRasterSourceEvent(View view, RNMBXSource.OnPressEvent event) {
-        return new FeatureClickEvent(view, EventKeys.RASTER_SOURCE_LAYER_CLICK,
+        return new FeatureClickEvent(view, EventKeys.RASTER_SOURCE_LAYER_CLICK.getValue(),
                 EventTypes.RASTER_SOURCE_LAYER_CLICK, event.getFeatures(), event.getLatLng(), event.getScreenPoint());
     }
 }

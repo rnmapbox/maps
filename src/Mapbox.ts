@@ -17,11 +17,13 @@ export {
   default as UserLocation,
   UserLocationRenderMode,
 } from './components/UserLocation';
+export { default as NativeUserLocation } from './components/NativeUserLocation';
 export { default as VectorSource } from './components/VectorSource';
 export { ShapeSource } from './components/ShapeSource';
 export { default as RasterSource } from './components/RasterSource';
 export { default as RasterDemSource } from './components/RasterDemSource';
 export { default as ImageSource } from './components/ImageSource';
+export { Viewport } from './components/Viewport';
 export { default as Images, type ImageEntry } from './components/Images';
 export { default as Image } from './components/Image';
 export { default as FillLayer } from './components/FillLayer';

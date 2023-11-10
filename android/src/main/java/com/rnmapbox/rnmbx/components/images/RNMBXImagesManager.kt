@@ -11,6 +11,7 @@ import com.mapbox.maps.ImageContent
 import com.mapbox.maps.ImageStretches
 import com.rnmapbox.rnmbx.components.AbstractEventEmitter
 import com.rnmapbox.rnmbx.events.constants.EventKeys
+import com.rnmapbox.rnmbx.events.constants.eventMapOf
 import com.rnmapbox.rnmbx.utils.ImageEntry
 import com.rnmapbox.rnmbx.utils.Logger
 import com.rnmapbox.rnmbx.utils.ResourceUtils
@@ -178,9 +179,9 @@ class RNMBXImagesManager(private val mContext: ReactApplicationContext) :
     }
 
     override fun customEvents(): Map<String, String>? {
-        return MapBuilder.builder<String, String>()
-            .put(EventKeys.IMAGES_MISSING, "onImageMissing")
-            .build()
+        return eventMapOf(
+            EventKeys.IMAGES_MISSING to "onImageMissing"
+        )
     }
 
     // region RNMBXImage children

@@ -1,0 +1,259 @@
+package com.rnmapbox.rnmbx.components.camera
+
+import android.content.Context
+import android.util.Log
+import androidx.annotation.RequiresPermission.Read
+import com.facebook.react.bridge.Arguments
+import com.facebook.react.bridge.Callback
+import com.facebook.react.bridge.Promise
+import com.facebook.react.bridge.ReadableMap
+import com.facebook.react.bridge.UIManager
+import com.facebook.react.bridge.WritableMap
+import com.facebook.react.uimanager.UIManagerHelper
+import com.mapbox.maps.MapView
+import com.mapbox.maps.plugin.viewport.CompletionListener
+import com.mapbox.maps.plugin.viewport.ViewportPlugin
+import com.mapbox.maps.plugin.viewport.ViewportStatus
+import com.mapbox.maps.plugin.viewport.ViewportStatusObserver
+import com.mapbox.maps.plugin.viewport.data.DefaultViewportTransitionOptions
+import com.mapbox.maps.plugin.viewport.data.ViewportStatusChangeReason
+import com.mapbox.maps.plugin.viewport.state.FollowPuckViewportState
+import com.mapbox.maps.plugin.viewport.state.OverviewViewportState
+import com.mapbox.maps.plugin.viewport.state.ViewportState
+import com.mapbox.maps.plugin.viewport.transition.DefaultViewportTransition
+import com.mapbox.maps.plugin.viewport.transition.ViewportTransition
+import com.mapbox.maps.plugin.viewport.viewport
+import com.rnmapbox.rnmbx.components.AbstractMapFeature
+import com.rnmapbox.rnmbx.components.mapview.RNMBXMapView
+import com.rnmapbox.rnmbx.modules.RNMBXLogging
+import com.rnmapbox.rnmbx.utils.Logger
+import com.rnmapbox.rnmbx.utils.extensions.getAndLogIfNotBoolean
+import com.rnmapbox.rnmbx.utils.extensions.getAndLogIfNotDouble
+import com.rnmapbox.rnmbx.utils.extensions.getAndLogIfNotString
+import com.rnmapbox.rnmbx.utils.writableMapOf
+
+import com.facebook.react.uimanager.events.Event
+import com.rnmapbox.rnmbx.events.constants.EventKeys
+
+class BaseEvent(
+    private val surfaceId: Int,
+    private val viewTag: Int,
+    private val eventName: String,
+    private val eventData: WritableMap,
+    private val canCoalesce: Boolean = false
+): Event<BaseEvent>(surfaceId, viewTag) {
+    override fun getEventName(): String {
+        return eventName
+    }
+
+    override fun canCoalesce(): Boolean {
+        return canCoalesce
+    }
+
+    override fun getEventData(): WritableMap? {
+        return eventData
+    }
+}
+
+class RNMBXViewport(private val mContext: Context, private val mManager: RNMBXViewportManager) :
+AbstractMapFeature(
+mContext
+) {
+    // region properties
+    var transitionsToIdleUponUserInteraction: Boolean? = null
+        set(value: Boolean?) {
+            field = value
+            if (value != null) {
+                mMapView?.let { applyTransitionsToIdleUponUserIntraction(it.mapView) }
+            }
+        }
+
+    fun applyTransitionsToIdleUponUserIntraction(mapView: MapView) {
+        this.transitionsToIdleUponUserInteraction?.let {
+            mapView.viewport.options = mapView.viewport.options.toBuilder().transitionsToIdleUponUserInteraction(it).build()
+        }
+    }
+
+    var hasStatusChanged: Boolean = false
+        set(value: Boolean) {
+            field = value
+            mMapView?.let { applyHasStatusChanged(it.mapView) }
+        }
+    private var statusObserver: ViewportStatusObserver? = null
+
+    private fun applyHasStatusChanged(mapView: MapView) {
+        val viewport = mapView.viewport
+        if (hasStatusChanged) {
+            if (statusObserver == null) {
+                val statusObserver = ViewportStatusObserver { from, to, reason ->
+                    val payload = writableMapOf("from" to statusToMap(from), "to" to statusToMap(to), "reason" to reasonToSrting(reason))
+                    mManager.dispatchEvent(
+                        BaseEvent(
+                            UIManagerHelper.getSurfaceId(mContext),
+                            id,
+                            EventKeys.VIEWPORT_STATUS_CHANGE.value,
+                            writableMapOf(
+                                "type" to "statuschanged",
+                                "payload" to payload
+                            )
+                        )
+                    )
+                }
+                this.statusObserver = statusObserver
+                viewport.addStatusObserver(statusObserver)
+            }
+        } else {
+            statusObserver?.let {
+                viewport.removeStatusObserver(it)
+            }
+        }
+    }
+    // endregion
+
+    override fun addToMap(mapView: RNMBXMapView) {
+        super.addToMap(mapView)
+        applyTransitionsToIdleUponUserIntraction(mapView.mapView)
+        applyHasStatusChanged(mapView.mapView)
+    }
+
+    fun toState(viewport: ViewportPlugin, state: ReadableMap): ViewportState? {
+        return when (val kind = state.getAndLogIfNotString("kind")) {
+            "followPuck" -> viewport.makeFollowPuckViewportState()
+            //"overview" -> return viewport.makeOverviewViewportState()
+            else -> {
+                Logger.e(LOG_TAG, "toState: unexpected state: $kind")
+                null
+            }
+        }
+    }
+
+    fun toDefaultViewportTransitionOptions(state: ReadableMap?): DefaultViewportTransitionOptions {
+        val builder = DefaultViewportTransitionOptions.Builder()
+        if (state?.hasKey("maxDurationMs") == true) {
+            val maxDurationMs = state.getAndLogIfNotDouble("maxDurationMs", LOG_TAG)
+            if (maxDurationMs != null) {
+                builder.maxDurationMs(maxDurationMs.toLong())
+            }
+            builder.build()
+        }
+        return builder.build()
+    }
+
+    fun toTransition(viewport: ViewportPlugin, state: ReadableMap?): ViewportTransition? {
+        viewport.idle()
+        return when (val kind = state?.getAndLogIfNotString("kind", LOG_TAG)) {
+            "default" -> viewport.makeDefaultViewportTransition(
+               toDefaultViewportTransitionOptions(state?.getMap("options"))
+            )
+            "immediate" -> viewport.makeImmediateViewportTransition()
+            null -> null
+            else -> {
+                Logger.e(LOG_TAG, "toTransition: unexpected transition to: $kind")
+                null
+            }
+        }
+    }
+
+    fun transitionTo(state: ReadableMap,
+                     transition: ReadableMap?,
+                     promise: Promise
+    ) {
+        val mapView = mMapView
+        if (mapView == null) {
+            Logger.e(LOG_TAG, "transitionTo: mapView is null")
+            return
+        }
+
+        val toState = toState(mapView.mapView.viewport, state)
+        if (toState == null) {
+            Logger.e(LOG_TAG, "transitionTo: no state to transition to: $state")
+            return;
+        }
+        val transition = toTransition(mapView.mapView.viewport, transition)
+
+        mapView.mapView.viewport.transitionTo(toState, transition, CompletionListener { promise.resolve(it) } )
+    }
+
+    fun idle() {
+        val mapView = mMapView
+        if (mapView == null) {
+            Logger.e(LOG_TAG, "transitionTo: mapView is null")
+            return
+        }
+
+        mapView.mapView.viewport.idle()
+    }
+
+    private fun transitionToMap(transition: ViewportTransition): WritableMap? {
+        return when (transition) {
+            is DefaultViewportTransition -> writableMapOf("kind" to "default", "maxDurationMs" to transition.options.maxDurationMs)
+            else ->
+                if (transition.javaClass.toString().indexOf("ImmediateViewportTransition") >= 0) {
+                    writableMapOf("kind" to "immediate")
+                } else {
+                    writableMapOf("kind" to "unknown")
+                }
+        }
+    }
+
+    private fun stateToMap(state: ViewportState): WritableMap? {
+        return when (state) {
+            is FollowPuckViewportState -> writableMapOf("kind" to "followPuck")
+            is OverviewViewportState -> writableMapOf("kind" to "overview")
+            else -> {
+                writableMapOf("kind" to "custom", "impl" to state.javaClass.toString())
+            }
+        }
+    }
+
+    private fun statusToMap(status: ViewportStatus): WritableMap? {
+        return when (status) {
+            is ViewportStatus.Idle -> {
+                writableMapOf(
+                    "kind" to "idle"
+                )
+            }
+
+            is ViewportStatus.State -> {
+                writableMapOf(
+                    "kind" to "state",
+                    "state" to stateToMap(status.state)
+                )
+            }
+
+            is ViewportStatus.Transition -> {
+                writableMapOf(
+                    "kind" to "transition",
+                    "transition" to transitionToMap(status.transition),
+                    "toState" to stateToMap(status.toState)
+                )
+            }
+        }
+    }
+
+    private fun reasonToSrting(reason: ViewportStatusChangeReason): String {
+        return when (reason) {
+           ViewportStatusChangeReason.IDLE_REQUESTED -> "IdleRequested"
+            ViewportStatusChangeReason.TRANSITION_FAILED -> "TransitionFailed"
+            ViewportStatusChangeReason.TRANSITION_STARTED -> "TransitionStarted"
+            ViewportStatusChangeReason.USER_INTERACTION -> "UserInteraction"
+            ViewportStatusChangeReason.TRANSITION_SUCCEEDED -> "TransitionSucceeded"
+            else -> {
+                "Unknown:${reason.toString()}"
+            }
+        }
+    }
+
+    fun getState(): WritableMap? {
+        val mapView = mMapView
+        if (mapView == null) {
+            Logger.e(LOG_TAG, "getState: mapView is null")
+            return null
+        }
+        return statusToMap(mapView.mapView.viewport.status)
+    }
+
+    companion object {
+        const val LOG_TAG = "RNMBXViewport"
+    }
+}

@@ -52,3 +52,16 @@ fun ReadableMap.getAndLogIfNotDouble(key: String, tag: String = "RNMBXReadableMa
         null
     }
 }
+
+fun ReadableMap.getAndLogIfNotString(key: String, tag: String = "RNMBXReadableMap"): String? {
+    return if (hasKey(key)) {
+        if (getType(key) == ReadableType.String) {
+            getString(key)
+        } else {
+            Logger.e("RNMBXReadableMap", "$key is expected to be a string but was: ${getType(key)}")
+            null
+        }
+    } else {
+        null
+    }
+}

@@ -12,7 +12,7 @@ class MapChangeEvent constructor(
     private val mPayload: WritableMap = Arguments.createMap()
 ) : AbstractEvent(view, eventType) {
     override val key: String
-        get() = EventKeys.MAP_ONCHANGE
+        get() = EventKeys.MAP_ONCHANGE.value
 
     override val payload: WritableMap
         get() {
