@@ -1,20 +1,13 @@
 package com.rnmapbox.rnmbx.components.mapview
 
-import android.util.Log
 import com.facebook.react.bridge.Promise
 import com.facebook.react.bridge.ReactApplicationContext
 import com.facebook.react.bridge.ReadableArray
-import com.facebook.react.bridge.UIManager
 import com.facebook.react.bridge.WritableMap
 import com.facebook.react.bridge.WritableNativeMap
-import com.facebook.react.uimanager.IllegalViewOperationException
-import com.facebook.react.uimanager.UIManagerHelper
-import com.facebook.react.uimanager.common.UIManagerType
-import com.rnmapbox.rnmbx.BuildConfig
 import com.rnmapbox.rnmbx.NativeMapViewModuleSpec
 import com.rnmapbox.rnmbx.utils.ConvertUtils
 import com.rnmapbox.rnmbx.utils.ExpressionParser
-import com.rnmapbox.rnmbx.utils.Logger
 import com.rnmapbox.rnmbx.utils.ViewTagResolver
 import com.rnmapbox.rnmbx.utils.extensions.toCoordinate
 import com.rnmapbox.rnmbx.utils.extensions.toScreenCoordinate
@@ -180,6 +173,24 @@ class NativeMapViewModule(context: ReactApplicationContext, val viewTagResolver:
                 if (sourceLayerIds.size == 0) null else sourceLayerIds,
                 createCommandResponse(promise)
             )
+        }
+    }
+
+    override fun setCustomLocation(
+        viewRef: Double?,
+        latitude: Double,
+        longitude: Double,
+        heading: Double?,
+        promise: Promise
+    ) {
+        withMapViewOnUIThread(viewRef, promise) {
+            it.setCustomLocation(latitude, longitude, heading, createCommandResponse(promise))
+        }
+    }
+
+    override fun removeCustomLocationProvider(viewRef: Double?, promise: Promise) {
+        withMapViewOnUIThread(viewRef, promise) {
+            it.removeCustomLocationProvider(createCommandResponse(promise))
         }
     }
 

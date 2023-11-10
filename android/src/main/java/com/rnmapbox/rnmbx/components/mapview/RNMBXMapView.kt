@@ -39,14 +39,14 @@ import com.mapbox.maps.plugin.annotation.AnnotationConfig
 import com.mapbox.maps.plugin.annotation.annotations
 import com.mapbox.maps.plugin.annotation.generated.*
 import com.mapbox.maps.plugin.attribution.attribution
-import com.mapbox.maps.plugin.attribution.generated.AttributionSettings
 import com.mapbox.maps.plugin.compass.compass
-import com.mapbox.maps.plugin.compass.generated.CompassSettings
 import com.mapbox.maps.plugin.delegates.listeners.*
 import com.mapbox.maps.plugin.gestures.*
-import com.mapbox.maps.plugin.logo.generated.LogoSettings
+import com.mapbox.maps.plugin.locationcomponent.DefaultLocationProvider
+import com.mapbox.maps.plugin.locationcomponent.LocationConsumer
+import com.mapbox.maps.plugin.locationcomponent.LocationProvider
+import com.mapbox.maps.plugin.locationcomponent.location
 import com.mapbox.maps.plugin.logo.logo
-import com.mapbox.maps.plugin.scalebar.generated.ScaleBarSettings
 import com.mapbox.maps.plugin.scalebar.scalebar
 import com.mapbox.maps.viewannotation.ViewAnnotationManager
 import com.rnmapbox.rnmbx.R
@@ -65,10 +65,9 @@ import com.rnmapbox.rnmbx.components.styles.layers.RNMBXLayer
 import com.rnmapbox.rnmbx.components.styles.light.RNMBXLight
 import com.rnmapbox.rnmbx.components.styles.sources.RNMBXSource
 import com.rnmapbox.rnmbx.components.styles.terrain.RNMBXTerrain
-import com.rnmapbox.rnmbx.events.AndroidCallbackEvent
+import com.rnmapbox.rnmbx.events.CameraChangeEvent
 import com.rnmapbox.rnmbx.events.IEvent
 import com.rnmapbox.rnmbx.events.MapChangeEvent
-import com.rnmapbox.rnmbx.events.CameraChangeEvent
 import com.rnmapbox.rnmbx.events.MapClickEvent
 import com.rnmapbox.rnmbx.events.constants.EventTypes
 import com.rnmapbox.rnmbx.utils.*
@@ -86,6 +85,9 @@ import com.rnmapbox.rnmbx.v11compat.event.*
 import com.rnmapbox.rnmbx.v11compat.feature.*
 import com.rnmapbox.rnmbx.v11compat.mapboxmap.*
 import com.rnmapbox.rnmbx.v11compat.ornamentsettings.*
+import org.json.JSONException
+import org.json.JSONObject
+import java.util.*
 
 fun <T> MutableList<T>.removeIf21(predicate: (T) -> Boolean): Boolean {
     var removed = false
@@ -224,6 +226,9 @@ open class RNMBXMapView(private val mContext: Context, var mManager: RNMBXMapVie
     private lateinit var mMap: MapboxMap
 
     private lateinit var mMapView: MapView
+    private var mLocationConsumers = mutableListOf<LocationConsumer>()
+    private var mCustomLocationProvider: LocationProvider? = null
+    private var mDefaultLocationProvider: LocationProvider? = null
     val isInitialized: Boolean
         get() = this::mMapView.isInitialized
 
@@ -1119,6 +1124,51 @@ open class RNMBXMapView(private val mContext: Context, var mManager: RNMBXMapVie
                 response.error(features.error ?: "n/a")
             }
         }
+    }
+
+    fun setCustomLocation(
+        latitude: Double,
+        longitude: Double,
+        heading: Double?,
+        response: CommandResponse
+    ) {
+        var customLocationProvider: LocationProvider? = null
+        if (mCustomLocationProvider == null) {
+            customLocationProvider = object : LocationProvider {
+                override fun registerLocationConsumer(locationConsumer: LocationConsumer) {
+                    mLocationConsumers.add(locationConsumer)
+                }
+
+                override fun unRegisterLocationConsumer(locationConsumer: LocationConsumer) {
+                    mLocationConsumers.remove(locationConsumer)
+                }
+            }
+        }
+        if (customLocationProvider != null) {
+            mDefaultLocationProvider = mMapView.location.getLocationProvider()
+            mMapView.location.setLocationProvider(customLocationProvider)
+            mCustomLocationProvider = customLocationProvider
+        }
+
+        val point = Point.fromLngLat(longitude, latitude)
+        mLocationConsumers.forEach {
+            it.onLocationUpdated(point)
+            if (heading != null) {
+                it.onBearingUpdated(heading)
+            }
+        }
+
+        response.success { }
+    }
+
+    fun removeCustomLocationProvider(response: CommandResponse) {
+        mMapView.location.setLocationProvider(
+            mDefaultLocationProvider ?: DefaultLocationProvider(
+                mContext
+            )
+        )
+        mCustomLocationProvider = null
+        response.success { }
     }
 
     fun getVisibleBounds(response: CommandResponse) {

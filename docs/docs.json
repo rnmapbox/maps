@@ -3530,6 +3530,50 @@
         "returns": null,
         "description": "Show the attribution and telemetry action sheet.\nIf you implement a custom attribution button, you should add this action to the button.",
         "examples": []
+      },
+      {
+        "name": "setCustomLocation",
+        "docblock": "Sets up a custom location provider and applies the supplied location\n@param latitude\n@param longitude\n@param heading\n@returns Promise",
+        "modifiers": [],
+        "params": [
+          {
+            "name": "latitude",
+            "optional": false,
+            "type": {
+              "name": "number"
+            }
+          },
+          {
+            "name": "longitude",
+            "optional": false,
+            "type": {
+              "name": "number"
+            }
+          },
+          {
+            "name": "heading",
+            "optional": true,
+            "type": {
+              "name": "number"
+            }
+          }
+        ],
+        "returns": {
+          "description": "Promise"
+        },
+        "description": "Sets up a custom location provider and applies the supplied location",
+        "examples": []
+      },
+      {
+        "name": "removeCustomLocationProvider",
+        "docblock": "Removes any previously set custom location provider\n@returns Promise",
+        "modifiers": [],
+        "params": [],
+        "returns": {
+          "description": "Promise"
+        },
+        "description": "Removes any previously set custom location provider",
+        "examples": []
       }
     ],
     "props": [
