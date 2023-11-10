@@ -232,7 +232,6 @@ class NativeCommands<Spec extends object> {
     args: NativeArg[],
   ): Promise<T> {
     const handle = findNodeHandle(nativeRef);
-    console.log(' => handle', handle);
     if (handle) {
       return (
         this.module[name] as (
