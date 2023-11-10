@@ -16,7 +16,7 @@ import com.rnmapbox.rnmbx.v11compat.image.ImageHolder
 import com.rnmapbox.rnmbx.v11compat.image.toBitmapImageHolder
 import com.rnmapbox.rnmbx.v11compat.image.toByteArray
 import com.rnmapbox.rnmbx.v11compat.image.toImageData
-import com.rnmapbox.rnmbx.v11compat.location.PuckBearingSource
+import com.rnmapbox.rnmbx.v11compat.location.PuckBearing
 
 /**
  * The LocationComponent on android implements display of user's current location.
@@ -53,9 +53,10 @@ class LocationComponentManager(mapView: RNMBXMapView, context: Context) {
         var bearingImage: ImageHolder?, // The image used as the middle of the location indicator.
         var topImage: ImageHolder?, // The image to use as the top layer for the location indicator.
         var shadowImage: ImageHolder?, // The image that acts as a background of the location indicator.
-        var puckBearingSource: PuckBearingSource?, // bearing source
+        var puckBearingSource: PuckBearing?, // bearing source
         var pulsing: Boolean = true,
         var scale: Double = 1.0,
+        var nativeUserLocation: Boolean = false, // LocaitonPuck managed by RNMBXNativeUserLocation
     ) {
         val enabled: Boolean
             get() = showUserLocation || followUserLocation
@@ -98,49 +99,52 @@ class LocationComponentManager(mapView: RNMBXMapView, context: Context) {
             if (fullUpdate ||
                 newState.hidden != oldState.hidden ||
                 newState.tintColor != oldState.tintColor ||
-                newState.bearingImage != oldState.bearingImage ||
-                newState.topImage != oldState.topImage ||
-                newState.shadowImage != oldState.shadowImage ||
-                newState.scale != oldState.scale
+                newState.scale != oldState.scale ||
+                newState.nativeUserLocation != oldState.nativeUserLocation
             ) {
-                if (newState.hidden) {
-                    var emptyLocationPuck = LocationPuck2D()
-                    val empty =
-                        AppCompatResourcesV11.getDrawableImageHolder(mContext, R.drawable.empty)
-                    emptyLocationPuck.bearingImage = empty
-                    emptyLocationPuck.shadowImage = empty
-                    emptyLocationPuck.topImage = empty
-                    //emptyLocationPuck.opacity = 0.0
-                    locationPuck = emptyLocationPuck
-                    pulsingEnabled = false
-                } else {
-                    val tintColor = newState.tintColor
-                    var topImage = newState.topImage
-                    if (tintColor != null && topImage != null) {
-                        val imageData = (topImage as ByteArray).toImageData().toByteArray()
-                        val drawable = BitmapDrawable(mContext.resources, BitmapFactory.decodeByteArray(imageData, 0, imageData.size))
-                        drawable.setTint(tintColor)
-                        topImage = drawable.toBitmapImageHolder()
-                    }
-                    val scaleExpression = if (newState.scale != 1.0) {
-                        interpolate {
-                            linear()
-                            zoom()
-                            stop {
-                                literal(0)
-                                literal(newState.scale)
-                            }
-                        }.toJson()
-                    } else null
+                if (!newState.nativeUserLocation) {
+                    if (newState.hidden) {
+                        var emptyLocationPuck = LocationPuck2D()
+                        val empty =
+                            AppCompatResourcesV11.getDrawableImageHolder(mContext, R.drawable.empty)
+                        emptyLocationPuck.bearingImage = empty
+                        emptyLocationPuck.shadowImage = empty
+                        emptyLocationPuck.topImage = empty
+                        //emptyLocationPuck.opacity = 0.0
+                        locationPuck = emptyLocationPuck
+                        pulsingEnabled = false
+                    } else {
+                        val tintColor = newState.tintColor
+                        var topImage = newState.topImage
+                        if (tintColor != null && topImage != null) {
+                            val imageData = (topImage as ByteArray).toImageData().toByteArray()
+                            val drawable = BitmapDrawable(
+                                mContext.resources,
+                                BitmapFactory.decodeByteArray(imageData, 0, imageData.size)
+                            )
+                            drawable.setTint(tintColor)
+                            topImage = drawable.toBitmapImageHolder()
+                        }
+                        val scaleExpression = if (newState.scale != 1.0) {
+                            interpolate {
+                                linear()
+                                zoom()
+                                stop {
+                                    literal(0)
+                                    literal(newState.scale)
+                                }
+                            }.toJson()
+                        } else null
 
-                    locationPuck = LocationPuck2D(
-                        topImage = topImage,
-                        bearingImage = newState.bearingImage,
-                        shadowImage = newState.shadowImage,
-                        scaleExpression = scaleExpression,
-                    )
-                    pulsingEnabled = newState.pulsing
-                    pulsingColor = tintColor ?: MAPBOX_BLUE_COLOR
+                        locationPuck = LocationPuck2D(
+                            topImage = topImage,
+                            bearingImage = newState.bearingImage,
+                            shadowImage = newState.shadowImage,
+                            scaleExpression = scaleExpression,
+                        )
+                        pulsingEnabled = newState.pulsing
+                        pulsingColor = tintColor ?: MAPBOX_BLUE_COLOR
+                    }
                 }
             }
 
@@ -179,7 +183,7 @@ class LocationComponentManager(mapView: RNMBXMapView, context: Context) {
 
     fun showNativeUserLocation(showUserLocation: Boolean) {
         update {
-            it.copy(showUserLocation = showUserLocation)
+            it.copy(showUserLocation = showUserLocation, nativeUserLocation= showUserLocation)
         }
     }
 

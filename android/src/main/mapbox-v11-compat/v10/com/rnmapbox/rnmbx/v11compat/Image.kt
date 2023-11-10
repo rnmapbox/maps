@@ -1,6 +1,7 @@
 package com.rnmapbox.rnmbx.v11compat.image;
 
 import android.content.Context
+import android.content.res.Resources
 import android.graphics.Bitmap
 import android.graphics.drawable.BitmapDrawable
 import android.graphics.drawable.Drawable
@@ -54,4 +55,15 @@ class AppCompatResourcesV11 {
             return AppCompatResources.getDrawable(context, resId)
         }
     }
+}
+
+fun Image.toDrawable(): Drawable {
+    val bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888)
+    bitmap.copyPixelsFromBuffer(ByteBuffer.wrap(data))
+
+    return BitmapDrawable(Resources.getSystem(), bitmap)
+}
+
+fun Image.toImageHolder(): ImageHolder {
+    return toDrawable()
 }

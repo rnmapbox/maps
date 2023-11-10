@@ -111,6 +111,20 @@
     "examples": [
       {
         "metadata": {
+          "title": "Custom Native UserLocation",
+          "tags": [
+            "NativeUserLocation",
+            "NativeUserLocation#topImage",
+            "NativeUserLocation#scale"
+          ],
+          "docs": "\n  Demonstrates use of images to customize NativeUserLocation\n  "
+        },
+        "fullPath": "example/src/examples/UserLocation/CustomNativeUserLocation.tsx",
+        "relPath": "UserLocation/CustomNativeUserLocation.tsx",
+        "name": "CustomNativeUserLocation"
+      },
+      {
+        "metadata": {
           "title": "Set Displacement",
           "tags": [
             "UserLocation",
@@ -133,21 +147,6 @@
         "fullPath": "example/src/examples/UserLocation/SetTintColor.js",
         "relPath": "UserLocation/SetTintColor.js",
         "name": "SetTintColor"
-      },
-      {
-        "metadata": {
-          "title": "User Location Native Animated",
-          "tags": [
-            "UserLocation",
-            "UserLocation#nativeTopImage",
-            "MapView#setCustomLocation",
-            "MapView#removeCustomLocationProvider"
-          ],
-          "docs": "\n  Demonstrates native UserLocation being natively animated using a custom location provider\n  "
-        },
-        "fullPath": "example/src/examples/UserLocation/UserLocationNativeAnimated.tsx",
-        "relPath": "UserLocation/UserLocationNativeAnimated.tsx",
-        "name": "UserLocationNativeAnimated"
       },
       {
         "metadata": {

@@ -2,16 +2,35 @@ package com.rnmapbox.rnmbx.components.location
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.content.res.Resources
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
+import android.graphics.drawable.BitmapDrawable
+import android.graphics.drawable.Drawable
 import com.mapbox.android.core.permissions.PermissionsManager
+import com.mapbox.bindgen.Value
+import com.mapbox.maps.Image
+import com.mapbox.maps.MapView
 import com.mapbox.maps.MapboxMap
 import com.mapbox.maps.Style
+import com.mapbox.maps.plugin.LocationPuck2D
+import com.mapbox.maps.plugin.locationcomponent.location
 import com.rnmapbox.rnmbx.R
 import com.rnmapbox.rnmbx.components.AbstractMapFeature
 import com.rnmapbox.rnmbx.components.RemovalReason
+import com.rnmapbox.rnmbx.components.images.ImageManager
+import com.rnmapbox.rnmbx.components.images.Resolver
+import com.rnmapbox.rnmbx.components.images.Subscription
 import com.rnmapbox.rnmbx.components.mapview.OnMapReadyCallback
 import com.rnmapbox.rnmbx.components.mapview.RNMBXMapView
+import com.rnmapbox.rnmbx.utils.BitmapUtils
+import com.rnmapbox.rnmbx.utils.Logger
 import com.rnmapbox.rnmbx.v11compat.image.AppCompatResourcesV11
-import com.rnmapbox.rnmbx.v11compat.location.PuckBearingSource
+import com.rnmapbox.rnmbx.v11compat.image.ImageHolder
+import com.rnmapbox.rnmbx.v11compat.image.toDrawable
+import com.rnmapbox.rnmbx.v11compat.image.toImageHolder
+import com.rnmapbox.rnmbx.v11compat.location.*
+import java.nio.ByteBuffer
 
 enum class RenderMode {
     GPS, COMPASS, NORMAL
@@ -22,26 +41,118 @@ class RNMBXNativeUserLocation(context: Context) : AbstractMapFeature(context), O
     private var mMap: MapboxMap? = null
     private var mRenderMode : RenderMode = RenderMode.NORMAL;
     private var mContext : Context = context
-    var mTopImage: String? = null
+
+    private var imageManager: ImageManager? = null
+
+    // region bearing
+    var androidRenderMode: RenderMode? = null
+    var puckBearing: PuckBearing? = null
+    var puckBearingEnabled: Boolean? = null
+    // endregion
+
+    enum class PuckImagePart {
+        TOP,
+        BEARING,
+        SHADOW
+    }
+
+    private var imageNames = mutableMapOf<PuckImagePart, String>()
+    private var subscriptions = mutableMapOf<PuckImagePart, Subscription>()
+    private var images = mutableMapOf<PuckImagePart, ImageHolder>()
+
+    var topImage: String?
+        get() = imageNames[PuckImagePart.TOP]
+        set(value) { imageNameUpdated(PuckImagePart.TOP, value) }
+
+    var bearingImage: String?
+        get() = imageNames[PuckImagePart.BEARING]
+        set(value) { imageNameUpdated(PuckImagePart.BEARING, value) }
+
+    var shadowImage: String?
+        get() = imageNames[PuckImagePart.SHADOW]
+        set(value) { imageNameUpdated(PuckImagePart.SHADOW, value) }
+
+    var scale: Value? = null
         set(value) {
             field = value
-            applyChanges()
+            _apply()
         }
-    var mBearingImage: String? = null
+
+    var visible: Boolean = true
         set(value) {
             field = value
-            applyChanges()
+            _apply()
         }
-    var mShadowImage: String? = null
-        set(value) {
-            field = value
-            applyChanges()
+
+    private fun imageNameUpdated(image: PuckImagePart, name: String?) {
+        if (name != null) {
+            imageNames[image] = name
+        } else {
+            imageNames.remove(image)
         }
-    var mScale: Double = 1.0
-        set(value) {
-            field = value
-            applyChanges()
+        subscriptions[image]?.let {
+            it.cancel()
         }
+        subscriptions.remove(image)
+
+        if (name == null) {
+            imageUpdated(image, null)
+            return
+        }
+
+        imageManager?.let { subscribe(it, image, name) }
+
+    }
+
+    private fun imageUpdated(image: PuckImagePart, imageHolder: ImageHolder?) {
+        if (imageHolder != null) {
+            images[image] = imageHolder
+        } else {
+            images.remove(image)
+        }
+        _apply()
+    }
+
+    private fun _apply() {
+        mMapView?.let {
+            it.mapView?.let {
+                _apply(it)
+            }
+        }
+    }
+
+    private fun _apply(mapView: MapView) {
+        val location2 = mapView.location2;
+
+        if (visible) {
+            if (images.isEmpty()) {
+                location2.locationPuck =
+                    makeDefaultLocationPuck2D(mContext, androidRenderMode ?: RenderMode.NORMAL)
+            } else {
+                location2.locationPuck = LocationPuck2D(
+                    topImage = images[PuckImagePart.TOP],
+                    bearingImage = images[PuckImagePart.BEARING],
+                    shadowImage = images[PuckImagePart.SHADOW],
+                    scaleExpression = scale?.toJson()
+                )
+            }
+        } else {
+            val empty =
+                AppCompatResourcesV11.getDrawableImageHolder(mContext, R.drawable.empty)
+            location2.locationPuck = LocationPuck2D(
+                topImage = empty,
+                bearingImage = empty,
+                shadowImage = empty
+            )
+        }
+
+        this.puckBearing?.let {
+            location2.puckBearing = it
+        }
+        this.puckBearingEnabled?.let {
+            location2.puckBearingEnabled = it
+        }
+    }
 
     override fun addToMap(mapView: RNMBXMapView) {
         super.addToMap(mapView)
@@ -49,7 +160,8 @@ class RNMBXNativeUserLocation(context: Context) : AbstractMapFeature(context), O
         mapView.getMapboxMap()
         mapView.getMapAsync(this)
         mMapView?.locationComponentManager?.showNativeUserLocation(true)
-        applyChanges()
+        _fetchImages(mapView)
+        _apply()
     }
 
     override fun removeFromMap(mapView: RNMBXMapView, reason: RemovalReason): Boolean {
@@ -63,12 +175,7 @@ class RNMBXNativeUserLocation(context: Context) : AbstractMapFeature(context), O
     override fun onMapReady(mapboxMap: MapboxMap) {
         mMap = mapboxMap
         mapboxMap.getStyle(this)
-        applyChanges()
-    }
-
-    fun setAndroidRenderMode(renderMode: RenderMode) {
-        mRenderMode = renderMode;
-        applyChanges();
+        _apply()
     }
 
     @SuppressLint("MissingPermission")
@@ -82,79 +189,64 @@ class RNMBXNativeUserLocation(context: Context) : AbstractMapFeature(context), O
         mMapView?.locationComponentManager?.showNativeUserLocation(mEnabled)
     }
 
-    @SuppressLint("DiscouragedApi")
-    fun applyChanges() {
-        val useCustomImages = mTopImage != null || mBearingImage != null || mShadowImage != null
-
-        val bearingImageResourceId = if (mBearingImage != null) {
-            context.resources.getIdentifier(
-                mBearingImage,
-                "drawable",
-                context.packageName
-            )
-        } else if (useCustomImages) {
-            null
-        } else when (mRenderMode) {
-            RenderMode.GPS -> R.drawable.mapbox_user_bearing_icon
-            RenderMode.COMPASS -> R.drawable.mapbox_user_puck_icon
-            RenderMode.NORMAL -> R.drawable.mapbox_user_stroke_icon
+    // region fetch images and subscribe on updates
+    private fun subscribe(imageManager: ImageManager, image: PuckImagePart, name: String) {
+        subscriptions[image]?.let {
+            it.cancel()
+            subscriptions.remove(image)
+            Logger.e("RNMBXNativeUserLocation", "subscribe: there is alread a subscription for image: $image")
         }
 
-        val topImageResourceId = if (mTopImage != null) {
-            context.resources.getIdentifier(
-                mTopImage,
-                "drawable",
-                context.packageName
-            )
-        } else if (useCustomImages) {
-            null
-        } else R.drawable.mapbox_user_icon
+        subscriptions[image] = imageManager.subscribe(name, Resolver { _, imageData  ->
+            imageUpdated(image, imageData.toImageHolder())
+        })
+    }
 
-        val shadowImageResourceId = if (mShadowImage != null) {
-            context.resources.getIdentifier(
-                mShadowImage,
-                "drawable",
-                context.packageName
-            )
-        } else if (useCustomImages) {
-            null
-        } else R.drawable.mapbox_user_icon_shadow
-
-        val puckBearingSource = when (mRenderMode) {
-            RenderMode.GPS -> PuckBearingSource.COURSE
-            RenderMode.COMPASS -> PuckBearingSource.HEADING
-            RenderMode.NORMAL -> null
+    private fun removeSubscriptions() {
+        subscriptions.forEach {
+            it.value.cancel()
         }
-        val pulsing = mRenderMode == RenderMode.NORMAL
+        subscriptions.clear()
+    }
 
-
-        mMapView?.locationComponentManager?.let { locationComponentManager ->
-            // emulate https://docs.mapbox.com/android/legacy/maps/guides/location-component/
-            locationComponentManager.update { state ->
-                state.copy(
-                    bearingImage = bearingImageResourceId?.let { bearingImageResourceId ->
-                        AppCompatResourcesV11.getDrawableImageHolder(
-                            mContext,
-                            bearingImageResourceId
-                        )
-                    },
-                    topImage = topImageResourceId?.let { topImageResourceId ->
-                        AppCompatResourcesV11.getDrawableImageHolder(
-                            mContext,
-                            topImageResourceId
-                        )
-                    },
-                    shadowImage = shadowImageResourceId?.let { shadowImageResourceId ->
-                        AppCompatResourcesV11.getDrawableImageHolder(
-                            mContext,
-                            shadowImageResourceId
-                        )
-                    },
-                    puckBearingSource = puckBearingSource,
-                    pulsing = pulsing,
-                    scale = mScale
-                )
+    private fun _fetchImages(map: RNMBXMapView) {
+        map.mapView?.getMapboxMap()?.getStyle()?.let { style ->
+            imageNames.forEach { (part,name) ->
+                if (style.hasStyleImage(name)) {
+                    style.getStyleImage(name)?.let { image ->
+                        images[part] = image.toImageHolder()
+                    }
+                }
             }
         }
+
+        removeSubscriptions()
+        val imageManager = map.imageManager
+        this.imageManager = imageManager
+        imageNames.forEach { (part,name) ->
+            subscribe(imageManager, part, name)
+        }
     }
+    // endregion
+}
+
+fun makeDefaultLocationPuck2D(context: Context, renderMode: RenderMode): LocationPuck2D {
+    return LocationPuck2D(
+        topImage = AppCompatResourcesV11.getDrawableImageHolder(
+            context,
+            R.drawable.mapbox_user_icon
+        ),
+        bearingImage = AppCompatResourcesV11.getDrawableImageHolder(
+            context,
+            when (renderMode) {
+                RenderMode.GPS -> R.drawable.mapbox_user_bearing_icon
+                RenderMode.COMPASS -> R.drawable.mapbox_user_puck_icon
+                RenderMode.NORMAL -> R.drawable.mapbox_user_stroke_icon
+            }
+        ),
+        shadowImage = AppCompatResourcesV11.getDrawableImageHolder(
+            context,
+            R.drawable.mapbox_user_icon_shadow
+        )
+    );
 }

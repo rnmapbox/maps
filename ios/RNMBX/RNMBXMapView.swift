@@ -99,6 +99,8 @@ class RNMBXCameraChanged : RNMBXEvent, RCTEvent {
 
 @objc(RNMBXMapView)
 open class RNMBXMapView: UIView {
+  var imageManager: ImageManager = ImageManager()
+
   var tapDelegate: IgnoreRNMBXMakerViewGestureDelegate? = nil
   
   var eventDispatcher: RCTEventDispatcherProtocol
@@ -575,7 +577,7 @@ open class RNMBXMapView: UIView {
       mapView.ornaments.options.scaleBar.margins = margins
     }
   }
-  
+
   @objc override public func didSetProps(_ props: [String]) {
     if (_mapView == nil) {
       createMapView()

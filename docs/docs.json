@@ -4110,49 +4110,63 @@
         "required": false,
         "type": "'normal' \\| 'compass' \\| 'gps'",
         "default": "none",
-        "description": "Android render mode.\n\n - normal: just a circle\n - compass: triangle with heading\n - gps: large arrow\n\n@platform android"
+        "description": "Android render mode.\n\n - normal: just a circle\n - compass: triangle with heading\n - gps: large arrow\n\n@deprecated use `puckBearing` for source and `bearingImage` for image\n@platform android"
+      },
+      {
+        "name": "puckBearing",
+        "required": false,
+        "type": "'heading' \\| 'course'",
+        "default": "none",
+        "description": "The bearing of the puck.\n\n - heading: Orients the puck to match the direction in which the device is facing.\n - course: Orients the puck to match the direction in which the device is moving."
+      },
+      {
+        "name": "puckBearingEnabled",
+        "required": false,
+        "type": "boolean",
+        "default": "none",
+        "description": "Whether the puck rotates to track the bearing source."
       },
       {
         "name": "iosShowsUserHeadingIndicator",
         "required": false,
         "type": "boolean",
         "default": "none",
-        "description": "iOS only. A Boolean value indicating whether the user location annotation may display a permanent heading indicator.\n\n@platform ios"
+        "description": "iOS only. A Boolean value indicating whether the user location annotation may display a permanent heading indicator.\n\n@platform ios\n@deprecated use `puckBearingEnabled={true} puckBrearing=\"heading\"` instead"
       },
       {
-        "name": "topImageAsset",
+        "name": "topImage",
         "required": false,
         "type": "string",
         "default": "none",
-        "description": "The name of native image asset to use as the top layer for the location indicator. Native asset are under Image.xcassets on iOS and the drawables directory on android"
+        "description": "The name of image to use as the top layer for the location indicator. Images component should define this image."
       },
       {
-        "name": "bearingImageAsset",
+        "name": "bearingImage",
         "required": false,
         "type": "string",
         "default": "none",
-        "description": "The name of native image asset to use as the middle layer for the location indicator. Native asset are under Image.xcassets on iOS and the drawables directory on android"
+        "description": "The name of image to use as the middle layer for the location indicator. Images component should define this image."
       },
       {
-        "name": "shadowImageAsset",
+        "name": "shadowImage",
         "required": false,
         "type": "string",
         "default": "none",
-        "description": "The name of native image asset to use as the background0 for the location indicator. Native asset are under Image.xcassets on iOS and the drawables directory on android"
+        "description": "The name of image asset to use as the background0 for the location indicator. Images component should define this image."
       },
       {
         "name": "scale",
         "required": false,
-        "type": "number",
+        "type": "T \\| Expression",
         "default": "none",
-        "description": "The size of the images, as a scale factor applied to the size of the specified image."
+        "description": "The size of the images, as a scale factor applied to the size of the specified image. Supports expressions based on zoom.\n\n@example\n[\"interpolate\",[\"linear\"], [\"zoom\"], 10.0, 1.0, 20.0, 4.0]]\n@example\n2.0"
       },
       {
         "name": "visible",
         "required": false,
         "type": "boolean",
         "default": "none",
-        "description": "Whether location icon is visible"
+        "description": "Whether location icon is visible, defaults to true"
       }
     ],
     "fileNameWithExt": "NativeUserLocation.tsx",

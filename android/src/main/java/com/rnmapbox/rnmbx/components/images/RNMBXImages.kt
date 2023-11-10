@@ -212,6 +212,7 @@ class RNMBXImages(context: Context, private val mManager: RNMBXImagesManager) : 
             val name = nativeImage.info.name
             if (!hasImage(name, map)) {
                 val bitmap = nativeImage.drawable
+                mMapView!!.imageManager.resolve(name, nativeImage.drawable)
                 style.addBitmapImage(nativeImage)
                 mCurrentImages.add(name)
             }
@@ -264,7 +265,7 @@ class RNMBXImages(context: Context, private val mManager: RNMBXImagesManager) : 
             }
         }
         if (missingImages.size > 0) {
-            val task = DownloadMapImageTask(context, map, null)
+            val task = DownloadMapImageTask(context, map, mMapView!!.imageManager)
             val params = missingImages.toTypedArray()
             task.execute(*params)
         }

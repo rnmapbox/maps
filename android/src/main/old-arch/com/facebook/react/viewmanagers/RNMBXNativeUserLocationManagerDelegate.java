@@ -25,8 +25,11 @@ public class RNMBXNativeUserLocationManagerDelegate<T extends View, U extends Ba
       case "androidRenderMode":
         mViewManager.setAndroidRenderMode(view, new DynamicFromObject(value));
         break;
-      case "iosShowsUserHeadingIndicator":
-        mViewManager.setIosShowsUserHeadingIndicator(view, new DynamicFromObject(value));
+      case "puckBearing":
+        mViewManager.setPuckBearing(view, new DynamicFromObject(value));
+        break;
+      case "puckBearingEnabled":
+        mViewManager.setPuckBearingEnabled(view, new DynamicFromObject(value));
         break;
       case "bearingImage":
         mViewManager.setBearingImage(view, new DynamicFromObject(value));
@@ -39,6 +42,9 @@ public class RNMBXNativeUserLocationManagerDelegate<T extends View, U extends Ba
         break;
       case "scale":
         mViewManager.setScale(view, new DynamicFromObject(value));
+        break;
+      case "visible":
+        mViewManager.setVisible(view, value == null ? false : (boolean) value);
         break;
       default:
         super.setProperty(view, propName, value);
