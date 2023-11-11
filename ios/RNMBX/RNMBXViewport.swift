@@ -11,11 +11,7 @@ open class RNMBXViewport : UIView, RNMBXMapComponent, ViewportStatusObserver {
     
   // MARK: React properties
   @objc
-  public var onStatusChanged: RCTBubblingEventBlock? = nil {
-    didSet {
-      print(" => setReactOnMapChange")
-    }
-  }
+  public var onStatusChanged: RCTBubblingEventBlock? = nil
   
   @objc
   public var hasStatusChanged: Bool = false {
