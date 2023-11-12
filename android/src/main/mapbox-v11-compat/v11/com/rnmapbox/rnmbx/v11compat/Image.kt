@@ -1,11 +1,12 @@
 package com.rnmapbox.rnmbx.v11compat.image;
 
 import android.content.Context
+import android.content.res.Resources
 import android.graphics.Bitmap
+import android.graphics.drawable.BitmapDrawable
 import android.graphics.drawable.Drawable
 import android.graphics.drawable.VectorDrawable
 import androidx.annotation.DrawableRes
-import androidx.appcompat.content.res.AppCompatResources
 import androidx.core.graphics.drawable.toBitmap
 import com.mapbox.bindgen.DataRef
 import com.mapbox.maps.Image
@@ -34,6 +35,10 @@ fun Drawable.toImageHolder(drawableId: Int) : ImageHolder {
 */
 
 fun VectorDrawable.toBitmapImageHolder(): ImageHolder {
+    return ImageHolder.from(this.toBitmap())
+}
+
+fun BitmapDrawable.toBitmapImageHolder(): ImageHolder {
     return ImageHolder.from(this.toBitmap())
 }
 
@@ -66,3 +71,18 @@ fun emptyImage(width: Int, height: Int): Image {
         width, height, DataRef.allocateNative(width * height * 4)
     )
 }
+
+fun Image.toDrawable(): Drawable {
+    val bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888)
+    bitmap.copyPixelsFromBuffer(data.buffer)
+
+    return BitmapDrawable(Resources.getSystem(), bitmap)
+}
+
+fun Image.toImageHolder(): ImageHolder {
+    val bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888)
+    bitmap.copyPixelsFromBuffer(data.buffer)
+
+    return ImageHolder.from(bitmap)
+}
+

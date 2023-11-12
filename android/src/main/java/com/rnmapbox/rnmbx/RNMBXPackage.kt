@@ -53,9 +53,9 @@ class RNMBXPackage : TurboReactPackage() {
     fun getViewTagResolver(context: ReactApplicationContext) : ViewTagResolver {
         val viewTagResolver = viewTagResolver
         if (viewTagResolver == null) {
-            val viewTagResolver = ViewTagResolver(context)
-            this.viewTagResolver = viewTagResolver
-            return viewTagResolver
+            val result = ViewTagResolver(context)
+            this.viewTagResolver = result
+            return result
         }
         return viewTagResolver
     }

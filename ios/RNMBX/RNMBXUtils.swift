@@ -8,9 +8,8 @@ class RNMBXUtils {
     RNMBXImageQueue.sharedInstance.addImage(url, scale: scale, bridge: bridge, handler: callback)
   }
   
-  static func fetchImages(_ bridge: RCTBridge, style: Style, objects: [String:Any], forceUpdate: Bool, loaded: @escaping (_ name:String) -> Void, callback: @escaping ()->Void) {
+  static func fetchImages(_ bridge: RCTBridge, style: Style, objects: [String:Any], forceUpdate: Bool, loaded: @escaping (String, UIImage) -> Void) {
     guard !objects.isEmpty else {
-      callback()
       return
     }
     
@@ -19,9 +18,6 @@ class RNMBXUtils {
     
     let imageLoadedBlock = { () in
       imagesToLoad = imagesToLoad - 1;
-      if imagesToLoad == 0 {
-        callback()
-      }
     }
     
     for imageName in imageNames {
@@ -55,8 +51,7 @@ class RNMBXUtils {
                 if let image = image {
                   logged("RNMBXUtils.fetchImage-\(imageName)") {
                     try style.addImage(image, id: imageName, sdf:sdf, stretchX: stretchX, stretchY: stretchY, content: content)
-                    loaded(imageName)
-                    imageLoadedBlock()
+                    loaded(imageName, image)
                   }
                 }
               }

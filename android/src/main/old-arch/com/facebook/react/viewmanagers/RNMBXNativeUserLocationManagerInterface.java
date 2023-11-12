@@ -14,5 +14,11 @@ import com.facebook.react.bridge.Dynamic;
 
 public interface RNMBXNativeUserLocationManagerInterface<T extends View> {
   void setAndroidRenderMode(T view, Dynamic value);
-  void setIosShowsUserHeadingIndicator(T view, Dynamic value);
+  void setPuckBearing(T view, Dynamic value);
+  void setPuckBearingEnabled(T view, Dynamic value);
+  void setBearingImage(T view, Dynamic value);
+  void setShadowImage(T view, Dynamic value);
+  void setTopImage(T view, Dynamic value);
+  void setScale(T view, Dynamic value);
+  void setVisible(T view, boolean value);
 }

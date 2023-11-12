@@ -1,6 +1,9 @@
 #import <CoreFoundation/CoreFoundation.h>
 #import <CoreLocation/CoreLocation.h>
 
+#import <React/RCTComponent.h>
+#import <React/RCTViewManager.h>
+
 @interface MapView : UIView
 @end
 

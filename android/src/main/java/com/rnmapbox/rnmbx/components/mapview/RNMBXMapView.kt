@@ -80,6 +80,7 @@ import org.json.JSONObject
 import java.util.*
 
 import com.mapbox.maps.MapboxMap.*;
+import com.rnmapbox.rnmbx.components.images.ImageManager
 
 import com.rnmapbox.rnmbx.v11compat.event.*
 import com.rnmapbox.rnmbx.v11compat.feature.*
@@ -202,6 +203,9 @@ open class RNMBXMapView(private val mContext: Context, var mManager: RNMBXMapVie
      * be rendered to the canvas before being added as annotations.
      */
     public var offscreenAnnotationViewContainer: ViewGroup? = null
+
+
+    public var imageManager = ImageManager()
 
     private val mSources: MutableMap<String, RNMBXSource<*>>
     private val mImages: MutableList<RNMBXImages>

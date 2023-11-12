@@ -223,6 +223,8 @@ using namespace facebook::react;
     }
 
   [super updateProps:props oldProps:oldProps];
+
+  [_view didSetProps:@[]];
 }
 
 - (void)prepareForRecycle

@@ -22,6 +22,8 @@ open class RNMBXImages : UIView, RNMBXMapComponent {
   
   weak var style: Style? = nil
 
+  var imageManager: ImageManager? = nil
+
   @objc
   public var onImageMissing: RCTBubblingEventBlock? = nil
   
@@ -46,9 +48,18 @@ open class RNMBXImages : UIView, RNMBXMapComponent {
   typealias NativeImageInfo = (name:String, sdf: Bool, stretchX:[(from:Float, to:Float)], stretchY:[(from:Float, to:Float)], content: (left:Float,top:Float,right:Float,bottom:Float)? );
   var nativeImageInfos: [NativeImageInfo] = []
   
+  @objc public func addImageView(_ image: RNMBXImage) {
+    imageViews.append(image)
+  }
+
+  @objc public func removeImageView(_ image: RNMBXImage) {
+    imageViews.removeAll { $0 == image }
+    image.images = nil
+  }
+
   @objc open override func insertReactSubview(_ subview: UIView!, at atIndex: Int) {
     if let image = subview as? RNMBXImage {
-      imageViews.insert(image, at: atIndex)
+      addImageView(image)
     } else {
       Logger.log(level:.warn, message: "RNMBXImages children can only be RNMBXImage, got \(optional: subview)")
     }
@@ -57,8 +68,7 @@ open class RNMBXImages : UIView, RNMBXMapComponent {
   
   @objc open override func removeReactSubview(_ subview: UIView!) {
     if let image = subview as? RNMBXImage {
-      imageViews.removeAll { $0 == image }
-      image.images = nil
+      removeImageView(image)
     }
     super.removeReactSubview(subview)
   }
@@ -71,6 +81,7 @@ open class RNMBXImages : UIView, RNMBXMapComponent {
   
   func addToMap(_ map: RNMBXMapView, style: Style) {
     self.style = style
+    imageManager = map.imageManager
     map.images.append(self)
     
     self.addNativeImages(style: style, nativeImages: nativeImageInfos)
@@ -80,6 +91,7 @@ open class RNMBXImages : UIView, RNMBXMapComponent {
   
   func removeFromMap(_ map: RNMBXMapView, reason: RemovalReason) -> Bool {
     self.style = nil
+    imageManager = nil
     // v10todo
     return true
   }
@@ -127,7 +139,10 @@ open class RNMBXImages : UIView, RNMBXMapComponent {
     }
     
     if missingImages.count > 0 {
-      RNMBXUtils.fetchImages(bridge, style: style, objects: missingImages, forceUpdate: true, loaded: { name in self.loadedImages.insert(name) } ,callback: { })
+      RNMBXUtils.fetchImages(bridge, style: style, objects: missingImages, forceUpdate: true) { name, image in
+        self.loadedImages.insert(name)
+        self.imageManager?.resolve(name: name, image: image)
+      }
     }
   }
   
@@ -252,6 +267,7 @@ open class RNMBXImages : UIView, RNMBXMapComponent {
                                content: RNMBXImages.convert(content: imageInfo.content, scale: image.scale)
             )
           }
+          imageManager?.resolve(name: imageName, image: image)
         } else {
           Logger.log(level:.error, message: "Cannot find nativeImage named \(imageName)")
         }
