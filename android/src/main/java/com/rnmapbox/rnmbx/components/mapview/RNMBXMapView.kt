@@ -224,9 +224,6 @@ open class RNMBXMapView(private val mContext: Context, var mManager: RNMBXMapVie
     private lateinit var mMap: MapboxMap
 
     private lateinit var mMapView: MapView
-    private var mLocationConsumers = mutableListOf<LocationConsumer>()
-    private var mCustomLocationProvider: LocationProvider? = null
-    private var mDefaultLocationProvider: LocationProvider? = null
     val isInitialized: Boolean
         get() = this::mMapView.isInitialized
 
@@ -1122,51 +1119,6 @@ open class RNMBXMapView(private val mContext: Context, var mManager: RNMBXMapVie
                 response.error(features.error ?: "n/a")
             }
         }
-    }
-
-    fun setCustomLocation(
-        latitude: Double,
-        longitude: Double,
-        heading: Double?,
-        response: CommandResponse
-    ) {
-        var customLocationProvider: LocationProvider? = null
-        if (mCustomLocationProvider == null) {
-            customLocationProvider = object : LocationProvider {
-                override fun registerLocationConsumer(locationConsumer: LocationConsumer) {
-                    mLocationConsumers.add(locationConsumer)
-                }
-
-                override fun unRegisterLocationConsumer(locationConsumer: LocationConsumer) {
-                    mLocationConsumers.remove(locationConsumer)
-                }
-            }
-        }
-        if (customLocationProvider != null) {
-            mDefaultLocationProvider = mMapView.location.getLocationProvider()
-            mMapView.location.setLocationProvider(customLocationProvider)
-            mCustomLocationProvider = customLocationProvider
-        }
-
-        val point = Point.fromLngLat(longitude, latitude)
-        mLocationConsumers.forEach {
-            it.onLocationUpdated(point)
-            if (heading != null) {
-                it.onBearingUpdated(heading)
-            }
-        }
-
-        response.success { }
-    }
-
-    fun removeCustomLocationProvider(response: CommandResponse) {
-        mMapView.location.setLocationProvider(
-            mDefaultLocationProvider ?: DefaultLocationProvider(
-                mContext
-            )
-        )
-        mCustomLocationProvider = null
-        response.success { }
     }
 
     fun getVisibleBounds(response: CommandResponse) {
