@@ -112,6 +112,7 @@ open class RCTMGLMapComponentBase : UIView, RCTMGLMapComponent {
 class RCTMGLCamera : RCTMGLMapComponentBase {
   var cameraAnimator: BasicCameraAnimator?
   let cameraUpdateQueue = CameraUpdateQueue()
+  var maxPitch = 50.0
   
   // MARK: React properties
   
@@ -256,6 +257,8 @@ class RCTMGLCamera : RCTMGLMapComponentBase {
       if let maxZoomLevel = self.maxZoomLevel {
         options.maxZoom = maxZoomLevel.CGFloat
       }
+      
+      options.maxPitch = self.maxPitch
 
       logged("RCTMGLCamera._updateMaxBounds") {
         try map.mapboxMap.setCameraBounds(with: options)

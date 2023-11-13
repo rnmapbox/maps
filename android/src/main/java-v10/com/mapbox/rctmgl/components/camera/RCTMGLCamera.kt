@@ -57,6 +57,7 @@ class RCTMGLCamera(private val mContext: Context, private val mManager: RCTMGLCa
     private val mCenterCoordinate: ScreenCoordinate? = null
     private val mAnimated = false
     private val mHeading = 0.0
+    private val mMaxPitch = 50.0
 
     private var mFollowUserLocation = false
     private var mFollowUserMode: String? = null
@@ -174,6 +175,7 @@ class RCTMGLCamera(private val mContext: Context, private val mManager: RCTMGLCa
             }
             mMinZoomLevel?.let { builder.minZoom(it) }
             mMaxZoomLevel?.let { builder.maxZoom(it) }
+            builder.maxPitch(mMaxPitch)
             map.setBounds(builder.build())
         }
     }
