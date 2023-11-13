@@ -18,6 +18,7 @@ import com.rnmapbox.rnmbx.components.camera.RNMBXViewportModule
 import com.rnmapbox.rnmbx.components.images.RNMBXImageManager
 import com.rnmapbox.rnmbx.components.images.RNMBXImageModule
 import com.rnmapbox.rnmbx.components.images.RNMBXImagesManager
+import com.rnmapbox.rnmbx.components.location.RNMBXCustomLocationProviderManager
 import com.rnmapbox.rnmbx.components.location.RNMBXNativeUserLocationManager
 import com.rnmapbox.rnmbx.components.mapview.NativeMapViewModule
 import com.rnmapbox.rnmbx.components.mapview.RNMBXMapViewManager
@@ -98,6 +99,7 @@ class RNMBXPackage : TurboReactPackage() {
         managers.add(RNMBXPointAnnotationManager(reactApplicationContext, getViewTagResolver(reactApplicationContext)))
         managers.add(RNMBXCalloutManager())
         managers.add(RNMBXNativeUserLocationManager())
+        managers.add(RNMBXCustomLocationProviderManager())
 
         // sources
         managers.add(RNMBXVectorSourceManager(reactApplicationContext))

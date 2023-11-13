@@ -133,10 +133,9 @@ extension RNMBXAppleLocationProviderProxy {
 class RNMBXLocationModule: RCTEventEmitter {
   static weak var shared : RNMBXLocationModule? = nil
   
-  // var _locationProvider : RNMBXAppleLocationProviderProxy = RNMBXAppleLocationProviderProxy(provider: AppleLocationProvider())
-  var _locationProvider : AppleLocationProvider = AppleLocationProvider()
-  var locationUpdateObserver : AnyCancelable? = nil
-  var locationHeadingObserver : AnyCancelable? = nil
+  var _locationProvider : LocationProvider & HeadingProvider = AppleLocationProvider()
+  var locationUpdateObserver : Cancelable? = nil
+  var locationHeadingObserver : Cancelable? = nil
   
   var actLocation : RNMBXLocation = RNMBXLocation()
   
@@ -164,12 +163,10 @@ class RNMBXLocationModule: RCTEventEmitter {
   }
   
   @objc func start(_ minDisplacement: CLLocationDistance) {
-    var newOptions = _locationProvider.options
-    newOptions.distanceFilter = minDisplacement
-    if minDisplacement >= 0.0 { _locationProvider.options = newOptions }
+    setMinDisplacement(minDisplacement)
     
     locationUpdateObserver?.cancel()
-    locationUpdateObserver = _locationProvider.onLocationUpdate.observe { location in
+    locationUpdateObserver = observeLocationUpdates(_locationProvider) { location in
       guard self.hasListener else { return }
   
       self.actLocation.location = location.last
@@ -178,7 +175,7 @@ class RNMBXLocationModule: RCTEventEmitter {
       }
     }
     locationHeadingObserver?.cancel()
-    locationHeadingObserver = _locationProvider.onHeadingUpdate.observe { heading in
+    locationHeadingObserver = observeHeadingUpdates(_locationProvider) { heading in
       guard self.hasListener else { return }
 
       self.actLocation.heading = heading
@@ -186,6 +183,64 @@ class RNMBXLocationModule: RCTEventEmitter {
         self.sendEvent(withName: RCT_MAPBOX_USER_LOCATION_UPDATE, body: self.actLocation.toJSON())
       }
     }
+  }
+  
+  class _LocationObserver : Cancelable, LocationObserver  {
+    weak var locationProvider: LocationProvider?
+    var callback: (([Location]) -> Void)?
+    
+    init(_ locationProvider: LocationProvider) {
+      self.locationProvider = locationProvider
+    }
+
+    func onLocationUpdateReceived(for locations: [Location]) {
+      callback?(locations)
+    }
+  
+    func cancel() {
+      locationProvider?.removeLocationObserver(for: self)
+      locationProvider = nil
+    }
+    
+    deinit {
+      self.cancel()
+    }
+  }
+  
+  class _HeadingObserver: Cancelable, HeadingObserver {
+    var headingProvider: HeadingProvider?
+    var callback: ((Heading) -> Void)?
+
+    init(_ headingProvider: HeadingProvider) {
+      self.headingProvider = headingProvider
+    }
+    
+    func onHeadingUpdate(_ heading: MapboxMaps.Heading) {
+      callback?(heading)
+    }
+    
+    func cancel() {
+      headingProvider?.remove(headingObserver: self)
+      headingProvider = nil
+    }
+    
+    deinit {
+      self.cancel()
+    }
+  }
+  
+  func observeLocationUpdates(_ locationProvider: LocationProvider, callback: @escaping ([Location]) -> Void) -> Cancelable {
+    let observer = _LocationObserver(locationProvider)
+    observer.callback = callback
+    locationProvider.addLocationObserver(for: observer)
+    return observer
+  }
+  
+  func observeHeadingUpdates(_ headingProvider: HeadingProvider, callback: @escaping (Heading) -> Void) -> Cancelable {
+    let observer = _HeadingObserver(headingProvider)
+    observer.callback = callback
+    headingProvider.add(headingObserver: observer)
+    return observer
   }
   
   @objc func stop() {
@@ -199,14 +254,17 @@ class RNMBXLocationModule: RCTEventEmitter {
   @objc func getLastKnownLocation() -> RNMBXLocation? {
     let last = RNMBXLocation()
     last.heading = _locationProvider.latestHeading
-    last.location = _locationProvider.latestLocation
+    last.location = _locationProvider.getLastObservedLocation()
     return last
   }
   
-  @objc func setMinDisplacement(_ minDisplacement: CLLocationDistance) {
-    var newOptions = _locationProvider.options
-    newOptions.distanceFilter = minDisplacement
-    _locationProvider.options = newOptions
+  @objc
+  func setMinDisplacement(_ minDisplacement: CLLocationDistance) {
+    if let appleLocationProvider = _locationProvider as? AppleLocationProvider {
+      var newOptions = appleLocationProvider.options
+      newOptions.distanceFilter = minDisplacement
+      if minDisplacement >= 0.0 { appleLocationProvider.options = newOptions }
+    }
   }
   
   @objc
@@ -236,7 +294,16 @@ class RNMBXLocationModule: RCTEventEmitter {
     get {
       return _locationProvider
     }
+    set(value) {
+      _locationProvider = value
+    }
   }
+  
+  func overrideLocationProvider(newProvider: LocationProvider & HeadingProvider) {
+    _locationProvider = newProvider
+  }
+  
+  
 }
 
 class EventThrottler {

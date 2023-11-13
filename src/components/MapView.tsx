@@ -914,29 +914,6 @@ class MapView extends NativeBridgeComponent(
     return this._runNative<void>('showAttribution');
   }
 
-  /**
-   * Sets up a custom location provider and applies the supplied location
-   * @param latitude
-   * @param longitude
-   * @param heading
-   * @returns Promise
-   */
-  setCustomLocation(latitude: number, longitude: number, heading?: number) {
-    return this._runNative<void>('setCustomLocation', [
-      latitude,
-      longitude,
-      heading ?? 0,
-    ]);
-  }
-
-  /**
-   * Removes any previously set custom location provider
-   * @returns Promise
-   */
-  removeCustomLocationProvider() {
-    return this._runNative<void>('removeCustomLocationProvider');
-  }
-
   _decodePayload<T>(payload: T | string): T {
     if (typeof payload === 'string') {
       return JSON.parse(payload);

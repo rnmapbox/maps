@@ -15,131 +15,6 @@ class FeatureEntry {
 }
 
 #if RNMBX_11
-class CustomHeadingProvider: HeadingProvider {
-  var latestHeading: Heading?
-  private let observers: NSHashTable<AnyObject> = .weakObjects()
-
-  func add(headingObserver: HeadingObserver) {
-    observers.add(headingObserver)
-  }
-
-  func remove(headingObserver: HeadingObserver) {
-    observers.remove(headingObserver)
-  }
-    
-  func setHeading(heading: NSNumber) {
-    let latestHeading = Heading(direction: CLLocationDirection(truncating: heading), accuracy: CLLocationDirection(truncating: 1))
-    self.latestHeading = latestHeading
-    for observer in observers.allObjects {
-      (observer as? HeadingObserver)?.onHeadingUpdate(latestHeading)
-    }
-  }
-}
-
-class CustomLocationProvider: LocationProvider {
-  private var observers: NSHashTable<AnyObject> = .weakObjects()
-  private var location: Location? = nil
-
-  func addLocationObserver(for observer: LocationObserver) {
-    observers.add(observer)
-  }
-
-  func removeLocationObserver(for observer: LocationObserver) {
-    observers.remove(observer)
-  }
-
-  func getLastObservedLocation() -> Location? {
-    return location
-  }
-
-  func setLocation(latitude: NSNumber, longitude: NSNumber) {
-    let lat = CLLocationDegrees(truncating: latitude)
-    let lon = CLLocationDegrees(truncating: longitude)
-    self.location = Location(clLocation: CLLocation(latitude: lat, longitude: lon))
-    for observer in observers.allObjects {
-      (observer as? LocationObserver)?.onLocationUpdateReceived(for: [self.location!])
-    }
-  }
-}
-#else
-final public class CustomHeading: CLHeading {
-    private var _magneticHeading: CLLocationDirection = 0
-    
-    public override var trueHeading: CLLocationDirection {
-        get { -1 }
-    }
-    
-    public override var magneticHeading: CLLocationDirection {
-        get { _magneticHeading }
-        set { _magneticHeading = newValue }
-    }
-}
-
-class CustomLocationProvider: LocationProvider {
-    var locationProviderOptions: MapboxMaps.LocationOptions = .init()
-    
-    var authorizationStatus: CLAuthorizationStatus = .authorizedAlways
-    
-    var accuracyAuthorization: CLAccuracyAuthorization = .fullAccuracy
-    
-    var heading: CLHeading?
-    var location: CLLocation?
-    var updateLocation = false
-    var updateHeading = false
-    
-    var locationProviderDelegate: MapboxMaps.LocationProviderDelegate?
-    
-    func setDelegate(_ delegate: MapboxMaps.LocationProviderDelegate) {
-        locationProviderDelegate = delegate
-    }
-    
-    func setLocation(latitude: NSNumber, longitude: NSNumber) {
-        let lat = CLLocationDegrees(truncating: latitude)
-        let lon = CLLocationDegrees(truncating: longitude)
-        self.location = CLLocation(latitude: lat, longitude: lon)
-        if (updateLocation) {
-          locationProviderDelegate?.locationProvider(self, didUpdateLocations: [self.location!])
-        }
-    }
-    
-    func setHeading(heading: NSNumber) {
-        let latestHeading = CustomHeading()
-        latestHeading.magneticHeading = CLLocationDirection(truncating: heading)
-        self.heading = latestHeading
-        if (self.updateHeading) {
-          locationProviderDelegate?.locationProvider(self, didUpdateHeading: self.heading!)
-        }
-    }
-    
-    func requestAlwaysAuthorization() { }
-    
-    func requestWhenInUseAuthorization() { }
-    
-    func requestTemporaryFullAccuracyAuthorization(withPurposeKey purposeKey: String) { }
-    
-    func startUpdatingLocation() {
-        self.updateLocation = true
-    }
-    
-    func stopUpdatingLocation() {
-        self.updateLocation = false
-    }
-    
-    var headingOrientation: CLDeviceOrientation = .unknown
-    
-    func startUpdatingHeading() {
-        self.updateHeading = true
-    }
-    
-    func stopUpdatingHeading() {
-        self.updateHeading = false
-    }
-    
-    func dismissHeadingCalibrationDisplay() { }
-}
-#endif
-
-#if RNMBX_11
 extension QueriedRenderedFeature {
   var feature : Feature { return queriedFeature.feature }
 }
@@ -291,13 +166,6 @@ open class RNMBXMapView: UIView {
     get { _mapView.mapboxMap }
   }
 
-  var customLocationProvider: CustomLocationProvider? = nil
-  #if RNMBX_11
-  var customHeadingProvider: CustomHeadingProvider? = nil
-  #else
-  var defaultLocationProvider: LocationProvider?
-  #endif
-  
   @objc public func addToMap(_ subview: UIView) {
     withMapView {
       if let mapComponent = subview as? RNMBXMapComponent {
@@ -846,46 +714,6 @@ open class RNMBXMapView: UIView {
         mapView.removeGestureRecognizer(recognizer)
       }
     }
-  }
-    
-  func setCustomLocation(
-    latitude: NSNumber,
-    longitude: NSNumber,
-    heading: NSNumber
-  ) -> Void {
-    #if RNMBX_11
-    if (customLocationProvider == nil && customHeadingProvider == nil) {
-      customLocationProvider = CustomLocationProvider()
-      customHeadingProvider = CustomHeadingProvider()
-      mapView.location.override(locationProvider: customLocationProvider!, headingProvider: customHeadingProvider)
-    }
-    
-    customLocationProvider?.setLocation(latitude: latitude, longitude: longitude)
-    customHeadingProvider?.setHeading(heading: heading)
-    #else
-    if (customLocationProvider == nil) {
-      if (defaultLocationProvider == nil) {
-        defaultLocationProvider = mapView.location.locationProvider
-      }
-      customLocationProvider = CustomLocationProvider()
-      mapView.location.overrideLocationProvider(with: customLocationProvider!)
-    }
-    customLocationProvider?.setLocation(latitude: latitude, longitude: longitude)
-    customLocationProvider?.setHeading(heading: heading)
-    #endif
-  }
-    
-  func removeCustomLocationProvider() {
-    #if RNMBX_11
-    mapView.location.override(provider: AppleLocationProvider())
-    customLocationProvider = nil
-    customHeadingProvider = nil
-    #else
-    if let provider = defaultLocationProvider {
-      mapView.location.overrideLocationProvider(with: provider)
-    }
-    customLocationProvider = nil
-    #endif
   }
 }
 

@@ -246,25 +246,4 @@ extension RNMBXMapViewManager {
           }
         }
     }
-    
-    @objc public static func setCustomLocation(
-      _ view: RNMBXMapView,
-      latitude: NSNumber,
-      longitude: NSNumber,
-      heading: NSNumber,
-      resolver: @escaping RCTPromiseResolveBlock,
-      rejecter: @escaping RCTPromiseRejectBlock
-    ) -> Void {
-      view.setCustomLocation(latitude: latitude, longitude: longitude, heading: heading)
-      resolver(nil)
-    }
-    
-    @objc public static func removeCustomLocationProvider(
-      _ view: RNMBXMapView,
-      resolver: @escaping RCTPromiseResolveBlock,
-      rejecter: @escaping RCTPromiseRejectBlock
-    ) -> Void {
-      view.removeCustomLocationProvider()
-      resolver(nil)
-    }
 }

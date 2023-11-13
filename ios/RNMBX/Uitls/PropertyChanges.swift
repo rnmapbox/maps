@@ -10,7 +10,6 @@
  *     case logo
  *     case compass
  *
- *     var name string { return rawValue }
  *     fun apply(mapView: MapView) {
  *       switch self {
  *         case .logo: mapView.applyLogo()
@@ -21,9 +20,9 @@
  *
  *   var logoPosition: LogoPosition;
  *
- * . func changed(_ property: Property) {
- *     changes.add(property)
- * . }
+ *   func changed(_ property: Property) {
+ *     changes.add(name: property.rawValue, update: property.apply)
+ *   }
  *
  *   func changed(name: String, apply: @escaping (MapView) -> Void) {
  *     changes.add(name: name, apply: apply)

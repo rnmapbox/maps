@@ -9,13 +9,12 @@ import React, {
 import { NativeModules } from 'react-native';
 
 import { MapboxGLEvent } from '../types';
+import { type Position } from '../types/Position';
 import { makeLatLngBounds, makePoint } from '../utils/geoUtils';
 import { type NativeRefType } from '../utils/nativeRef';
 import NativeCameraView from '../specs/RNMBXCameraNativeComponent';
 
 const NativeModule = NativeModules.RNMBXModule;
-
-type Position = number[] | [number, number];
 
 export enum UserTrackingMode {
   Follow = 'normal',

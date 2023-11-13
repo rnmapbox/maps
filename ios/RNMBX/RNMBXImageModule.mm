@@ -25,7 +25,7 @@ RCT_EXPORT_MODULE();
   return RCTGetUIManagerQueue();
 }
 
-- (void)withImage:(NSNumber*)viewRef block:(void (^)(RNMBXImage *))block reject:(RCTPromiseRejectBlock)reject methodName:(NSString *)methodName
+- (void)withImage:(nonnull NSNumber*)viewRef block:(void (^)(RNMBXImage *))block reject:(RCTPromiseRejectBlock)reject methodName:(NSString *)methodName
 {
 #ifdef RCT_NEW_ARCH_ENABLED
     [self.viewRegistry_DEPRECATED addUIBlock:^(RCTViewRegistry *viewRegistry) {
@@ -46,7 +46,7 @@ RCT_EXPORT_MODULE();
 }
 
 
-RCT_EXPORT_METHOD(refresh:(NSNumber*)viewRef resolve:(RCTPromiseResolveBlock)resolve reject:(RCTPromiseRejectBlock)reject)
+RCT_EXPORT_METHOD(refresh:(nonnull NSNumber*)viewRef resolve:(RCTPromiseResolveBlock)resolve reject:(RCTPromiseRejectBlock)reject)
 {
     [self withImage:viewRef block:^(RNMBXImage *view) {
         // TODO: implement refresh on iOS
