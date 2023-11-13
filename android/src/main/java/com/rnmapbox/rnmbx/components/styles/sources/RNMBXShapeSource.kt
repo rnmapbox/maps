@@ -18,7 +18,7 @@ import com.mapbox.geojson.LineString
 import com.mapbox.geojson.Point
 import com.mapbox.maps.*
 import com.mapbox.maps.extension.style.expressions.generated.Expression
-import com.mapbox.rctmgl.utils.Logger
+import com.mapbox.rnmbx.utils.Logger
 import com.mapbox.turf.TurfConstants
 import com.mapbox.turf.TurfMeasurement
 import com.mapbox.turf.TurfMisc

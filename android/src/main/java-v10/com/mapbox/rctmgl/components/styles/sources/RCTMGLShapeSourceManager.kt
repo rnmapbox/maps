@@ -1,8 +1,8 @@
-package com.mapbox.rctmgl.components.styles.sources
+package com.mapbox.rnmbx.components.styles.sources
 
 import android.view.View
 import com.facebook.react.bridge.ReactApplicationContext
-import com.mapbox.rctmgl.components.AbstractEventEmitter
+import com.mapbox.rnmbx.components.AbstractEventEmitter
 import com.facebook.react.uimanager.ThemedReactContext
 import com.facebook.react.uimanager.annotations.ReactProp
 import com.facebook.react.bridge.ReadableMap
@@ -11,9 +11,9 @@ import com.facebook.react.bridge.ReadableType
 import com.facebook.react.common.MapBuilder
 import com.mapbox.bindgen.Value
 import com.mapbox.maps.extension.style.expressions.generated.Expression
-import com.mapbox.rctmgl.events.constants.EventKeys
-import com.mapbox.rctmgl.utils.ExpressionParser
-import com.mapbox.rctmgl.utils.Logger
+import com.mapbox.rnmbx.events.constants.EventKeys
+import com.mapbox.rnmbx.utils.ExpressionParser
+import com.mapbox.rnmbx.utils.Logger
 import java.net.MalformedURLException
 import java.net.URL
 import java.util.ArrayList

@@ -76,7 +76,7 @@ mkdir -p $GENERATED/source/codegen/
 echo "=> combine-js-to-schema-cli.js"
 node $RNCODEGEN/lib/cli/combine/combine-js-to-schema-cli.js --platform android $GENERATED/source/codegen/schema.json $SPECS
 echo "=> generate-specs-cli.js"
-node $RN/scripts/generate-specs-cli.js --platform android --schemaPath $GENERATED/source/codegen/schema.json --outputDir $GENERATED/source/codegen --libraryName rnmapbox_maps_specs --javaPackageName com.mapbox.rctmgl
+node $RN/scripts/generate-specs-cli.js --platform android --schemaPath $GENERATED/source/codegen/schema.json --outputDir $GENERATED/source/codegen --libraryName rnmapbox_maps_specs --javaPackageName com.mapbox.rnmbx
 cp -rf  $GENERATED/source/codegen/java/ $OLD_ARCH/
 popd
 */
