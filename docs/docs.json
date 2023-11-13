@@ -623,7 +623,7 @@
       {
         "name": "centerCoordinate",
         "required": false,
-        "type": "number[] \\| [number, number]",
+        "type": "Position",
         "default": "none",
         "description": "The location on which the map should center."
       },
@@ -773,14 +773,14 @@
             {
               "name": "ne",
               "required": true,
-              "type": "union",
+              "type": "Position",
               "default": "none",
               "description": "FIX ME NO DESCRIPTION"
             },
             {
               "name": "sw",
               "required": true,
-              "type": "union",
+              "type": "Position",
               "default": "none",
               "description": "FIX ME NO DESCRIPTION"
             }
@@ -804,8 +804,8 @@
             },
             {
               "name": "centerCoordinate",
-              "required": true,
-              "type": "union",
+              "required": false,
+              "type": "Position",
               "default": "none",
               "description": "The location on which the map should center."
             },
@@ -1322,6 +1322,23 @@
         }
       }
     ]
+  },
+  "CustomLocationProvider": {
+    "description": "",
+    "displayName": "CustomLocationProvider",
+    "methods": [],
+    "props": [
+      {
+        "name": "coordinate",
+        "required": false,
+        "type": "Position",
+        "default": "none",
+        "description": "FIX ME NO DESCRIPTION"
+      }
+    ],
+    "fileNameWithExt": "CustomLocationProvider.tsx",
+    "relPath": "src/components/CustomLocationProvider.tsx",
+    "name": "CustomLocationProvider"
   },
   "FillExtrusionLayer": {
     "description": "FillExtrusionLayer is a style layer that renders one or more 3D extruded polygons on the map.",

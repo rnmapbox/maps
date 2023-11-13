@@ -14,7 +14,6 @@ class FeatureEntry {
   }
 }
 
-
 #if RNMBX_11
 extension QueriedRenderedFeature {
   var feature : Feature { return queriedFeature.feature }
@@ -166,7 +165,7 @@ open class RNMBXMapView: UIView {
   var mapboxMap: MapboxMap! {
     get { _mapView.mapboxMap }
   }
-  
+
   @objc public func addToMap(_ subview: UIView) {
     withMapView {
       if let mapComponent = subview as? RNMBXMapComponent {

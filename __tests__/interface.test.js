@@ -17,6 +17,7 @@ describe('Public Interface', () => {
       'NativeUserLocation',
       'StyleImport',
       'Viewport',
+      'CustomLocationProvider',
 
       // modules
       'offlineManager',

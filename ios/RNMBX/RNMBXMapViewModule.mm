@@ -139,7 +139,6 @@ RCT_EXPORT_METHOD(querySourceFeatures:(nonnull NSNumber*)viewRef sourceId:(NSStr
     } reject:reject methodName:@"querySourceFeatures"];
 }
 
-
 // Thanks to this guard, we won't compile this code when we build for the old architecture.
 #ifdef RCT_NEW_ARCH_ENABLED
 - (std::shared_ptr<facebook::react::TurboModule>)getTurboModule:

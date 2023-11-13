@@ -35,6 +35,7 @@ export { default as SkyLayer } from './components/SkyLayer';
 export { SymbolLayer } from './components/SymbolLayer';
 export { default as RasterLayer } from './components/RasterLayer';
 export { default as BackgroundLayer } from './components/BackgroundLayer';
+export { default as CustomLocationProvider } from './components/CustomLocationProvider';
 export { Terrain } from './components/Terrain';
 export {
   default as locationManager,

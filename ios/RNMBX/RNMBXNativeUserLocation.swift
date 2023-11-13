@@ -1,7 +1,7 @@
 import MapboxMaps
 
 @objc
-public class RNMBXNativeUserLocation : UIView, RNMBXMapComponent {
+public class RNMBXNativeUserLocation: UIView, RNMBXMapComponent {
   weak var map : RNMBXMapView! = nil
   var imageManager: ImageManager? = nil
   
