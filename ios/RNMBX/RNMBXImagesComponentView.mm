@@ -3,6 +3,8 @@
 #import "RNMBXImagesComponentView.h"
 #import "RNMBXFabricHelpers.h"
 
+#include "RNMBXImageComponentView.h"
+
 #import <React/RCTBridge+Private.h>
 #import <React/RCTConversions.h>
 #import <React/RCTFabricComponentsPlugins.h>
@@ -68,7 +70,7 @@ using namespace facebook::react;
 
 - (void)updateProps:(const Props::Shared &)props oldProps:(const Props::Shared &)oldProps
 {
-  const auto &newProps = static_cast<const RNMBXImagesProps &>(*props);
+    const auto &newProps = static_cast<const RNMBXImagesProps &>(*props);
     id images = RNMBXConvertFollyDynamicToId(newProps.images);
     if (images != nil) {
         _view.images = images;
@@ -79,6 +81,22 @@ using namespace facebook::react;
     }
 
   [super updateProps:props oldProps:oldProps];
+}
+
+- (void)mountChildComponentView:(UIView<RCTComponentViewProtocol> *)childComponentView index:(NSInteger)index
+{
+    if ([childComponentView isKindOfClass:[RNMBXImageComponentView class]] && ((RNMBXImageComponentView *)childComponentView).contentView) {
+        [_view addImageView:((RNMBXImageComponentView *)childComponentView).contentView];
+    }
+    [super mountChildComponentView:childComponentView index:index];
+}
+
+- (void)unmountChildComponentView:(UIView<RCTComponentViewProtocol> *)childComponentView index:(NSInteger)index
+{
+    if ([childComponentView isKindOfClass:[RCTViewComponentView class]] && ((RCTViewComponentView *)childComponentView).contentView) {
+        [_view removeImageView:((RCTViewComponentView *)childComponentView).contentView];
+    }
+    [super unmountChildComponentView:childComponentView index:index];
 }
 
 @end

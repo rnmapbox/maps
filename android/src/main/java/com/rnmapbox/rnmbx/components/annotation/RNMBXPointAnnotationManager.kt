@@ -11,6 +11,7 @@ import com.facebook.react.viewmanagers.RNMBXPointAnnotationManagerInterface
 import com.rnmapbox.rnmbx.components.AbstractEventEmitter
 import com.rnmapbox.rnmbx.components.styles.sources.RNMBXShapeSource
 import com.rnmapbox.rnmbx.events.constants.EventKeys
+import com.rnmapbox.rnmbx.events.constants.eventMapOf
 import com.rnmapbox.rnmbx.utils.GeoJSONUtils.toPointGeometry
 import com.rnmapbox.rnmbx.utils.ViewTagResolver
 
@@ -32,13 +33,13 @@ class RNMBXPointAnnotationManager(reactApplicationContext: ReactApplicationConte
     }
 
     override fun customEvents(): Map<String, String> {
-        return MapBuilder.builder<String, String>()
-            .put(EventKeys.POINT_ANNOTATION_SELECTED, "onMapboxPointAnnotationSelected")
-            .put(EventKeys.POINT_ANNOTATION_DESELECTED, "onMapboxPointAnnotationDeselected")
-            .put(EventKeys.POINT_ANNOTATION_DRAG_START, "onMapboxPointAnnotationDragStart")
-            .put(EventKeys.POINT_ANNOTATION_DRAG, "onMapboxPointAnnotationDrag")
-            .put(EventKeys.POINT_ANNOTATION_DRAG_END, "onMapboxPointAnnotationDragEnd")
-            .build()
+        return eventMapOf(
+            EventKeys.POINT_ANNOTATION_SELECTED to "onMapboxPointAnnotationSelected",
+            EventKeys.POINT_ANNOTATION_DESELECTED to "onMapboxPointAnnotationDeselected",
+            EventKeys.POINT_ANNOTATION_DRAG_START to "onMapboxPointAnnotationDragStart",
+            EventKeys.POINT_ANNOTATION_DRAG to "onMapboxPointAnnotationDrag",
+            EventKeys.POINT_ANNOTATION_DRAG_END to "onMapboxPointAnnotationDragEnd"
+        )
     }
 
     // TODO: check why it does not work correctly

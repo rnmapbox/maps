@@ -334,10 +334,10 @@ class RNMBXCamera(private val mContext: Context, private val mManager: RNMBXCame
                         if (location?.puckBearingEnabled == true) {
                             when (location.puckBearingSource) {
 
-                                PuckBearingSource.HEADING -> {
+                                PuckBearing.HEADING -> {
                                     UserTrackingMode.FollowWithHeading
                                 }
-                                PuckBearingSource.COURSE -> {
+                                PuckBearing.COURSE -> {
                                     UserTrackingMode.FollowWithCourse
                                 }
                                 else -> {
@@ -468,12 +468,12 @@ class RNMBXCamera(private val mContext: Context, private val mManager: RNMBXCame
             when (mFollowUserMode ?: "normal") {
                 "compass" -> {
                     location.puckBearingEnabled = true
-                    location.puckBearingSource = PuckBearingSource.HEADING
+                    location.puckBearingSource = PuckBearing.HEADING
                     followOptions.bearing(FollowPuckViewportStateBearing.SyncWithLocationPuck)
                 }
                 "course" -> {
                     location.puckBearingEnabled = true
-                    location.puckBearingSource = PuckBearingSource.COURSE
+                    location.puckBearingSource = PuckBearing.COURSE
                     followOptions.bearing(FollowPuckViewportStateBearing.SyncWithLocationPuck)
                 }
                 "normal" -> {

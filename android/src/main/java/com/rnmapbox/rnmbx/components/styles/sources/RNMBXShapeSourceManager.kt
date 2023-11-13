@@ -12,6 +12,7 @@ import com.facebook.react.viewmanagers.RNMBXShapeSourceManagerInterface
 import com.mapbox.bindgen.Value
 import com.mapbox.maps.extension.style.expressions.generated.Expression
 import com.rnmapbox.rnmbx.events.constants.EventKeys
+import com.rnmapbox.rnmbx.events.constants.eventMapOf
 import com.rnmapbox.rnmbx.utils.ExpressionParser
 import com.rnmapbox.rnmbx.utils.Logger
 import com.rnmapbox.rnmbx.utils.ViewTagResolver
@@ -158,10 +159,10 @@ class RNMBXShapeSourceManager(private val mContext: ReactApplicationContext, val
     }
 
     override fun customEvents(): Map<String, String>? {
-        return MapBuilder.builder<String, String>()
-            .put(EventKeys.SHAPE_SOURCE_LAYER_CLICK, "onMapboxShapeSourcePress")
-            .put(EventKeys.MAP_ANDROID_CALLBACK, "onAndroidCallback")
-            .build()
+        return eventMapOf(
+            EventKeys.SHAPE_SOURCE_LAYER_CLICK to "onMapboxShapeSourcePress",
+            EventKeys.MAP_ANDROID_CALLBACK to "onAndroidCallback"
+        )
     }
 
     companion object {

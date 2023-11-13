@@ -8,7 +8,7 @@ import com.mapbox.common.location.IntervalSettings
 import com.mapbox.common.location.LocationObserver
 import com.mapbox.common.location.Location as _Location
 import com.mapbox.maps.MapView
-import com.mapbox.maps.plugin.PuckBearing
+import com.mapbox.maps.plugin.PuckBearing as _PuckBearing
 import com.mapbox.maps.plugin.locationcomponent.LocationComponentPlugin
 import com.mapbox.maps.plugin.locationcomponent.location
 
@@ -19,7 +19,7 @@ import com.mapbox.common.location.LocationServiceFactory
 import com.rnmapbox.rnmbx.utils.Logger
 import kotlin.math.absoluteValue
 
-typealias PuckBearingSource = PuckBearing
+typealias PuckBearing = _PuckBearing
 
 const val DEFAULT_FASTEST_INTERVAL_MILLIS: Long = 1000
 const val DEFAULT_INTERVAL_MILLIS: Long = 1000

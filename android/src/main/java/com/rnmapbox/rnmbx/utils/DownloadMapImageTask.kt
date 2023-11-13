@@ -20,6 +20,7 @@ import com.facebook.imagepipeline.image.CloseableStaticBitmap
 import com.facebook.imagepipeline.request.ImageRequestBuilder
 import com.facebook.react.views.imagehelper.ImageSource
 import com.rnmapbox.rnmbx.components.images.ImageInfo
+import com.rnmapbox.rnmbx.components.images.ImageManager
 import java.io.File
 import java.lang.ref.WeakReference
 import java.util.HashMap
@@ -27,12 +28,13 @@ import com.rnmapbox.rnmbx.v11compat.image.*
 
 data class DownloadedImage(val name: String, val bitmap: Bitmap, val info: ImageInfo)
 
-class DownloadMapImageTask(context: Context, map: MapboxMap, callback: OnAllImagesLoaded?) :
+class DownloadMapImageTask(context: Context, map: MapboxMap, imageManager: ImageManager?, callback: OnAllImagesLoaded? = null) :
     AsyncTask<Map.Entry<String, ImageEntry>, Void?, List<DownloadedImage>>() {
     private val mContext: WeakReference<Context>
     private val mMap: WeakReference<MapboxMap>
     private val mCallback: OnAllImagesLoaded?
     private val mCallerContext: Any
+    private val mImageManager: WeakReference<ImageManager>
 
     interface OnAllImagesLoaded {
         fun onAllImagesLoaded()
@@ -97,7 +99,7 @@ class DownloadMapImageTask(context: Context, map: MapboxMap, callback: OnAllImag
                 for (image in images) {
                     bitmapImages[image.name] = image.bitmap
                     val info = image.info
-
+                    mImageManager.get()?.resolve(image.name, image.bitmap)
                     style.addBitmapImage(image.name, image.bitmap, info)
                 }
             }
@@ -112,6 +114,7 @@ class DownloadMapImageTask(context: Context, map: MapboxMap, callback: OnAllImag
     init {
         mContext = WeakReference(context.applicationContext)
         mMap = WeakReference(map)
+        mImageManager = WeakReference(imageManager)
         mCallback = callback
         mCallerContext = this
     }

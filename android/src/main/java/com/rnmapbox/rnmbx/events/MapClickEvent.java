@@ -35,10 +35,10 @@ public class MapClickEvent extends AbstractEvent {
         String eventType = getType();
 
         if (eventType.equals(EventTypes.MAP_LONG_CLICK)) {
-            return EventKeys.MAP_LONG_CLICK;
+            return EventKeys.MAP_LONG_CLICK.getValue();
         }
 
-        return EventKeys.MAP_CLICK;
+        return EventKeys.MAP_CLICK.getValue();
     }
 
     @Override

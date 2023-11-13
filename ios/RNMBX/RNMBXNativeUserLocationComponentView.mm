@@ -2,6 +2,7 @@
 
 #import "RNMBXNativeUserLocationComponentView.h"
 #import "RNMBXFabricHelpers.h"
+#import "RNMBXFabricPropConvert.h"
 
 #import <React/RCTConversions.h>
 #import <React/RCTFabricComponentsPlugins.h>
@@ -53,13 +54,20 @@ using namespace facebook::react;
 
 - (void)updateProps:(const Props::Shared &)props oldProps:(const Props::Shared &)oldProps
 {
-  const auto &newProps = static_cast<const RNMBXNativeUserLocationProps &>(*props);
-    id iosShowsUserHeadingIndicator = RNMBXConvertFollyDynamicToId(newProps.iosShowsUserHeadingIndicator);
-    if (iosShowsUserHeadingIndicator != nil) {
-        _view.iosShowsUserHeadingIndicator = iosShowsUserHeadingIndicator;
-    }
-    
+  const auto &oldViewProps = static_cast<const RNMBXNativeUserLocationProps &>(*oldProps);
+  const auto &newViewProps = static_cast<const RNMBXNativeUserLocationProps &>(*props);
+
+  RNMBX_OPTIONAL_RPOP_NSString(puckBearing)
+  RNMBX_OPTIONAL_RPOP_BOOL(puckBearingEnabled)
+  RNMBX_OPTIONAL_RPOP_NSString(bearingImage)
+  RNMBX_OPTIONAL_RPOP_NSString(shadowImage)
+  RNMBX_OPTIONAL_RPOP_NSString(topImage)
+  RNMBX_OPTIONAL_RPOP_ExpressionDouble(scale)
+  RNMBX_RPOP_BOOL(visible)
+
   [super updateProps:props oldProps:oldProps];
+
+  [_view didSetProps:@[]];
 }
 
 @end

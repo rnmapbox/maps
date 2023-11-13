@@ -22,7 +22,6 @@ class RNMBXMarkerViewParentViewAnnotation : UIView {
     if actSize.width != size.width || actSize.height != size.height {
       let dx = ((size.width/2.0) - newOffset.dx) - ((actSize.width/2.0) - oldOffset.dx)
       let dy = ((size.height/2.0) + newOffset.dy) - ((actSize.height/2.0) + oldOffset.dy)
-      print(" => size=\(size) actSize=\(actSize) newOffset=\(newOffset) oldOffset=\(oldOffset)  dx=\(dx) dy=\(dy)")
       var frame = self.frame
       frame = frame.offsetBy(dx: -dx, dy: -dy)
       frame.size = size

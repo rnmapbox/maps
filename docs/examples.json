@@ -111,6 +111,20 @@
     "examples": [
       {
         "metadata": {
+          "title": "Custom Native UserLocation",
+          "tags": [
+            "NativeUserLocation",
+            "NativeUserLocation#topImage",
+            "NativeUserLocation#scale"
+          ],
+          "docs": "\n  Demonstrates use of images to customize NativeUserLocation\n  "
+        },
+        "fullPath": "example/src/examples/UserLocation/CustomNativeUserLocation.tsx",
+        "relPath": "UserLocation/CustomNativeUserLocation.tsx",
+        "name": "CustomNativeUserLocation"
+      },
+      {
+        "metadata": {
           "title": "Set Displacement",
           "tags": [
             "UserLocation",

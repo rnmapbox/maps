@@ -2,6 +2,10 @@ package com.rnmapbox.rnmbx.utils.extensions
 
 import com.facebook.react.bridge.ReadableMap
 import com.facebook.react.bridge.ReadableType
+import com.google.gson.JsonArray
+import com.google.gson.JsonElement
+import com.google.gson.JsonObject
+import com.rnmapbox.rnmbx.utils.ConvertUtils
 import com.rnmapbox.rnmbx.utils.Logger
 
 fun ReadableMap.forEach(action: (String, Any) -> Unit) {
@@ -51,4 +55,34 @@ fun ReadableMap.getAndLogIfNotDouble(key: String, tag: String = "RNMBXReadableMa
     } else {
         null
     }
+}
+
+fun ReadableMap.getAndLogIfNotString(key: String, tag: String = "RNMBXReadableMap"): String? {
+    return if (hasKey(key)) {
+        if (getType(key) == ReadableType.String) {
+            getString(key)
+        } else {
+            Logger.e("RNMBXReadableMap", "$key is expected to be a string but was: ${getType(key)}")
+            null
+        }
+    } else {
+        null
+    }
+}
+
+fun ReadableMap.toJsonObject() : JsonObject {
+    val result = JsonObject()
+    val it = keySetIterator()
+    while (it.hasNextKey()) {
+        val key = it.nextKey()
+        when (getType(key)) {
+            ReadableType.Map -> result.add(key, getMap(key)!!.toJsonObject())
+            ReadableType.Array -> result.add(key, getArray(key)!!.toJsonArray())
+            ReadableType.Null -> result.add(key, null)
+            ReadableType.Number -> result.addProperty(key, getDouble(key))
+            ReadableType.String -> result.addProperty(key, getString(key))
+            ReadableType.Boolean -> result.addProperty(key, getBoolean(key))
+        }
+    }
+    return result
 }

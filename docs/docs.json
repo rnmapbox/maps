@@ -4110,14 +4110,63 @@
         "required": false,
         "type": "'normal' \\| 'compass' \\| 'gps'",
         "default": "none",
-        "description": "Android render mode.\n\n - normal: just a circle\n - compass: triangle with heading\n - gps: large arrow\n\n@platform android"
+        "description": "Android render mode.\n\n - normal: just a circle\n - compass: triangle with heading\n - gps: large arrow\n\n@deprecated use `puckBearing` for source and `bearingImage` for image\n@platform android"
+      },
+      {
+        "name": "puckBearing",
+        "required": false,
+        "type": "'heading' \\| 'course'",
+        "default": "none",
+        "description": "The bearing of the puck.\n\n - heading: Orients the puck to match the direction in which the device is facing.\n - course: Orients the puck to match the direction in which the device is moving."
+      },
+      {
+        "name": "puckBearingEnabled",
+        "required": false,
+        "type": "boolean",
+        "default": "none",
+        "description": "Whether the puck rotates to track the bearing source."
       },
       {
         "name": "iosShowsUserHeadingIndicator",
         "required": false,
         "type": "boolean",
         "default": "none",
-        "description": "iOS only. A Boolean value indicating whether the user location annotation may display a permanent heading indicator.\n\n@platform ios"
+        "description": "iOS only. A Boolean value indicating whether the user location annotation may display a permanent heading indicator.\n\n@platform ios\n@deprecated use `puckBearingEnabled={true} puckBrearing=\"heading\"` instead"
+      },
+      {
+        "name": "topImage",
+        "required": false,
+        "type": "string",
+        "default": "none",
+        "description": "The name of image to use as the top layer for the location indicator. Images component should define this image."
+      },
+      {
+        "name": "bearingImage",
+        "required": false,
+        "type": "string",
+        "default": "none",
+        "description": "The name of image to use as the middle layer for the location indicator. Images component should define this image."
+      },
+      {
+        "name": "shadowImage",
+        "required": false,
+        "type": "string",
+        "default": "none",
+        "description": "The name of image asset to use as the background0 for the location indicator. Images component should define this image."
+      },
+      {
+        "name": "scale",
+        "required": false,
+        "type": "T \\| Expression",
+        "default": "none",
+        "description": "The size of the images, as a scale factor applied to the size of the specified image. Supports expressions based on zoom.\n\n@example\n[\"interpolate\",[\"linear\"], [\"zoom\"], 10.0, 1.0, 20.0, 4.0]]\n@example\n2.0"
+      },
+      {
+        "name": "visible",
+        "required": false,
+        "type": "boolean",
+        "default": "none",
+        "description": "Whether location icon is visible, defaults to true"
       }
     ],
     "fileNameWithExt": "NativeUserLocation.tsx",
@@ -7282,7 +7331,7 @@
         "required": false,
         "type": "UserLocationRenderMode",
         "default": "UserLocationRenderMode.Normal",
-        "description": "Which render mode to use."
+        "description": "@deprecated use NativeUserLocation component instead of UserLocationRenderMode.Native\nWhich render mode to use."
       },
       {
         "name": "requestsAlwaysUse",
@@ -7433,6 +7482,72 @@
     "fileNameWithExt": "VectorSource.tsx",
     "relPath": "src/components/VectorSource.tsx",
     "name": "VectorSource"
+  },
+  "Viewport": {
+    "description": "provides a structured approach to organizing camera management logic into states and transitions between them.\n\nAt any given time, the viewport is either:\n - idle\n - in a state (camera is being managed by a ViewportState)\n - transitioning between states\n\nSee [android](https://docs.mapbox.com/android/maps/api/${ANDROID_SDK_VERSION}/mapbox-maps-android/com.mapbox.maps.plugin.viewport/viewport.html),\n[ios](https://docs.mapbox.com/ios/maps/api/${IOS_SDK_VERSION}/Viewport.html#/s:10MapboxMaps8ViewportC)",
+    "displayName": "Viewport",
+    "methods": [
+      {
+        "name": "getState",
+        "docblock": null,
+        "modifiers": [],
+        "params": [],
+        "returns": null
+      },
+      {
+        "name": "idle",
+        "docblock": null,
+        "modifiers": [
+          "async"
+        ],
+        "params": [],
+        "returns": null
+      },
+      {
+        "name": "transitionTo",
+        "docblock": null,
+        "modifiers": [],
+        "params": [
+          {
+            "name": "state",
+            "optional": false,
+            "type": {
+              "name": null
+            }
+          },
+          {
+            "name": "transition",
+            "optional": false,
+            "type": {
+              "name": null
+            }
+          }
+        ],
+        "returns": null
+      }
+    ],
+    "props": [
+      {
+        "name": "transitionsToIdleUponUserInteraction",
+        "required": false,
+        "type": "boolean",
+        "default": "none",
+        "description": "Indicates whether the Viewport should idle when the MapView receives touch input.\n\nSet this property to false to enable building custom ViewportStates that can work simultaneously with certain types of gestures.\n\nDefaults to true."
+      },
+      {
+        "name": "onStatusChanged",
+        "required": false,
+        "type": {
+          "name": "func",
+          "funcSignature": "(event:{from: union, to: union, reason: union}) => void"
+        },
+        "default": "none",
+        "description": "Subscribes to status changes, will be called when the status changes.\n\nObservers are notified of status changes asynchronously on the main queue.\nThis means that by the time the notification is delivered, the status may have already changed again.\nThis behavior is necessary to allow observers to trigger further transitions while avoiding out-of-order\ndelivery of status changed notifications.\n*signature:*`(event:{from: union, to: union, reason: union}) => void`"
+      }
+    ],
+    "fileNameWithExt": "Viewport.tsx",
+    "relPath": "src/components/Viewport.tsx",
+    "name": "Viewport"
   },
   "coordinates": {
     "name": "coordinates",

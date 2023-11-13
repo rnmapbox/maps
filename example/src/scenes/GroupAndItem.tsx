@@ -25,18 +25,7 @@ import MarkerView from '../examples/Annotations/MarkerView';
 import PointAnnotationAnchors from '../examples/Annotations/PointAnnotationAnchors';
 import ShowPointAnnotation from '../examples/Annotations/ShowPointAnnotation';
 // CAMERA
-import CompassView from '../examples/Camera/CompassView';
-import Fit from '../examples/Camera/Fit';
-import FlyTo from '../examples/Camera/FlyTo';
-import GetCenter from '../examples/Camera/GetCenter';
-import GetZoom from '../examples/Camera/GetZoom';
-import RestrictMapBounds from '../examples/Camera/RestrictMapBounds';
-import SetHeading from '../examples/Camera/SetHeading';
-import SetPitch from '../examples/Camera/SetPitch';
-import SetUserTrackingModes from '../examples/Camera/SetUserTrackingModes';
-import TakeSnapshot from '../examples/Camera/TakeSnapshot';
-import TakeSnapshotWithMap from '../examples/Camera/TakeSnapshotWithMap';
-import YoYo from '../examples/Camera/YoYo';
+import * as Camera from '../examples/Camera';
 // FILLRASTERLAYER
 import ChoroplethLayerByZoomLevel from '../examples/FillRasterLayer/ChoroplethLayerByZoomLevel';
 import CustomVectorSource from '../examples/FillRasterLayer/CustomVectorSource';
@@ -318,6 +307,8 @@ const Examples = new ExampleGroup('React Native Mapbox', [
   ]),
   new ExampleGroup('V11', [example(StyleImportConfig)]),
   exampleGroup(Map),
+  exampleGroup(Camera),
+  /*
   new ExampleGroup('Camera', [
     new ExampleItem('Fit (Bounds, Center/Zoom, Padding)', Fit),
     new ExampleItem('Set Pitch', SetPitch),
@@ -331,7 +322,7 @@ const Examples = new ExampleGroup('React Native Mapbox', [
     new ExampleItem('Get Current Zoom', GetZoom),
     new ExampleItem('Get Center', GetCenter),
     new ExampleItem('Compass View', CompassView),
-  ]),
+  ]),*/
   exampleGroup(UserLocation),
   exampleGroup(SymbolCircleLayer),
   new ExampleGroup('Fill/RasterLayer', [

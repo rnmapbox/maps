@@ -57,7 +57,7 @@ class RNMBXStyle(private val mContext: Context, reactStyle: ReadableMap?, map: M
                 imageEntry(styleValue)
             )
         )
-        val task = DownloadMapImageTask(mContext, mMap, callback)
+        val task = DownloadMapImageTask(mContext, mMap, null, callback)
         task.execute(*images)
     }
 

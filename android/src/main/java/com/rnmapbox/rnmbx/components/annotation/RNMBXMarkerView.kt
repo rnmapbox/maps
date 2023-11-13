@@ -16,6 +16,7 @@ import com.rnmapbox.rnmbx.components.RemovalReason
 import com.rnmapbox.rnmbx.components.mapview.RNMBXMapView
 import com.rnmapbox.rnmbx.utils.Logger
 import java.util.Vector
+import com.rnmapbox.rnmbx.v11compat.annotation.*
 
 private data class Vec2(val dx: Double, val dy: Double)
 
@@ -169,12 +170,11 @@ class RNMBXMarkerView(context: Context?, private val mManager: RNMBXMarkerViewMa
         val offset = getOffset()
 
         val options = viewAnnotationOptions {
-            geometry(coordinate)
-            width(width)
-            height(height)
+            coordinate?.let { geometry(it) }
+            width(width.toDouble())
+            height(height.toDouble())
             allowOverlap(mAllowOverlap)
-            offsetX(offset.dx.toInt())
-            offsetY(offset.dy.toInt())
+            offsets(offset.dx, offset.dy)
             selected(mIsSelected)
         }
         return options
