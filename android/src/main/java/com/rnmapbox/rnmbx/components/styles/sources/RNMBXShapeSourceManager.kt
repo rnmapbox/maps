@@ -21,7 +21,6 @@ import java.net.URL
 import java.util.ArrayList
 import java.util.HashMap
 
-
 class RNMBXShapeSourceManager(private val mContext: ReactApplicationContext, val viewTagResolver: ViewTagResolver) :
     AbstractEventEmitter<RNMBXShapeSource>(
         mContext

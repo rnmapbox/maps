@@ -2,10 +2,10 @@ package com.rnmapbox.rnmbx.components.styles.sources
 
 import android.content.Context
 import com.mapbox.maps.extension.style.sources.generated.GeoJsonSource
-import com.rnmapbox.rnmbx.utils.ImageEntry
-import android.graphics.drawable.BitmapDrawable
+import com.mapbox.maps.extension.style.expressions.generated.Expression
+import android.util.Log
 import com.facebook.react.bridge.Promise
-import com.facebook.react.bridge.ReadableMap
+import com.facebook.react.bridge.UiThreadUtil.runOnUiThread
 import com.rnmapbox.rnmbx.components.mapview.RNMBXMapView
 import com.rnmapbox.rnmbx.events.FeatureClickEvent
 import com.facebook.react.bridge.WritableMap
@@ -14,23 +14,20 @@ import com.mapbox.bindgen.Value
 import com.mapbox.geojson.Feature
 import com.rnmapbox.rnmbx.events.AndroidCallbackEvent
 import com.mapbox.geojson.FeatureCollection
+import com.mapbox.geojson.GeoJson
 import com.mapbox.geojson.LineString
 import com.mapbox.geojson.Point
-import com.mapbox.maps.*
-import com.mapbox.maps.extension.style.expressions.generated.Expression
-import com.rnmapbox.rnmbx.utils.Logger
-import com.mapbox.turf.TurfConstants
-import com.mapbox.turf.TurfMeasurement
-import com.mapbox.turf.TurfMisc
-import org.json.JSONObject
+import com.mapbox.turf.*
+import com.rnmapbox.rnmbx.utils.GeoJSONUtils
 import com.rnmapbox.rnmbx.utils.Logger
 import java.net.URL
 import java.util.ArrayList
 import java.util.HashMap
-import java.util.Timer
-import java.util.TimerTask
 
 import com.rnmapbox.rnmbx.v11compat.feature.*
+import org.json.JSONObject
+import java.util.Timer
+import java.util.TimerTask
 
 class RNMBXShapeSource(context: Context, private val mManager: RNMBXShapeSourceManager) :
     RNMBXSource<GeoJsonSource>(context) {
