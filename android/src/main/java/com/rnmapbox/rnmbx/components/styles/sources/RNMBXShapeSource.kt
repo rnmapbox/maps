@@ -1,18 +1,14 @@
 package com.rnmapbox.rnmbx.components.styles.sources
 
 import android.content.Context
-import com.mapbox.maps.extension.style.sources.generated.GeoJsonSource
 import com.mapbox.maps.extension.style.expressions.generated.Expression
 import android.util.Log
 import com.facebook.react.bridge.Promise
 import com.facebook.react.bridge.UiThreadUtil.runOnUiThread
-import com.rnmapbox.rnmbx.components.mapview.RNMBXMapView
-import com.rnmapbox.rnmbx.events.FeatureClickEvent
 import com.facebook.react.bridge.WritableMap
 import com.facebook.react.bridge.WritableNativeMap
 import com.mapbox.bindgen.Value
 import com.mapbox.geojson.Feature
-import com.rnmapbox.rnmbx.events.AndroidCallbackEvent
 import com.mapbox.geojson.FeatureCollection
 import com.mapbox.geojson.GeoJson
 import com.mapbox.geojson.LineString
@@ -23,11 +19,16 @@ import com.rnmapbox.rnmbx.utils.Logger
 import java.net.URL
 import java.util.ArrayList
 import java.util.HashMap
-
 import com.rnmapbox.rnmbx.v11compat.feature.*
 import org.json.JSONObject
 import java.util.Timer
 import java.util.TimerTask
+import com.mapbox.maps.QueryFeatureExtensionCallback
+import com.mapbox.maps.SourceQueryOptions
+import com.mapbox.maps.extension.style.sources.generated.GeoJsonSource
+import com.rnmapbox.rnmbx.components.mapview.RNMBXMapView
+import com.rnmapbox.rnmbx.events.AndroidCallbackEvent
+import com.rnmapbox.rnmbx.events.FeatureClickEvent
 
 class RNMBXShapeSource(context: Context, private val mManager: RNMBXShapeSourceManager) :
     RNMBXSource<GeoJsonSource>(context) {
