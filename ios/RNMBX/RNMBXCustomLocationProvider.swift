@@ -22,6 +22,11 @@ public class RNMBXCustomLocationProvider: UIView, RNMBXMapComponent {
   public var coordinate: [Double] = [] {
     didSet { changed(.coordinate) }
   }
+    
+  @objc
+  public var heading: NSNumber = 0.0 {
+    didSet { changed(.heading) }
+  }
   
   func changed(_ property: Property) {
     changes.add(name: property.rawValue, update: property.apply)
@@ -50,7 +55,7 @@ public class RNMBXCustomLocationProvider: UIView, RNMBXMapComponent {
   }
   
   private func applyHeading() {
-    // updateHeading()
+    updateHeading(heading: heading.doubleValue)
   }
   
   func removeFromMap(_ map: RNMBXMapView, reason: RemovalReason) -> Bool {
