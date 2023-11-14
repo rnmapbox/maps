@@ -12,7 +12,10 @@ export default function ViewportExample() {
         title="followPuck"
         onPress={async () => {
           const completed = await viewport.current?.transitionTo(
-            { kind: 'followPuck' },
+            {
+              kind: 'followPuck',
+              options: { zoom: 'keep', padding: { top: 200, left: 200 } },
+            },
             { kind: 'default', maxDurationMs: 5000 },
           );
           console.log(' => transitionTo completed:', completed);

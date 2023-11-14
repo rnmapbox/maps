@@ -51,7 +51,7 @@ import com.rnmapbox.rnmbx.utils.ViewTagResolver
 class RNMBXPackage : TurboReactPackage() {
 
     var viewTagResolver: ViewTagResolver? = null
-    fun getViewTagResolver(context: ReactApplicationContext) : ViewTagResolver {
+    fun getViewTagResolver(context: ReactApplicationContext, module: String) : ViewTagResolver {
         val viewTagResolver = viewTagResolver
         if (viewTagResolver == null) {
             val result = ViewTagResolver(context)
@@ -59,6 +59,10 @@ class RNMBXPackage : TurboReactPackage() {
             return result
         }
         return viewTagResolver
+    }
+
+    fun resetViewTagResolver() {
+        viewTagResolver = null
     }
 
     override fun getModule(
@@ -71,11 +75,11 @@ class RNMBXPackage : TurboReactPackage() {
             RNMBXOfflineModule.REACT_CLASS -> return RNMBXOfflineModule(reactApplicationContext)
             RNMBXSnapshotModule.REACT_CLASS -> return RNMBXSnapshotModule(reactApplicationContext)
             RNMBXLogging.REACT_CLASS -> return RNMBXLogging(reactApplicationContext)
-            NativeMapViewModule.NAME -> return NativeMapViewModule(reactApplicationContext, getViewTagResolver(reactApplicationContext))
-            RNMBXViewportModule.NAME -> return RNMBXViewportModule(reactApplicationContext, getViewTagResolver(reactApplicationContext))
-            RNMBXShapeSourceModule.NAME -> return RNMBXShapeSourceModule(reactApplicationContext, getViewTagResolver(reactApplicationContext))
-            RNMBXImageModule.NAME -> return RNMBXImageModule(reactApplicationContext, getViewTagResolver(reactApplicationContext))
-            RNMBXPointAnnotationModule.NAME -> return RNMBXPointAnnotationModule(reactApplicationContext, getViewTagResolver(reactApplicationContext))
+            NativeMapViewModule.NAME -> return NativeMapViewModule(reactApplicationContext, getViewTagResolver(reactApplicationContext, s))
+            RNMBXViewportModule.NAME -> return RNMBXViewportModule(reactApplicationContext, getViewTagResolver(reactApplicationContext, s))
+            RNMBXShapeSourceModule.NAME -> return RNMBXShapeSourceModule(reactApplicationContext, getViewTagResolver(reactApplicationContext, s))
+            RNMBXImageModule.NAME -> return RNMBXImageModule(reactApplicationContext, getViewTagResolver(reactApplicationContext, s))
+            RNMBXPointAnnotationModule.NAME -> return RNMBXPointAnnotationModule(reactApplicationContext, getViewTagResolver(reactApplicationContext, s))
         }
         return null
     }
@@ -91,26 +95,26 @@ class RNMBXPackage : TurboReactPackage() {
         // components
         managers.add(RNMBXCameraManager(reactApplicationContext))
         managers.add(RNMBXViewportManager(reactApplicationContext))
-        managers.add(RNMBXMapViewManager(reactApplicationContext, getViewTagResolver(reactApplicationContext)))
+        managers.add(RNMBXMapViewManager(reactApplicationContext, getViewTagResolver(reactApplicationContext, "RNMBXMapViewManager")))
         managers.add(RNMBXStyleImportManager(reactApplicationContext))
 
         // annotations
         managers.add(RNMBXMarkerViewManager(reactApplicationContext))
-        managers.add(RNMBXPointAnnotationManager(reactApplicationContext, getViewTagResolver(reactApplicationContext)))
+        managers.add(RNMBXPointAnnotationManager(reactApplicationContext, getViewTagResolver(reactApplicationContext, "RNMBXPointAnnotationManager")))
         managers.add(RNMBXCalloutManager())
         managers.add(RNMBXNativeUserLocationManager())
         managers.add(RNMBXCustomLocationProviderManager())
 
         // sources
         managers.add(RNMBXVectorSourceManager(reactApplicationContext))
-        managers.add(RNMBXShapeSourceManager(reactApplicationContext, getViewTagResolver(reactApplicationContext)))
+        managers.add(RNMBXShapeSourceManager(reactApplicationContext, getViewTagResolver(reactApplicationContext, "RNMBXShapeSourceManager")))
         managers.add(RNMBXRasterDemSourceManager(reactApplicationContext))
         managers.add(RNMBXRasterSourceManager(reactApplicationContext))
         managers.add(RNMBXImageSourceManager())
 
         // images
         managers.add(RNMBXImagesManager(reactApplicationContext))
-        managers.add(RNMBXImageManager(reactApplicationContext, getViewTagResolver(reactApplicationContext)))
+        managers.add(RNMBXImageManager(reactApplicationContext, getViewTagResolver(reactApplicationContext, "RNMBXImageManager")))
 
         // layers
         managers.add(RNMBXFillLayerManager())
@@ -129,6 +133,7 @@ class RNMBXPackage : TurboReactPackage() {
     }
 
     override fun getReactModuleInfoProvider(): ReactModuleInfoProvider {
+        resetViewTagResolver()
         return ReactModuleInfoProvider {
             val moduleInfos: MutableMap<String, ReactModuleInfo> = HashMap()
             val isTurboModule = BuildConfig.IS_NEW_ARCHITECTURE_ENABLED

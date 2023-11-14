@@ -26,7 +26,7 @@ public class RNMBXViewportManager : RCTViewManager {
       
   @objc public static func transitionTo(
     _ view: RNMBXViewport,
-    state: [String: String],
+    state: [String: Any],
     transition: [String: Any],
     resolve: @escaping RCTPromiseResolveBlock,
     reject: @escaping RCTPromiseRejectBlock

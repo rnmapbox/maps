@@ -147,25 +147,75 @@ open class RNMBXViewport : UIView, RNMBXMapComponent, ViewportStatusObserver {
     mapView.viewport.idle()
   }
   
-  func toState(_ from: [String:String], _ viewport: ViewportManager?) -> ViewportState? {
+  func toState(_ viewport: ViewportManager?,_ state: [String:Any]) -> ViewportState? {
     guard let viewport = viewport else {
       Logger.log(level:.error, message: "no viewport")
       return nil
     }
-    guard let kind = from["kind"] else {
+    guard let kind = state["kind"] as? String else {
       Logger.log(level:.error, message: "no kind found in state")
       return nil
     }
     
     switch (kind) {
     case "followPuck":
-      return viewport.makeFollowPuckViewportState()
-//    case "overview":
-//      viewport.makeOverviewViewportState(options: )
+      return viewport.makeFollowPuckViewportState(options:
+        parseFollowViewportOptions(state)
+      )
+//  case "overview":
+//    viewport.makeOverviewViewportState(options: )
     default:
       Logger.log(level:.error, message: "unexpected state kind: \(kind)")
       return nil
     }
+  }
+  
+  func parseFollowViewportOptions(_ state: [String:Any]) -> FollowPuckViewportStateOptions {
+    var result = FollowPuckViewportStateOptions()
+    if let options = state["options"] as? [String:Any] {
+      if let zoom = options["zoom"] as? String, (zoom == "keep") {
+        result.zoom = nil
+      } else if let zoom = options["zoom"] as? Double {
+        result.zoom = zoom
+      } else if options["zoom"] != nil {
+        Logger.log(level: .error, message: "parseFollowViewportOptions expected zoom to be number or 'keep', but was \(options["zoom"])")
+      }
+      
+      if let pitch = options["pitch"] as? String, (pitch == "pitch") {
+        result.pitch = nil
+      } else if let pitch = options["pitch"] as? Double {
+        result.pitch = pitch
+      } else if options["pitch"] != nil{
+        Logger.log(level: .error, message: "parseFollowViewportOptions expected pitch to be number or 'keep', but was \(options["pitch"])")
+      }
+      
+      if let bearing = options["bearing"] as? String {
+        switch (bearing) {
+        case "keep":
+          result.bearing = nil
+        case "course":
+          result.bearing = .course
+        case "heading":
+          result.bearing = .heading
+        default:
+          Logger.log(level: .error, message: "bearing expected to be a number or 'keep' or 'course' or 'heading', but was \(options["bearing"])")
+        }
+      } else if let bearing = options["bearing"] as? NSNumber {
+        result.bearing = .constant(bearing.doubleValue)
+      } else if options["bearing"] != nil {
+        Logger.log(level: .error, message: "bearing expected to be a number or 'keep' or 'course' or 'heading', but was \(options["bearing"])")
+      }
+      
+      if let padding = options["padding"] as? String, (padding == "keep") {
+        result.padding = nil
+      } else if let padding = options["padding"] as? [String: NSNumber] {
+        result.padding = toPadding(padding)
+      } else if (options["padding"] != nil) {
+        Logger.log(level: .error, message: "padding expected to be an object or 'keep' or but was \(options["bearing"])")
+      }
+    }
+    
+    return result
   }
   
   func toTransition(_ from: [String: Any], _ viewport: ViewportManager?) -> ViewportTransition? {
@@ -197,7 +247,7 @@ open class RNMBXViewport : UIView, RNMBXMapComponent, ViewportStatusObserver {
   }
   
   func transitionTo(
-    state: [String: String],
+    state: [String: Any],
     transition: [String: Any],
     resolve: @escaping (NSNumber) -> Void
   ) {
@@ -205,7 +255,7 @@ open class RNMBXViewport : UIView, RNMBXMapComponent, ViewportStatusObserver {
       Logger.log(level:.error, message: "mapView is null in RNMBXViewport.transitionTo")
       return
     }
-    guard let state = toState(state, mapView.viewport) else {
+    guard let state = toState(mapView.viewport, state) else {
       Logger.log(level:.error, message: "unable to parse toState in RNMBXViewport.transitionTo")
       return
     }
@@ -217,4 +267,27 @@ open class RNMBXViewport : UIView, RNMBXMapComponent, ViewportStatusObserver {
       resolve(NSNumber(booleanLiteral: completed))
     }
   }
+}
+
+
+func toPadding(_ value: [String: NSNumber]) -> UIEdgeInsets {
+  var result = UIEdgeInsets()
+  
+  if let top = value["top"] as? NSNumber {
+    result.top = top.CGFloat
+  }
+  
+  if let bottom = value["bottom"] as? NSNumber {
+    result.bottom = bottom.CGFloat
+  }
+  
+  if let left = value["left"] as? NSNumber {
+    result.left = left.CGFloat
+  }
+  
+  if let right = value["right"] as? NSNumber {
+    result.right = right.CGFloat
+  }
+  
+  return result
 }

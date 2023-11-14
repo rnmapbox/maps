@@ -7,6 +7,7 @@ import com.facebook.react.bridge.Arguments
 import com.facebook.react.bridge.Callback
 import com.facebook.react.bridge.Promise
 import com.facebook.react.bridge.ReadableMap
+import com.facebook.react.bridge.ReadableType
 import com.facebook.react.bridge.UIManager
 import com.facebook.react.bridge.WritableMap
 import com.facebook.react.uimanager.UIManagerHelper
@@ -27,12 +28,13 @@ import com.rnmapbox.rnmbx.components.AbstractMapFeature
 import com.rnmapbox.rnmbx.components.mapview.RNMBXMapView
 import com.rnmapbox.rnmbx.modules.RNMBXLogging
 import com.rnmapbox.rnmbx.utils.Logger
-import com.rnmapbox.rnmbx.utils.extensions.getAndLogIfNotBoolean
-import com.rnmapbox.rnmbx.utils.extensions.getAndLogIfNotDouble
-import com.rnmapbox.rnmbx.utils.extensions.getAndLogIfNotString
+import com.rnmapbox.rnmbx.utils.extensions.*
 import com.rnmapbox.rnmbx.utils.writableMapOf
 
 import com.facebook.react.uimanager.events.Event
+import com.mapbox.maps.EdgeInsets
+import com.mapbox.maps.plugin.viewport.data.FollowPuckViewportStateBearing
+import com.mapbox.maps.plugin.viewport.data.FollowPuckViewportStateOptions
 import com.rnmapbox.rnmbx.events.constants.EventKeys
 
 class BaseEvent(
@@ -116,9 +118,11 @@ mContext
         applyHasStatusChanged(mapView.mapView)
     }
 
-    fun toState(viewport: ViewportPlugin, state: ReadableMap): ViewportState? {
+    private fun toState(viewport: ViewportPlugin, state: ReadableMap): ViewportState? {
         return when (val kind = state.getAndLogIfNotString("kind")) {
-            "followPuck" -> viewport.makeFollowPuckViewportState()
+            "followPuck" -> viewport.makeFollowPuckViewportState(
+                parseFollowViewportOptions(state)
+            )
             //"overview" -> return viewport.makeOverviewViewportState()
             else -> {
                 Logger.e(LOG_TAG, "toState: unexpected state: $kind")
@@ -127,7 +131,79 @@ mContext
         }
     }
 
-    fun toDefaultViewportTransitionOptions(state: ReadableMap?): DefaultViewportTransitionOptions {
+    data class FollowPuckViewportStateBearingOrNull(val state: FollowPuckViewportStateBearing?)
+    private fun parseFollowViewportOptions(state: ReadableMap): FollowPuckViewportStateOptions {
+        val builder = FollowPuckViewportStateOptions.Builder()
+        state.getAndLogIfNotMap("options", LOG_TAG)?.let { options ->
+            if (options.hasKey("zoom")) {
+                if (options.isKeep("zoom")) {
+                    builder.zoom(null)
+                } else {
+                    options.getAndLogIfNotDouble("zoom", LOG_TAG)?.let { zoom ->
+                        builder.zoom(zoom)
+                    }
+                }
+            }
+            if (options.hasKey("pitch")) {
+                if (options.isKeep("pitch")) {
+                    builder.pitch(null)
+                } else {
+                    options.getAndLogIfNotDouble("pitch", LOG_TAG)?.let {pitch ->
+                        builder.pitch(pitch)
+                    }
+                }
+            }
+
+            if (options.hasKey("bearing")) {
+                when (options.getType("bearing")) {
+                    ReadableType.Number ->
+                        FollowPuckViewportStateBearingOrNull(FollowPuckViewportStateBearing.Constant(options.getDouble("bearing")))
+
+                    ReadableType.String ->
+                        when (options.getString("bearing")) {
+                            "course" ->
+                                FollowPuckViewportStateBearingOrNull(FollowPuckViewportStateBearing.SyncWithLocationPuck)
+                            "heading" ->
+                                FollowPuckViewportStateBearingOrNull(FollowPuckViewportStateBearing.SyncWithLocationPuck)
+                            "keep" ->
+                                FollowPuckViewportStateBearingOrNull(null)
+                            else -> {
+                                Logger.e(
+                                    LOG_TAG,
+                                    "bearing in viewport options should be either a constant number or syncWithLocationPuck"
+                                )
+                                null
+                            }
+                        }
+                    else -> {
+                        Logger.e(
+                            LOG_TAG,
+                        "bearing in viewport options should be either constant number or course or heading or keep"
+                        )
+                        null
+                    }
+                }?.let { bearing ->
+                    builder.bearing(bearing.state)
+                }
+            }
+            if (options.hasKey("padding")) {
+                if (options.isNull("padding")) {
+                    builder.padding(null)
+                } else {
+                    options.getAndLogIfNotMap("padding", LOG_TAG)?.let { paddingMap ->
+                        paddingMap?.toPadding(LOG_TAG)?.let { padding ->
+                            builder.padding(padding)
+                        }
+                    }
+                }
+            }
+
+        }
+        return builder.build()
+    }
+
+
+    private fun toDefaultViewportTransitionOptions(state: ReadableMap?): DefaultViewportTransitionOptions {
         val builder = DefaultViewportTransitionOptions.Builder()
         if (state?.hasKey("maxDurationMs") == true) {
             val maxDurationMs = state.getAndLogIfNotDouble("maxDurationMs", LOG_TAG)
@@ -139,7 +215,7 @@ mContext
         return builder.build()
     }
 
-    fun toTransition(viewport: ViewportPlugin, state: ReadableMap?): ViewportTransition? {
+    private fun toTransition(viewport: ViewportPlugin, state: ReadableMap?): ViewportTransition? {
         viewport.idle()
         return when (val kind = state?.getAndLogIfNotString("kind", LOG_TAG)) {
             "default" -> viewport.makeDefaultViewportTransition(
@@ -257,3 +333,9 @@ mContext
         const val LOG_TAG = "RNMBXViewport"
     }
 }
+
+private fun ReadableMap.isKeep(s: String): Boolean {
+    return ((getType(s) == ReadableType.String) && (getString(s) == "keep"))
+}
+
+

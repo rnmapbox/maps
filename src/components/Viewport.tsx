@@ -20,9 +20,52 @@ import NativeViewport, {
 } from '../specs/RNMBXViewportNativeComponent';
 import RNMBXViewportModule from '../specs/NativeRNMBXViewportModule';
 
+type FollowPuckOptions = {
+  /**
+   * The value to use for setting zoom. If 'keep', zoom will not be modified by the FollowPuckViewportState.
+   * @default DEFAULT_FOLLOW_PUCK_VIEWPORT_STATE_ZOOM.
+   */
+  zoom?: number | 'keep';
+
+  /**
+   * The value to use for setting pitch. If 'keep', pitch will not be modified by the FollowPuckViewportState.
+   * @default DEFAULT_FOLLOW_PUCK_VIEWPORT_STATE_PITCH degrees.
+   */
+  pitch?: number | 'keep';
+
+  /**
+   * Indicates how to obtain the value to use for bearing when setting the camera.
+   * If set to 'keep', bearing will not be modified by the FollowPuckViewportState.
+   *  - heading: sets bearing to the heading of the device
+   *  - course: sets bearing based on the direction of travel
+   *  - number: sets the camera bearing to the constant value on every frame
+   *
+   * On Android, 'heading' and 'coruse' sets the camera bearing to the same as the location puck's bearing. See
+   * [syncWithLocationPuck](https://docs.mapbox.com/android/maps/api/11.0.0-rc.1/mapbox-maps-android/com.mapbox.maps.plugin.viewport.data/-follow-puck-viewport-state-bearing/-sync-with-location-puck/)
+   *
+   * @default 'heading'
+   */
+  bearing?: 'heading' | 'course' | number | 'keep';
+
+  /**
+   * The value to use for setting CameraOptions.padding. If 'keep', padding will not be modified by the FollowPuckViewportState.
+   *
+   * @default 0 padding
+   */
+  padding?:
+    | {
+        top?: number;
+        left?: number;
+        bottom?: number;
+        right?: number;
+      }
+    | 'keep';
+};
+
 type ViewportState =
   | {
       kind: 'followPuck';
+      options?: FollowPuckOptions;
     }
   | {
       kind: 'overview';

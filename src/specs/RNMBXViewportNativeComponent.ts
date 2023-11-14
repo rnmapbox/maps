@@ -7,9 +7,24 @@ import type { UnsafeMixed } from './codegenUtils';
 // see https://github.com/rnmapbox/maps/wiki/FabricOptionalProp
 type OptionalProp<T> = UnsafeMixed<T>;
 
-type ViewportState =
+export type FollowPuckOptionsNative = {
+  zoom?: number | 'keep';
+  pitch?: number | 'keep';
+  bearing?: 'course' | 'heading' | number | 'keep';
+  padding?:
+    | {
+        top?: number;
+        left?: number;
+        bottom?: number;
+        right?: number;
+      }
+    | 'keep';
+};
+
+export type ViewportStateNative =
   | {
       kind: 'followPuck';
+      options?: FollowPuckOptionsNative;
     }
   | {
       kind: 'overview';
@@ -21,7 +36,7 @@ type ViewportStatus =
     }
   | {
       kind: 'transition';
-      toState: ViewportState;
+      toState: ViewportStateNative;
       transition: ViewportTransition;
     };
 
