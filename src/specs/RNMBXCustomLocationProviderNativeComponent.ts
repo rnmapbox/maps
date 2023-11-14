@@ -10,6 +10,7 @@ type OptionalProp<T> = UnsafeMixed<T>;
 
 export interface NativeProps extends ViewProps {
   coordinate?: OptionalProp<Position>;
+  heading?: OptionalProp<number>;
 }
 
 export default codegenNativeComponent<NativeProps>(

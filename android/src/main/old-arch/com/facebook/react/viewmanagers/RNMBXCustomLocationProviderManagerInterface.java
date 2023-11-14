@@ -14,4 +14,5 @@ import com.facebook.react.bridge.Dynamic;
 
 public interface RNMBXCustomLocationProviderManagerInterface<T extends View> {
   void setCoordinate(T view, Dynamic value);
+  void setHeading(T view, Dynamic value);
 }

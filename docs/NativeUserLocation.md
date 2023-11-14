@@ -85,7 +85,7 @@ The name of image to use as the middle layer for the location indicator. Images 
 ```tsx
 string
 ```
-The name of image asset to use as the background0 for the location indicator. Images component should define this image.
+The name of image to use as the background for the location indicator. Images component should define this image.
 
 
   

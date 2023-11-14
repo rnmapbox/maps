@@ -52,7 +52,7 @@ export type Props = {
   bearingImage?: string;
 
   /**
-   * The name of image asset to use as the background0 for the location indicator. Images component should define this image.
+   * The name of image to use as the background for the location indicator. Images component should define this image.
    */
   shadowImage?: string;
 
@@ -81,7 +81,7 @@ const NativeUserLocation = memo((props: Props) => {
   let baseProps: NativeProps = { ...defaultProps };
   if (iosShowsUserHeadingIndicator) {
     console.warn(
-      'NativeUserLocation: iosShowsUserHeadingIndicator is deprecated, use puckBearingEnabled={true} puckBrearing="heading" instead',
+      'NativeUserLocation: iosShowsUserHeadingIndicator is deprecated, use puckBearingEnabled={true} puckBearing="heading" instead',
     );
     baseProps = {
       ...baseProps,
