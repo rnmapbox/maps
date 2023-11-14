@@ -23,6 +23,39 @@ import RNMBXViewportModule from '../specs/NativeRNMBXViewportModule';
 type ViewportState =
   | {
       kind: 'followPuck';
+      options: {
+        /**
+         * The value to use for setting zoom. If null, zoom will not be modified by the FollowPuckViewportState.
+         * @default DEFAULT_FOLLOW_PUCK_VIEWPORT_STATE_ZOOM.
+         */
+        zoom?: number | null;
+
+        /**
+         * The value to use for setting pitch. If null, pitch will not be modified by the FollowPuckViewportState.
+         * @default DEFAULT_FOLLOW_PUCK_VIEWPORT_STATE_PITCH degrees.
+         */
+        pitch?: number | null;
+
+        /**
+         * Indicates how to obtain the value to use for bearing when setting the camera.
+         * If set to null, bearing will not be modified by the FollowPuckViewportState.
+         *
+         * @default 'syncWithLocationPuck'
+         */
+        bearing?: 'syncWithLocationPuck' | number | null;
+
+        /**
+         * The value to use for setting CameraOptions.padding. If null, padding will not be modified by the FollowPuckViewportState.
+         *
+         * @default 0 padding
+         */
+        padding?: {
+          top?: number;
+          left?: number;
+          bottom?: number;
+          right?: number;
+        } | null;
+      };
     }
   | {
       kind: 'overview';

@@ -10,6 +10,17 @@ type OptionalProp<T> = UnsafeMixed<T>;
 type ViewportState =
   | {
       kind: 'followPuck';
+      options: {
+        zoom?: number;
+        pitch?: number;
+        bearing?: 'syncWithLocationPuck' | number;
+        padding?: {
+          top?: number;
+          left?: number;
+          bottom?: number;
+          right?: number;
+        };
+      };
     }
   | {
       kind: 'overview';
