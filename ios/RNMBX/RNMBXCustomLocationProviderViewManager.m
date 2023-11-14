@@ -5,5 +5,6 @@
 
 // circle layer props
 RCT_EXPORT_VIEW_PROPERTY(coordinate, NSArray)
+RCT_EXPORT_VIEW_PROPERTY(heading, NSNumber)
 
 @end

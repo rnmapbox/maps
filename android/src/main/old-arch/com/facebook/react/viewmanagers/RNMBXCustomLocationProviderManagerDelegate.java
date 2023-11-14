@@ -25,6 +25,9 @@ public class RNMBXCustomLocationProviderManagerDelegate<T extends View, U extend
       case "coordinate":
         mViewManager.setCoordinate(view, new DynamicFromObject(value));
         break;
+      case "heading":
+        mViewManager.setHeading(view, new DynamicFromObject(value));
+        break;
       default:
         super.setProperty(view, propName, value);
     }

@@ -1333,7 +1333,14 @@
         "required": false,
         "type": "Position",
         "default": "none",
-        "description": "FIX ME NO DESCRIPTION"
+        "description": "longitude and latitude to use for the custom location provider that gets applied to the NativeUserLocation"
+      },
+      {
+        "name": "heading",
+        "required": false,
+        "type": "number",
+        "default": "none",
+        "description": "heading/bearing to use for custom location provider that gets applied to the NativeUserLocation"
       }
     ],
     "fileNameWithExt": "CustomLocationProvider.tsx",
@@ -4169,7 +4176,7 @@
         "required": false,
         "type": "string",
         "default": "none",
-        "description": "The name of image asset to use as the background0 for the location indicator. Images component should define this image."
+        "description": "The name of image to use as the background for the location indicator. Images component should define this image."
       },
       {
         "name": "scale",

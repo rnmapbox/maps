@@ -32,6 +32,15 @@ class RNMBXCustomLocationProviderManager : ViewGroupManager<RNMBXCustomLocationP
         }
     }
 
+    @ReactProp(name = "heading")
+    override fun setHeading(view: RNMBXCustomLocationProvider, value: Dynamic?) {
+        if (value?.type == ReadableType.Number) {
+            view.heading = value.asDouble()
+        } else {
+            Logger.e(LOG_TAG, "heading is expected to be a number")
+        }
+    }
+
     override fun onAfterUpdateTransaction(view: RNMBXCustomLocationProvider) {
         super.onAfterUpdateTransaction(view)
 
