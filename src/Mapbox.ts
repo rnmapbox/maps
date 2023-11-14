@@ -5,6 +5,7 @@ export {
   type CameraPadding,
   type CameraAnimationMode,
   type CameraBounds,
+  type CameraStop,
 } from './components/Camera';
 export { Atmosphere } from './components/Atmosphere';
 export { default as MapView, type MapState } from './components/MapView';
