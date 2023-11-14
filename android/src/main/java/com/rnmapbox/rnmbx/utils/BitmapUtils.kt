@@ -87,6 +87,9 @@ object BitmapUtils {
         if (tempFile == null) {
             return null
         }
+        if (outputStream == null) {
+            return null
+        }
         bitmap.compress(Bitmap.CompressFormat.PNG, 100, outputStream)
         closeSnapshotOutputStream(outputStream)
         return Uri.fromFile(tempFile).toString()
