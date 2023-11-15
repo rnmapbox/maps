@@ -3,15 +3,19 @@ import {
   View,
   StyleSheet,
   NativeModules,
-  requireNativeComponent,
   ViewProps,
   NativeSyntheticEvent,
   NativeMethods,
   HostComponent,
   LayoutChangeEvent,
+  findNodeHandle,
 } from 'react-native';
 import { debounce } from 'debounce';
+import { GeoJsonProperties, Geometry } from 'geojson';
 
+import NativeMapView from '../specs/RNMBXMapViewNativeComponent';
+import NativeAndroidTextureMapView from '../specs/RNMBXAndroidTextureMapViewNativeComponent';
+import NativeMapViewModule from '../specs/NativeMapViewModule';
 import {
   isFunction,
   isAndroid,
@@ -26,29 +30,28 @@ import { type Location } from '../modules/location/locationManager';
 
 import NativeBridgeComponent from './NativeBridgeComponent';
 
-const { MGLModule } = NativeModules;
-const { EventTypes } = MGLModule;
+const { RNMBXModule } = NativeModules;
+const { EventTypes } = RNMBXModule;
 
-if (MGLModule == null) {
+if (RNMBXModule == null) {
   console.error(
     'Native part of Mapbox React Native libraries were not registered properly, double check our native installation guides.',
   );
 }
-if (!MGLModule.MapboxV10) {
+if (!RNMBXModule.MapboxV10) {
   console.warn(
     '@rnmapbox/maps: Non v10 implementations are deprecated and will be removed in next version - see https://github.com/rnmapbox/maps/wiki/Deprecated-RNMapboxImpl-Maplibre',
   );
 }
 
-export const NATIVE_MODULE_NAME = 'RCTMGLMapView';
-
-export const ANDROID_TEXTURE_NATIVE_MODULE_NAME = 'RCTMGLAndroidTextureMapView';
+// TODO: check if this can be removed
+export const NATIVE_MODULE_NAME = 'MBXMapView';
 
 const styles = StyleSheet.create({
   matchParent: { flex: 1 },
 });
 
-const defaultStyleURL = MGLModule.StyleURL.Street;
+const defaultStyleURL = RNMBXModule.StyleURL.Street;
 
 export type Point = {
   x: number;
@@ -406,7 +409,7 @@ class MapView extends NativeBridgeComponent(
     compassFadeWhenNorth: false,
     logoEnabled: true,
     scaleBarEnabled: true,
-    surfaceView: MGLModule.MapboxV10 ? true : false,
+    surfaceView: RNMBXModule.MapboxV10 ? true : false,
     requestDisallowInterceptTouchEvent: false,
     regionWillChangeDebounceTime: 10,
     regionDidChangeDebounceTime: 500,
@@ -438,7 +441,7 @@ class MapView extends NativeBridgeComponent(
       >,
     ) => void
   >;
-  _nativeRef?: RCTMGLMapViewRefType;
+  _nativeRef?: RNMBXMapViewRefType;
   state: {
     isReady: boolean | null;
     region: null;
@@ -495,7 +498,7 @@ class MapView extends NativeBridgeComponent(
   }
 
   _setHandledMapChangedEvents(props: Props) {
-    if (isAndroid() || MGLModule.MapboxV10) {
+    if (isAndroid() || RNMBXModule.MapboxV10) {
       const events: string[] = [];
 
       function addIfHasHandler(name: CallbablePropKeysWithoutOn) {
@@ -676,7 +679,7 @@ class MapView extends NativeBridgeComponent(
   ): Promise<GeoJSON.FeatureCollection | undefined> {
     if (
       bbox != null &&
-      (bbox.length === 4 || (MGLModule.MapboxV10 && bbox.length === 0))
+      (bbox.length === 4 || (RNMBXModule.MapboxV10 && bbox.length === 0))
     ) {
       const res = await this._runNative<{ data: GeoJSON.FeatureCollection }>(
         'queryRenderedFeaturesInRect',
@@ -738,8 +741,10 @@ class MapView extends NativeBridgeComponent(
     methodName: string,
     args: NativeArg[] = [],
   ): Promise<ReturnType> {
-    return super._runNativeCommand<typeof RCTMGLMapView, ReturnType>(
+    return this._runNativeCommand<typeof RNMBXMapView, ReturnType>(
       methodName,
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore TODO: fix types
       this._nativeRef as HostComponent<NativeProps> | undefined,
       args,
     );
@@ -793,7 +798,7 @@ class MapView extends NativeBridgeComponent(
    * v10 only
    */
   async clearData(): Promise<void> {
-    if (!MGLModule.MapboxV10) {
+    if (!RNMBXModule.MapboxV10) {
       console.warn(
         'RNMapbox: clearData is only implemented in v10 implementation or later',
       );
@@ -845,12 +850,50 @@ class MapView extends NativeBridgeComponent(
    * If you implement a custom attribution button, you should add this action to the button.
    */
   showAttribution() {
-    return this._runNativeCommand('showAttribution', this._nativeRef);
+    return this._runNative<void>('showAttribution');
+  }
+
+  _runNativeCommand<RefType, ReturnType = NativeArg>(
+    methodName: string,
+    nativeRef: RefType | undefined,
+    args: NativeArg[],
+  ): Promise<ReturnType> {
+    // when this method is called after component mounts, the ref is not yet set
+    // schedule it to be called after a timeout
+    if (!this._nativeRef) {
+      return new Promise<ReturnType>((resolve) => {
+        this._preRefMapMethodQueue.push({
+          method: { name: methodName, args },
+          resolver: resolve as (args: NativeArg) => void,
+        });
+      });
+    }
+
+    const handle = findNodeHandle(nativeRef as any);
+
+    // @ts-expect-error TS says that string cannot be used to index NativeMapViewModule.
+    // It can, it's just not pretty.
+    return NativeMapViewModule[methodName]?.(
+      handle,
+      ...(args ?? []),
+    ) as Promise<ReturnType>;
+  }
+
+  _decodePayload<G extends Geometry | null = Geometry, P = GeoJsonProperties>(
+    payload: GeoJSON.Feature<G, P> | string,
+  ): GeoJSON.Feature<G, P> {
+    // we check whether the payload is a string, since the strict type safety is enforced only on iOS on the new arch
+    // on Android, on both archs, the payload is an object
+    if (typeof payload === 'string') {
+      return JSON.parse(payload);
+    } else {
+      return payload;
+    }
   }
 
   _onPress(e: NativeSyntheticEvent<{ payload: GeoJSON.Feature }>) {
     if (isFunction(this.props.onPress)) {
-      this.props.onPress(e.nativeEvent.payload);
+      this.props.onPress(this._decodePayload(e.nativeEvent.payload));
     }
   }
 
@@ -898,7 +941,9 @@ class MapView extends NativeBridgeComponent(
   ) {
     const { regionWillChangeDebounceTime, regionDidChangeDebounceTime } =
       this.props;
-    const { type, payload } = e.nativeEvent;
+    const { type } = e.nativeEvent;
+    const payload = this._decodePayload(e.nativeEvent.payload);
+
     let propName: CallbablePropKeys | '' = '';
     let deprecatedPropName: CallbablePropKeys | '' = '';
 
@@ -995,7 +1040,7 @@ class MapView extends NativeBridgeComponent(
       return;
     }
 
-    if (MGLModule.MapboxV10) {
+    if (RNMBXModule.MapboxV10) {
       if (!this.deprecationLogged.contentInset) {
         console.warn(
           '@rnmapbox/maps: contentInset is deprecated, use Camera padding instead.',
@@ -1011,7 +1056,7 @@ class MapView extends NativeBridgeComponent(
     return this.props.contentInset;
   }
 
-  _setNativeRef(nativeRef: RCTMGLMapViewRefType) {
+  _setNativeRef(nativeRef: RNMBXMapViewRefType) {
     this._nativeRef = nativeRef;
     super._runPendingNativeCommands(nativeRef);
   }
@@ -1041,7 +1086,7 @@ class MapView extends NativeBridgeComponent(
   }
 
   _setLocalizeLabels(props: Props) {
-    if (!MGLModule.MapboxV10) {
+    if (!RNMBXModule.MapboxV10) {
       return;
     }
     if (typeof props.localizeLabels === 'boolean') {
@@ -1062,7 +1107,7 @@ class MapView extends NativeBridgeComponent(
     this._setLocalizeLabels(props);
 
     const callbacks = {
-      ref: (nativeRef: RCTMGLMapViewRefType) => this._setNativeRef(nativeRef),
+      ref: (nativeRef: RNMBXMapViewRefType) => this._setNativeRef(nativeRef),
       onPress: this._onPress,
       onLongPress: this._onLongPress,
       onMapChange: this._onChange,
@@ -1073,15 +1118,17 @@ class MapView extends NativeBridgeComponent(
     let mapView = null;
     if (isAndroid() && !this.props.surfaceView && this.state.isReady) {
       mapView = (
-        <RCTMGLAndroidTextureMapView {...props} {...callbacks}>
+        <RNMBXAndroidTextureMapView {...props} {...callbacks}>
           {this.props.children}
-        </RCTMGLAndroidTextureMapView>
+        </RNMBXAndroidTextureMapView>
       );
     } else if (this.state.isReady) {
       mapView = (
-        <RCTMGLMapView {...props} {...callbacks}>
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-ignore TODO: fix types
+        <RNMBXMapView {...props} {...callbacks}>
           {this.props.children}
-        </RCTMGLMapView>
+        </RNMBXMapView>
       );
     }
 
@@ -1106,14 +1153,14 @@ type NativeProps = Omit<
   onCameraChanged(event: NativeSyntheticEvent<{ payload: MapState }>): void;
 };
 
-type RCTMGLMapViewRefType = Component<NativeProps> & Readonly<NativeMethods>;
-const RCTMGLMapView = requireNativeComponent<NativeProps>(NATIVE_MODULE_NAME);
+type RNMBXMapViewRefType = Component<NativeProps> & Readonly<NativeMethods>;
+// const RNMBXMapView = requireNativeComponent<NativeProps>(NATIVE_MODULE_NAME);
+// TODO: figure out how to pick the correct implementation
+const RNMBXMapView = NativeMapView;
 
-let RCTMGLAndroidTextureMapView: typeof RCTMGLMapView;
+let RNMBXAndroidTextureMapView: any;
 if (isAndroid()) {
-  RCTMGLAndroidTextureMapView = requireNativeComponent<NativeProps>(
-    ANDROID_TEXTURE_NATIVE_MODULE_NAME,
-  );
+  RNMBXAndroidTextureMapView = NativeAndroidTextureMapView;
 }
 
 export default MapView;

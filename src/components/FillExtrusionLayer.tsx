@@ -1,17 +1,16 @@
 import React from 'react';
-import { NativeModules, requireNativeComponent } from 'react-native';
+import { NativeModules } from 'react-native';
 
 import {
   FilterExpression,
   FillExtrusionLayerStyleProps,
 } from '../utils/MapboxStyles';
 import { StyleValue } from '../utils/StyleValue';
+import RNMBXFillExtrusionLayerNativeComponent from '../specs/RNMBXFillExtrusionLayerNativeComponent';
 
 import AbstractLayer from './AbstractLayer';
 
-const MapboxGL = NativeModules.MGLModule;
-
-export const NATIVE_MODULE_NAME = 'RCTMGLFillExtrusionLayer';
+const MapboxGL = NativeModules.RNMBXModule;
 
 export type Props = {
   /**
@@ -90,11 +89,14 @@ class FillExtrusionLayer extends AbstractLayer<Props, NativeTypeProps> {
       ...this.baseProps,
       sourceLayerID: this.props.sourceLayerID,
     };
-    return <RCTMGLFillExtrusionLayer ref={this.setNativeLayer} {...props} />;
+    return (
+      <RNMBXFillExtrusionLayerNativeComponent
+        // @ts-expect-error just codegen stuff
+        ref={this.setNativeLayer}
+        {...props}
+      />
+    );
   }
 }
-
-const RCTMGLFillExtrusionLayer =
-  requireNativeComponent<NativeTypeProps>(NATIVE_MODULE_NAME);
 
 export default FillExtrusionLayer;

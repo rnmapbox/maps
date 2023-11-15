@@ -1,7 +1,7 @@
 import React, { memo } from 'react';
 import { requireNativeComponent } from 'react-native';
 
-const NATIVE_MODULE_NAME = 'RCTMGLNativeUserLocation';
+const NATIVE_MODULE_NAME = 'RNMBXNativeUserLocation';
 
 export type Props = {
   /**
@@ -25,11 +25,11 @@ export type Props = {
 
 type NativeProps = Props;
 
-const RCTMGLNativeUserLocation =
+const RNMBXNativeUserLocation =
   requireNativeComponent<NativeProps>(NATIVE_MODULE_NAME);
 
 const NativeUserLocation = memo((props: Props) => {
-  return <RCTMGLNativeUserLocation {...props} />;
+  return <RNMBXNativeUserLocation {...props} />;
 });
 
 export default NativeUserLocation;

@@ -7,7 +7,7 @@ function keyMirror(keys) {
 }
 
 // Mock of what the native code puts on the JS object
-NativeModules.MGLModule = {
+NativeModules.RNMBXModule = {
   // constants
   UserTrackingModes: keyMirror([
     'None',
@@ -86,9 +86,11 @@ NativeModules.MGLModule = {
   getAccessToken: () => Promise.resolve('test-token'),
   setTelemetryEnabled: jest.fn(),
   setConnected: jest.fn(),
+
+  MapboxV10: true,
 };
 
-NativeModules.MGLOfflineModule = {
+NativeModules.RNMBXOfflineModule = {
   createPack: (packOptions) => {
     return Promise.resolve({
       bounds: packOptions.bounds,
@@ -106,16 +108,32 @@ NativeModules.MGLOfflineModule = {
   setProgressEventThrottle: jest.fn(),
 };
 
-NativeModules.MGLSnapshotModule = {
+NativeModules.RNMBXSnapshotModule = {
   takeSnap: () => {
     return Promise.resolve('file://test.png');
   },
 };
 
-NativeModules.MGLLocationModule = {
+NativeModules.RNMBXLocationModule = {
   getLastKnownLocation: jest.fn(),
   start: jest.fn(),
   pause: jest.fn(),
+};
+
+NativeModules.RNMBXMapViewModule = {
+  takeSnap: jest.fn(),
+  queryTerrainElevation: jest.fn(),
+  setSourceVisibility: jest.fn(),
+  getCenter: jest.fn(),
+  getCoordinateFromView: jest.fn(),
+  getPointInView: jest.fn(),
+  getZoom: jest.fn(),
+  getVisibleBounds: jest.fn(),
+  queryRenderedFeaturesAtPoint: jest.fn(),
+  queryRenderedFeaturesInRect: jest.fn(),
+  setHandledMapChangedEvents: jest.fn(),
+  clearData: jest.fn(),
+  querySourceFeatures: jest.fn(),
 };
 
 // Mock for global AbortController

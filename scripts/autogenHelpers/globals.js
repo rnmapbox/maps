@@ -193,6 +193,27 @@ global.androidOutputType = function (type, value) {
   }
 };
 
+global.androidGetConfigTypeKt = function (androidType, prop) {
+  switch (androidType) {
+    case 'Integer':
+      return 'styleValue.getInt(VALUE_KEY)';
+    case 'Float':
+      return 'styleValue.getDouble(VALUE_KEY)';
+    case 'Boolean':
+      return 'styleValue.getBoolean(VALUE_KEY)';
+    case 'Float[]':
+      return 'styleValue.getFloatArray(VALUE_KEY)';
+    case 'String[]':
+      return 'styleValue.getStringArray(VALUE_KEY)';
+    default:
+      if (prop && prop.image) {
+        return 'styleValue.imageURI';
+      } else {
+        return 'styleValue.getString(VALUE_KEY)';
+      }
+  }
+};
+
 global.androidGetConfigType = function (androidType, prop) {
   switch (androidType) {
     case 'Integer':

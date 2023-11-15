@@ -15,7 +15,7 @@ import { Position } from '../types/Position';
 
 import NativeBridgeComponent, { type RNMBEvent } from './NativeBridgeComponent';
 
-export const NATIVE_MODULE_NAME = 'RCTMGLPointAnnotation';
+export const NATIVE_MODULE_NAME = 'RNMBXPointAnnotation';
 
 const styles = StyleSheet.create({
   container: {
@@ -221,9 +221,9 @@ class PointAnnotation extends NativeBridgeComponent(
       coordinate: this._getCoordinate(),
     };
     return (
-      <RCTMGLPointAnnotation {...props}>
+      <RNMBXPointAnnotation {...props}>
         {this.props.children}
-      </RCTMGLPointAnnotation>
+      </RNMBXPointAnnotation>
     );
   }
 }
@@ -234,7 +234,7 @@ type NativeProps = Omit<Props, 'coordinate'> & {
 
 type NativePointAnnotationRef = Component<NativeProps>;
 
-const RCTMGLPointAnnotation =
+const RNMBXPointAnnotation =
   requireNativeComponent<NativeProps>(NATIVE_MODULE_NAME);
 
 export default PointAnnotation;

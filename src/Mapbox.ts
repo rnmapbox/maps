@@ -1,4 +1,4 @@
-export * from './MGLModule';
+export * from './RNMBXModule';
 export {
   Camera,
   UserTrackingMode,
@@ -12,6 +12,7 @@ export { default as Light } from './components/Light';
 export { default as PointAnnotation } from './components/PointAnnotation';
 export { default as Annotation } from './components/Annotation';
 export { default as Callout } from './components/Callout';
+export { default as StyleImport } from './components/StyleImport';
 export {
   default as UserLocation,
   UserLocationRenderMode,

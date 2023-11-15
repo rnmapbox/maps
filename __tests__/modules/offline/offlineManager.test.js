@@ -71,7 +71,7 @@ describe('offlineManager', () => {
 
   it('should migrate offline cache', async () => {
     const spy = jest.spyOn(
-      NativeModules.MGLOfflineModule,
+      NativeModules.RNMBXOfflineModule,
       'migrateOfflineCache',
     );
     await MapboxGL.offlineManager.migrateOfflineCache();
@@ -80,7 +80,10 @@ describe('offlineManager', () => {
 
   it('should set max tile count limit', () => {
     const expectedLimit = 2000;
-    const spy = jest.spyOn(NativeModules.MGLOfflineModule, 'setTileCountLimit');
+    const spy = jest.spyOn(
+      NativeModules.RNMBXOfflineModule,
+      'setTileCountLimit',
+    );
     MapboxGL.offlineManager.setTileCountLimit(expectedLimit);
     expect(spy).toHaveBeenCalledWith(expectedLimit);
     spy.mockRestore();
@@ -89,7 +92,7 @@ describe('offlineManager', () => {
   it('should set progress event throttle value', () => {
     const expectedThrottleValue = 500;
     const spy = jest.spyOn(
-      NativeModules.MGLOfflineModule,
+      NativeModules.RNMBXOfflineModule,
       'setProgressEventThrottle',
     );
     MapboxGL.offlineManager.setProgressEventThrottle(expectedThrottleValue);
@@ -195,7 +198,10 @@ describe('offlineManager', () => {
     beforeEach(() => (Platform.OS = 'android'));
 
     it('should set pack observer manually', async () => {
-      const spy = jest.spyOn(NativeModules.MGLOfflineModule, 'setPackObserver');
+      const spy = jest.spyOn(
+        NativeModules.RNMBXOfflineModule,
+        'setPackObserver',
+      );
 
       const name = `test-${Date.now()}`;
       const noop = () => {};
@@ -208,7 +214,10 @@ describe('offlineManager', () => {
     });
 
     it('should not set pack observer manually during create flow', async () => {
-      const spy = jest.spyOn(NativeModules.MGLOfflineModule, 'setPackObserver');
+      const spy = jest.spyOn(
+        NativeModules.RNMBXOfflineModule,
+        'setPackObserver',
+      );
 
       const name = `test-${Date.now()}`;
       const noop = () => {};
@@ -224,7 +233,10 @@ describe('offlineManager', () => {
     beforeEach(() => (Platform.OS = 'ios'));
 
     it('should not set pack observer manually', async () => {
-      const spy = jest.spyOn(NativeModules.MGLOfflineModule, 'setPackObserver');
+      const spy = jest.spyOn(
+        NativeModules.RNMBXOfflineModule,
+        'setPackObserver',
+      );
 
       const name = `test-${Date.now()}`;
       const noop = () => {};

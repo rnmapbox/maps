@@ -9,7 +9,7 @@ import { ImageSourcePropType, ImageResolvedAssetSource } from 'react-native';
 import { ShapeSource } from './ShapeSource';
 import Image from './Image';
 
-export const NATIVE_MODULE_NAME = 'RCTMGLImages';
+export const NATIVE_MODULE_NAME = 'RNMBXImages';
 
 export type RNMBEvent<PayloadType = { [key: string]: string }> = {
   payload: PayloadType;
@@ -190,7 +190,7 @@ class Images extends React.PureComponent<Props> {
       ...this._getImages(),
     };
 
-    return <RCTMGLImages {...props}>{this.props.children}</RCTMGLImages>;
+    return <RNMBXImages {...props}>{this.props.children}</RNMBXImages>;
   }
 }
 
@@ -203,6 +203,6 @@ type NativeProps = {
   nativeImages?: NativeImage[];
 };
 
-const RCTMGLImages = requireNativeComponent<NativeProps>(NATIVE_MODULE_NAME);
+const RNMBXImages = requireNativeComponent<NativeProps>(NATIVE_MODULE_NAME);
 
 export default Images;

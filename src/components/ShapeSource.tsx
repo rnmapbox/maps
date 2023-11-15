@@ -19,9 +19,9 @@ import { OnPressEvent } from '../types/OnPressEvent';
 import AbstractSource from './AbstractSource';
 import NativeBridgeComponent from './NativeBridgeComponent';
 
-const MapboxGL = NativeModules.MGLModule;
+const MapboxGL = NativeModules.RNMBXModule;
 
-export const NATIVE_MODULE_NAME = 'RCTMGLShapeSource';
+export const NATIVE_MODULE_NAME = 'RNMBXShapeSource';
 
 type OnPressEventDeprecated = OnPressEvent & {
   nativeEvent?: OnPressEvent;
@@ -388,11 +388,11 @@ export class ShapeSource extends NativeBridgeComponent(
     };
 
     return (
-      <RCTMGLShapeSource {...props}>
+      <RNMBXShapeSource {...props}>
         {cloneReactChildrenWithProps(this.props.children, {
           sourceID: this.props.id,
         })}
-      </RCTMGLShapeSource>
+      </RNMBXShapeSource>
     );
   }
 }
@@ -402,5 +402,5 @@ type NativeProps = {
   shape?: string;
 };
 
-const RCTMGLShapeSource =
+const RNMBXShapeSource =
   requireNativeComponent<NativeProps>(NATIVE_MODULE_NAME);

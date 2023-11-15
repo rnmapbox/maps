@@ -2,7 +2,7 @@ import { NativeModules } from 'react-native';
 
 import OfflineCreatePackOptions from './OfflineCreatePackOptions';
 
-const MapboxGLOfflineManager = NativeModules.MGLOfflineModuleLegacy;
+const MapboxGLOfflineManager = NativeModules.RNMBXOfflineModuleLegacy;
 
 type OfflinePackStatus = {
   name: string;

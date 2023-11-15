@@ -1,6 +1,14 @@
+/**
+ * Metro configuration
+ * https://facebook.github.io/metro/docs/configuration
+ *
+ * @type {import('metro-config').MetroConfig}
+ */
+
 const path = require('path');
 const fs = require('fs');
 
+const { getDefaultConfig, mergeConfig } = require('@react-native/metro-config');
 const blacklist = require('metro-config/src/defaults/exclusionList');
 const glob = require('glob-to-regexp');
 
@@ -50,7 +58,7 @@ function getBlacklist() {
   return blacklist([...nodeModuleDirs, ...webSupportSources]);
 }
 
-module.exports = {
+const config = {
   resolver: {
     blacklistRE: getBlacklist(),
   },
@@ -65,3 +73,5 @@ module.exports = {
     }),
   },
 };
+
+module.exports = mergeConfig(getDefaultConfig(__dirname), config);

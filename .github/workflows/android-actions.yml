@@ -7,10 +7,15 @@ on:
         required: true
         type: string
       MAP_IMPL:
-        description: "The map implementation to use (mapbox,maplibre or mapbox-gl)"
+        description: "The map implementation to use (mapbox,mapbox11)"
         default: mapbox
         required: false
         type: string
+      NEW_ARCH:
+        description: "If build with new architecture or not"
+        default: false
+        required: false
+        type: boolean
     secrets:
       MAPBOX_ACCESS_TOKEN:
         required: true
@@ -50,7 +55,11 @@ jobs:
       - run: yarn install --network-timeout 1000000
         working-directory: example
 
+      - run: yarn postinstall
+        working-directory: example
+
       - run: ./gradlew assemble
         working-directory: example/android
         env:
           CI_MAP_IMPL: ${{ inputs.MAP_IMPL }}
+          ORG_GRADLE_PROJECT_newArchEnabled: ${{ inputs.NEW_ARCH && 'true' || 'false' }}

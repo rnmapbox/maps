@@ -1,19 +1,38 @@
-require_relative '../node_modules/react-native/scripts/react_native_pods'
-require_relative '../node_modules/@react-native-community/cli-platform-ios/native_modules'
+# Resolve react_native_pods.rb with node to allow for hoisting
+require Pod::Executable.execute_command('node', ['-p',
+  'require.resolve(
+    "react-native/scripts/react_native_pods.rb",
+    {paths: [process.argv[1]]},
+  )', __dir__]).strip
+prepare_react_native_project!
 
-$RNMapboxMapsImpl = 'mapbox' # mapbox-gl, maplibre
+$RNMapboxMapsImpl = 'mapbox'
+if ENV['RNMBX11']
+  $RNMapboxMapsUseV11 = true # use 11 version
+  $RNMapboxMapsVersion = '= 11.0.0-beta.4'
+end
+
 
 if ENV['CI_MAP_IMPL']
-  fail "Invalid CI_MAP_IMPL value" unless ["maplibre", "mapbox-gl", "mapbox"].include?(ENV['CI_MAP_IMPL'])
-
-  $RNMapboxMapsImpl = ENV['CI_MAP_IMPL']
+  fail "Invalid CI_MAP_IMPL value" unless ["mapbox","mapbox11"].include?(ENV['CI_MAP_IMPL'])
+  case ENV['CI_MAP_IMPL']
+  when 'mapbox'
+    $RNMapboxMapsImpl = 'mapbox'
+  when 'mapbox11'
+    $RNMapboxMapsImpl = 'mapbox'
+    $RNMapboxMapsUseV11 = true # use 11 version
+    $RNMapboxMapsVersion = '= 11.0.0-beta.3' 
+  else
+    fail "Invalid CI_MAP_IMPL value: #{ENV['CI_MAP_IMPL']}"
+  end
 end
 
-if $RNMapboxMapsImpl == 'mapbox'
-  platform :ios, '13.0'
-else
-  platform :ios, '12.4'
-end
+#if $RNMapboxMapsImpl == 'mapbox'
+#  platform :ios, '13.0'
+#else
+#  platform :ios, '12.4'
+#end
+platform :ios, '13.0'
 
 # If you are using a `react-native-flipper` your iOS build will fail when `NO_FLIPPER=1` is set.
 # because `react-native-flipper` depends on (FlipperKit,...) that will be excluded
@@ -32,18 +51,13 @@ if linkage != nil
   use_frameworks! :linkage => linkage.to_sym
 end
 
-production = ENV["PRODUCTION"] == "1"
-
-if $RNMapboxMapsImpl == 'maplibre'
-  $RNMapboxMapsSwiftPackageManager = {
-    url: "https://github.com/maplibre/maplibre-gl-native-distribution",
-    requirement: {
-      kind: "upToNextMajorVersion",
-      minimumVersion: "5.12.1"
-    },
-    product_name: "Mapbox"
-  }
+flags = get_default_flags()
+if flags[:fabric_enabled]
+  use_modular_headers!
+  pod 'glog', :podspec => '../node_modules/react-native/third-party-podspecs/glog.podspec', :modular_headers => false
 end
+
+production = ENV["PRODUCTION"] == "1"
 
 # We ignore warning except for RNMapboxMaps
 INHIBIT_WARNING_BY_DEFAULT = true
@@ -121,10 +135,10 @@ target 'RNMapboxGLExample' do
   else
     # CI configuration
     post_install do |installer|
+      # https://github.com/facebook/react-native/blob/main/packages/react-native/scripts/react_native_pods.rb#L197-L202
       react_native_post_install(
         installer,
-        # Set `mac_catalyst_enabled` to `true` in order to apply patches
-        # necessary for Mac Catalyst builds
+        config[:reactNativePath],
         :mac_catalyst_enabled => false
       )
       disable_optimizations_in_release(installer)

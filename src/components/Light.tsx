@@ -7,7 +7,7 @@ import { type BaseProps } from '../types/BaseProps';
 import { transformStyle } from '../utils/StyleValue';
 import nativeRef from '../utils/nativeRef';
 
-export const NATIVE_MODULE_NAME = 'RCTMGLLight';
+export const NATIVE_MODULE_NAME = 'RNMBXLight';
 
 type Props = BaseProps & {
   /**
@@ -30,7 +30,7 @@ interface LightMethods {
 function Light(props: Props, ref: React.ForwardedRef<LightMethods>) {
   const { style, ...propWithoutStyle } = props;
 
-  const nativeLightRef = nativeRef(useRef<typeof RCTMGLLight>(null));
+  const nativeLightRef = nativeRef(useRef<typeof RNMBXLight>(null));
 
   useImperativeHandle(ref, () => ({
     setNativeProps(_props: { [key: string]: unknown }) {
@@ -46,15 +46,15 @@ function Light(props: Props, ref: React.ForwardedRef<LightMethods>) {
   }));
 
   return (
-    <RCTMGLLight
+    <RNMBXLight
       ref={nativeLightRef}
-      testID="rctmglLight"
+      testID="RNMBXLight"
       {...propWithoutStyle}
       reactStyle={transformStyle(style)}
     />
   );
 }
 
-const RCTMGLLight = requireNativeComponent<NativeProps>(NATIVE_MODULE_NAME);
+const RNMBXLight = requireNativeComponent<NativeProps>(NATIVE_MODULE_NAME);
 
 export default memo(forwardRef(Light));

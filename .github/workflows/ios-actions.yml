@@ -7,10 +7,15 @@ on:
         required: true
         type: string
       MAP_IMPL:
-        description: "The map implementation to use (mapbox,maplibre or mapbox-gl)"
+        description: "The map implementation to use (mapbox,mapbox11)"
         default: mapbox
         required: false
         type: string
+      NEW_ARCH:
+        description: "If build with new architecture or not"
+        default: false
+        required: false
+        type: boolean
     secrets:
       MAPBOX_ACCESS_TOKEN:
         required: true
@@ -61,18 +66,23 @@ jobs:
         if: steps.yarn-cache.outputs.cache-hit != 'true'
         run: yarn install --network-timeout 1000000
 
+      - run: yarn postinstall
+        working-directory: example
+
       - name: Cache Pods
         uses: actions/cache@v3
         id: pods-cache
         with:
           path: ios/Pods
-          key: pods-${{ hashFiles('**/Podfile.lock') }}
+          key: pods-${{ hashFiles('**/Podfile.lock') }}-${{ inputs.MAP_IMPL }}-${{ inputs.NEW_ARCH }}}
 
       - name: Install Pod Dependencies
         if: steps.pods-cache.outputs.cache-hit != 'true'
-        run: cd ios && pod --version && pod install
+        run: cd ios && pod --version && pod update MapboxMaps && pod install
         env:
           CI_MAP_IMPL: ${{ inputs.MAP_IMPL }}
+          RCT_NEW_ARCH_ENABLED: ${{ inputs.NEW_ARCH && 1 || 0 }}
+          NO_FLIPPER: 1
 
       - name: Install Detox Dependencies
         run: |
@@ -84,11 +94,12 @@ jobs:
         run: set -o pipefail && NSUnbufferedIO=YES  yarn detox build --configuration ios.debug 2>&1 | xcbeautify -qq
 
       - name: Test with detox
+        if: inputs.NEW_ARCH != 1
         run: |
           npx detox --version
           yarn detox test --configuration ios.debug --debug-synchronization 500 --loglevel trace --record-logs all --take-screenshots all
         env:
-          SKIP_TESTS_NO_METAL: ${{ inputs.MAP_IMPL == 'mapbox' }}
+          SKIP_TESTS_NO_METAL: ${{ inputs.MAP_IMPL == 'mapbox' || inputs.MAP_IMPL == 'mapbox11' }}
 
       - name: Store Detox artifacts on test failure
         uses: actions/upload-artifact@v3
