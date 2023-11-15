@@ -45,7 +45,7 @@ if linkage != nil
   use_frameworks! :linkage => linkage.to_sym
 end
 
-flags = get_default_flags()
+flags = ReactNativePodsUtils.get_default_flags()
 if flags[:fabric_enabled]
   pod 'glog', :podspec => '../node_modules/react-native/third-party-podspecs/glog.podspec', :modular_headers => false
 end

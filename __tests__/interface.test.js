@@ -106,6 +106,8 @@ describe('Public Interface', () => {
       // helpers
       'Logger',
       'Style',
+
+      '__experimental',
     ];
     actualKeys.forEach((key) => expect(expectedKeys).toContain(key));
   });
