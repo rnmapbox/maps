@@ -1,6 +1,8 @@
 import React, { ReactNode, useState } from 'react';
 import { StyleSheet, ScrollView } from 'react-native';
 import { ButtonGroup } from '@rneui/base';
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-ignore
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import colors from '../../styles/colors';

@@ -17,12 +17,11 @@ import com.facebook.react.bridge.Promise;
 import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.bridge.ReactContextBaseJavaModule;
 import com.facebook.react.bridge.ReactMethod;
-import com.facebook.react.bridge.ReactModuleWithSpec;
 import com.facebook.react.turbomodule.core.interfaces.TurboModule;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-public abstract class NativeRNMBXImageModuleSpec extends ReactContextBaseJavaModule implements ReactModuleWithSpec, TurboModule {
+public abstract class NativeRNMBXImageModuleSpec extends ReactContextBaseJavaModule implements TurboModule {
   public static final String NAME = "RNMBXImageModule";
 
   public NativeRNMBXImageModuleSpec(ReactApplicationContext reactContext) {

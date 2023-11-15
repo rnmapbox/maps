@@ -78,7 +78,7 @@ jobs:
 
       - name: Install Pod Dependencies
         if: steps.pods-cache.outputs.cache-hit != 'true'
-        run: cd ios && pod --version && pod update MapboxMaps hermes-engine && pod install
+        run: cd ios && pod --version && pod update MapboxMaps hermes-engine RCT-Folly && pod install
         env:
           CI_MAP_IMPL: ${{ inputs.MAP_IMPL }}
           RCT_NEW_ARCH_ENABLED: ${{ inputs.NEW_ARCH && 1 || 0 }}
