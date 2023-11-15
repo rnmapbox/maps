@@ -43,7 +43,7 @@ class RNMBXOfflineModuleLegacy(private val mReactContext: ReactApplicationContex
         mReactContext
     ) {
     companion object {
-        const val REACT_CLASS = "RNMBXOfflineModule"
+        const val REACT_CLASS = "RNMBXOfflineModuleLegacy"
         const val LOG_TAG = "OfflineModuleLegacy"
         const val DEFAULT_STYLE_URL = "mapbox://styles/mapbox/streets-v11"
         const val DEFAULT_MIN_ZOOM_LEVEL = 10.0

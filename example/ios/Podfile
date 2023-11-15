@@ -6,7 +6,6 @@ require Pod::Executable.execute_command('node', ['-p',
   )', __dir__]).strip
 prepare_react_native_project!
 
-$RNMapboxMapsLegacyOfflineManager = false
 $RNMapboxMapsImpl = 'mapbox'
 if ENV['RNMBX11']
   $RNMapboxMapsUseV11 = true # use 11 version

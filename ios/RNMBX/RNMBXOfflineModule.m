@@ -1,5 +1,3 @@
-#if !LEGACY_OFFLINE_MANAGER
-
 #import "React/RCTBridgeModule.h"
 #import <React/RCTEventEmitter.h>
 
@@ -35,4 +33,3 @@ RCT_EXTERN_METHOD(resetDatabase:(RCTPromiseResolveBlock)resolve rejecter:(RCTPro
 
 @end
  
-#endif

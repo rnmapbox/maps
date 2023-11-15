@@ -64,8 +64,8 @@ class RNMBXPackage : TurboReactPackage() {
         when (s) {
             RNMBXModule.REACT_CLASS -> return RNMBXModule(reactApplicationContext)
             RNMBXLocationModule.REACT_CLASS -> return RNMBXLocationModule(reactApplicationContext)
-            RNMBXOfflineModule.REACT_CLASS -> return if (BuildConfig.LEGACY_OFFLINE_MANAGER)
-                RNMBXOfflineModuleLegacy(reactApplicationContext) else RNMBXOfflineModule(reactApplicationContext)
+            RNMBXOfflineModule.REACT_CLASS -> return RNMBXOfflineModule(reactApplicationContext)
+            RNMBXOfflineModuleLegacy.REACT_CLASS -> return RNMBXOfflineModuleLegacy(reactApplicationContext)
             RNMBXSnapshotModule.REACT_CLASS -> return RNMBXSnapshotModule(reactApplicationContext)
             RNMBXLogging.REACT_CLASS -> return RNMBXLogging(reactApplicationContext)
             NativeMapViewModule.NAME -> return NativeMapViewModule(reactApplicationContext, getMapViewTagResolver(reactApplicationContext))
@@ -145,6 +145,15 @@ class RNMBXPackage : TurboReactPackage() {
             moduleInfos[RNMBXOfflineModule.REACT_CLASS] = ReactModuleInfo(
                 RNMBXOfflineModule.REACT_CLASS,
                 RNMBXOfflineModule.REACT_CLASS,
+                false,  // canOverrideExistingModule
+                false,  // needsEagerInit
+                true,  // hasConstants
+                false,  // isCxxModule
+                false // isTurboModule
+            )
+            moduleInfos[RNMBXOfflineModuleLegacy.REACT_CLASS] = ReactModuleInfo(
+                RNMBXOfflineModuleLegacy.REACT_CLASS,
+                RNMBXOfflineModuleLegacy.REACT_CLASS,
                 false,  // canOverrideExistingModule
                 false,  // needsEagerInit
                 true,  // hasConstants
