@@ -906,14 +906,6 @@ class MapView extends NativeBridgeComponent(
     ]);
   }
 
-  /**
-   * Show the attribution and telemetry action sheet.
-   * If you implement a custom attribution button, you should add this action to the button.
-   */
-  showAttribution() {
-    return this._runNative<void>('showAttribution');
-  }
-
   _decodePayload<T>(payload: T | string): T {
     if (typeof payload === 'string') {
       return JSON.parse(payload);

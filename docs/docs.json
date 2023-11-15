@@ -3545,15 +3545,6 @@
         "examples": [
           "\nawait this._map.setSourceVisibility(false, 'composite', 'building')\n\n"
         ]
-      },
-      {
-        "name": "showAttribution",
-        "docblock": "Show the attribution and telemetry action sheet.\nIf you implement a custom attribution button, you should add this action to the button.",
-        "modifiers": [],
-        "params": [],
-        "returns": null,
-        "description": "Show the attribution and telemetry action sheet.\nIf you implement a custom attribution button, you should add this action to the button.",
-        "examples": []
       }
     ],
     "props": [
