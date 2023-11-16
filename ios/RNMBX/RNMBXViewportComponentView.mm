@@ -18,7 +18,7 @@
 // TODO: use generated RNMBXViewportEventEmitter, but need 0.73+ for dynamic support
 class RNMBXViewportEventEmitter : public facebook::react::ViewEventEmitter {
  public:
-  using ViewEventEmitter::ViewEventEmitter;
+  using facebook::react::ViewEventEmitter::ViewEventEmitter;
 
   struct OnStatusChanged {
     std::string type;

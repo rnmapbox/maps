@@ -116,6 +116,14 @@ def $RNMapboxMaps._add_compiler_flags(sp, extra_flags)
   end
 end
 
+def $RNMapobxMaps._rn_72_or_earlier()
+  rn_version_full = JSON.parse(File.read("node_modules/react-native/package.json"))['version']
+  rn_major_minor = rn_version_full.split('.')[0...2].map(&:to_i)
+  return (rn_major_minor <=> [0,72]) <= 0
+rescue
+  false
+end
+
 def $RNMapboxMaps.post_install(installer)
   if $RNMapboxMapsUseV11
     installer.pods_project.build_configurations.each do |config|
@@ -234,6 +242,9 @@ Pod::Spec.new do |s|
         install_modules_dependencies(sp)
         dependencies_only_requiring_modular_headers = ["React-Fabric", "React-graphics", "React-utils", "React-debug", "glog"]
         sp.dependencies = sp.dependencies.select { |d| !dependencies_only_requiring_modular_headers.include?(d.name) }.map {|d| [d.name, []]}.to_h
+        if $RNMapobxMaps._rn_72_or_earlier()
+          $RNMapboxMaps._add_compiler_flags(sp, "-DRNMBX_RN_72=1")
+        end
       end
       if ENV['USE_FRAMEWORKS'] || $RNMapboxMapsUseFrameworks
         $RNMapboxMaps._add_compiler_flags(sp, "-DRNMBX_USE_FRAMEWORKS=1")
