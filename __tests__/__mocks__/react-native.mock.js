@@ -27,3 +27,11 @@ jest.mock('react-native/Libraries/Utilities/Platform', () => ({
     }
   },
 }));
+
+jest.mock('react-native/Libraries/Animated/NativeAnimatedHelper', () => ({
+  addListener: jest.fn(),
+  API: {
+    flushQueue: jest.fn(),
+  },
+  shouldUseNativeDriver: jest.fn(),
+}));

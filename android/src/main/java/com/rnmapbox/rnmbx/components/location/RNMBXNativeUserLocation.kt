@@ -15,6 +15,7 @@ import com.mapbox.maps.MapboxMap
 import com.mapbox.maps.Style
 import com.mapbox.maps.plugin.LocationPuck2D
 import com.mapbox.maps.plugin.locationcomponent.location
+import com.mapbox.maps.plugin.locationcomponent.R as LR
 import com.rnmapbox.rnmbx.R
 import com.rnmapbox.rnmbx.components.AbstractMapFeature
 import com.rnmapbox.rnmbx.components.RemovalReason
@@ -234,19 +235,19 @@ fun makeDefaultLocationPuck2D(context: Context, renderMode: RenderMode): Locatio
     return LocationPuck2D(
         topImage = AppCompatResourcesV11.getDrawableImageHolder(
             context,
-            R.drawable.mapbox_user_icon
+            LR.drawable.mapbox_user_icon
         ),
         bearingImage = AppCompatResourcesV11.getDrawableImageHolder(
             context,
             when (renderMode) {
-                RenderMode.GPS -> R.drawable.mapbox_user_bearing_icon
-                RenderMode.COMPASS -> R.drawable.mapbox_user_puck_icon
-                RenderMode.NORMAL -> R.drawable.mapbox_user_stroke_icon
+                RenderMode.GPS -> LR.drawable.mapbox_user_bearing_icon
+                RenderMode.COMPASS -> LR.drawable.mapbox_user_puck_icon
+                RenderMode.NORMAL -> LR.drawable.mapbox_user_stroke_icon
             }
         ),
         shadowImage = AppCompatResourcesV11.getDrawableImageHolder(
             context,
-            R.drawable.mapbox_user_icon_shadow
+            LR.drawable.mapbox_user_icon_shadow
         )
     );
 }
