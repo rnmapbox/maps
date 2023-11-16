@@ -1,4 +1,4 @@
-package com.mapbox.rctmgl.modules
+package com.rnmapbox.rnmbx.modules
 
 import android.os.Build
 import android.util.Log
@@ -21,15 +21,12 @@ import com.mapbox.maps.OfflineRegionCallback
 import com.mapbox.maps.OfflineRegionCreateCallback
 import com.mapbox.maps.OfflineRegionDownloadState
 import com.mapbox.maps.OfflineRegionManager
-import com.mapbox.maps.OfflineRegionObserver
 import com.mapbox.maps.OfflineRegionStatus
 import com.mapbox.maps.OfflineRegionTilePyramidDefinition
-import com.mapbox.maps.ResourceOptions
-import com.mapbox.maps.ResponseError
-import com.mapbox.rctmgl.utils.ConvertUtils
-import com.mapbox.rctmgl.utils.Logger
-import com.mapbox.rctmgl.utils.extensions.toGeometryCollection
-import com.mapbox.rctmgl.utils.writableArrayOf
+import com.rnmapbox.rnmbx.utils.ConvertUtils
+import com.rnmapbox.rnmbx.utils.extensions.toGeometryCollection
+import com.rnmapbox.rnmbx.utils.writableArrayOf
+import com.rnmapbox.rnmbx.v11compat.offlinemanager.getOfflineRegionManager
 import org.json.JSONException
 import org.json.JSONObject
 import java.io.File
@@ -40,13 +37,13 @@ import java.nio.file.StandardCopyOption
 import kotlin.math.ceil
 
 
-@ReactModule(name = RCTMGLOfflineModuleLegacy.REACT_CLASS)
-class RCTMGLOfflineModuleLegacy(private val mReactContext: ReactApplicationContext) :
+@ReactModule(name = RNMBXOfflineModuleLegacy.REACT_CLASS)
+class RNMBXOfflineModuleLegacy(private val mReactContext: ReactApplicationContext) :
     ReactContextBaseJavaModule(
         mReactContext
     ) {
     companion object {
-        const val REACT_CLASS = "RCTMGLOfflineModuleLegacy"
+        const val REACT_CLASS = "RNMBXOfflineModuleLegacy"
         const val LOG_TAG = "OfflineModuleLegacy"
         const val DEFAULT_STYLE_URL = "mapbox://styles/mapbox/streets-v11"
         const val DEFAULT_MIN_ZOOM_LEVEL = 10.0
@@ -59,11 +56,9 @@ class RCTMGLOfflineModuleLegacy(private val mReactContext: ReactApplicationConte
     }
 
     val offlineRegionManager: OfflineRegionManager by lazy {
-        OfflineRegionManager(
-            ResourceOptions.Builder()
-                .accessToken(RCTMGLModule.getAccessToken(mReactContext))
-                .build()
-        )
+        getOfflineRegionManager {
+            RNMBXModule.getAccessToken(mReactContext)
+        }
     }
 
     private fun makeDefinition(
@@ -98,7 +93,6 @@ class RCTMGLOfflineModuleLegacy(private val mReactContext: ReactApplicationConte
         return OfflineRegionCreateCallback { expected ->
             if (expected.isValue) {
                 expected.value?.let {
-                    it.setOfflineRegionObserver(regionObserver)
                     it.setOfflineRegionDownloadState(OfflineRegionDownloadState.ACTIVE)
                     it.setMetadata(metadata) { expectedMetadata ->
                         if (expectedMetadata.isError) {
@@ -147,18 +141,6 @@ class RCTMGLOfflineModuleLegacy(private val mReactContext: ReactApplicationConte
         return metadataBytes
     }
 
-    private val regionObserver: OfflineRegionObserver = object : OfflineRegionObserver {
-        override fun responseError(error: ResponseError) {
-            Log.d(LOG_TAG, "Error downloading some resources:  ${error}, ${error.message}")
-        }
-
-        override fun statusChanged(status: OfflineRegionStatus) {}
-
-        override fun mapboxTileCountLimitExceeded(Limit: Long) {
-            Log.d(LOG_TAG, "mapboxTileCountLimitExceeded")
-        }
-    }
-
     private fun getRegionByName(
         name: String?,
         offlineRegions: List<OfflineRegion>
@@ -190,8 +172,6 @@ class RCTMGLOfflineModuleLegacy(private val mReactContext: ReactApplicationConte
         val isCompleted = percentage == 100.0
         val downloadState = if (isCompleted) COMPLETE_REGION_DOWNLOAD_STATE else status.downloadState.ordinal
 
-        Log.d(LOG_TAG, "STATUS ${status.toString()}")
-
         map.putString("name", regionName)
         map.putInt("state", downloadState)
         map.putDouble("percentage", percentage)
@@ -201,16 +181,6 @@ class RCTMGLOfflineModuleLegacy(private val mReactContext: ReactApplicationConte
         map.putInt("completedTileCount", status.completedTileCount.toInt())
         map.putInt("requiredResourceCount", status.requiredResourceCount.toInt())
         return map
-    }
-
-    @ReactMethod
-    fun addListener(eventName: String?) {
-        // Set up any upstream listeners or background tasks as necessary
-    }
-
-    @ReactMethod
-    fun removeListeners(count: Int?) {
-        // Remove upstream listeners, stop unnecessary background tasks
     }
 
     @ReactMethod
@@ -250,7 +220,6 @@ class RCTMGLOfflineModuleLegacy(private val mReactContext: ReactApplicationConte
                             val payload = Arguments.createArray()
 
                             for (region in it) {
-                                Log.d(LOG_TAG, "getPacks done:$region")
                                 payload.pushMap(fromOfflineRegion(region!!))
                             }
 
@@ -281,7 +250,7 @@ class RCTMGLOfflineModuleLegacy(private val mReactContext: ReactApplicationConte
                         }
 
                         region.setOfflineRegionDownloadState(OfflineRegionDownloadState.INACTIVE)
-                        
+
                         region.purge { purgeExpected ->
                             if (purgeExpected.isError) {
                                 promise.reject("deleteRegion error:", purgeExpected.error);
@@ -441,7 +410,6 @@ class RCTMGLOfflineModuleLegacy(private val mReactContext: ReactApplicationConte
     fun migrateOfflineCache(promise: Promise) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             // Old and new cache file paths
-            Log.d(LOG_TAG, "v10 cache moving started")
             val targetDirectoryPathName = mReactContext.filesDir.absolutePath + "/.mapbox/map_data"
             val sourcePathName = mReactContext.filesDir.absolutePath + "/mbgl-offline.db"
             val sourcePath = Paths.get(sourcePathName)
@@ -469,7 +437,7 @@ class RCTMGLOfflineModuleLegacy(private val mReactContext: ReactApplicationConte
             }
         } else {
             val mes = "\"migrateOfflineCache only supported on api level 26 or later\""
-            Logger.w(LOG_TAG, "migrateOfflineCache only supported on api level 26 or later")
+            Log.w(LOG_TAG, "migrateOfflineCache only supported on api level 26 or later")
             promise.reject(mes)
         }
     }

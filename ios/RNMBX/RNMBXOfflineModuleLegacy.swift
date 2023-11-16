@@ -1,36 +1,22 @@
 import Foundation
 import MapboxMaps
 
-final class OfflineRegionObserverCustom: OfflineRegionObserver {
-  func statusChanged(for status: OfflineRegionStatus) {}
-
-  func responseError(forError error: ResponseError) {
-    print("Offline resource download error: \(error.reason), \(error.message)")
-  }
-
-  func mapboxTileCountLimitExceeded(forLimit limit: UInt64) {
-    print("Mapbox tile count max (\(limit)) has been exceeded!")
-  }
-}
-
-@objc(RCTMGLOfflineModuleLegacy)
-class RCTMGLOfflineModuleLegacy: RCTEventEmitter {
+@objc(RNMBXOfflineModuleLegacy)
+class RNMBXOfflineModuleLegacy: RCTEventEmitter {
   final let CompleteRegionDownloadState = 2
-
+  
   lazy var offlineRegionManager: OfflineRegionManager = {
-      return OfflineRegionManager(resourceOptions: .init(accessToken: MGLModule.accessToken!))
+    #if RNMBX_11
+    return OfflineRegionManager()
+    #else
+    return OfflineRegionManager(resourceOptions: .init(accessToken: RNMBXModule.accessToken!))
+    #endif
   }()
-
-  enum Callbacks : String {
-    case error = "MapboOfflineRegionError"
-    case progress = "MapboxOfflineRegionProgress"
-  }
-
 
   @objc
   override
   func supportedEvents() -> [String] {
-    return [Callbacks.error.rawValue, Callbacks.progress.rawValue]
+    return []
   }
 
   @objc
@@ -85,18 +71,18 @@ func convertRegionToPack(region: OfflineRegion) -> [String: Any]? {
     var metadataString: String?
 
     guard let bb = region.getTilePyramidDefinition()?.bounds else { return [:] }
-    
+
     do {
       let metadata = region.getMetadata()
-      
+
       metadataString = String(data: metadata, encoding: .utf8)
-      
+
       if (metadataString == nil) {
         // Handle archived data from V9
         metadataString = NSKeyedUnarchiver.unarchiveObject(with: metadata) as? String
       }
-      
-      
+
+
       let jsonBounds = [
          [bb.east, bb.north],
          [bb.west, bb.south]
@@ -106,22 +92,19 @@ func convertRegionToPack(region: OfflineRegion) -> [String: Any]? {
         "metadata": metadataString,
         "bounds": jsonBounds
       ]
-    
+
       return pack
     } catch {
       print("convertRegionToPack error: \(error)")
       return nil
     }
   }
-  
+
   func createPackCallback(region: OfflineRegion,
                           metadata: Data,
                           resolver: @escaping RCTPromiseResolveBlock,
                           rejecter: @escaping RCTPromiseRejectBlock) {
 
-    let observer = OfflineRegionObserverCustom()
-
-    region.setOfflineRegionObserverFor(observer)
     region.setOfflineRegionDownloadStateFor(.active)
     region.setMetadata(metadata) { [weak self] result in
       switch result {
@@ -141,17 +124,17 @@ func getRegionByName(name: String, offlineRegions: [OfflineRegion]) -> OfflineRe
 
       do {
         let byteMetadata = region.getMetadata()
-        
+
        // Handle archived data from V9
         let metadataString = NSKeyedUnarchiver.unarchiveObject(with: byteMetadata) as? String
-        
+
         if (metadataString != nil) {
           let data = metadataString!.data(using: .utf8)
           metadata = try JSONSerialization.jsonObject(with: data!, options: []) as! [String: Any]
         } else {
           metadata = try JSONSerialization.jsonObject(with: byteMetadata, options: []) as! [String:Any]
         }
-        
+
         if (name == metadata["name"] as! String) {
           return region
         }
@@ -160,7 +143,7 @@ func getRegionByName(name: String, offlineRegions: [OfflineRegion]) -> OfflineRe
         return nil
       }
     }
-    
+
     return nil
   }
 
@@ -177,7 +160,7 @@ func getRegionByName(name: String, offlineRegions: [OfflineRegion]) -> OfflineRe
         let boundsData = boundsStr.data(using: .utf8)
         var boundsFC = try JSONDecoder().decode(FeatureCollection.self, from: boundsData!)
 
-        guard let bounds = self.convertPointPairToBounds(RCTMGLFeatureUtils.fcToGeomtry(boundsFC)),
+        guard let bounds = self.convertPointPairToBounds(RNMBXFeatureUtils.fcToGeomtry(boundsFC)),
               let metadataBytes = metadataStr.data(using: .utf8)
         else {
           rejecter("createPack error:", "No metadata or bounds set", nil)
@@ -423,13 +406,13 @@ func getRegionByName(name: String, offlineRegions: [OfflineRegion]) -> OfflineRe
  @objc
   func migrateOfflineCache(_ resolve : @escaping RCTPromiseResolveBlock, reject: @escaping RCTPromiseRejectBlock) {
     let bundleIdentifier = Bundle.main.bundleIdentifier!
-    
+
     let srcPath = "\(NSHomeDirectory())/Library/Application Support/\(bundleIdentifier)/.mapbox/cache.db"
     let srcURL = URL(fileURLWithPath: NSHomeDirectory()).appendingPathComponent("Library/Application Support/\(bundleIdentifier)/.mapbox/cache.db")
     let destURL = URL(fileURLWithPath: NSHomeDirectory()).appendingPathComponent("Library/Application Support/.mapbox/map_data/map_data.db")
 
     let fileManager = FileManager.default
-    
+
     if (!fileManager.fileExists(atPath: srcPath)) {
       print("migrateOfflineCache: nothing to migrate")
       resolve(false)
