@@ -72,3 +72,13 @@ class CustomVectorSource extends React.PureComponent {
 }
 
 export default CustomVectorSource;
+
+/* end-example-doc */
+
+/** @type ExampleWithMetadata['metadata'] */
+const metadata = {
+  title: 'Custom Vector Source',
+  tags: [],
+  docs: '',
+};
+CustomVectorSource.metadata = metadata;

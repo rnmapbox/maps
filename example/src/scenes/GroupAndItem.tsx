@@ -26,15 +26,7 @@ import ShowPointAnnotation from '../examples/Annotations/ShowPointAnnotation';
 // CAMERA
 import * as Camera from '../examples/Camera';
 // FILLRASTERLAYER
-import ChoroplethLayerByZoomLevel from '../examples/FillRasterLayer/ChoroplethLayerByZoomLevel';
-import CustomVectorSource from '../examples/FillRasterLayer/CustomVectorSource';
-import GeoJSONSource from '../examples/FillRasterLayer/GeoJSONSource';
-import ImageOverlay from '../examples/FillRasterLayer/ImageOverlay';
-import IndoorBuilding from '../examples/FillRasterLayer/IndoorBuilding';
-import QueryAtPoint from '../examples/FillRasterLayer/QueryAtPoint';
-import QueryWithRect from '../examples/FillRasterLayer/QueryWithRect';
-import QuerySourceFeatures from '../examples/FillRasterLayer/QuerySourceFeatures';
-import WatercolorRasterTiles from '../examples/FillRasterLayer/WatercolorRasterTiles';
+import * as FillRasterLayer from '../examples/FillRasterLayer';
 // LINE LAYER
 import GradientLine from '../examples/LineLayer/GradientLine';
 import DrawPolyline from '../examples/LineLayer/DrawPolyline';
@@ -324,20 +316,8 @@ const Examples = new ExampleGroup('React Native Mapbox', [
   ]),*/
   exampleGroup(UserLocation),
   exampleGroup(SymbolCircleLayer),
-  new ExampleGroup('Fill/RasterLayer', [
-    new ExampleItem('GeoJSON Source', GeoJSONSource),
-    new ExampleItem('Watercolor Raster Tiles', WatercolorRasterTiles),
-    new ExampleItem('Indoor Building Map', IndoorBuilding),
-    new ExampleItem('Query Feature Point', QueryAtPoint),
-    new ExampleItem('Query Features Bounding Box', QueryWithRect),
-    new ExampleItem('Query Source Features', QuerySourceFeatures),
-    new ExampleItem('Custom Vector Source', CustomVectorSource),
-    new ExampleItem('Image Overlay', ImageOverlay),
-    new ExampleItem(
-      'Choropleth Layer By Zoom Level',
-      ChoroplethLayerByZoomLevel,
-    ),
-  ]),
+  // @ts-expect-error TODO: fix
+  exampleGroup(FillRasterLayer),
   new ExampleGroup('LineLayer', [
     new ExampleItem('GradientLine', GradientLine),
     example(DrawPolyline),

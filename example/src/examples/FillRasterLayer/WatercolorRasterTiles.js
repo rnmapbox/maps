@@ -80,3 +80,13 @@ class WatercolorRasterTiles extends React.Component {
 }
 
 export default WatercolorRasterTiles;
+
+/* end-example-doc */
+
+/** @type ExampleWithMetadata['metadata'] */
+const metadata = {
+  title: 'Watercolor Raster Tiles',
+  tags: [],
+  docs: '',
+};
+WatercolorRasterTiles.metadata = metadata;

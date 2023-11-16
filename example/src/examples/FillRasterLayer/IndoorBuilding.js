@@ -95,3 +95,13 @@ class IndoorBuilding extends React.Component {
 }
 
 export default IndoorBuilding;
+
+/* end-example-doc */
+
+/** @type ExampleWithMetadata['metadata'] */
+const metadata = {
+  title: 'Indoor Building Map',
+  tags: [],
+  docs: '',
+};
+IndoorBuilding.metadata = metadata;

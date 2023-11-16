@@ -108,3 +108,13 @@ class ChoroplethLayerByZoomLevel extends React.PureComponent {
 }
 
 export default ChoroplethLayerByZoomLevel;
+
+/* end-example-doc */
+
+/** @type ExampleWithMetadata['metadata'] */
+const metadata = {
+  title: 'Choropleth Layer By Zoom Level',
+  tags: [],
+  docs: '',
+};
+ChoroplethLayerByZoomLevel.metadata = metadata;
