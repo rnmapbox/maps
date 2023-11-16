@@ -32,4 +32,3 @@ RCT_EXTERN_METHOD(migrateOfflineCache:(RCTPromiseResolveBlock)resolve reject:(RC
 RCT_EXTERN_METHOD(resetDatabase:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject)
 
 @end
- 
