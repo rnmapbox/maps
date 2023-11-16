@@ -720,14 +720,4 @@ await this._map.setSourceVisibility(false, 'composite', 'building')
 ```
 
 
-### showAttribution()
-
-Show the attribution and telemetry action sheet.<br/>If you implement a custom attribution button, you should add this action to the button.
-
-#### arguments
-| Name | Type | Required | Description  |
-| ---- | :--: | :------: | :----------: |
-
-
-
 
