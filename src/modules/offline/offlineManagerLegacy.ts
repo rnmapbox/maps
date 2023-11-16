@@ -11,28 +11,6 @@ import OfflinePack from './OfflinePackLegacy';
 
 const MapboxOfflineManager = NativeModules.RNMBXOfflineModuleLegacy;
 
-type OfflineProgressStatus = {
-  name: string;
-  state: number;
-  percentage: number;
-  completedResourceSize: number;
-  completedTileCount: number;
-  completedResourceCount: number;
-  requiredResourceCount: number;
-  completedTileSize: number;
-};
-
-type OfflinePackError = {
-  name: string;
-  message: string;
-};
-
-type ProgressListener = (
-  pack: OfflinePack,
-  status: OfflineProgressStatus,
-) => void;
-type ErrorListener = (pack: OfflinePack, err: OfflinePackError) => void;
-
 /**
  * OfflineManagerLegacy implements a singleton (shared object) that manages offline packs.
  * All of this class’s instance methods are asynchronous, reflecting the fact that offline resources are stored in a database.
@@ -61,15 +39,9 @@ class OfflineManagerLegacy {
    * })
    *
    * @param  {OfflineCreatePackOptions} options Create options for a offline pack that specifices zoom levels, style url, and the region to download.
-   * @param  {Callback=} progressListener Callback that listens for status events while downloading the offline resource.
-   * @param  {Callback=} errorListener Callback that listens for status events while downloading the offline resource.
    * @return {void}
    */
-  async createPack(
-    options: OfflineCreatePackOptionsArgs,
-    progressListener?: ProgressListener, // eslint-disable-line @typescript-eslint/no-unused-vars
-    errorListener?: ErrorListener, // eslint-disable-line @typescript-eslint/no-unused-vars
-  ): Promise<void> {
+  async createPack(options: OfflineCreatePackOptionsArgs): Promise<void> {
     await this._initialize();
 
     const packOptions = new OfflineCreatePackOptions(options);

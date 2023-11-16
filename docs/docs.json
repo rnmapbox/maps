@@ -6990,22 +6990,6 @@
               "name": "OfflineCreatePackOptions"
             },
             "optional": false
-          },
-          {
-            "name": "progressListener",
-            "description": "Callback that listens for status events while downloading the offline resource.",
-            "type": {
-              "name": "Callback"
-            },
-            "optional": true
-          },
-          {
-            "name": "errorListener",
-            "description": "Callback that listens for status events while downloading the offline resource.",
-            "type": {
-              "name": "Callback"
-            },
-            "optional": true
           }
         ],
         "examples": [

@@ -12,7 +12,7 @@ The shared object maintains a canonical collection of offline packs.
 
 
 ## methods
-### createPack(options[, progressListener][, errorListener])
+### createPack(options)
 
 Creates and registers an offline pack that downloads the resources needed to use the given region offline.
 
@@ -20,8 +20,6 @@ Creates and registers an offline pack that downloads the resources needed to use
 | Name | Type | Required | Description  |
 | ---- | :--: | :------: | :----------: |
 | `options` | `OfflineCreatePackOptions` | `Yes` | Create options for a offline pack that specifices zoom levels, style url, and the region to download. |
-| `progressListener` | `Callback` | `No` | Callback that listens for status events while downloading the offline resource. |
-| `errorListener` | `Callback` | `No` | Callback that listens for status events while downloading the offline resource. |
 
 
 
