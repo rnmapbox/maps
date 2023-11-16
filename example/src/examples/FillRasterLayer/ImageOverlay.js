@@ -111,3 +111,13 @@ class ImageOverlay extends React.Component {
 }
 
 export default ImageOverlay;
+
+/* end-example-doc */
+
+/** @type ExampleWithMetadata['metadata'] */
+const metadata = {
+  title: 'Image Overlay',
+  tags: [],
+  docs: '',
+};
+ImageOverlay.metadata = metadata;

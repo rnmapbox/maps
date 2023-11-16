@@ -94,3 +94,13 @@ const QuerySourceFeatures = (props: BaseExampleProps) => {
 };
 
 export default QuerySourceFeatures;
+
+/* end-example-doc */
+
+/** @type ExampleWithMetadata['metadata'] */
+const metadata = {
+  title: 'Query Source Features',
+  tags: [],
+  docs: '',
+};
+QuerySourceFeatures.metadata = metadata;

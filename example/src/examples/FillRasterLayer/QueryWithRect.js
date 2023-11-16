@@ -119,3 +119,13 @@ class QueryWithRect extends React.Component {
 }
 
 export default QueryWithRect;
+
+/* end-example-doc */
+
+/** @type ExampleWithMetadata['metadata'] */
+const metadata = {
+  title: 'Query Features Bounding Box',
+  tags: [],
+  docs: '',
+};
+QueryWithRect.metadata = metadata;

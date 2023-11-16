@@ -56,3 +56,13 @@ class GeoJSONSource extends React.Component {
 }
 
 export default GeoJSONSource;
+
+/* end-example-doc */
+
+/** @type ExampleWithMetadata['metadata'] */
+const metadata = {
+  title: 'GeoJSON Source',
+  tags: [],
+  docs: '',
+};
+GeoJSONSource.metadata = metadata;

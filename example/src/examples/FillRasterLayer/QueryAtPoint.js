@@ -97,3 +97,13 @@ class QueryAtPoint extends React.Component {
 }
 
 export default QueryAtPoint;
+
+/* end-example-doc */
+
+/** @type ExampleWithMetadata['metadata'] */
+const metadata = {
+  title: 'Query Feature Point',
+  tags: [],
+  docs: '',
+};
+QueryAtPoint.metadata = metadata;
