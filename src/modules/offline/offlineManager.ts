@@ -17,7 +17,7 @@ import OfflinePack from './OfflinePack';
 
 const { RNMBXModule } = NativeModules;
 
-const MapboxOfflineManager = NativeModules.RNMBXOfflineModuleLegacy;
+const MapboxOfflineManager = NativeModules.RNMBXOfflineModule;
 export const OfflineModuleEventEmitter = new NativeEventEmitter(
   MapboxOfflineManager,
 );

@@ -42,6 +42,7 @@ export {
   default as offlineManager,
   OfflineCreatePackOptions,
 } from './modules/offline/offlineManager';
+export { default as offlineManagerLegacy } from './modules/offline/offlineManagerLegacy';
 export {
   default as snapshotManager,
   type SnapshotOptions,
