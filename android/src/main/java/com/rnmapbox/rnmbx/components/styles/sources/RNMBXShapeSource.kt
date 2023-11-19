@@ -14,8 +14,13 @@ import com.mapbox.bindgen.Value
 import com.mapbox.geojson.Feature
 import com.rnmapbox.rnmbx.events.AndroidCallbackEvent
 import com.mapbox.geojson.FeatureCollection
+import com.mapbox.geojson.GeoJson
+import com.mapbox.geojson.Geometry
 import com.mapbox.maps.*
 import com.mapbox.maps.extension.style.expressions.generated.Expression
+import com.rnmapbox.rnmbx.shape_animators.ShapeAnimationConsumer
+import com.rnmapbox.rnmbx.shape_animators.ShapeAnimator
+import com.rnmapbox.rnmbx.shape_animators.ShapeAnimatorManager
 import com.rnmapbox.rnmbx.utils.Logger
 import java.net.URL
 import java.util.ArrayList
@@ -24,9 +29,10 @@ import java.util.HashMap
 import com.rnmapbox.rnmbx.v11compat.feature.*
 
 class RNMBXShapeSource(context: Context, private val mManager: RNMBXShapeSourceManager) :
-    RNMBXSource<GeoJsonSource>(context) {
+    RNMBXSource<GeoJsonSource>(context), ShapeAnimationConsumer {
     private var mURL: URL? = null
     private var mShape: String? = null
+    private var mShapeAnimator: ShapeAnimator? = null
     private var mCluster: Boolean? = null
     private var mClusterRadius: Long? = null
     private var mClusterMaxZoom: Long? = null
@@ -70,11 +76,55 @@ class RNMBXShapeSource(context: Context, private val mManager: RNMBXShapeSourceM
     }
 
     fun setShape(geoJSONStr: String) {
-        mShape = geoJSONStr
-        if (mSource != null && mMapView != null && !mMapView!!.isDestroyed) {
-            mSource!!.data(mShape!!)
-            val result = mMap!!.getStyle()!!
-                .setStyleSourceProperty(iD!!, "data", Value.valueOf(mShape!!))
+        mShapeAnimator?.unsubscribe(this)
+        mShapeAnimator = null
+
+        val shapeAnimatorManager = mManager.shapeAnimatorManager
+        if (shapeAnimatorManager.isShapeAnimatorTag(geoJSONStr)) {
+            shapeAnimatorManager.get(geoJSONStr)?.let { shapeAnimator ->
+                mShapeAnimator = shapeAnimator
+                shapeAnimator.subscribe(this)
+
+                shapeUpdated(shapeAnimator.getShape())
+            }
+        } else {
+            mShape = geoJSONStr
+            if (mSource != null && mMapView != null && !mMapView!!.isDestroyed) {
+                mSource!!.data(mShape!!)
+                val result = mMap!!.getStyle()!!
+                    .setStyleSourceProperty(iD!!, "data", Value.valueOf(mShape!!))
+            }
+        }
+    }
+
+    private fun toGeoJSONSourceData(geoJson: GeoJson): GeoJSONSourceData? {
+        return when (geoJson) {
+            is Geometry ->
+                GeoJSONSourceData(geoJson)
+            is Feature ->
+                GeoJSONSourceData(geoJson)
+            is FeatureCollection ->
+                GeoJSONSourceData(geoJson.features() ?: listOf())
+            else -> {
+                Logger.e(
+                    LOG_TAG,
+                    "Cannot convert shape to GeoJSONSourceData, neitthe Geometry, nor Feature or FeatureCollection: $geoJson"
+                );
+                return null
+            }
+        }
+    }
+    override fun shapeUpdated(geoJson: GeoJson) {
+        mSource?.also {
+            if (mSource != null && mMapView != null && !mMapView!!.isDestroyed) {
+                toGeoJSONSourceData(geoJson)?.let {
+                    mMap?.getStyle()?.setStyleGeoJSONSourceData(iD!!,
+                        "animated-shape",
+                        it)
+                }
+            }
+        } ?: run {
+            mShape = geoJson.toJson()
         }
     }
 

@@ -13,6 +13,7 @@ import com.mapbox.bindgen.Value
 import com.mapbox.maps.extension.style.expressions.generated.Expression
 import com.rnmapbox.rnmbx.events.constants.EventKeys
 import com.rnmapbox.rnmbx.events.constants.eventMapOf
+import com.rnmapbox.rnmbx.shape_animators.ShapeAnimatorManager
 import com.rnmapbox.rnmbx.utils.ExpressionParser
 import com.rnmapbox.rnmbx.utils.Logger
 import com.rnmapbox.rnmbx.utils.ViewTagResolver
@@ -22,7 +23,7 @@ import java.util.ArrayList
 import java.util.HashMap
 
 
-class RNMBXShapeSourceManager(private val mContext: ReactApplicationContext, val viewTagResolver: ViewTagResolver) :
+class RNMBXShapeSourceManager(private val mContext: ReactApplicationContext, val viewTagResolver: ViewTagResolver, val shapeAnimatorManager: ShapeAnimatorManager) :
     AbstractEventEmitter<RNMBXShapeSource>(
         mContext
     ), RNMBXShapeSourceManagerInterface<RNMBXShapeSource> {

@@ -1,4 +1,5 @@
 export * from './RNMBXModule';
+
 export {
   Camera,
   UserTrackingMode,
@@ -82,8 +83,10 @@ export type {
 import { deprecatedClass } from './utils/deprecation';
 import { AnimatedPoint } from './classes';
 import { UserTrackingMode } from './components/Camera';
+import MovePointShapeAnimator from './shape_animators/MovePointShapeAnimator';
 
 /** @deprecated This will be removed in a future release. Use `AnimatedPoint` instead. */
+
 export const AnimatedMapPoint = deprecatedClass(
   AnimatedPoint,
   'AnimatedMapPoint is deprecated please use AnimatedPoint',
@@ -103,3 +106,9 @@ export enum StyleURL {
 
 /** @deprecated UserTrackingModes is deprecated use UserTrackingMode */
 export const UserTrackingModes = UserTrackingMode;
+
+/** @experimental */
+
+export const __experimental = {
+  MovePointShapeAnimator,
+};

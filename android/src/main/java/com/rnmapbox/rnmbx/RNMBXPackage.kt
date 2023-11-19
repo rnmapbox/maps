@@ -46,6 +46,8 @@ import com.rnmapbox.rnmbx.modules.RNMBXLogging
 import com.rnmapbox.rnmbx.modules.RNMBXModule
 import com.rnmapbox.rnmbx.modules.RNMBXOfflineModule
 import com.rnmapbox.rnmbx.modules.RNMBXSnapshotModule
+import com.rnmapbox.rnmbx.shape_animators.RNMBXMovePointShapeAnimatorModule
+import com.rnmapbox.rnmbx.shape_animators.ShapeAnimatorManager
 import com.rnmapbox.rnmbx.utils.ViewTagResolver
 
 class RNMBXPackage : TurboReactPackage() {
@@ -59,6 +61,17 @@ class RNMBXPackage : TurboReactPackage() {
             return result
         }
         return viewTagResolver
+    }
+
+    var shapeAnimators: ShapeAnimatorManager? = null
+    fun getShapeAnimators(module: String): ShapeAnimatorManager {
+        val shapeAnimators = shapeAnimators
+        if (shapeAnimators == null) {
+            val result = ShapeAnimatorManager()
+            this.shapeAnimators = result
+            return result
+        }
+        return shapeAnimators
     }
 
     fun resetViewTagResolver() {
@@ -80,6 +93,7 @@ class RNMBXPackage : TurboReactPackage() {
             RNMBXShapeSourceModule.NAME -> return RNMBXShapeSourceModule(reactApplicationContext, getViewTagResolver(reactApplicationContext, s))
             RNMBXImageModule.NAME -> return RNMBXImageModule(reactApplicationContext, getViewTagResolver(reactApplicationContext, s))
             RNMBXPointAnnotationModule.NAME -> return RNMBXPointAnnotationModule(reactApplicationContext, getViewTagResolver(reactApplicationContext, s))
+            RNMBXMovePointShapeAnimatorModule.NAME -> return RNMBXMovePointShapeAnimatorModule(reactApplicationContext, getShapeAnimators(s))
         }
         return null
     }
@@ -107,7 +121,10 @@ class RNMBXPackage : TurboReactPackage() {
 
         // sources
         managers.add(RNMBXVectorSourceManager(reactApplicationContext))
-        managers.add(RNMBXShapeSourceManager(reactApplicationContext, getViewTagResolver(reactApplicationContext, "RNMBXShapeSourceManager")))
+        managers.add(RNMBXShapeSourceManager(reactApplicationContext,
+            getViewTagResolver(reactApplicationContext, "RNMBXShapeSourceManager"),
+            getShapeAnimators("RNMBXShapeSourceManager")
+            ))
         managers.add(RNMBXRasterDemSourceManager(reactApplicationContext))
         managers.add(RNMBXRasterSourceManager(reactApplicationContext))
         managers.add(RNMBXImageSourceManager())
@@ -226,6 +243,15 @@ class RNMBXPackage : TurboReactPackage() {
                 false,  // hasConstants
                 false,  // isCxxModule
                 isTurboModule // isTurboModule
+            )
+            moduleInfos[RNMBXMovePointShapeAnimatorModule.NAME] = ReactModuleInfo(
+                RNMBXMovePointShapeAnimatorModule.NAME,
+                RNMBXMovePointShapeAnimatorModule.NAME,
+                false,
+                false,
+                false,
+                false,
+                isTurboModule
             )
             moduleInfos
         }
