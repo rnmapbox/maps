@@ -275,6 +275,7 @@ open class RNMBXMapView: UIView {
     case pitchEnabled
     case onMapChange
     case styleURL
+    case gestureSettings
     
     func apply(_ map: RNMBXMapView) -> Void {
       switch self {
@@ -304,6 +305,8 @@ open class RNMBXMapView: UIView {
         map.applyStyleURL()
       case .pitchEnabled:
         map.applyPitchEnabled()
+      case .gestureSettings:
+        map.applyGestureSettings()
       }
     }
   }
@@ -361,9 +364,27 @@ open class RNMBXMapView: UIView {
     }
   }
   
-  @objc public func setReactGestureSettings(_ value: NSDictionary?) {
-    if let value = value, let gestures = self.mapView.gestures {
-      var options = gestures.options
+  struct GestureSettings {
+    var doubleTapToZoomInEnabled: Bool? = nil;
+    var doubleTouchToZoomOutEnabled: Bool? = nil;
+    var pinchPanEnabled: Bool? = nil;
+    var pinchZoomEnabled: Bool? = nil;
+    var pitchEnabled: Bool? = nil;
+    var quickZoomEnabled: Bool? = nil;
+    var rotateEnabled: Bool? = nil;
+    var panEnabled: Bool? = nil;
+    var panDecelerationFactor: CGFloat? = nil;
+    #if RNMBX_11
+    var simultaneousRotateAndPinchZoomEnabled: Bool? = nil;
+    #endif
+  }
+  
+  var gestureSettings = GestureSettings()
+  
+  @objc
+  public func setReactGestureSettings(_ value: NSDictionary?) {
+    if let value = value {
+      var options = gestureSettings
       if let doubleTapToZoomInEnabled = value["doubleTapToZoomInEnabled"] as? NSNumber {
         options.doubleTapToZoomInEnabled = doubleTapToZoomInEnabled.boolValue
       }
@@ -403,6 +424,56 @@ open class RNMBXMapView: UIView {
 #if RNMBX_11
       if let simultaneousRotateAndPinchZoomEnabled = value["simultaneousRotateAndPinchZoomEnabled"] as? NSNumber {
         options.simultaneousRotateAndPinchZoomEnabled = simultaneousRotateAndPinchZoomEnabled.boolValue
+      }
+#endif
+      /* android only
+       if let zoomAnimationAmount = value["zoomAnimationAmount"] as? NSNumber {
+       options.zoomAnimationAmount = zoomAnimationAmount.CGFloat
+       }*/
+      gestureSettings = options
+      
+      changed(.gestureSettings)
+    }
+  }
+  
+  func applyGestureSettings() {
+    if let gestures = self.mapView?.gestures {
+      var options = gestures.options
+      let settings = gestureSettings
+      if let doubleTapToZoomInEnabled = settings.doubleTapToZoomInEnabled as? Bool {
+        options.doubleTapToZoomInEnabled = doubleTapToZoomInEnabled
+      }
+      if let doubleTouchToZoomOutEnabled = settings.doubleTouchToZoomOutEnabled as? Bool {
+        options.doubleTouchToZoomOutEnabled = doubleTouchToZoomOutEnabled
+      }
+      if let pinchPanEnabled = settings.pinchPanEnabled as? Bool {
+        options.pinchPanEnabled = pinchPanEnabled
+      }
+      if let pinchZoomEnabled = settings.pinchZoomEnabled as? Bool {
+        options.pinchZoomEnabled = pinchZoomEnabled
+      }
+      if let pitchEnabled = settings.pitchEnabled as? Bool {
+        options.pitchEnabled = pitchEnabled
+      }
+      if let quickZoomEnabled = settings.quickZoomEnabled as? Bool {
+        options.quickZoomEnabled = quickZoomEnabled
+      }
+      if let rotateEnabled = settings.rotateEnabled as? Bool {
+        options.rotateEnabled = rotateEnabled
+      }
+      /* android only
+       if let rotateDecelerationEnabled = value["rotateDecelerationEnabled"] as? NSNumber {
+       options.rotateDecelerationEnabled = rotateDecelerationEnabled.boolValue
+       }*/
+      if let panEnabled = settings.panEnabled as? Bool {
+        options.panEnabled = panEnabled
+      }
+      if let panDecelerationFactor = settings.panDecelerationFactor as? CGFloat {
+        options.panDecelerationFactor = panDecelerationFactor
+      }
+#if RNMBX_11
+      if let simultaneousRotateAndPinchZoomEnabled = settings.simultaneousRotateAndPinchZoomEnabled as? Bool {
+        options.simultaneousRotateAndPinchZoomEnabled = simultaneousRotateAndPinchZoomEnabled
       }
 #endif
       /* android only
