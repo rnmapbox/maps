@@ -16,6 +16,7 @@ class RNMBXHeatmapLayerManager : ViewGroupManager<RNMBXHeatmapLayer>(),
         return RNMBXHeatmapLayer(reactContext)
     }
 
+    // @{codepart-replace-start(LayerManagerCommonProps.codepart-kt.ejs,{layerType:"RNMBXHeatmapLayer"})}
     @ReactProp(name = "id")
     override fun setId(layer: RNMBXHeatmapLayer, id: Dynamic) {
         layer.iD = id.asString()
@@ -70,6 +71,12 @@ class RNMBXHeatmapLayerManager : ViewGroupManager<RNMBXHeatmapLayer>(),
     override fun setFilter(layer: RNMBXHeatmapLayer, filterList: Dynamic) {
         layer.setFilter(filterList.asArray())
     }
+
+    @ReactProp(name = "slot")
+    override fun setSlot(layer: RNMBXHeatmapLayer, slot: Dynamic) {
+        layer.setSlot(slot.asString())
+    }
+    // @{codepart-replace-end}
 
     companion object {
         const val REACT_CLASS = "RNMBXHeatmapLayer"

@@ -10,11 +10,14 @@ import RNMBXHeatmapLayerNativeComponent from '../specs/RNMBXHeatmapLayerNativeCo
 
 import AbstractLayer from './AbstractLayer';
 
-const MapboxGL = NativeModules.RNMBXModule;
+const Mapbox = NativeModules.RNMBXModule;
 
-export type Props = {
+// @{codepart-replace-start(LayerPropsCommon.codepart-tsx)}
+type Slot = 'bottom' | 'middle' | 'top';
+
+type LayerPropsCommon = {
   /**
-   * A string that uniquely identifies the layer in the style to which it is added.
+   * A string that uniquely identifies the source in the style to which it is added.
    */
   id: string;
 
@@ -31,8 +34,7 @@ export type Props = {
   sourceID?: string;
 
   /**
-   * Identifier of the layer within the source identified by the sourceID property
-   * from which the receiver obtains the data to style.
+   * Identifier of the layer within the source identified by the sourceID property from which the receiver obtains the data to style.
    */
   sourceLayerID?: string;
 
@@ -67,6 +69,16 @@ export type Props = {
   maxZoomLevel?: number;
 
   /**
+   * The slot this layer is assigned to. If specified, and a slot with that name exists, it will be placed at that position in the layer order.
+   *
+   * v11 only
+   */
+  slot?: Slot;
+};
+// @{codepart-replace-end}
+
+export type Props = LayerPropsCommon & {
+  /**
    * Customizable style attributes
    */
   style?: HeatmapLayerStyleProps;
@@ -81,7 +93,7 @@ type NativeTypeProps = Omit<Props, 'style'> & {
  */
 class HeatmapLayer extends AbstractLayer<Props, NativeTypeProps> {
   static defaultProps = {
-    sourceID: MapboxGL.StyleSource.DefaultSourceID,
+    sourceID: Mapbox.StyleSource.DefaultSourceID,
   };
 
   render() {

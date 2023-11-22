@@ -24,5 +24,8 @@
     "index.ts",
     "jest.config.ts",
     "src/**/*"
-  ]
+  ],
+  "exclude": [
+    "**/*.codepart.tsx"
+  ],
 }

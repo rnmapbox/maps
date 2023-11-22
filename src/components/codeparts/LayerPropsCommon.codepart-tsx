@@ -1,15 +1,3 @@
-import React from 'react';
-import { NativeModules } from 'react-native';
-
-import { FilterExpression, LineLayerStyleProps } from '../utils/MapboxStyles';
-import { StyleValue } from '../utils/StyleValue';
-import RNMBXLineLayerNativeComponent from '../specs/RNMBXLineLayerNativeComponent';
-
-import AbstractLayer from './AbstractLayer';
-
-const Mapbox = NativeModules.RNMBXModule;
-
-// @{codepart-replace-start(LayerPropsCommon.codepart-tsx)}
 type Slot = 'bottom' | 'middle' | 'top';
 
 type LayerPropsCommon = {
@@ -72,37 +60,3 @@ type LayerPropsCommon = {
    */
   slot?: Slot;
 };
-// @{codepart-replace-end}
-
-export type Props = LayerPropsCommon & {
-  /**
-   * Customizable style attributes
-   */
-  style?: LineLayerStyleProps;
-};
-
-type NativeTypeProps = Omit<Props, 'style'> & {
-  reactStyle?: { [key: string]: StyleValue };
-};
-
-/**
- * LineLayer is a style layer that renders one or more stroked polylines on the map.
- */
-class LineLayer extends AbstractLayer<Props, NativeTypeProps> {
-  static defaultProps = {
-    sourceID: Mapbox.StyleSource.DefaultSourceID,
-  };
-
-  render() {
-    const props = {
-      ...this.baseProps,
-      sourceLayerID: this.props.sourceLayerID,
-    };
-    return (
-      // @ts-expect-error just codegen stuff
-      <RNMBXLineLayerNativeComponent ref={this.setNativeLayer} {...props} />
-    );
-  }
-}
-
-export default LineLayer;

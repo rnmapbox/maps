@@ -10,4 +10,6 @@ RCT_EXPORT_VIEW_PROPERTY(reactStyle, NSDictionary);
 RCT_EXPORT_VIEW_PROPERTY(maxZoomLevel, NSNumber);
 RCT_EXPORT_VIEW_PROPERTY(minZoomLevel, NSNumber);
 
+RCT_EXPORT_VIEW_PROPERTY(slot, NSString);
+
 
