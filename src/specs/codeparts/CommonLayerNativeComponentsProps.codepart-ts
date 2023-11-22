@@ -1,0 +1,17 @@
+// see https://github.com/rnmapbox/maps/wiki/FabricOptionalProp
+type OptionalProp<T> = UnsafeMixed<T>;
+
+type CommonProps = {
+  sourceID: OptionalProp<string>;
+  existing: OptionalProp<boolean>;
+  filter: UnsafeMixed<any[]>;
+
+  aboveLayerID: OptionalProp<string>;
+  belowLayerID: OptionalProp<string>;
+  layerIndex: OptionalProp<Int32>;
+
+  maxZoomLevel: OptionalProp<Double>;
+  minZoomLevel: OptionalProp<Double>;
+  sourceLayerID: OptionalProp<string>;
+  slot: OptionalProp<string>;
+};

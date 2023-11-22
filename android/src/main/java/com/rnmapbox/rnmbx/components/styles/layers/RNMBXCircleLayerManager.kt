@@ -8,6 +8,7 @@ import com.facebook.react.viewmanagers.RNMBXCircleLayerManagerInterface
 
 class RNMBXCircleLayerManager : ViewGroupManager<RNMBXCircleLayer>(),
     RNMBXCircleLayerManagerInterface<RNMBXCircleLayer> {
+
     override fun getName(): String {
         return REACT_CLASS
     }
@@ -16,6 +17,7 @@ class RNMBXCircleLayerManager : ViewGroupManager<RNMBXCircleLayer>(),
         return RNMBXCircleLayer(reactContext)
     }
 
+    // @{codepart-replace-start(LayerManagerCommonProps.codepart-kt.ejs,{layerType:"RNMBXCircleLayer"})}
     @ReactProp(name = "id")
     override fun setId(layer: RNMBXCircleLayer, id: Dynamic) {
         layer.iD = id.asString()
@@ -70,6 +72,12 @@ class RNMBXCircleLayerManager : ViewGroupManager<RNMBXCircleLayer>(),
     override fun setFilter(layer: RNMBXCircleLayer, filterList: Dynamic) {
         layer.setFilter(filterList.asArray())
     }
+
+    @ReactProp(name = "slot")
+    override fun setSlot(layer: RNMBXCircleLayer, slot: Dynamic) {
+        layer.setSlot(slot.asString())
+    }
+    // @{codepart-replace-end}
 
     companion object {
         const val REACT_CLASS = "RNMBXCircleLayer"

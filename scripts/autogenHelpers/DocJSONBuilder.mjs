@@ -25,7 +25,7 @@ const IGNORE_PATTERN = /\.web\./;
 
 const IGNORE_METHODS = ['setNativeProps'];
 
-const fileExtensionsRegex = /.(js|tsx|(?<!d.)ts)$/;
+const fileExtensionsRegex = /\.(js|tsx|(?<!d.)ts)$/;
 
 class DocJSONBuilder {
   constructor(styledLayers) {

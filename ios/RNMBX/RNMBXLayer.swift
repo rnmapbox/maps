@@ -96,6 +96,12 @@ public class RNMBXLayer : UIView, RNMBXMapComponent, RNMBXSourceConsumer {
     }
   }
   
+  @objc public var slot: String? = nil {
+    didSet {
+      optionsChanged()
+    }
+  }
+  
   @objc weak var map: RNMBXMapView? = nil
 
   deinit {
@@ -252,6 +258,21 @@ public class RNMBXLayer : UIView, RNMBXMapComponent, RNMBXSourceConsumer {
     removeFromMap(style)
   }
   
+  #if RNMBX_11
+  func _toSlot(_ slot: String) -> Slot? {
+    switch slot {
+    case "top":
+      return Slot.top;
+    case "bottom":
+      return Slot.bottom;
+    case "middle":
+      return Slot.middle;
+    default:
+      return Slot(rawValue: slot);
+    }
+  }
+  #endif
+  
   func setBaseOptions<T: Layer>(_ layer: inout T) {
     if let minZoom = minZoomLevel {
       layer.minZoom = minZoom.doubleValue
@@ -260,6 +281,12 @@ public class RNMBXLayer : UIView, RNMBXMapComponent, RNMBXSourceConsumer {
     if let maxZoom = maxZoomLevel {
       layer.maxZoom = maxZoom.doubleValue
     }
+    
+    #if RNMBX_11
+    if let slot = slot {
+      layer.slot = _toSlot(slot)
+    }
+    #endif
   }
   
   func setOptions(_ layer: inout Layer) {

@@ -20,4 +20,8 @@ class RNMBXRasterLayer(context: Context?) : RNMBXLayer<RasterLayer?>(
             Logger.e("RNMBXRasterLayer", "mLayer is null")
         }
     }
+
+    fun setSourceLayerID(asString: String?) {
+        // no-op
+    }
 }

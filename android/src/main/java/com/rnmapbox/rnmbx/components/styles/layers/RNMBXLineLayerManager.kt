@@ -16,6 +16,7 @@ class RNMBXLineLayerManager : ViewGroupManager<RNMBXLineLayer>(),
         return RNMBXLineLayer(reactContext)
     }
 
+    // @{codepart-replace-start(LayerManagerCommonProps.codepart-kt.ejs,{layerType:"RNMBXLineLayer"})}
     @ReactProp(name = "id")
     override fun setId(layer: RNMBXLineLayer, id: Dynamic) {
         layer.iD = id.asString()
@@ -70,6 +71,12 @@ class RNMBXLineLayerManager : ViewGroupManager<RNMBXLineLayer>(),
     override fun setFilter(layer: RNMBXLineLayer, filterList: Dynamic) {
         layer.setFilter(filterList.asArray())
     }
+
+    @ReactProp(name = "slot")
+    override fun setSlot(layer: RNMBXLineLayer, slot: Dynamic) {
+        layer.setSlot(slot.asString())
+    }
+    // @{codepart-replace-end}
 
     companion object {
         const val REACT_CLASS = "RNMBXLineLayer"
