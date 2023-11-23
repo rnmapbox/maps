@@ -118,7 +118,7 @@ The duration the map takes to animate to a new configuration.
 ```
 The easing or path the camera uses to animate to a new configuration.
 
-
+[Camera Animation](../examples/V10/CameraAnimation)
   
 ### followUserLocation
 

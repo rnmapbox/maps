@@ -408,5 +408,287 @@
         "name": "TwoByTwo"
       }
     ]
+  },
+  {
+    "groupName": "V10",
+    "metadata": {
+      "title": "V10"
+    },
+    "examples": [
+      {
+        "metadata": {
+          "title": "Camera Animation",
+          "tags": [
+            "Camera",
+            "Camera#animationMode"
+          ],
+          "docs": "\nCamera animation modes\n"
+        },
+        "fullPath": "example/src/examples/V10/CameraAnimation.tsx",
+        "relPath": "V10/CameraAnimation.tsx",
+        "name": "CameraAnimation"
+      },
+      {
+        "metadata": {
+          "title": "Globe Projection",
+          "tags": [
+            "MapView#projection"
+          ],
+          "docs": "\nShows map with globe projection\n"
+        },
+        "fullPath": "example/src/examples/V10/GlobeProjection.tsx",
+        "relPath": "V10/GlobeProjection.tsx",
+        "name": "GlobeProjection"
+      },
+      {
+        "metadata": {
+          "title": "Map Handlers",
+          "tags": [
+            "MapView#onMapIdle"
+          ],
+          "docs": "\nMap Handlers\n"
+        },
+        "fullPath": "example/src/examples/V10/MapHandlers.tsx",
+        "relPath": "V10/MapHandlers.tsx",
+        "name": "MapHandlers"
+      },
+      {
+        "metadata": {
+          "title": "Markers",
+          "tags": [
+            "MarkerView"
+          ],
+          "docs": "\nTest view for MarkerViews\n"
+        },
+        "fullPath": "example/src/examples/V10/Markers.tsx",
+        "relPath": "V10/Markers.tsx",
+        "name": "Markers"
+      },
+      {
+        "metadata": {
+          "title": "Query Terrain Elevation",
+          "tags": [
+            "MapView#queryTerrainElevation"
+          ],
+          "docs": "\nQuery Terrain Elevation\n"
+        },
+        "fullPath": "example/src/examples/V10/QueryTerrainElevation.js",
+        "relPath": "V10/QueryTerrainElevation.js",
+        "name": "QueryTerrainElevation"
+      },
+      {
+        "metadata": {
+          "title": "Terrain, Sky, & Atmosphere",
+          "tags": [
+            "RasterDemSource",
+            "Terrain",
+            "Atmosphere",
+            "SkyLayer"
+          ],
+          "docs": "\nDemostrates use of Terran, Atmosphere and SkyLayer.\n"
+        },
+        "fullPath": "example/src/examples/V10/TerrainSkyAtmosphere.tsx",
+        "relPath": "V10/TerrainSkyAtmosphere.tsx",
+        "name": "TerrainSkyAtmosphere"
+      }
+    ]
+  },
+  {
+    "groupName": "Annotations",
+    "metadata": {
+      "title": "Annotations"
+    },
+    "examples": [
+      {
+        "metadata": {
+          "title": "Custom Callout",
+          "tags": [
+            "MarkerView"
+          ],
+          "docs": "\nUse MarkerView to create a custom callout.\n"
+        },
+        "fullPath": "example/src/examples/Annotations/CustomCallout.tsx",
+        "relPath": "Annotations/CustomCallout.tsx",
+        "name": "CustomCallout"
+      },
+      {
+        "metadata": {
+          "title": "Heatmap",
+          "tags": [
+            "HeatmapLayer",
+            "HeatmapLayer#heatmapColor"
+          ],
+          "docs": "\nShows heatmap layer\n"
+        },
+        "fullPath": "example/src/examples/Annotations/Heatmap.js",
+        "relPath": "Annotations/Heatmap.js",
+        "name": "Heatmap"
+      },
+      {
+        "metadata": {
+          "title": "Marker View",
+          "tags": [
+            "PointAnnotation",
+            "MarkerView"
+          ],
+          "docs": "\nShows marker view and poitn annotations\n"
+        },
+        "fullPath": "example/src/examples/Annotations/MarkerView.js",
+        "relPath": "Annotations/MarkerView.js",
+        "name": "MarkerView"
+      },
+      {
+        "metadata": {
+          "title": "Point Annotation Anchors",
+          "tags": [
+            "PointAnnotation"
+          ],
+          "docs": "\nPoint annotation anchors test\n"
+        },
+        "fullPath": "example/src/examples/Annotations/PointAnnotationAnchors.js",
+        "relPath": "Annotations/PointAnnotationAnchors.js",
+        "name": "PointAnnotationAnchors"
+      },
+      {
+        "metadata": {
+          "title": "Show Point Annotations",
+          "tags": [
+            "PointAnnotation"
+          ],
+          "docs": "\nShows Point annotation with images\n"
+        },
+        "fullPath": "example/src/examples/Annotations/ShowPointAnnotation.tsx",
+        "relPath": "Annotations/ShowPointAnnotation.tsx",
+        "name": "ShowPointAnnotation"
+      }
+    ]
+  },
+  {
+    "groupName": "FillRasterLayer",
+    "metadata": {
+      "title": "Fill/Raster Layer"
+    },
+    "examples": [
+      {
+        "metadata": {
+          "title": "Choropleth Layer By Zoom Level",
+          "tags": [],
+          "docs": ""
+        },
+        "fullPath": "example/src/examples/FillRasterLayer/ChoroplethLayerByZoomLevel.js",
+        "relPath": "FillRasterLayer/ChoroplethLayerByZoomLevel.js",
+        "name": "ChoroplethLayerByZoomLevel"
+      },
+      {
+        "metadata": {
+          "title": "Custom Vector Source",
+          "tags": [],
+          "docs": ""
+        },
+        "fullPath": "example/src/examples/FillRasterLayer/CustomVectorSource.js",
+        "relPath": "FillRasterLayer/CustomVectorSource.js",
+        "name": "CustomVectorSource"
+      },
+      {
+        "metadata": {
+          "title": "GeoJSON Source",
+          "tags": [],
+          "docs": ""
+        },
+        "fullPath": "example/src/examples/FillRasterLayer/GeoJSONSource.js",
+        "relPath": "FillRasterLayer/GeoJSONSource.js",
+        "name": "GeoJSONSource"
+      },
+      {
+        "metadata": {
+          "title": "Image Overlay",
+          "tags": [
+            "RasterLayer",
+            "ImageSource"
+          ],
+          "docs": ""
+        },
+        "fullPath": "example/src/examples/FillRasterLayer/ImageOverlay.js",
+        "relPath": "FillRasterLayer/ImageOverlay.js",
+        "name": "ImageOverlay"
+      },
+      {
+        "metadata": {
+          "title": "Indoor Building Map",
+          "tags": [],
+          "docs": ""
+        },
+        "fullPath": "example/src/examples/FillRasterLayer/IndoorBuilding.js",
+        "relPath": "FillRasterLayer/IndoorBuilding.js",
+        "name": "IndoorBuilding"
+      },
+      {
+        "metadata": {
+          "title": "Query Feature Point",
+          "tags": [],
+          "docs": ""
+        },
+        "fullPath": "example/src/examples/FillRasterLayer/QueryAtPoint.js",
+        "relPath": "FillRasterLayer/QueryAtPoint.js",
+        "name": "QueryAtPoint"
+      },
+      {
+        "metadata": {
+          "title": "Query Source Features",
+          "tags": [],
+          "docs": ""
+        },
+        "fullPath": "example/src/examples/FillRasterLayer/QuerySourceFeatures.tsx",
+        "relPath": "FillRasterLayer/QuerySourceFeatures.tsx",
+        "name": "QuerySourceFeatures"
+      },
+      {
+        "metadata": {
+          "title": "Query Features Bounding Box",
+          "tags": [],
+          "docs": ""
+        },
+        "fullPath": "example/src/examples/FillRasterLayer/QueryWithRect.js",
+        "relPath": "FillRasterLayer/QueryWithRect.js",
+        "name": "QueryWithRect"
+      },
+      {
+        "metadata": {
+          "title": "Raster Source",
+          "tags": [],
+          "docs": ""
+        },
+        "fullPath": "example/src/examples/FillRasterLayer/RasterSource.js",
+        "relPath": "FillRasterLayer/RasterSource.js",
+        "name": "RasterSource"
+      },
+      {
+        "metadata": {
+          "title": "Watercolor Raster Tiles",
+          "tags": [
+            "RasterSource",
+            "RasterLayer"
+          ],
+          "docs": ""
+        },
+        "fullPath": "example/src/examples/FillRasterLayer/WatercolorRasterTiles.js",
+        "relPath": "FillRasterLayer/WatercolorRasterTiles.js",
+        "name": "WatercolorRasterTiles"
+      }
+    ]
+  },
+  {
+    "groupName": "LineLayer",
+    "metadata": {
+      "title": "LineLayer"
+    },
+    "examples": []
+  },
+  {
+    "groupName": "Camera",
+    "metadata": {
+      "title": "Camera"
+    },
+    "examples": []
   }
 ]

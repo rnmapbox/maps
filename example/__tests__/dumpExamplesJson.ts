@@ -7,6 +7,11 @@ import fs from 'fs';
 import * as SymbolCircleLayer from '../src/examples/SymbolCircleLayer';
 import * as UserLocation from '../src/examples/UserLocation';
 import * as Map from '../src/examples/Map';
+import * as V10 from '../src/examples/V10';
+import * as Annotations from '../src/examples/Annotations';
+import * as FillRasterLayer from '../src/examples/FillRasterLayer';
+import * as LineLayer from '../src/examples/LineLayer';
+import * as Camera from '../src/examples/Camera';
 import type {
   Examples,
   Example,
@@ -24,6 +29,12 @@ const allTests = {
   SymbolCircleLayer,
   UserLocation,
   Map,
+
+  V10,
+  Annotations,
+  FillRasterLayer,
+  LineLayer,
+  Camera,
 } as const;
 
 const relExamplesPath = path.join('example', 'src', 'examples');

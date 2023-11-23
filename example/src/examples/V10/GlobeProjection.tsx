@@ -1,4 +1,4 @@
-import React, { memo, useState } from 'react';
+import React, { useState } from 'react';
 import { Button } from 'react-native';
 import {
   MapView,
@@ -10,16 +10,15 @@ import {
   Camera,
 } from '@rnmapbox/maps';
 
-import Page from '../common/Page';
-import { BaseExampleProps } from '../common/BaseExamplePropTypes';
+import { ExampleWithMetadata } from '../common/ExampleMetadata'; // exclude-from-doc
 
 Logger.setLogLevel('verbose');
 
-const GlobeProjection = memo((props: BaseExampleProps) => {
+const GlobeProjection = () => {
   const [projection, setProjection] = useState<'globe' | 'mercator'>('globe');
 
   return (
-    <Page {...props}>
+    <>
       <Button
         title={`Change projection to ${
           projection === 'globe' ? 'mercator' : 'globe'
@@ -34,10 +33,12 @@ const GlobeProjection = memo((props: BaseExampleProps) => {
         styleURL={'mapbox://styles/mapbox-map-design/ckhqrf2tz0dt119ny6azh975y'}
       >
         <Camera
-          centerCoordinate={[13, 59]}
-          zoomLevel={3}
-          heading={220}
-          pitch={40}
+          defaultSettings={{
+            centerCoordinate: [13, 59],
+            zoomLevel: 3,
+            heading: 220,
+            pitch: 40,
+          }}
         />
         <RasterDemSource
           id="mapbox-dem"
@@ -65,8 +66,19 @@ const GlobeProjection = memo((props: BaseExampleProps) => {
           <Terrain style={{ exaggeration: 1.5 }} />
         </RasterDemSource>
       </MapView>
-    </Page>
+    </>
   );
-});
+};
 
 export default GlobeProjection;
+
+/* end-example-doc */
+
+const metadata: ExampleWithMetadata['metadata'] = {
+  title: 'Globe Projection',
+  tags: ['MapView#projection'],
+  docs: `
+Shows map with globe projection
+`,
+};
+GlobeProjection.metadata = metadata;

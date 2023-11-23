@@ -18,18 +18,13 @@ import sheet from '../styles/sheet';
 import AnimatedLine from '../examples/Animations/AnimatedLine';
 import DriveTheLine from '../examples/Animations/DriveTheLine';
 // ANNOTATIONS
-import CustomCallout from '../examples/Annotations/CustomCallout';
-import Heatmap from '../examples/Annotations/Heatmap';
-import MarkerView from '../examples/Annotations/MarkerView';
-import PointAnnotationAnchors from '../examples/Annotations/PointAnnotationAnchors';
-import ShowPointAnnotation from '../examples/Annotations/ShowPointAnnotation';
+import * as Annotations from '../examples/Annotations';
 // CAMERA
 import * as Camera from '../examples/Camera';
 // FILLRASTERLAYER
 import * as FillRasterLayer from '../examples/FillRasterLayer';
 // LINE LAYER
-import GradientLine from '../examples/LineLayer/GradientLine';
-import DrawPolyline from '../examples/LineLayer/DrawPolyline';
+import * as LineLayer from '../examples/LineLayer';
 // MAP
 import * as Map from '../examples/Map';
 // SYMBOLCIRCLELAYER
@@ -41,12 +36,15 @@ import BugReportExample from '../examples/BugReportExample';
 import BugReportExampleTS from '../examples/BugReportExampleTS';
 import CacheManagement from '../examples/CacheManagement';
 // V10
+import * as V10 from '../examples/V10';
+/*
 import CameraAnimation from '../examples/V10/CameraAnimation';
 import GlobeProjection from '../examples/V10/GlobeProjection';
 import MapHandlers from '../examples/V10/MapHandlers';
 import Markers from '../examples/V10/Markers';
 import QueryTerrainElevation from '../examples/V10/QueryTerrainElevation';
 import TerrainSkyAtmosphere from '../examples/V10/TerrainSkyAtmosphere';
+*/
 // V11
 import StyleImportConfig from '../examples/V11/StyleImportConfig';
 
@@ -289,47 +287,16 @@ const Examples = new ExampleGroup('React Native Mapbox', [
   new MostRecentExampleItem(),
   new ExampleItem('Bug Report Template', BugReportPage(BugReportExample)),
   new ExampleItem('Bug Report Template TS', BugReportPage(BugReportExampleTS)),
-  new ExampleGroup('V10', [
-    new ExampleItem('Terrain, Sky, & Atmosphere', TerrainSkyAtmosphere),
-    new ExampleItem('Globe Projection', GlobeProjection),
-    new ExampleItem('Query Terrain Elevation', QueryTerrainElevation),
-    new ExampleItem('Camera Animation', CameraAnimation),
-    new ExampleItem('Map Handlers', MapHandlers),
-  ]),
+  exampleGroup(V10),
   new ExampleGroup('V11', [example(StyleImportConfig)]),
   exampleGroup(Map),
   exampleGroup(Camera),
-  /*
-  new ExampleGroup('Camera', [
-    new ExampleItem('Fit (Bounds, Center/Zoom, Padding)', Fit),
-    new ExampleItem('Set Pitch', SetPitch),
-    new ExampleItem('Set Heading', SetHeading),
-    new ExampleItem('Fly To', FlyTo),
-    new ExampleItem('Restrict Bounds', RestrictMapBounds),
-    new ExampleItem('Set User Tracking Modes', SetUserTrackingModes),
-    new ExampleItem('Yo Yo Camera', YoYo),
-    new ExampleItem('Take Snapshot Without Map', TakeSnapshot),
-    new ExampleItem('Take Snapshot With Map', TakeSnapshotWithMap),
-    new ExampleItem('Get Current Zoom', GetZoom),
-    new ExampleItem('Get Center', GetCenter),
-    new ExampleItem('Compass View', CompassView),
-  ]),*/
   exampleGroup(UserLocation),
   exampleGroup(SymbolCircleLayer),
   // @ts-expect-error TODO: fix
   exampleGroup(FillRasterLayer),
-  new ExampleGroup('LineLayer', [
-    new ExampleItem('GradientLine', GradientLine),
-    example(DrawPolyline),
-  ]),
-  new ExampleGroup('Annotations', [
-    new ExampleItem('Marker Positions & Anchors', Markers),
-    new ExampleItem('Show Point Annotation', ShowPointAnnotation),
-    new ExampleItem('Point Annotation Anchors', PointAnnotationAnchors),
-    new ExampleItem('Marker View', MarkerView),
-    new ExampleItem('Heatmap', Heatmap),
-    new ExampleItem('Custom Callout', CustomCallout),
-  ]),
+  exampleGroup(LineLayer),
+  exampleGroup(Annotations),
   new ExampleGroup('Animations', [
     new ExampleItem('Animated Line', AnimatedLine),
     new ExampleItem('Animation Along a Line', DriveTheLine),
@@ -390,6 +357,7 @@ function ExampleGroupComponent({
       <MapHeader label={title} {...back} />
       <View style={sheet.matchParent}>
         <FlatList
+          testID="example-list"
           style={styles.exampleList}
           data={items}
           keyExtractor={(item) => item.label}

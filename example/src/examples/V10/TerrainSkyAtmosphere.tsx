@@ -1,4 +1,4 @@
-import React, { memo, useRef } from 'react';
+import React, { useRef } from 'react';
 import { Button } from 'react-native';
 import {
   MapView,
@@ -10,16 +10,13 @@ import {
   Camera,
 } from '@rnmapbox/maps';
 
-import Page from '../common/Page';
-import { BaseExampleProps } from '../common/BaseExamplePropTypes';
-
 Logger.setLogLevel('verbose');
 
-const TerrainSkyAtmosphere = memo((props: BaseExampleProps) => {
+const TerrainSkyAtmosphere = () => {
   const cameraRef = useRef<Camera>(null);
 
   return (
-    <Page {...props}>
+    <>
       <Button
         title="Change"
         onPress={() =>
@@ -71,8 +68,20 @@ const TerrainSkyAtmosphere = memo((props: BaseExampleProps) => {
           <Terrain style={{ exaggeration: 1.5 }} />
         </RasterDemSource>
       </MapView>
-    </Page>
+    </>
   );
-});
+};
 
 export default TerrainSkyAtmosphere;
+
+/* end-example-doc */
+
+/** @type ExampleWithMetadata['metadata'] */
+const metadata = {
+  title: 'Terrain, Sky, & Atmosphere',
+  tags: ['RasterDemSource', 'Terrain', 'Atmosphere', 'SkyLayer'],
+  docs: `
+Demostrates use of Terran, Atmosphere and SkyLayer.
+`,
+};
+TerrainSkyAtmosphere.metadata = metadata;
