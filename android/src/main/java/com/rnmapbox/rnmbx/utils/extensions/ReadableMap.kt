@@ -5,6 +5,16 @@ import com.facebook.react.bridge.ReadableType
 import com.google.gson.JsonArray
 import com.google.gson.JsonElement
 import com.google.gson.JsonObject
+import com.mapbox.geojson.Feature
+import com.mapbox.geojson.FeatureCollection
+import com.mapbox.geojson.Geometry
+import com.mapbox.geojson.GeometryCollection
+import com.mapbox.geojson.LineString
+import com.mapbox.geojson.MultiLineString
+import com.mapbox.geojson.MultiPoint
+import com.mapbox.geojson.MultiPolygon
+import com.mapbox.geojson.Point
+import com.mapbox.geojson.Polygon
 import com.mapbox.maps.EdgeInsets
 import com.rnmapbox.rnmbx.utils.ConvertUtils
 import com.rnmapbox.rnmbx.utils.Logger
@@ -103,7 +113,29 @@ fun ReadableMap.toJsonObject() : JsonObject {
     return result
 }
 
-fun ReadableMap.toPadding(tag: String = "RNMBXReadableMap"): EdgeInsets? {
+fun ReadableMap.toJson(): String {
+    return toJsonObject().toString()
+}
+fun ReadableMap.toGeometry(): Geometry?
+{
+    return getAndLogIfNotString("type")?.let {kind ->
+        return when (kind) {
+            "geometrycollection", "GeometryCollection" -> GeometryCollection.fromJson(this.toJson())
+            "point", "Point" -> Point.fromJson(this.toJson())
+            "multipoint", "MultiPoint" -> MultiPoint.fromJson(this.toJson())
+            "polygon", "Polygon" -> Polygon.fromJson(this.toJson())
+            "multipolygon", "MultiPolygon" -> MultiPolygon.fromJson(this.toJson())
+            "linestring", "LineString" -> LineString.fromJson(this.toJson())
+            "mulilinestring", "MultilineString" -> MultiLineString.fromJson(this.toJson())
+            else -> {
+                Logger.e("ReadableMap.toGeometry", "Unexpected geometry kind: $kind")
+                null
+            }
+        }
+    }
+}
+
+fun ReadableMap.toPadding(tag: String = "RNMBXReadableMap", density: Float): EdgeInsets? {
     var top: Double = 0.0
     var bottom: Double = 0.0
     var left: Double = 0.0
@@ -111,19 +143,19 @@ fun ReadableMap.toPadding(tag: String = "RNMBXReadableMap"): EdgeInsets? {
     var empty = true
 
     getAndLogIfNotDouble("top", tag)?.let {
-        top = it
+        top = it * density.toDouble()
         empty = false
     }
     getAndLogIfNotDouble("bottom", tag)?.let {
-        bottom = it
+        bottom = it * density.toDouble()
         empty = false
     }
     getAndLogIfNotDouble("left", tag)?.let {
-        left = it
+        left = it * density.toDouble()
         empty = false
     }
     getAndLogIfNotDouble("right", tag)?.let {
-        right = it
+        right = it * density.toDouble()
         empty = false
     }
     if (empty) {

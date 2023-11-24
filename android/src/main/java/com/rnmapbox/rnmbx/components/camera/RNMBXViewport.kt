@@ -32,9 +32,11 @@ import com.rnmapbox.rnmbx.utils.extensions.*
 import com.rnmapbox.rnmbx.utils.writableMapOf
 
 import com.facebook.react.uimanager.events.Event
+import com.mapbox.geojson.Geometry
 import com.mapbox.maps.EdgeInsets
 import com.mapbox.maps.plugin.viewport.data.FollowPuckViewportStateBearing
 import com.mapbox.maps.plugin.viewport.data.FollowPuckViewportStateOptions
+import com.mapbox.maps.plugin.viewport.data.OverviewViewportStateOptions
 import com.rnmapbox.rnmbx.events.constants.EventKeys
 
 class BaseEvent(
@@ -123,7 +125,9 @@ mContext
             "followPuck" -> viewport.makeFollowPuckViewportState(
                 parseFollowViewportOptions(state)
             )
-            //"overview" -> return viewport.makeOverviewViewportState()
+            "overview" -> return viewport.makeOverviewViewportState(
+                parseOverviewViewportOption(state)
+            )
             else -> {
                 Logger.e(LOG_TAG, "toState: unexpected state: $kind")
                 null
@@ -191,14 +195,73 @@ mContext
                     builder.padding(null)
                 } else {
                     options.getAndLogIfNotMap("padding", LOG_TAG)?.let { paddingMap ->
-                        paddingMap?.toPadding(LOG_TAG)?.let { padding ->
+                        paddingMap?.toPadding(LOG_TAG, resources.displayMetrics.density)?.let { padding ->
+                            builder.padding(padding)
+                        }
+                    }
+                }
+            }
+        }
+        return builder.build()
+    }
+
+    private fun parseOverviewViewportOption(state: ReadableMap): OverviewViewportStateOptions {
+        val builder = OverviewViewportStateOptions.Builder()
+
+        state.getAndLogIfNotMap("options", LOG_TAG)?.let { options ->
+            if (options.hasKey("padding")) {
+                if (!options.isNull("padding")) {
+                    options.getAndLogIfNotMap("padding", LOG_TAG)?.let { paddingMap ->
+                        paddingMap?.toPadding(LOG_TAG, resources.displayMetrics.density)?.let { padding ->
                             builder.padding(padding)
                         }
                     }
                 }
             }
 
+            if (options.hasKey("bearing")) {
+                when (options.getType("bearing")) {
+                    ReadableType.Number ->
+                        builder.bearing(options.getDouble("bearing"))
+                    ReadableType.Null ->
+                        builder.bearing(null)
+                    else -> {
+                        Logger.e(
+                            LOG_TAG,
+                            "bearing in viewport options should be either constant number or null"
+                        )
+                        null
+                    }
+                }
+            }
+
+            if (options.hasKey("pitch")) {
+                if (options.isNull("pitch")) {
+                    builder.pitch(null)
+                } else {
+                    options.getAndLogIfNotDouble("pitch", LOG_TAG)?.let {pitch ->
+                        builder.pitch(pitch)
+                    }
+                }
+            }
+
+            if (options.hasKey("animationDuration")) {
+                if (!options.isNull("animationDuration")) {
+                    options.getAndLogIfNotDouble("zoom", LOG_TAG)?.let { duration ->
+                        builder.animationDurationMs((duration * 1000.0).toLong())
+                    }
+                }
+            }
+
+            if (options.hasKey("geometry")) {
+                options.getAndLogIfNotMap("geometry")?.let {map ->
+                    map.toGeometry()?.let { geometry ->
+                        builder.geometry(geometry)
+                    }
+                }
+            }
         }
+
         return builder.build()
     }
 
@@ -213,6 +276,10 @@ mContext
             builder.build()
         }
         return builder.build()
+    }
+
+    private fun toGeometry(geometry: ReadableMap): Geometry? {
+        return geometry.toGeometry()
     }
 
     private fun toTransition(viewport: ViewportPlugin, state: ReadableMap?): ViewportTransition? {

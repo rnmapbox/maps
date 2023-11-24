@@ -18,7 +18,7 @@ public class RNMBXInteractiveElement : UIView, RNMBXMapComponent {
   @objc public var id: String! = nil {
     willSet {
       if id != nil && newValue != id {
-        Logger.log(level:.warn, message: "Changing id from: \(optional: id) to \(optional: newValue), changing of id is supported")
+        Logger.log(level:.warn, message: "Changing id from: \(optional: id) to \(optional: newValue), changing of id is not supported")
         if let map = map { removeFromMap(map, reason: .ComponentChange) }
       }
     }

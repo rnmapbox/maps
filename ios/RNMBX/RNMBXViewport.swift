@@ -162,8 +162,13 @@ open class RNMBXViewport : UIView, RNMBXMapComponent, ViewportStatusObserver {
       return viewport.makeFollowPuckViewportState(options:
         parseFollowViewportOptions(state)
       )
-//  case "overview":
-//    viewport.makeOverviewViewportState(options: )
+    case "overview":
+      if let options = parseOverviewViewportOptions(state) {
+        return viewport.makeOverviewViewportState(options: options)
+      } else {
+        Logger.log(level:.error, message: "Cannot parse overview options")
+        return nil
+      }
     default:
       Logger.log(level:.error, message: "unexpected state kind: \(kind)")
       return nil
@@ -181,7 +186,7 @@ open class RNMBXViewport : UIView, RNMBXMapComponent, ViewportStatusObserver {
         Logger.log(level: .error, message: "parseFollowViewportOptions expected zoom to be number or 'keep', but was \(options["zoom"])")
       }
       
-      if let pitch = options["pitch"] as? String, (pitch == "pitch") {
+      if let pitch = options["pitch"] as? String, (pitch == "keep") {
         result.pitch = nil
       } else if let pitch = options["pitch"] as? Double {
         result.pitch = pitch
@@ -216,6 +221,57 @@ open class RNMBXViewport : UIView, RNMBXMapComponent, ViewportStatusObserver {
     }
     
     return result
+  }
+  
+  func parseOverviewViewportOptions(_ state: [String:Any]) -> OverviewViewportStateOptions? {
+    guard let options = state["options"] as? [String:Any] else {
+      return nil
+    }
+    guard let geometry = options["geometry"], let geometry = toGeometry(geometry) else {
+      return nil
+    }
+
+    var result = OverviewViewportStateOptions(geometry: geometry)
+
+    if let padding = options["padding"] as? [String: NSNumber] {
+      result.padding = toPadding(padding)
+    } else if (options["padding"] != nil) {
+      Logger.log(level: .error, message: "padding expected to be an object or nil or but was \(options["padding"])")
+    }
+
+    if options["bearing"] == nil {
+      result.bearing = (CLLocationDirection?)(nil)
+    } else if let bearing = options["bearing"] as? NSNumber {
+      result.bearing = bearing.doubleValue
+    } else if options["bearing"] != nil {
+      Logger.log(level: .error, message: "bearing expected to be a number or nil but was \(options["bearing"])")
+    }
+
+    if options["pitch"] == nil {
+      result.pitch = (CGFloat?)(nil)
+    } else if let pitch = options["pitch"] as? Double {
+      result.pitch = pitch
+    } else if options["pitch"] != nil{
+      Logger.log(level: .error, message: "parseOverviewViewportOptions expected pitch to be number or nil, but was \(options["pitch"])")
+    }
+
+    if let animationDuration = options["animationDuration"] as? Double {
+      result.animationDuration = animationDuration
+    } else if let animationDuration = options["animationDuration"] as? NSNumber {
+      result.animationDuration = animationDuration.doubleValue
+    } else if options["animationDuration"] != nil {
+      Logger.log(level: .error, message: "parseOverviewViewportOptions expected animationDuration to be a number or nil but was \(options["animationDuration"])")
+    }
+
+    return result
+  }
+  
+  func toGeometry(_ geometry: Any) -> GeometryConvertible? {
+    return logged("toGeometry") {
+      let jsonData = try JSONSerialization.data(withJSONObject: geometry)
+      let geometry = try JSONDecoder().decode(Geometry.self, from: jsonData)
+      return geometry
+    }
   }
   
   func toTransition(_ from: [String: Any], _ viewport: ViewportManager?) -> ViewportTransition? {
