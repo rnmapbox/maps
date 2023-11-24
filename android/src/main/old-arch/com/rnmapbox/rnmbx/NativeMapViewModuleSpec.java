@@ -17,12 +17,13 @@ import com.facebook.react.bridge.Promise;
 import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.bridge.ReactContextBaseJavaModule;
 import com.facebook.react.bridge.ReactMethod;
+import com.facebook.react.bridge.ReactModuleWithSpec;
 import com.facebook.react.bridge.ReadableArray;
 import com.facebook.react.turbomodule.core.interfaces.TurboModule;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-public abstract class NativeMapViewModuleSpec extends ReactContextBaseJavaModule implements TurboModule {
+public abstract class NativeMapViewModuleSpec extends ReactContextBaseJavaModule implements ReactModuleWithSpec, TurboModule {
   public static final String NAME = "RNMBXMapViewModule";
 
   public NativeMapViewModuleSpec(ReactApplicationContext reactContext) {
