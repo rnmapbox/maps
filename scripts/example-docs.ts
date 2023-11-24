@@ -67,7 +67,9 @@ examples.forEach(({ groupName, examples, metadata }) => {
         if (Os.platform() === 'darwin') {
           execSync(`sips -Z 640 ${imageDestPath}`);
         } else {
-          execSync(`convert -resize x640 ${imageDestPath} ${imageDestPath}`);
+          execSync(
+            `convert -resize x640 -define png:exclude-chunks=date,time ${imageDestPath} ${imageDestPath}`,
+          );
         }
 
         return { title: imageName, filename: imageName };
