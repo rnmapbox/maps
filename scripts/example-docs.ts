@@ -5,6 +5,7 @@
 import * as path from 'path';
 import * as fs from 'fs';
 import { execSync } from 'child_process';
+import Os from 'os';
 
 // eslint-disable-next-line import/order
 import {
@@ -63,7 +64,12 @@ examples.forEach(({ groupName, examples, metadata }) => {
         const imageName = path.basename(imagePath);
         const imageDestPath = path.join(destGroupDir, imageName);
         fs.copyFileSync(path.join(docSiteRootPath, imagePath), imageDestPath);
-        execSync(`sips -Z 640 ${imageDestPath}`);
+        if (Os.platform() === 'darwin') {
+          execSync(`sips -Z 640 ${imageDestPath}`);
+        } else {
+          execSync(`convert -resize x640 ${imageDestPath} ${imageDestPath}`);
+        }
+
         return { title: imageName, filename: imageName };
       },
     );
