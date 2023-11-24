@@ -19,7 +19,30 @@ const {
 /**
  * @type {import('../../scripts/autogenHelpers/examplesJsonSchema.ts').Examples}
  */
-const examples = JSON.parse(fs.readFileSync(examplesJSONPath, 'utf8'));
+let examples = JSON.parse(fs.readFileSync(examplesJSONPath, 'utf8'));
+
+if (false) {
+  examples = [
+    {
+      groupName: 'Map',
+      metadata: {
+        title: 'Map',
+      },
+      examples: [
+        {
+          metadata: {
+            title: 'Source Layer Visibility',
+            tags: ['MapView#setSoruceVisibility'],
+            docs: '\nChanges visibility of layers using a source in the map\n',
+          },
+          fullPath: 'example/src/examples/Map/SourceLayerVisibility.js',
+          relPath: 'Map/SourceLayerVisibility.js',
+          name: 'SourceLayerVisibility',
+        },
+      ],
+    },
+  ];
+}
 
 async function setSampleLocation() {
   const latitude = 40.723279;
@@ -127,7 +150,10 @@ if (['true', 1, '1'].includes(process.env.SKIP_TESTS_NO_METAL)) {
               await expect(element(by.text(groupMetadata.title))).toBeVisible();
               await element(by.text(groupMetadata.title)).tap();
 
-              await expect(element(by.text(metadata.title))).toBeVisible();
+              await waitFor(element(by.text(metadata.title)))
+                .toBeVisible()
+                .whileElement(by.id('example-list'))
+                .scroll(50, 'down');
               await element(by.text(metadata.title)).tap();
 
               let shots = new ExampleScreenshots(
@@ -145,6 +171,7 @@ if (['true', 1, '1'].includes(process.env.SKIP_TESTS_NO_METAL)) {
     });
 
     afterAll(async () => {
+      console.log('Writing screenshots.json', screenshotsJSONPath);
       fs.writeFileSync(screenshotsJSONPath, JSON.stringify(screenshots));
     });
   });

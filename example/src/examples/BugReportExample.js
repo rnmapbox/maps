@@ -74,16 +74,24 @@ class BugReportExample extends React.Component {
           title="Grow"
           onPress={() => this.setState({ radius: this.state.radius + 20 })}
         />
-        <MapView style={styles.mapView}>
+        <MapView
+          style={styles.mapView}
+          styleURL="mapbox://styles/mapbox/standard-beta"
+        >
           <Camera centerCoordinate={[-74.00597, 40.71427]} zoomLevel={14} />
           <Images images={{ example: require('../assets/example.png') }} />
           <ShapeSource id={'shape-source-id-0'} shape={features}>
-            <CircleLayer id={'circle-layer'} style={circleLayerStyle} />
+            <CircleLayer
+              id={'circle-layer'}
+              style={circleLayerStyle}
+              slot={'bottom'}
+            />
             <SymbolLayer
               id="symbol-id"
               style={{
                 iconImage: ['get', 'icon'],
               }}
+              slot={'middle'}
             />
           </ShapeSource>
         </MapView>

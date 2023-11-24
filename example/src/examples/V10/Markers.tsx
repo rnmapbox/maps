@@ -1,11 +1,10 @@
 import { Button, Divider, Text } from '@rneui/base';
 import { Camera, Logger, MapView, MarkerView } from '@rnmapbox/maps';
 import { Position } from 'geojson';
-import React, { memo, useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { Pressable, StyleSheet, View } from 'react-native';
 
-import { BaseExampleProps } from '../common/BaseExamplePropTypes';
-import Page from '../common/Page';
+import { ExampleWithMetadata } from '../common/ExampleMetadata'; // exclude-from-doc
 
 Logger.setLogLevel('verbose');
 
@@ -18,7 +17,7 @@ const markerCount = 20;
 const centerCoord = [-73.99155, 40.72];
 const allColors = ['red', 'green', 'blue', 'purple'];
 
-const Markers = memo((props: BaseExampleProps) => {
+const Markers = () => {
   const [markers, setMarkers] = useState<MarkerConfig[]>([]);
   const [selectedIndex, setSelectedIndex] = useState<number | undefined>();
   const [anchor, setAnchor] = useState({ x: 0.5, y: 0.5 });
@@ -47,7 +46,7 @@ const Markers = memo((props: BaseExampleProps) => {
   }, []);
 
   return (
-    <Page {...props}>
+    <>
       <MapView style={{ flex: 1 }}>
         <Camera
           defaultSettings={{ centerCoordinate: centerCoord, zoomLevel: 14 }}
@@ -180,9 +179,9 @@ const Markers = memo((props: BaseExampleProps) => {
           />
         </View>
       </View>
-    </Page>
+    </>
   );
-});
+};
 
 const styles = StyleSheet.create({
   markerBox: {
@@ -218,3 +217,14 @@ const styles = StyleSheet.create({
 });
 
 export default Markers;
+
+/* end-example-doc */
+
+const metadata: ExampleWithMetadata['metadata'] = {
+  title: 'Markers',
+  tags: ['MarkerView'],
+  docs: `
+Test view for MarkerViews
+`,
+};
+Markers.metadata = metadata;

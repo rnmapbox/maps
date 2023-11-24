@@ -1,10 +1,7 @@
 import React from 'react';
 import { Alert } from 'react-native';
-import MapboxGL from '@rnmapbox/maps';
-
-import sheet from '../../styles/sheet';
-import BaseExamplePropTypes from '../common/BaseExamplePropTypes';
-import TabBarPage from '../common/TabBarPage';
+import Mapbox from '@rnmapbox/maps';
+import { ButtonGroup } from '@rneui/base';
 
 const layerStyles = {
   building: {
@@ -34,6 +31,10 @@ const layerStyles = {
   },
 };
 
+const styles = {
+  matchParent: { flex: 1 },
+};
+
 class FlyTo extends React.Component {
   static SF_OFFICE_LOCATION = [-122.400021, 37.789085];
 
@@ -42,10 +43,6 @@ class FlyTo extends React.Component {
   static ZERO_ZERO = [0, 0];
   static ZERO_TEN = [0, 10];
   static TEN_ZERO = [10, 0];
-
-  static propTypes = {
-    ...BaseExamplePropTypes,
-  };
 
   constructor(props) {
     super(props);
@@ -67,7 +64,7 @@ class FlyTo extends React.Component {
   }
 
   onFlyToPress(i) {
-    this.setState({ location: this._flyToOptions[i].data });
+    this.setState({ location: this._flyToOptions[i].data, selectedIndex: i });
   }
 
   onFlyToComplete() {
@@ -76,28 +73,29 @@ class FlyTo extends React.Component {
 
   render() {
     return (
-      <TabBarPage
-        {...this.props}
-        options={this._flyToOptions}
-        onOptionPress={this.onFlyToPress}
-      >
-        <MapboxGL.MapView style={sheet.matchParent}>
-          <MapboxGL.Camera
+      <>
+        <ButtonGroup
+          buttons={this._flyToOptions.map((i) => i.label)}
+          selectedIndex={this.state.selectedIndex}
+          onPress={(i) => this.onFlyToPress(i)}
+        />
+        <Mapbox.MapView style={styles.matchParent}>
+          <Mapbox.Camera
             zoomLevel={16}
             animationMode={'flyTo'}
             animationDuration={6000}
             centerCoordinate={this.state.location}
           />
 
-          <MapboxGL.UserLocation />
+          <Mapbox.UserLocation />
 
-          <MapboxGL.FillExtrusionLayer
+          <Mapbox.FillExtrusionLayer
             id="building3d"
             sourceLayerID="building"
             style={layerStyles.building}
           />
-        </MapboxGL.MapView>
-      </TabBarPage>
+        </Mapbox.MapView>
+      </>
     );
   }
 }

@@ -174,7 +174,9 @@ NativeModules.RNMBXMovePointShapeAnimatorModule = {
   start: jest.fn(),
 };
 
-NativeModules.RNMBXLogging = nativeModule({});
+NativeModules.RNMBXLogging = nativeModule({
+  setLogLevel: jest.fn(),
+});
 
 // Mock for global AbortController
 global.AbortController = class {

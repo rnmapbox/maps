@@ -30,7 +30,7 @@ The distance from the edges of the map view’s frame to the edges of the map vi
 ```
 The projection used when rendering the map
 
-
+[Globe Projection](../examples/V10/GlobeProjection)
   
 ### styleURL
 
@@ -379,7 +379,7 @@ func
 v10 only, replaces onRegionDidChange
 *signature:*`(state:{properties: {center: GeoJSON.Position, bounds: {ne: GeoJSON.Position, sw: GeoJSON.Position}, zoom: number, heading: number, pitch: number}, gestures: {isGestureActive: boolean}, timestamp: number}) =&gt; void`
 
-
+[Map Handlers](../examples/V10/MapHandlers)
   
 ### onWillStartLoadingMap
 
@@ -702,7 +702,7 @@ Queries the currently loaded data for elevation at a geographical location.<br/>
 | `coordinate` | `Position` | `Yes` | the coordinates to query elevation at |
 
 
-### setSourceVisibility(visible, sourceId[, sourceLayerId])
+[Query Terrain Elevation](../examples/V10/QueryTerrainElevation)### setSourceVisibility(visible, sourceId[, sourceLayerId])
 
 Sets the visibility of all the layers referencing the specified `sourceLayerId` and/or `sourceId`
 
