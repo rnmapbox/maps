@@ -62,6 +62,41 @@ type FollowPuckOptions = {
     | 'keep';
 };
 
+type OverviewOptions = {
+  /**
+   * The geometry that the ``OverviewViewportState`` should use when calculating its camera.
+   */
+  geometry: GeoJSON.Geometry;
+
+  /**
+   * The padding that ``OverviewViewportState`` should use when calculating its camera.
+   *
+   * @default 0 padding
+   */
+  padding?: {
+    top?: number;
+    left?: number;
+    bottom?: number;
+    right?: number;
+  };
+
+  /**
+   * The bearing that ``OverviewViewportState`` should use when calcualting its camera.
+   */
+  bearing?: number;
+
+  /**
+   * The pitch that ``OverviewViewportState`` should use when calculating its camera.
+   */
+  pitch?: number;
+
+  /**
+   * The length of the animation performed by in seconds ``OverviewViewportState`` when it starts updating
+   * the camera.
+   */
+  animationDuration?: number;
+};
+
 type ViewportState =
   | {
       kind: 'followPuck';
@@ -69,6 +104,7 @@ type ViewportState =
     }
   | {
       kind: 'overview';
+      options?: OverviewOptions;
     };
 
 type ViewportStatus =
@@ -214,6 +250,7 @@ export type NativeArg =
   | NativeArg[]
   // eslint-disable-next-line @typescript-eslint/ban-types
   | Function
+  | GeoJSON.Geometry
   | undefined;
 
 type FunctionKeys<T> = keyof {

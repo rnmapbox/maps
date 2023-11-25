@@ -1,6 +1,26 @@
 import React, { useRef } from 'react';
 import { Button } from 'react-native';
-import { MapView, Viewport, NativeUserLocation } from '@rnmapbox/maps';
+import {
+  MapView,
+  Viewport,
+  NativeUserLocation,
+  ShapeSource,
+  CircleLayer,
+} from '@rnmapbox/maps';
+
+const points: GeoJSON.Geometry = {
+  type: 'GeometryCollection',
+  geometries: [
+    {
+      type: 'Point',
+      coordinates: [-73.9880595, 40.7738941],
+    },
+    {
+      type: 'Point',
+      coordinates: [-73.9881695, 40.7738741],
+    },
+  ],
+};
 
 export default function ViewportExample() {
   const viewport = useRef<Viewport>(null);
@@ -22,6 +42,22 @@ export default function ViewportExample() {
         }}
       />
       <Button
+        title="overview"
+        onPress={async () => {
+          const completed = await viewport.current?.transitionTo(
+            {
+              kind: 'overview',
+              options: {
+                geometry: points,
+                padding: { top: 200, left: 200, right: 20, bottom: 20 },
+              },
+            },
+            { kind: 'default', maxDurationMs: 5000 },
+          );
+          console.log(' => transitionTo completed:', completed);
+        }}
+      />
+      <Button
         title="getState"
         onPress={async () => {
           const state = await viewport.current?.getState();
@@ -36,6 +72,9 @@ export default function ViewportExample() {
           }
         />
         <NativeUserLocation />
+        <ShapeSource id="shape-source" shape={points}>
+          <CircleLayer id="circle-layer" style={{ circleRadius: 10 }} />
+        </ShapeSource>
       </MapView>
     </>
   );
