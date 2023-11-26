@@ -1,6 +1,7 @@
 package com.rnmapbox.rnmbx.components.location
 
 import com.facebook.react.bridge.Dynamic
+import com.facebook.react.bridge.ReadableMap
 import com.facebook.react.bridge.ReadableType
 import com.facebook.react.uimanager.ThemedReactContext
 import com.facebook.react.uimanager.ViewGroupManager
@@ -80,6 +81,13 @@ class RNMBXNativeUserLocationManager : ViewGroupManager<RNMBXNativeUserLocation>
     @ReactProp(name = "visible")
     override fun setVisible(view: RNMBXNativeUserLocation, value: Boolean) {
         view.visible = value
+    }
+
+    @ReactProp(name = "pulsing")
+    override fun setPulsing(view: RNMBXNativeUserLocation, value: Dynamic) {
+        if (!value.isNull) {
+            view.pulsing = value.asMap()
+        }
     }
 
     @Nonnull

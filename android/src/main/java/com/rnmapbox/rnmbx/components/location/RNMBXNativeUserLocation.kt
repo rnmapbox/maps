@@ -7,6 +7,9 @@ import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.graphics.drawable.BitmapDrawable
 import android.graphics.drawable.Drawable
+import com.facebook.react.bridge.ColorPropConverter
+import com.facebook.react.bridge.ReadableMap
+import com.facebook.react.bridge.ReadableType
 import com.mapbox.android.core.permissions.PermissionsManager
 import com.mapbox.bindgen.Value
 import com.mapbox.maps.Image
@@ -14,6 +17,7 @@ import com.mapbox.maps.MapView
 import com.mapbox.maps.MapboxMap
 import com.mapbox.maps.Style
 import com.mapbox.maps.plugin.LocationPuck2D
+import com.mapbox.maps.plugin.locationcomponent.LocationComponentConstants
 import com.mapbox.maps.plugin.locationcomponent.location
 import com.mapbox.maps.plugin.locationcomponent.R as LR
 import com.rnmapbox.rnmbx.R
@@ -26,6 +30,8 @@ import com.rnmapbox.rnmbx.components.mapview.OnMapReadyCallback
 import com.rnmapbox.rnmbx.components.mapview.RNMBXMapView
 import com.rnmapbox.rnmbx.utils.BitmapUtils
 import com.rnmapbox.rnmbx.utils.Logger
+import com.rnmapbox.rnmbx.utils.extensions.getAndLogIfNotBoolean
+import com.rnmapbox.rnmbx.utils.extensions.getAndLogIfNotString
 import com.rnmapbox.rnmbx.v11compat.image.AppCompatResourcesV11
 import com.rnmapbox.rnmbx.v11compat.image.ImageHolder
 import com.rnmapbox.rnmbx.v11compat.image.toDrawable
@@ -80,6 +86,12 @@ class RNMBXNativeUserLocation(context: Context) : AbstractMapFeature(context), O
         }
 
     var visible: Boolean = true
+        set(value) {
+            field = value
+            _apply()
+        }
+
+    var pulsing: ReadableMap? = null
         set(value) {
             field = value
             _apply()
@@ -152,6 +164,41 @@ class RNMBXNativeUserLocation(context: Context) : AbstractMapFeature(context), O
         }
         this.puckBearingEnabled?.let {
             location2.puckBearingEnabled = it
+        }
+
+        pulsing?.let { pulsing ->
+            pulsing.getAndLogIfNotString("kind")?.also { kind ->
+                if (kind == "default") {
+                    location2.pulsingEnabled = true
+                }
+            }
+            if (pulsing.hasKey("color")) {
+                when (pulsing.getType("color")) {
+                    ReadableType.Map ->
+                        location2.pulsingColor = ColorPropConverter.getColor(pulsing.getMap("color"), mContext)
+                    ReadableType.Number ->
+                        location2.pulsingColor = pulsing.getInt("color")
+                    else ->
+                        Logger.e(LOG_TAG, "pusling.color should be either a map or a number, but was ${pulsing.getDynamic("color")}")
+                }
+            }
+            pulsing.getAndLogIfNotBoolean("isEnabled")?.let { enabled ->
+               location2.pulsingEnabled = enabled
+            }
+            if (pulsing.hasKey("radius")) {
+                when (pulsing.getType("radius")) {
+                    ReadableType.Number ->
+                        location2.pulsingMaxRadius = pulsing.getDouble("radius").toFloat()
+                    ReadableType.String ->
+                        if (pulsing.getString("radius") == "accuracy") {
+                            location2.pulsingMaxRadius = LocationComponentConstants.PULSING_MAX_RADIUS_FOLLOW_ACCURACY
+                        } else {
+                            Logger.e(LOG_TAG, "Expected pulsing/radius to be a number or accuracy but was ${pulsing.getString("radius")}")
+                        }
+                    else ->
+                        Logger.e(LOG_TAG, "Expected pulsing/radius to be a number or accuracy but was ${pulsing.getString("radius")}")
+                }
+            }
         }
     }
 
@@ -229,6 +276,10 @@ class RNMBXNativeUserLocation(context: Context) : AbstractMapFeature(context), O
         }
     }
     // endregion
+
+    companion object {
+        const val LOG_TAG = "RNMBXNativeUserLocation"
+    }
 }
 
 fun makeDefaultLocationPuck2D(context: Context, renderMode: RenderMode): LocationPuck2D {

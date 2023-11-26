@@ -76,6 +76,9 @@ public class RNMBXNativeUserLocation: UIView, RNMBXMapComponent {
   
   @objc
   public var puckBearingEnabled: Bool = false
+  
+  @objc
+  public var pulsing: NSDictionary? = nil
 
   @objc
   override public func didSetProps(_ props: [String]) {
@@ -151,20 +154,7 @@ public class RNMBXNativeUserLocation: UIView, RNMBXMapComponent {
       return
     }
 
-    if (visible) {
-      if images.isEmpty {
-        location.options.puckType = .puck2D(.makeDefault(showBearing: puckBearingEnabled))
-      } else {
-        location.options.puckType = .puck2D(
-          Puck2DConfiguration(
-            topImage: self.images[.top],
-            bearingImage: self.images[.bearing],
-            shadowImage: self.images[.shadow],
-            scale: toDoubleValue(value: scale, name: "scale")
-          )
-        )
-      }
-    } else {
+    if (!visible) {
       let emptyImage = UIGraphicsImageRenderer(size: CGSize(width: 1, height: 1)).image { _ in }
       location.options.puckType = .puck2D(
         Puck2DConfiguration(
@@ -174,9 +164,50 @@ public class RNMBXNativeUserLocation: UIView, RNMBXMapComponent {
           scale: Value.constant(1.0)
         )
       )
+      return
+    } else {
+      var configuration : Puck2DConfiguration = images.isEmpty ?
+        .makeDefault(showBearing: puckBearingEnabled) : Puck2DConfiguration(
+          topImage: self.images[.top],
+          bearingImage: self.images[.bearing],
+          shadowImage: self.images[.shadow])
+      
+      if let scale = toDoubleValue(value: scale, name: "scale") {
+        configuration.scale = scale
+      }
+      
+      if let pulsing = pulsing {
+        if let kind = pulsing["kind"] as? String, kind == "default" {
+          configuration.pulsing = .default
+        } else {
+          var pulsingConfig = Puck2DConfiguration.Pulsing()
+          if let isEnabled = pulsing["isEnabled"] as? Bool {
+            pulsingConfig.isEnabled = isEnabled
+          }
+          
+          if let radius = pulsing["radius"] as? String {
+            if radius == "accuracy" {
+              pulsingConfig.radius = .accuracy
+            } else {
+              Logger.log(level: .error, message: "expected pulsing/radius to be either a number or accuracy but was \(radius)")
+            }
+          } else if let radius = pulsing["radius"] as? NSNumber {
+            pulsingConfig.radius = .constant(radius.doubleValue)
+          }
+          
+          if let color = pulsing["color"] as? Any {
+            if let uicolor = RCTConvert.uiColor(color) {
+              pulsingConfig.color = uicolor
+            } else {
+              Logger.log(level: .error, message: "expected color to be a color but was \(color)")
+            }
+          }
+          
+          configuration.pulsing = pulsingConfig
+        }
+      }
+      location.options.puckType = .puck2D(configuration)
     }
-
-
     location.options.puckBearingEnabled = puckBearingEnabled
     if let puckBearing = _puckBearing {
       location.options.puckBearing = puckBearing

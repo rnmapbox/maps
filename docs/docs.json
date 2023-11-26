@@ -4205,6 +4205,13 @@
         "description": "The size of the images, as a scale factor applied to the size of the specified image. Supports expressions based on zoom.\n\n@example\n[\"interpolate\",[\"linear\"], [\"zoom\"], 10.0, 1.0, 20.0, 4.0]]\n@example\n2.0"
       },
       {
+        "name": "pulsing",
+        "required": false,
+        "type": "\\| {\n    /**\n     * Flag determining whether the pulsing circle animation.\n     */\n    isEnabled?: boolean;\n\n    /**\n     * The color of the pulsing circle.\n     */\n    color?: number \\| ColorValue;\n\n    /**\n     * Circle radius configuration for the pulsing circle animation.\n     *  - accuracy:  Pulsing circle animates with the `horizontalAccuracy` form the latest puck location.\n     *  - number: Pulsing circle should animate with the constant radius.\n     */\n    radius?: 'accuracy' \\| number;\n  }\n\\| 'default'",
+        "default": "none",
+        "description": "The configration parameters for sonar-like pulsing circle animation shown around the 2D puck."
+      },
+      {
         "name": "visible",
         "required": false,
         "type": "boolean",

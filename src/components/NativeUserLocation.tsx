@@ -1,4 +1,5 @@
 import React, { memo } from 'react';
+import { processColor, type ColorValue } from 'react-native';
 
 import RNMBXNativeUserLocation, {
   type NativeProps,
@@ -67,6 +68,30 @@ export type Props = {
   scale?: Value<number>;
 
   /**
+   * The configration parameters for sonar-like pulsing circle animation shown around the 2D puck.
+   */
+  pulsing?:
+    | {
+        /**
+         * Flag determining whether the pulsing circle animation.
+         */
+        isEnabled?: boolean;
+
+        /**
+         * The color of the pulsing circle.
+         */
+        color?: number | ColorValue;
+
+        /**
+         * Circle radius configuration for the pulsing circle animation.
+         *  - accuracy:  Pulsing circle animates with the `horizontalAccuracy` form the latest puck location.
+         *  - number: Pulsing circle should animate with the constant radius.
+         */
+        radius?: 'accuracy' | number;
+      }
+    | 'default';
+
+  /**
    * Whether location icon is visible, defaults to true
    */
   visible?: boolean;
@@ -77,12 +102,14 @@ const defaultProps = {
 } as const;
 
 const NativeUserLocation = memo((props: Props) => {
-  const { iosShowsUserHeadingIndicator, ...rest } = props;
-  let baseProps: NativeProps = { ...defaultProps };
+  const { iosShowsUserHeadingIndicator, pulsing, ...rest } = props;
+  const nativePulsing = pulsing ? _pulsingToNative(pulsing) : undefined;
+  let baseProps: NativeProps = { ...defaultProps, pulsing: nativePulsing };
   if (iosShowsUserHeadingIndicator) {
     console.warn(
       'NativeUserLocation: iosShowsUserHeadingIndicator is deprecated, use puckBearingEnabled={true} puckBearing="heading" instead',
     );
+
     baseProps = {
       ...baseProps,
       puckBearingEnabled: true,
@@ -92,5 +119,22 @@ const NativeUserLocation = memo((props: Props) => {
   const actualProps = { ...baseProps, ...rest };
   return <RNMBXNativeUserLocation {...actualProps} />;
 });
+
+function _pulsingToNative(
+  pulsing: Props['pulsing'],
+): NativeProps['pulsing'] | undefined {
+  if (pulsing === 'default') {
+    return { kind: 'default' };
+  }
+  if (pulsing == null) {
+    return undefined;
+  }
+  const { color, isEnabled, radius } = pulsing;
+  return {
+    color: processColor(color),
+    isEnabled,
+    radius,
+  };
+}
 
 export default NativeUserLocation;

@@ -11,6 +11,7 @@ RCT_EXPORT_VIEW_PROPERTY(scale, NSArray);
 RCT_EXPORT_VIEW_PROPERTY(visible, BOOL);
 RCT_EXPORT_VIEW_PROPERTY(puckBearing, NSString);
 RCT_EXPORT_VIEW_PROPERTY(puckBearingEnabled, BOOL);
+RCT_EXPORT_VIEW_PROPERTY(pulsing, NSDictionary);
 
 @end
 

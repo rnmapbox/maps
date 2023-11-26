@@ -44,6 +44,11 @@ const UserLocationNativeAnimated = () => {
           topImage="topImage"
           visible={true}
           scale={['interpolate', ['linear'], ['zoom'], 10, 1.0, 20, 4.0]}
+          pulsing={{
+            isEnabled: true,
+            color: 'teal',
+            radius: 50.0,
+          }}
         />
       </MapView>
     </SafeAreaView>

@@ -46,6 +46,9 @@ public class RNMBXNativeUserLocationManagerDelegate<T extends View, U extends Ba
       case "visible":
         mViewManager.setVisible(view, value == null ? false : (boolean) value);
         break;
+      case "pulsing":
+        mViewManager.setPulsing(view, new DynamicFromObject(value));
+        break;
       default:
         super.setProperty(view, propName, value);
     }
