@@ -21,4 +21,5 @@ public interface RNMBXNativeUserLocationManagerInterface<T extends View> {
   void setTopImage(T view, Dynamic value);
   void setScale(T view, Dynamic value);
   void setVisible(T view, boolean value);
+  void setPulsing(T view, Dynamic value);
 }

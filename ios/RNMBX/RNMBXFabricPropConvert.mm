@@ -128,4 +128,9 @@ id RNMBXPropConvert_Optional_ExpressionDouble(const folly::dynamic &dyn, NSStrin
   }
 }
 
+NSDictionary* RNMBXPropConvert_Optional_NSDictionary(const folly::dynamic &dyn, NSString* propertyName)
+{
+  return RNMBXPropConvert_ID(dyn);
+}
+
 #endif

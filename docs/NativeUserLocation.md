@@ -103,6 +103,33 @@ The size of the images, as a scale factor applied to the size of the specified i
 
 [Custom Native UserLocation](../examples/UserLocation/CustomNativeUserLocation)
   
+### pulsing
+
+```tsx
+| {
+    /**
+     * Flag determining whether the pulsing circle animation.
+     */
+    isEnabled?: boolean;
+
+    /**
+     * The color of the pulsing circle.
+     */
+    color?: number | ColorValue;
+
+    /**
+     * Circle radius configuration for the pulsing circle animation.
+     *  - accuracy:  Pulsing circle animates with the `horizontalAccuracy` form the latest puck location.
+     *  - number: Pulsing circle should animate with the constant radius.
+     */
+    radius?: 'accuracy' | number;
+  }
+| 'default'
+```
+The configration parameters for sonar-like pulsing circle animation shown around the 2D puck.
+
+
+  
 ### visible
 
 ```tsx

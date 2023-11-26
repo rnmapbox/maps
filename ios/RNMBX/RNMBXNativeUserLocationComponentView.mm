@@ -57,13 +57,14 @@ using namespace facebook::react;
   const auto &oldViewProps = static_cast<const RNMBXNativeUserLocationProps &>(*oldProps);
   const auto &newViewProps = static_cast<const RNMBXNativeUserLocationProps &>(*props);
 
-  RNMBX_OPTIONAL_RPOP_NSString(puckBearing)
-  RNMBX_OPTIONAL_RPOP_BOOL(puckBearingEnabled)
-  RNMBX_OPTIONAL_RPOP_NSString(bearingImage)
-  RNMBX_OPTIONAL_RPOP_NSString(shadowImage)
-  RNMBX_OPTIONAL_RPOP_NSString(topImage)
-  RNMBX_OPTIONAL_RPOP_ExpressionDouble(scale)
-  RNMBX_RPOP_BOOL(visible)
+  RNMBX_OPTIONAL_PROP_NSString(puckBearing)
+  RNMBX_OPTIONAL_PROP_BOOL(puckBearingEnabled)
+  RNMBX_OPTIONAL_PROP_NSString(bearingImage)
+  RNMBX_OPTIONAL_PROP_NSString(shadowImage)
+  RNMBX_OPTIONAL_PROP_NSString(topImage)
+  RNMBX_OPTIONAL_PROP_ExpressionDouble(scale)
+  RNMBX_PROP_BOOL(visible)
+  RNMBX_OPTIONAL_PROP_NSDictionary(pulsing)
 
   [super updateProps:props oldProps:oldProps];
 
