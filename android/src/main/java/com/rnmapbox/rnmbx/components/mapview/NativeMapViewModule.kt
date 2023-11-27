@@ -125,7 +125,7 @@ class NativeMapViewModule(context: ReactApplicationContext, val viewTagResolver:
         viewRef: Double?,
         withBBox: ReadableArray,
         withFilter: ReadableArray,
-        withLayerIDs: ReadableArray,
+        withLayerIDs: ReadableArray?,
         promise: Promise
     ) {
         withMapViewOnUIThread(viewRef, promise) {
