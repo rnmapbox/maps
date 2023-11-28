@@ -1,0 +1,23 @@
+on:
+  pull_request_target:
+    branches: [ main ]
+
+jobs:
+  approve:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Approve
+      run: echo For security reasons, all pull requests need to be approved first before running any automated CI.
+
+  call_ci_requiring_tokens:
+    name: "CI requiring tokens"
+    enivoronment:
+      name: CI with Mapbox Tokens
+    needs: [approve]
+    uses: ./.github/workflows/ci-requiring-tokens.yml
+    with:
+      NVMRC: v18.18.0
+    secrets:
+      MAPBOX_ACCESS_TOKEN: ${{ secrets.ENV_MAPBOX_ACCESS_TOKEN }}
+      MAPBOX_DOWNLOAD_TOKEN: ${{ secrets.ENV_MAPBOX_DOWNLOAD_TOKEN }}
+

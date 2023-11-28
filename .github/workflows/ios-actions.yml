@@ -24,6 +24,7 @@ on:
 
 jobs:
   build:
+    name: iOS Example Build ${{ inputs.NEW_ARCH && 'Fabric' || 'Paper' }} ${{ inputs.MAP_IMPL }}
     runs-on: macos-12
     timeout-minutes: 55
 
@@ -33,7 +34,7 @@ jobs:
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Access Token
         run: echo $MAPBOX_ACCESS_TOKEN > ./accesstoken

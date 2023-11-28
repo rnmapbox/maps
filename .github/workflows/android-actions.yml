@@ -11,6 +11,10 @@ on:
         default: mapbox
         required: false
         type: string
+      REF_FORK:
+        description: "If build from fork repo or not"
+        required: false
+        type: string
       NEW_ARCH:
         description: "If build with new architecture or not"
         default: false
@@ -24,10 +28,18 @@ on:
 
 jobs:
   build_example:
+    name: Android Example Build ${{ inputs.NEW_ARCH && 'Fabric' || 'Paper' }} ${{ inputs.MAP_IMPL }}
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
+        if: ${{ github.event.inputs.REF_FORK == false }}
+      
+      - name: Checkout fork
+        uses: actions/checkout@v4
+        if: ${{ github.event.inputs.REF_FORK == true }}
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
 
       - name: Setup node ${{ inputs.NVMRC }}
         uses: actions/setup-node@v3.5.1
