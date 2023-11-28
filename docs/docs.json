@@ -4143,6 +4143,36 @@
     "relPath": "src/components/MarkerView.tsx",
     "name": "MarkerView"
   },
+  "Models": {
+    "description": "Name of 3D model assets to be used in the map",
+    "displayName": "Models",
+    "methods": [],
+    "props": [
+      {
+        "name": "models",
+        "required": true,
+        "type": {
+          "name": "shape",
+          "value": [
+            {
+              "name": {
+                "name": "string"
+              },
+              "required": true,
+              "type": "string",
+              "default": "none",
+              "description": "FIX ME NO DESCRIPTION"
+            }
+          ]
+        },
+        "default": "none",
+        "description": "pair odf model name to glbf and gbl file path/url"
+      }
+    ],
+    "fileNameWithExt": "Models.tsx",
+    "relPath": "src/components/Models.tsx",
+    "name": "Models"
+  },
   "NativeUserLocation": {
     "description": "",
     "displayName": "NativeUserLocation",
