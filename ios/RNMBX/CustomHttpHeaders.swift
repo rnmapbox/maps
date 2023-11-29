@@ -46,23 +46,16 @@ class CustomHttpHeaders : HttpServiceInterceptorInterface {
     return request
   }
 
+  #if !RNMBX_11
   func onDownload(forDownload download: DownloadOptions) -> DownloadOptions {
     customHeaders.forEach {(key,value) in
       download.request.headers[key] = value
     }
     return download
   }
+  #endif
 
   func onResponse(for response: HttpResponse) -> HttpResponse {
     return response
   }
-  
-  #if RNMBX_11
-  func onUpload(forUpload upload: UploadOptions) -> UploadOptions {
-    customHeaders.forEach {(key,value) in
-      upload.headers[key] = value
-    }
-    return upload
-  }
-  #endif
 }

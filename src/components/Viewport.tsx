@@ -41,7 +41,7 @@ type FollowPuckOptions = {
    *  - number: sets the camera bearing to the constant value on every frame
    *
    * On Android, 'heading' and 'coruse' sets the camera bearing to the same as the location puck's bearing. See
-   * [syncWithLocationPuck](https://docs.mapbox.com/android/maps/api/11.0.0-rc.1/mapbox-maps-android/com.mapbox.maps.plugin.viewport.data/-follow-puck-viewport-state-bearing/-sync-with-location-puck/)
+   * [syncWithLocationPuck](https://docs.mapbox.com/android/maps/api/11.0.0/mapbox-maps-android/com.mapbox.maps.plugin.viewport.data/-follow-puck-viewport-state-bearing/-sync-with-location-puck/)
    *
    * @default 'heading'
    */
