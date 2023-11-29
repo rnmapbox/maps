@@ -63,7 +63,7 @@ The start and end distance range in which fog fades from fully transparent to fu
 
 #### Expression
 
-Parameters: `zoom`
+Parameters: `zoom, measure-light`
 ___
 
 ### rangeTransition
@@ -102,7 +102,7 @@ The color of the atmosphere region immediately below the horizon and within the 
 
 #### Expression
 
-Parameters: `zoom`
+Parameters: `zoom, measure-light`
 ___
 
 ### colorTransition
@@ -141,7 +141,7 @@ The color of the atmosphere region above the horizon, `highColor` extends furthe
 
 #### Expression
 
-Parameters: `zoom`
+Parameters: `zoom, measure-light`
 ___
 
 ### highColorTransition
@@ -180,7 +180,7 @@ The color of the region above the horizon and after the end of the `horizonBlend
 
 #### Expression
 
-Parameters: `zoom`
+Parameters: `zoom, measure-light`
 ___
 
 ### spaceColorTransition
@@ -225,7 +225,7 @@ Horizon blend applies a smooth fade from the color of the atmosphere to the colo
 
 #### Expression
 
-Parameters: `zoom`
+Parameters: `zoom, measure-light`
 ___
 
 ### horizonBlendTransition
@@ -270,7 +270,7 @@ A value controlling the star intensity where `0` will show no stars and `1` will
 
 #### Expression
 
-Parameters: `zoom`
+Parameters: `zoom, measure-light`
 ___
 
 ### starIntensityTransition

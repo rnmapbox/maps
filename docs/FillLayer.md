@@ -184,6 +184,9 @@ Whether this layer is displayed.
 **none** - The layer is not shown.<br />
 
 
+#### Expression
+
+Parameters: ``
 
 ___
 
@@ -229,7 +232,7 @@ The opacity of the entire fill layer. In contrast to the `fillColor`, this value
 
 #### Expression
 
-Parameters: `zoom, feature, feature-state`
+Parameters: `zoom, feature, feature-state, measure-light`
 ___
 
 ### fillOpacityTransition
@@ -271,7 +274,7 @@ The color of the filled part of this layer. This color can be specified as `rgba
 
 #### Expression
 
-Parameters: `zoom, feature, feature-state`
+Parameters: `zoom, feature, feature-state, measure-light`
 ___
 
 ### fillColorTransition
@@ -311,7 +314,7 @@ The outline color of the fill. Matches the value of `fillColor` if unspecified.
 
 #### Expression
 
-Parameters: `zoom, feature, feature-state`
+Parameters: `zoom, feature, feature-state, measure-light`
 ___
 
 ### fillOutlineColorTransition

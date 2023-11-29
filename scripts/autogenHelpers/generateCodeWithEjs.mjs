@@ -20,6 +20,7 @@ function readIosVersion() {
 
   return {
     v10: `${mapboxLineRegex.exec(mapboxLine)[1]}.0`,
+    v11: '11.0.0',
   };
 }
 
@@ -31,6 +32,7 @@ function readAndroidVersion() {
   const mapboxV10Line = lines.filter((i) => mapboxV10LineRegex.exec(i))[0];
   return {
     v10: mapboxV10LineRegex.exec(mapboxV10Line)[1],
+    v11: '11.0.0',
   };
 }
 
@@ -73,7 +75,9 @@ const ANDROID_V10_OUTPUT_PATH = path.join(
 const JS_OUTPUT_PATH = path.join(__dirname, ...OUTPUT_PREFIX, 'src', 'utils');
 
 
-
+/**
+ * @param {string[]|undefined} only
+ */
 function getPropertiesFor(kind, only) {
   const attributes = styleSpecJSON[kind];
 
@@ -111,6 +115,9 @@ function getPropertiesForLayer(layerName, only) {
     },
   );
 
+  /**
+   * @params {string[]|undefined} only
+   */
   const layoutProps = getSupportedProperties(layoutAttributes, only).map(
     (attrName) => {
       const prop = buildProperties(layoutAttributes, attrName, 'layout', layerName);
@@ -144,6 +151,10 @@ function getSupportedLayers(layerNames) {
     const layer = layerMap[layerName];
     const support = getAttributeSupport(layer['sdk-support']);
 
+    if (layerName === 'model') {
+      support.basic.v10.android = true;
+      support.basic.v10.ios = true;
+    }
     if (support.basic.v10.android && support.basic.v10.ios) {
       supportedLayers.push({
         layerName,
@@ -157,9 +168,12 @@ function getSupportedLayers(layerNames) {
   return supportedLayers;
 }
 
+/**
+ * @param {string[]|null} only 
+ */
 function getSupportedProperties(attributes, only) {
   return Object.keys(attributes).filter((attrName) =>
-    isAttrSupported(attributes[attrName], only),
+    isAttrSupported(attrName, attributes[attrName], only),
   );
 }
 
@@ -197,9 +211,21 @@ function buildProperties(attributes, attrName, type, layerName) {
     expression: attributes[attrName].expression,
     expressionSupported:
       Object.keys(attributes[attrName].expression || {}).length > 0,
-    support: getAttributeSupport(attributes[attrName]['sdk-support']),
+    support: _fixPropSupport(getAttributeSupport(attributes[attrName]['sdk-support']), attrName),
     allowedFunctionTypes: getAllowedFunctionTypes(attributes[attrName]),
   };
+}
+
+function _fixPropSupport(support, attrName) {
+  /* fill-extrusion-rounded-roof is not supported on v10 */
+  if (attrName === 'fill-extrusion-rounded-roof') {
+    support.basic.v10.android = false;
+    support.basic.v10.ios = false;
+  } else if (['model-id', 'model-scale', 'model-rotation'].includes(attrName)) {
+    support.basic.v10.android = true;
+    support.basic.v10.ios = true;
+  }
+  return support;
 }
 
 function formatDescription(description) {
@@ -269,13 +295,23 @@ function isTranslate(attrName) {
   return attrName.toLowerCase().indexOf('translate') !== -1;
 }
 
-function isAttrSupported(attr, only) {
+const UnsupportedProperties = [
+  'hillshade-emissive-strength' // should be supported in v11 according to specs but it's not on ios 11.0.0.rc2
+]
+
+/**
+ * @param {string[]|undefined} only 
+ */
+function isAttrSupported(name, attr, only) {
+  if (UnsupportedProperties.includes(name)) {
+    return false
+  }
   const support = getAttributeSupport(attr['sdk-support']);
   if (attr.private === true) {
     return false;
   }
   if (only != null) {
-    return support.basic[only].android && support.basic[only].ios;
+    return only.find(o => (support.basic[o].android && support.basic[o].ios)) != null;
   }
   return support.basic.v10.android && support.basic.v10.ios;
 }
@@ -284,9 +320,11 @@ function getAttributeSupport(sdkSupport) {
   const support = {
     basic: {
       v10: { android: false, ios: false },
+      v11: { android: false, ios: false }
     },
     data: {
       v10: { android: false, ios: false },
+      v11: { android: false, ios: false }
     },
   };
 
@@ -296,9 +334,14 @@ function getAttributeSupport(sdkSupport) {
       androidVersion.v10,
       basicSupport.android,
     );
+    support.basic.v11.android = isVersionGTE(
+      androidVersion.v11,
+      basicSupport.android,
+    )
   }
   if (basicSupport && basicSupport.ios) {
     support.basic.v10.ios = isVersionGTE(iosVersion.v10, basicSupport.ios);
+    support.basic.v11.ios = isVersionGTE(iosVersion.v11, basicSupport.ios);
   }
 
   const dataDrivenSupport = sdkSupport && sdkSupport['data-driven styling'];
@@ -307,14 +350,24 @@ function getAttributeSupport(sdkSupport) {
       androidVersion.v10,
       dataDrivenSupport.android,
     );
+    support.data.v11.android = isVersionGTE(
+      androidVersion.v11,
+      dataDrivenSupport.android,
+    );
   }
   if (dataDrivenSupport && dataDrivenSupport.ios) {
     support.data.v10.ios = isVersionGTE(iosVersion.v10, dataDrivenSupport.ios);
+    support.data.v11.ios = isVersionGTE(iosVersion.v11, dataDrivenSupport.ios);
   }
 
   if (support.data.v10.ios !== true || support.data.v10.android !== true) {
     support.data.v10.ios = false;
     support.data.v10.android = false;
+  }
+
+  if (support.data.v11.ios !== true || support.data.v11.android !== true) {
+    support.data.v11.ios = false;
+    support.data.v11.android = false;
   }
 
   return support;
@@ -356,7 +409,8 @@ export function getLayers() {
         name: layerName,
         properties: getPropertiesForLayer(layerName),
         props: {
-          v10: getPropertiesForLayer(layerName, 'v10'),
+          v10: getPropertiesForLayer(layerName, ['v10']),
+          v11: getPropertiesForLayer(layerName, ['v11']),
         },
         support,
       });
@@ -368,7 +422,7 @@ export function getLayers() {
     name: 'light',
     properties: getPropertiesFor('light'),
     props: {
-      v10: getPropertiesFor('light', 'v10'),
+      v10: getPropertiesFor('light', ['v10','v11']),
     },
     support: { v10: true },
   });
@@ -378,7 +432,7 @@ export function getLayers() {
     name: 'atmosphere',
     properties: getPropertiesFor('fog'),
     props: {
-      v10: removeTransitionsOnV10Before1070(getPropertiesFor('fog', 'v10')),
+      v10: removeTransitionsOnV10Before1070(getPropertiesFor('fog', ['v10','v11'])),
     },
     support: { v10: true },
   });
@@ -388,7 +442,7 @@ export function getLayers() {
     name: 'terrain',
     properties: getPropertiesFor('terrain'),
     props: {
-      v10: getPropertiesFor('terrain', 'v10')
+      v10: getPropertiesFor('terrain', ['v10'])
         .filter(({ name }) => name !== 'source')
         .map((i) => ({ ...i, transition: false })),
     },
@@ -407,20 +461,22 @@ export default function generateCodeWithEjs(layers) {
     {
       input: path.join(TMPL_PATH, 'MapboxStyles.ts.ejs'),
       output: path.join(JS_OUTPUT_PATH, 'MapboxStyles.d.ts'),
+      only: ['v10', 'v11'],
     },
     {
       input: path.join(TMPL_PATH, 'RNMBXStyle.swift.ejs'),
       output: path.join(IOS_V10_OUTPUT_PATH, 'RNMBXStyle.swift'),
-      only: 'v10',
+      only: ['v10', 'v11'],
     },
     {
       input: path.join(TMPL_PATH, 'RNMBXStyleFactoryv10.kt.ejs'),
       output: path.join(ANDROID_V10_OUTPUT_PATH, 'RNMBXStyleFactory.kt'),
-      only: 'v10',
+      only: ['v10', 'v11'],
     },
     {
       input: path.join(TMPL_PATH, 'styleMap.ts.ejs'),
       output: path.join(JS_OUTPUT_PATH, 'styleMap.ts'),
+      only: ['v10', 'v11'],
     },
   ];
   const outputPaths = templateMappings.map((m) => m.output);
@@ -431,11 +487,27 @@ export default function generateCodeWithEjs(layers) {
     console.log(`Generating ${filename}`);
     const tmpl = ejs.compile(fs.readFileSync(input, 'utf8'), { strict: true });
 
+    function concatuniq(propsList) {
+      let result = [];
+      let has = new Set();
+      for (let list of propsList) {
+        for (let item of list) {
+          if (!has.has(item.name)) {
+            result.push(item);
+            has.add(item.name);
+          }
+        }
+      }
+      return result;
+    }
+    /**
+     * @param {string[]} only 
+     */
     function filterOnly(layers, only) {
       if (only != null) {
         let result = layers
-          .filter((e) => e.support[only])
-          .map((e) => ({ ...e, properties: e.props[only] }));
+          .filter((e) => only.find((v) => e.support[v]))
+          .map((e) => ({ ...e, properties: concatuniq(only.map(o => e.props[o] || [])) }));
         return result;
       } else {
         return layers;

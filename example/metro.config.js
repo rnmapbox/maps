@@ -12,6 +12,8 @@ const libPeerDependencies = Object.keys(libPackageJson.peerDependencies)
   .concat(['@babel/runtime'])
   .concat(Object.keys(libPackageJson.dependencies));
 
+const defaultConfig = getDefaultConfig(__dirname);
+
 /**
  * Metro configuration
  * https://facebook.github.io/metro/docs/configuration
@@ -34,6 +36,8 @@ const config = {
       acc[name] = path.join(__dirname, 'node_modules', name);
       return acc;
     }, {}),
+
+    assetExts: [...defaultConfig.resolver.assetExts, 'gltf', 'glb'],
   },
 
   transformer: {
@@ -46,4 +50,4 @@ const config = {
   },
 };
 
-module.exports = mergeConfig(getDefaultConfig(__dirname), config);
+module.exports = mergeConfig(defaultConfig, config);

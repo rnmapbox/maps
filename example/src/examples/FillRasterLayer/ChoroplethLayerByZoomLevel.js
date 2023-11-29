@@ -103,7 +103,7 @@ export default ChoroplethLayerByZoomLevel;
 /** @type ExampleWithMetadata['metadata'] */
 const metadata = {
   title: 'Choropleth Layer By Zoom Level',
-  tags: [],
+  tags: ['VectorSource'],
   docs: '',
 };
 ChoroplethLayerByZoomLevel.metadata = metadata;

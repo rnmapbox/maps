@@ -31,6 +31,7 @@ describe('Public Interface', () => {
       'CircleLayer',
       'HeatmapLayer',
       'LineLayer',
+      'ModelLayer',
       'SymbolLayer',
       'BackgroundLayer',
       'RasterLayer',
@@ -46,6 +47,7 @@ describe('Public Interface', () => {
       'RasterDemSource',
       'Images',
       'Image',
+      'Models',
 
       // constants
       'UserTrackingModes', // deprecated

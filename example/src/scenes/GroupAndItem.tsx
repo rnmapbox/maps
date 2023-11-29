@@ -293,7 +293,6 @@ const Examples = new ExampleGroup('React Native Mapbox', [
   exampleGroup(Camera),
   exampleGroup(UserLocation),
   exampleGroup(SymbolCircleLayer),
-  // @ts-expect-error TODO: fix
   exampleGroup(FillRasterLayer),
   exampleGroup(LineLayer),
   exampleGroup(Annotations),

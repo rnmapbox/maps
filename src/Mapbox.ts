@@ -26,6 +26,7 @@ export { default as RasterSource } from './components/RasterSource';
 export { default as RasterDemSource } from './components/RasterDemSource';
 export { default as ImageSource } from './components/ImageSource';
 export { Viewport } from './components/Viewport';
+export { default as Models } from './components/Models';
 export { default as Images, type ImageEntry } from './components/Images';
 export { default as Image } from './components/Image';
 export { default as FillLayer } from './components/FillLayer';
@@ -34,6 +35,7 @@ export { default as HeatmapLayer } from './components/HeatmapLayer';
 export { default as LineLayer } from './components/LineLayer';
 export { default as CircleLayer } from './components/CircleLayer';
 export { default as SkyLayer } from './components/SkyLayer';
+export { default as ModelLayer } from './components/ModelLayer';
 export { SymbolLayer } from './components/SymbolLayer';
 export { default as RasterLayer } from './components/RasterLayer';
 export { default as BackgroundLayer } from './components/BackgroundLayer';
@@ -78,6 +80,7 @@ export type {
   LightLayerStyleProps as LightLayerStyle,
   AtmosphereLayerStyleProps as AtmosphereLayerStyle,
   TerrainLayerStyleProps as TerrainLayerStyle,
+  ModelLayerStyleProps as ModelLayerStyle,
 } from './utils/MapboxStyles';
 
 import { deprecatedClass } from './utils/deprecation';
