@@ -546,8 +546,8 @@
           ],
           "docs": "\nShows marker view and poitn annotations\n"
         },
-        "fullPath": "example/src/examples/Annotations/MarkerView.js",
-        "relPath": "Annotations/MarkerView.js",
+        "fullPath": "example/src/examples/Annotations/MarkerView.tsx",
+        "relPath": "Annotations/MarkerView.tsx",
         "name": "MarkerView"
       },
       {

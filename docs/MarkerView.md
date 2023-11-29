@@ -60,6 +60,17 @@ markers will 'collapse' and only one will be shown. Defaults to false.
   _defaults to:_ `false`
 
   
+### allowOverlapWithPuck
+
+```tsx
+boolean
+```
+Whether or not nearby markers on the map should be hidden if close to a
+UserLocation puck. Defaults to false.
+
+  _defaults to:_ `false`
+
+  
 ### isSelected
 
 ```tsx

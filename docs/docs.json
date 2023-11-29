@@ -4278,6 +4278,13 @@
         "description": "@v10\n\nWhether or not nearby markers on the map should all be displayed. If false, adjacent\nmarkers will 'collapse' and only one will be shown. Defaults to false."
       },
       {
+        "name": "allowOverlapWithPuck",
+        "required": false,
+        "type": "boolean",
+        "default": "false",
+        "description": "Whether or not nearby markers on the map should be hidden if close to a\nUserLocation puck. Defaults to false."
+      },
+      {
         "name": "isSelected",
         "required": false,
         "type": "boolean",

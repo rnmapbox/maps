@@ -31,6 +31,7 @@ class RNMBXMarkerView(context: Context?, private val mManager: RNMBXMarkerViewMa
     private var mCoordinate: Point? = null
     private var mAnchor: Vec2 = Vec2(0.5, 0.5)
     private var mAllowOverlap = false
+    private var mAllowOverlapWithPuck = false
     private var mIsSelected = false
 
     fun setCoordinate(point: Point?) {
@@ -45,6 +46,11 @@ class RNMBXMarkerView(context: Context?, private val mManager: RNMBXMarkerViewMa
 
     fun setAllowOverlap(allowOverlap: Boolean) {
         mAllowOverlap = allowOverlap
+        update()
+    }
+
+    fun setAllowOverlapWithPuck(allowOverlapWithPuck: Boolean) {
+        mAllowOverlapWithPuck = allowOverlapWithPuck
         update()
     }
 
@@ -174,6 +180,7 @@ class RNMBXMarkerView(context: Context?, private val mManager: RNMBXMarkerViewMa
             width(width.toDouble())
             height(height.toDouble())
             allowOverlap(mAllowOverlap)
+            allowOverlapWithPuck(mAllowOverlapWithPuck)
             offsets(offset.dx, offset.dy)
             selected(mIsSelected)
         }

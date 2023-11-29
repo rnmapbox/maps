@@ -49,6 +49,11 @@ class RNMBXMarkerViewManager(reactApplicationContext: ReactApplicationContext) :
         markerView.setAllowOverlap(allowOverlap.asBoolean())
     }
 
+    @ReactProp(name = "allowOverlapWithPuck")
+    override fun setAllowOverlapWithPuck(markerView: RNMBXMarkerView, allowOverlap: Dynamic) {
+        markerView.setAllowOverlapWithPuck(allowOverlapWithPuck.asBoolean())
+    }
+
     @ReactProp(name = "isSelected")
     override fun setIsSelected(markerView: RNMBXMarkerView, isSelected: Dynamic) {
         markerView.setIsSelected(isSelected.asBoolean())
