@@ -2,27 +2,37 @@
 
 @objc(RNMBXModels)
 open class RNMBXModels : UIView, RNMBXMapComponent {
-  var models: [String: String] = [:]
+  var modelIdToUrl: [String: String] = [:]
   
-  @objc
-  func setModels(_ models: NSDictionary) {
-    var newModels: [String: String] = [:]
-    models.forEach { (key, value) in
-      if let value = value as? NSDictionary, let key = key as? String {
-        if let uri = value["uri"] as? String {
-          newModels[key] = uri
-        } else if let url = value["url"] as? String {
-          newModels[key] = url
-        } else {
-          Logger.log(level: .error, message: "Unexpected value for model key: \(key) \(value) - no uri or url found")
+  @objc(models)
+  public var models: NSDictionary {
+    set {
+      var newModels: [String: String] = [:]
+      newValue.forEach { (key, value) in
+        if let value = value as? NSDictionary, let key = key as? String {
+          if let uri = value["uri"] as? String {
+            newModels[key] = uri
+          } else if let url = value["url"] as? String {
+            newModels[key] = url
+          } else {
+            Logger.log(level: .error, message: "Unexpected value for model key: \(key) \(value) - no uri or url found")
+          }
         }
       }
+      self.modelIdToUrl = newModels
     }
-    self.models = newModels
+    get {
+      Logger.error("RNMBXModels.models.getter not implemented")
+      return NSDictionary()
+    }
+  }
+  
+  func setModels(_ models: NSDictionary) {
+
   }
   
   func addToMap(_ map: RNMBXMapView, style: Style) {
-    models.forEach { (id, uri) in
+    modelIdToUrl.forEach { (id, uri) in
       logged("Models.addStyleModel") {
         if let link = URL(string: uri), let scheme = link.scheme, let host = link.host,
             let port = link.port {
@@ -39,7 +49,7 @@ open class RNMBXModels : UIView, RNMBXMapComponent {
   }
   
   func removeFromMap(_ map: RNMBXMapView, reason: RemovalReason) -> Bool {
-    models.forEach { (id, _) in
+    modelIdToUrl.forEach { (id, _) in
       #if RNMBX_11
       try? map._mapView?.mapboxMap.removeStyleModel(modelId: id)
       #endif
