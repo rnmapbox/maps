@@ -285,6 +285,9 @@ Whether this layer is displayed.
 **none** - The layer is not shown.<br />
 
 
+#### Expression
+
+Parameters: ``
 
 ___
 
@@ -310,7 +313,7 @@ The opacity at which the line will be drawn.
 
 #### Expression
 
-Parameters: `zoom, feature, feature-state`
+Parameters: `zoom, feature, feature-state, measure-light`
 ___
 
 ### lineOpacityTransition
@@ -352,7 +355,7 @@ The color with which the line will be drawn.
 
 #### Expression
 
-Parameters: `zoom, feature, feature-state`
+Parameters: `zoom, feature, feature-state, measure-light`
 ___
 
 ### lineColorTransition
@@ -468,7 +471,7 @@ Stroke thickness.
 `camera`
 #### Expression
 
-Parameters: `zoom, feature, feature-state`
+Parameters: `zoom, feature, feature-state, measure-light`
 ___
 
 ### lineWidthTransition
@@ -513,7 +516,7 @@ Draws a line casing outside of a line's actual path. Value indicates the width o
 
 #### Expression
 
-Parameters: `zoom, feature, feature-state`
+Parameters: `zoom, feature, feature-state, measure-light`
 ___
 
 ### lineGapWidthTransition
@@ -555,7 +558,7 @@ The line's offset. For linear features, a positive value offsets the line to the
 
 #### Expression
 
-Parameters: `zoom, feature, feature-state`
+Parameters: `zoom, feature, feature-state, measure-light`
 ___
 
 ### lineOffsetTransition
@@ -600,7 +603,7 @@ Blur applied to the line, in pixels.
 
 #### Expression
 
-Parameters: `zoom, feature, feature-state`
+Parameters: `zoom, feature, feature-state, measure-light`
 ___
 
 ### lineBlurTransition
@@ -674,7 +677,7 @@ Name: `lineGradient`
 Mapbox spec: [line-gradient](https://docs.mapbox.com/style-spec/reference/layers/#paint-line-line-gradient)
 
 #### Description
-Defines a gradient with which to color a line feature. Can only be used with GeoJSON sources that specify `"lineMetrics": true`.
+A gradient used to color a line feature at various distances along its length. Defined using a `step` or `interpolate` expression which outputs a color for each corresponding `lineProgress` input value. `lineProgress` is a percentage of the line feature's total length as measured on the webmercator projected coordinate plane (a `number` between `0` and `1`). Can only be used with GeoJSON sources that specify `"lineMetrics": true`.
 
 #### Type
 `color`

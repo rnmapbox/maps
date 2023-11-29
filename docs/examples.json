@@ -572,7 +572,9 @@
       {
         "metadata": {
           "title": "Choropleth Layer By Zoom Level",
-          "tags": [],
+          "tags": [
+            "VectorSource"
+          ],
           "docs": ""
         },
         "fullPath": "example/src/examples/FillRasterLayer/ChoroplethLayerByZoomLevel.js",
@@ -582,7 +584,10 @@
       {
         "metadata": {
           "title": "Custom Vector Source",
-          "tags": [],
+          "tags": [
+            "VectorSource",
+            "VectorSource#features"
+          ],
           "docs": ""
         },
         "fullPath": "example/src/examples/FillRasterLayer/CustomVectorSource.js",
@@ -635,7 +640,10 @@
       {
         "metadata": {
           "title": "Query Source Features",
-          "tags": [],
+          "tags": [
+            "VectorSource",
+            "querySourceFeatures"
+          ],
           "docs": ""
         },
         "fullPath": "example/src/examples/FillRasterLayer/QuerySourceFeatures.tsx",

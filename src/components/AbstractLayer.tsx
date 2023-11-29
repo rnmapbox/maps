@@ -42,10 +42,12 @@ class AbstractLayer<
 
   nativeLayer:
     | (React.Component<NativePropsType> & Readonly<NativeMethods>)
-    | undefined = undefined;
+    | null = null;
 
   setNativeLayer = (
-    instance: React.Component<NativePropsType> & Readonly<NativeMethods>,
+    instance:
+      | (React.Component<NativePropsType> & Readonly<NativeMethods>)
+      | null,
   ) => {
     this.nativeLayer = instance;
   };

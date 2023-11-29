@@ -109,6 +109,8 @@ export function getLayerType(layer, platform) {
       return isIOS ? 'MGLAtmosphere' : 'Atmosphere';
     case 'terrain':
       return isIOS ? 'MGLTerrain' : 'Terrain';
+    case 'model':
+      return isIOS ? 'ModelLayer' : 'ModelLayer';
     default:
       throw new Error(
         `Is ${layer.name} a new layer? We should add support for it!`,

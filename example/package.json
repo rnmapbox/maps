@@ -35,7 +35,7 @@
     "moment": "^2.24.0",
     "prop-types": "^15.7.2",
     "react": "18.2.0",
-    "react-native": "0.73.0-rc.4",
+    "react-native": "0.73.0-rc.6",
     "react-native-safe-area-context": "github:ravindraguptacapgemini/react-native-safe-area-context#rn-73-support",
     "react-native-screens": "github:mfazekas/react-native-screens#rn-073-rc4",
     "react-native-svg": "^12.1.0",

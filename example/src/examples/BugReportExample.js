@@ -7,6 +7,8 @@ import {
   SymbolLayer,
   CircleLayer,
   Camera,
+  Models,
+  ModelLayer,
 } from '@rnmapbox/maps';
 
 const styles = {
@@ -80,6 +82,7 @@ class BugReportExample extends React.Component {
         >
           <Camera centerCoordinate={[-74.00597, 40.71427]} zoomLevel={14} />
           <Images images={{ example: require('../assets/example.png') }} />
+          <Models models={{ car: require('../assets/sportcar.glb') }} />
           <ShapeSource id={'shape-source-id-0'} shape={features}>
             <CircleLayer
               id={'circle-layer'}
@@ -92,6 +95,13 @@ class BugReportExample extends React.Component {
                 iconImage: ['get', 'icon'],
               }}
               slot={'middle'}
+            />
+            <ModelLayer
+              id="model-layer-id"
+              style={{
+                modelId: 'car',
+                modelScale: [50, 50, 50],
+              }}
             />
           </ShapeSource>
         </MapView>

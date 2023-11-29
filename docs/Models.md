@@ -17,11 +17,11 @@ Name of 3D model assets to be used in the map
 
 ```tsx
 type Models = {
-  [object Object]: string; /* FIX ME NO DESCRIPTION */
+  [object Object]: union; /* FIX ME NO DESCRIPTION */
 }
 ```
 _required_
-pair odf model name to glbf and gbl file path/url
+pair odf model name to gltf and gbl file path/url, or asset id.
 
 
   

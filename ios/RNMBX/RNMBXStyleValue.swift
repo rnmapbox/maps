@@ -348,13 +348,44 @@ class RNMBXStyleValue {
       return .constant(valueObj.map { $0.doubleValue })
     } else {
       do {
-        let data = try JSONSerialization.data(withJSONObject: valueObj, options: .prettyPrinted)
-        let decodedExpression = try JSONDecoder().decode(Expression.self, from: data)
-        return .expression(decodedExpression)
+        return .expression(try _toExpressions(valueObj))
       } catch {
         Logger.log(level: .error, message: "Invalid value for array number: \(value) error: \(error) setting dummy value")
         return .constant([1.0,1.0])
       }
+    }
+  }
+  
+  private func _toExpressions(_ valueObj: Any) throws -> Expression {
+    if let valueObj = valueObj as? NSNumber {
+      throw RNMBXError.parseError("valueObj is a single number and cannot be converted to expressions")
+    }
+
+    let data = try JSONSerialization.data(withJSONObject: valueObj, options: .prettyPrinted)
+    let decodedExpression = try JSONDecoder().decode(Expression.self, from: data)
+    return decodedExpression
+  }
+  
+  func mglStyleValueString() -> Value<String> {
+    if let value = value as? Dictionary<String,Any> {
+      let value = RNMBXStyleValue.convert(value["stylevalue"] as! [String:Any])
+        if let value = value as? String {
+            return Value.constant(value)
+        } else if let value = value as? [Any] {
+            if let parsedExpression = (logged("mglStyleValueEnum: failed to parse expression") {
+                try parseExpression(value)
+            }) {
+                return .expression(parsedExpression)
+            } else {
+                return Value.constant(value[0] as! String)
+            }
+        } else {
+            Logger.log(level: .error, message:"Invalid value for string (nor string, not array): \(value) returning something")
+            return Value.constant("")
+        }
+    } else {
+      Logger.log(level: .error, message:"Invalid value for enum: \(value) returning something")
+      return Value.constant("")
     }
   }
   

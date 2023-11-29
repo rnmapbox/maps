@@ -446,6 +446,8 @@ object RNMBXStyleFactory {
               setFillExtrusionBaseTransition(layer, styleValue)
             "fillExtrusionVerticalGradient" ->
               setFillExtrusionVerticalGradient(layer, styleValue)
+            "fillExtrusionRoundedRoof" ->
+              setFillExtrusionRoundedRoof(layer, styleValue)
         }
       }
     }
@@ -526,6 +528,20 @@ object RNMBXStyleFactory {
               setHillshadeAccentColor(layer, styleValue)
               "hillshadeAccentColorTransition" ->
               setHillshadeAccentColorTransition(layer, styleValue)
+        }
+      }
+    }
+    fun setModelLayerStyle(layer: ModelLayer, style: RNMBXStyle ) {
+      val styleKeys = style.allStyleKeys
+
+      if (styleKeys.isEmpty()) {
+        return
+      }
+
+      for (styleKey in styleKeys) {
+        val styleValue = style.getStyleValueForKey(styleKey)
+
+        when (styleKey) {
         }
       }
     }
@@ -662,6 +678,10 @@ object RNMBXStyleFactory {
               setStarIntensity(layer, styleValue)
               "starIntensityTransition" ->
               setStarIntensityTransition(layer, styleValue)
+            "verticalRange" ->
+              setVerticalRange(layer, styleValue)
+              "verticalRangeTransition" ->
+              setVerticalRangeTransition(layer, styleValue)
         }
       }
     }
@@ -2829,6 +2849,24 @@ object RNMBXStyleFactory {
       }
     }
 
+    fun setFillExtrusionRoundedRoof(layer: FillExtrusionLayer, styleValue: RNMBXStyleValue ) {
+      if (styleValue.isExpression()) {
+        val expression = styleValue.getExpression()
+        if (expression != null) {
+          layer.fillExtrusionRoundedRoof(expression)
+        } else {
+          e("RNMBXFillExtrusion", "Expression for fillExtrusionRoundedRoof is null")
+        }
+      } else {
+          val value = styleValue.getBoolean(VALUE_KEY)
+          if (value != null) {
+            layer.fillExtrusionRoundedRoof(value)
+          } else {
+            e("RNMBXFillExtrusion", "value for fillExtrusionRoundedRoof is null")
+          }
+      }
+    }
+
     fun setVisibility(layer: RasterLayer, styleValue: RNMBXStyleValue ) {
         layer.visibility(Visibility.valueOf(styleValue.getEnumName()));
     }
@@ -3645,6 +3683,32 @@ object RNMBXStyleFactory {
       val transition = styleValue.transition
       if (transition != null) {
         layer.starIntensityTransition(transition);
+      }
+    }
+
+    fun setVerticalRange(layer: Atmosphere, styleValue: RNMBXStyleValue ) {
+      if (styleValue.isExpression()) {
+        val expression = styleValue.getExpression()
+        if (expression != null) {
+          layer.verticalRange(expression)
+        } else {
+          e("RNMBXAtmosphere", "Expression for verticalRange is null")
+        }
+      } else {
+          val value = styleValue.getFloatArray(VALUE_KEY)
+          if (value != null) {
+            layer.verticalRange(value)
+          } else {
+            e("RNMBXAtmosphere", "value for verticalRange is null")
+          }
+      }
+    }
+
+
+    fun setVerticalRangeTransition(layer: Atmosphere, styleValue: RNMBXStyleValue) {
+      val transition = styleValue.transition
+      if (transition != null) {
+        layer.verticalRangeTransition(transition);
       }
     }
 
