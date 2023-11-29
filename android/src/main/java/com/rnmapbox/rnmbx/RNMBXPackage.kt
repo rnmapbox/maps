@@ -30,10 +30,12 @@ import com.rnmapbox.rnmbx.components.styles.layers.RNMBXFillExtrusionLayerManage
 import com.rnmapbox.rnmbx.components.styles.layers.RNMBXFillLayerManager
 import com.rnmapbox.rnmbx.components.styles.layers.RNMBXHeatmapLayerManager
 import com.rnmapbox.rnmbx.components.styles.layers.RNMBXLineLayerManager
+import com.rnmapbox.rnmbx.components.styles.layers.RNMBXModelLayerManager
 import com.rnmapbox.rnmbx.components.styles.layers.RNMBXRasterLayerManager
 import com.rnmapbox.rnmbx.components.styles.layers.RNMBXSkyLayerManager
 import com.rnmapbox.rnmbx.components.styles.layers.RNMBXSymbolLayerManager
 import com.rnmapbox.rnmbx.components.styles.light.RNMBXLightManager
+import com.rnmapbox.rnmbx.components.styles.model.RNMBXModelsManager
 import com.rnmapbox.rnmbx.components.styles.sources.RNMBXImageSourceManager
 import com.rnmapbox.rnmbx.components.styles.sources.RNMBXRasterDemSourceManager
 import com.rnmapbox.rnmbx.components.styles.sources.RNMBXRasterSourceManager
@@ -111,6 +113,7 @@ class RNMBXPackage : TurboReactPackage() {
         managers.add(RNMBXViewportManager(reactApplicationContext))
         managers.add(RNMBXMapViewManager(reactApplicationContext, getViewTagResolver(reactApplicationContext, "RNMBXMapViewManager")))
         managers.add(RNMBXStyleImportManager(reactApplicationContext))
+        managers.add(RNMBXModelsManager(reactApplicationContext))
 
         // annotations
         managers.add(RNMBXMarkerViewManager(reactApplicationContext))
@@ -146,6 +149,7 @@ class RNMBXPackage : TurboReactPackage() {
         managers.add(RNMBXAtmosphereManager())
         managers.add(RNMBXBackgroundLayerManager())
         managers.add(RNMBXLightManager())
+        managers.add(RNMBXModelLayerManager())
         return managers
     }
 

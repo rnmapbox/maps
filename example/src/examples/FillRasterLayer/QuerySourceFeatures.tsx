@@ -23,7 +23,7 @@ const countiesOfInterest = [
 
 const styles = {
   matchParent: { flex: 1 },
-}
+};
 
 const QuerySourceFeatures = () => {
   const [ready, setReady] = useState(false);

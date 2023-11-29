@@ -30,7 +30,7 @@ open class RNMBXModels : UIView, RNMBXMapComponent {
           // https://github.com/mapbox/mapbox-maps-ios/issues/2067
           let uriWithoutQuery = "\(scheme)://\(host):\(port)\(link.path)"
 
-          try style.addStyleModel(modelId: id, modelUri: uri)
+          try style.addStyleModel(modelId: id, modelUri: uriWithoutQuery)
         } else {
           try style.addStyleModel(modelId: id, modelUri: uri)
         }

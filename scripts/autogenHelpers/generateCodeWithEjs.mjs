@@ -471,7 +471,7 @@ export default function generateCodeWithEjs(layers) {
     {
       input: path.join(TMPL_PATH, 'RNMBXStyleFactoryv10.kt.ejs'),
       output: path.join(ANDROID_V10_OUTPUT_PATH, 'RNMBXStyleFactory.kt'),
-      only: ['v10'],
+      only: ['v10', 'v11'],
     },
     {
       input: path.join(TMPL_PATH, 'styleMap.ts.ejs'),
