@@ -2,7 +2,7 @@
 
 ## Supported mapbox libraries
 
-We're only supporting mabpox 10.0 releases. 11.0 beta has experimental support.
+We're only supporting mapbox 10.0 releases. 11.0 beta has experimental support.
 
 ### Adding mapbox maven repo
 
