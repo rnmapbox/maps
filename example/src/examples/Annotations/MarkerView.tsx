@@ -36,12 +36,13 @@ const INITIAL_COORDINATES: [number, number][] = [
 
 const ShowMarkerView = () => {
   const [pointList, setPointList] =
-    React.useState<[number, number][]>(INITIAL_COORDINATES);
+    React.useState<GeoJSON.Position[]>(INITIAL_COORDINATES);
   const [allowOverlapWithPuck, setAllowOverlapWithPuck] =
     React.useState<boolean>(false);
 
   const onPressMap = (e: GeoJSON.Feature) => {
-    setPointList((pl) => [...pl, e.geometry.coordinates]);
+    const geometry = e.geometry as GeoJSON.Point;
+    setPointList((pl) => [...pl, geometry.coordinates]);
   };
 
   return (
