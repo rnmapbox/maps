@@ -11,7 +11,7 @@ jobs:
 
   call_ci_requiring_tokens:
     name: "CI requiring tokens"
-    enivoronment:
+    environment:
       name: CI with Mapbox Tokens
     needs: [approve]
     uses: ./.github/workflows/ci-requiring-tokens.yml
