@@ -4,7 +4,7 @@ on:
 
 jobs:
   call_ci_requiring_tokens:
-    if: github.repository == '@rnmapbox/maps' && github.event.pull_request.head.repo.fork == true
+    if: github.repository == 'rnmapbox/maps' && github.event.pull_request.head.repo.fork == true
     name: "CI requiring tokens"
     uses: ./.github/workflows/ci-requiring-tokens.yml
     with:
