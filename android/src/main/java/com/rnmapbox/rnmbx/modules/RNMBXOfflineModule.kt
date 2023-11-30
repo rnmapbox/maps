@@ -30,6 +30,7 @@ import java.nio.file.StandardCopyOption
 import java.util.concurrent.CountDownLatch
 
 import com.rnmapbox.rnmbx.v11compat.offlinemanager.*
+import com.rnmapbox.rnmbx.v11compat.resourceoption.getMapboxAccessToken
 
 data class ZoomRange(val minZoom: Byte, val maxZoom: Byte) {
 
@@ -103,7 +104,9 @@ class RNMBXOfflineModule(private val mReactContext: ReactApplicationContext) :
 
 
     val tileStore: TileStore by lazy {
-        TileStore.create()
+        val result = TileStore.create()
+        result.setAccessToken(RNMBXModule.getAccessToken(mReactContext));
+        result
     }
 
     val offlineManager: OfflineManager by lazy {

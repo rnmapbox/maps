@@ -1,6 +1,8 @@
 package com.rnmapbox.rnmbx.v11compat.offlinemanager;
 
 import com.mapbox.common.TileStore
+import com.mapbox.common.TileStoreOptions
+import com.mapbox.common.toValue
 import com.mapbox.maps.OfflineManager
 import com.mapbox.maps.OfflineRegionManager
 import com.mapbox.maps.ResourceOptions
@@ -16,4 +18,8 @@ fun getOfflineManager(tileStore: TileStore, getAccessToken: () -> String): Offli
         tileStore
       ).build()
   )
+}
+
+fun TileStore.setAccessToken(token: String) {
+  this.setOption(TileStoreOptions.MAPBOX_ACCESS_TOKEN, token.toValue());
 }
