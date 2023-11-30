@@ -33,6 +33,7 @@ jobs:
     uses: ./.github/workflows/android-actions.yml
     with:
       env_name: ${{ inputs.env_name }}
+      ref: ${{ inputs.ref }}
       NVMRC: ${{ inputs.NVMRC }}
       MAP_IMPL: mapbox
     secrets:
@@ -46,6 +47,7 @@ jobs:
     uses: ./.github/workflows/android-actions.yml
     with:
       env_name: ${{ inputs.env_name }}
+      ref: ${{ inputs.ref }}
       NVMRC: ${{ inputs.NVMRC }}
       MAP_IMPL: mapbox
       NEW_ARCH: true
@@ -61,6 +63,7 @@ jobs:
     uses: ./.github/workflows/android-actions.yml
     with:
       env_name: ${{ inputs.env_name }}
+      ref: ${{ inputs.ref }}
       NVMRC: ${{ inputs.NVMRC }}
       MAP_IMPL: mapbox11
     secrets:
@@ -74,6 +77,7 @@ jobs:
     uses: ./.github/workflows/ios-actions.yml
     with:
       env_name: ${{ inputs.env_name }}
+      ref: ${{ inputs.ref }}
       NVMRC: ${{ inputs.NVMRC }}
       MAP_IMPL: mapbox
     secrets:
@@ -87,6 +91,7 @@ jobs:
     uses: ./.github/workflows/ios-actions.yml
     with:
       env_name: ${{ inputs.env_name }}
+      ref: ${{ inputs.ref }}
       NVMRC: ${{ inputs.NVMRC }}
       MAP_IMPL: mapbox
       NEW_ARCH: true
@@ -101,6 +106,7 @@ jobs:
     uses: ./.github/workflows/ios-actions.yml
     with:
       env_name: ${{ inputs.env_name }}
+      ref: ${{ inputs.ref }}
       NVMRC: ${{ inputs.NVMRC }}
       MAP_IMPL: mapbox11
     secrets:
