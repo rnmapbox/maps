@@ -3,16 +3,19 @@ name: Android Build
 on:
   workflow_call:
     inputs:
+      env_name:
+        required: true
+        default: default
+        type: string
+      ref:
+        required: false
+        type: string 
       NVMRC:
         required: true
         type: string
       MAP_IMPL:
         description: "The map implementation to use (mapbox,mapbox11)"
         default: mapbox
-        required: false
-        type: string
-      REF_FORK:
-        description: "If build from fork repo or not"
         required: false
         type: string
       NEW_ARCH:
@@ -25,21 +28,26 @@ on:
         required: true
       MAPBOX_DOWNLOAD_TOKEN:
         required: true
+      ENV_MAPBOX_ACCESS_TOKEN:
+        required: false
+      ENV_MAPBOX_DOWNLOAD_TOKEN:
+        required: false
 
 jobs:
   build_example:
     name: Android Example Build ${{ inputs.NEW_ARCH && 'Fabric' || 'Paper' }} ${{ inputs.MAP_IMPL }}
     runs-on: ubuntu-latest
+    environment: ${{ inputs.env_name }}
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-        if: ${{ github.event.inputs.REF_FORK == false }}
+        if: ${{ inputs.ref == '' }}
       
       - name: Checkout fork
         uses: actions/checkout@v4
-        if: ${{ github.event.inputs.REF_FORK == true }}
+        if: ${{ inputs.ref != '' }}
         with:
-          ref: ${{ github.event.pull_request.head.sha }}
+          ref: ${{ inputs.ref }}
 
       - name: Setup node ${{ inputs.NVMRC }}
         uses: actions/setup-node@v3.5.1
@@ -57,12 +65,12 @@ jobs:
           echo MAPBOX_DOWNLOADS_TOKEN=$MAPBOX_DOWNLOAD_TOKEN > ~/.gradle/gradle.properties
         working-directory: example
         env:
-          MAPBOX_DOWNLOAD_TOKEN: ${{ secrets.MAPBOX_DOWNLOAD_TOKEN }}
+          MAPBOX_DOWNLOAD_TOKEN: ${{ secrets.MAPBOX_DOWNLOAD_TOKEN || secrets.ENV_MAPBOX_DOWNLOAD_TOKEN }}
 
       - run: echo $MAPBOX_ACCESS_TOKEN > ./accesstoken
         working-directory: example
         env:
-          MAPBOX_ACCESS_TOKEN: ${{ secrets.MAPBOX_ACCESS_TOKEN }}
+          MAPBOX_ACCESS_TOKEN: ${{ secrets.MAPBOX_ACCESS_TOKEN || secrets.ENV_MAPBOX_ACCESS_TOKEN }}
 
       - run: yarn install --network-timeout 1000000
         working-directory: example
