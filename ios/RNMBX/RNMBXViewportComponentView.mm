@@ -14,6 +14,7 @@
 
 #import "RCTFollyConvert.h"
 
+#error "An error 2"
 
 // TODO: use generated RNMBXViewportEventEmitter, but need 0.73+ for dynamic support
 class RNMBXViewportEventEmitter : public facebook::react::ViewEventEmitter {
