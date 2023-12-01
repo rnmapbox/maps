@@ -183,8 +183,10 @@ const styles = StyleSheet.create({
 - [Callout](/docs/Callout.md)
 - [Camera](docs/Camera.md)
 - [UserLocation](docs/UserLocation.md)
+- [LocaitonPuck](docs/LocationPuck.md)
 - [Images](docs/Images.md)
 - [Image](docs/Image.md)
+- [Models](docs/Models.md)
 
 ### Sources
 
@@ -204,6 +206,7 @@ const styles = StyleSheet.create({
 - [SymbolLayer](/docs/SymbolLayer.md)
 - [HeatmapLayer](/docs/HeatmapLayer.md)
 - [SkyLayer](/docs/SkyLayer.md)
+- [ModelLayer](/docs/ModelLayer.md)
 
 ### Terrain
 

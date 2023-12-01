@@ -74,6 +74,15 @@ else
   fail "$RNMapboxMapsImpl should be one of mapbox"
 end
 
+if $RNMapboxMapsUseV11 != nil
+  warn "WARNING: $RNMapboxMapsUseV11 is deprecated just set $RNMapboxMapsVersion to '= 11.0.0"
+end
+
+if $MapboxImplVersion =~ /(~>|>=|=|>)?\S*11\./
+  $RNMapboxMapsUseV11 = true
+end
+
+
 $RNMapboxMaps = Object.new
 
 def $RNMapboxMaps._check_no_mapbox_spm(project)
@@ -125,7 +134,9 @@ rescue
 end
 
 def $RNMapboxMaps.post_install(installer)
-  if $RNMapboxMapsUseV11
+  map_pod = installer.pod_targets.find {|p| p.name == "MapboxMaps" }
+  use_v11 = $RNMapboxMapsUseV11 || (map_pod && map_pod.version.split('.')[0].to_i >= 11)
+  if use_v11
     installer.pods_project.build_configurations.each do |config|
       config.build_settings['OTHER_SWIFT_FLAGS'] ||= ['$(inherited)', '-D RNMBX_11']
     end

@@ -10,7 +10,6 @@ prepare_react_native_project!
 
 $RNMapboxMapsImpl = 'mapbox'
 if ENV['RNMBX11']
-  $RNMapboxMapsUseV11 = true # use 11 version
   $RNMapboxMapsVersion = '= 11.0.0'
 end
 
@@ -21,7 +20,6 @@ if ENV['CI_MAP_IMPL']
     $RNMapboxMapsImpl = 'mapbox'
   when 'mapbox11'
     $RNMapboxMapsImpl = 'mapbox'
-    $RNMapboxMapsUseV11 = true # use 11 version
     $RNMapboxMapsVersion = '= 11.0.0'
   else
     fail "Invalid CI_MAP_IMPL value: #{ENV['CI_MAP_IMPL']}"
