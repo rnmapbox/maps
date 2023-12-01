@@ -113,11 +113,11 @@
         "metadata": {
           "title": "Custom Native UserLocation",
           "tags": [
-            "NativeUserLocation",
-            "NativeUserLocation#topImage",
-            "NativeUserLocation#scale"
+            "LocationPuck",
+            "LocationPuck#topImage",
+            "LocationPuck#scale"
           ],
-          "docs": "\n  Demonstrates use of images to customize NativeUserLocation\n  "
+          "docs": "\n  Demonstrates use of images to customize LocationPuck\n  "
         },
         "fullPath": "example/src/examples/UserLocation/CustomNativeUserLocation.tsx",
         "relPath": "UserLocation/CustomNativeUserLocation.tsx",

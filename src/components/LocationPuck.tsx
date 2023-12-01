@@ -101,13 +101,16 @@ const defaultProps = {
   visible: true,
 } as const;
 
-const NativeUserLocation = memo((props: Props) => {
+/**
+ * Renders a puck on the map that shows the device's current location.
+ */
+const LocationPuck = memo((props: Props) => {
   const { iosShowsUserHeadingIndicator, pulsing, ...rest } = props;
   const nativePulsing = pulsing ? _pulsingToNative(pulsing) : undefined;
   let baseProps: NativeProps = { ...defaultProps, pulsing: nativePulsing };
   if (iosShowsUserHeadingIndicator) {
     console.warn(
-      'NativeUserLocation: iosShowsUserHeadingIndicator is deprecated, use puckBearingEnabled={true} puckBearing="heading" instead',
+      'LocationPuck: iosShowsUserHeadingIndicator is deprecated, use puckBearingEnabled={true} puckBearing="heading" instead',
     );
 
     baseProps = {
@@ -137,4 +140,4 @@ function _pulsingToNative(
   };
 }
 
-export default NativeUserLocation;
+export default LocationPuck;

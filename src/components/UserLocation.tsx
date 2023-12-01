@@ -7,7 +7,7 @@ import { CircleLayerStyle } from '../Mapbox';
 import Annotation from './Annotation';
 import CircleLayer from './CircleLayer';
 import HeadingIndicator from './HeadingIndicator';
-import NativeUserLocation from './NativeUserLocation';
+import NativeUserLocation from './LocationPuck';
 
 const mapboxBlue = 'rgba(51, 181, 229, 100)';
 

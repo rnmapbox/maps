@@ -19,7 +19,7 @@ export {
   default as UserLocation,
   UserLocationRenderMode,
 } from './components/UserLocation';
-export { default as NativeUserLocation } from './components/NativeUserLocation';
+export { default as LocationPuck } from './components/LocationPuck';
 export { default as VectorSource } from './components/VectorSource';
 export { ShapeSource } from './components/ShapeSource';
 export { default as RasterSource } from './components/RasterSource';
@@ -87,6 +87,7 @@ import { deprecatedClass } from './utils/deprecation';
 import { AnimatedPoint } from './classes';
 import { UserTrackingMode } from './components/Camera';
 import MovePointShapeAnimator from './shape_animators/MovePointShapeAnimator';
+import LocationPuck from './components/LocationPuck';
 
 /** @deprecated This will be removed in a future release. Use `AnimatedPoint` instead. */
 
@@ -94,6 +95,9 @@ export const AnimatedMapPoint = deprecatedClass(
   AnimatedPoint,
   'AnimatedMapPoint is deprecated please use AnimatedPoint',
 );
+
+/** @deprecated NativeUserLocation will be removed in future release. Use `LocationPuck` instead. */
+export const NativeUserLocation = LocationPuck;
 
 // types:
 export enum StyleURL {
