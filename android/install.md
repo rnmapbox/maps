@@ -83,8 +83,7 @@ buildscript {
 ```groovy
 buildscript {
     ext {
-        RNMapboxMapsUseV11 = true
-        RNMapboxMapsVersion = '10.6.0'
+        RNMapboxMapsVersion = '11.0.0'
     }
 }
 ```

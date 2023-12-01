@@ -1,12 +1,11 @@
 import React from 'react';
-import { Button } from 'react-native';
 import {
-  Images,
   MapView,
   ShapeSource,
-  SymbolLayer,
   CircleLayer,
   Camera,
+  Models,
+  ModelLayer,
 } from '@rnmapbox/maps';
 
 const styles = {
@@ -57,7 +56,16 @@ const features = {
   ],
 };
 
-class BugReportExample extends React.Component {
+const modelLayerStyle = {
+  modelId: 'car',
+  modelScale: [50, 50, 50],
+};
+
+const models = {
+  car: require('../../assets/sportcar.glb'),
+};
+
+class SimpleModelLayer extends React.Component {
   state = {
     radius: 20,
   };
@@ -70,29 +78,16 @@ class BugReportExample extends React.Component {
 
     return (
       <>
-        <Button
-          title="Grow"
-          onPress={() => this.setState({ radius: this.state.radius + 20 })}
-        />
-        <MapView
-          style={styles.mapView}
-          styleURL="mapbox://styles/mapbox/standard-beta"
-        >
+        <MapView style={styles.mapView}>
           <Camera centerCoordinate={[-74.00597, 40.71427]} zoomLevel={14} />
-          <Images images={{ example: require('../assets/example.png') }} />
+          <Models models={models} />
           <ShapeSource id={'shape-source-id-0'} shape={features}>
             <CircleLayer
               id={'circle-layer'}
               style={circleLayerStyle}
               slot={'bottom'}
             />
-            <SymbolLayer
-              id="symbol-id"
-              style={{
-                iconImage: ['get', 'icon'],
-              }}
-              slot={'middle'}
-            />
+            <ModelLayer id="model-layer-id" style={modelLayerStyle} />
           </ShapeSource>
         </MapView>
       </>
@@ -100,4 +95,16 @@ class BugReportExample extends React.Component {
   }
 }
 
-export default BugReportExample;
+export default SimpleModelLayer;
+
+/* end-example-doc */
+
+/** @type ExampleWithMetadata['metadata'] */
+const metadata = {
+  title: 'Simple Model Layer',
+  tags: ['Models', 'ModelLayer'],
+  docs: `
+Deomnstrate the use of ModelLayer to render, and Models to associate 3D models with names.
+`,
+};
+SimpleModelLayer.metadata = metadata;
