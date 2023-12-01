@@ -25,6 +25,10 @@ jest.mock('../src/assets/scale-test-icon4.png', () => null, {
   virtual: true,
 });
 
+jest.mock('../src/assets/sportcar.glb', () => null, {
+  virtual: true,
+});
+
 const allTests = {
   SymbolCircleLayer,
   UserLocation,

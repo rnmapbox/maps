@@ -58,10 +58,14 @@ android {
         sourceSets {
             main {
                 java.srcDirs = ['src/main/java']
-                if (safeExtGet("RNMapboxMapsUseV11", false)) {
+                def majorMapboxVersion = safeExtGet("RNMapboxMapsVersion", defaultMapboxMapsVersion).split("\\.")[0] as Integer
+                if (majorMapboxVersion >= 11) {
                     java.srcDirs += 'src/main/mapbox-v11-compat/v11'
                 } else {
                     java.srcDirs += 'src/main/mapbox-v11-compat/v10'
+                }
+                if (safeExtGet("RNMapboxMapsUseV11", false)) {
+                    logger.warn("RNMapboxMapsUseV11 is deprecated, just set RNMapboxMapsVersion to 11.*")
                 }
             }
         }

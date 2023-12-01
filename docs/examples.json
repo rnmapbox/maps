@@ -478,6 +478,19 @@
       },
       {
         "metadata": {
+          "title": "Simple Model Layer",
+          "tags": [
+            "Models",
+            "ModelLayer"
+          ],
+          "docs": "\nDeomnstrate the use of ModelLayer to render, and Models to associate 3D models with names.\n"
+        },
+        "fullPath": "example/src/examples/V10/SimpleModelLayer.js",
+        "relPath": "V10/SimpleModelLayer.js",
+        "name": "SimpleModelLayer"
+      },
+      {
+        "metadata": {
           "title": "Terrain, Sky, & Atmosphere",
           "tags": [
             "RasterDemSource",
