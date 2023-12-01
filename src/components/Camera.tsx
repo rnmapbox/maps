@@ -154,13 +154,19 @@ export interface CameraProps
     CameraMinMaxConfig {
   /** The configuration that the camera falls back on, if no other values are specified. */
   defaultSettings?: CameraStop;
+
   /** Whether the camera should send any configuration to the native module. Prevents unnecessary tile
    * fetching and improves performance when the map is not visible. Defaults to `true`. */
   allowUpdates?: boolean;
+
   /** Any arbitrary primitive value that, when changed, causes the camera to retry moving to its target
    * configuration. (Not yet implemented.) */
   triggerKey?: string | number;
-  /** Executes when user tracking mode changes. */
+
+  /**
+   * Executes when user tracking mode changes.
+   * @deprecated use Viewport#onStatusChanged instead.
+   */
   onUserTrackingModeChange?: UserTrackingModeChangeCallback;
 }
 

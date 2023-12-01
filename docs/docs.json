@@ -900,7 +900,7 @@
           "funcSignature": "(event:MapboxGLEvent) => void"
         },
         "default": "none",
-        "description": "Executes when user tracking mode changes.\n*signature:*`(event:MapboxGLEvent) => void`"
+        "description": "Executes when user tracking mode changes.\n@deprecated use Viewport#onStatusChanged instead.\n*signature:*`(event:MapboxGLEvent) => void`"
       }
     ],
     "fileNameWithExt": "Camera.tsx",

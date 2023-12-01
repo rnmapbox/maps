@@ -250,6 +250,7 @@ configuration. (Not yet implemented.)
 func
 ```
 Executes when user tracking mode changes.
+@deprecated use Viewport#onStatusChanged instead.
 *signature:*`(event:MapboxGLEvent) =&gt; void`
 
 
