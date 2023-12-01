@@ -14,7 +14,8 @@ describe('Public Interface', () => {
       'Callout',
       'Camera',
       'UserLocation',
-      'NativeUserLocation',
+      'NativeUserLocation', // deprecated
+      'LocationPuck',
       'StyleImport',
       'Viewport',
       'CustomLocationProvider',

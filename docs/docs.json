@@ -3212,6 +3212,86 @@
       }
     ]
   },
+  "LocationPuck": {
+    "description": "Renders a puck on the map that shows the device's current location.",
+    "displayName": "LocationPuck",
+    "methods": [],
+    "props": [
+      {
+        "name": "androidRenderMode",
+        "required": false,
+        "type": "'normal' \\| 'compass' \\| 'gps'",
+        "default": "none",
+        "description": "Android render mode.\n\n - normal: just a circle\n - compass: triangle with heading\n - gps: large arrow\n\n@deprecated use `puckBearing` for source and `bearingImage` for image\n@platform android"
+      },
+      {
+        "name": "puckBearing",
+        "required": false,
+        "type": "'heading' \\| 'course'",
+        "default": "none",
+        "description": "The bearing of the puck.\n\n - heading: Orients the puck to match the direction in which the device is facing.\n - course: Orients the puck to match the direction in which the device is moving."
+      },
+      {
+        "name": "puckBearingEnabled",
+        "required": false,
+        "type": "boolean",
+        "default": "none",
+        "description": "Whether the puck rotates to track the bearing source."
+      },
+      {
+        "name": "iosShowsUserHeadingIndicator",
+        "required": false,
+        "type": "boolean",
+        "default": "none",
+        "description": "iOS only. A Boolean value indicating whether the user location annotation may display a permanent heading indicator.\n\n@platform ios\n@deprecated use `puckBearingEnabled={true} puckBrearing=\"heading\"` instead"
+      },
+      {
+        "name": "topImage",
+        "required": false,
+        "type": "string",
+        "default": "none",
+        "description": "The name of image to use as the top layer for the location indicator. Images component should define this image."
+      },
+      {
+        "name": "bearingImage",
+        "required": false,
+        "type": "string",
+        "default": "none",
+        "description": "The name of image to use as the middle layer for the location indicator. Images component should define this image."
+      },
+      {
+        "name": "shadowImage",
+        "required": false,
+        "type": "string",
+        "default": "none",
+        "description": "The name of image to use as the background for the location indicator. Images component should define this image."
+      },
+      {
+        "name": "scale",
+        "required": false,
+        "type": "T \\| Expression",
+        "default": "none",
+        "description": "The size of the images, as a scale factor applied to the size of the specified image. Supports expressions based on zoom.\n\n@example\n[\"interpolate\",[\"linear\"], [\"zoom\"], 10.0, 1.0, 20.0, 4.0]]\n@example\n2.0"
+      },
+      {
+        "name": "pulsing",
+        "required": false,
+        "type": "\\| {\n    /**\n     * Flag determining whether the pulsing circle animation.\n     */\n    isEnabled?: boolean;\n\n    /**\n     * The color of the pulsing circle.\n     */\n    color?: number \\| ColorValue;\n\n    /**\n     * Circle radius configuration for the pulsing circle animation.\n     *  - accuracy:  Pulsing circle animates with the `horizontalAccuracy` form the latest puck location.\n     *  - number: Pulsing circle should animate with the constant radius.\n     */\n    radius?: 'accuracy' \\| number;\n  }\n\\| 'default'",
+        "default": "none",
+        "description": "The configration parameters for sonar-like pulsing circle animation shown around the 2D puck."
+      },
+      {
+        "name": "visible",
+        "required": false,
+        "type": "boolean",
+        "default": "none",
+        "description": "Whether location icon is visible, defaults to true"
+      }
+    ],
+    "fileNameWithExt": "LocationPuck.tsx",
+    "relPath": "src/components/LocationPuck.tsx",
+    "name": "LocationPuck"
+  },
   "MapView": {
     "description": "MapView backed by Mapbox Native GL",
     "displayName": "MapView",
@@ -4343,86 +4423,6 @@
     "fileNameWithExt": "Models.tsx",
     "relPath": "src/components/Models.tsx",
     "name": "Models"
-  },
-  "NativeUserLocation": {
-    "description": "",
-    "displayName": "NativeUserLocation",
-    "methods": [],
-    "props": [
-      {
-        "name": "androidRenderMode",
-        "required": false,
-        "type": "'normal' \\| 'compass' \\| 'gps'",
-        "default": "none",
-        "description": "Android render mode.\n\n - normal: just a circle\n - compass: triangle with heading\n - gps: large arrow\n\n@deprecated use `puckBearing` for source and `bearingImage` for image\n@platform android"
-      },
-      {
-        "name": "puckBearing",
-        "required": false,
-        "type": "'heading' \\| 'course'",
-        "default": "none",
-        "description": "The bearing of the puck.\n\n - heading: Orients the puck to match the direction in which the device is facing.\n - course: Orients the puck to match the direction in which the device is moving."
-      },
-      {
-        "name": "puckBearingEnabled",
-        "required": false,
-        "type": "boolean",
-        "default": "none",
-        "description": "Whether the puck rotates to track the bearing source."
-      },
-      {
-        "name": "iosShowsUserHeadingIndicator",
-        "required": false,
-        "type": "boolean",
-        "default": "none",
-        "description": "iOS only. A Boolean value indicating whether the user location annotation may display a permanent heading indicator.\n\n@platform ios\n@deprecated use `puckBearingEnabled={true} puckBrearing=\"heading\"` instead"
-      },
-      {
-        "name": "topImage",
-        "required": false,
-        "type": "string",
-        "default": "none",
-        "description": "The name of image to use as the top layer for the location indicator. Images component should define this image."
-      },
-      {
-        "name": "bearingImage",
-        "required": false,
-        "type": "string",
-        "default": "none",
-        "description": "The name of image to use as the middle layer for the location indicator. Images component should define this image."
-      },
-      {
-        "name": "shadowImage",
-        "required": false,
-        "type": "string",
-        "default": "none",
-        "description": "The name of image to use as the background for the location indicator. Images component should define this image."
-      },
-      {
-        "name": "scale",
-        "required": false,
-        "type": "T \\| Expression",
-        "default": "none",
-        "description": "The size of the images, as a scale factor applied to the size of the specified image. Supports expressions based on zoom.\n\n@example\n[\"interpolate\",[\"linear\"], [\"zoom\"], 10.0, 1.0, 20.0, 4.0]]\n@example\n2.0"
-      },
-      {
-        "name": "pulsing",
-        "required": false,
-        "type": "\\| {\n    /**\n     * Flag determining whether the pulsing circle animation.\n     */\n    isEnabled?: boolean;\n\n    /**\n     * The color of the pulsing circle.\n     */\n    color?: number \\| ColorValue;\n\n    /**\n     * Circle radius configuration for the pulsing circle animation.\n     *  - accuracy:  Pulsing circle animates with the `horizontalAccuracy` form the latest puck location.\n     *  - number: Pulsing circle should animate with the constant radius.\n     */\n    radius?: 'accuracy' \\| number;\n  }\n\\| 'default'",
-        "default": "none",
-        "description": "The configration parameters for sonar-like pulsing circle animation shown around the 2D puck."
-      },
-      {
-        "name": "visible",
-        "required": false,
-        "type": "boolean",
-        "default": "none",
-        "description": "Whether location icon is visible, defaults to true"
-      }
-    ],
-    "fileNameWithExt": "NativeUserLocation.tsx",
-    "relPath": "src/components/NativeUserLocation.tsx",
-    "name": "NativeUserLocation"
   },
   "PointAnnotation": {
     "description": "PointAnnotation represents a one-dimensional shape located at a single geographical coordinate.\n\nConsider using ShapeSource and SymbolLayer instead, if you have many points and static images,\nthey'll offer much better performance.\n\nIf you need interactive views please use MarkerView because PointAnnotation will render children onto a bitmap.\nAlso disable any kind of animations like `fadeDuration` of `Image`.\nOtherwise, the bitmap might be rendered at an unknown state of the animation.",
