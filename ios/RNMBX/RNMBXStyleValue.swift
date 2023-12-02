@@ -556,7 +556,28 @@ class RNMBXStyleValue {
   }
   
   func mglStyleValueArrayTextVariableAnchor() -> Value<[TextAnchor]> {
-    return Value.constant([.left])
+    guard let value = value as? Dictionary<String,Any> else {
+      Logger.log(level: .error, message: "Invalid value for array of TextAnchor: \(value)")
+      return .constant([.left])
+    }
+    let valueObj = RNMBXStyleValue.convert(value["stylevalue"] as! [String:Any])
+
+    if let valueObj = valueObj as? [String] {
+      let convertedVal = valueObj.compactMap(TextAnchor.init(rawValue:))
+      return .constant(convertedVal)
+    } else {
+      do {
+        if valueObj is String {
+          throw StyleConversionError.unexpectedType(message: "should be array constant or expression")
+        }
+        let data = try JSONSerialization.data(withJSONObject: valueObj, options: .prettyPrinted)
+        let decodedExpression = try JSONDecoder().decode(Expression.self, from: data)
+        return .expression(decodedExpression)
+      } catch {
+        Logger.log(level: .error, message: "Invalid value for array => value: \(value) error: \(error) setting dummy value")
+        return .constant([.left])
+      }
+    }
   }
   
   #if RNMBX_11
