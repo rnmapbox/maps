@@ -189,23 +189,26 @@ const DrawPolyline = () => {
   );
 };
 
-DrawPolyline.title = 'Draw Polyline';
-DrawPolyline.tags = [
-  'LineLayer',
-  'ShapeSource',
-  'onCameraChanged',
-  'getCoordinateFromView',
-  'Overlay',
-];
-DrawPolyline.docs = `
-# Draw Polyline
-
-This example shows a simple polyline editor. It uses \`onCameraChanged\` to get the center of the map and \`getCoordinateFromView\` 
-to get the coordinates of the crosshair.
-
-The crosshair is an overlay that is positioned using \`onLayout\` and \`getCoordinateFromView\`.
-
-The \`ShapeSource\` is updated with the new coordinates and the \`LineLayer\` is updated with the new coordinates.
-`;
-
 export default DrawPolyline;
+
+/* end-example-doc */
+
+/** @type ExampleWithMetadata['metadata'] */
+const metadata = {
+  title: 'Draw Polyline',
+  tags: [
+    'LineLayer',
+    'ShapeSource',
+    'onCameraChanged',
+    'getCoordinateFromView',
+    'Overlay',
+  ],
+  docs: `This example shows a simple polyline editor. It uses \`onCameraChanged\` to get the center of the map and \`getCoordinateFromView\` 
+  to get the coordinates of the crosshair.
+  
+  The crosshair is an overlay that is positioned using \`onLayout\` and \`getCoordinateFromView\`.
+  
+  The \`ShapeSource\` is updated with the new coordinates and the \`LineLayer\` is updated with the new coordinates.`,
+};
+
+DrawPolyline.metadata = metadata;

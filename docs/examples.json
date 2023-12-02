@@ -703,7 +703,50 @@
     "metadata": {
       "title": "LineLayer"
     },
-    "examples": []
+    "examples": [
+      {
+        "metadata": {
+          "title": "Draw Polyline",
+          "tags": [
+            "LineLayer",
+            "ShapeSource",
+            "onCameraChanged",
+            "getCoordinateFromView",
+            "Overlay"
+          ],
+          "docs": "This example shows a simple polyline editor. It uses `onCameraChanged` to get the center of the map and `getCoordinateFromView` \n  to get the coordinates of the crosshair.\n  \n  The crosshair is an overlay that is positioned using `onLayout` and `getCoordinateFromView`.\n  \n  The `ShapeSource` is updated with the new coordinates and the `LineLayer` is updated with the new coordinates."
+        },
+        "fullPath": "example/src/examples/LineLayer/DrawPolyline.tsx",
+        "relPath": "LineLayer/DrawPolyline.tsx",
+        "name": "DrawPolyline"
+      },
+      {
+        "metadata": {
+          "title": "Gradient Line",
+          "tags": [
+            "LineLayer",
+            "LineLayer#lineGradient"
+          ],
+          "docs": "This example demonstrates how to use interpolate expression in the `lineGradient` property of a `LineLayer` to create a gradient line."
+        },
+        "fullPath": "example/src/examples/LineLayer/GradientLine.js",
+        "relPath": "LineLayer/GradientLine.js",
+        "name": "GradientLine"
+      },
+      {
+        "metadata": {
+          "title": "Third Party Vector Source",
+          "tags": [
+            "VectorSource",
+            "VectorSource#tileUrlTemplates"
+          ],
+          "docs": "This example renders vector tiles using a third party vector tile source.\n\nIn this case, Mapillary provides the vector tiles, which are added to the map using VectorSource."
+        },
+        "fullPath": "example/src/examples/LineLayer/ThirdPartyVectorSource.js",
+        "relPath": "LineLayer/ThirdPartyVectorSource.js",
+        "name": "ThirdPartyVectorSource"
+      }
+    ]
   },
   {
     "groupName": "Camera",
