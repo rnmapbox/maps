@@ -2,7 +2,8 @@
 
 ## Supported mapbox libraries
 
-We're only supporting mapbox 10.0 releases. 11.0 beta has experimental support.
+We're only supporting mapbox 10.16* and 11.*. The default is 10.16*. 
+Next release will be 11.* only so we recommend updatign to 11.*
 
 ### Adding mapbox maven repo
 
@@ -35,31 +36,17 @@ allprojects {
 }
 ```
 
-### Setting Mapbox implementation
-
-Note 10.1 or later only supports mapbox 10 and 11 implementations. So you no longer need to set this variable:
-
-Set `RNMapboxMapsImpl` in `android/build.gradle > buildscript > ext` section
-
-```groovy
-buildscript {
-    ext {
-        RNMapboxMapsImpl = 'mapbox'
-    }
-}
-```
-
 ### Using non default mapbox version
 
 *Warning*: If you set a custom version, make sure you revisit, any time you update @rnmapbox/maps. Setting it to earlier version than what we exepect will likely result in a build error.
 
-Set `RNMapboxMapsLibs` in `android/build.gradle > buildscript > ext` section
+Set `RNMapboxMapsVersion` in `android/build.gradle > buildscript > ext` section
 
 
 ```groovy
 buildscript {
     ext {
-        RNMapboxMapsVersion = '10.6.0'
+        RNMapboxMapsVersion = '11.0.0'
     }
 }
 ```
@@ -87,8 +74,6 @@ buildscript {
     }
 }
 ```
-
-
 
 # Troubleshooting
 

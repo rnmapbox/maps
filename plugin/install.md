@@ -9,10 +9,6 @@ Install the latest release:
 expo install @rnmapbox/maps
 ```
 
-## Installing other versions
-Replace `@rnmapbox/maps` with the following to install other versions:
-- `rnmapbox/maps#main` installs the latest source from git
-
 ## Plugin Configuration
 
 After installing this package, add the [config plugin](https://docs.expo.io/guides/config-plugins/) to the [`plugins`](https://docs.expo.io/versions/latest/config/app/#plugins) array of your `app.{json,config.js,config.ts}`:
@@ -24,7 +20,7 @@ After installing this package, add the [config plugin](https://docs.expo.io/guid
       [
         "@rnmapbox/maps",
         {
-          "RNMapboxMapsImpl": "maplibre"
+          "RNMapboxMapsVersion": "11.0.0"
         }
       ]
     ]
@@ -32,7 +28,7 @@ After installing this package, add the [config plugin](https://docs.expo.io/guid
 }
 ```
 
-For `mapbox` or `mapbox-gl` you'll need to provide `RNMapboxMapsDownloadToken` as well. This secret token requires the `DOWNLOADS:READ` scope. You can refer to the [iOS guide](https://docs.mapbox.com/ios/maps/guides/install/#configure-credentials), which explains how to configure this token under the section `Configure your secret token`.
+You'll need to provide `RNMapboxMapsDownloadToken` as well. This secret token requires the `DOWNLOADS:READ` scope. You can refer to the [iOS guide](https://docs.mapbox.com/ios/maps/guides/install/#configure-credentials), which explains how to configure this token under the section `Configure your secret token`.
 
 ```json
 {
@@ -41,7 +37,6 @@ For `mapbox` or `mapbox-gl` you'll need to provide `RNMapboxMapsDownloadToken` a
       [
         "@rnmapbox/maps",
         {
-          "RNMapboxMapsImpl": "mapbox",
           "RNMapboxMapsDownloadToken": "sk.ey...qg"
         }
       ]
@@ -71,7 +66,7 @@ Next, rebuild your app as described in the ["Adding custom native code"](https:/
 
 ### Advanced Configuration
 
-For `mapbox` or `mapbox-gl` on iOS it's possible to overwrite the native SDK version with `RNMapboxMapsVersion`:
+It's possible to overwrite the native SDK version with `RNMapboxMapsVersion`:
 
 ```json
 {
@@ -80,8 +75,7 @@ For `mapbox` or `mapbox-gl` on iOS it's possible to overwrite the native SDK ver
       [
         "@rnmapbox/maps",
         {
-          "RNMapboxMapsImpl": "mapbox",
-          "RNMapboxMapsVersion": "10.XX.XX",
+          "RNMapboxMapsVersion": "10.16.2",
           "RNMapboxMapsDownloadToken": "sk.ey...qg"
         }
       ]
@@ -90,7 +84,7 @@ For `mapbox` or `mapbox-gl` on iOS it's possible to overwrite the native SDK ver
 }
 ```
 
-If using V11, on iOS, you can use property `RNMapboxMapsUseV11`, see [the ios guide](/ios/install.md):
+To use V11 just set the version to a 11 version, see [the ios guide](/ios/install.md):
 
 ```json
 {
@@ -99,10 +93,8 @@ If using V11, on iOS, you can use property `RNMapboxMapsUseV11`, see [the ios gu
       [
         "@rnmapbox/maps",
         {
-          "RNMapboxMapsImpl": "mapbox",
-          "RNMapboxMapsVersion": "11.XX.XX",
+          "RNMapboxMapsVersion": "11.0.0",
           "RNMapboxMapsDownloadToken": "sk.ey...qg",
-          "RNMapboxMapsUseV11": true
         }
       ]
     ]
