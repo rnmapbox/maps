@@ -8,7 +8,7 @@ import { coordinates } from '@rnmapbox/maps';
 coordinates
 
 ```
-Coorinates sent by locationManager
+Coordinates sent by locationManager
 
 
 

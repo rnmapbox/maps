@@ -4132,7 +4132,7 @@
           "funcSignature": "() => void"
         },
         "default": "none",
-        "description": "This event is tiggered when there is an error during map load. V10 only, replaces onDidFailLoadingMap, might be called multiple times and not exclusive with onDidFinishLoadingMap.\n*signature:*`() => void`"
+        "description": "This event is triggered when there is an error during map load. V10 only, replaces onDidFailLoadingMap, might be called multiple times and not exclusive with onDidFinishLoadingMap.\n*signature:*`() => void`"
       },
       {
         "name": "onWillStartRenderingFrame",
@@ -5435,7 +5435,7 @@
           180
         ],
         "units": "degrees",
-        "description": "Position of the sun center [a azimuthal angle, p polar angle]. The azimuthal angle indicates the position of the sun relative to 0° north, where degrees proceed clockwise. The polar angle indicates the height of the sun, where 0° is directly above, at zenith, and 90° at the horizon. When this property is ommitted, the sun center is directly inherited from the light position.",
+        "description": "Position of the sun center [a azimuthal angle, p polar angle]. The azimuthal angle indicates the position of the sun relative to 0° north, where degrees proceed clockwise. The polar angle indicates the height of the sun, where 0° is directly above, at zenith, and 90° at the horizon. When this property is omitted, the sun center is directly inherited from the light position.",
         "requires": [],
         "disabledBy": [],
         "allowedFunctionTypes": [],
@@ -7811,7 +7811,7 @@
     "name": "coordinates",
     "fileNameWithExt": "locationManager.ts",
     "relPath": "src/modules/location/locationManager.ts",
-    "description": "Coorinates sent by locationManager",
+    "description": "Coordinates sent by locationManager",
     "props": [],
     "styles": [],
     "methods": []
@@ -7872,7 +7872,7 @@
         "params": [
           {
             "name": "options",
-            "description": "Create options for a offline pack that specifices zoom levels, style url, and the region to download.",
+            "description": "Create options for a offline pack that specifies zoom levels, style url, and the region to download.",
             "type": {
               "name": "OfflineCreatePackOptions"
             },
