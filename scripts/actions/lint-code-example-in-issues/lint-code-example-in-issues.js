@@ -11,6 +11,8 @@ const Config = {
   botLogin: 'github-actions[bot]',
   /// the label to add when lint fails
   label: 'error-in-code',
+  /// ignore issues with this label
+  ignoreLabels: ['bug-setup 🪲'],
   /// this is the marker is added to all comments made by this action
   commentMarker: '<!-- lint-action -->',
   /// the comment prefix to add when lint fails
@@ -126,9 +128,29 @@ function log(...args) {
   console.log('=>', ...args);
 }
 
+async function ignoreIssue(issueNumber, ignoreLabels) {
+  const token = core.getInput('repo-token') || process.env.GITHUB_TOKEN;
+  if (!token) {
+    console.error('No token found.');
+  }
+  const octokit = github.getOctokit(token);
+
+  const { data: labels } = await octokit.rest.issues.listLabelsOnIssue({
+    issue_number: issueNumber,
+    ...github.context.repo,
+  });
+  const hasIgnoreLabel = labels.some((label) =>
+    ignoreLabels.includes(label.name),
+  );
+  return hasIgnoreLabel;
+}
+
 async function run() {
   try {
     const issueNumber = getIssueNumber();
+    if (await ignoreIssue(issueNumber, Config.ignoreLabels)) {
+      return;
+    }
     const [code, { isTypescript = false }] = getCode();
     if (!code) {
       await processGithubIssue(
