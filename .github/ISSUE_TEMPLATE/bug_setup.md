@@ -1,7 +1,7 @@
 ---
 name: 🪲 Setup/installation error
 about: This template should be used for reporting bugs and defects with project setup
-labels: 'bug-setup :beetle:'
+labels: 'bug-setup 🪲'
 assignees: ''
 ---
 
