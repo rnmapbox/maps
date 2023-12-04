@@ -50,7 +50,7 @@ class RNMBXMarkerViewManager(reactApplicationContext: ReactApplicationContext) :
     }
 
     @ReactProp(name = "allowOverlapWithPuck")
-    override fun setAllowOverlapWithPuck(markerView: RNMBXMarkerView, allowOverlap: Dynamic) {
+    override fun setAllowOverlapWithPuck(markerView: RNMBXMarkerView, allowOverlapWithPuck: Dynamic) {
         markerView.setAllowOverlapWithPuck(allowOverlapWithPuck.asBoolean())
     }
 
