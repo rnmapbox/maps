@@ -1,7 +1,7 @@
 name: "🪲 Bug Report"
 description: This template should be used for reporting bugs and defects.
 title: "[Bug]: "
-labels: 'bug :beetle:'
+labels: 'bug 🪲'
 body:
 - type: markdown
   attributes:
