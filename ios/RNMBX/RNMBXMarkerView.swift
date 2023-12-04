@@ -242,7 +242,9 @@ public class RNMBXMarkerView: UIView, RNMBXMapComponent {
       offsetY: offset.dy,
       selected: isSelected
     )
+    #if RNMBX_11
     options.allowOverlapWithPuck = allowOverlapWithPuck
+    #endif
     return options
   }
   
