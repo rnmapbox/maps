@@ -116,11 +116,13 @@ class RNMBXMarkerView(context: Context?, private val mManager: RNMBXMarkerViewMa
 
         val options = getOptions()
 
+
         val annotation = mMapView?.viewAnnotationManager?.addViewAnnotation(
             view,
             options
         )
         didAddToMap = true
+
     }
 
     fun update() {
@@ -176,6 +178,7 @@ class RNMBXMarkerView(context: Context?, private val mManager: RNMBXMarkerViewMa
             allowOverlap(mAllowOverlap)
             offsets(offset.dx, offset.dy)
             selected(mIsSelected)
+
         }
         return options
     }
