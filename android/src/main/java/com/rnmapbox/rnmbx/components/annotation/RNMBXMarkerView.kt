@@ -122,13 +122,14 @@ class RNMBXMarkerView(context: Context?, private val mManager: RNMBXMarkerViewMa
 
         val options = getOptions()
 
-
+        val content = view as? RNMBXMarkerViewContent;
+        content?.inAdd = true;
+        didAddToMap = true
         val annotation = mMapView?.viewAnnotationManager?.addViewAnnotation(
             view,
             options
         )
-        didAddToMap = true
-
+        content?.inAdd = false;
     }
 
     fun update() {
