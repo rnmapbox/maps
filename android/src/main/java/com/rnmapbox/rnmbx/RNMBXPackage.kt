@@ -8,6 +8,7 @@ import com.facebook.react.module.model.ReactModuleInfo
 import com.facebook.react.module.model.ReactModuleInfoProvider
 import com.facebook.react.uimanager.ViewManager
 import com.rnmapbox.rnmbx.components.annotation.RNMBXCalloutManager
+import com.rnmapbox.rnmbx.components.annotation.RNMBXMarkerViewContentManager
 import com.rnmapbox.rnmbx.components.annotation.RNMBXMarkerViewManager
 import com.rnmapbox.rnmbx.components.annotation.RNMBXPointAnnotationManager
 import com.rnmapbox.rnmbx.components.annotation.RNMBXPointAnnotationModule
@@ -117,6 +118,7 @@ class RNMBXPackage : TurboReactPackage() {
 
         // annotations
         managers.add(RNMBXMarkerViewManager(reactApplicationContext))
+        managers.add(RNMBXMarkerViewContentManager(reactApplicationContext))
         managers.add(RNMBXPointAnnotationManager(reactApplicationContext, getViewTagResolver(reactApplicationContext, "RNMBXPointAnnotationManager")))
         managers.add(RNMBXCalloutManager())
         managers.add(RNMBXNativeUserLocationManager())
