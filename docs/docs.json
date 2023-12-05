@@ -8203,6 +8203,7 @@
   "offlineManagerLegacy": {
     "name": "offlineManagerLegacy",
     "fileNameWithExt": "offlineManagerLegacy.ts",
+    "relPath": "src/modules/offline/offlineManagerLegacy.ts",
     "description": "OfflineManagerLegacy implements a singleton (shared object) that manages offline packs.\nAll of this class’s instance methods are asynchronous, reflecting the fact that offline resources are stored in a database.\nThe shared object maintains a canonical collection of offline packs.",
     "props": [],
     "styles": [],
