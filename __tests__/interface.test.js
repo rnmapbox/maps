@@ -86,6 +86,7 @@ describe('Public Interface', () => {
 
       // methods
       'setWellKnownTileServer',
+      'clearData',
       'setAccessToken',
       'getAccessToken',
       'setTelemetryEnabled',

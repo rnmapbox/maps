@@ -1,6 +1,7 @@
 package com.rnmapbox.rnmbx.v11compat.mapboxmap
 
 import android.animation.Animator
+import android.content.Context
 import com.mapbox.maps.AsyncOperationResultCallback
 import com.mapbox.maps.CameraOptions
 import com.mapbox.maps.MapboxMap
@@ -34,4 +35,8 @@ fun MapboxMap.easeToV11(
 
 fun MapboxMap.clearData(callback: AsyncOperationResultCallback) {
     return MapboxMap.clearData(callback)
+}
+
+fun MapboxMap.Companion.clearData(context: Context, callback: AsyncOperationResultCallback) {
+    this.clearData(callback)
 }

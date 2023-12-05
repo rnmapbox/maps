@@ -1,4 +1,4 @@
-# MapboxGL
+# Mapbox
 
 ## methods
 ### setAccessToken(accessToken)
@@ -14,13 +14,15 @@ not required when using other tiles
 
 ### setWellKnownTileServer(tileServer)
 
+
+
 #### arguments
 | Name | Type | Required | Description  |
 | ---- | :--: | :------: | :----------: |
 | `tileServer` | `String` | `Yes` | tile server |
 
 #### Description
-No-op on non MapLibre implemntations. Use MapboxGL.TileServers.Mapbox to consume mapbox tiles with maplibre. *Note*: Consuming mapbox with MapLibre has different pricing than with the official SDK. Other values: MapboxGL.TileServers.MapLibre, MapboxGL.TileServers.MapTiler
+Deprecard will be removed on next version
 
 ### getAccessToken()
 
@@ -78,6 +80,13 @@ Either permission was granted or denied.
 | Name | Type | Required | Description  |
 | ---- | :--: | :------: | :----------: |
 | `connected` | `Boolean` | `Yes` | whether or not mapbox is told to be connected or not |
+
+### Description
+If you want to fully block online map - maybe to force offline maps
+
+### clearData
+
+Clears temporary map data from the data path defined in the given resource options. Useful to reduce the disk usage or in case the disk cache contains invalid data.
 
 ### Description
 If you want to fully block online map - maybe to force offline maps

@@ -1,7 +1,14 @@
 package com.rnmapbox.rnmbx.v11compat.mapboxmap;
 
 import android.animation.Animator
+import android.app.Activity
+import android.content.Context
+import android.content.ContextWrapper
+import androidx.activity.result.contract.ActivityResultContracts
+import com.mapbox.bindgen.Expected
+import com.mapbox.bindgen.None
 import com.mapbox.maps.CameraOptions
+import com.mapbox.maps.MapView
 import com.mapbox.maps.MapboxMap
 import com.mapbox.maps.plugin.animation.MapAnimationOptions
 import com.mapbox.maps.plugin.animation.easeTo
@@ -28,4 +35,8 @@ fun MapboxMap.easeToV11(
         animationOptions.apply { animatorListener(callback) }.build(),
 
     )
+}
+
+fun MapboxMap.Companion.clearData(context: Context, callback: (result: Expected<String, None>) -> Unit) {
+    MapView(context).getMapboxMap().clearData(callback)
 }
