@@ -60,6 +60,12 @@ public class RNMBXMarkerView: UIView, RNMBXMapComponent {
     }
   }
   
+  @objc public var allowOverlapWithPuck: Bool = false {
+    didSet {
+      update()
+    }
+  }
+  
   @objc public var isSelected: Bool = false {
     didSet {
       update()
@@ -227,7 +233,7 @@ public class RNMBXMarkerView: UIView, RNMBXMapComponent {
     let size = self.bounds.size
     let offset = calcOffset(size: size)
   
-    let options = ViewAnnotationOptions(
+    var options = ViewAnnotationOptions(
       geometry: geometry,
       width: size.width,
       height: size.height,
@@ -236,6 +242,9 @@ public class RNMBXMarkerView: UIView, RNMBXMapComponent {
       offsetY: offset.dy,
       selected: isSelected
     )
+    #if RNMBX_11
+    options.allowOverlapWithPuck = allowOverlapWithPuck
+    #endif
     return options
   }
   

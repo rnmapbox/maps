@@ -16,5 +16,6 @@ public interface RNMBXMarkerViewManagerInterface<T extends View> {
   void setCoordinate(T view, Dynamic value);
   void setAnchor(T view, Dynamic value);
   void setAllowOverlap(T view, Dynamic value);
+  void setAllowOverlapWithPuck(T view, Dynamic value);
   void setIsSelected(T view, Dynamic value);
 }

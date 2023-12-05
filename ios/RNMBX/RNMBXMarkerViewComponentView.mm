@@ -84,6 +84,10 @@ using namespace facebook::react;
     if (allowOverlap != nil) {
         _view.allowOverlap = allowOverlap;
     }
+    id allowOverlapWithPuck = RNMBXConvertFollyDynamicToId(newProps.allowOverlapWithPuck);
+    if (allowOverlapWithPuck != nil) {
+        _view.allowOverlapWithPuck = allowOverlapWithPuck;
+    }
     id isSelected = RNMBXConvertFollyDynamicToId(newProps.isSelected);
     if (isSelected != nil) {
         _view.isSelected = isSelected;

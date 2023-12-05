@@ -34,6 +34,12 @@ type Props = ViewProps & {
    */
   allowOverlap: boolean;
 
+  /**
+   * Whether or not nearby markers on the map should be hidden if close to a
+   * UserLocation puck. Defaults to false.
+   */
+  allowOverlapWithPuck: boolean;
+
   isSelected: boolean;
 
   /**
@@ -59,6 +65,7 @@ class MarkerView extends React.PureComponent<Props> {
   static defaultProps: Partial<Props> = {
     anchor: { x: 0.5, y: 0.5 },
     allowOverlap: false,
+    allowOverlapWithPuck: false,
     isSelected: false,
   };
 
@@ -112,6 +119,7 @@ class MarkerView extends React.PureComponent<Props> {
         coordinate={this._getCoordinate(this.props.coordinate)}
         anchor={anchor}
         allowOverlap={this.props.allowOverlap}
+        allowOverlapWithPuck={this.props.allowOverlapWithPuck}
         isSelected={this.props.isSelected}
         onTouchEnd={(e) => {
           e.stopPropagation();

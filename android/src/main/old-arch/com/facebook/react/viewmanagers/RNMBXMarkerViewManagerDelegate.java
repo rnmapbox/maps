@@ -31,6 +31,9 @@ public class RNMBXMarkerViewManagerDelegate<T extends View, U extends BaseViewMa
       case "allowOverlap":
         mViewManager.setAllowOverlap(view, new DynamicFromObject(value));
         break;
+      case "allowOverlapWithPuck":
+        mViewManager.setAllowOverlapWithPuck(view, new DynamicFromObject(value));
+        break;
       case "isSelected":
         mViewManager.setIsSelected(view, new DynamicFromObject(value));
         break;

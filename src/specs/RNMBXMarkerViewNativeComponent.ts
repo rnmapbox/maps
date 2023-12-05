@@ -13,6 +13,7 @@ export interface NativeProps extends ViewProps {
   coordinate?: UnsafeMixed<string>;
   anchor: UnsafeMixed<Point>;
   allowOverlap: UnsafeMixed<boolean>;
+  allowOverlapWithPuck: UnsafeMixed<boolean>;
   isSelected: UnsafeMixed<boolean>;
 }
 
