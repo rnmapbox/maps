@@ -1,5 +1,5 @@
-def defaultMapboxMapsImpl = "mabpox"
-def defaultMapboxMapsVersion = "10.16.1"
+def defaultMapboxMapsImpl = "mapbox"
+def defaultMapboxMapsVersion = "10.16.2"
 
 def safeExtGet(prop, fallback) {
     rootProject.ext.has(prop) ? rootProject.ext.get(prop) : fallback
@@ -43,6 +43,7 @@ if (safeExtGet("RNMapboxMapsImpl", defaultMapboxMapsImpl) == "mapbox") {
 }
 
 android {
+    namespace = "com.rnmapbox.rnmbx"
     if (safeExtGet("RNMapboxMapsImpl", defaultMapboxMapsImpl) == "maplibre") {
         msg = '@rnmapbox/maps: Maplibre implementation has been removed, set RNMapboxMapsImpl to mapbox- see https://github.com/rnmapbox/maps/wiki/Deprecated-RNMapboxImpl-Maplibre#android'
         logger.error(msg)
@@ -57,10 +58,14 @@ android {
         sourceSets {
             main {
                 java.srcDirs = ['src/main/java']
-                if (safeExtGet("RNMapboxMapsUseV11", false)) {
+                def majorMapboxVersion = safeExtGet("RNMapboxMapsVersion", defaultMapboxMapsVersion).split("\\.")[0] as Integer
+                if (majorMapboxVersion >= 11) {
                     java.srcDirs += 'src/main/mapbox-v11-compat/v11'
                 } else {
                     java.srcDirs += 'src/main/mapbox-v11-compat/v10'
+                }
+                if (safeExtGet("RNMapboxMapsUseV11", false)) {
+                    logger.warn("RNMapboxMapsUseV11 is deprecated, just set RNMapboxMapsVersion to 11.*")
                 }
             }
         }

@@ -8,13 +8,12 @@ import {
   NativeMethods,
   HostComponent,
   LayoutChangeEvent,
-  findNodeHandle,
 } from 'react-native';
 import { debounce } from 'debounce';
-import { GeoJsonProperties, Geometry } from 'geojson';
 
-import NativeMapView from '../specs/RNMBXMapViewNativeComponent';
-import NativeAndroidTextureMapView from '../specs/RNMBXAndroidTextureMapViewNativeComponent';
+import NativeMapView, {
+  type NativeMapViewActual,
+} from '../specs/RNMBXMapViewNativeComponent';
 import NativeMapViewModule from '../specs/NativeMapViewModule';
 import {
   isFunction,
@@ -44,9 +43,6 @@ if (!RNMBXModule.MapboxV10) {
   );
 }
 
-// TODO: check if this can be removed
-export const NATIVE_MODULE_NAME = 'MBXMapView';
-
 const styles = StyleSheet.create({
   matchParent: { flex: 1 },
 });
@@ -67,6 +63,67 @@ export type RegionPayload = {
   isUserInteraction: boolean;
   visibleBounds: GeoJSON.Position[];
   pitch: number;
+};
+
+export type GestureSettings = {
+  /**
+   * Whether double tapping the map with one touch results in a zoom-in animation.
+   */
+  doubleTapToZoomInEnabled?: boolean;
+  /**
+   * Whether single tapping the map with two touches results in a zoom-out animation.
+   */
+  doubleTouchToZoomOutEnabled?: boolean;
+  /**
+   * Whether pan/scroll is enabled for the pinch gesture.
+   */
+  pinchPanEnabled?: boolean;
+  /**
+   * Whether zoom is enabled for the pinch gesture.
+   */
+  pinchZoomEnabled?: boolean;
+  /**
+   * Whether a deceleration animation following a pinch-zoom gesture is enabled. True by default.
+   * (Android only)
+   */
+  pinchZoomDecelerationEnabled?: boolean;
+  /**
+   * Whether the pitch gesture is enabled.
+   */
+  pitchEnabled?: boolean;
+  /**
+   * Whether the quick zoom gesture is enabled.
+   */
+  quickZoomEnabled?: boolean;
+  /**
+   * Whether the rotate gesture is enabled.
+   */
+  rotateEnabled?: boolean;
+  /**
+   * Whether a deceleration animation following a rotate gesture is enabled. True by default.
+   * (Android only)
+   */
+  rotateDecelerationEnabled?: boolean;
+  /**
+   * Whether the single-touch pan/scroll gesture is enabled.
+   */
+  panEnabled?: boolean;
+  /**
+   * A constant factor that determines how quickly pan deceleration animations happen. Multiplied with the velocity vector once per millisecond during deceleration animations.
+   *
+   * On iOS Defaults to UIScrollView.DecelerationRate.normal.rawValue
+   * On android set to 0 to disable deceleration, and non zero to enabled it.
+   */
+  panDecelerationFactor?: number;
+  /**
+   * Whether rotation is enabled for the pinch zoom gesture.
+   */
+  simultaneousRotateAndPinchZoomEnabled?: boolean;
+  /**
+   * The amount by which the zoom level increases or decreases during a double-tap-to-zoom-in or double-touch-to-zoom-out gesture. 1.0 by default. Must be positive.
+   * (Android only)
+   */
+  zoomAnimationAmount?: number;
 };
 
 /**
@@ -245,6 +302,11 @@ type Props = ViewProps & {
   localizeLabels?: LocalizeLabels;
 
   /**
+   * Gesture configuration allows to control the user touch interaction.
+   */
+  gestureSettings?: GestureSettings;
+
+  /**
    * Map press listener, gets called when a user presses the map
    */
   onPress?: (feature: GeoJSON.Feature) => void;
@@ -397,10 +459,9 @@ type Debounced<F> = F & { clear(): void; flush(): void };
  */
 class MapView extends NativeBridgeComponent(
   React.PureComponent<Props>,
-  NATIVE_MODULE_NAME,
+  NativeMapViewModule,
 ) {
   static defaultProps: Props = {
-    projection: 'mercator',
     scrollEnabled: true,
     pitchEnabled: true,
     rotateEnabled: true,
@@ -571,7 +632,7 @@ class MapView extends NativeBridgeComponent(
         );
       }
 
-      this._runNativeCommand('setHandledMapChangedEvents', this._nativeRef, [
+      this._runNativeMethod('setHandledMapChangedEvents', this._nativeRef, [
         events,
       ]);
     }
@@ -741,7 +802,7 @@ class MapView extends NativeBridgeComponent(
     methodName: string,
     args: NativeArg[] = [],
   ): Promise<ReturnType> {
-    return this._runNativeCommand<typeof RNMBXMapView, ReturnType>(
+    return super._runNativeMethod<typeof RNMBXMapView, ReturnType>(
       methodName,
       // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       // @ts-ignore TODO: fix types
@@ -845,45 +906,7 @@ class MapView extends NativeBridgeComponent(
     ]);
   }
 
-  /**
-   * Show the attribution and telemetry action sheet.
-   * If you implement a custom attribution button, you should add this action to the button.
-   */
-  showAttribution() {
-    return this._runNative<void>('showAttribution');
-  }
-
-  _runNativeCommand<RefType, ReturnType = NativeArg>(
-    methodName: string,
-    nativeRef: RefType | undefined,
-    args: NativeArg[],
-  ): Promise<ReturnType> {
-    // when this method is called after component mounts, the ref is not yet set
-    // schedule it to be called after a timeout
-    if (!this._nativeRef) {
-      return new Promise<ReturnType>((resolve) => {
-        this._preRefMapMethodQueue.push({
-          method: { name: methodName, args },
-          resolver: resolve as (args: NativeArg) => void,
-        });
-      });
-    }
-
-    const handle = findNodeHandle(nativeRef as any);
-
-    // @ts-expect-error TS says that string cannot be used to index NativeMapViewModule.
-    // It can, it's just not pretty.
-    return NativeMapViewModule[methodName]?.(
-      handle,
-      ...(args ?? []),
-    ) as Promise<ReturnType>;
-  }
-
-  _decodePayload<G extends Geometry | null = Geometry, P = GeoJsonProperties>(
-    payload: GeoJSON.Feature<G, P> | string,
-  ): GeoJSON.Feature<G, P> {
-    // we check whether the payload is a string, since the strict type safety is enforced only on iOS on the new arch
-    // on Android, on both archs, the payload is an object
+  _decodePayload<T>(payload: T | string): T {
     if (typeof payload === 'string') {
       return JSON.parse(payload);
     } else {
@@ -891,15 +914,15 @@ class MapView extends NativeBridgeComponent(
     }
   }
 
-  _onPress(e: NativeSyntheticEvent<{ payload: GeoJSON.Feature }>) {
+  _onPress(e: NativeSyntheticEvent<{ payload: GeoJSON.Feature | string }>) {
     if (isFunction(this.props.onPress)) {
       this.props.onPress(this._decodePayload(e.nativeEvent.payload));
     }
   }
 
-  _onLongPress(e: NativeSyntheticEvent<{ payload: GeoJSON.Feature }>) {
+  _onLongPress(e: NativeSyntheticEvent<{ payload: GeoJSON.Feature | string }>) {
     if (isFunction(this.props.onLongPress)) {
-      this.props.onLongPress(e.nativeEvent.payload);
+      this.props.onLongPress(this._decodePayload(e.nativeEvent.payload));
     }
   }
 
@@ -926,17 +949,19 @@ class MapView extends NativeBridgeComponent(
     this.setState({ region: payload });
   }
 
-  _onCameraChanged(e: NativeSyntheticEvent<{ payload: MapState }>) {
-    this.props.onCameraChanged?.(e.nativeEvent.payload);
+  _onCameraChanged(e: NativeSyntheticEvent<{ payload: MapState | string }>) {
+    this.props.onCameraChanged?.(this._decodePayload(e.nativeEvent.payload));
   }
 
   _onChange(
     e: NativeSyntheticEvent<{
       type: string;
-      payload: GeoJSON.Feature<
-        GeoJSON.Point,
-        RegionPayload & { isAnimatingFromUserInteraction: boolean }
-      >;
+      payload:
+        | GeoJSON.Feature<
+            GeoJSON.Point,
+            RegionPayload & { isAnimatingFromUserInteraction: boolean }
+          >
+        | string;
     }>,
   ) {
     const { regionWillChangeDebounceTime, regionDidChangeDebounceTime } =
@@ -1056,9 +1081,11 @@ class MapView extends NativeBridgeComponent(
     return this.props.contentInset;
   }
 
-  _setNativeRef(nativeRef: RNMBXMapViewRefType) {
-    this._nativeRef = nativeRef;
-    super._runPendingNativeCommands(nativeRef);
+  _setNativeRef(nativeRef: RNMBXMapViewRefType | null) {
+    if (nativeRef != null) {
+      this._nativeRef = nativeRef;
+      super._runPendingNativeMethods(nativeRef);
+    }
   }
 
   setNativeProps(props: NativeProps) {
@@ -1107,25 +1134,17 @@ class MapView extends NativeBridgeComponent(
     this._setLocalizeLabels(props);
 
     const callbacks = {
-      ref: (nativeRef: RNMBXMapViewRefType) => this._setNativeRef(nativeRef),
+      ref: (nativeRef: RNMBXMapViewRefType | null) =>
+        this._setNativeRef(nativeRef),
       onPress: this._onPress,
       onLongPress: this._onLongPress,
       onMapChange: this._onChange,
-      onAndroidCallback: isAndroid() ? this._onAndroidCallback : undefined,
       onCameraChanged: this._onCameraChanged,
     };
 
     let mapView = null;
-    if (isAndroid() && !this.props.surfaceView && this.state.isReady) {
+    if (this.state.isReady) {
       mapView = (
-        <RNMBXAndroidTextureMapView {...props} {...callbacks}>
-          {this.props.children}
-        </RNMBXAndroidTextureMapView>
-      );
-    } else if (this.state.isReady) {
-      mapView = (
-        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-        // @ts-ignore TODO: fix types
         <RNMBXMapView {...props} {...callbacks}>
           {this.props.children}
         </RNMBXMapView>
@@ -1148,19 +1167,19 @@ type NativeProps = Omit<
   Props,
   'onPress' | 'onLongPress' | 'onCameraChanged'
 > & {
-  onPress(event: NativeSyntheticEvent<{ payload: GeoJSON.Feature }>): void;
-  onLongPress(event: NativeSyntheticEvent<{ payload: GeoJSON.Feature }>): void;
-  onCameraChanged(event: NativeSyntheticEvent<{ payload: MapState }>): void;
+  onPress?: (
+    event: NativeSyntheticEvent<{ type: string; payload: string }>,
+  ) => void;
+  onLongPress?: (
+    event: NativeSyntheticEvent<{ type: string; payload: string }>,
+  ) => void;
+  onCameraChanged?: (
+    event: NativeSyntheticEvent<{ type: string; payload: string }>,
+  ) => void;
 };
 
 type RNMBXMapViewRefType = Component<NativeProps> & Readonly<NativeMethods>;
-// const RNMBXMapView = requireNativeComponent<NativeProps>(NATIVE_MODULE_NAME);
-// TODO: figure out how to pick the correct implementation
-const RNMBXMapView = NativeMapView;
 
-let RNMBXAndroidTextureMapView: any;
-if (isAndroid()) {
-  RNMBXAndroidTextureMapView = NativeAndroidTextureMapView;
-}
+const RNMBXMapView = NativeMapView as NativeMapViewActual;
 
 export default MapView;

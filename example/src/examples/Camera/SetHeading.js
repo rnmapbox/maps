@@ -1,15 +1,12 @@
 import React from 'react';
-import MapboxGL from '@rnmapbox/maps';
+import Mapbox from '@rnmapbox/maps';
+import { ButtonGroup } from '@rneui/base';
 
-import sheet from '../../styles/sheet';
-import BaseExamplePropTypes from '../common/BaseExamplePropTypes';
-import TabBarPage from '../common/TabBarPage';
+const styles = {
+  matchParent: { flex: 1 },
+};
 
 class SetHeading extends React.Component {
-  static propTypes = {
-    ...BaseExamplePropTypes,
-  };
-
   constructor(props) {
     super(props);
 
@@ -30,7 +27,7 @@ class SetHeading extends React.Component {
   }
 
   componentDidMount() {
-    MapboxGL.locationManager.start();
+    Mapbox.locationManager.start();
   }
 
   componentDidUpdate() {
@@ -40,28 +37,29 @@ class SetHeading extends React.Component {
   }
 
   componentWillUnmount() {
-    MapboxGL.locationManager.stop();
+    Mapbox.locationManager.stop();
   }
 
   onHeadingChange(index, heading) {
-    this.setState({ heading });
+    this.setState({ heading, selectedIndex: index });
   }
 
   render() {
     return (
-      <TabBarPage
-        {...this.props}
-        options={this._bearingOptions}
-        onOptionPress={this.onHeadingChange}
-      >
-        <MapboxGL.MapView
+      <>
+        <ButtonGroup
+          buttons={this._bearingOptions.map((i) => i.label)}
+          selectedIndex={this.state.selectedIndex}
+          onPress={(i) => this.onHeadingChange(i, this._bearingOptions[i].data)}
+        />
+        <Mapbox.MapView
           ref={(ref) => (this.map = ref)}
-          style={sheet.matchParent}
+          style={styles.matchParent}
         >
-          <MapboxGL.Camera {...this.state} />
-          <MapboxGL.UserLocation />
-        </MapboxGL.MapView>
-      </TabBarPage>
+          <Mapbox.Camera {...this.state} />
+          <Mapbox.UserLocation />
+        </Mapbox.MapView>
+      </>
     );
   }
 }

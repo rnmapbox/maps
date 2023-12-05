@@ -1,16 +1,17 @@
 import React, { ReactNode, useState } from 'react';
-import MapboxGL, {
+import {
+  MapView,
   CircleLayer,
+  UserLocation,
+  Camera,
   UserLocationRenderMode as UserLocationRenderModeType,
   UserTrackingMode,
 } from '@rnmapbox/maps';
-import { Button, Platform, View } from 'react-native';
+import { Button, Platform, SafeAreaView, View } from 'react-native';
 import { ButtonGroup, Text } from '@rneui/base';
 
-import sheet from '../../styles/sheet';
-import TabBarPage from '../common/TabBarPage';
-import { BaseExampleProps } from '../common/BaseExamplePropTypes';
 import { DEFAULT_CENTER_COORDINATE } from '../../utils';
+import { ExampleWithMetadata } from '../common/ExampleMetadata'; // exclude-from-doc
 
 const SettingsGroup = ({
   children,
@@ -25,6 +26,14 @@ const SettingsGroup = ({
   </View>
 );
 
+const styles = { matchParent: { flex: 1 } };
+
+function humanize(name: string): string {
+  const words = name.match(/[A-Za-z][a-z]*/g) || [];
+
+  return words.map((i) => i.charAt(0).toUpperCase() + i.substring(1)).join(' ');
+}
+
 enum ExampleRenderMode {
   Normal = 'normal',
   Native = 'native',
@@ -38,7 +47,7 @@ const ANDROID_RENDER_MODES: ('normal' | 'compass' | 'gps')[] = [
   'gps',
 ];
 
-const UserLocationRenderMode = (props: BaseExampleProps) => {
+const UserLocationRenderMode = () => {
   const [renderMode, setRenderMode] = useState<ExampleRenderMode>(
     ExampleRenderMode.Normal,
   );
@@ -51,17 +60,7 @@ const UserLocationRenderMode = (props: BaseExampleProps) => {
   >('normal');
 
   return (
-    <TabBarPage
-      {...props}
-      initialIndex={0}
-      options={[
-        { label: 'Normal', data: ExampleRenderMode.Normal },
-        { label: 'Native', data: ExampleRenderMode.Native },
-        { label: 'Custom Children', data: ExampleRenderMode.CustomChildren },
-        { label: 'Hidden', data: ExampleRenderMode.Hidden },
-      ]}
-      onOptionPress={(index, value) => setRenderMode(value)}
-    >
+    <SafeAreaView style={styles.matchParent}>
       <View>
         <Button
           title={
@@ -107,8 +106,9 @@ const UserLocationRenderMode = (props: BaseExampleProps) => {
           </SettingsGroup>
         )}
       </View>
-      <MapboxGL.MapView style={sheet.matchParent} tintColor={'red'}>
-        <MapboxGL.Camera
+
+      <MapView style={styles.matchParent} tintColor={'red'}>
+        <Camera
           defaultSettings={{
             centerCoordinate: DEFAULT_CENTER_COORDINATE,
             zoomLevel: 18,
@@ -122,7 +122,7 @@ const UserLocationRenderMode = (props: BaseExampleProps) => {
             }
           }}
         />
-        <MapboxGL.UserLocation
+        <UserLocation
           visible={renderMode !== ExampleRenderMode.Hidden}
           renderMode={
             renderMode === ExampleRenderMode.Native
@@ -146,10 +146,33 @@ const UserLocationRenderMode = (props: BaseExampleProps) => {
                 />,
               ]
             : undefined}
-        </MapboxGL.UserLocation>
-      </MapboxGL.MapView>
-    </TabBarPage>
+        </UserLocation>
+      </MapView>
+      <ButtonGroup
+        buttons={Object.values(ExampleRenderMode).map(humanize)}
+        selectedIndex={Object.values(ExampleRenderMode).indexOf(renderMode)}
+        onPress={(index) => {
+          setRenderMode(Object.values(ExampleRenderMode)[index]);
+        }}
+      />
+    </SafeAreaView>
   );
 };
 
 export default UserLocationRenderMode;
+
+/* end-example-doc */
+
+const metadata: ExampleWithMetadata['metadata'] = {
+  title: 'User Location Render Mode',
+  tags: [
+    'UserLocation',
+    'UserLocation#renderMode',
+    'UserLocation#visible',
+    'UserLocation#onUserTrackingModeChange',
+  ],
+  docs: `
+Demonstates UserLocation render modes, follow modes
+`,
+};
+UserLocationRenderMode.metadata = metadata;

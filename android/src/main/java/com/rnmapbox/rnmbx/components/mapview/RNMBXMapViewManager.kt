@@ -19,10 +19,13 @@ import com.mapbox.maps.extension.style.layers.properties.generated.ProjectionNam
 import com.mapbox.maps.plugin.gestures.gestures
 import com.mapbox.maps.plugin.logo.logo
 import com.rnmapbox.rnmbx.events.AndroidCallbackEvent
+import com.rnmapbox.rnmbx.events.constants.eventMapOf
 import com.rnmapbox.rnmbx.utils.ConvertUtils
 import com.rnmapbox.rnmbx.utils.ExpressionParser
 import com.rnmapbox.rnmbx.utils.Logger
 import com.rnmapbox.rnmbx.utils.ViewTagResolver
+import com.rnmapbox.rnmbx.utils.extensions.getAndLogIfNotBoolean
+import com.rnmapbox.rnmbx.utils.extensions.getAndLogIfNotDouble
 import com.rnmapbox.rnmbx.utils.extensions.toCoordinate
 import com.rnmapbox.rnmbx.utils.extensions.toRectF
 import com.rnmapbox.rnmbx.utils.extensions.toScreenCoordinate
@@ -47,7 +50,7 @@ interface CommandResponse {
     fun error(message: String)
 }
 
-open class RNMBXMapViewManager(context: ReactApplicationContext, val viewTagResolver: ViewTagResolver<RNMBXMapView>) :
+open class RNMBXMapViewManager(context: ReactApplicationContext, val viewTagResolver: ViewTagResolver) :
     AbstractEventEmitter<RNMBXMapView>(context), RNMBXMapViewManagerInterface<RNMBXMapView> {
     private val mViews: MutableMap<Int, RNMBXMapView>
 
@@ -75,7 +78,9 @@ open class RNMBXMapViewManager(context: ReactApplicationContext, val viewTagReso
 
     override fun onAfterUpdateTransaction(mapView: RNMBXMapView) {
         super.onAfterUpdateTransaction(mapView)
-        if (mapView.getMapboxMap() == null) {
+        val first = !mapView.isInitialized
+        mapView.applyAllChanges()
+        if (first) {
             mViews[mapView.id] = mapView
             mapView.init()
         }
@@ -139,6 +144,65 @@ open class RNMBXMapViewManager(context: ReactApplicationContext, val viewTagReso
         mapView.setReactLocalizeLabels(locale, layerIds)
     }
 
+    @ReactProp(name = "surfaceView")
+    override fun setSurfaceView(mapView: RNMBXMapView, value: Dynamic) {
+        if (mapView.isInitialized) {
+            Logger.d(LOG_TAG, "setSurafaceView cannot be changed")
+        } else {
+            mapView.surfaceView = value.asBoolean()
+        }
+    }
+
+    @ReactProp(name = "gestureSettings")
+    override fun setGestureSettings(mapView: RNMBXMapView, settings: Dynamic) {
+        mapView.withMap {
+           it.gesturesPlugin {
+               val map = settings.asMap()
+               this.updateSettings {
+                   map.getAndLogIfNotBoolean("doubleTapToZoomInEnabled", LOG_TAG)?.let {
+                       this.doubleTapToZoomInEnabled = it
+                   }
+                   map.getAndLogIfNotBoolean("doubleTouchToZoomOutEnabled", LOG_TAG)?.let {
+                       this.doubleTouchToZoomOutEnabled = it
+                   }
+                   map.getAndLogIfNotBoolean("pinchPanEnabled", LOG_TAG)?.let {
+                       this.pinchScrollEnabled = it
+                   }
+                   map.getAndLogIfNotBoolean("pinchZoomEnabled", LOG_TAG)?.let {
+                       this.pinchToZoomEnabled = it
+                   }
+                   map.getAndLogIfNotBoolean("pinchZoomDecelerationEnabled", LOG_TAG)?.let {
+                       this.pinchToZoomDecelerationEnabled = it
+                   }
+                   map.getAndLogIfNotBoolean("pitchEnabled", LOG_TAG)?.let {
+                       this.pitchEnabled = it
+                   }
+                   map.getAndLogIfNotBoolean("quickZoomEnabled", LOG_TAG)?.let {
+                       this.quickZoomEnabled = it
+                   }
+                   map.getAndLogIfNotBoolean("rotateEnabled", LOG_TAG)?.let {
+                       this.rotateEnabled = it
+                   }
+                   map.getAndLogIfNotBoolean("rotateDecelerationEnabled", LOG_TAG)?.let {
+                       this.rotateDecelerationEnabled = it
+                   }
+                   map.getAndLogIfNotBoolean("panEnabled", LOG_TAG)?.let {
+                       this.scrollEnabled = it
+                   }
+                   map.getAndLogIfNotDouble("panDecelerationFactor", LOG_TAG)?.let {
+                       this.scrollDecelerationEnabled = it > 0.0
+                   }
+                   map.getAndLogIfNotBoolean("simultaneousRotateAndPinchToZoomEnabled", LOG_TAG)?.let {
+                       this.simultaneousRotateAndPinchToZoomEnabled = it
+                   }
+                   map.getAndLogIfNotDouble("zoomAnimationAmount", LOG_TAG)?.let {
+                       this.zoomAnimationAmount = it.toFloat()
+                   }
+               }
+           }
+        }
+    }
+
     @ReactProp(name = "styleURL")
     override fun setStyleURL(mapView: RNMBXMapView, styleURL:Dynamic) {
         mapView.setReactStyleURL(styleURL.asString())
@@ -151,28 +215,32 @@ open class RNMBXMapViewManager(context: ReactApplicationContext, val viewTagReso
 
     @ReactProp(name = "zoomEnabled")
     override fun setZoomEnabled(map: RNMBXMapView, zoomEnabled: Dynamic) {
-        val mapView = map.mapView
-        mapView.gestures.pinchToZoomEnabled = zoomEnabled.asBoolean()
-        mapView.gestures.doubleTouchToZoomOutEnabled = zoomEnabled.asBoolean()
-        mapView.gestures.doubleTapToZoomInEnabled = zoomEnabled.asBoolean()
+        map.withMapView {
+            it.gestures.pinchToZoomEnabled = zoomEnabled.asBoolean()
+            it.gestures.doubleTouchToZoomOutEnabled = zoomEnabled.asBoolean()
+            it.gestures.doubleTapToZoomInEnabled = zoomEnabled.asBoolean()
+        }
     }
 
     @ReactProp(name = "scrollEnabled")
     override fun setScrollEnabled(map: RNMBXMapView, scrollEnabled: Dynamic) {
-        val mapView = map.mapView
-        mapView.gestures.scrollEnabled = scrollEnabled.asBoolean()
+        map.withMapView {
+            it.gestures.scrollEnabled = scrollEnabled.asBoolean()
+        }
     }
 
     @ReactProp(name = "pitchEnabled")
     override fun setPitchEnabled(map: RNMBXMapView, pitchEnabled: Dynamic) {
-        val mapView = map.mapView
-        mapView.gestures.pitchEnabled = pitchEnabled.asBoolean()
+        map.withMapView {
+            it.gestures.pitchEnabled = pitchEnabled.asBoolean()
+        }
     }
 
     @ReactProp(name = "rotateEnabled")
     override fun setRotateEnabled(map: RNMBXMapView, rotateEnabled: Dynamic) {
-        val mapView = map.mapView
-        mapView.gestures.rotateEnabled = rotateEnabled.asBoolean()
+        map.withMapView {
+           it.gestures.rotateEnabled = rotateEnabled.asBoolean()
+        }
     }
 
     @ReactProp(name = "attributionEnabled")
@@ -269,14 +337,14 @@ open class RNMBXMapViewManager(context: ReactApplicationContext, val viewTagReso
     //endregion
     //region Custom Events
     override fun customEvents(): Map<String, String>? {
-        return MapBuilder.builder<String, String>()
-            .put(EventKeys.MAP_CLICK, "onPress")
-            .put(EventKeys.MAP_LONG_CLICK, "onLongPress")
-            .put(EventKeys.MAP_ONCHANGE, "onMapChange")
-            .put(EventKeys.MAP_ON_LOCATION_CHANGE, "onLocationChange")
-            .put(EventKeys.MAP_USER_TRACKING_MODE_CHANGE, "onUserTrackingModeChange")
-            .put(EventKeys.MAP_ANDROID_CALLBACK, "onAndroidCallback")
-            .build()
+        return eventMapOf(
+            EventKeys.MAP_CLICK to "onPress",
+            EventKeys.MAP_LONG_CLICK to "onLongPress",
+            EventKeys.MAP_ONCHANGE to "onMapChange",
+            EventKeys.MAP_ON_LOCATION_CHANGE to "onLocationChange",
+            EventKeys.MAP_USER_TRACKING_MODE_CHANGE to "onUserTrackingModeChange",
+            EventKeys.MAP_ANDROID_CALLBACK to "onAndroidCallback"
+        )
     }
 
     override fun getCommandsMap(): Map<String, Int>? {

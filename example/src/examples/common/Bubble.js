@@ -1,8 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { View, StyleSheet, TouchableOpacity } from 'react-native';
+import { View, TouchableOpacity } from 'react-native';
 
-const styles = StyleSheet.create({
+const styles = {
   container: {
     alignItems: 'center',
     backgroundColor: 'white',
@@ -15,7 +15,7 @@ const styles = StyleSheet.create({
     position: 'absolute',
     right: 48,
   },
-});
+};
 
 class Bubble extends React.PureComponent {
   static propTypes = {

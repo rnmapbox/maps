@@ -1,7 +1,7 @@
 @_spi(Experimental) import MapboxMaps
 
 @objc
-class RNMBXSource : RNMBXInteractiveElement {
+public class RNMBXSource : RNMBXInteractiveElement {
   var layers: [RNMBXSourceConsumer] = []
   var components: [RNMBXMapComponent] = []
 
@@ -9,7 +9,7 @@ class RNMBXSource : RNMBXInteractiveElement {
 
   var ownsSource : Bool = false
 
-  @objc var existing: Bool = false
+  @objc public var existing: Bool = false
   
   override func getLayerIDs() -> [String] {
     layers.compactMap {
@@ -31,37 +31,46 @@ class RNMBXSource : RNMBXInteractiveElement {
   
   // MARK: - UIView+React
 
-  @objc override func insertReactSubview(_ subview: UIView!, at atIndex: Int) {
-    if let layer = subview as? RNMBXSourceConsumer {
-      if let map = map {
-        layer.addToMap(map, style: map.mapboxMap.style)
-      }
-      layers.append(layer)
-    } else if let component = subview as? RNMBXMapComponent {
-      if let map = map {
-        component.addToMap(map, style: map.mapboxMap.style)
-      }
-      components.append(component)
-    }
+  @objc public override func insertReactSubview(_ subview: UIView!, at atIndex: Int) {
+    insertReactSubviewInternal(subview, at: atIndex)
     super.insertReactSubview(subview, at: atIndex)
   }
-  
-  @objc override func removeReactSubview(_ subview: UIView!) {
-    if let layer : RNMBXSourceConsumer = subview as? RNMBXSourceConsumer {
-      if let map = map {
-        layer.removeFromMap(map, style: map.mapboxMap.style)
-      }
-      layers.removeAll { $0 as AnyObject === layer }
-    } else if let component = subview as? RNMBXMapComponent {
-      if let map = map {
-        component.removeFromMap(map, reason: .ViewRemoval)
-      }
-      layers.removeAll { $0 as AnyObject === component }
+    
+    @objc public func insertReactSubviewInternal(_ subview: UIView!, at atIndex: Int) {
+        if let layer = subview as? RNMBXSourceConsumer {
+          if let map = map {
+            layer.addToMap(map, style: map.mapboxMap.style)
+          }
+          layers.append(layer)
+        } else if let component = subview as? RNMBXMapComponent {
+          if let map = map {
+            component.addToMap(map, style: map.mapboxMap.style)
+          }
+          components.append(component)
+        }
     }
+  
+  @objc public override func removeReactSubview(_ subview: UIView!) {
+    removeReactSubviewInternal(subview)
     super.removeReactSubview(subview)
   }
+    
+    @objc public func removeReactSubviewInternal(_ subview: UIView!) {
+        if let layer : RNMBXSourceConsumer = subview as? RNMBXSourceConsumer {
+          if let map = map {
+            layer.removeFromMap(map, style: map.mapboxMap.style)
+          }
+          layers.removeAll { $0 as AnyObject === layer }
+        } else if let component = subview as? RNMBXMapComponent {
+          if let map = map {
+            component.removeFromMap(map, reason: .ViewRemoval)
+          }
+          layers.removeAll { $0 as AnyObject === component }
+        }
+    }
+
   
-  @objc override func didUpdateReactSubviews() {
+  @objc public override func didUpdateReactSubviews() {
     // do nothing to prevent inserting layers to UIView hierarchy
   }
   

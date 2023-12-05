@@ -90,7 +90,7 @@ module.exports = {
         project: [
           './tsconfig.json',
           './example/tsconfig.json',
-          './fabricexample/tsconfig.json',
+          './scripts/tsconfig.json',
           './plugin/src/__tests__/tsconfig.eslint.json',
         ],
       },

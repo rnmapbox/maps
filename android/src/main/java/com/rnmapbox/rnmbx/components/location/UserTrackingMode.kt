@@ -25,6 +25,7 @@ object UserTrackingMode {
             FOLLOW -> return "normal"
             FollowWithCourse -> return "course"
             FollowWithHeading -> return "compass"
+            NONE -> return null
         }
         return null
     }

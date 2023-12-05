@@ -1,9 +1,7 @@
 import React from 'react';
 import { Text } from 'react-native';
-import MapboxGL from '@rnmapbox/maps';
+import { MapView, Camera } from '@rnmapbox/maps';
 
-import BaseExamplePropTypes from '../common/BaseExamplePropTypes';
-import Page from '../common/Page';
 import Bubble from '../common/Bubble';
 
 const defaultCamera = {
@@ -16,10 +14,6 @@ const styles = {
 };
 
 class SourceLayerVisibility extends React.Component {
-  static propTypes = {
-    ...BaseExamplePropTypes,
-  };
-
   state = {
     show: true,
   };
@@ -37,22 +31,34 @@ class SourceLayerVisibility extends React.Component {
 
   render() {
     return (
-      <Page {...this.props}>
-        <MapboxGL.MapView
+      <>
+        <MapView
           ref={(c) => (this._map = c)}
           onPress={this.onPress}
           style={styles.mapView}
         >
-          <MapboxGL.Camera defaultSettings={defaultCamera} />
-        </MapboxGL.MapView>
+          <Camera defaultSettings={defaultCamera} />
+        </MapView>
         <Bubble onPress={this.onPress}>
           <Text>{`${
             this.state.show ? 'Hide' : 'Show'
           } 'Roads' source layer`}</Text>
         </Bubble>
-      </Page>
+      </>
     );
   }
 }
 
 export default SourceLayerVisibility;
+
+/* end-example-doc */
+
+/** @type ExampleWithMetadata['metadata'] */
+const metadata = {
+  title: 'Source Layer Visibility',
+  tags: ['MapView#setSoruceVisibility'],
+  docs: `
+Changes visibility of layers using a source in the map
+`,
+};
+SourceLayerVisibility.metadata = metadata;

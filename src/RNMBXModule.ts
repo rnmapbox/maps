@@ -31,6 +31,7 @@ interface RNMBXModule {
   addCustomHeader(headerName: string, headerValue: string): void;
   setAccessToken(accessToken: string | null): Promise<string | null>;
   setWellKnownTileServer(tileServer: string): void;
+  clearData(): Promise<void>;
   getAccessToken(): Promise<string>;
   setTelemetryEnabled(telemetryEnabled: boolean): void;
   setConnected(connected: boolean): void;
@@ -48,6 +49,7 @@ export const {
   addCustomHeader,
   setAccessToken,
   setWellKnownTileServer,
+  clearData,
   getAccessToken,
   setTelemetryEnabled,
   setConnected,

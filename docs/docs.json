@@ -113,6 +113,7 @@
       }
     ],
     "fileNameWithExt": "Annotation.tsx",
+    "relPath": "src/components/Annotation.tsx",
     "name": "Annotation"
   },
   "Atmosphere": {
@@ -129,7 +130,11 @@
       }
     ],
     "fileNameWithExt": "Atmosphere.tsx",
+    "relPath": "src/components/Atmosphere.tsx",
     "name": "Atmosphere",
+    "mbx": {
+      "name": "atmosphere"
+    },
     "styles": [
       {
         "name": "range",
@@ -148,10 +153,17 @@
         "expression": {
           "interpolated": true,
           "parameters": [
-            "zoom"
-          ]
+            "zoom",
+            "measure-light"
+          ],
+          "relaxZoomRestriction": true
         },
-        "transition": true
+        "transition": true,
+        "mbx": {
+          "fullName": "range",
+          "name": "range",
+          "namespace": null
+        }
       },
       {
         "name": "color",
@@ -165,10 +177,17 @@
         "expression": {
           "interpolated": true,
           "parameters": [
-            "zoom"
-          ]
+            "zoom",
+            "measure-light"
+          ],
+          "relaxZoomRestriction": true
         },
-        "transition": true
+        "transition": true,
+        "mbx": {
+          "fullName": "color",
+          "name": "color",
+          "namespace": null
+        }
       },
       {
         "name": "highColor",
@@ -182,10 +201,17 @@
         "expression": {
           "interpolated": true,
           "parameters": [
-            "zoom"
-          ]
+            "zoom",
+            "measure-light"
+          ],
+          "relaxZoomRestriction": true
         },
-        "transition": true
+        "transition": true,
+        "mbx": {
+          "fullName": "high-color",
+          "name": "high-color",
+          "namespace": null
+        }
       },
       {
         "name": "spaceColor",
@@ -211,10 +237,17 @@
         "expression": {
           "interpolated": true,
           "parameters": [
-            "zoom"
-          ]
+            "zoom",
+            "measure-light"
+          ],
+          "relaxZoomRestriction": true
         },
-        "transition": true
+        "transition": true,
+        "mbx": {
+          "fullName": "space-color",
+          "name": "space-color",
+          "namespace": null
+        }
       },
       {
         "name": "horizonBlend",
@@ -242,10 +275,17 @@
         "expression": {
           "interpolated": true,
           "parameters": [
-            "zoom"
-          ]
+            "zoom",
+            "measure-light"
+          ],
+          "relaxZoomRestriction": true
         },
-        "transition": true
+        "transition": true,
+        "mbx": {
+          "fullName": "horizon-blend",
+          "name": "horizon-blend",
+          "namespace": null
+        }
       },
       {
         "name": "starIntensity",
@@ -273,10 +313,17 @@
         "expression": {
           "interpolated": true,
           "parameters": [
-            "zoom"
-          ]
+            "zoom",
+            "measure-light"
+          ],
+          "relaxZoomRestriction": true
         },
-        "transition": true
+        "transition": true,
+        "mbx": {
+          "fullName": "star-intensity",
+          "name": "star-intensity",
+          "namespace": null
+        }
       }
     ]
   },
@@ -364,7 +411,11 @@
       }
     ],
     "fileNameWithExt": "BackgroundLayer.tsx",
+    "relPath": "src/components/BackgroundLayer.tsx",
     "name": "BackgroundLayer",
+    "mbx": {
+      "name": "background"
+    },
     "styles": [
       {
         "name": "visibility",
@@ -383,7 +434,15 @@
         "description": "Whether this layer is displayed.",
         "requires": [],
         "disabledBy": [],
-        "allowedFunctionTypes": []
+        "allowedFunctionTypes": [],
+        "expression": {
+          "interpolated": false
+        },
+        "mbx": {
+          "fullName": "layout-background-visibility",
+          "name": "visibility",
+          "namespace": "layout"
+        }
       },
       {
         "name": "backgroundColor",
@@ -402,7 +461,12 @@
             "zoom"
           ]
         },
-        "transition": true
+        "transition": true,
+        "mbx": {
+          "fullName": "paint-background-background-color",
+          "name": "background-color",
+          "namespace": "paint"
+        }
       },
       {
         "name": "backgroundPattern",
@@ -418,7 +482,12 @@
             "zoom"
           ]
         },
-        "transition": false
+        "transition": false,
+        "mbx": {
+          "fullName": "paint-background-background-pattern",
+          "name": "background-pattern",
+          "namespace": "paint"
+        }
       },
       {
         "name": "backgroundOpacity",
@@ -437,7 +506,12 @@
             "zoom"
           ]
         },
-        "transition": true
+        "transition": true,
+        "mbx": {
+          "fullName": "paint-background-background-opacity",
+          "name": "background-opacity",
+          "namespace": "paint"
+        }
       }
     ]
   },
@@ -490,10 +564,11 @@
       }
     ],
     "fileNameWithExt": "Callout.tsx",
+    "relPath": "src/components/Callout.tsx",
     "name": "Callout"
   },
   "Camera": {
-    "description": "Controls the perspective from which the user sees the map.\n\nTo use imperative methods, pass in a ref object:\n\n```tsx\nconst camera = useRef<Camera>(null);\n\nuseEffect(() => {\n  camera.current?.setCamera({\n    centerCoordinate: [lon, lat],\n  });\n}, []);\n\nreturn (\n  <Camera ref={camera} />\n);\n```",
+    "description": "Controls the perspective from which the user sees the map.\n\nTo use imperative methods, pass in a ref object:\n\n```tsx\nconst camera = useRef&lt;Camera&gt;(null);\n\nuseEffect(() => {\n  camera.current?.setCamera({\n    centerCoordinate: [lon, lat],\n  });\n}, []);\n\nreturn (\n  <Camera ref={camera} />\n);\n```",
     "displayName": "Camera",
     "methods": [
       {
@@ -563,7 +638,7 @@
       {
         "name": "centerCoordinate",
         "required": false,
-        "type": "number[] \\| [number, number]",
+        "type": "Position",
         "default": "none",
         "description": "The location on which the map should center."
       },
@@ -713,14 +788,14 @@
             {
               "name": "ne",
               "required": true,
-              "type": "union",
+              "type": "Position",
               "default": "none",
               "description": "FIX ME NO DESCRIPTION"
             },
             {
               "name": "sw",
               "required": true,
-              "type": "union",
+              "type": "Position",
               "default": "none",
               "description": "FIX ME NO DESCRIPTION"
             }
@@ -744,8 +819,8 @@
             },
             {
               "name": "centerCoordinate",
-              "required": true,
-              "type": "union",
+              "required": false,
+              "type": "Position",
               "default": "none",
               "description": "The location on which the map should center."
             },
@@ -825,10 +900,11 @@
           "funcSignature": "(event:MapboxGLEvent) => void"
         },
         "default": "none",
-        "description": "Executes when user tracking mode changes.\n*signature:*`(event:MapboxGLEvent) => void`"
+        "description": "Executes when user tracking mode changes.\n@deprecated use Viewport#onStatusChanged instead.\n*signature:*`(event:MapboxGLEvent) => void`"
       }
     ],
     "fileNameWithExt": "Camera.tsx",
+    "relPath": "src/components/Camera.tsx",
     "name": "Camera"
   },
   "CircleLayer": {
@@ -854,7 +930,7 @@
         "name": "sourceID",
         "required": false,
         "type": "string",
-        "default": "MapboxGL.StyleSource.DefaultSourceID",
+        "default": "Mapbox.StyleSource.DefaultSourceID",
         "description": "The source from which to obtain the data to style.\nIf the source has not yet been added to the current style, the behavior is undefined.\nInferred from parent source only if the layer is a direct child to it."
       },
       {
@@ -862,7 +938,7 @@
         "required": false,
         "type": "string",
         "default": "none",
-        "description": "Identifier of the layer within the source identified by the sourceID property\nfrom which the receiver obtains the data to style."
+        "description": "Identifier of the layer within the source identified by the sourceID property from which the receiver obtains the data to style."
       },
       {
         "name": "aboveLayerID",
@@ -907,6 +983,13 @@
         "description": "The maximum zoom level at which the layer gets parsed and appears."
       },
       {
+        "name": "slot",
+        "required": false,
+        "type": "'bottom' \\| 'middle' \\| 'top'",
+        "default": "none",
+        "description": "The slot this layer is assigned to. If specified, and a slot with that name exists, it will be placed at that position in the layer order.\n\nv11 only"
+      },
+      {
         "name": "style",
         "required": false,
         "type": "CircleLayerStyleProps",
@@ -915,7 +998,11 @@
       }
     ],
     "fileNameWithExt": "CircleLayer.tsx",
+    "relPath": "src/components/CircleLayer.tsx",
     "name": "CircleLayer",
+    "mbx": {
+      "name": "circle"
+    },
     "styles": [
       {
         "name": "circleSortKey",
@@ -931,6 +1018,11 @@
             "zoom",
             "feature"
           ]
+        },
+        "mbx": {
+          "fullName": "layout-circle-circle-sort-key",
+          "name": "circle-sort-key",
+          "namespace": "layout"
         }
       },
       {
@@ -950,7 +1042,15 @@
         "description": "Whether this layer is displayed.",
         "requires": [],
         "disabledBy": [],
-        "allowedFunctionTypes": []
+        "allowedFunctionTypes": [],
+        "expression": {
+          "interpolated": false
+        },
+        "mbx": {
+          "fullName": "layout-circle-visibility",
+          "name": "visibility",
+          "namespace": "layout"
+        }
       },
       {
         "name": "circleRadius",
@@ -968,10 +1068,16 @@
           "parameters": [
             "zoom",
             "feature",
-            "feature-state"
+            "feature-state",
+            "measure-light"
           ]
         },
-        "transition": true
+        "transition": true,
+        "mbx": {
+          "fullName": "paint-circle-circle-radius",
+          "name": "circle-radius",
+          "namespace": "paint"
+        }
       },
       {
         "name": "circleColor",
@@ -987,10 +1093,16 @@
           "parameters": [
             "zoom",
             "feature",
-            "feature-state"
+            "feature-state",
+            "measure-light"
           ]
         },
-        "transition": true
+        "transition": true,
+        "mbx": {
+          "fullName": "paint-circle-circle-color",
+          "name": "circle-color",
+          "namespace": "paint"
+        }
       },
       {
         "name": "circleBlur",
@@ -1006,10 +1118,16 @@
           "parameters": [
             "zoom",
             "feature",
-            "feature-state"
+            "feature-state",
+            "measure-light"
           ]
         },
-        "transition": true
+        "transition": true,
+        "mbx": {
+          "fullName": "paint-circle-circle-blur",
+          "name": "circle-blur",
+          "namespace": "paint"
+        }
       },
       {
         "name": "circleOpacity",
@@ -1027,10 +1145,16 @@
           "parameters": [
             "zoom",
             "feature",
-            "feature-state"
+            "feature-state",
+            "measure-light"
           ]
         },
-        "transition": true
+        "transition": true,
+        "mbx": {
+          "fullName": "paint-circle-circle-opacity",
+          "name": "circle-opacity",
+          "namespace": "paint"
+        }
       },
       {
         "name": "circleTranslate",
@@ -1051,7 +1175,12 @@
             "zoom"
           ]
         },
-        "transition": true
+        "transition": true,
+        "mbx": {
+          "fullName": "paint-circle-circle-translate",
+          "name": "circle-translate",
+          "namespace": "paint"
+        }
       },
       {
         "name": "circleTranslateAnchor",
@@ -1078,6 +1207,11 @@
           "parameters": [
             "zoom"
           ]
+        },
+        "mbx": {
+          "fullName": "paint-circle-circle-translate-anchor",
+          "name": "circle-translate-anchor",
+          "namespace": "paint"
         }
       },
       {
@@ -1103,6 +1237,11 @@
           "parameters": [
             "zoom"
           ]
+        },
+        "mbx": {
+          "fullName": "paint-circle-circle-pitch-scale",
+          "name": "circle-pitch-scale",
+          "namespace": "paint"
         }
       },
       {
@@ -1128,6 +1267,11 @@
           "parameters": [
             "zoom"
           ]
+        },
+        "mbx": {
+          "fullName": "paint-circle-circle-pitch-alignment",
+          "name": "circle-pitch-alignment",
+          "namespace": "paint"
         }
       },
       {
@@ -1146,10 +1290,16 @@
           "parameters": [
             "zoom",
             "feature",
-            "feature-state"
+            "feature-state",
+            "measure-light"
           ]
         },
-        "transition": true
+        "transition": true,
+        "mbx": {
+          "fullName": "paint-circle-circle-stroke-width",
+          "name": "circle-stroke-width",
+          "namespace": "paint"
+        }
       },
       {
         "name": "circleStrokeColor",
@@ -1165,10 +1315,16 @@
           "parameters": [
             "zoom",
             "feature",
-            "feature-state"
+            "feature-state",
+            "measure-light"
           ]
         },
-        "transition": true
+        "transition": true,
+        "mbx": {
+          "fullName": "paint-circle-circle-stroke-color",
+          "name": "circle-stroke-color",
+          "namespace": "paint"
+        }
       },
       {
         "name": "circleStrokeOpacity",
@@ -1186,12 +1342,42 @@
           "parameters": [
             "zoom",
             "feature",
-            "feature-state"
+            "feature-state",
+            "measure-light"
           ]
         },
-        "transition": true
+        "transition": true,
+        "mbx": {
+          "fullName": "paint-circle-circle-stroke-opacity",
+          "name": "circle-stroke-opacity",
+          "namespace": "paint"
+        }
       }
     ]
+  },
+  "CustomLocationProvider": {
+    "description": "",
+    "displayName": "CustomLocationProvider",
+    "methods": [],
+    "props": [
+      {
+        "name": "coordinate",
+        "required": false,
+        "type": "Position",
+        "default": "none",
+        "description": "longitude and latitude to use for the custom location provider that gets applied to the NativeUserLocation"
+      },
+      {
+        "name": "heading",
+        "required": false,
+        "type": "number",
+        "default": "none",
+        "description": "heading/bearing to use for custom location provider that gets applied to the NativeUserLocation"
+      }
+    ],
+    "fileNameWithExt": "CustomLocationProvider.tsx",
+    "relPath": "src/components/CustomLocationProvider.tsx",
+    "name": "CustomLocationProvider"
   },
   "FillExtrusionLayer": {
     "description": "FillExtrusionLayer is a style layer that renders one or more 3D extruded polygons on the map.",
@@ -1277,7 +1463,11 @@
       }
     ],
     "fileNameWithExt": "FillExtrusionLayer.tsx",
+    "relPath": "src/components/FillExtrusionLayer.tsx",
     "name": "FillExtrusionLayer",
+    "mbx": {
+      "name": "fill-extrusion"
+    },
     "styles": [
       {
         "name": "visibility",
@@ -1296,7 +1486,15 @@
         "description": "Whether this layer is displayed.",
         "requires": [],
         "disabledBy": [],
-        "allowedFunctionTypes": []
+        "allowedFunctionTypes": [],
+        "expression": {
+          "interpolated": false
+        },
+        "mbx": {
+          "fullName": "layout-fill-extrusion-visibility",
+          "name": "visibility",
+          "namespace": "layout"
+        }
       },
       {
         "name": "fillExtrusionOpacity",
@@ -1315,7 +1513,12 @@
             "zoom"
           ]
         },
-        "transition": true
+        "transition": true,
+        "mbx": {
+          "fullName": "paint-fill-extrusion-fill-extrusion-opacity",
+          "name": "fill-extrusion-opacity",
+          "namespace": "paint"
+        }
       },
       {
         "name": "fillExtrusionColor",
@@ -1333,10 +1536,16 @@
           "parameters": [
             "zoom",
             "feature",
-            "feature-state"
+            "feature-state",
+            "measure-light"
           ]
         },
-        "transition": true
+        "transition": true,
+        "mbx": {
+          "fullName": "paint-fill-extrusion-fill-extrusion-color",
+          "name": "fill-extrusion-color",
+          "namespace": "paint"
+        }
       },
       {
         "name": "fillExtrusionTranslate",
@@ -1357,7 +1566,12 @@
             "zoom"
           ]
         },
-        "transition": true
+        "transition": true,
+        "mbx": {
+          "fullName": "paint-fill-extrusion-fill-extrusion-translate",
+          "name": "fill-extrusion-translate",
+          "namespace": "paint"
+        }
       },
       {
         "name": "fillExtrusionTranslateAnchor",
@@ -1384,6 +1598,11 @@
           "parameters": [
             "zoom"
           ]
+        },
+        "mbx": {
+          "fullName": "paint-fill-extrusion-fill-extrusion-translate-anchor",
+          "name": "fill-extrusion-translate-anchor",
+          "namespace": "paint"
         }
       },
       {
@@ -1401,7 +1620,12 @@
             "feature"
           ]
         },
-        "transition": false
+        "transition": false,
+        "mbx": {
+          "fullName": "paint-fill-extrusion-fill-extrusion-pattern",
+          "name": "fill-extrusion-pattern",
+          "namespace": "paint"
+        }
       },
       {
         "name": "fillExtrusionHeight",
@@ -1422,7 +1646,12 @@
             "feature-state"
           ]
         },
-        "transition": true
+        "transition": true,
+        "mbx": {
+          "fullName": "paint-fill-extrusion-fill-extrusion-height",
+          "name": "fill-extrusion-height",
+          "namespace": "paint"
+        }
       },
       {
         "name": "fillExtrusionBase",
@@ -1445,7 +1674,12 @@
             "feature-state"
           ]
         },
-        "transition": true
+        "transition": true,
+        "mbx": {
+          "fullName": "paint-fill-extrusion-fill-extrusion-base",
+          "name": "fill-extrusion-base",
+          "namespace": "paint"
+        }
       },
       {
         "name": "fillExtrusionVerticalGradient",
@@ -1462,7 +1696,36 @@
             "zoom"
           ]
         },
-        "transition": false
+        "transition": false,
+        "mbx": {
+          "fullName": "paint-fill-extrusion-fill-extrusion-vertical-gradient",
+          "name": "fill-extrusion-vertical-gradient",
+          "namespace": "paint"
+        }
+      },
+      {
+        "name": "fillExtrusionRoundedRoof",
+        "type": "boolean",
+        "values": [],
+        "default": true,
+        "description": "Indicates whether top edges should be rounded when fillExtrusionEdgeRadius has a value greater than 0. If false, rounded edges are only applied to the sides. Default is true.",
+        "requires": [
+          "fillExtrusionEdgeRadius"
+        ],
+        "disabledBy": [],
+        "allowedFunctionTypes": [],
+        "expression": {
+          "interpolated": false,
+          "parameters": [
+            "zoom"
+          ]
+        },
+        "transition": false,
+        "mbx": {
+          "fullName": "paint-fill-extrusion-fill-extrusion-rounded-roof",
+          "name": "fill-extrusion-rounded-roof",
+          "namespace": "paint"
+        }
       }
     ]
   },
@@ -1489,7 +1752,7 @@
         "name": "sourceID",
         "required": false,
         "type": "string",
-        "default": "MapboxGL.StyleSource.DefaultSourceID",
+        "default": "Mapbox.StyleSource.DefaultSourceID",
         "description": "The source from which to obtain the data to style.\nIf the source has not yet been added to the current style, the behavior is undefined.\nInferred from parent source only if the layer is a direct child to it."
       },
       {
@@ -1542,6 +1805,13 @@
         "description": "The maximum zoom level at which the layer gets parsed and appears."
       },
       {
+        "name": "slot",
+        "required": false,
+        "type": "'bottom' \\| 'middle' \\| 'top'",
+        "default": "none",
+        "description": "The slot this layer is assigned to. If specified, and a slot with that name exists, it will be placed at that position in the layer order.\n\nv11 only"
+      },
+      {
         "name": "style",
         "required": false,
         "type": "FillLayerStyleProps",
@@ -1550,7 +1820,11 @@
       }
     ],
     "fileNameWithExt": "FillLayer.tsx",
+    "relPath": "src/components/FillLayer.tsx",
     "name": "FillLayer",
+    "mbx": {
+      "name": "fill"
+    },
     "styles": [
       {
         "name": "fillSortKey",
@@ -1566,6 +1840,11 @@
             "zoom",
             "feature"
           ]
+        },
+        "mbx": {
+          "fullName": "layout-fill-fill-sort-key",
+          "name": "fill-sort-key",
+          "namespace": "layout"
         }
       },
       {
@@ -1585,7 +1864,15 @@
         "description": "Whether this layer is displayed.",
         "requires": [],
         "disabledBy": [],
-        "allowedFunctionTypes": []
+        "allowedFunctionTypes": [],
+        "expression": {
+          "interpolated": false
+        },
+        "mbx": {
+          "fullName": "layout-fill-visibility",
+          "name": "visibility",
+          "namespace": "layout"
+        }
       },
       {
         "name": "fillAntialias",
@@ -1601,6 +1888,11 @@
           "parameters": [
             "zoom"
           ]
+        },
+        "mbx": {
+          "fullName": "paint-fill-fill-antialias",
+          "name": "fill-antialias",
+          "namespace": "paint"
         }
       },
       {
@@ -1619,10 +1911,16 @@
           "parameters": [
             "zoom",
             "feature",
-            "feature-state"
+            "feature-state",
+            "measure-light"
           ]
         },
-        "transition": true
+        "transition": true,
+        "mbx": {
+          "fullName": "paint-fill-fill-opacity",
+          "name": "fill-opacity",
+          "namespace": "paint"
+        }
       },
       {
         "name": "fillColor",
@@ -1640,10 +1938,16 @@
           "parameters": [
             "zoom",
             "feature",
-            "feature-state"
+            "feature-state",
+            "measure-light"
           ]
         },
-        "transition": true
+        "transition": true,
+        "mbx": {
+          "fullName": "paint-fill-fill-color",
+          "name": "fill-color",
+          "namespace": "paint"
+        }
       },
       {
         "name": "fillOutlineColor",
@@ -1660,10 +1964,16 @@
           "parameters": [
             "zoom",
             "feature",
-            "feature-state"
+            "feature-state",
+            "measure-light"
           ]
         },
-        "transition": true
+        "transition": true,
+        "mbx": {
+          "fullName": "paint-fill-fill-outline-color",
+          "name": "fill-outline-color",
+          "namespace": "paint"
+        }
       },
       {
         "name": "fillTranslate",
@@ -1684,7 +1994,12 @@
             "zoom"
           ]
         },
-        "transition": true
+        "transition": true,
+        "mbx": {
+          "fullName": "paint-fill-fill-translate",
+          "name": "fill-translate",
+          "namespace": "paint"
+        }
       },
       {
         "name": "fillTranslateAnchor",
@@ -1711,6 +2026,11 @@
           "parameters": [
             "zoom"
           ]
+        },
+        "mbx": {
+          "fullName": "paint-fill-fill-translate-anchor",
+          "name": "fill-translate-anchor",
+          "namespace": "paint"
         }
       },
       {
@@ -1728,7 +2048,12 @@
             "feature"
           ]
         },
-        "transition": false
+        "transition": false,
+        "mbx": {
+          "fullName": "paint-fill-fill-pattern",
+          "name": "fill-pattern",
+          "namespace": "paint"
+        }
       }
     ]
   },
@@ -1746,6 +2071,7 @@
       }
     ],
     "fileNameWithExt": "HeadingIndicator.tsx",
+    "relPath": "src/components/HeadingIndicator.tsx",
     "name": "HeadingIndicator"
   },
   "HeatmapLayer": {
@@ -1758,7 +2084,7 @@
         "required": true,
         "type": "string",
         "default": "none",
-        "description": "A string that uniquely identifies the layer in the style to which it is added."
+        "description": "A string that uniquely identifies the source in the style to which it is added."
       },
       {
         "name": "existing",
@@ -1771,7 +2097,7 @@
         "name": "sourceID",
         "required": false,
         "type": "string",
-        "default": "MapboxGL.StyleSource.DefaultSourceID",
+        "default": "Mapbox.StyleSource.DefaultSourceID",
         "description": "The source from which to obtain the data to style.\nIf the source has not yet been added to the current style, the behavior is undefined.\nInferred from parent source only if the layer is a direct child to it."
       },
       {
@@ -1779,7 +2105,7 @@
         "required": false,
         "type": "string",
         "default": "none",
-        "description": "Identifier of the layer within the source identified by the sourceID property\nfrom which the receiver obtains the data to style."
+        "description": "Identifier of the layer within the source identified by the sourceID property from which the receiver obtains the data to style."
       },
       {
         "name": "aboveLayerID",
@@ -1824,6 +2150,13 @@
         "description": "The maximum zoom level at which the layer gets parsed and appears."
       },
       {
+        "name": "slot",
+        "required": false,
+        "type": "'bottom' \\| 'middle' \\| 'top'",
+        "default": "none",
+        "description": "The slot this layer is assigned to. If specified, and a slot with that name exists, it will be placed at that position in the layer order.\n\nv11 only"
+      },
+      {
         "name": "style",
         "required": false,
         "type": "HeatmapLayerStyleProps",
@@ -1832,7 +2165,11 @@
       }
     ],
     "fileNameWithExt": "HeatmapLayer.tsx",
+    "relPath": "src/components/HeatmapLayer.tsx",
     "name": "HeatmapLayer",
+    "mbx": {
+      "name": "heatmap"
+    },
     "styles": [
       {
         "name": "visibility",
@@ -1851,7 +2188,15 @@
         "description": "Whether this layer is displayed.",
         "requires": [],
         "disabledBy": [],
-        "allowedFunctionTypes": []
+        "allowedFunctionTypes": [],
+        "expression": {
+          "interpolated": false
+        },
+        "mbx": {
+          "fullName": "layout-heatmap-visibility",
+          "name": "visibility",
+          "namespace": "layout"
+        }
       },
       {
         "name": "heatmapRadius",
@@ -1869,10 +2214,16 @@
           "parameters": [
             "zoom",
             "feature",
-            "feature-state"
+            "feature-state",
+            "measure-light"
           ]
         },
-        "transition": true
+        "transition": true,
+        "mbx": {
+          "fullName": "paint-heatmap-heatmap-radius",
+          "name": "heatmap-radius",
+          "namespace": "paint"
+        }
       },
       {
         "name": "heatmapWeight",
@@ -1889,10 +2240,16 @@
           "parameters": [
             "zoom",
             "feature",
-            "feature-state"
+            "feature-state",
+            "measure-light"
           ]
         },
-        "transition": false
+        "transition": false,
+        "mbx": {
+          "fullName": "paint-heatmap-heatmap-weight",
+          "name": "heatmap-weight",
+          "namespace": "paint"
+        }
       },
       {
         "name": "heatmapIntensity",
@@ -1910,7 +2267,12 @@
             "zoom"
           ]
         },
-        "transition": true
+        "transition": true,
+        "mbx": {
+          "fullName": "paint-heatmap-heatmap-intensity",
+          "name": "heatmap-intensity",
+          "namespace": "paint"
+        }
       },
       {
         "name": "heatmapColor",
@@ -1937,7 +2299,7 @@
           1,
           "red"
         ],
-        "description": "Defines the color of each pixel based on its density value in a heatmap.  Should be an expression that uses `[\"heatmapDensity\"]` as input.",
+        "description": "Defines the color of each pixel based on its density value in a heatmap. Should be an expression that uses `[\"heatmapDensity\"]` as input.",
         "requires": [],
         "disabledBy": [],
         "allowedFunctionTypes": [],
@@ -1947,7 +2309,12 @@
             "heatmap-density"
           ]
         },
-        "transition": false
+        "transition": false,
+        "mbx": {
+          "fullName": "paint-heatmap-heatmap-color",
+          "name": "heatmap-color",
+          "namespace": "paint"
+        }
       },
       {
         "name": "heatmapOpacity",
@@ -1966,14 +2333,27 @@
             "zoom"
           ]
         },
-        "transition": true
+        "transition": true,
+        "mbx": {
+          "fullName": "paint-heatmap-heatmap-opacity",
+          "name": "heatmap-opacity",
+          "namespace": "paint"
+        }
       }
     ]
   },
   "Image": {
     "description": "",
     "displayName": "Image",
-    "methods": [],
+    "methods": [
+      {
+        "name": "refresh",
+        "docblock": null,
+        "modifiers": [],
+        "params": [],
+        "returns": null
+      }
+    ],
     "props": [
       {
         "name": "name",
@@ -2026,6 +2406,7 @@
       }
     ],
     "fileNameWithExt": "Image.tsx",
+    "relPath": "src/components/Image.tsx",
     "name": "Image"
   },
   "ImageSource": {
@@ -2070,6 +2451,7 @@
       }
     ],
     "fileNameWithExt": "ImageSource.tsx",
+    "relPath": "src/components/ImageSource.tsx",
     "name": "ImageSource"
   },
   "Images": {
@@ -2115,13 +2497,6 @@
         "description": "Gets called when a Layer is trying to render an image whose key is not present in\nany of the `Images` component of the Map.\n*signature:*`(imageKey:string) => void`"
       },
       {
-        "name": "id",
-        "required": false,
-        "type": "string",
-        "default": "none",
-        "description": "FIX ME NO DESCRIPTION"
-      },
-      {
         "name": "children",
         "required": false,
         "type": "ReactElement<T> \\| Array<TypedReactNode<T>> \\| never",
@@ -2130,6 +2505,7 @@
       }
     ],
     "fileNameWithExt": "Images.tsx",
+    "relPath": "src/components/Images.tsx",
     "name": "Images"
   },
   "Light": {
@@ -2145,7 +2521,11 @@
       }
     ],
     "fileNameWithExt": "Light.tsx",
+    "relPath": "src/components/Light.tsx",
     "name": "Light",
+    "mbx": {
+      "name": "light"
+    },
     "styles": [
       {
         "name": "anchor",
@@ -2171,7 +2551,12 @@
             "zoom"
           ]
         },
-        "transition": false
+        "transition": false,
+        "mbx": {
+          "fullName": "anchor",
+          "name": "anchor",
+          "namespace": null
+        }
       },
       {
         "name": "position",
@@ -2192,7 +2577,12 @@
             "zoom"
           ]
         },
-        "transition": true
+        "transition": true,
+        "mbx": {
+          "fullName": "position",
+          "name": "position",
+          "namespace": null
+        }
       },
       {
         "name": "color",
@@ -2209,7 +2599,12 @@
             "zoom"
           ]
         },
-        "transition": true
+        "transition": true,
+        "mbx": {
+          "fullName": "color",
+          "name": "color",
+          "namespace": null
+        }
       },
       {
         "name": "intensity",
@@ -2228,7 +2623,12 @@
             "zoom"
           ]
         },
-        "transition": true
+        "transition": true,
+        "mbx": {
+          "fullName": "intensity",
+          "name": "intensity",
+          "namespace": null
+        }
       }
     ]
   },
@@ -2255,7 +2655,7 @@
         "name": "sourceID",
         "required": false,
         "type": "string",
-        "default": "MapboxGL.StyleSource.DefaultSourceID",
+        "default": "Mapbox.StyleSource.DefaultSourceID",
         "description": "The source from which to obtain the data to style.\nIf the source has not yet been added to the current style, the behavior is undefined.\nInferred from parent source only if the layer is a direct child to it."
       },
       {
@@ -2308,6 +2708,13 @@
         "description": "The maximum zoom level at which the layer gets parsed and appears."
       },
       {
+        "name": "slot",
+        "required": false,
+        "type": "'bottom' \\| 'middle' \\| 'top'",
+        "default": "none",
+        "description": "The slot this layer is assigned to. If specified, and a slot with that name exists, it will be placed at that position in the layer order.\n\nv11 only"
+      },
+      {
         "name": "style",
         "required": false,
         "type": "LineLayerStyleProps",
@@ -2316,7 +2723,11 @@
       }
     ],
     "fileNameWithExt": "LineLayer.tsx",
+    "relPath": "src/components/LineLayer.tsx",
     "name": "LineLayer",
+    "mbx": {
+      "name": "line"
+    },
     "styles": [
       {
         "name": "lineCap",
@@ -2346,6 +2757,11 @@
             "zoom",
             "feature"
           ]
+        },
+        "mbx": {
+          "fullName": "layout-line-line-cap",
+          "name": "line-cap",
+          "namespace": "layout"
         }
       },
       {
@@ -2378,6 +2794,11 @@
             "zoom",
             "feature"
           ]
+        },
+        "mbx": {
+          "fullName": "layout-line-line-join",
+          "name": "line-join",
+          "namespace": "layout"
         }
       },
       {
@@ -2394,6 +2815,11 @@
           "parameters": [
             "zoom"
           ]
+        },
+        "mbx": {
+          "fullName": "layout-line-line-miter-limit",
+          "name": "line-miter-limit",
+          "namespace": "layout"
         }
       },
       {
@@ -2410,6 +2836,11 @@
           "parameters": [
             "zoom"
           ]
+        },
+        "mbx": {
+          "fullName": "layout-line-line-round-limit",
+          "name": "line-round-limit",
+          "namespace": "layout"
         }
       },
       {
@@ -2426,6 +2857,11 @@
             "zoom",
             "feature"
           ]
+        },
+        "mbx": {
+          "fullName": "layout-line-line-sort-key",
+          "name": "line-sort-key",
+          "namespace": "layout"
         }
       },
       {
@@ -2445,7 +2881,15 @@
         "description": "Whether this layer is displayed.",
         "requires": [],
         "disabledBy": [],
-        "allowedFunctionTypes": []
+        "allowedFunctionTypes": [],
+        "expression": {
+          "interpolated": false
+        },
+        "mbx": {
+          "fullName": "layout-line-visibility",
+          "name": "visibility",
+          "namespace": "layout"
+        }
       },
       {
         "name": "lineOpacity",
@@ -2463,10 +2907,16 @@
           "parameters": [
             "zoom",
             "feature",
-            "feature-state"
+            "feature-state",
+            "measure-light"
           ]
         },
-        "transition": true
+        "transition": true,
+        "mbx": {
+          "fullName": "paint-line-line-opacity",
+          "name": "line-opacity",
+          "namespace": "paint"
+        }
       },
       {
         "name": "lineColor",
@@ -2484,10 +2934,16 @@
           "parameters": [
             "zoom",
             "feature",
-            "feature-state"
+            "feature-state",
+            "measure-light"
           ]
         },
-        "transition": true
+        "transition": true,
+        "mbx": {
+          "fullName": "paint-line-line-color",
+          "name": "line-color",
+          "namespace": "paint"
+        }
       },
       {
         "name": "lineTranslate",
@@ -2508,7 +2964,12 @@
             "zoom"
           ]
         },
-        "transition": true
+        "transition": true,
+        "mbx": {
+          "fullName": "paint-line-line-translate",
+          "name": "line-translate",
+          "namespace": "paint"
+        }
       },
       {
         "name": "lineTranslateAnchor",
@@ -2535,6 +2996,11 @@
           "parameters": [
             "zoom"
           ]
+        },
+        "mbx": {
+          "fullName": "paint-line-line-translate-anchor",
+          "name": "line-translate-anchor",
+          "namespace": "paint"
         }
       },
       {
@@ -2555,10 +3021,16 @@
           "parameters": [
             "zoom",
             "feature",
-            "feature-state"
+            "feature-state",
+            "measure-light"
           ]
         },
-        "transition": true
+        "transition": true,
+        "mbx": {
+          "fullName": "paint-line-line-width",
+          "name": "line-width",
+          "namespace": "paint"
+        }
       },
       {
         "name": "lineGapWidth",
@@ -2576,10 +3048,16 @@
           "parameters": [
             "zoom",
             "feature",
-            "feature-state"
+            "feature-state",
+            "measure-light"
           ]
         },
-        "transition": true
+        "transition": true,
+        "mbx": {
+          "fullName": "paint-line-line-gap-width",
+          "name": "line-gap-width",
+          "namespace": "paint"
+        }
       },
       {
         "name": "lineOffset",
@@ -2596,10 +3074,16 @@
           "parameters": [
             "zoom",
             "feature",
-            "feature-state"
+            "feature-state",
+            "measure-light"
           ]
         },
-        "transition": true
+        "transition": true,
+        "mbx": {
+          "fullName": "paint-line-line-offset",
+          "name": "line-offset",
+          "namespace": "paint"
+        }
       },
       {
         "name": "lineBlur",
@@ -2617,10 +3101,16 @@
           "parameters": [
             "zoom",
             "feature",
-            "feature-state"
+            "feature-state",
+            "measure-light"
           ]
         },
-        "transition": true
+        "transition": true,
+        "mbx": {
+          "fullName": "paint-line-line-blur",
+          "name": "line-blur",
+          "namespace": "paint"
+        }
       },
       {
         "name": "lineDasharray",
@@ -2641,7 +3131,12 @@
             "feature"
           ]
         },
-        "transition": false
+        "transition": false,
+        "mbx": {
+          "fullName": "paint-line-line-dasharray",
+          "name": "line-dasharray",
+          "namespace": "paint"
+        }
       },
       {
         "name": "linePattern",
@@ -2658,13 +3153,18 @@
             "feature"
           ]
         },
-        "transition": false
+        "transition": false,
+        "mbx": {
+          "fullName": "paint-line-line-pattern",
+          "name": "line-pattern",
+          "namespace": "paint"
+        }
       },
       {
         "name": "lineGradient",
         "type": "color",
         "values": [],
-        "description": "Defines a gradient with which to color a line feature. Can only be used with GeoJSON sources that specify `\"lineMetrics\": true`.",
+        "description": "A gradient used to color a line feature at various distances along its length. Defined using a `step` or `interpolate` expression which outputs a color for each corresponding `lineProgress` input value. `lineProgress` is a percentage of the line feature's total length as measured on the webmercator projected coordinate plane (a `number` between `0` and `1`). Can only be used with GeoJSON sources that specify `\"lineMetrics\": true`.",
         "requires": [],
         "disabledBy": [
           "linePattern"
@@ -2676,7 +3176,12 @@
             "line-progress"
           ]
         },
-        "transition": false
+        "transition": false,
+        "mbx": {
+          "fullName": "paint-line-line-gradient",
+          "name": "line-gradient",
+          "namespace": "paint"
+        }
       },
       {
         "name": "lineTrimOffset",
@@ -2698,9 +3203,94 @@
         "requires": [],
         "disabledBy": [],
         "allowedFunctionTypes": [],
-        "transition": false
+        "transition": false,
+        "mbx": {
+          "fullName": "paint-line-line-trim-offset",
+          "name": "line-trim-offset",
+          "namespace": "paint"
+        }
       }
     ]
+  },
+  "LocationPuck": {
+    "description": "Renders a puck on the map that shows the device's current location.",
+    "displayName": "LocationPuck",
+    "methods": [],
+    "props": [
+      {
+        "name": "androidRenderMode",
+        "required": false,
+        "type": "'normal' \\| 'compass' \\| 'gps'",
+        "default": "none",
+        "description": "Android render mode.\n\n - normal: just a circle\n - compass: triangle with heading\n - gps: large arrow\n\n@deprecated use `puckBearing` for source and `bearingImage` for image\n@platform android"
+      },
+      {
+        "name": "puckBearing",
+        "required": false,
+        "type": "'heading' \\| 'course'",
+        "default": "none",
+        "description": "The bearing of the puck.\n\n - heading: Orients the puck to match the direction in which the device is facing.\n - course: Orients the puck to match the direction in which the device is moving."
+      },
+      {
+        "name": "puckBearingEnabled",
+        "required": false,
+        "type": "boolean",
+        "default": "none",
+        "description": "Whether the puck rotates to track the bearing source."
+      },
+      {
+        "name": "iosShowsUserHeadingIndicator",
+        "required": false,
+        "type": "boolean",
+        "default": "none",
+        "description": "iOS only. A Boolean value indicating whether the user location annotation may display a permanent heading indicator.\n\n@platform ios\n@deprecated use `puckBearingEnabled={true} puckBrearing=\"heading\"` instead"
+      },
+      {
+        "name": "topImage",
+        "required": false,
+        "type": "string",
+        "default": "none",
+        "description": "The name of image to use as the top layer for the location indicator. Images component should define this image."
+      },
+      {
+        "name": "bearingImage",
+        "required": false,
+        "type": "string",
+        "default": "none",
+        "description": "The name of image to use as the middle layer for the location indicator. Images component should define this image."
+      },
+      {
+        "name": "shadowImage",
+        "required": false,
+        "type": "string",
+        "default": "none",
+        "description": "The name of image to use as the background for the location indicator. Images component should define this image."
+      },
+      {
+        "name": "scale",
+        "required": false,
+        "type": "T \\| Expression",
+        "default": "none",
+        "description": "The size of the images, as a scale factor applied to the size of the specified image. Supports expressions based on zoom.\n\n@example\n[\"interpolate\",[\"linear\"], [\"zoom\"], 10.0, 1.0, 20.0, 4.0]]\n@example\n2.0"
+      },
+      {
+        "name": "pulsing",
+        "required": false,
+        "type": "\\| {\n    /**\n     * Flag determining whether the pulsing circle animation.\n     */\n    isEnabled?: boolean;\n\n    /**\n     * The color of the pulsing circle.\n     */\n    color?: number \\| ColorValue;\n\n    /**\n     * Circle radius configuration for the pulsing circle animation.\n     *  - accuracy:  Pulsing circle animates with the `horizontalAccuracy` form the latest puck location.\n     *  - number: Pulsing circle should animate with the constant radius.\n     */\n    radius?: 'accuracy' \\| number;\n  }\n\\| 'default'",
+        "default": "none",
+        "description": "The configration parameters for sonar-like pulsing circle animation shown around the 2D puck."
+      },
+      {
+        "name": "visible",
+        "required": false,
+        "type": "boolean",
+        "default": "none",
+        "description": "Whether location icon is visible, defaults to true"
+      }
+    ],
+    "fileNameWithExt": "LocationPuck.tsx",
+    "relPath": "src/components/LocationPuck.tsx",
+    "name": "LocationPuck"
   },
   "MapView": {
     "description": "MapView backed by Mapbox Native GL",
@@ -2723,7 +3313,6 @@
           }
         ],
         "returns": {
-          "description": null,
           "type": {
             "name": "Promise",
             "elements": [
@@ -2756,7 +3345,6 @@
           }
         ],
         "returns": {
-          "description": null,
           "type": {
             "name": "Promise",
             "elements": [
@@ -2780,7 +3368,6 @@
         ],
         "params": [],
         "returns": {
-          "description": null,
           "type": {
             "name": "Promise",
             "elements": [
@@ -2838,7 +3425,6 @@
           }
         ],
         "returns": {
-          "description": null,
           "type": {
             "name": "Promise",
             "elements": [
@@ -2896,7 +3482,6 @@
           }
         ],
         "returns": {
-          "description": null,
           "type": {
             "name": "Promise",
             "elements": [
@@ -2954,7 +3539,6 @@
           }
         ],
         "returns": {
-          "description": null,
           "type": {
             "name": "Promise",
             "elements": [
@@ -2996,7 +3580,6 @@
           }
         ],
         "returns": {
-          "description": null,
           "type": {
             "name": "Promise",
             "elements": [
@@ -3018,7 +3601,6 @@
         ],
         "params": [],
         "returns": {
-          "description": null,
           "type": {
             "name": "Promise",
             "elements": [
@@ -3096,7 +3678,6 @@
           }
         ],
         "returns": {
-          "description": null,
           "type": {
             "name": "Promise",
             "elements": [
@@ -3145,15 +3726,6 @@
         "examples": [
           "\nawait this._map.setSourceVisibility(false, 'composite', 'building')\n\n"
         ]
-      },
-      {
-        "name": "showAttribution",
-        "docblock": "Show the attribution and telemetry action sheet.\nIf you implement a custom attribution button, you should add this action to the button.",
-        "modifiers": [],
-        "params": [],
-        "returns": null,
-        "description": "Show the attribution and telemetry action sheet.\nIf you implement a custom attribution button, you should add this action to the button.",
-        "examples": []
       }
     ],
     "props": [
@@ -3168,7 +3740,7 @@
         "name": "projection",
         "required": false,
         "type": "'mercator' \\| 'globe'",
-        "default": "'mercator'",
+        "default": "none",
         "description": "The projection used when rendering the map"
       },
       {
@@ -3349,6 +3921,108 @@
         "type": "\\| {\n    /** locale code like `es` or `current` for the device's current locale */\n    locale: string;\n    /** layer id to localize. If not specified, all layers will be localized */\n    layerIds?: string[];\n  }\n\\| true",
         "default": "none",
         "description": "[`mapbox` (v10) implementation only]\nSet map's label locale, e.g. { \"locale\": \"es\" } will localize labels to Spanish, { \"locale\": \"current\" } will localize labels to system locale."
+      },
+      {
+        "name": "gestureSettings",
+        "required": false,
+        "type": {
+          "name": "shape",
+          "value": [
+            {
+              "name": "doubleTapToZoomInEnabled",
+              "required": false,
+              "type": "boolean",
+              "default": "none",
+              "description": "Whether double tapping the map with one touch results in a zoom-in animation."
+            },
+            {
+              "name": "doubleTouchToZoomOutEnabled",
+              "required": false,
+              "type": "boolean",
+              "default": "none",
+              "description": "Whether single tapping the map with two touches results in a zoom-out animation."
+            },
+            {
+              "name": "pinchPanEnabled",
+              "required": false,
+              "type": "boolean",
+              "default": "none",
+              "description": "Whether pan/scroll is enabled for the pinch gesture."
+            },
+            {
+              "name": "pinchZoomEnabled",
+              "required": false,
+              "type": "boolean",
+              "default": "none",
+              "description": "Whether zoom is enabled for the pinch gesture."
+            },
+            {
+              "name": "pinchZoomDecelerationEnabled",
+              "required": false,
+              "type": "boolean",
+              "default": "none",
+              "description": "Whether a deceleration animation following a pinch-zoom gesture is enabled. True by default.\n(Android only)"
+            },
+            {
+              "name": "pitchEnabled",
+              "required": false,
+              "type": "boolean",
+              "default": "none",
+              "description": "Whether the pitch gesture is enabled."
+            },
+            {
+              "name": "quickZoomEnabled",
+              "required": false,
+              "type": "boolean",
+              "default": "none",
+              "description": "Whether the quick zoom gesture is enabled."
+            },
+            {
+              "name": "rotateEnabled",
+              "required": false,
+              "type": "boolean",
+              "default": "none",
+              "description": "Whether the rotate gesture is enabled."
+            },
+            {
+              "name": "rotateDecelerationEnabled",
+              "required": false,
+              "type": "boolean",
+              "default": "none",
+              "description": "Whether a deceleration animation following a rotate gesture is enabled. True by default.\n(Android only)"
+            },
+            {
+              "name": "panEnabled",
+              "required": false,
+              "type": "boolean",
+              "default": "none",
+              "description": "Whether the single-touch pan/scroll gesture is enabled."
+            },
+            {
+              "name": "panDecelerationFactor",
+              "required": false,
+              "type": "number",
+              "default": "none",
+              "description": "A constant factor that determines how quickly pan deceleration animations happen. Multiplied with the velocity vector once per millisecond during deceleration animations.\n\nOn iOS Defaults to UIScrollView.DecelerationRate.normal.rawValue\nOn android set to 0 to disable deceleration, and non zero to enabled it."
+            },
+            {
+              "name": "simultaneousRotateAndPinchZoomEnabled",
+              "required": false,
+              "type": "boolean",
+              "default": "none",
+              "description": "Whether rotation is enabled for the pinch zoom gesture."
+            },
+            {
+              "name": "zoomAnimationAmount",
+              "required": false,
+              "type": "number",
+              "default": "none",
+              "description": "The amount by which the zoom level increases or decreases during a double-tap-to-zoom-in or double-touch-to-zoom-out gesture. 1.0 by default. Must be positive.\n(Android only)"
+            }
+          ]
+        },
+        "default": "none",
+        "description": "Gesture configuration allows to control the user touch interaction."
       },
       {
         "name": "onPress",
@@ -3556,6 +4230,7 @@
       }
     ],
     "fileNameWithExt": "MapView.tsx",
+    "relPath": "src/components/MapView.tsx",
     "name": "MapView"
   },
   "MarkerView": {
@@ -3618,30 +4293,136 @@
       }
     ],
     "fileNameWithExt": "MarkerView.tsx",
+    "relPath": "src/components/MarkerView.tsx",
     "name": "MarkerView"
   },
-  "NativeUserLocation": {
-    "description": "",
-    "displayName": "NativeUserLocation",
+  "ModelLayer": {
+    "description": "ModelLayer is a style layer that renders one or more stroked polylines on the map.",
+    "displayName": "ModelLayer",
     "methods": [],
     "props": [
       {
-        "name": "androidRenderMode",
-        "required": false,
-        "type": "'normal' \\| 'compass' \\| 'gps'",
+        "name": "id",
+        "required": true,
+        "type": "string",
         "default": "none",
-        "description": "Android render mode.\n\n - normal: just a circle\n - compass: triangle with heading\n - gps: large arrow\n\n@platform android"
+        "description": "A string that uniquely identifies the source in the style to which it is added."
       },
       {
-        "name": "iosShowsUserHeadingIndicator",
+        "name": "existing",
         "required": false,
         "type": "boolean",
         "default": "none",
-        "description": "iOS only. A Boolean value indicating whether the user location annotation may display a permanent heading indicator.\n\n@platform ios"
+        "description": "The id refers to en existing layer in the style. Does not create a new layer."
+      },
+      {
+        "name": "sourceID",
+        "required": false,
+        "type": "string",
+        "default": "Mapbox.StyleSource.DefaultSourceID",
+        "description": "The source from which to obtain the data to style.\nIf the source has not yet been added to the current style, the behavior is undefined.\nInferred from parent source only if the layer is a direct child to it."
+      },
+      {
+        "name": "sourceLayerID",
+        "required": false,
+        "type": "string",
+        "default": "none",
+        "description": "Identifier of the layer within the source identified by the sourceID property from which the receiver obtains the data to style."
+      },
+      {
+        "name": "aboveLayerID",
+        "required": false,
+        "type": "string",
+        "default": "none",
+        "description": "Inserts a layer above aboveLayerID."
+      },
+      {
+        "name": "belowLayerID",
+        "required": false,
+        "type": "string",
+        "default": "none",
+        "description": "Inserts a layer below belowLayerID"
+      },
+      {
+        "name": "layerIndex",
+        "required": false,
+        "type": "number",
+        "default": "none",
+        "description": "Inserts a layer at a specified index"
+      },
+      {
+        "name": "filter",
+        "required": false,
+        "type": "FilterExpression",
+        "default": "none",
+        "description": "Filter only the features in the source layer that satisfy a condition that you define"
+      },
+      {
+        "name": "minZoomLevel",
+        "required": false,
+        "type": "number",
+        "default": "none",
+        "description": "The minimum zoom level at which the layer gets parsed and appears."
+      },
+      {
+        "name": "maxZoomLevel",
+        "required": false,
+        "type": "number",
+        "default": "none",
+        "description": "The maximum zoom level at which the layer gets parsed and appears."
+      },
+      {
+        "name": "slot",
+        "required": false,
+        "type": "'bottom' \\| 'middle' \\| 'top'",
+        "default": "none",
+        "description": "The slot this layer is assigned to. If specified, and a slot with that name exists, it will be placed at that position in the layer order.\n\nv11 only"
+      },
+      {
+        "name": "style",
+        "required": false,
+        "type": "ModelLayerStyleProps",
+        "default": "none",
+        "description": "Customizable style attributes"
       }
     ],
-    "fileNameWithExt": "NativeUserLocation.tsx",
-    "name": "NativeUserLocation"
+    "fileNameWithExt": "ModelLayer.tsx",
+    "relPath": "src/components/ModelLayer.tsx",
+    "name": "ModelLayer",
+    "mbx": {
+      "name": "model"
+    },
+    "styles": []
+  },
+  "Models": {
+    "description": "Name of 3D model assets to be used in the map",
+    "displayName": "Models",
+    "methods": [],
+    "props": [
+      {
+        "name": "models",
+        "required": true,
+        "type": {
+          "name": "shape",
+          "value": [
+            {
+              "name": {
+                "name": "string"
+              },
+              "required": true,
+              "type": "union",
+              "default": "none",
+              "description": "FIX ME NO DESCRIPTION"
+            }
+          ]
+        },
+        "default": "none",
+        "description": "pair odf model name to gltf and gbl file path/url, or asset id."
+      }
+    ],
+    "fileNameWithExt": "Models.tsx",
+    "relPath": "src/components/Models.tsx",
+    "name": "Models"
   },
   "PointAnnotation": {
     "description": "PointAnnotation represents a one-dimensional shape located at a single geographical coordinate.\n\nConsider using ShapeSource and SymbolLayer instead, if you have many points and static images,\nthey'll offer much better performance.\n\nIf you need interactive views please use MarkerView because PointAnnotation will render children onto a bitmap.\nAlso disable any kind of animations like `fadeDuration` of `Image`.\nOtherwise, the bitmap might be rendered at an unknown state of the animation.",
@@ -3791,6 +4572,7 @@
       }
     ],
     "fileNameWithExt": "PointAnnotation.tsx",
+    "relPath": "src/components/PointAnnotation.tsx",
     "name": "PointAnnotation"
   },
   "RasterDemSource": {
@@ -3856,6 +4638,7 @@
       }
     ],
     "fileNameWithExt": "RasterDemSource.tsx",
+    "relPath": "src/components/RasterDemSource.tsx",
     "name": "RasterDemSource"
   },
   "RasterLayer": {
@@ -3868,7 +4651,7 @@
         "required": true,
         "type": "string",
         "default": "none",
-        "description": "A string that uniquely identifies the layer in the style to which it is added."
+        "description": "A string that uniquely identifies the source in the style to which it is added."
       },
       {
         "name": "existing",
@@ -3881,7 +4664,7 @@
         "name": "sourceID",
         "required": false,
         "type": "string",
-        "default": "MapboxGL.StyleSource.DefaultSourceID",
+        "default": "Mapbox.StyleSource.DefaultSourceID",
         "description": "The source from which to obtain the data to style.\nIf the source has not yet been added to the current style, the behavior is undefined.\nInferred from parent source only if the layer is a direct child to it."
       },
       {
@@ -3934,6 +4717,13 @@
         "description": "The maximum zoom level at which the layer gets parsed and appears."
       },
       {
+        "name": "slot",
+        "required": false,
+        "type": "'bottom' \\| 'middle' \\| 'top'",
+        "default": "none",
+        "description": "The slot this layer is assigned to. If specified, and a slot with that name exists, it will be placed at that position in the layer order.\n\nv11 only"
+      },
+      {
         "name": "style",
         "required": true,
         "type": "RasterLayerStyleProps",
@@ -3942,7 +4732,11 @@
       }
     ],
     "fileNameWithExt": "RasterLayer.tsx",
+    "relPath": "src/components/RasterLayer.tsx",
     "name": "RasterLayer",
+    "mbx": {
+      "name": "raster"
+    },
     "styles": [
       {
         "name": "visibility",
@@ -3961,7 +4755,15 @@
         "description": "Whether this layer is displayed.",
         "requires": [],
         "disabledBy": [],
-        "allowedFunctionTypes": []
+        "allowedFunctionTypes": [],
+        "expression": {
+          "interpolated": false
+        },
+        "mbx": {
+          "fullName": "layout-raster-visibility",
+          "name": "visibility",
+          "namespace": "layout"
+        }
       },
       {
         "name": "rasterOpacity",
@@ -3980,7 +4782,12 @@
             "zoom"
           ]
         },
-        "transition": true
+        "transition": true,
+        "mbx": {
+          "fullName": "paint-raster-raster-opacity",
+          "name": "raster-opacity",
+          "namespace": "paint"
+        }
       },
       {
         "name": "rasterHueRotate",
@@ -3998,7 +4805,12 @@
             "zoom"
           ]
         },
-        "transition": true
+        "transition": true,
+        "mbx": {
+          "fullName": "paint-raster-raster-hue-rotate",
+          "name": "raster-hue-rotate",
+          "namespace": "paint"
+        }
       },
       {
         "name": "rasterBrightnessMin",
@@ -4017,7 +4829,12 @@
             "zoom"
           ]
         },
-        "transition": true
+        "transition": true,
+        "mbx": {
+          "fullName": "paint-raster-raster-brightness-min",
+          "name": "raster-brightness-min",
+          "namespace": "paint"
+        }
       },
       {
         "name": "rasterBrightnessMax",
@@ -4036,7 +4853,12 @@
             "zoom"
           ]
         },
-        "transition": true
+        "transition": true,
+        "mbx": {
+          "fullName": "paint-raster-raster-brightness-max",
+          "name": "raster-brightness-max",
+          "namespace": "paint"
+        }
       },
       {
         "name": "rasterSaturation",
@@ -4055,7 +4877,12 @@
             "zoom"
           ]
         },
-        "transition": true
+        "transition": true,
+        "mbx": {
+          "fullName": "paint-raster-raster-saturation",
+          "name": "raster-saturation",
+          "namespace": "paint"
+        }
       },
       {
         "name": "rasterContrast",
@@ -4074,7 +4901,12 @@
             "zoom"
           ]
         },
-        "transition": true
+        "transition": true,
+        "mbx": {
+          "fullName": "paint-raster-raster-contrast",
+          "name": "raster-contrast",
+          "namespace": "paint"
+        }
       },
       {
         "name": "rasterResampling",
@@ -4099,6 +4931,11 @@
           "parameters": [
             "zoom"
           ]
+        },
+        "mbx": {
+          "fullName": "paint-raster-raster-resampling",
+          "name": "raster-resampling",
+          "namespace": "paint"
         }
       },
       {
@@ -4118,7 +4955,12 @@
             "zoom"
           ]
         },
-        "transition": false
+        "transition": false,
+        "mbx": {
+          "fullName": "paint-raster-raster-fade-duration",
+          "name": "raster-fade-duration",
+          "namespace": "paint"
+        }
       }
     ]
   },
@@ -4199,39 +5041,13 @@
       }
     ],
     "fileNameWithExt": "RasterSource.tsx",
+    "relPath": "src/components/RasterSource.tsx",
     "name": "RasterSource"
   },
   "ShapeSource": {
     "description": "ShapeSource is a map content source that supplies vector shapes to be shown on the map.\nThe shape may be an url or a GeoJSON object",
     "displayName": "ShapeSource",
     "methods": [
-      {
-        "name": "features",
-        "docblock": "Returns all features from the source that match the query parameters whether the feature is currently\nrendered on the map.\n\n@example\nshapeSource.features()\n\n@param  {Array=} filter - an optional filter statement to filter the returned Features.\n@return {FeatureCollection}",
-        "modifiers": [
-          "async"
-        ],
-        "params": [
-          {
-            "name": "filter",
-            "description": "an optional filter statement to filter the returned Features.",
-            "type": {
-              "name": "Array"
-            },
-            "optional": true
-          }
-        ],
-        "returns": {
-          "description": null,
-          "type": {
-            "name": "FeatureCollection"
-          }
-        },
-        "description": "Returns all features from the source that match the query parameters whether the feature is currently\nrendered on the map.",
-        "examples": [
-          "\nshapeSource.features()\n\n"
-        ]
-      },
       {
         "name": "getClusterExpansionZoom",
         "docblock": "Returns the zoom needed to expand the cluster.\n\n@example\nconst zoom = await shapeSource.getClusterExpansionZoom(clusterId);\n\n@param  {Feature} feature - The feature cluster to expand.\n@return {number}",
@@ -4249,7 +5065,6 @@
           }
         ],
         "returns": {
-          "description": null,
           "type": {
             "name": "Promise",
             "elements": [
@@ -4298,7 +5113,6 @@
           }
         ],
         "returns": {
-          "description": null,
           "type": {
             "name": "FeatureCollection"
           }
@@ -4325,7 +5139,6 @@
           }
         ],
         "returns": {
-          "description": null,
           "type": {
             "name": "FeatureCollection"
           }
@@ -4480,6 +5293,7 @@
       }
     ],
     "fileNameWithExt": "ShapeSource.tsx",
+    "relPath": "src/components/ShapeSource.tsx",
     "name": "ShapeSource"
   },
   "SkyLayer": {
@@ -4505,7 +5319,7 @@
         "name": "sourceID",
         "required": false,
         "type": "string",
-        "default": "MapboxGL.StyleSource.DefaultSourceID",
+        "default": "Mapbox.StyleSource.DefaultSourceID",
         "description": "The source from which to obtain the data to style.\nIf the source has not yet been added to the current style, the behavior is undefined."
       },
       {
@@ -4545,7 +5359,11 @@
       }
     ],
     "fileNameWithExt": "SkyLayer.tsx",
+    "relPath": "src/components/SkyLayer.tsx",
     "name": "SkyLayer",
+    "mbx": {
+      "name": "sky"
+    },
     "styles": [
       {
         "name": "visibility",
@@ -4564,7 +5382,15 @@
         "description": "Whether this layer is displayed.",
         "requires": [],
         "disabledBy": [],
-        "allowedFunctionTypes": []
+        "allowedFunctionTypes": [],
+        "expression": {
+          "interpolated": false
+        },
+        "mbx": {
+          "fullName": "layout-sky-visibility",
+          "name": "visibility",
+          "namespace": "layout"
+        }
       },
       {
         "name": "skyType",
@@ -4589,6 +5415,11 @@
           "parameters": [
             "zoom"
           ]
+        },
+        "mbx": {
+          "fullName": "paint-sky-sky-type",
+          "name": "sky-type",
+          "namespace": "paint"
         }
       },
       {
@@ -4614,7 +5445,12 @@
             "zoom"
           ]
         },
-        "transition": false
+        "transition": false,
+        "mbx": {
+          "fullName": "paint-sky-sky-atmosphere-sun",
+          "name": "sky-atmosphere-sun",
+          "namespace": "paint"
+        }
       },
       {
         "name": "skyAtmosphereSunIntensity",
@@ -4627,7 +5463,12 @@
         "requires": [],
         "disabledBy": [],
         "allowedFunctionTypes": [],
-        "transition": false
+        "transition": false,
+        "mbx": {
+          "fullName": "paint-sky-sky-atmosphere-sun-intensity",
+          "name": "sky-atmosphere-sun-intensity",
+          "namespace": "paint"
+        }
       },
       {
         "name": "skyGradientCenter",
@@ -4656,7 +5497,12 @@
             "zoom"
           ]
         },
-        "transition": false
+        "transition": false,
+        "mbx": {
+          "fullName": "paint-sky-sky-gradient-center",
+          "name": "sky-gradient-center",
+          "namespace": "paint"
+        }
       },
       {
         "name": "skyGradientRadius",
@@ -4675,7 +5521,12 @@
             "zoom"
           ]
         },
-        "transition": false
+        "transition": false,
+        "mbx": {
+          "fullName": "paint-sky-sky-gradient-radius",
+          "name": "sky-gradient-radius",
+          "namespace": "paint"
+        }
       },
       {
         "name": "skyGradient",
@@ -4704,7 +5555,12 @@
             "sky-radial-progress"
           ]
         },
-        "transition": false
+        "transition": false,
+        "mbx": {
+          "fullName": "paint-sky-sky-gradient",
+          "name": "sky-gradient",
+          "namespace": "paint"
+        }
       },
       {
         "name": "skyAtmosphereHaloColor",
@@ -4715,7 +5571,12 @@
         "requires": [],
         "disabledBy": [],
         "allowedFunctionTypes": [],
-        "transition": false
+        "transition": false,
+        "mbx": {
+          "fullName": "paint-sky-sky-atmosphere-halo-color",
+          "name": "sky-atmosphere-halo-color",
+          "namespace": "paint"
+        }
       },
       {
         "name": "skyAtmosphereColor",
@@ -4726,7 +5587,12 @@
         "requires": [],
         "disabledBy": [],
         "allowedFunctionTypes": [],
-        "transition": false
+        "transition": false,
+        "mbx": {
+          "fullName": "paint-sky-sky-atmosphere-color",
+          "name": "sky-atmosphere-color",
+          "namespace": "paint"
+        }
       },
       {
         "name": "skyOpacity",
@@ -4745,7 +5611,12 @@
             "zoom"
           ]
         },
-        "transition": true
+        "transition": true,
+        "mbx": {
+          "fullName": "paint-sky-sky-opacity",
+          "name": "sky-opacity",
+          "namespace": "paint"
+        }
       }
     ]
   },
@@ -4763,6 +5634,7 @@
       }
     ],
     "fileNameWithExt": "Style.tsx",
+    "relPath": "src/components/Style.tsx",
     "name": "Style"
   },
   "StyleImport": {
@@ -4805,6 +5677,7 @@
       }
     ],
     "fileNameWithExt": "StyleImport.tsx",
+    "relPath": "src/components/StyleImport.tsx",
     "name": "StyleImport"
   },
   "SymbolLayer": {
@@ -4817,7 +5690,7 @@
         "required": true,
         "type": "string",
         "default": "none",
-        "description": "A string that uniquely identifies the layer in the style to which it is added."
+        "description": "A string that uniquely identifies the source in the style to which it is added."
       },
       {
         "name": "existing",
@@ -4830,7 +5703,7 @@
         "name": "sourceID",
         "required": false,
         "type": "string",
-        "default": "MapboxGL.StyleSource.DefaultSourceID",
+        "default": "Mapbox.StyleSource.DefaultSourceID",
         "description": "The source from which to obtain the data to style.\nIf the source has not yet been added to the current style, the behavior is undefined.\nInferred from parent source only if the layer is a direct child to it."
       },
       {
@@ -4864,7 +5737,7 @@
       {
         "name": "filter",
         "required": false,
-        "type": "Expression",
+        "type": "FilterExpression",
         "default": "none",
         "description": "Filter only the features in the source layer that satisfy a condition that you define"
       },
@@ -4883,11 +5756,18 @@
         "description": "The maximum zoom level at which the layer gets parsed and appears."
       },
       {
-        "name": "style",
+        "name": "slot",
         "required": false,
+        "type": "'bottom' \\| 'middle' \\| 'top'",
+        "default": "none",
+        "description": "The slot this layer is assigned to. If specified, and a slot with that name exists, it will be placed at that position in the layer order.\n\nv11 only"
+      },
+      {
+        "name": "style",
+        "required": true,
         "type": "SymbolLayerStyleProps",
         "default": "none",
-        "description": "FIX ME NO DESCRIPTION"
+        "description": "Customizable style attributes"
       },
       {
         "name": "children",
@@ -4898,7 +5778,11 @@
       }
     ],
     "fileNameWithExt": "SymbolLayer.tsx",
+    "relPath": "src/components/SymbolLayer.tsx",
     "name": "SymbolLayer",
+    "mbx": {
+      "name": "symbol"
+    },
     "styles": [
       {
         "name": "symbolPlacement",
@@ -4927,6 +5811,11 @@
           "parameters": [
             "zoom"
           ]
+        },
+        "mbx": {
+          "fullName": "layout-symbol-symbol-placement",
+          "name": "symbol-placement",
+          "namespace": "layout"
         }
       },
       {
@@ -4945,6 +5834,11 @@
           "parameters": [
             "zoom"
           ]
+        },
+        "mbx": {
+          "fullName": "layout-symbol-symbol-spacing",
+          "name": "symbol-spacing",
+          "namespace": "layout"
         }
       },
       {
@@ -4961,13 +5855,18 @@
           "parameters": [
             "zoom"
           ]
+        },
+        "mbx": {
+          "fullName": "layout-symbol-symbol-avoid-edges",
+          "name": "symbol-avoid-edges",
+          "namespace": "layout"
         }
       },
       {
         "name": "symbolSortKey",
         "type": "number",
         "values": [],
-        "description": "Sorts features in ascending order based on this value. Features with lower sort keys are drawn and placed first.  When `iconAllowOverlap` or `textAllowOverlap` is `false`, features with a lower sort key will have priority during placement. When `iconAllowOverlap` or `textAllowOverlap` is set to `true`, features with a higher sort key will overlap over features with a lower sort key.",
+        "description": "Sorts features in ascending order based on this value. Features with lower sort keys are drawn and placed first. When `iconAllowOverlap` or `textAllowOverlap` is `false`, features with a lower sort key will have priority during placement. When `iconAllowOverlap` or `textAllowOverlap` is set to `true`, features with a higher sort key will overlap over features with a lower sort key.",
         "requires": [],
         "disabledBy": [],
         "allowedFunctionTypes": [],
@@ -4977,6 +5876,11 @@
             "zoom",
             "feature"
           ]
+        },
+        "mbx": {
+          "fullName": "layout-symbol-symbol-sort-key",
+          "name": "symbol-sort-key",
+          "namespace": "layout"
         }
       },
       {
@@ -5006,6 +5910,11 @@
           "parameters": [
             "zoom"
           ]
+        },
+        "mbx": {
+          "fullName": "layout-symbol-symbol-z-order",
+          "name": "symbol-z-order",
+          "namespace": "layout"
         }
       },
       {
@@ -5024,6 +5933,11 @@
           "parameters": [
             "zoom"
           ]
+        },
+        "mbx": {
+          "fullName": "layout-symbol-icon-allow-overlap",
+          "name": "icon-allow-overlap",
+          "namespace": "layout"
         }
       },
       {
@@ -5042,6 +5956,11 @@
           "parameters": [
             "zoom"
           ]
+        },
+        "mbx": {
+          "fullName": "layout-symbol-icon-ignore-placement",
+          "name": "icon-ignore-placement",
+          "namespace": "layout"
         }
       },
       {
@@ -5061,6 +5980,11 @@
           "parameters": [
             "zoom"
           ]
+        },
+        "mbx": {
+          "fullName": "layout-symbol-icon-optional",
+          "name": "icon-optional",
+          "namespace": "layout"
         }
       },
       {
@@ -5092,6 +6016,11 @@
           "parameters": [
             "zoom"
           ]
+        },
+        "mbx": {
+          "fullName": "layout-symbol-icon-rotation-alignment",
+          "name": "icon-rotation-alignment",
+          "namespace": "layout"
         }
       },
       {
@@ -5113,6 +6042,11 @@
             "zoom",
             "feature"
           ]
+        },
+        "mbx": {
+          "fullName": "layout-symbol-icon-size",
+          "name": "icon-size",
+          "namespace": "layout"
         }
       },
       {
@@ -5147,8 +6081,14 @@
         "expression": {
           "interpolated": false,
           "parameters": [
-            "zoom"
+            "zoom",
+            "feature"
           ]
+        },
+        "mbx": {
+          "fullName": "layout-symbol-icon-text-fit",
+          "name": "icon-text-fit",
+          "namespace": "layout"
         }
       },
       {
@@ -5172,8 +6112,14 @@
         "expression": {
           "interpolated": true,
           "parameters": [
-            "zoom"
+            "zoom",
+            "feature"
           ]
+        },
+        "mbx": {
+          "fullName": "layout-symbol-icon-text-fit-padding",
+          "name": "icon-text-fit-padding",
+          "namespace": "layout"
         }
       },
       {
@@ -5190,6 +6136,11 @@
             "zoom",
             "feature"
           ]
+        },
+        "mbx": {
+          "fullName": "layout-symbol-icon-image",
+          "name": "icon-image",
+          "namespace": "layout"
         }
       },
       {
@@ -5210,6 +6161,11 @@
             "zoom",
             "feature"
           ]
+        },
+        "mbx": {
+          "fullName": "layout-symbol-icon-rotate",
+          "name": "icon-rotate",
+          "namespace": "layout"
         }
       },
       {
@@ -5230,6 +6186,11 @@
           "parameters": [
             "zoom"
           ]
+        },
+        "mbx": {
+          "fullName": "layout-symbol-icon-padding",
+          "name": "icon-padding",
+          "namespace": "layout"
         }
       },
       {
@@ -5248,6 +6209,11 @@
           "parameters": [
             "zoom"
           ]
+        },
+        "mbx": {
+          "fullName": "layout-symbol-icon-keep-upright",
+          "name": "icon-keep-upright",
+          "namespace": "layout"
         }
       },
       {
@@ -5270,6 +6236,11 @@
             "zoom",
             "feature"
           ]
+        },
+        "mbx": {
+          "fullName": "layout-symbol-icon-offset",
+          "name": "icon-offset",
+          "namespace": "layout"
         }
       },
       {
@@ -5326,6 +6297,11 @@
             "zoom",
             "feature"
           ]
+        },
+        "mbx": {
+          "fullName": "layout-symbol-icon-anchor",
+          "name": "icon-anchor",
+          "namespace": "layout"
         }
       },
       {
@@ -5357,6 +6333,11 @@
           "parameters": [
             "zoom"
           ]
+        },
+        "mbx": {
+          "fullName": "layout-symbol-icon-pitch-alignment",
+          "name": "icon-pitch-alignment",
+          "namespace": "layout"
         }
       },
       {
@@ -5388,6 +6369,11 @@
           "parameters": [
             "zoom"
           ]
+        },
+        "mbx": {
+          "fullName": "layout-symbol-text-pitch-alignment",
+          "name": "text-pitch-alignment",
+          "namespace": "layout"
         }
       },
       {
@@ -5419,6 +6405,11 @@
           "parameters": [
             "zoom"
           ]
+        },
+        "mbx": {
+          "fullName": "layout-symbol-text-rotation-alignment",
+          "name": "text-rotation-alignment",
+          "namespace": "layout"
         }
       },
       {
@@ -5436,6 +6427,11 @@
             "zoom",
             "feature"
           ]
+        },
+        "mbx": {
+          "fullName": "layout-symbol-text-field",
+          "name": "text-field",
+          "namespace": "layout"
         }
       },
       {
@@ -5460,6 +6456,11 @@
             "zoom",
             "feature"
           ]
+        },
+        "mbx": {
+          "fullName": "layout-symbol-text-font",
+          "name": "text-font",
+          "namespace": "layout"
         }
       },
       {
@@ -5481,6 +6482,11 @@
             "zoom",
             "feature"
           ]
+        },
+        "mbx": {
+          "fullName": "layout-symbol-text-size",
+          "name": "text-size",
+          "namespace": "layout"
         }
       },
       {
@@ -5504,6 +6510,11 @@
             "zoom",
             "feature"
           ]
+        },
+        "mbx": {
+          "fullName": "layout-symbol-text-max-width",
+          "name": "text-max-width",
+          "namespace": "layout"
         }
       },
       {
@@ -5524,6 +6535,11 @@
             "zoom",
             "feature"
           ]
+        },
+        "mbx": {
+          "fullName": "layout-symbol-text-line-height",
+          "name": "text-line-height",
+          "namespace": "layout"
         }
       },
       {
@@ -5546,6 +6562,11 @@
             "zoom",
             "feature"
           ]
+        },
+        "mbx": {
+          "fullName": "layout-symbol-text-letter-spacing",
+          "name": "text-letter-spacing",
+          "namespace": "layout"
         }
       },
       {
@@ -5584,6 +6605,11 @@
             "zoom",
             "feature"
           ]
+        },
+        "mbx": {
+          "fullName": "layout-symbol-text-justify",
+          "name": "text-justify",
+          "namespace": "layout"
         }
       },
       {
@@ -5604,6 +6630,11 @@
             "zoom",
             "feature"
           ]
+        },
+        "mbx": {
+          "fullName": "layout-symbol-text-radial-offset",
+          "name": "text-radial-offset",
+          "namespace": "layout"
         }
       },
       {
@@ -5621,6 +6652,11 @@
           "parameters": [
             "zoom"
           ]
+        },
+        "mbx": {
+          "fullName": "layout-symbol-text-variable-anchor",
+          "name": "text-variable-anchor",
+          "namespace": "layout"
         }
       },
       {
@@ -5681,6 +6717,11 @@
             "zoom",
             "feature"
           ]
+        },
+        "mbx": {
+          "fullName": "layout-symbol-text-anchor",
+          "name": "text-anchor",
+          "namespace": "layout"
         }
       },
       {
@@ -5700,6 +6741,11 @@
           "parameters": [
             "zoom"
           ]
+        },
+        "mbx": {
+          "fullName": "layout-symbol-text-max-angle",
+          "name": "text-max-angle",
+          "namespace": "layout"
         }
       },
       {
@@ -5717,6 +6763,11 @@
           "parameters": [
             "zoom"
           ]
+        },
+        "mbx": {
+          "fullName": "layout-symbol-text-writing-mode",
+          "name": "text-writing-mode",
+          "namespace": "layout"
         }
       },
       {
@@ -5737,6 +6788,11 @@
             "zoom",
             "feature"
           ]
+        },
+        "mbx": {
+          "fullName": "layout-symbol-text-rotate",
+          "name": "text-rotate",
+          "namespace": "layout"
         }
       },
       {
@@ -5757,6 +6813,11 @@
           "parameters": [
             "zoom"
           ]
+        },
+        "mbx": {
+          "fullName": "layout-symbol-text-padding",
+          "name": "text-padding",
+          "namespace": "layout"
         }
       },
       {
@@ -5775,6 +6836,11 @@
           "parameters": [
             "zoom"
           ]
+        },
+        "mbx": {
+          "fullName": "layout-symbol-text-keep-upright",
+          "name": "text-keep-upright",
+          "namespace": "layout"
         }
       },
       {
@@ -5807,6 +6873,11 @@
             "zoom",
             "feature"
           ]
+        },
+        "mbx": {
+          "fullName": "layout-symbol-text-transform",
+          "name": "text-transform",
+          "namespace": "layout"
         }
       },
       {
@@ -5832,6 +6903,11 @@
             "zoom",
             "feature"
           ]
+        },
+        "mbx": {
+          "fullName": "layout-symbol-text-offset",
+          "name": "text-offset",
+          "namespace": "layout"
         }
       },
       {
@@ -5850,6 +6926,11 @@
           "parameters": [
             "zoom"
           ]
+        },
+        "mbx": {
+          "fullName": "layout-symbol-text-allow-overlap",
+          "name": "text-allow-overlap",
+          "namespace": "layout"
         }
       },
       {
@@ -5868,6 +6949,11 @@
           "parameters": [
             "zoom"
           ]
+        },
+        "mbx": {
+          "fullName": "layout-symbol-text-ignore-placement",
+          "name": "text-ignore-placement",
+          "namespace": "layout"
         }
       },
       {
@@ -5887,6 +6973,11 @@
           "parameters": [
             "zoom"
           ]
+        },
+        "mbx": {
+          "fullName": "layout-symbol-text-optional",
+          "name": "text-optional",
+          "namespace": "layout"
         }
       },
       {
@@ -5906,7 +6997,15 @@
         "description": "Whether this layer is displayed.",
         "requires": [],
         "disabledBy": [],
-        "allowedFunctionTypes": []
+        "allowedFunctionTypes": [],
+        "expression": {
+          "interpolated": false
+        },
+        "mbx": {
+          "fullName": "layout-symbol-visibility",
+          "name": "visibility",
+          "namespace": "layout"
+        }
       },
       {
         "name": "iconOpacity",
@@ -5926,10 +7025,16 @@
           "parameters": [
             "zoom",
             "feature",
-            "feature-state"
+            "feature-state",
+            "measure-light"
           ]
         },
-        "transition": true
+        "transition": true,
+        "mbx": {
+          "fullName": "paint-symbol-icon-opacity",
+          "name": "icon-opacity",
+          "namespace": "paint"
+        }
       },
       {
         "name": "iconColor",
@@ -5947,10 +7052,16 @@
           "parameters": [
             "zoom",
             "feature",
-            "feature-state"
+            "feature-state",
+            "measure-light"
           ]
         },
-        "transition": true
+        "transition": true,
+        "mbx": {
+          "fullName": "paint-symbol-icon-color",
+          "name": "icon-color",
+          "namespace": "paint"
+        }
       },
       {
         "name": "iconHaloColor",
@@ -5968,10 +7079,16 @@
           "parameters": [
             "zoom",
             "feature",
-            "feature-state"
+            "feature-state",
+            "measure-light"
           ]
         },
-        "transition": true
+        "transition": true,
+        "mbx": {
+          "fullName": "paint-symbol-icon-halo-color",
+          "name": "icon-halo-color",
+          "namespace": "paint"
+        }
       },
       {
         "name": "iconHaloWidth",
@@ -5991,10 +7108,16 @@
           "parameters": [
             "zoom",
             "feature",
-            "feature-state"
+            "feature-state",
+            "measure-light"
           ]
         },
-        "transition": true
+        "transition": true,
+        "mbx": {
+          "fullName": "paint-symbol-icon-halo-width",
+          "name": "icon-halo-width",
+          "namespace": "paint"
+        }
       },
       {
         "name": "iconHaloBlur",
@@ -6014,10 +7137,16 @@
           "parameters": [
             "zoom",
             "feature",
-            "feature-state"
+            "feature-state",
+            "measure-light"
           ]
         },
-        "transition": true
+        "transition": true,
+        "mbx": {
+          "fullName": "paint-symbol-icon-halo-blur",
+          "name": "icon-halo-blur",
+          "namespace": "paint"
+        }
       },
       {
         "name": "iconTranslate",
@@ -6040,7 +7169,12 @@
             "zoom"
           ]
         },
-        "transition": true
+        "transition": true,
+        "mbx": {
+          "fullName": "paint-symbol-icon-translate",
+          "name": "icon-translate",
+          "namespace": "paint"
+        }
       },
       {
         "name": "iconTranslateAnchor",
@@ -6068,6 +7202,11 @@
           "parameters": [
             "zoom"
           ]
+        },
+        "mbx": {
+          "fullName": "paint-symbol-icon-translate-anchor",
+          "name": "icon-translate-anchor",
+          "namespace": "paint"
         }
       },
       {
@@ -6088,10 +7227,16 @@
           "parameters": [
             "zoom",
             "feature",
-            "feature-state"
+            "feature-state",
+            "measure-light"
           ]
         },
-        "transition": true
+        "transition": true,
+        "mbx": {
+          "fullName": "paint-symbol-text-opacity",
+          "name": "text-opacity",
+          "namespace": "paint"
+        }
       },
       {
         "name": "textColor",
@@ -6109,10 +7254,16 @@
           "parameters": [
             "zoom",
             "feature",
-            "feature-state"
+            "feature-state",
+            "measure-light"
           ]
         },
-        "transition": true
+        "transition": true,
+        "mbx": {
+          "fullName": "paint-symbol-text-color",
+          "name": "text-color",
+          "namespace": "paint"
+        }
       },
       {
         "name": "textHaloColor",
@@ -6130,10 +7281,16 @@
           "parameters": [
             "zoom",
             "feature",
-            "feature-state"
+            "feature-state",
+            "measure-light"
           ]
         },
-        "transition": true
+        "transition": true,
+        "mbx": {
+          "fullName": "paint-symbol-text-halo-color",
+          "name": "text-halo-color",
+          "namespace": "paint"
+        }
       },
       {
         "name": "textHaloWidth",
@@ -6153,10 +7310,16 @@
           "parameters": [
             "zoom",
             "feature",
-            "feature-state"
+            "feature-state",
+            "measure-light"
           ]
         },
-        "transition": true
+        "transition": true,
+        "mbx": {
+          "fullName": "paint-symbol-text-halo-width",
+          "name": "text-halo-width",
+          "namespace": "paint"
+        }
       },
       {
         "name": "textHaloBlur",
@@ -6176,10 +7339,16 @@
           "parameters": [
             "zoom",
             "feature",
-            "feature-state"
+            "feature-state",
+            "measure-light"
           ]
         },
-        "transition": true
+        "transition": true,
+        "mbx": {
+          "fullName": "paint-symbol-text-halo-blur",
+          "name": "text-halo-blur",
+          "namespace": "paint"
+        }
       },
       {
         "name": "textTranslate",
@@ -6202,7 +7371,12 @@
             "zoom"
           ]
         },
-        "transition": true
+        "transition": true,
+        "mbx": {
+          "fullName": "paint-symbol-text-translate",
+          "name": "text-translate",
+          "namespace": "paint"
+        }
       },
       {
         "name": "textTranslateAnchor",
@@ -6230,6 +7404,11 @@
           "parameters": [
             "zoom"
           ]
+        },
+        "mbx": {
+          "fullName": "paint-symbol-text-translate-anchor",
+          "name": "text-translate-anchor",
+          "namespace": "paint"
         }
       }
     ]
@@ -6262,7 +7441,11 @@
       }
     ],
     "fileNameWithExt": "Terrain.tsx",
+    "relPath": "src/components/Terrain.tsx",
     "name": "Terrain",
+    "mbx": {
+      "name": "terrain"
+    },
     "styles": [
       {
         "name": "source",
@@ -6271,7 +7454,12 @@
         "description": "Name of a source of `raster_dem` type to be used for terrain elevation.",
         "requires": [],
         "disabledBy": [],
-        "allowedFunctionTypes": []
+        "allowedFunctionTypes": [],
+        "mbx": {
+          "fullName": "source",
+          "name": "source",
+          "namespace": null
+        }
       },
       {
         "name": "exaggeration",
@@ -6292,7 +7480,12 @@
             "zoom"
           ]
         },
-        "transition": true
+        "transition": true,
+        "mbx": {
+          "fullName": "exaggeration",
+          "name": "exaggeration",
+          "namespace": null
+        }
       }
     ]
   },
@@ -6316,7 +7509,6 @@
           }
         ],
         "returns": {
-          "description": null,
           "type": {
             "name": "Promise",
             "elements": [
@@ -6335,7 +7527,6 @@
         "modifiers": [],
         "params": [],
         "returns": {
-          "description": null,
           "type": {
             "name": "boolean"
           }
@@ -6398,7 +7589,7 @@
         "required": false,
         "type": "UserLocationRenderMode",
         "default": "UserLocationRenderMode.Normal",
-        "description": "Which render mode to use."
+        "description": "@deprecated use NativeUserLocation component instead of UserLocationRenderMode.Native\nWhich render mode to use."
       },
       {
         "name": "requestsAlwaysUse",
@@ -6423,47 +7614,13 @@
       }
     ],
     "fileNameWithExt": "UserLocation.tsx",
+    "relPath": "src/components/UserLocation.tsx",
     "name": "UserLocation"
   },
   "VectorSource": {
     "description": "VectorSource is a map content source that supplies tiled vector data in Mapbox Vector Tile format to be shown on the map.\nThe location of and metadata about the tiles are defined either by an option dictionary or by an external file that conforms to the TileJSON specification.",
     "displayName": "VectorSource",
     "methods": [
-      {
-        "name": "features",
-        "docblock": "Returns all features that match the query parameters regardless of whether or not the feature is\ncurrently rendered on the map. The domain of the query includes all currently-loaded vector tiles\nand GeoJSON source tiles. This function does not check tiles outside of the visible viewport.\n\n@example\nvectorSource.features(['id1', 'id2'])\n\n@param  {Array=} layerIDs - A set of strings that correspond to the names of layers defined in the current style. Only the features contained in these layers are included in the returned array.\n@param  {Array=} filter - an optional filter statement to filter the returned Features.\n@return {FeatureCollection}",
-        "modifiers": [
-          "async"
-        ],
-        "params": [
-          {
-            "name": "layerIDs",
-            "description": "A set of strings that correspond to the names of layers defined in the current style. Only the features contained in these layers are included in the returned array.",
-            "type": {
-              "name": "Array"
-            },
-            "optional": true
-          },
-          {
-            "name": "filter",
-            "description": "an optional filter statement to filter the returned Features.",
-            "type": {
-              "name": "Array"
-            },
-            "optional": true
-          }
-        ],
-        "returns": {
-          "description": null,
-          "type": {
-            "name": "FeatureCollection"
-          }
-        },
-        "description": "Returns all features that match the query parameters regardless of whether or not the feature is\ncurrently rendered on the map. The domain of the query includes all currently-loaded vector tiles\nand GeoJSON source tiles. This function does not check tiles outside of the visible viewport.",
-        "examples": [
-          "\nvectorSource.features(['id1', 'id2'])\n\n"
-        ]
-      },
       {
         "name": "onPress",
         "docblock": null,
@@ -6581,11 +7738,79 @@
       }
     ],
     "fileNameWithExt": "VectorSource.tsx",
+    "relPath": "src/components/VectorSource.tsx",
     "name": "VectorSource"
+  },
+  "Viewport": {
+    "description": "provides a structured approach to organizing camera management logic into states and transitions between them.\n\nAt any given time, the viewport is either:\n - idle\n - in a state (camera is being managed by a ViewportState)\n - transitioning between states\n\nSee [android](https://docs.mapbox.com/android/maps/api/${ANDROID_SDK_VERSION}/mapbox-maps-android/com.mapbox.maps.plugin.viewport/viewport.html),\n[ios](https://docs.mapbox.com/ios/maps/api/${IOS_SDK_VERSION}/Viewport.html#/s:10MapboxMaps8ViewportC)",
+    "displayName": "Viewport",
+    "methods": [
+      {
+        "name": "getState",
+        "docblock": null,
+        "modifiers": [],
+        "params": [],
+        "returns": null
+      },
+      {
+        "name": "idle",
+        "docblock": null,
+        "modifiers": [
+          "async"
+        ],
+        "params": [],
+        "returns": null
+      },
+      {
+        "name": "transitionTo",
+        "docblock": null,
+        "modifiers": [],
+        "params": [
+          {
+            "name": "state",
+            "optional": false,
+            "type": {
+              "name": null
+            }
+          },
+          {
+            "name": "transition",
+            "optional": false,
+            "type": {
+              "name": null
+            }
+          }
+        ],
+        "returns": null
+      }
+    ],
+    "props": [
+      {
+        "name": "transitionsToIdleUponUserInteraction",
+        "required": false,
+        "type": "boolean",
+        "default": "none",
+        "description": "Indicates whether the Viewport should idle when the MapView receives touch input.\n\nSet this property to false to enable building custom ViewportStates that can work simultaneously with certain types of gestures.\n\nDefaults to true."
+      },
+      {
+        "name": "onStatusChanged",
+        "required": false,
+        "type": {
+          "name": "func",
+          "funcSignature": "(event:{from: union, to: union, reason: union}) => void"
+        },
+        "default": "none",
+        "description": "Subscribes to status changes, will be called when the status changes.\n\nObservers are notified of status changes asynchronously on the main queue.\nThis means that by the time the notification is delivered, the status may have already changed again.\nThis behavior is necessary to allow observers to trigger further transitions while avoiding out-of-order\ndelivery of status changed notifications.\n*signature:*`(event:{from: union, to: union, reason: union}) => void`"
+      }
+    ],
+    "fileNameWithExt": "Viewport.tsx",
+    "relPath": "src/components/Viewport.tsx",
+    "name": "Viewport"
   },
   "coordinates": {
     "name": "coordinates",
     "fileNameWithExt": "locationManager.ts",
+    "relPath": "src/modules/location/locationManager.ts",
     "description": "Coorinates sent by locationManager",
     "props": [],
     "styles": [],
@@ -6594,6 +7819,7 @@
   "location": {
     "name": "location",
     "fileNameWithExt": "locationManager.ts",
+    "relPath": "src/modules/location/locationManager.ts",
     "description": "Location sent by locationManager",
     "props": [],
     "styles": [],
@@ -6602,6 +7828,7 @@
   "locationManager": {
     "name": "locationManager",
     "fileNameWithExt": "locationManager.ts",
+    "relPath": "src/modules/location/locationManager.ts",
     "description": "LocationManager is a singleton, see ",
     "props": [],
     "styles": [],
@@ -6634,6 +7861,7 @@
   "offlineManager": {
     "name": "offlineManager",
     "fileNameWithExt": "offlineManager.ts",
+    "relPath": "src/modules/offline/offlineManager.ts",
     "description": "OfflineManager implements a singleton (shared object) that manages offline packs.\nAll of this class’s instance methods are asynchronous, reflecting the fact that offline resources are stored in a database.\nThe shared object maintains a canonical collection of offline packs.",
     "props": [],
     "styles": [],
@@ -7118,6 +8346,7 @@
   "snapshotManager": {
     "name": "snapshotManager",
     "fileNameWithExt": "snapshotManager.ts",
+    "relPath": "src/modules/snapshot/snapshotManager.ts",
     "description": "The snapshotManager generates static raster images of the map.\nEach snapshot image depicts a portion of a map defined by an SnapshotOptions object you provide.\nThe snapshotter generates the snapshot asynchronous.",
     "props": [],
     "styles": [],

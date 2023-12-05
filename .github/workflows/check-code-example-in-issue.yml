@@ -16,9 +16,9 @@ jobs:
       - uses: actions/checkout@v3
 
       - name: setup node
-        uses: actions/setup-node@v1
+        uses: actions/setup-node@v4
         with:
-          node-version: '12'
+          node-version: '18'
 
       - name: run lint-code-example-in-issues.js
         run: |

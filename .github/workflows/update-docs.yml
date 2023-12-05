@@ -1,0 +1,58 @@
+name: Update docs to maps-docs repo
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  update_docs:
+    name: Update docs on maps-docs repo
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: maps
+    steps:
+      - name: Install ImageMagick
+        run: sudo apt-get install -y imagemagick
+        working-directory: /
+      - name: test convert
+        run: convert -version
+        working-directory: /
+      - name: Checkout maps repo
+        uses: actions/checkout@v4
+        with:
+          path: maps
+      - name: Checkout maps-docs repo
+        uses: actions/checkout@v4
+        with:
+          repository: rnmapbox/maps-docs
+          ssh-key: ${{ secrets.MAPS_DOCS_DEPLOY_KEY }}
+          path: maps-docs
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 18
+      - uses: oven-sh/setup-bun@v1
+        with:
+          bun-version: latest
+      - name: Install dependencies
+        run: yarn install
+      - name: Generate component docs into maps-docs repo
+        run: node scripts/doc-generate.mjs
+      - name: Generate example docs into maps-docs repo
+        run: bun scripts/example-docs.ts
+      - name: Setup deploy key for github deploy
+        uses: webfactory/ssh-agent@v0.5.0
+        with:
+          ssh-private-key: ${{ secrets.MAPS_DOCS_DEPLOY_KEY }}
+      - name: Add all changed files to git and push to origin main
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add .
+          git commit -m "Update docs from maps  rnmapbox/maps@${GITHUB_SHA::7}"
+          git push origin main
+        working-directory: maps-docs
+        env:
+          GITHUB_SHA: ${{ github.sha }}
+

@@ -3,6 +3,13 @@ name: iOS Build & Detox
 on:
   workflow_call:
     inputs:
+      env_name:
+        required: true
+        default: default
+        type: string
+      ref:
+        required: false
+        type: string 
       NVMRC:
         required: true
         type: string
@@ -21,11 +28,17 @@ on:
         required: true
       MAPBOX_DOWNLOAD_TOKEN:
         required: true
+      ENV_MAPBOX_ACCESS_TOKEN:
+        required: false
+      ENV_MAPBOX_DOWNLOAD_TOKEN:
+        required: false
 
 jobs:
   build:
+    name: iOS Example Build ${{ inputs.NEW_ARCH && 'Fabric' || 'Paper' }} ${{ inputs.MAP_IMPL }}
     runs-on: macos-12
     timeout-minutes: 55
+    environment: ${{ inputs.env_name }}
 
     defaults:
       run:
@@ -33,12 +46,19 @@ jobs:
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
+        if: ${{ inputs.ref == '' }}
+      
+      - name: Checkout fork
+        uses: actions/checkout@v4
+        if: ${{ inputs.ref != '' }}
+        with:
+          ref: ${{ inputs.ref }}
 
       - name: Access Token
         run: echo $MAPBOX_ACCESS_TOKEN > ./accesstoken
         env:
-          MAPBOX_ACCESS_TOKEN: ${{ secrets.MAPBOX_ACCESS_TOKEN }}
+          MAPBOX_ACCESS_TOKEN: ${{ secrets.MAPBOX_ACCESS_TOKEN || secrets.ENV_MAPBOX_ACCESS_TOKEN }}
 
       - name: Setup .netrc with MAPBOX_DOWNLOAD_TOKEN
         run: |
@@ -48,7 +68,7 @@ jobs:
           chmod 0600 ~/.netrc
         if: "${{ env.MAPBOX_DOWNLOAD_TOKEN != '' }}"
         env:
-          MAPBOX_DOWNLOAD_TOKEN: ${{ secrets.MAPBOX_DOWNLOAD_TOKEN }}
+          MAPBOX_DOWNLOAD_TOKEN: ${{ secrets.MAPBOX_DOWNLOAD_TOKEN || secrets.ENV_MAPBOX_DOWNLOAD_TOKEN }}
 
       - name: Setup node ${{ inputs.NVMRC }}
         uses: actions/setup-node@v3.5.1
@@ -78,7 +98,7 @@ jobs:
 
       - name: Install Pod Dependencies
         if: steps.pods-cache.outputs.cache-hit != 'true'
-        run: cd ios && pod --version && pod update MapboxMaps && pod install
+        run: cd ios && pod --version && pod update MapboxMaps hermes-engine RCT-Folly && pod install
         env:
           CI_MAP_IMPL: ${{ inputs.MAP_IMPL }}
           RCT_NEW_ARCH_ENABLED: ${{ inputs.NEW_ARCH && 1 || 0 }}
@@ -91,13 +111,13 @@ jobs:
           brew install xcbeautify
 
       - name: Build for detox
-        run: set -o pipefail && NSUnbufferedIO=YES  yarn detox build --configuration ios.debug 2>&1 | xcbeautify -qq
+        run: set -o pipefail && NSUnbufferedIO=YES  yarn detox build --configuration ios.debug.ci 2>&1
 
       - name: Test with detox
         if: inputs.NEW_ARCH != 1
         run: |
           npx detox --version
-          yarn detox test --configuration ios.debug --debug-synchronization 500 --loglevel trace --record-logs all --take-screenshots all
+          yarn detox test --configuration ios.debug.ci --debug-synchronization 500 --loglevel trace --record-logs all --take-screenshots all  | xcbeautify -qq --renderer github-actions
         env:
           SKIP_TESTS_NO_METAL: ${{ inputs.MAP_IMPL == 'mapbox' || inputs.MAP_IMPL == 'mapbox11' }}
 

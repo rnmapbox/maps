@@ -1,5 +1,5 @@
 import React from 'react';
-import MapboxGL from '@rnmapbox/maps';
+import Mapbox from '@rnmapbox/maps';
 import { Text } from 'react-native';
 
 import Bubble from '../common/Bubble';
@@ -7,8 +7,6 @@ import sheet from '../../styles/sheet';
 import radar0 from '../../assets/radar.png';
 import radar1 from '../../assets/radar1.png';
 import radar2 from '../../assets/radar2.png';
-import Page from '../common/Page';
-import BaseExamplePropTypes from '../common/BaseExamplePropTypes';
 
 const styles = {
   rasterLayer: { rasterOpacity: 0.6 },
@@ -32,10 +30,6 @@ const coordQuads = [
 ];
 
 class ImageOverlay extends React.Component {
-  static propTypes = {
-    ...BaseExamplePropTypes,
-  };
-
   state = {
     radarFrameIndex: 0,
     coords: coordQuads[0],
@@ -80,23 +74,25 @@ class ImageOverlay extends React.Component {
       ? 'Static coordinates'
       : 'Dynamic coordinates';
     return (
-      <Page {...this.props}>
-        <MapboxGL.MapView
+      <>
+        <Mapbox.MapView
           ref={(ref) => (this.map = ref)}
           style={sheet.matchParent}
-          styleURL={MapboxGL.StyleURL.Satellite}
+          styleURL={Mapbox.StyleURL.Satellite}
         >
-          <MapboxGL.Camera zoomLevel={4} centerCoordinate={[-79, 40]} />
+          <Mapbox.Camera
+            defaultSettings={{ zoomLevel: 4, centerCoordinate: [-79, 40] }}
+          />
 
-          <MapboxGL.Animated.ImageSource
+          <Mapbox.Animated.ImageSource
             key="d"
             id="radarSource"
             coordinates={this.state.coords}
             url={frames[this.state.radarFrameIndex]}
           >
-            <MapboxGL.RasterLayer id="radarLayer" style={styles.rasterLayer} />
-          </MapboxGL.Animated.ImageSource>
-        </MapboxGL.MapView>
+            <Mapbox.RasterLayer id="radarLayer" style={styles.rasterLayer} />
+          </Mapbox.Animated.ImageSource>
+        </Mapbox.MapView>
         <Bubble
           onPress={() => {
             this.setState({ dynamic: !this.state.dynamic });
@@ -105,9 +101,19 @@ class ImageOverlay extends React.Component {
         >
           <Text>{bubbleText}</Text>
         </Bubble>
-      </Page>
+      </>
     );
   }
 }
 
 export default ImageOverlay;
+
+/* end-example-doc */
+
+/** @type ExampleWithMetadata['metadata'] */
+const metadata = {
+  title: 'Image Overlay',
+  tags: ['RasterLayer', 'ImageSource'],
+  docs: '',
+};
+ImageOverlay.metadata = metadata;

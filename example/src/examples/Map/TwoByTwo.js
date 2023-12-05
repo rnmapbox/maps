@@ -1,10 +1,8 @@
 import React from 'react';
-import MapboxGL from '@rnmapbox/maps';
+import { MapView, ShapeSource, FillLayer, StyleURL } from '@rnmapbox/maps';
 
 import sheet from '../../styles/sheet';
 import smileyFaceGeoJSON from '../../assets/smiley_face.json';
-import BaseExamplePropTypes from '../common/BaseExamplePropTypes';
-import Page from '../common/Page';
 
 const layerStyles = {
   smileyFaceLight: {
@@ -20,13 +18,9 @@ const layerStyles = {
 };
 
 class TwoByTwo extends React.Component {
-  static propTypes = {
-    ...BaseExamplePropTypes,
-  };
-
   renderMap(styleURL, layerStyle) {
     return (
-      <MapboxGL.MapView
+      <MapView
         zoomLevel={2}
         centerCoordinate={[-35.15165038, 40.6235728]}
         onSetCameraComplete={this.onUpdateZoomLevel}
@@ -34,21 +28,31 @@ class TwoByTwo extends React.Component {
         style={sheet.matchParent}
         styleURL={styleURL}
       >
-        <MapboxGL.ShapeSource id="smileyFaceSource" shape={smileyFaceGeoJSON}>
-          <MapboxGL.FillLayer id="smileyFaceFill" style={layerStyle} />
-        </MapboxGL.ShapeSource>
-      </MapboxGL.MapView>
+        <ShapeSource id="smileyFaceSource" shape={smileyFaceGeoJSON}>
+          <FillLayer id="smileyFaceFill" style={layerStyle} />
+        </ShapeSource>
+      </MapView>
     );
   }
 
   render() {
     return (
-      <Page {...this.props}>
-        {this.renderMap(MapboxGL.StyleURL.Light, layerStyles.smileyFaceDark)}
-        {this.renderMap(MapboxGL.StyleURL.Dark, layerStyles.smileyFaceLight)}
-      </Page>
+      <>
+        {this.renderMap(StyleURL.Light, layerStyles.smileyFaceDark)}
+        {this.renderMap(StyleURL.Dark, layerStyles.smileyFaceLight)}
+      </>
     );
   }
 }
 
 export default TwoByTwo;
+
+/** @type ExampleWithMetadata['metadata'] */
+const metadata = {
+  title: 'Two Map Views',
+  tags: ['MapView'],
+  docs: `
+Display two map views side by side
+`,
+};
+TwoByTwo.metadata = metadata;

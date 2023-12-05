@@ -2,8 +2,8 @@ import MapboxMaps
 import Turf
 
 @objc
-class RNMBXShapeSource : RNMBXSource {
-  @objc var url : String? {
+public class RNMBXShapeSource : RNMBXSource {
+  @objc public var url : String? {
     didSet {
       parseJSON(url) { [weak self] result in
         guard let self = self else { return }
@@ -23,23 +23,39 @@ class RNMBXShapeSource : RNMBXSource {
     }
   }
 
-  @objc var shape : String? {
-    didSet {
-      logged("RNMBXShapeSource.updateShape") {
-        let obj : GeoJSONObject = try parse(shape)
+  var shapeAnimator: ShapeAnimator? = nil
+  var shapeObject: GeoJSONObject? = nil
 
-        doUpdate { (style) in
-          logged("RNMBXShapeSource.setShape") {
-            try style.updateGeoJSONSource(withId: id, geoJSON: obj)
+  @objc public var shape : String? {
+    didSet {
+      shapeAnimator?.unsubscribe(consumer: self)
+      shapeAnimator = nil
+
+      if let shape = shape, ShapeAnimatorManager.shared.isShapeAnimatorTag(shape: shape), let animatedShape = ShapeAnimatorManager.shared.get(shape: shape) {
+        if let shapeAnimator = ShapeAnimatorManager.shared.get(shape: shape) {
+          self.shapeAnimator = shapeAnimator
+          shapeAnimator.subscribe(consumer: self)
+          
+          shapeUpdated(shape: shapeAnimator.getShape())
+        }
+      } else {
+        logged("RNMBXShapeSource.updateShape") {
+          let obj : GeoJSONObject = try parse(shape)
+          shapeObject = obj
+          
+          doUpdate { (style) in
+            logged("RNMBXShapeSource.setShape") {
+              try style.updateGeoJSONSource(withId: id, geoJSON: obj)
+            }
           }
         }
       }
     }
   }
 
-  @objc var cluster : NSNumber?
-  @objc var clusterRadius : NSNumber?
-  @objc var clusterMaxZoomLevel : NSNumber? {
+  @objc public var cluster : NSNumber?
+  @objc public var clusterRadius : NSNumber?
+  @objc public var clusterMaxZoomLevel : NSNumber? {
     didSet {
       logged("RNMBXShapeSource.clusterMaxZoomLevel") {
         if let number = clusterMaxZoomLevel?.doubleValue {
@@ -52,12 +68,12 @@ class RNMBXShapeSource : RNMBXSource {
       }
     }
   }
-  @objc var clusterProperties : [String: [Any]]?;
+  @objc public var clusterProperties : [String: [Any]]?;
 
-  @objc var maxZoomLevel : NSNumber?
-  @objc var buffer : NSNumber?
-  @objc var tolerance : NSNumber?
-  @objc var lineMetrics : NSNumber?
+  @objc public var maxZoomLevel : NSNumber?
+  @objc public var buffer : NSNumber?
+  @objc public var tolerance : NSNumber?
+  @objc public var lineMetrics : NSNumber?
 
   override func sourceType() -> Source.Type {
     return GeoJSONSource.self
@@ -71,13 +87,10 @@ class RNMBXShapeSource : RNMBXSource {
     var result =  GeoJSONSource()
     #endif
 
-    if let shape = shape {
-      do {
-        result.data = try parse(shape)
-      } catch {
-        Logger.log(level: .error, message: "Unable to read shape: \(shape) \(error) setting it to empty")
-        result.data = emptyShape()
-      }
+    if let shapeObject = shapeObject {
+      result.data = toGeoJSONSourceData(shapeObject)
+    } else {
+      result.data = emptyShape()
     }
 
     if let url = url {
@@ -144,12 +157,27 @@ class RNMBXShapeSource : RNMBXSource {
       try! style.setSourceProperty(for: id, property: property, value: value)
     }
   }
+  
+  deinit {
+    shapeAnimator?.unsubscribe(consumer: self)
+  }
 }
 
 // MARK: - parseJSON(url)
 
 extension RNMBXShapeSource
 {
+  func toGeoJSONSourceData(_ shape: GeoJSONObject) -> GeoJSONSourceData {
+    switch shape {
+    case .geometry(let geometry):
+      return .geometry(geometry)
+    case .feature(let feature):
+      return .feature(feature)
+    case .featureCollection(let features):
+      return .featureCollection(features)
+    }
+  }
+
   func parseJSON(_ url: String?, completion: @escaping (Result<GeoJSONObject, Error>) -> Void) {
     guard let url = url else { return }
 
@@ -299,8 +327,6 @@ extension MapboxMap {
                                    completion: completion)
     return DummyCancellable()
   }
-  
-  
 }
 #endif
 #endif
@@ -383,6 +409,19 @@ extension RNMBXShapeSource
         case .failure(let error):
           completion(.failure(error))
         }
+      }
+    }
+  }
+}
+
+// MARK: shape animation
+
+extension RNMBXShapeSource: ShapeAnimationConsumer {
+  func shapeUpdated(shape: Turf.GeoJSONObject) {
+    shapeObject = shape
+    doUpdate { (style) in
+      logged("RCTMGLShapeSource.setShape") {
+        try style.updateGeoJSONSource(withId: id, geoJSON: shape)
       }
     }
   }

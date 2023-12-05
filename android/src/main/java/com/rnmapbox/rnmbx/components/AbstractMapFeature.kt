@@ -15,6 +15,8 @@ abstract class AbstractMapFeature(context: Context?) : ReactViewGroup(context) {
     protected var mMapView: RNMBXMapView? = null;
     private var mWithMapViewCallbacks: Array<((RNMBXMapView) -> Unit)>? = null;
 
+    open var requiresStyleLoad = true;
+
     open fun addToMap(mapView: RNMBXMapView) {
         mMapView = mapView;
         mWithMapViewCallbacks?.forEach { it(mapView) }

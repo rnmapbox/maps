@@ -33,6 +33,15 @@ describe('applyCocoaPodsModifications', () => {
       applyCocoaPodsModifications(iosFixtures.reactNativeTemplatePodfile, {}),
     ).toMatchSnapshot();
   });
+  it('adds blocks to a react native template podfile with params', () => {
+    expect(
+      applyCocoaPodsModifications(iosFixtures.reactNativeTemplatePodfile, {
+        RNMapboxMapsUseV11: true,
+        RNMapboxMapsVersion: '11.0.0.beta4',
+        RNMapboxMapsDownloadToken: 'pk.123',
+      }),
+    ).toMatchSnapshot();
+  });
   it('adds blocks to a expo prebuild template podfile', () => {
     expect(
       applyCocoaPodsModifications(iosFixtures.expoTemplatePodfile, {}),

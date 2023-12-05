@@ -13,15 +13,16 @@ import android.view.View;
 import com.facebook.react.bridge.Dynamic;
 
 public interface RNMBXFillLayerManagerInterface<T extends View> {
-  void setId(T view, Dynamic value);
   void setSourceID(T view, Dynamic value);
   void setExisting(T view, Dynamic value);
   void setFilter(T view, Dynamic value);
   void setAboveLayerID(T view, Dynamic value);
   void setBelowLayerID(T view, Dynamic value);
   void setLayerIndex(T view, Dynamic value);
-  void setReactStyle(T view, Dynamic value);
   void setMaxZoomLevel(T view, Dynamic value);
   void setMinZoomLevel(T view, Dynamic value);
   void setSourceLayerID(T view, Dynamic value);
+  void setSlot(T view, Dynamic value);
+  void setId(T view, Dynamic value);
+  void setReactStyle(T view, Dynamic value);
 }

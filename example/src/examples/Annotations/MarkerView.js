@@ -1,11 +1,7 @@
 import React from 'react';
 import { View, Text, TouchableOpacity } from 'react-native';
-import MapboxGL from '@rnmapbox/maps';
-import PropTypes from 'prop-types';
+import Mapbox from '@rnmapbox/maps';
 
-import sheet from '../../styles/sheet';
-import BaseExamplePropTypes from '../common/BaseExamplePropTypes';
-import Page from '../common/Page';
 import Bubble from '../common/Bubble';
 
 const styles = {
@@ -22,6 +18,7 @@ const styles = {
     color: 'white',
     fontWeight: 'bold',
   },
+  matchParent: { flex: 1 },
 };
 
 const AnnotationContent = ({ title }) => (
@@ -32,15 +29,8 @@ const AnnotationContent = ({ title }) => (
     </TouchableOpacity>
   </View>
 );
-AnnotationContent.propTypes = {
-  title: PropTypes.string,
-};
 
 class ShowMarkerView extends React.Component {
-  static propTypes = {
-    ...BaseExamplePropTypes,
-  };
-
   constructor(props) {
     super(props);
 
@@ -61,46 +51,60 @@ class ShowMarkerView extends React.Component {
 
   render() {
     return (
-      <Page {...this.props}>
-        <MapboxGL.MapView
+      <>
+        <Mapbox.MapView
           ref={(c) => (this._map = c)}
           onPress={(e) => this.onPress(e)}
           onDidFinishLoadingMap={this.onDidFinishLoadingMap}
-          style={sheet.matchParent}
+          style={styles.matchParent}
         >
-          <MapboxGL.Camera
-            zoomLevel={16}
-            centerCoordinate={this.state.coordinates[0]}
+          <Mapbox.Camera
+            defaultSettings={{
+              zoomLevel: 16,
+              centerCoordinate: this.state.coordinates[0],
+            }}
           />
 
-          <MapboxGL.PointAnnotation
+          <Mapbox.PointAnnotation
             coordinate={this.state.coordinates[1]}
             id="pt-ann"
           >
             <AnnotationContent title={'this is a point annotation'} />
-          </MapboxGL.PointAnnotation>
+          </Mapbox.PointAnnotation>
 
-          <MapboxGL.MarkerView coordinate={this.state.coordinates[0]}>
+          <Mapbox.MarkerView coordinate={this.state.coordinates[0]}>
             <AnnotationContent title={'this is a marker view'} />
-          </MapboxGL.MarkerView>
+          </Mapbox.MarkerView>
 
           {this.state.coordinates.slice(2).map((coordinate, index) => (
-            <MapboxGL.PointAnnotation
+            <Mapbox.PointAnnotation
               coordinate={coordinate}
               id={`pt-ann-${index}`}
               key={`pt-ann-${index}`}
             >
               <AnnotationContent title={'this is a point annotation'} />
-            </MapboxGL.PointAnnotation>
+            </Mapbox.PointAnnotation>
           ))}
-        </MapboxGL.MapView>
+        </Mapbox.MapView>
 
         <Bubble>
           <Text>Click to add a point annotation</Text>
         </Bubble>
-      </Page>
+      </>
     );
   }
 }
 
 export default ShowMarkerView;
+
+/* end-example-doc */
+
+/** @type ExampleWithMetadata['metadata'] */
+const metadata = {
+  title: 'Marker View',
+  tags: ['PointAnnotation', 'MarkerView'],
+  docs: `
+Shows marker view and poitn annotations
+`,
+};
+ShowMarkerView.metadata = metadata;

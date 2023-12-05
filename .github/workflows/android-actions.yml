@@ -3,6 +3,13 @@ name: Android Build
 on:
   workflow_call:
     inputs:
+      env_name:
+        required: true
+        default: default
+        type: string
+      ref:
+        required: false
+        type: string 
       NVMRC:
         required: true
         type: string
@@ -21,36 +28,49 @@ on:
         required: true
       MAPBOX_DOWNLOAD_TOKEN:
         required: true
+      ENV_MAPBOX_ACCESS_TOKEN:
+        required: false
+      ENV_MAPBOX_DOWNLOAD_TOKEN:
+        required: false
 
 jobs:
   build_example:
+    name: Android Example Build ${{ inputs.NEW_ARCH && 'Fabric' || 'Paper' }} ${{ inputs.MAP_IMPL }}
     runs-on: ubuntu-latest
+    environment: ${{ inputs.env_name }}
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
+        if: ${{ inputs.ref == '' }}
+      
+      - name: Checkout fork
+        uses: actions/checkout@v4
+        if: ${{ inputs.ref != '' }}
+        with:
+          ref: ${{ inputs.ref }}
 
       - name: Setup node ${{ inputs.NVMRC }}
         uses: actions/setup-node@v3.5.1
         with:
           node-version: ${{ inputs.NVMRC }}
 
-      - name: Setup JDK zulu 11
-        uses: actions/setup-java@v3.6.0
+      - name: Setup JDK zulu 17
+        uses: actions/setup-java@v3
         with:
           distribution: 'zulu'
-          java-version: '11'
+          java-version: '17'
 
       - run: |
           mkdir -p ~/.gradle/
           echo MAPBOX_DOWNLOADS_TOKEN=$MAPBOX_DOWNLOAD_TOKEN > ~/.gradle/gradle.properties
         working-directory: example
         env:
-          MAPBOX_DOWNLOAD_TOKEN: ${{ secrets.MAPBOX_DOWNLOAD_TOKEN }}
+          MAPBOX_DOWNLOAD_TOKEN: ${{ secrets.MAPBOX_DOWNLOAD_TOKEN || secrets.ENV_MAPBOX_DOWNLOAD_TOKEN }}
 
       - run: echo $MAPBOX_ACCESS_TOKEN > ./accesstoken
         working-directory: example
         env:
-          MAPBOX_ACCESS_TOKEN: ${{ secrets.MAPBOX_ACCESS_TOKEN }}
+          MAPBOX_ACCESS_TOKEN: ${{ secrets.MAPBOX_ACCESS_TOKEN || secrets.ENV_MAPBOX_ACCESS_TOKEN }}
 
       - run: yarn install --network-timeout 1000000
         working-directory: example

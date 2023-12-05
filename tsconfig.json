@@ -1,6 +1,5 @@
 {
   "compilerOptions": {
-    // change to true after we transition to TS
     "declaration": true,
     "preserveSymlinks": true,
     "target": "es6",
@@ -16,9 +15,17 @@
     "forceConsistentCasingInFileNames": true,
     "noUnusedLocals": true,
     "noImplicitReturns": true,
+    "paths": {
+      "@rnmapbox/maps": ["../src"],
+      "react-native": ["./node_modules/react-native"],
+    }
   },
   "include": [
     "index.ts",
+    "jest.config.ts",
     "src/**/*"
-  ]
+  ],
+  "exclude": [
+    "**/*.codepart.tsx"
+  ],
 }

@@ -12,14 +12,12 @@ import {
 import { Point, Position } from 'geojson';
 import { Button } from '@rneui/base';
 
-import sheet from '../../styles/sheet';
-import Page from '../common/Page';
 import Bubble from '../common/Bubble';
-import { BaseExampleProps } from '../common/BaseExamplePropTypes';
+import { ExampleWithMetadata } from '../common/ExampleMetadata'; // exclude-from-doc
 
 const ANNOTATION_SIZE = 40;
 
-const styles = StyleSheet.create({
+const styles = {
   annotationContainer: {
     alignItems: 'center',
     backgroundColor: 'white',
@@ -31,7 +29,10 @@ const styles = StyleSheet.create({
     overflow: 'hidden',
     width: ANNOTATION_SIZE,
   },
-});
+  matchParent: {
+    flex: 1,
+  },
+} as const;
 
 type AnnotationWithRemoteImageProps = {
   id: string;
@@ -80,8 +81,11 @@ const AnnotationWithRemoteImage = ({
   );
 };
 
-const ShowPointAnnotation = (props: BaseExampleProps) => {
-  const [coordinates, setCoordinates] = useState([[-73.99155, 40.73581]]);
+const ShowPointAnnotation = () => {
+  const [coordinates, setCoordinates] = useState([
+    [-73.99155, 40.73581],
+    [-73.99155, 40.73681],
+  ]);
   const [layerRendering, setLayerRendering] = useState<'below' | 'above'>(
     'below',
   );
@@ -125,7 +129,7 @@ const ShowPointAnnotation = (props: BaseExampleProps) => {
   };
 
   return (
-    <Page {...props}>
+    <>
       <MapView
         onPress={(feature) => {
           setCoordinates((prevState) => [
@@ -133,7 +137,7 @@ const ShowPointAnnotation = (props: BaseExampleProps) => {
             (feature.geometry as Point).coordinates,
           ]);
         }}
-        style={sheet.matchParent}
+        style={styles.matchParent}
       >
         <Camera
           defaultSettings={{ centerCoordinate: coordinates[0], zoomLevel: 16 }}
@@ -185,8 +189,19 @@ const ShowPointAnnotation = (props: BaseExampleProps) => {
           Render Polygon {{ above: 'below', below: 'above' }[layerRendering]}
         </Button>
       </Bubble>
-    </Page>
+    </>
   );
 };
 
 export default ShowPointAnnotation;
+
+/* end-example-doc */
+
+const metadata: ExampleWithMetadata['metadata'] = {
+  title: 'Show Point Annotations',
+  tags: ['PointAnnotation'],
+  docs: `
+Shows Point annotation with images
+`,
+};
+ShowPointAnnotation.metadata = metadata;

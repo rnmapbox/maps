@@ -9,5 +9,5 @@
       "react": ["./node_modules/@types/react"],
     }
   },
-  "include": ["global.d.ts", "index.js"]
+  "include": ["global.d.ts", "index.js", "./__tests__/dumpExamplesJson.ts", "jest.config.ts", "jest.setup.ts"]
 }

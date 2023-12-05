@@ -23,7 +23,7 @@ class LocationEvent(private val location: Location, private val mapView: RNMBXMa
         get() =  mapView?.id ?: -1
 
     override val key
-        get() = EventKeys.USER_LOCATION_UPDATE
+        get() = EventKeys.USER_LOCATION_UPDATE.value
 
     override val type
         get() = EventTypes.USER_LOCATION_UPDATED

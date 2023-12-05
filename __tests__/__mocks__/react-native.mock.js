@@ -2,6 +2,8 @@ jest.mock('react-native/Libraries/Image/resolveAssetSource', () => {
   return () => ({ uri: 'asset://test.png' });
 });
 
+jest.mock('../../src/assets/heading.png', () => 'heading.png');
+
 jest.mock('react-native/Libraries/EventEmitter/NativeEventEmitter', () => {
   function MockEventEmitter() {}
   MockEventEmitter.prototype.addListener = jest.fn(() => ({
@@ -24,4 +26,12 @@ jest.mock('react-native/Libraries/Utilities/Platform', () => ({
       return x.default;
     }
   },
+}));
+
+jest.mock('react-native/Libraries/Animated/NativeAnimatedHelper', () => ({
+  addListener: jest.fn(),
+  API: {
+    flushQueue: jest.fn(),
+  },
+  shouldUseNativeDriver: jest.fn(),
 }));

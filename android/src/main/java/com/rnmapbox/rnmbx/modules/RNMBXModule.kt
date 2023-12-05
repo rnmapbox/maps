@@ -14,12 +14,15 @@ import com.facebook.react.bridge.ReactMethod
 import com.facebook.react.common.MapBuilder
 import com.mapbox.common.*
 import com.mapbox.maps.MapView
+import com.mapbox.maps.MapboxMap
 import com.mapbox.maps.Style
 import com.mapbox.maps.plugin.attribution.attribution
 import com.rnmapbox.rnmbx.components.camera.constants.CameraMode
+import com.rnmapbox.rnmbx.utils.Logger
 import java.util.HashMap
 
 import com.rnmapbox.rnmbx.v11compat.resourceoption.*
+import com.rnmapbox.rnmbx.v11compat.mapboxmap.*
 
 @ReactModule(name = RNMBXModule.REACT_CLASS)
 class RNMBXModule(private val mReactContext: ReactApplicationContext) : ReactContextBaseJavaModule(
@@ -129,6 +132,19 @@ class RNMBXModule(private val mReactContext: ReactApplicationContext) : ReactCon
     }
 
     @ReactMethod
+    fun clearData(promise: Promise) {
+        mReactContext.runOnUiQueueThread {
+            MapboxMap.clearData(mReactContext) {
+                if (it.isValue) {
+                    promise.resolve(it.value)
+                } else {
+                    promise.reject("error", "RNMBXModule.clearError ${it.error}")
+                }
+            }
+        }
+    }
+
+    @ReactMethod
     fun setAccessToken(accessToken: String?, promise: Promise) {
         mReactContext.runOnUiQueueThread(Runnable {
             setMapboxAccessToken(reactApplicationContext, accessToken)
@@ -138,7 +154,7 @@ class RNMBXModule(private val mReactContext: ReactApplicationContext) : ReactCon
 
     @ReactMethod
     fun setWellKnownTileServer(tileServer: String?) {
-        // NO-OP
+        Logger.e(LOG_TAG, "setWellKnownTileServer is deprecated and will be removed")
     }
 
     @ReactMethod
@@ -153,6 +169,7 @@ class RNMBXModule(private val mReactContext: ReactApplicationContext) : ReactCon
 
     companion object {
         const val REACT_CLASS = "RNMBXModule"
+        const val LOG_TAG = "RNMBXModule"
         private val customHeaderInterceptorAdded = false
         @JvmStatic
         fun getAccessToken(reactContext: ReactApplicationContext?): String {

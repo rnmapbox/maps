@@ -1,13 +1,15 @@
 package com.rnmapbox.rnmbx.components.styles.sources
 
 import android.view.View
-import com.facebook.react.bridge.ReadableArray
+import com.facebook.react.bridge.Dynamic
 import com.facebook.react.uimanager.ThemedReactContext
 import com.facebook.react.uimanager.ViewGroupManager
 import com.facebook.react.uimanager.annotations.ReactProp
+import com.facebook.react.viewmanagers.RNMBXImageSourceManagerInterface
 import com.rnmapbox.rnmbx.utils.GeoJSONUtils.toLatLngQuad
 
-class RNMBXImageSourceManager : ViewGroupManager<RNMBXImageSource>() {
+class RNMBXImageSourceManager : ViewGroupManager<RNMBXImageSource>(),
+    RNMBXImageSourceManagerInterface<RNMBXImageSource> {
     override fun getName(): String {
         return REACT_CLASS
     }
@@ -33,22 +35,28 @@ class RNMBXImageSourceManager : ViewGroupManager<RNMBXImageSource>() {
     }
 
     @ReactProp(name = "id")
-    fun setId(source: RNMBXImageSource, id: String?) {
-        source.iD = id
+    override fun setId(source: RNMBXImageSource, id: Dynamic) {
+        source.iD = id.asString()
     }
 
     @ReactProp(name = "url")
-    fun setUrl(source: RNMBXImageSource, url: String?) {
-        source.setURL(url)
+    override fun setUrl(source: RNMBXImageSource, url: Dynamic) {
+        source.setURL(url.asString())
     }
 
     @ReactProp(name = "coordinates")
-    fun setCoordinates(source: RNMBXImageSource, arr: ReadableArray?) {
-        val quad = toLatLngQuad(arr) ?: return
+    override fun setCoordinates(source: RNMBXImageSource, arr: Dynamic) {
+        val quad = toLatLngQuad(arr.asArray()) ?: return
         source.setCoordinates(quad)
+    }
+
+    @ReactProp(name = "existing")
+    override fun setExisting(source: RNMBXImageSource, value: Dynamic) {
+        source.mExisting = value.asBoolean()
     }
 
     companion object {
         const val REACT_CLASS = "RNMBXImageSource"
     }
+
 }

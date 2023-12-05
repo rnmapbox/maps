@@ -7,6 +7,8 @@ import {
   SymbolLayer,
   CircleLayer,
   Camera,
+  VectorSource,
+  LineLayer,
 } from '@rnmapbox/maps';
 
 const styles = {
@@ -70,20 +72,47 @@ class BugReportExample extends React.Component {
 
     return (
       <>
-        <Button
-          title="Grow"
-          onPress={() => this.setState({ radius: this.state.radius + 20 })}
-        />
         <MapView style={styles.mapView}>
-          <Camera centerCoordinate={[-74.00597, 40.71427]} zoomLevel={14} />
+          <Camera
+            defaultSettings={{
+              centerCoordinate: [-87.622088, 41.878781],
+              zoomLevel: 10,
+            }}
+          />
           <Images images={{ example: require('../assets/example.png') }} />
+          <VectorSource
+            id="mapillary"
+            tileUrlTemplates={[
+              'https://tiles.mapillary.com/maps/vtp/mly1_public/2/{z}/{x}/{y}?access_token=MLY|4142433049200173|72206abe5035850d6743b23a49c41333'.replaceAll(
+                '|',
+                '%7C',
+              ),
+            ]}
+          >
+            <LineLayer
+              id="mapillary-lines"
+              sourceLayerID="sequence"
+              style={{
+                lineCap: 'round',
+                lineJoin: 'round',
+                lineOpacity: 0.6,
+                lineColor: 'rgb(53, 175, 109)',
+                lineWidth: 2.0,
+              }}
+            />
+          </VectorSource>
           <ShapeSource id={'shape-source-id-0'} shape={features}>
-            <CircleLayer id={'circle-layer'} style={circleLayerStyle} />
+            <CircleLayer
+              id={'circle-layer'}
+              style={circleLayerStyle}
+              slot={'bottom'}
+            />
             <SymbolLayer
               id="symbol-id"
               style={{
                 iconImage: ['get', 'icon'],
               }}
+              slot={'middle'}
             />
           </ShapeSource>
         </MapView>

@@ -1,15 +1,12 @@
 import React from 'react';
 import MapboxGL from '@rnmapbox/maps';
+import { ButtonGroup } from '@rneui/base';
 
-import sheet from '../../styles/sheet';
-import BaseExamplePropTypes from '../common/BaseExamplePropTypes';
-import TabBarPage from '../common/TabBarPage';
+const styles = {
+  matchParent: { flex: 1 },
+};
 
 class SetPitch extends React.Component {
-  static propTypes = {
-    ...BaseExamplePropTypes,
-  };
-
   constructor(props) {
     super(props);
 
@@ -42,16 +39,17 @@ class SetPitch extends React.Component {
 
   render() {
     return (
-      <TabBarPage
-        {...this.props}
-        options={this._pitchOptions}
-        onOptionPress={this.onUpdatePitch}
-      >
-        <MapboxGL.MapView style={sheet.matchParent}>
+      <>
+        <ButtonGroup
+          buttons={this._pitchOptions.map((i) => i.label)}
+          selectedIndex={this.state.selectedIndex}
+          onPress={(i) => this.onUpdatePitch(i, this._pitchOptions[i].data)}
+        />
+        <MapboxGL.MapView style={styles.matchParent}>
           <MapboxGL.Camera {...this.state} followUserLocation />
           <MapboxGL.UserLocation />
         </MapboxGL.MapView>
-      </TabBarPage>
+      </>
     );
   }
 }
