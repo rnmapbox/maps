@@ -1,6 +1,6 @@
 import { NativeModules } from 'react-native';
 
-import MapboxGL from '../../../src';
+import Mapbox from '../../../src';
 
 describe('offlineManagerLegacy', () => {
   const packOptions = {
@@ -15,34 +15,34 @@ describe('offlineManagerLegacy', () => {
   };
 
   afterEach(async () => {
-    const packs = await MapboxGL.offlineManagerLegacy.getPacks();
+    const packs = await Mapbox.offlineManagerLegacy.getPacks();
     for (const pack of packs) {
-      await MapboxGL.offlineManagerLegacy.deletePack(pack.name);
+      await Mapbox.offlineManagerLegacy.deletePack(pack.name);
     }
 
     jest.clearAllMocks();
   });
 
   it('should create pack', async () => {
-    let offlinePack = await MapboxGL.offlineManagerLegacy.getPack(
+    let offlinePack = await Mapbox.offlineManagerLegacy.getPack(
       packOptions.name,
     );
     expect(offlinePack).toBeFalsy();
 
-    await MapboxGL.offlineManagerLegacy.createPack(packOptions);
-    offlinePack = await MapboxGL.offlineManagerLegacy.getPack(packOptions.name);
+    await Mapbox.offlineManagerLegacy.createPack(packOptions);
+    offlinePack = await Mapbox.offlineManagerLegacy.getPack(packOptions.name);
     expect(offlinePack).toBeTruthy();
   });
 
   it('should delete pack', async () => {
-    await MapboxGL.offlineManagerLegacy.createPack(packOptions);
-    let offlinePack = await MapboxGL.offlineManagerLegacy.getPack(
+    await Mapbox.offlineManagerLegacy.createPack(packOptions);
+    let offlinePack = await Mapbox.offlineManagerLegacy.getPack(
       packOptions.name,
     );
     expect(offlinePack).toBeTruthy();
 
-    await MapboxGL.offlineManagerLegacy.deletePack(packOptions.name);
-    offlinePack = await MapboxGL.offlineManagerLegacy.getPack(packOptions.name);
+    await Mapbox.offlineManagerLegacy.deletePack(packOptions.name);
+    offlinePack = await Mapbox.offlineManagerLegacy.getPack(packOptions.name);
     expect(offlinePack).toBeFalsy();
   });
 
@@ -51,7 +51,7 @@ describe('offlineManagerLegacy', () => {
       NativeModules.RNMBXOfflineModuleLegacy,
       'migrateOfflineCache',
     );
-    await MapboxGL.offlineManagerLegacy.migrateOfflineCache();
+    await Mapbox.offlineManagerLegacy.migrateOfflineCache();
     expect(spy).toHaveBeenCalled();
   });
 });
