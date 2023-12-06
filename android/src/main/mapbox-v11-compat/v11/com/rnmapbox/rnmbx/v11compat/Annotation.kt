@@ -27,7 +27,6 @@ fun ViewAnnotationOptions.Builder.offsets(x: Double, y: Double) {
   ))
 }
 
-
 abstract class OnViewAnnotationUpdatedListener : _OnViewAnnotationUpdatedListener {
 
 }

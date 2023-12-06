@@ -21,6 +21,10 @@ fun ViewAnnotationOptions.Builder.height(value: Double): ViewAnnotationOptions.B
   return this.height(value.toInt())
 }
 
+fun com.mapbox.maps.ViewAnnotationOptions.Builder.allowOverlapWithPuck(value: Boolean): ViewAnnotationOptions.Builder {
+  return this;
+}
+
 abstract class OnViewAnnotationUpdatedListener : _OnViewAnnotationUpdatedListener {
   override fun onViewAnnotationPositionUpdated(
     view: View,
