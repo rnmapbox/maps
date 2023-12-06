@@ -48,6 +48,7 @@ import com.rnmapbox.rnmbx.modules.RNMBXLocationModule
 import com.rnmapbox.rnmbx.modules.RNMBXLogging
 import com.rnmapbox.rnmbx.modules.RNMBXModule
 import com.rnmapbox.rnmbx.modules.RNMBXOfflineModule
+import com.rnmapbox.rnmbx.modules.RNMBXOfflineModuleLegacy
 import com.rnmapbox.rnmbx.modules.RNMBXSnapshotModule
 import com.rnmapbox.rnmbx.shape_animators.RNMBXMovePointShapeAnimatorModule
 import com.rnmapbox.rnmbx.shape_animators.ShapeAnimatorManager
@@ -89,6 +90,7 @@ class RNMBXPackage : TurboReactPackage() {
             RNMBXModule.REACT_CLASS -> return RNMBXModule(reactApplicationContext)
             RNMBXLocationModule.REACT_CLASS -> return RNMBXLocationModule(reactApplicationContext)
             RNMBXOfflineModule.REACT_CLASS -> return RNMBXOfflineModule(reactApplicationContext)
+            RNMBXOfflineModuleLegacy.REACT_CLASS -> return RNMBXOfflineModuleLegacy(reactApplicationContext)
             RNMBXSnapshotModule.REACT_CLASS -> return RNMBXSnapshotModule(reactApplicationContext)
             RNMBXLogging.REACT_CLASS -> return RNMBXLogging(reactApplicationContext)
             NativeMapViewModule.NAME -> return NativeMapViewModule(reactApplicationContext, getViewTagResolver(reactApplicationContext, s))
@@ -181,6 +183,15 @@ class RNMBXPackage : TurboReactPackage() {
             moduleInfos[RNMBXOfflineModule.REACT_CLASS] = ReactModuleInfo(
                 RNMBXOfflineModule.REACT_CLASS,
                 RNMBXOfflineModule.REACT_CLASS,
+                false,  // canOverrideExistingModule
+                false,  // needsEagerInit
+                true,  // hasConstants
+                false,  // isCxxModule
+                false // isTurboModule
+            )
+            moduleInfos[RNMBXOfflineModuleLegacy.REACT_CLASS] = ReactModuleInfo(
+                RNMBXOfflineModuleLegacy.REACT_CLASS,
+                RNMBXOfflineModuleLegacy.REACT_CLASS,
                 false,  // canOverrideExistingModule
                 false,  // needsEagerInit
                 true,  // hasConstants

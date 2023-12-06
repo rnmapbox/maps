@@ -8207,6 +8207,150 @@
       }
     ]
   },
+  "offlineManagerLegacy": {
+    "name": "offlineManagerLegacy",
+    "fileNameWithExt": "offlineManagerLegacy.ts",
+    "relPath": "src/modules/offline/offlineManagerLegacy.ts",
+    "description": "OfflineManagerLegacy implements a singleton (shared object) that manages offline packs.\nAll of this class’s instance methods are asynchronous, reflecting the fact that offline resources are stored in a database.\nThe shared object maintains a canonical collection of offline packs.",
+    "props": [],
+    "styles": [],
+    "methods": [
+      {
+        "name": "createPack",
+        "description": "Creates and registers an offline pack that downloads the resources needed to use the given region offline.",
+        "params": [
+          {
+            "name": "options",
+            "description": "Create options for a offline pack that specifices zoom levels, style url, and the region to download.",
+            "type": {
+              "name": "OfflineCreatePackOptions"
+            },
+            "optional": false
+          }
+        ],
+        "examples": [
+          "await Mapbox.offlineManager.createPack({\n  name: 'offlinePack',\n  styleURL: 'mapbox://...',\n  minZoom: 14,\n  maxZoom: 20,\n  bounds: [[neLng, neLat], [swLng, swLat]]\n})"
+        ],
+        "returns": {
+          "description": "",
+          "type": {
+            "name": "void"
+          }
+        }
+      },
+      {
+        "name": "invalidatePack",
+        "description": "Invalidates the specified offline pack. This method checks that the tiles in the specified offline pack match those from the server. Local tiles that do not match the latest version on the server are updated.This is more efficient than deleting the offline pack and downloading it again. If the data stored locally matches that on the server, new data will not be downloaded.",
+        "params": [
+          {
+            "name": "name",
+            "description": "Name of the offline pack.",
+            "type": {
+              "name": "String"
+            },
+            "optional": false
+          }
+        ],
+        "examples": [
+          "await Mapbox.offlineManagerLegacy.invalidatePack('packName')"
+        ],
+        "returns": {
+          "description": "",
+          "type": {
+            "name": "void"
+          }
+        }
+      },
+      {
+        "name": "deletePack",
+        "description": "Unregisters the given offline pack and allows resources that are no longer required by any remaining packs to be potentially freed.",
+        "params": [
+          {
+            "name": "name",
+            "description": "Name of the offline pack.",
+            "type": {
+              "name": "String"
+            },
+            "optional": false
+          }
+        ],
+        "examples": [
+          "await Mapbox.offlineManagerLegacy.deletePack('packName')"
+        ],
+        "returns": {
+          "description": "",
+          "type": {
+            "name": "void"
+          }
+        }
+      },
+      {
+        "name": "migrateOfflineCache",
+        "description": "Migrates the offline cache from pre-v10 SDKs to the new v10 cache location",
+        "params": [],
+        "examples": [
+          "await Mapbox.offlineManager.migrateOfflineCache()"
+        ],
+        "returns": {
+          "description": "",
+          "type": {
+            "name": "void"
+          }
+        }
+      },
+      {
+        "name": "resetDatabase",
+        "description": "Deletes the existing database, which includes both the ambient cache and offline packs, then reinitializes it.",
+        "params": [],
+        "examples": [
+          "await Mapbox.offlineManager.resetDatabase();"
+        ],
+        "returns": {
+          "description": "",
+          "type": {
+            "name": "void"
+          }
+        }
+      },
+      {
+        "name": "getPacks",
+        "description": "Retrieves all the current offline packs that are stored in the database.",
+        "params": [],
+        "examples": [
+          "const offlinePacks = await Mapbox.offlineManagerLegacy.getPacks();"
+        ],
+        "returns": {
+          "description": "",
+          "type": {
+            "name": "Array"
+          }
+        }
+      },
+      {
+        "name": "getPack",
+        "description": "Retrieves an offline pack that is stored in the database by name.",
+        "params": [
+          {
+            "name": "name",
+            "description": "Name of the offline pack.",
+            "type": {
+              "name": "String"
+            },
+            "optional": false
+          }
+        ],
+        "examples": [
+          "const offlinePack = await Mapbox.offlineManagerLegacy.getPack();"
+        ],
+        "returns": {
+          "description": "",
+          "type": {
+            "name": "OfflinePack"
+          }
+        }
+      }
+    ]
+  },
   "snapshotManager": {
     "name": "snapshotManager",
     "fileNameWithExt": "snapshotManager.ts",

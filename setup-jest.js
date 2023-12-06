@@ -121,6 +121,21 @@ NativeModules.RNMBXOfflineModule = nativeModule({
   setProgressEventThrottle: jest.fn(),
 });
 
+NativeModules.RNMBXOfflineModuleLegacy = {
+  createPack: (packOptions) => {
+    return Promise.resolve({
+      bounds: packOptions.bounds,
+      metadata: JSON.stringify({ name: packOptions.name }),
+    });
+  },
+  getPacks: () => Promise.resolve([]),
+  deletePack: () => Promise.resolve(),
+  getPackStatus: () => Promise.resolve({}),
+  migrateOfflineCache: () => Promise.resolve({}),
+  pausePackDownload: () => Promise.resolve(),
+  resumePackDownload: () => Promise.resolve(),
+};
+
 NativeModules.RNMBXSnapshotModule = {
   takeSnap: () => {
     return Promise.resolve('file://test.png');
