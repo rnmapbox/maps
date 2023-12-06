@@ -18,7 +18,6 @@ import com.rnmapbox.rnmbx.components.RemovalReason
 import com.rnmapbox.rnmbx.utils.ExpressionParser
 import java.lang.ClassCastException
 import com.rnmapbox.rnmbx.utils.Logger
-import com.rnmapbox.rnmbx.v11compat.layer.*
 
 abstract class RNMBXLayer<T : Layer?>(protected var mContext: Context) : AbstractSourceConsumer(
     mContext
