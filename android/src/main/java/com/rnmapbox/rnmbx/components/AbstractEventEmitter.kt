@@ -7,6 +7,7 @@ import com.facebook.react.common.MapBuilder
 import com.facebook.react.uimanager.ThemedReactContext
 import com.facebook.react.uimanager.UIManagerHelper
 import com.facebook.react.uimanager.ViewGroupManager
+import com.facebook.react.uimanager.events.Event
 import com.facebook.react.uimanager.events.EventDispatcher
 import com.rnmapbox.rnmbx.events.IEvent
 
@@ -26,6 +27,10 @@ abstract class AbstractEventEmitter<T : ViewGroup?>(reactApplicationContext: Rea
 
     val activity : Activity?
         get() = mRCTAppContext.currentActivity
+
+    fun <T : Event<T>>dispatchEvent(event: Event<T>) {
+        mEventDispatcher!!.dispatchEvent(event)
+    }
 
     fun handleEvent(event: IEvent) {
         val eventCacheKey = getEventCacheKey(event)

@@ -1,13 +1,17 @@
 ---
 name: 🪲 Setup/installation error
 about: This template should be used for reporting bugs and defects with project setup
-labels: 'bug-setup :beetle:'
+labels: 'bug-setup 🪲'
 assignees: ''
 ---
 
 
 ## Environment
 - Dev OS: [e.g. OSX 11.0.1, Win10]
+- @rnmapbox/maps version: [eg. 10.0.15] 
+- React Native version: [eg. 0.72.6]
+- Expo version: [eg. 49.0.0]
+
 
 ## Steps to reproduce
 

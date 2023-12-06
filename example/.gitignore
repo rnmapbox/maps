@@ -69,3 +69,6 @@ buck-out/
 /ios/Pods/
 /ios/Podfile.lock
 /vendor/bundle
+
+# detox
+artifacts

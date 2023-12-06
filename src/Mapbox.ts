@@ -1,10 +1,12 @@
 export * from './RNMBXModule';
+
 export {
   Camera,
   UserTrackingMode,
   type CameraPadding,
   type CameraAnimationMode,
   type CameraBounds,
+  type CameraStop,
 } from './components/Camera';
 export { Atmosphere } from './components/Atmosphere';
 export { default as MapView, type MapState } from './components/MapView';
@@ -17,11 +19,14 @@ export {
   default as UserLocation,
   UserLocationRenderMode,
 } from './components/UserLocation';
+export { default as LocationPuck } from './components/LocationPuck';
 export { default as VectorSource } from './components/VectorSource';
 export { ShapeSource } from './components/ShapeSource';
 export { default as RasterSource } from './components/RasterSource';
 export { default as RasterDemSource } from './components/RasterDemSource';
 export { default as ImageSource } from './components/ImageSource';
+export { Viewport } from './components/Viewport';
+export { default as Models } from './components/Models';
 export { default as Images, type ImageEntry } from './components/Images';
 export { default as Image } from './components/Image';
 export { default as FillLayer } from './components/FillLayer';
@@ -30,9 +35,11 @@ export { default as HeatmapLayer } from './components/HeatmapLayer';
 export { default as LineLayer } from './components/LineLayer';
 export { default as CircleLayer } from './components/CircleLayer';
 export { default as SkyLayer } from './components/SkyLayer';
+export { default as ModelLayer } from './components/ModelLayer';
 export { SymbolLayer } from './components/SymbolLayer';
 export { default as RasterLayer } from './components/RasterLayer';
 export { default as BackgroundLayer } from './components/BackgroundLayer';
+export { default as CustomLocationProvider } from './components/CustomLocationProvider';
 export { Terrain } from './components/Terrain';
 export {
   default as locationManager,
@@ -74,17 +81,24 @@ export type {
   LightLayerStyleProps as LightLayerStyle,
   AtmosphereLayerStyleProps as AtmosphereLayerStyle,
   TerrainLayerStyleProps as TerrainLayerStyle,
+  ModelLayerStyleProps as ModelLayerStyle,
 } from './utils/MapboxStyles';
 
 import { deprecatedClass } from './utils/deprecation';
 import { AnimatedPoint } from './classes';
 import { UserTrackingMode } from './components/Camera';
+import MovePointShapeAnimator from './shape_animators/MovePointShapeAnimator';
+import LocationPuck from './components/LocationPuck';
 
 /** @deprecated This will be removed in a future release. Use `AnimatedPoint` instead. */
+
 export const AnimatedMapPoint = deprecatedClass(
   AnimatedPoint,
   'AnimatedMapPoint is deprecated please use AnimatedPoint',
 );
+
+/** @deprecated NativeUserLocation will be removed in future release. Use `LocationPuck` instead. */
+export const NativeUserLocation = LocationPuck;
 
 // types:
 export enum StyleURL {
@@ -100,3 +114,9 @@ export enum StyleURL {
 
 /** @deprecated UserTrackingModes is deprecated use UserTrackingMode */
 export const UserTrackingModes = UserTrackingMode;
+
+/** @experimental */
+
+export const __experimental = {
+  MovePointShapeAnimator,
+};

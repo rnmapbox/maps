@@ -3,7 +3,7 @@ import { NativeMethods, processColor } from 'react-native';
 
 import { getFilter } from '../utils/filterUtils';
 import { AllLayerStyleProps, FilterExpression } from '../utils/MapboxStyles';
-import { transformStyle } from '../utils/StyleValue';
+import { StyleValue, transformStyle } from '../utils/StyleValue';
 import type { BaseProps } from '../types/BaseProps';
 
 type PropsBase = BaseProps & {
@@ -23,7 +23,9 @@ class AbstractLayer<
   PropsType extends PropsBase,
   NativePropsType,
 > extends React.PureComponent<PropsType> {
-  get baseProps(): PropsType {
+  get baseProps(): Omit<PropsType, 'style'> & {
+    reactStyle?: { [key: string]: StyleValue };
+  } {
     return {
       ...this.props,
       id: this.props.id,
@@ -42,10 +44,12 @@ class AbstractLayer<
 
   nativeLayer:
     | (React.Component<NativePropsType> & Readonly<NativeMethods>)
-    | undefined = undefined;
+    | null = null;
 
   setNativeLayer = (
-    instance: React.Component<NativePropsType> & Readonly<NativeMethods>,
+    instance:
+      | (React.Component<NativePropsType> & Readonly<NativeMethods>)
+      | null,
   ) => {
     this.nativeLayer = instance;
   };
@@ -57,7 +61,9 @@ class AbstractLayer<
     return undefined;
   }
 
-  getStyle(style: AllLayerStyleProps | undefined) {
+  getStyle(
+    style: AllLayerStyleProps | undefined,
+  ): { [key: string]: StyleValue } | undefined {
     return transformStyle(style);
   }
 

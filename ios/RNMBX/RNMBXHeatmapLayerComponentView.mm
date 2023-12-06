@@ -5,6 +5,7 @@
 
 #import <React/RCTConversions.h>
 #import <React/RCTFabricComponentsPlugins.h>
+#import <React/RCTBridge+Private.h>
 
 #import <react/renderer/components/rnmapbox_maps_specs/ComponentDescriptors.h>
 #import <react/renderer/components/rnmapbox_maps_specs/EventEmitters.h>
@@ -34,6 +35,7 @@ using namespace facebook::react;
 - (void)prepareView
 {
   _view =  [[RNMBXHeatmapLayer alloc] init];
+  _view.bridge = [RCTBridge currentBridge];
   self.contentView = _view;
 }
 #pragma mark - RCTComponentViewProtocol
@@ -45,7 +47,7 @@ using namespace facebook::react;
 
 - (void)updateProps:(const Props::Shared &)props oldProps:(const Props::Shared &)oldProps
 {
-  const auto &newProps = *std::static_pointer_cast<const RNMBXHeatmapLayerProps>(props);
+  const auto &newProps = static_cast<const RNMBXHeatmapLayerProps &>(*props);
   RNMBXSetCommonLayerProps(newProps, _view);
 
 

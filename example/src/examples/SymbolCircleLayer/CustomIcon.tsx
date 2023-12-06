@@ -10,7 +10,7 @@ import MapboxGL, {
 import { featureCollection, feature, point } from '@turf/helpers';
 
 import Bubble from '../common/Bubble';
-import type { ExampleMetadata } from '../common/ExampleMetadata';
+import type { ExampleWithMetadata } from '../common/ExampleMetadata';
 import exampleIcon from '../../assets/example.png';
 
 const styles = {
@@ -80,19 +80,21 @@ const CustomIcon = memo(() => {
   );
 });
 
+export default CustomIcon;
 /* end-example-doc */
 
-const metadata = CustomIcon as unknown as ExampleMetadata;
-metadata.title = 'Custom Icon';
-metadata.tags = [
-  'ShapeSource',
-  'ShapeSource#onPress',
-  'SymbolLayer',
-  'Images',
-  'SymbolLayer#iconImage',
-];
-metadata.docs = `
+const metadata: ExampleWithMetadata['metadata'] = {
+  title: 'Custom Icon',
+  tags: [
+    'ShapeSource',
+    'ShapeSource#onPress',
+    'SymbolLayer',
+    'Images',
+    'SymbolLayer#iconImage',
+  ],
+  docs: `
 Renders a symbol layer with custom icon defined using the Images component. Clicking a location on a map add a new icon.
-`;
+`,
+};
 
-export default CustomIcon;
+(CustomIcon as unknown as ExampleWithMetadata).metadata = metadata;

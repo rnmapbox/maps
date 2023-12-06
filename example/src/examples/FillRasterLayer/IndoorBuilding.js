@@ -1,13 +1,11 @@
 import React from 'react';
 import { View, StyleSheet } from 'react-native';
-import MapboxGL from '@rnmapbox/maps';
+import Mapbox from '@rnmapbox/maps';
 import { Slider } from '@rneui/base';
 
 import sheet from '../../styles/sheet';
 import colors from '../../styles/colors';
 import indoorMapGeoJSON from '../../assets/indoor_3d_map.json';
-import Page from '../common/Page';
-import BaseExamplePropTypes from '../common/BaseExamplePropTypes';
 
 const styles = StyleSheet.create({
   slider: {
@@ -30,10 +28,6 @@ const layerStyles = {
 };
 
 class IndoorBuilding extends React.Component {
-  static propTypes = {
-    ...BaseExamplePropTypes,
-  };
-
   constructor(props) {
     super(props);
 
@@ -50,32 +44,30 @@ class IndoorBuilding extends React.Component {
 
   render() {
     return (
-      <Page {...this.props}>
-        <MapboxGL.MapView
+      <>
+        <Mapbox.MapView
           ref={(ref) => (this.map = ref)}
           style={sheet.matchParent}
         >
-          <MapboxGL.Camera
+          <Mapbox.Camera
             zoomLevel={16}
             pitch={40}
             heading={20}
             centerCoordinate={[-87.61694, 41.86625]}
           />
 
-          <MapboxGL.Light
-            style={{ position: [5, 90, this.state.sliderValue] }}
-          />
+          <Mapbox.Light style={{ position: [5, 90, this.state.sliderValue] }} />
 
-          <MapboxGL.ShapeSource
+          <Mapbox.ShapeSource
             id="indoorBuildingSource"
             shape={indoorMapGeoJSON}
           >
-            <MapboxGL.FillExtrusionLayer
+            <Mapbox.FillExtrusionLayer
               id="building3d"
               style={layerStyles.building}
             />
-          </MapboxGL.ShapeSource>
-        </MapboxGL.MapView>
+          </Mapbox.ShapeSource>
+        </Mapbox.MapView>
 
         <View style={styles.slider}>
           <Slider
@@ -89,9 +81,19 @@ class IndoorBuilding extends React.Component {
             minimumTrackTintColor={colors.secondary.purpleDark}
           />
         </View>
-      </Page>
+      </>
     );
   }
 }
 
 export default IndoorBuilding;
+
+/* end-example-doc */
+
+/** @type ExampleWithMetadata['metadata'] */
+const metadata = {
+  title: 'Indoor Building Map',
+  tags: [],
+  docs: '',
+};
+IndoorBuilding.metadata = metadata;

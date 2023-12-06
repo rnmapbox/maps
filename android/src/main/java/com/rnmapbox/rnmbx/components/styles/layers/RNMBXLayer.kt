@@ -18,6 +18,7 @@ import com.rnmapbox.rnmbx.components.RemovalReason
 import com.rnmapbox.rnmbx.utils.ExpressionParser
 import java.lang.ClassCastException
 import com.rnmapbox.rnmbx.utils.Logger
+import com.rnmapbox.rnmbx.v11compat.layer.*
 
 abstract class RNMBXLayer<T : Layer?>(protected var mContext: Context) : AbstractSourceConsumer(
     mContext
@@ -133,6 +134,13 @@ abstract class RNMBXLayer<T : Layer?>(protected var mContext: Context) : Abstrac
         }
     }
 
+    var mSlot: String? = null
+
+    fun setSlot(slot: String?) {
+        mSlot = slot
+        applySlot()
+    }
+
     fun setExisting(existing: Boolean) {
         mExisting = existing
     }
@@ -232,16 +240,27 @@ abstract class RNMBXLayer<T : Layer?>(protected var mContext: Context) : Abstrac
                     add ()
                 } } }
             }
-            setZoomBounds()
+            applyZoomBounds()
+            applySlot()
         }
     }
 
-    protected fun setZoomBounds() {
-        if (mMaxZoomLevel != null) {
-            mLayer!!.maxZoom(mMaxZoomLevel!!.toFloat().toDouble())
+    protected fun applyZoomBounds() {
+        mLayer?.let {layer ->
+            mMaxZoomLevel?.let {
+                layer.maxZoom(it.toDouble())
+            }
+            mMinZoomLevel?.let {
+                layer.minZoom(it.toDouble())
+            }
         }
-        if (mMinZoomLevel != null) {
-            mLayer!!.minZoom(mMinZoomLevel!!.toFloat().toDouble())
+    }
+
+    protected fun applySlot() {
+        mLayer?.let { layer ->
+            mSlot?.let {
+                layer.slot(it)
+            }
         }
     }
 

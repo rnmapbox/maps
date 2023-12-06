@@ -79,6 +79,12 @@ public class RNMBXMapViewManagerDelegate<T extends View, U extends BaseViewManag
       case "styleURL":
         mViewManager.setStyleURL(view, new DynamicFromObject(value));
         break;
+      case "gestureSettings":
+        mViewManager.setGestureSettings(view, new DynamicFromObject(value));
+        break;
+      case "surfaceView":
+        mViewManager.setSurfaceView(view, new DynamicFromObject(value));
+        break;
       case "scaleBarViewMargins":
         mViewManager.setScaleBarViewMargins(view, new DynamicFromObject(value));
         break;

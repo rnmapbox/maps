@@ -4,6 +4,7 @@ import android.content.Context
 import com.mapbox.maps.extension.style.sources.generated.GeoJsonSource
 import com.rnmapbox.rnmbx.utils.ImageEntry
 import android.graphics.drawable.BitmapDrawable
+import com.facebook.react.bridge.Promise
 import com.facebook.react.bridge.ReadableMap
 import com.rnmapbox.rnmbx.components.mapview.RNMBXMapView
 import com.rnmapbox.rnmbx.events.FeatureClickEvent
@@ -13,8 +14,13 @@ import com.mapbox.bindgen.Value
 import com.mapbox.geojson.Feature
 import com.rnmapbox.rnmbx.events.AndroidCallbackEvent
 import com.mapbox.geojson.FeatureCollection
+import com.mapbox.geojson.GeoJson
+import com.mapbox.geojson.Geometry
 import com.mapbox.maps.*
 import com.mapbox.maps.extension.style.expressions.generated.Expression
+import com.rnmapbox.rnmbx.shape_animators.ShapeAnimationConsumer
+import com.rnmapbox.rnmbx.shape_animators.ShapeAnimator
+import com.rnmapbox.rnmbx.shape_animators.ShapeAnimatorManager
 import com.rnmapbox.rnmbx.utils.Logger
 import java.net.URL
 import java.util.ArrayList
@@ -23,9 +29,10 @@ import java.util.HashMap
 import com.rnmapbox.rnmbx.v11compat.feature.*
 
 class RNMBXShapeSource(context: Context, private val mManager: RNMBXShapeSourceManager) :
-    RCTSource<GeoJsonSource>(context) {
+    RNMBXSource<GeoJsonSource>(context), ShapeAnimationConsumer {
     private var mURL: URL? = null
     private var mShape: String? = null
+    private var mShapeAnimator: ShapeAnimator? = null
     private var mCluster: Boolean? = null
     private var mClusterRadius: Long? = null
     private var mClusterMaxZoom: Long? = null
@@ -34,8 +41,6 @@ class RNMBXShapeSource(context: Context, private val mManager: RNMBXShapeSourceM
     private var mBuffer: Long? = null
     private var mTolerance: Double? = null
     private var mLineMetrics: Boolean? = null
-    private val mImages: List<Map.Entry<String, ImageEntry>>? = null
-    private val mNativeImages: List<Map.Entry<String, BitmapDrawable>>? = null
 
     override fun hasNoDataSoRefersToExisting(): Boolean {
         return (mURL == null) && (mShape == null)
@@ -47,6 +52,11 @@ class RNMBXShapeSource(context: Context, private val mManager: RNMBXShapeSourceM
             val map = mapView.getMapboxMap()
             super@RNMBXShapeSource.addToMap(mapView)
         }
+    }
+
+    override fun setId(id: Int) {
+        super.setId(id)
+        mManager.tagAssigned(id)
     }
 
     override fun makeSource(): GeoJsonSource {
@@ -66,11 +76,55 @@ class RNMBXShapeSource(context: Context, private val mManager: RNMBXShapeSourceM
     }
 
     fun setShape(geoJSONStr: String) {
-        mShape = geoJSONStr
-        if (mSource != null && mMapView != null && !mMapView!!.isDestroyed) {
-            mSource!!.data(mShape!!)
-            val result = mMap!!.getStyle()!!
-                .setStyleSourceProperty(iD!!, "data", Value.valueOf(mShape!!))
+        mShapeAnimator?.unsubscribe(this)
+        mShapeAnimator = null
+
+        val shapeAnimatorManager = mManager.shapeAnimatorManager
+        if (shapeAnimatorManager.isShapeAnimatorTag(geoJSONStr)) {
+            shapeAnimatorManager.get(geoJSONStr)?.let { shapeAnimator ->
+                mShapeAnimator = shapeAnimator
+                shapeAnimator.subscribe(this)
+
+                shapeUpdated(shapeAnimator.getShape())
+            }
+        } else {
+            mShape = geoJSONStr
+            if (mSource != null && mMapView != null && !mMapView!!.isDestroyed) {
+                mSource!!.data(mShape!!)
+                val result = mMap!!.getStyle()!!
+                    .setStyleSourceProperty(iD!!, "data", Value.valueOf(mShape!!))
+            }
+        }
+    }
+
+    private fun toGeoJSONSourceData(geoJson: GeoJson): GeoJSONSourceData? {
+        return when (geoJson) {
+            is Geometry ->
+                GeoJSONSourceData(geoJson)
+            is Feature ->
+                GeoJSONSourceData(geoJson)
+            is FeatureCollection ->
+                GeoJSONSourceData(geoJson.features() ?: listOf())
+            else -> {
+                Logger.e(
+                    LOG_TAG,
+                    "Cannot convert shape to GeoJSONSourceData, neitthe Geometry, nor Feature or FeatureCollection: $geoJson"
+                );
+                return null
+            }
+        }
+    }
+    override fun shapeUpdated(geoJson: GeoJson) {
+        mSource?.also {
+            if (mSource != null && mMapView != null && !mMapView!!.isDestroyed) {
+                toGeoJSONSourceData(geoJson)?.let {
+                    mMap?.getStyle()?.setStyleGeoJSONSourceData(iD!!,
+                        "animated-shape",
+                        it)
+                }
+            }
+        } ?: run {
+            mShape = geoJson.toJson()
         }
     }
 
@@ -176,18 +230,14 @@ class RNMBXShapeSource(context: Context, private val mManager: RNMBXShapeSourceM
         }
     }
 
-    private fun callbackSuccess(callbackID: String, payload: WritableMap) {
-        val event = AndroidCallbackEvent(this, callbackID, payload)
-        mManager.handleEvent(event)
+    private fun callbackSuccess(payload: WritableMap, promise: Promise) {
+        promise.resolve(payload)
     }
-    private fun callbackError(callbackID: String, error: String, where: String) {
-        val payload: WritableMap = WritableNativeMap()
-        payload.putString("error", "$where: $error")
-        val event = AndroidCallbackEvent(this, callbackID, payload)
-        mManager.handleEvent(event)
+    private fun callbackError(error: String, where: String, promise: Promise) {
+        promise.reject("error", "$where: $error")
     }
 
-    fun getClusterExpansionZoom(callbackID: String, featureJSON: String) {
+    fun getClusterExpansionZoom(featureJSON: String, promise: Promise) {
         val feature = Feature.fromJson(featureJSON)
 
         mMap!!.getGeoJsonClusterExpansionZoom(iD!!, feature, QueryFeatureExtensionCallback { features ->
@@ -198,28 +248,29 @@ class RNMBXShapeSource(context: Context, private val mManager: RNMBXShapeSourceM
                 if (contents is Long) {
                     val payload: WritableMap = WritableNativeMap()
                     payload.putInt("data", contents.toInt())
-                    callbackSuccess(callbackID, payload)
+                    callbackSuccess(payload, promise)
                     return@QueryFeatureExtensionCallback
                 } else {
                     callbackError(
-                        callbackID,
+
                         "Not a number: $contents",
-                        "getClusterExpansionZoom/getGeoJsonClusterExpansionZoom"
+                        "getClusterExpansionZoom/getGeoJsonClusterExpansionZoom",
+                        promise
                     )
                     return@QueryFeatureExtensionCallback
                 }
             } else {
                 callbackError(
-                    callbackID,
                     features.error ?: "Unknown error",
-                    "getClusterExpansionZoom/getGeoJsonClusterExpansionZoom"
+                    "getClusterExpansionZoom/getGeoJsonClusterExpansionZoom",
+                    promise
                 )
                 return@QueryFeatureExtensionCallback
             }
         })
     }
 
-    fun getClusterLeaves(callbackID: String, featureJSON: String, number: Int, offset: Int) {
+    fun getClusterLeaves(featureJSON: String, number: Int, offset: Int, promise: Promise) {
         val feature = Feature.fromJson(featureJSON)
 
         val _this = this
@@ -232,19 +283,19 @@ class RNMBXShapeSource(context: Context, private val mManager: RNMBXShapeSourceM
                     "data",
                     FeatureCollection.fromFeatures(leaves!!).toJson()
                 )
-                callbackSuccess(callbackID, payload)
+                callbackSuccess(payload, promise)
             } else {
                 callbackError(
-                    callbackID,
                     features.error ?: "Unknown error",
-                    "getClusterLeaves/getGeoJsonClusterLeaves"
+                    "getClusterLeaves/getGeoJsonClusterLeaves",
+                    promise
                 )
                 return@QueryFeatureExtensionCallback
             }
         })
     }
 
-    fun getClusterChildren(callbackID: String, featureJSON: String) {
+    fun getClusterChildren(featureJSON: String, promise: Promise) {
         val feature = Feature.fromJson(featureJSON)
 
         val _this = this
@@ -257,12 +308,12 @@ class RNMBXShapeSource(context: Context, private val mManager: RNMBXShapeSourceM
                     "data",
                     FeatureCollection.fromFeatures(children!!).toJson()
                 )
-                callbackSuccess(callbackID, payload)
+                callbackSuccess(payload, promise)
             }else {
                 callbackError(
-                    callbackID,
                     features.error ?: "Unknown error",
-                    "getClusterLeaves/queryFeatureExtensions"
+                    "getClusterLeaves/queryFeatureExtensions",
+                    promise
                 )
                 return@QueryFeatureExtensionCallback
             }

@@ -16,6 +16,7 @@ class RNMBXSymbolLayerManager : ViewGroupManager<RNMBXSymbolLayer>(),
         return RNMBXSymbolLayer(reactContext)
     }
 
+    // @{codepart-replace-start(LayerManagerCommonProps.codepart-kt.ejs,{layerType:"RNMBXSymbolLayer"})}
     @ReactProp(name = "id")
     override fun setId(layer: RNMBXSymbolLayer, id: Dynamic) {
         layer.iD = id.asString()
@@ -70,6 +71,13 @@ class RNMBXSymbolLayerManager : ViewGroupManager<RNMBXSymbolLayer>(),
     override fun setFilter(layer: RNMBXSymbolLayer, filterList: Dynamic) {
         layer.setFilter(filterList.asArray())
     }
+
+    @ReactProp(name = "slot")
+    override fun setSlot(layer: RNMBXSymbolLayer, slot: Dynamic) {
+        layer.setSlot(slot.asString())
+    }
+
+    // @{codepart-replace-end}
 
     companion object {
         const val REACT_CLASS = "RNMBXSymbolLayer"

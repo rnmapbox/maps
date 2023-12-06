@@ -11,12 +11,11 @@ import {
 } from '@rnmapbox/maps';
 import bbox from '@turf/bbox';
 import { Feature, Point, Position } from 'geojson';
-import React, { memo, useCallback, useMemo, useState } from 'react';
+import React, { useCallback, useMemo, useState } from 'react';
 import { Button, SafeAreaView, StyleSheet, View } from 'react-native';
 
 import colors from '../../styles/colors';
-import { BaseExampleProps } from '../common/BaseExamplePropTypes';
-import Page from '../common/Page';
+import { ExampleWithMetadata } from '../common/ExampleMetadata'; // exclude-from-doc
 
 Logger.setLogLevel('verbose');
 
@@ -70,7 +69,7 @@ const toPosition = (coordinate: Coordinate): Position => {
   return [coordinate.longitude, coordinate.latitude];
 };
 
-const CameraAnimation = memo((props: BaseExampleProps) => {
+const CameraAnimation = () => {
   const [animationMode, setAnimationMode] =
     useState<CameraAnimationMode>('moveTo');
   const [coordinates, setCoordinates] = useState<Coordinate[]>([
@@ -168,7 +167,7 @@ const CameraAnimation = memo((props: BaseExampleProps) => {
   }, [coordinates, centerOrBounds]);
 
   return (
-    <Page {...props}>
+    <>
       <MapView style={styles.map}>
         <Camera
           {...centerOrBounds}
@@ -243,9 +242,9 @@ const CameraAnimation = memo((props: BaseExampleProps) => {
           </View>
         </View>
       </SafeAreaView>
-    </Page>
+    </>
   );
-});
+};
 
 const styles = StyleSheet.create({
   map: {
@@ -272,3 +271,14 @@ const styles = StyleSheet.create({
 });
 
 export default CameraAnimation;
+
+/* end-example-doc */
+
+const metadata: ExampleWithMetadata['metadata'] = {
+  title: 'Camera Animation',
+  tags: ['Camera', 'Camera#animationMode'],
+  docs: `
+Camera animation modes
+`,
+};
+CameraAnimation.metadata = metadata;

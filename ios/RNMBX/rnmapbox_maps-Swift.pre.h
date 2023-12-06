@@ -1,7 +1,8 @@
-// ideally the file extension would be just `.h` but then it gets picked up as a header part of the umbrella header
-
 #import <CoreFoundation/CoreFoundation.h>
 #import <CoreLocation/CoreLocation.h>
+
+#import <React/RCTComponent.h>
+#import <React/RCTViewManager.h>
 
 @interface MapView : UIView
 @end

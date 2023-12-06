@@ -457,14 +457,9 @@ class RNMBXLocationModule: RCTEventEmitter, LocationProviderRNMBXDelegate {
 
   static weak var shared : RNMBXLocationModule? = nil
 
-  var locationProviderRNMBX : LocationProviderRNMBX
   var hasListener = false
   
-  var locationProvider : LocationProvider {
-    get {
-      return locationProviderRNMBX
-    }
-  }
+  var locationProvider : LocationProvider
   
   var locationEventThrottle : (
     waitBetweenEvents: Double?,
@@ -475,9 +470,11 @@ class RNMBXLocationModule: RCTEventEmitter, LocationProviderRNMBXDelegate {
   )
 
   override init() {
-    locationProviderRNMBX = LocationProviderRNMBX()
+    locationProvider = LocationProviderRNMBX()
     super.init()
-    locationProviderRNMBX.delegate = self
+    if let locationProvider = locationProvider as? LocationProviderRNMBX {
+      locationProvider.delegate = self
+    }
     RNMBXLocationModule.shared = self
   }
   
@@ -497,12 +494,20 @@ class RNMBXLocationModule: RCTEventEmitter, LocationProviderRNMBXDelegate {
   }
   
   @objc func start(_ minDisplacement: CLLocationDistance) {
-    if minDisplacement >= 0.0 { locationProviderRNMBX.setDistanceFilter(minDisplacement) }
-    locationProviderRNMBX.start()
+    if minDisplacement >= 0.0 {
+      if let locationProvider = locationProvider as? LocationProviderRNMBX {
+        locationProvider.setDistanceFilter(minDisplacement)
+      }
+    }
+    if let locationProvider = locationProvider as? LocationProviderRNMBX {
+      locationProvider.start()
+    }
   }
   
   @objc func stop() {
-    locationProviderRNMBX.stop()
+    if let locationProvider = locationProvider as? LocationProviderRNMBX {
+      locationProvider.stop()
+    }
   }
   
   @objc func getLastKnownLocation() -> RNMBXLocation? {
@@ -510,15 +515,21 @@ class RNMBXLocationModule: RCTEventEmitter, LocationProviderRNMBXDelegate {
   }
   
   @objc func setMinDisplacement(_ minDisplacement: CLLocationDistance) {
-    locationProviderRNMBX.setDistanceFilter(minDisplacement)
+    if let locationProvider = locationProvider as? LocationProviderRNMBX {
+      locationProvider.setDistanceFilter(minDisplacement)
+    }
   }
   
   @objc func setRequestsAlwaysUse(_ requestsAlwaysUse: Bool) {
-    locationProviderRNMBX.setRequestsAlwaysUse(requestsAlwaysUse);
+    if let locationProvider = locationProvider as? LocationProviderRNMBX {
+      locationProvider.setRequestsAlwaysUse(requestsAlwaysUse)
+    }
   }
 
   @objc func simulateHeading(_ changesPerSecond: NSNumber, increment: NSNumber) {
-    locationProviderRNMBX.simulateHeading(changesPerSecond: changesPerSecond.intValue, increment: increment.doubleValue)
+    if let locationProvider = locationProvider as? LocationProviderRNMBX {
+      locationProvider.simulateHeading(changesPerSecond: changesPerSecond.intValue, increment: increment.doubleValue)
+    }
   }
 
   @objc

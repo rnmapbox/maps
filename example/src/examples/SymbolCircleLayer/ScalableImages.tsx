@@ -1,8 +1,7 @@
 import React from 'react';
 import Mapbox, { type ImageEntry } from '@rnmapbox/maps';
 
-import sheet from '../../styles/sheet';
-import { ExampleMetadata } from '../common/ExampleMetadata';
+import type { ExampleWithMetadata } from '../common/ExampleMetadata';
 
 const styles = {
   icon: {
@@ -11,6 +10,7 @@ const styles = {
     textField: ['get', 'name'],
     iconTextFit: 'both',
   },
+  matchParent: { flex: 1 },
 } as const;
 
 const featureCollection: GeoJSON.FeatureCollection = {
@@ -54,7 +54,7 @@ class ScaleableImages extends React.PureComponent {
     const { images } = this.state;
 
     return (
-      <Mapbox.MapView style={sheet.matchParent}>
+      <Mapbox.MapView style={styles.matchParent}>
         <Mapbox.Camera
           defaultSettings={{
             zoomLevel: 17,
@@ -78,16 +78,14 @@ class ScaleableImages extends React.PureComponent {
 export default ScaleableImages;
 
 /* end-example-doc */
-const metadata = ScaleableImages as unknown as ExampleMetadata;
-metadata.title = 'Scaleable images';
-metadata.tags = [
-  'Images',
-  'Images#stretchX',
-  'Images#stretchY',
-  'Images#content',
-];
-metadata.docs = `
+const metadata: ExampleWithMetadata['metadata'] = {
+  title: 'Scaleable images',
+  tags: ['Images', 'Images#stretchX', 'Images#stretchY', 'Images#content'],
+  docs: `
 Demonstates Scalable images.
 
 You can use strachX, stretchY and content to scale a bitmap image - keep parts of it fixed while only scale specific parts.
-`;
+`,
+};
+
+(ScaleableImages as unknown as ExampleWithMetadata).metadata = metadata;

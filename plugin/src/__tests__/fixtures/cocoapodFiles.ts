@@ -41,7 +41,7 @@ target 'HelloWorld' do
   use_unimodules!
   config = use_native_modules!
 
-  use_react_native!(:path => config["reactNativePath"])
+  use_react_native!(:path => config[\\"reactNativePath\\"])
 
   # Uncomment to opt-in to using Flipper
   #
@@ -65,7 +65,7 @@ target 'HelloWorld' do
   use_unimodules!
   config = use_native_modules!
 
-  use_react_native!(:path => config["reactNativePath"])
+  use_react_native!(:path => config[\\"reactNativePath\\"])
 
   # pre_install do |installer|
   # end
@@ -107,7 +107,7 @@ INVALID_post_install do |installer|
 # @generated end @rnmapbox/maps-post_installer
 end
 # @generated end post_installer
-  use_react_native!(:path => config["reactNativePath"])
+  use_react_native!(:path => config[\\"reactNativePath\\"])
 
   # pre_install do |installer|
   # end
@@ -159,7 +159,7 @@ INVALID_post_install do |installer|
 # @generated end @rnmapbox/maps-post_installer
 end
 # @generated end post_installer
-  use_react_native!(:path => config["reactNativePath"])
+  use_react_native!(:path => config[\\"reactNativePath\\"])
 
 
 end

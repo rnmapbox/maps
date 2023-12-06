@@ -92,7 +92,6 @@ using namespace facebook::react;
               std::dynamic_pointer_cast<const facebook::react::RNMBXMapViewEventEmitter>(strongSelf->_eventEmitter)->onMapChange({type, json});
             }
       }];
-
     self.contentView = _view;
 }
 
@@ -126,7 +125,7 @@ using namespace facebook::react;
 
 - (void)updateProps:(const Props::Shared &)props oldProps:(const Props::Shared &)oldProps
 {
-  const auto &newProps = *std::static_pointer_cast<const RNMBXMapViewProps>(props);
+  const auto &newProps = static_cast<const RNMBXMapViewProps &>(*props);
     id attributionEnabled = RNMBXConvertFollyDynamicToId(newProps.attributionEnabled);
     if (attributionEnabled != nil) {
         _view.reactAttributionEnabled = attributionEnabled;
@@ -224,6 +223,8 @@ using namespace facebook::react;
     }
 
   [super updateProps:props oldProps:oldProps];
+
+  [_view didSetProps:@[]];
 }
 
 - (void)prepareForRecycle

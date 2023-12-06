@@ -16,6 +16,7 @@ class RNMBXFillLayerManager : ViewGroupManager<RNMBXFillLayer>(),
         return RNMBXFillLayer(reactContext)
     }
 
+    // @{codepart-replace-start(LayerManagerCommonProps.codepart-kt.ejs,{layerType:"RNMBXFillLayer"})}
     @ReactProp(name = "id")
     override fun setId(layer: RNMBXFillLayer, id: Dynamic) {
         layer.iD = id.asString()
@@ -29,11 +30,6 @@ class RNMBXFillLayerManager : ViewGroupManager<RNMBXFillLayer>(),
     @ReactProp(name = "sourceID")
     override fun setSourceID(layer: RNMBXFillLayer, sourceID: Dynamic) {
         layer.setSourceID(sourceID.asString())
-    }
-
-    @ReactProp(name = "sourceLayerID")
-    override fun setSourceLayerID(layer: RNMBXFillLayer, sourceLayerID: Dynamic) {
-        layer.setSourceLayerID(sourceLayerID.asString())
     }
 
     @ReactProp(name = "aboveLayerID")
@@ -66,10 +62,21 @@ class RNMBXFillLayerManager : ViewGroupManager<RNMBXFillLayer>(),
         layer.setReactStyle(style.asMap())
     }
 
+    @ReactProp(name = "sourceLayerID")
+    override fun setSourceLayerID(layer: RNMBXFillLayer, sourceLayerID: Dynamic) {
+        layer.setSourceLayerID(sourceLayerID.asString())
+    }
+
     @ReactProp(name = "filter")
     override fun setFilter(layer: RNMBXFillLayer, filterList: Dynamic) {
         layer.setFilter(filterList.asArray())
     }
+
+    @ReactProp(name = "slot")
+    override fun setSlot(layer: RNMBXFillLayer, slot: Dynamic) {
+        layer.setSlot(slot.asString())
+    }
+    // @{codepart-replace-end}
 
     companion object {
         const val REACT_CLASS = "RNMBXFillLayer"

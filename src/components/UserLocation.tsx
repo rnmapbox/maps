@@ -7,7 +7,7 @@ import { CircleLayerStyle } from '../Mapbox';
 import Annotation from './Annotation';
 import CircleLayer from './CircleLayer';
 import HeadingIndicator from './HeadingIndicator';
-import NativeUserLocation from './NativeUserLocation';
+import NativeUserLocation from './LocationPuck';
 
 const mapboxBlue = 'rgba(51, 181, 229, 100)';
 
@@ -100,6 +100,7 @@ type Props = {
   onUpdate?: (location: Location) => void;
 
   /**
+   * @deprecated use NativeUserLocation component instead of UserLocationRenderMode.Native
    * Which render mode to use.
    */
   renderMode?: UserLocationRenderMode;

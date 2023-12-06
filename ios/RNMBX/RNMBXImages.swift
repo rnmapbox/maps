@@ -16,17 +16,19 @@ func hasImage(style: Style, name: String) -> Bool {
 typealias StyleImageMissingPayload = StyleImageMissing
 #endif
 
-class RNMBXImages : UIView, RNMBXMapComponent {
+open class RNMBXImages : UIView, RNMBXMapComponent {
   
-  weak var bridge : RCTBridge! = nil
+  @objc public weak var bridge : RCTBridge! = nil
   
   weak var style: Style? = nil
 
+  var imageManager: ImageManager? = nil
+
   @objc
-  var onImageMissing: RCTBubblingEventBlock? = nil
+  public var onImageMissing: RCTBubblingEventBlock? = nil
   
   @objc
-  var images : [String:Any] = [:] {
+  public var images : [String:Any] = [:] {
     didSet {
       updateImages(images: images, oldImages: oldValue)
     }
@@ -37,7 +39,7 @@ class RNMBXImages : UIView, RNMBXMapComponent {
   var imageViews: [RNMBXImage] = []
 
   @objc
-  var nativeImages: [Any] = [] {
+  public var nativeImages: [Any] = [] {
     didSet {
       nativeImageInfos = nativeImages.compactMap { decodeImage($0) }
     }
@@ -46,9 +48,18 @@ class RNMBXImages : UIView, RNMBXMapComponent {
   typealias NativeImageInfo = (name:String, sdf: Bool, stretchX:[(from:Float, to:Float)], stretchY:[(from:Float, to:Float)], content: (left:Float,top:Float,right:Float,bottom:Float)? );
   var nativeImageInfos: [NativeImageInfo] = []
   
+  @objc public func addImageView(_ image: RNMBXImage) {
+    imageViews.append(image)
+  }
+
+  @objc public func removeImageView(_ image: RNMBXImage) {
+    imageViews.removeAll { $0 == image }
+    image.images = nil
+  }
+
   @objc open override func insertReactSubview(_ subview: UIView!, at atIndex: Int) {
     if let image = subview as? RNMBXImage {
-      imageViews.insert(image, at: atIndex)
+      addImageView(image)
     } else {
       Logger.log(level:.warn, message: "RNMBXImages children can only be RNMBXImage, got \(optional: subview)")
     }
@@ -57,8 +68,7 @@ class RNMBXImages : UIView, RNMBXMapComponent {
   
   @objc open override func removeReactSubview(_ subview: UIView!) {
     if let image = subview as? RNMBXImage {
-      imageViews.removeAll { $0 == image }
-      image.images = nil
+      removeImageView(image)
     }
     super.removeReactSubview(subview)
   }
@@ -71,6 +81,7 @@ class RNMBXImages : UIView, RNMBXMapComponent {
   
   func addToMap(_ map: RNMBXMapView, style: Style) {
     self.style = style
+    imageManager = map.imageManager
     map.images.append(self)
     
     self.addNativeImages(style: style, nativeImages: nativeImageInfos)
@@ -80,6 +91,7 @@ class RNMBXImages : UIView, RNMBXMapComponent {
   
   func removeFromMap(_ map: RNMBXMapView, reason: RemovalReason) -> Bool {
     self.style = nil
+    imageManager = nil
     // v10todo
     return true
   }
@@ -118,7 +130,7 @@ class RNMBXImages : UIView, RNMBXMapComponent {
         } else {
           if !hasImage(style: style, name: name) {
             logged("RNMBXImages.addImagePlaceholder") {
-              try? style.addImage(placeholderImage, id: name, stretchX: [], stretchY: [])
+              try style.addImage(placeholderImage, id: name, stretchX: [], stretchY: [])
               missingImages[name] = images[name]
             }
           }
@@ -127,7 +139,10 @@ class RNMBXImages : UIView, RNMBXMapComponent {
     }
     
     if missingImages.count > 0 {
-      RNMBXUtils.fetchImages(bridge, style: style, objects: missingImages, forceUpdate: true, loaded: { name in self.loadedImages.insert(name) } ,callback: { })
+      RNMBXUtils.fetchImages(bridge, style: style, objects: missingImages, forceUpdate: true) { name, image in
+        self.loadedImages.insert(name)
+        self.imageManager?.resolve(name: name, image: image)
+      }
     }
   }
   
@@ -137,7 +152,7 @@ class RNMBXImages : UIView, RNMBXMapComponent {
     }
   }
   
-  public func addMissingImageToStyle(style: Style, imageName: String) -> Bool {
+  internal func addMissingImageToStyle(style: Style, imageName: String) -> Bool {
     if let nativeImage = nativeImageInfos.first(where: { $0.name == imageName }) {
       addNativeImages(style: style, nativeImages: [nativeImage])
       return true
@@ -150,7 +165,7 @@ class RNMBXImages : UIView, RNMBXMapComponent {
     return false
   }
   
-  public func sendImageMissingEvent(imageName: String, payload: StyleImageMissingPayload) {
+  internal func sendImageMissingEvent(imageName: String, payload: StyleImageMissingPayload) {
     let payload = ["imageKey":imageName]
     let event = RNMBXEvent(type: .imageMissing, payload: payload)
     if let onImageMissing = onImageMissing {
@@ -243,7 +258,7 @@ class RNMBXImages : UIView, RNMBXMapComponent {
   func addNativeImages(style: Style, nativeImages: [NativeImageInfo]) {
     for imageInfo in nativeImages {
       let imageName = imageInfo.name
-      if !hasImage(style: style, name: imageInfo.name) {
+      if  !hasImage(style: style, name: imageName) {
         if let image = UIImage(named: imageName) {
           logged("RNMBXImage.addNativeImage: \(imageName)") {
             try style.addImage(image, id: imageName, sdf: imageInfo.sdf,
@@ -252,6 +267,7 @@ class RNMBXImages : UIView, RNMBXMapComponent {
                                content: RNMBXImages.convert(content: imageInfo.content, scale: image.scale)
             )
           }
+          imageManager?.resolve(name: imageName, image: image)
         } else {
           Logger.log(level:.error, message: "Cannot find nativeImage named \(imageName)")
         }

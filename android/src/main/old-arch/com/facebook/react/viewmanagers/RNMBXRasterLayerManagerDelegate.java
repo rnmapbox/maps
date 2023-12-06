@@ -22,9 +22,6 @@ public class RNMBXRasterLayerManagerDelegate<T extends View, U extends BaseViewM
   @Override
   public void setProperty(T view, String propName, @Nullable Object value) {
     switch (propName) {
-      case "id":
-        mViewManager.setId(view, new DynamicFromObject(value));
-        break;
       case "sourceID":
         mViewManager.setSourceID(view, new DynamicFromObject(value));
         break;
@@ -43,9 +40,6 @@ public class RNMBXRasterLayerManagerDelegate<T extends View, U extends BaseViewM
       case "layerIndex":
         mViewManager.setLayerIndex(view, new DynamicFromObject(value));
         break;
-      case "reactStyle":
-        mViewManager.setReactStyle(view, new DynamicFromObject(value));
-        break;
       case "maxZoomLevel":
         mViewManager.setMaxZoomLevel(view, new DynamicFromObject(value));
         break;
@@ -54,6 +48,15 @@ public class RNMBXRasterLayerManagerDelegate<T extends View, U extends BaseViewM
         break;
       case "sourceLayerID":
         mViewManager.setSourceLayerID(view, new DynamicFromObject(value));
+        break;
+      case "slot":
+        mViewManager.setSlot(view, new DynamicFromObject(value));
+        break;
+      case "id":
+        mViewManager.setId(view, new DynamicFromObject(value));
+        break;
+      case "reactStyle":
+        mViewManager.setReactStyle(view, new DynamicFromObject(value));
         break;
       default:
         super.setProperty(view, propName, value);

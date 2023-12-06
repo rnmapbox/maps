@@ -1,32 +1,27 @@
 import React from 'react';
-import { Text } from 'react-native';
-import MapboxGL from '@rnmapbox/maps';
+import { Text, ScrollView } from 'react-native';
+import Mapbox from '@rnmapbox/maps';
+import { ButtonGroup } from '@rneui/base';
 
-import sheet from '../../styles/sheet';
 import { onSortOptions } from '../../utils';
-import BaseExamplePropTypes from '../common/BaseExamplePropTypes';
-import TabBarPage from '../common/TabBarPage';
 import Bubble from '../common/Bubble';
 
 const styles = {
   bubbleOne: { bottom: 80 },
   bubbleTwo: { bottom: 150 },
   bubbleThree: { bottom: 220 },
+  matchParent: { flex: 1 },
 };
 
 class SetUserTrackingModes extends React.Component {
-  static propTypes = {
-    ...BaseExamplePropTypes,
-  };
-
   constructor(props) {
     super(props);
 
-    this._trackingOptions = Object.keys(MapboxGL.UserTrackingModes)
+    this._trackingOptions = Object.keys(Mapbox.UserTrackingModes)
       .map((key) => {
         return {
           label: key,
-          data: MapboxGL.UserTrackingModes[key],
+          data: Mapbox.UserTrackingModes[key],
         };
       })
       .concat([
@@ -42,6 +37,7 @@ class SetUserTrackingModes extends React.Component {
       userSelectedUserTrackingMode: this._trackingOptions[3].data,
       currentTrackingMode: this._trackingOptions[3].data,
       showsUserHeadingIndicator: false,
+      selectedIndex: 3,
     };
 
     this.onTrackingChange = this.onTrackingChange.bind(this);
@@ -52,6 +48,7 @@ class SetUserTrackingModes extends React.Component {
 
   onTrackingChange(index, userTrackingMode) {
     this.setState({
+      selectedIndex: index,
       userSelectedUserTrackingMode: userTrackingMode,
       currentTrackingMode: userTrackingMode,
     });
@@ -74,11 +71,11 @@ class SetUserTrackingModes extends React.Component {
 
   get userTrackingModeText() {
     switch (this.state.currentTrackingMode) {
-      case MapboxGL.UserTrackingModes.Follow:
+      case Mapbox.UserTrackingModes.Follow:
         return 'Follow';
-      case MapboxGL.UserTrackingModes.FollowWithCourse:
+      case Mapbox.UserTrackingModes.FollowWithCourse:
         return 'FollowWithCourse';
-      case MapboxGL.UserTrackingModes.FollowWithHeading:
+      case Mapbox.UserTrackingModes.FollowWithHeading:
         return 'FollowWithHeading';
       default:
         return 'None';
@@ -87,20 +84,23 @@ class SetUserTrackingModes extends React.Component {
 
   render() {
     return (
-      <TabBarPage
-        {...this.props}
-        scrollable
-        initialIndex={3}
-        options={this._trackingOptions}
-        onOptionPress={this.onTrackingChange}
-      >
-        <MapboxGL.MapView style={sheet.matchParent}>
-          <MapboxGL.UserLocation
+      <>
+        <ScrollView horizontal style={{ maxHeight: 64 }}>
+          <ButtonGroup
+            buttons={this._trackingOptions.map((i) => i.label)}
+            selectedIndex={this.state.selectedIndex}
+            onPress={(i) =>
+              this.onTrackingChange(i, this._trackingOptions[i].data)
+            }
+          />
+        </ScrollView>
+        <Mapbox.MapView style={styles.matchParent}>
+          <Mapbox.UserLocation
             visible={this.state.showUserLocation}
             showsUserHeadingIndicator={this.state.showsUserHeadingIndicator}
           />
 
-          <MapboxGL.Camera
+          <Mapbox.Camera
             defaultSettings={{
               centerCoordinate: [-111.8678, 40.2866],
               zoomLevel: 0,
@@ -115,7 +115,7 @@ class SetUserTrackingModes extends React.Component {
             }
             onUserTrackingModeChange={this.onUserTrackingModeChange}
           />
-        </MapboxGL.MapView>
+        </Mapbox.MapView>
 
         <Bubble style={styles.bubbleOne}>
           <Text>User Tracking Mode: {this.userTrackingModeText}</Text>
@@ -137,7 +137,7 @@ class SetUserTrackingModes extends React.Component {
             {this.state.showsUserHeadingIndicator ? 'true' : 'false'}
           </Text>
         </Bubble>
-      </TabBarPage>
+      </>
     );
   }
 }

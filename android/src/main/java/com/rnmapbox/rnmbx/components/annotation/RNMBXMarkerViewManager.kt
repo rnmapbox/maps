@@ -2,42 +2,61 @@ package com.rnmapbox.rnmbx.components.annotation
 
 import android.view.View
 import android.widget.FrameLayout
+import com.facebook.react.bridge.Dynamic
 import com.rnmapbox.rnmbx.utils.GeoJSONUtils.toPointGeometry
 import com.facebook.react.bridge.ReactApplicationContext
 import com.rnmapbox.rnmbx.components.AbstractEventEmitter
 import com.facebook.react.uimanager.annotations.ReactProp
-import com.facebook.react.bridge.ReadableMap
 import com.facebook.react.common.MapBuilder
 import com.facebook.react.uimanager.ThemedReactContext
+import com.facebook.react.uimanager.ViewManagerDelegate
+import com.facebook.react.viewmanagers.RNMBXMarkerViewManagerDelegate
+import com.facebook.react.viewmanagers.RNMBXMarkerViewManagerInterface
 import com.mapbox.maps.ScreenCoordinate
-import com.mapbox.maps.viewannotation.OnViewAnnotationUpdatedListener
 import com.mapbox.maps.viewannotation.ViewAnnotationManager
 import com.rnmapbox.rnmbx.components.mapview.RNMBXMapView
+import com.rnmapbox.rnmbx.v11compat.annotation.*
 
 class RNMBXMarkerViewManager(reactApplicationContext: ReactApplicationContext) :
-    AbstractEventEmitter<RNMBXMarkerView?>(reactApplicationContext) {
+    AbstractEventEmitter<RNMBXMarkerView>(reactApplicationContext),
+    RNMBXMarkerViewManagerInterface<RNMBXMarkerView> {
+    private val mDelegate: ViewManagerDelegate<RNMBXMarkerView>
+
+    init {
+        mDelegate = RNMBXMarkerViewManagerDelegate(this)
+    }
+
+    override fun getDelegate(): ViewManagerDelegate<RNMBXMarkerView> {
+        return mDelegate
+    }
+
     override fun getName(): String {
         return REACT_CLASS
     }
 
     @ReactProp(name = "coordinate")
-    fun setCoordinate(markerView: RNMBXMarkerView, geoJSONStr: String?) {
-        markerView.setCoordinate(toPointGeometry(geoJSONStr))
+    override fun setCoordinate(markerView: RNMBXMarkerView, geoJSONStr: Dynamic) {
+        markerView.setCoordinate(toPointGeometry(geoJSONStr.asString()))
     }
 
     @ReactProp(name = "anchor")
-    fun setAnchor(markerView: RNMBXMarkerView, map: ReadableMap) {
-        markerView.setAnchor(map.getDouble("x").toFloat(), map.getDouble("y").toFloat())
+    override fun setAnchor(markerView: RNMBXMarkerView, map: Dynamic) {
+        markerView.setAnchor(map.asMap().getDouble("x").toFloat(), map.asMap().getDouble("y").toFloat())
     }
 
     @ReactProp(name = "allowOverlap")
-    fun setAllowOverlap(markerView: RNMBXMarkerView, allowOverlap: Boolean) {
-        markerView.setAllowOverlap(allowOverlap)
+    override fun setAllowOverlap(markerView: RNMBXMarkerView, allowOverlap: Dynamic) {
+        markerView.setAllowOverlap(allowOverlap.asBoolean())
+    }
+
+    @ReactProp(name = "allowOverlapWithPuck")
+    override fun setAllowOverlapWithPuck(markerView: RNMBXMarkerView, allowOverlapWithPuck: Dynamic) {
+        markerView.setAllowOverlapWithPuck(allowOverlapWithPuck.asBoolean())
     }
 
     @ReactProp(name = "isSelected")
-    fun setIsSelected(markerView: RNMBXMarkerView, isSelected: Boolean) {
-        markerView.setIsSelected(isSelected)
+    override fun setIsSelected(markerView: RNMBXMarkerView, isSelected: Dynamic) {
+        markerView.setIsSelected(isSelected.asBoolean())
     }
 
     override fun createViewInstance(reactContext: ThemedReactContext): RNMBXMarkerView {
@@ -55,7 +74,7 @@ class RNMBXMarkerViewManager(reactApplicationContext: ReactApplicationContext) :
         fun markerViewContainerSizeFixer(mapView: RNMBXMapView, viewAnnotationManager: ViewAnnotationManager) {
             // see https://github.com/rnmapbox/maps/issues/2376
             viewAnnotationManager.addOnViewAnnotationUpdatedListener(object :
-                OnViewAnnotationUpdatedListener {
+                OnViewAnnotationUpdatedListener() {
                 override fun onViewAnnotationVisibilityUpdated(view: View, visible: Boolean) {
                     val parent = view.parent
                     if (parent is FrameLayout) {
@@ -65,13 +84,7 @@ class RNMBXMarkerViewManager(reactApplicationContext: ReactApplicationContext) :
                     }
                 }
 
-                override fun onViewAnnotationPositionUpdated(
-                    view: View,
-                    leftTopCoordinate: ScreenCoordinate,
-                    width: Int,
-                    height: Int
-                ) {
-                }
+
             })
         }
     }

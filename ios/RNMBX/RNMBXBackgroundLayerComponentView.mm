@@ -3,6 +3,7 @@
 #import "RNMBXBackgroundLayerComponentView.h"
 #import "RNMBXFabricHelpers.h"
 
+#import <React/RCTBridge+Private.h>
 #import <React/RCTConversions.h>
 #import <React/RCTFabricComponentsPlugins.h>
 
@@ -34,6 +35,7 @@ using namespace facebook::react;
 - (void)prepareView
 {
   _view =  [[RNMBXBackgroundLayer alloc] init];
+  _view.bridge = [RCTBridge currentBridge];
   self.contentView = _view;
 }
 
@@ -46,7 +48,7 @@ using namespace facebook::react;
 
 - (void)updateProps:(const Props::Shared &)props oldProps:(const Props::Shared &)oldProps
 {
-  const auto &newProps = *std::static_pointer_cast<const RNMBXBackgroundLayerProps>(props);
+  const auto &newProps = static_cast<const RNMBXBackgroundLayerProps &>(*props);
   RNMBXSetCommonLayerPropsWithoutSourceID(newProps, _view);
 
 

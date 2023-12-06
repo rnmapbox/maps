@@ -1,13 +1,11 @@
 import React from 'react';
 import { View, StyleSheet } from 'react-native';
-import MapboxGL from '@rnmapbox/maps';
+import Mapbox from '@rnmapbox/maps';
 import { Slider } from '@rneui/base';
 
 import sheet from '../../styles/sheet';
 import colors from '../../styles/colors';
 import { SF_OFFICE_COORDINATE } from '../../utils';
-import Page from '../common/Page';
-import BaseExamplePropTypes from '../common/BaseExamplePropTypes';
 
 const styles = StyleSheet.create({
   slider: {
@@ -20,10 +18,6 @@ const styles = StyleSheet.create({
 });
 
 class WatercolorRasterTiles extends React.Component {
-  static propTypes = {
-    ...BaseExamplePropTypes,
-  };
-
   constructor(props) {
     super(props);
 
@@ -42,27 +36,29 @@ class WatercolorRasterTiles extends React.Component {
     const rasterSourceProps = {
       id: 'stamenWatercolorSource',
       tileUrlTemplates: [
-        'https://stamen-tiles.a.ssl.fastly.net/watercolor/{z}/{x}/{y}.jpg',
+        'https://tiles-eu.stadiamaps.com/tiles/stamen_watercolor/{z}/{x}/{y}.jpg',
       ],
       tileSize: 256,
     };
 
     return (
-      <Page {...this.props}>
-        <MapboxGL.MapView style={sheet.matchParent}>
-          <MapboxGL.Camera
-            zoomLevel={16}
-            centerCoordinate={SF_OFFICE_COORDINATE}
+      <>
+        <Mapbox.MapView style={sheet.matchParent}>
+          <Mapbox.Camera
+            defaultSettings={{
+              zoomLevel: 16,
+              centerCoordinate: SF_OFFICE_COORDINATE,
+            }}
           />
 
-          <MapboxGL.RasterSource {...rasterSourceProps}>
-            <MapboxGL.RasterLayer
+          <Mapbox.RasterSource {...rasterSourceProps}>
+            <Mapbox.RasterLayer
               id="stamenWatercolorLayer"
               sourceID="stamenWatercolorSource"
               style={{ rasterOpacity: this.state.opacity }}
             />
-          </MapboxGL.RasterSource>
-        </MapboxGL.MapView>
+          </Mapbox.RasterSource>
+        </Mapbox.MapView>
 
         <View style={styles.slider}>
           <Slider
@@ -74,9 +70,19 @@ class WatercolorRasterTiles extends React.Component {
             minimumTrackTintColor={colors.secondary.purpleDark}
           />
         </View>
-      </Page>
+      </>
     );
   }
 }
 
 export default WatercolorRasterTiles;
+
+/* end-example-doc */
+
+/** @type ExampleWithMetadata['metadata'] */
+const metadata = {
+  title: 'Watercolor Raster Tiles',
+  tags: ['RasterSource', 'RasterLayer'],
+  docs: '',
+};
+WatercolorRasterTiles.metadata = metadata;

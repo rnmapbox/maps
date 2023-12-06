@@ -23,7 +23,7 @@ class RNMBXVectorSource(context: Context?, private val mManager: RNMBXVectorSour
     }
 
     override fun hasNoDataSoRefersToExisting(): Boolean {
-        return uRL == null;
+        return uRL == null && tileUrlTemplates == null;
     }
 
     override fun makeSource(): VectorSource {

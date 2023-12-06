@@ -1,21 +1,15 @@
 import React from 'react';
-import {
-  Platform,
-  NativeModules,
-  requireNativeComponent,
-  type ViewProps,
-  View,
-} from 'react-native';
+import { Platform, NativeModules, type ViewProps } from 'react-native';
 
 import { toJSONString } from '../utils';
 import { makePoint } from '../utils/geoUtils';
 import { type Position } from '../types/Position';
+import NativeMarkerViewComponent from '../specs/RNMBXMarkerViewNativeComponent';
+import RNMBXMakerViewContentCoponent from '../specs/RNMBXMarkerViewContentNativeComponent';
 
 import PointAnnotation from './PointAnnotation';
 
 const Mapbox = NativeModules.RNMBXModule;
-
-export const NATIVE_MODULE_NAME = 'RNMBXMarkerView';
 
 type Props = ViewProps & {
   /**
@@ -39,6 +33,12 @@ type Props = ViewProps & {
    * markers will 'collapse' and only one will be shown. Defaults to false.
    */
   allowOverlap: boolean;
+
+  /**
+   * Whether or not nearby markers on the map should be hidden if close to a
+   * UserLocation puck. Defaults to false.
+   */
+  allowOverlapWithPuck: boolean;
 
   isSelected: boolean;
 
@@ -65,6 +65,7 @@ class MarkerView extends React.PureComponent<Props> {
   static defaultProps: Partial<Props> = {
     anchor: { x: 0.5, y: 0.5 },
     allowOverlap: false,
+    allowOverlapWithPuck: false,
     isSelected: false,
   };
 
@@ -118,12 +119,13 @@ class MarkerView extends React.PureComponent<Props> {
         coordinate={this._getCoordinate(this.props.coordinate)}
         anchor={anchor}
         allowOverlap={this.props.allowOverlap}
+        allowOverlapWithPuck={this.props.allowOverlapWithPuck}
         isSelected={this.props.isSelected}
         onTouchEnd={(e) => {
           e.stopPropagation();
         }}
       >
-        <View
+        <RNMBXMakerViewContentCoponent
           style={{ flex: 0, alignSelf: 'flex-start' }}
           onStartShouldSetResponder={(_event) => {
             return true;
@@ -133,19 +135,12 @@ class MarkerView extends React.PureComponent<Props> {
           }}
         >
           {this.props.children}
-        </View>
+        </RNMBXMakerViewContentCoponent>
       </RNMBXMarkerView>
     );
   }
 }
 
-type NativeProps = ViewProps & {
-  coordinate: string | undefined;
-  anchor: { x: number; y: number };
-  allowOverlap: boolean;
-  isSelected: boolean;
-};
-
-const RNMBXMarkerView = requireNativeComponent<NativeProps>(NATIVE_MODULE_NAME);
+const RNMBXMarkerView = NativeMarkerViewComponent;
 
 export default MarkerView;

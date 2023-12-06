@@ -113,4 +113,28 @@ class RNMBXModule : NSObject {
       Logger.error("setWellKnownTileServer: \(tileServer) should be mapbox")
     }
   }
+
+  @objc func clearData(_ resolver: @escaping RCTPromiseResolveBlock,
+    rejecter: @escaping RCTPromiseRejectBlock) {
+    
+    DispatchQueue.main.async {
+      #if RNMBX_11
+      MapboxMap.clearData { error in
+        if let error = error {
+          rejecter("error", error.localizedDescription, error)
+        } else {
+          resolver(nil)
+        }
+      }
+      #else
+      MapboxMap.clearData(for: ResourceOptions(accessToken: RNMBXModule.accessToken ?? "")) { error in
+        if let error = error {
+          rejecter("error", error.localizedDescription, error)
+        } else {
+          resolver(nil)
+        }
+      }
+      #endif
+    }
+  }
 }

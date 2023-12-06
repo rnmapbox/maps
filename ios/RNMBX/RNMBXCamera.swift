@@ -42,11 +42,11 @@ struct CameraUpdateItem {
       }
       switch mode {
         case .flight:
-          map.camera.fly(to: camera, duration: duration)
+        map.mapView.camera.fly(to: camera, duration: duration)
         case .ease:
-          map.camera.ease(to: camera, duration: duration ?? 0, curve: .easeInOut, completion: nil)
+        map.mapView.camera.ease(to: camera, duration: duration ?? 0, curve: .easeInOut, completion: nil)
         case .linear:
-          map.camera.ease(to: camera, duration: duration ?? 0, curve: .linear, completion: nil)
+        map.mapView.camera.ease(to: camera, duration: duration ?? 0, curve: .linear, completion: nil)
         default:
           map.mapboxMap.setCamera(to: camera)
       }
@@ -527,7 +527,7 @@ open class RNMBXCamera : RNMBXMapComponentBase {
       return false
     }
 
-    map.viewport.removeStatusObserver(self)
+    map.mapView.viewport.removeStatusObserver(self)
     return super.removeFromMap(map, reason:reason)
   }
 }

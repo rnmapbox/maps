@@ -7,7 +7,7 @@ import RNMBXSkyLayerNativeComponent from '../specs/RNMBXSkyLayerNativeComponent'
 
 import AbstractLayer from './AbstractLayer';
 
-const MapboxGL = NativeModules.RNMBXModule;
+const Mapbox = NativeModules.RNMBXModule;
 
 export type Props = {
   /**
@@ -60,7 +60,7 @@ type NativeTypeProps = Omit<Props, 'style'> & {
  */
 class SkyLayer extends AbstractLayer<Props, NativeTypeProps> {
   static defaultProps = {
-    sourceID: MapboxGL.StyleSource.DefaultSourceID,
+    sourceID: Mapbox.StyleSource.DefaultSourceID,
   };
 
   render() {

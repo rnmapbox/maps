@@ -16,6 +16,7 @@ class RNMBXRasterLayerManager : ViewGroupManager<RNMBXRasterLayer>(),
         return RNMBXRasterLayer(reactContext)
     }
 
+    // @{codepart-replace-start(LayerManagerCommonProps.codepart-kt.ejs,{layerType:"RNMBXRasterLayer"})}
     @ReactProp(name = "id")
     override fun setId(layer: RNMBXRasterLayer, id: Dynamic) {
         layer.iD = id.asString()
@@ -63,14 +64,19 @@ class RNMBXRasterLayerManager : ViewGroupManager<RNMBXRasterLayer>(),
 
     @ReactProp(name = "sourceLayerID")
     override fun setSourceLayerID(layer: RNMBXRasterLayer, sourceLayerID: Dynamic) {
-        // not available
-        // layer.setSourceLayerID(sourceLayerID.asString())
+        layer.setSourceLayerID(sourceLayerID.asString())
     }
 
     @ReactProp(name = "filter")
     override fun setFilter(layer: RNMBXRasterLayer, filterList: Dynamic) {
         layer.setFilter(filterList.asArray())
     }
+
+    @ReactProp(name = "slot")
+    override fun setSlot(layer: RNMBXRasterLayer, slot: Dynamic) {
+        layer.setSlot(slot.asString())
+    }
+    // @{codepart-replace-end}
 
     companion object {
         const val REACT_CLASS = "RNMBXRasterLayer"

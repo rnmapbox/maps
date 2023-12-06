@@ -1,0 +1,17 @@
+on:
+  pull_request_target:
+    branches: [ main ]
+
+jobs:
+  call_ci_requiring_tokens:
+    if: github.repository == 'rnmapbox/maps' && github.event.pull_request.head.repo.fork == true
+    name: "CI requiring tokens"
+    uses: ./.github/workflows/ci-requiring-tokens.yml
+    with:
+      NVMRC: v18.18.0
+      env_name: CI with Mapbox Tokens
+      ref: ${{ github.event.pull_request.head.sha }}
+    secrets:
+      ENV_MAPBOX_ACCESS_TOKEN: ${{ secrets.ENV_MAPBOX_ACCESS_TOKEN }}
+      ENV_MAPBOX_DOWNLOAD_TOKEN: ${{ secrets.ENV_MAPBOX_DOWNLOAD_TOKEN }}
+

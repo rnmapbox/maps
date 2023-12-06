@@ -1,9 +1,6 @@
 import React from 'react';
-import MapboxGL from '@rnmapbox/maps';
+import Mapbox from '@rnmapbox/maps';
 import { StyleSheet, Text, View } from 'react-native';
-
-import sheet from '../../styles/sheet';
-import Page from '../common/Page';
 
 const ANNOTATION_SIZE = 50;
 
@@ -47,7 +44,7 @@ const sides = [
   },
 ];
 
-const styles = StyleSheet.create({
+const styles = {
   small: {
     backgroundColor: 'blue',
     height: ANNOTATION_SIZE,
@@ -68,67 +65,80 @@ const styles = StyleSheet.create({
     position: 'absolute',
     fontSize: 10,
   },
-});
+  matchParent: {
+    flex: 1,
+  },
+};
 
 const PointAnnotationAnchors = (props) => {
   return (
-    <Page {...props}>
-      <MapboxGL.MapView style={sheet.matchParent}>
-        <MapboxGL.Camera defaultSettings={defaultCamera} />
-        {corners.map((p, i) => (
-          <MapboxGL.PointAnnotation
-            key={`square-${i}`}
-            id={`square-${i}`}
+    <Mapbox.MapView style={styles.matchParent}>
+      <Mapbox.Camera defaultSettings={defaultCamera} />
+      {corners.map((p, i) => (
+        <Mapbox.PointAnnotation
+          key={`square-${i}`}
+          id={`square-${i}`}
+          coordinate={p.coordinate}
+          anchor={p.anchor}
+        >
+          <View style={styles.small}>
+            <Text style={[styles.text, { color: 'white' }]}>
+              x={p.anchor.x.toPrecision(2)}, y={p.anchor.y.toPrecision(2)}
+            </Text>
+          </View>
+        </Mapbox.PointAnnotation>
+      ))}
+      {sides.map((p, i) => {
+        let { x, y } = p.anchor;
+        if (x === 1) {
+          x = 0;
+        }
+        if (y === 1) {
+          y = 0;
+        }
+        return (
+          <Mapbox.PointAnnotation
+            key={`triangle-${i}`}
+            id={`triangle-${i}`}
             coordinate={p.coordinate}
             anchor={p.anchor}
           >
-            <View style={styles.small}>
-              <Text style={[styles.text, { color: 'white' }]}>
+            <View style={[styles.large, p.containerStyle]}>
+              <View
+                style={{
+                  height: ANNOTATION_SIZE * 2,
+                  width: ANNOTATION_SIZE * 2 * x,
+                  backgroundColor: 'green',
+                }}
+              />
+              <View
+                style={{
+                  height: ANNOTATION_SIZE * 2 * y,
+                  width: ANNOTATION_SIZE * 2,
+                  backgroundColor: 'green',
+                }}
+              />
+              <Text style={[styles.text, { color: 'black' }]}>
                 x={p.anchor.x.toPrecision(2)}, y={p.anchor.y.toPrecision(2)}
               </Text>
             </View>
-          </MapboxGL.PointAnnotation>
-        ))}
-        {sides.map((p, i) => {
-          let { x, y } = p.anchor;
-          if (x === 1) {
-            x = 0;
-          }
-          if (y === 1) {
-            y = 0;
-          }
-          return (
-            <MapboxGL.PointAnnotation
-              key={`triangle-${i}`}
-              id={`triangle-${i}`}
-              coordinate={p.coordinate}
-              anchor={p.anchor}
-            >
-              <View style={[styles.large, p.containerStyle]}>
-                <View
-                  style={{
-                    height: ANNOTATION_SIZE * 2,
-                    width: ANNOTATION_SIZE * 2 * x,
-                    backgroundColor: 'green',
-                  }}
-                />
-                <View
-                  style={{
-                    height: ANNOTATION_SIZE * 2 * y,
-                    width: ANNOTATION_SIZE * 2,
-                    backgroundColor: 'green',
-                  }}
-                />
-                <Text style={[styles.text, { color: 'black' }]}>
-                  x={p.anchor.x.toPrecision(2)}, y={p.anchor.y.toPrecision(2)}
-                </Text>
-              </View>
-            </MapboxGL.PointAnnotation>
-          );
-        })}
-      </MapboxGL.MapView>
-    </Page>
+          </Mapbox.PointAnnotation>
+        );
+      })}
+    </Mapbox.MapView>
   );
 };
 
 export default PointAnnotationAnchors;
+
+/* end-example-doc */
+
+/** @type ExampleWithMetadata['metadata'] */
+const metadata = {
+  title: 'Point Annotation Anchors',
+  tags: ['PointAnnotation'],
+  docs: `
+Point annotation anchors test
+`,
+};
+PointAnnotationAnchors.metadata = metadata;

@@ -1,0 +1,116 @@
+name: CI Builds requiring mapbox tokens
+
+on:
+  workflow_call:
+    inputs:
+      NVMRC:
+        required: true
+        type: string
+      env_name:
+        required: false
+        type: string
+        default: default
+      ref:
+        required: false
+        type: string
+    secrets:
+      MAPBOX_ACCESS_TOKEN:
+        required: false
+      MAPBOX_DOWNLOAD_TOKEN:
+        required: false
+      ENV_MAPBOX_ACCESS_TOKEN:
+        required: false
+      ENV_MAPBOX_DOWNLOAD_TOKEN:
+        required: false
+
+concurrency: 
+  group: ${{ github.head_ref || github.run_id }}-ci-with-tokens
+  cancel-in-progress: true
+
+jobs:
+  call_android_workflow:
+    name: "Android/Mapbox"
+    uses: ./.github/workflows/android-actions.yml
+    with:
+      env_name: ${{ inputs.env_name }}
+      ref: ${{ inputs.ref }}
+      NVMRC: ${{ inputs.NVMRC }}
+      MAP_IMPL: mapbox
+    secrets:
+      MAPBOX_ACCESS_TOKEN: ${{ secrets.MAPBOX_ACCESS_TOKEN }}
+      MAPBOX_DOWNLOAD_TOKEN: ${{ secrets.MAPBOX_DOWNLOAD_TOKEN }}
+      ENV_MAPBOX_ACCESS_TOKEN: ${{ secrets.ENV_MAPBOX_ACCESS_TOKEN }}
+      ENV_MAPBOX_DOWNLOAD_TOKEN: ${{ secrets.ENV_MAPBOX_DOWNLOAD_TOKEN }}
+
+  call_android_workflow_fabric:
+    name: "Android/Mapbox/Fabric"
+    uses: ./.github/workflows/android-actions.yml
+    with:
+      env_name: ${{ inputs.env_name }}
+      ref: ${{ inputs.ref }}
+      NVMRC: ${{ inputs.NVMRC }}
+      MAP_IMPL: mapbox
+      NEW_ARCH: true
+    secrets:
+      MAPBOX_ACCESS_TOKEN: ${{ secrets.MAPBOX_ACCESS_TOKEN }}
+      MAPBOX_DOWNLOAD_TOKEN: ${{ secrets.MAPBOX_DOWNLOAD_TOKEN }}
+      ENV_MAPBOX_ACCESS_TOKEN: ${{ secrets.ENV_MAPBOX_ACCESS_TOKEN }}
+      ENV_MAPBOX_DOWNLOAD_TOKEN: ${{ secrets.ENV_MAPBOX_DOWNLOAD_TOKEN }}
+
+
+  call_android_workflow_11:
+    name: "Android/Mapbox11"
+    uses: ./.github/workflows/android-actions.yml
+    with:
+      env_name: ${{ inputs.env_name }}
+      ref: ${{ inputs.ref }}
+      NVMRC: ${{ inputs.NVMRC }}
+      MAP_IMPL: mapbox11
+    secrets:
+      MAPBOX_ACCESS_TOKEN: ${{ secrets.MAPBOX_ACCESS_TOKEN }}
+      MAPBOX_DOWNLOAD_TOKEN: ${{ secrets.MAPBOX_DOWNLOAD_TOKEN }}
+      ENV_MAPBOX_ACCESS_TOKEN: ${{ secrets.ENV_MAPBOX_ACCESS_TOKEN }}
+      ENV_MAPBOX_DOWNLOAD_TOKEN: ${{ secrets.ENV_MAPBOX_DOWNLOAD_TOKEN }}
+
+  call_ios_workflow:
+    name: "iOS/Mapbox"
+    uses: ./.github/workflows/ios-actions.yml
+    with:
+      env_name: ${{ inputs.env_name }}
+      ref: ${{ inputs.ref }}
+      NVMRC: ${{ inputs.NVMRC }}
+      MAP_IMPL: mapbox
+    secrets:
+      MAPBOX_ACCESS_TOKEN: ${{ secrets.MAPBOX_ACCESS_TOKEN }}
+      MAPBOX_DOWNLOAD_TOKEN: ${{ secrets.MAPBOX_DOWNLOAD_TOKEN }}
+      ENV_MAPBOX_ACCESS_TOKEN: ${{ secrets.ENV_MAPBOX_ACCESS_TOKEN }}
+      ENV_MAPBOX_DOWNLOAD_TOKEN: ${{ secrets.ENV_MAPBOX_DOWNLOAD_TOKEN }}
+
+  call_ios_workflow_fabric:
+    name: "iOS/Mapbox/Fabric"
+    uses: ./.github/workflows/ios-actions.yml
+    with:
+      env_name: ${{ inputs.env_name }}
+      ref: ${{ inputs.ref }}
+      NVMRC: ${{ inputs.NVMRC }}
+      MAP_IMPL: mapbox
+      NEW_ARCH: true
+    secrets:
+      MAPBOX_ACCESS_TOKEN: ${{ secrets.MAPBOX_ACCESS_TOKEN }}
+      MAPBOX_DOWNLOAD_TOKEN: ${{ secrets.MAPBOX_DOWNLOAD_TOKEN }}
+      ENV_MAPBOX_ACCESS_TOKEN: ${{ secrets.ENV_MAPBOX_ACCESS_TOKEN }}
+      ENV_MAPBOX_DOWNLOAD_TOKEN: ${{ secrets.ENV_MAPBOX_DOWNLOAD_TOKEN }}
+
+  call_ios_workflow_11:
+    name: "iOS/Mapbox11"
+    uses: ./.github/workflows/ios-actions.yml
+    with:
+      env_name: ${{ inputs.env_name }}
+      ref: ${{ inputs.ref }}
+      NVMRC: ${{ inputs.NVMRC }}
+      MAP_IMPL: mapbox11
+    secrets:
+      MAPBOX_ACCESS_TOKEN: ${{ secrets.MAPBOX_ACCESS_TOKEN }}
+      MAPBOX_DOWNLOAD_TOKEN: ${{ secrets.MAPBOX_DOWNLOAD_TOKEN }}
+      ENV_MAPBOX_ACCESS_TOKEN: ${{ secrets.ENV_MAPBOX_ACCESS_TOKEN }}
+      ENV_MAPBOX_DOWNLOAD_TOKEN: ${{ secrets.ENV_MAPBOX_DOWNLOAD_TOKEN }}

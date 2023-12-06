@@ -229,3 +229,15 @@ const QueryTerrainElevation = ({ ...props }) => {
 };
 
 export default QueryTerrainElevation;
+
+/* end-example-doc */
+
+/** @type ExampleWithMetadata['metadata'] */
+const metadata = {
+  title: 'Query Terrain Elevation',
+  tags: ['MapView#queryTerrainElevation'],
+  docs: `
+Query Terrain Elevation
+`,
+};
+QueryTerrainElevation.metadata = metadata;

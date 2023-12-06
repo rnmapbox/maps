@@ -19,8 +19,7 @@ import React, { useState } from 'react';
 import { SafeAreaView, View } from 'react-native';
 
 import colors from '../../styles/colors';
-import { BaseExampleProps } from '../common/BaseExamplePropTypes';
-import Page from '../common/Page';
+import { ExampleWithMetadata } from '../common/ExampleMetadata'; // exclude-from-doc
 
 Logger.setLogLevel('verbose');
 
@@ -40,7 +39,7 @@ const styles = {
   },
 };
 
-const MapHandlers = (props: BaseExampleProps) => {
+const MapHandlers = () => {
   const [lastCallback, setLastCallback] = useState('');
   const [mapState, setMapState] = useState<MapState>({
     properties: {
@@ -88,7 +87,7 @@ const MapHandlers = (props: BaseExampleProps) => {
   };
 
   return (
-    <Page {...props}>
+    <>
       <MapView
         style={styles.map}
         onPress={(_feature: Feature<Geometry, GeoJsonProperties>) => {
@@ -176,8 +175,19 @@ const MapHandlers = (props: BaseExampleProps) => {
           </View>
         </View>
       </SafeAreaView>
-    </Page>
+    </>
   );
 };
 
 export default MapHandlers;
+
+/* end-example-doc */
+
+const metadata: ExampleWithMetadata['metadata'] = {
+  title: 'Map Handlers',
+  tags: ['MapView#onMapIdle'],
+  docs: `
+Map Handlers
+`,
+};
+MapHandlers.metadata = metadata;

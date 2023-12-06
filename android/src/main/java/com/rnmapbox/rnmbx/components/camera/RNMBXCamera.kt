@@ -40,6 +40,8 @@ class RNMBXCamera(private val mContext: Context, private val mManager: RNMBXCame
     AbstractMapFeature(
         mContext
     ) {
+    override var requiresStyleLoad = false
+
     private var hasSentFirstRegion = false
     private var mDefaultStop: CameraStop? = null
     private var mCameraStop: CameraStop? = null
@@ -319,21 +321,77 @@ class RNMBXCamera(private val mContext: Context, private val mManager: RNMBXCame
         when (status) {
             ViewportStatus.Idle -> return null
             is ViewportStatus.State ->
-                return toFollowUserMode(status)
+                return toFollowUserMode(status.state)
             is ViewportStatus.Transition ->
                 return toFollowUserMode(status.toState)
         }
     }
 
-    fun toReadableMap(status: ViewportStatus): ReadableMap {
-        when (status) {
-            ViewportStatus.Idle -> return writableMapOf("state" to "idle")
+    fun toUserTrackingMode(state: ViewportState): Int {
+        when (state) {
+            is FollowPuckViewportState -> {
+                return when (state.options.bearing) {
+                    is FollowPuckViewportStateBearing.SyncWithLocationPuck -> {
+                        val location = mMapView?.mapView?.location2
+                        if (location?.puckBearingEnabled == true) {
+                            when (location.puckBearingSource) {
+
+                                PuckBearing.HEADING -> {
+                                    UserTrackingMode.FollowWithHeading
+                                }
+                                PuckBearing.COURSE -> {
+                                    UserTrackingMode.FollowWithCourse
+                                }
+                                else -> {
+                                    UserTrackingMode.FOLLOW
+                                }
+                            }
+                        } else {
+                            UserTrackingMode.FOLLOW
+                        }
+                    }
+
+                    is FollowPuckViewportStateBearing.Constant ->
+                        UserTrackingMode.FOLLOW
+
+                    else -> {
+                        Logger.w(LOG_TAG, "Unexpected bearing: ${state.options.bearing}")
+                        UserTrackingMode.FOLLOW
+                    }
+                }
+            }
+
+            is OverviewViewportState -> {
+                return UserTrackingMode.NONE
+            }
+
+            else -> {
+                return UserTrackingMode.NONE // TODO
+            }
+        }
+    }
+
+    fun toUserTrackingMode(status: ViewportStatus): Int {
+        return when (status) {
+            ViewportStatus.Idle -> UserTrackingMode.NONE
             is ViewportStatus.State ->
-                return writableMapOf(
+                toUserTrackingMode(status.state)
+
+            is ViewportStatus.Transition ->
+                toUserTrackingMode(status.toState)
+        }
+    }
+
+    fun toReadableMap(status: ViewportStatus): ReadableMap {
+        return when (status) {
+            ViewportStatus.Idle -> writableMapOf("state" to "idle")
+            is ViewportStatus.State ->
+                writableMapOf(
                     "state" to status.toString()
                 )
+
             is ViewportStatus.Transition ->
-                return writableMapOf(
+                writableMapOf(
                     "transition" to status.toString()
                 )
         }
@@ -346,12 +404,11 @@ class RNMBXCamera(private val mContext: Context, private val mManager: RNMBXCame
                 toStatus: ViewportStatus,
                 reason: ViewportStatusChangeReason
             ) {
-                if (reason == ViewportStatusChangeReason.USER_INTERACTION) {
+                if (reason == ViewportStatusChangeReason.USER_INTERACTION || reason == ViewportStatusChangeReason.TRANSITION_SUCCEEDED) {
                     val followUserLocation = toFollowUserLocation(toStatus)
 
-
-
-                    mManager.handleEvent(MapUserTrackingModeEvent(this@RNMBXCamera, UserTrackingMode.NONE,
+                    val mode = toUserTrackingMode(toStatus)
+                    mManager.handleEvent(MapUserTrackingModeEvent(this@RNMBXCamera, mode,
                     writableMapOf(
                         "followUserMode" to toFollowUserMode(toStatus),
                         "followUserLocation" to followUserLocation,
@@ -413,12 +470,12 @@ class RNMBXCamera(private val mContext: Context, private val mManager: RNMBXCame
             when (mFollowUserMode ?: "normal") {
                 "compass" -> {
                     location.puckBearingEnabled = true
-                    location.puckBearingSource = PuckBearingSource.HEADING
+                    location.puckBearingSource = PuckBearing.HEADING
                     followOptions.bearing(FollowPuckViewportStateBearing.SyncWithLocationPuck)
                 }
                 "course" -> {
                     location.puckBearingEnabled = true
-                    location.puckBearingSource = PuckBearingSource.COURSE
+                    location.puckBearingSource = PuckBearing.COURSE
                     followOptions.bearing(FollowPuckViewportStateBearing.SyncWithLocationPuck)
                 }
                 "normal" -> {

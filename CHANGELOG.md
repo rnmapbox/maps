@@ -1,9 +1,13 @@
-## UNRELEASED
+Please check `https://github.com/rnmapbox/maps/releases` for all release logs. We no longer maintain this file.
 
-```
-Please add unreleased changes in the following style:
-PR Title ([#123](link to my pr))
-```
+### Release notes for 10.1.0
+
+- fabric support (should cover all functionality, but some stuff might be broken)
+- v11 support, including api for new features like style config, slot and ModelLayers
+- deprecate `UserLocation#renderMode`, to use native user location, use the new component `LocationPuck`
+- deprecate `Camera#onUserTrackingModeChange`, use `Viewport#onStatusChanged` instead
+- lot of smaller bugfixes/features
+
 
 ### UNRELEASED/10.0.0-beta.10
 
