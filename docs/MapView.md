@@ -270,7 +270,7 @@ when embedded into a scroll view
 | true
 ```
 [`mapbox` (v10) implementation only]
-Set map's label locale, e.g. { "locale": "es" } will localize labels to Spanish, { "locale": "current" } will localize labels to system locale.
+Set map's label locale, e.g. `{ "locale": "es" }` will localize labels to Spanish, `{ "locale": "current" }` will localize labels to system locale.
 
 [Localize Labels](../examples/Map/LocalizeLabels)
   
@@ -332,7 +332,7 @@ func
 
 This event is triggered whenever the currently displayed map region is about to change.
 
-@param {PointFeature} feature - The geojson point feature at the camera center, properties contains zoomLevel, visibleBounds
+- `feature`: `PointFeature`  - The geojson point feature at the camera center, properties contains zoomLevel, visibleBounds
 *signature:*`(feature:GeoJSON.Feature) =&gt; void`
 
 [Show Region Did Change](../examples/Map/ShowRegionDidChange)
@@ -344,7 +344,7 @@ func
 ```
 This event is triggered whenever the currently displayed map region is changing.
 
-@param {PointFeature} feature - The geojson point feature at the camera center, properties contains zoomLevel, visibleBounds
+- `feature`: `PointFeature`  - The geojson point feature at the camera center, properties contains zoomLevel, visibleBounds
 *signature:*`(feature:GeoJSON.Feature) =&gt; void`
 
 [Show Region Did Change](../examples/Map/ShowRegionDidChange)
@@ -356,7 +356,7 @@ func
 ```
 This event is triggered whenever the currently displayed map region finished changing.
 
-@param {PointFeature} feature - The geojson point feature at the camera center, properties contains zoomLevel, visibleBounds
+- `feature`: `PointFeature`  - The geojson point feature at the camera center, properties contains zoomLevel, visibleBounds
 *signature:*`(feature:GeoJSON.Feature) =&gt; void`
 
 [Show Region Did Change](../examples/Map/ShowRegionDidChange)
@@ -407,7 +407,7 @@ This is triggered when the map has successfully loaded a new map style.
 func
 ```
 This event is triggered when the map has failed to load a new map style. On v10 it's deprecated and replaced by onMapLoadingError
-@deprecated use onMapLoadingError
+**DEPRECATED** use onMapLoadingError
 *signature:*`() =&gt; void`
 
 

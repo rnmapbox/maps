@@ -575,8 +575,12 @@ export function propType(prop) {
   return `\`\`\`tsx\n${type.replace(/(\\\|)/g, '|')}\n\`\`\``;
 }
 
-export function propDescription(prop) {
-  return prop.description.replace('<', '&lt;').replace('>', '&gt;');
+export function propDescription(prop, mdx) {
+  let result = prop.description.replaceAll('<', '&lt;').replaceAll('>', '&gt;');
+  if (mdx && false) {
+    result = result.replaceAll('{', '&#123;').replaceAll('}', '&#125;');
+  }
+  return result;
 }
 
 export function examplePropLinks(prop, component) {
@@ -603,7 +607,7 @@ export function exampleMethodLinks(method, component) {
   return '';
 }
 
-export function getMarkdownMethodSignature(method) {
+export function getMarkdownMethodSignature(method, mdx) {
   const params = method.params
     .map((param, i) => {
       const isOptional = param.optional;
@@ -615,6 +619,13 @@ export function getMarkdownMethodSignature(method) {
       }
 
       name += param.name;
+      if (mdx) {
+        name = name
+          .replaceAll('<', '&lt;')
+          .replaceAll('>', '&gt;')
+          .replaceAll('{', '&#123;')
+          .replaceAll('}', '&#125;');
+      }
       return isOptional ? `[${name}]` : name;
     })
     .join('');

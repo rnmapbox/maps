@@ -237,6 +237,19 @@ class DocJSONBuilder {
       }
     }
 
+    /**
+     * @param {string} jsdoc comment
+     * @returns string
+     */
+    function formatMethodJSDocToMD(description) {
+      let result = description
+        .replaceAll('@deprecated', '**DEPRECATED**')
+        .replaceAll(/@param\s+\{(.+)\}\s+(\S+)/g, (m, type, name) => {
+          return `- \`${name}\`: \`${type}\` `;
+        });
+      return result;
+    }
+
     function mapProp(propMeta, propName, array) {
       let result = {};
       if (!array) {
@@ -257,7 +270,8 @@ class DocJSONBuilder {
           result.type.name === 'func' &&
           result.type.funcSignature
         ) {
-          result.description = `${result.description}\n*signature:*\`${result.type.funcSignature}\``;
+          let description = formatMethodJSDocToMD(result.description);
+          result.description = `${description}\n*signature:*\`${result.type.funcSignature}\``;
         }
       } else {
         if (propName) {
