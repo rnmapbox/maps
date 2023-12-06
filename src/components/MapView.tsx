@@ -297,7 +297,7 @@ type Props = ViewProps & {
 
   /**
    * [`mapbox` (v10) implementation only]
-   * Set map's label locale, e.g. { "locale": "es" } will localize labels to Spanish, { "locale": "current" } will localize labels to system locale.
+   * Set map's label locale, e.g. `{ "locale": "es" }` will localize labels to Spanish, `{ "locale": "current" }` will localize labels to system locale.
    */
   localizeLabels?: LocalizeLabels;
 

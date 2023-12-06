@@ -2,6 +2,7 @@ import fs from 'fs';
 import path from 'path';
 import * as url from 'url';
 
+import { compile } from '@mdx-js/mdx';
 import ejs from 'ejs';
 
 const __dirname = url.fileURLToPath(new URL('.', import.meta.url));
@@ -14,6 +15,21 @@ import * as globalFuncs from './globals.mjs';
 Object.keys(globalFuncs).forEach((key) => {
   global[key] = globalFuncs[key];
 });
+
+async function checkMDX(code) {
+  try {
+    await compile(code);
+  } catch (e) {
+    const lines = code.split('\n');
+    const { line, column } = e.place;
+
+    console.error(lines[line-1]);
+    console.error(' '.repeat(column-1) + '^');
+    console.error(e.reason);
+    throw e;
+  }
+  return true;
+}
 
 const TMPL_PATH = path.join(__dirname, '..', 'templates');
 const TMPL_FILE = fs.readFileSync(
@@ -29,7 +45,7 @@ class MarkdownBuilder {
    * @param {string} componentName
    * @param {string[]} tagLinks
    */
-  generateComponentFile(
+  async generateComponentFile(
     destDirPath,
     docJSON,
     componentName,
@@ -46,6 +62,10 @@ class MarkdownBuilder {
       path.join(destDirPath, `${componentName}.md`),
       fileContents,
     );
+
+    if (options.docosaurus) {
+      await checkMDX(fileContents);
+    }
   }
 
   parseExampleTagLinks() {
@@ -83,14 +103,14 @@ class MarkdownBuilder {
    * @param {string} docsJsonPath
    * @param {{docosaurus?: boolean}?} options
    */
-  generate(docsJsonPath, destDirPath, options = {}) {
+  async generate(docsJsonPath, destDirPath, options = {}) {
     const docJSONFile = fs.readFileSync(docsJsonPath, 'utf8');
     const docJSON = JSON.parse(docJSONFile);
     const componentPaths = Object.keys(docJSON);
 
     const tagLinks = this.parseExampleTagLinks();
     for (let componentPath of componentPaths) {
-      this.generateComponentFile(
+      await this.generateComponentFile(
         destDirPath,
         docJSON,
         componentPath,

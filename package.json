@@ -115,7 +115,8 @@
     "react-native-builder-bob": "^0.23.1",
     "react-test-renderer": "18.2.0",
     "ts-node": "10.9.1",
-    "typescript": "4.8.4"
+    "typescript": "4.8.4",
+    "@mdx-js/mdx": "^3.0.0"
   },
   "codegenConfig": {
     "name": "rnmapbox_maps_specs",

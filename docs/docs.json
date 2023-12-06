@@ -900,7 +900,7 @@
           "funcSignature": "(event:MapboxGLEvent) => void"
         },
         "default": "none",
-        "description": "Executes when user tracking mode changes.\n@deprecated use Viewport#onStatusChanged instead.\n*signature:*`(event:MapboxGLEvent) => void`"
+        "description": "Executes when user tracking mode changes.\n**DEPRECATED** use Viewport#onStatusChanged instead.\n*signature:*`(event:MapboxGLEvent) => void`"
       }
     ],
     "fileNameWithExt": "Camera.tsx",
@@ -2477,7 +2477,7 @@
           ]
         },
         "default": "none",
-        "description": "Specifies the external images in key-value pairs required for the shape source.\nKeys are names - see iconImage expressions, values can be either urls-s objects\nwith format {uri: 'http://...'}` or `require('image.png')` or `import 'image.png'`"
+        "description": "Specifies the external images in key-value pairs required for the shape source.\nKeys are names - see iconImage expressions, values can be either urls-s objects\nwith format `{uri: 'http://...'}` or `require('image.png')` or `import 'image.png'`"
       },
       {
         "name": "nativeAssetImages",
@@ -3920,7 +3920,7 @@
         "required": false,
         "type": "\\| {\n    /** locale code like `es` or `current` for the device's current locale */\n    locale: string;\n    /** layer id to localize. If not specified, all layers will be localized */\n    layerIds?: string[];\n  }\n\\| true",
         "default": "none",
-        "description": "[`mapbox` (v10) implementation only]\nSet map's label locale, e.g. { \"locale\": \"es\" } will localize labels to Spanish, { \"locale\": \"current\" } will localize labels to system locale."
+        "description": "[`mapbox` (v10) implementation only]\nSet map's label locale, e.g. `{ \"locale\": \"es\" }` will localize labels to Spanish, `{ \"locale\": \"current\" }` will localize labels to system locale."
       },
       {
         "name": "gestureSettings",
@@ -4052,7 +4052,7 @@
           "funcSignature": "(feature:GeoJSON.Feature) => void"
         },
         "default": "none",
-        "description": "<v10 only\n\nThis event is triggered whenever the currently displayed map region is about to change.\n\n@param {PointFeature} feature - The geojson point feature at the camera center, properties contains zoomLevel, visibleBounds\n*signature:*`(feature:GeoJSON.Feature) => void`"
+        "description": "<v10 only\n\nThis event is triggered whenever the currently displayed map region is about to change.\n\n- `feature`: `PointFeature`  - The geojson point feature at the camera center, properties contains zoomLevel, visibleBounds\n*signature:*`(feature:GeoJSON.Feature) => void`"
       },
       {
         "name": "onRegionIsChanging",
@@ -4062,7 +4062,7 @@
           "funcSignature": "(feature:GeoJSON.Feature) => void"
         },
         "default": "none",
-        "description": "This event is triggered whenever the currently displayed map region is changing.\n\n@param {PointFeature} feature - The geojson point feature at the camera center, properties contains zoomLevel, visibleBounds\n*signature:*`(feature:GeoJSON.Feature) => void`"
+        "description": "This event is triggered whenever the currently displayed map region is changing.\n\n- `feature`: `PointFeature`  - The geojson point feature at the camera center, properties contains zoomLevel, visibleBounds\n*signature:*`(feature:GeoJSON.Feature) => void`"
       },
       {
         "name": "onRegionDidChange",
@@ -4072,7 +4072,7 @@
           "funcSignature": "(feature:GeoJSON.Feature) => void"
         },
         "default": "none",
-        "description": "This event is triggered whenever the currently displayed map region finished changing.\n\n@param {PointFeature} feature - The geojson point feature at the camera center, properties contains zoomLevel, visibleBounds\n*signature:*`(feature:GeoJSON.Feature) => void`"
+        "description": "This event is triggered whenever the currently displayed map region finished changing.\n\n- `feature`: `PointFeature`  - The geojson point feature at the camera center, properties contains zoomLevel, visibleBounds\n*signature:*`(feature:GeoJSON.Feature) => void`"
       },
       {
         "name": "onCameraChanged",
@@ -4122,7 +4122,7 @@
           "funcSignature": "() => void"
         },
         "default": "none",
-        "description": "This event is triggered when the map has failed to load a new map style. On v10 it's deprecated and replaced by onMapLoadingError\n@deprecated use onMapLoadingError\n*signature:*`() => void`"
+        "description": "This event is triggered when the map has failed to load a new map style. On v10 it's deprecated and replaced by onMapLoadingError\n**DEPRECATED** use onMapLoadingError\n*signature:*`() => void`"
       },
       {
         "name": "onMapLoadingError",
@@ -5264,7 +5264,7 @@
           "funcSignature": "(event:OnPressEvent) => void"
         },
         "default": "none",
-        "description": "Source press listener, gets called when a user presses one of the children layers only\nif that layer has a higher z-index than another source layers\n\n@param {Object} event\n@param {Object[]} event.features - the geojson features that have hit by the press (might be multiple)\n@param {Object} event.coordinates - the coordinates of the click\n@param {Object} event.point - the point of the click\n@return void\n*signature:*`(event:OnPressEvent) => void`"
+        "description": "Source press listener, gets called when a user presses one of the children layers only\nif that layer has a higher z-index than another source layers\n\n- `event`: `Object` \n- `event.features`: `Object[]`  - the geojson features that have hit by the press (might be multiple)\n- `event.coordinates`: `Object`  - the coordinates of the click\n- `event.point`: `Object`  - the point of the click\n@return void\n*signature:*`(event:OnPressEvent) => void`"
       },
       {
         "name": "hitbox",
@@ -7709,7 +7709,7 @@
           "funcSignature": "(event:OnPressEvent) => void"
         },
         "default": "none",
-        "description": "Source press listener, gets called when a user presses one of the children layers only\nif that layer has a higher z-index than another source layers\n\n@param {Object} event\n@param {Object[]} event.features - the geojson features that have hit by the press (might be multiple)\n@param {Object} event.coordinates - the coordinates of the click\n@param {Object} event.point - the point of the click\n*signature:*`(event:OnPressEvent) => void`"
+        "description": "Source press listener, gets called when a user presses one of the children layers only\nif that layer has a higher z-index than another source layers\n\n- `event`: `Object` \n- `event.features`: `Object[]`  - the geojson features that have hit by the press (might be multiple)\n- `event.coordinates`: `Object`  - the coordinates of the click\n- `event.point`: `Object`  - the point of the click\n*signature:*`(event:OnPressEvent) => void`"
       },
       {
         "name": "hitbox",
