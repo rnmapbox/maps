@@ -21,7 +21,9 @@
       {
         "name": "symbolStyle",
         "docblock": null,
-        "modifiers": ["get"],
+        "modifiers": [
+          "get"
+        ],
         "params": [],
         "returns": {
           "type": {
@@ -140,14 +142,20 @@
         "values": [],
         "minimum": -20,
         "maximum": 20,
-        "default": [0.5, 10],
+        "default": [
+          0.5,
+          10
+        ],
         "description": "The start and end distance range in which fog fades from fully transparent to fully opaque. The distance to the point at the center of the map is defined as zero, so that negative range values are closer to the camera, and positive values are farther away.",
         "requires": [],
         "disabledBy": [],
         "allowedFunctionTypes": [],
         "expression": {
           "interpolated": true,
-          "parameters": ["zoom", "measure-light"],
+          "parameters": [
+            "zoom",
+            "measure-light"
+          ],
           "relaxZoomRestriction": true
         },
         "transition": true,
@@ -168,7 +176,10 @@
         "allowedFunctionTypes": [],
         "expression": {
           "interpolated": true,
-          "parameters": ["zoom", "measure-light"],
+          "parameters": [
+            "zoom",
+            "measure-light"
+          ],
           "relaxZoomRestriction": true
         },
         "transition": true,
@@ -189,7 +200,10 @@
         "allowedFunctionTypes": [],
         "expression": {
           "interpolated": true,
-          "parameters": ["zoom", "measure-light"],
+          "parameters": [
+            "zoom",
+            "measure-light"
+          ],
           "relaxZoomRestriction": true
         },
         "transition": true,
@@ -205,8 +219,12 @@
         "values": [],
         "default": [
           "interpolate",
-          ["linear"],
-          ["zoom"],
+          [
+            "linear"
+          ],
+          [
+            "zoom"
+          ],
           4,
           "#010b19",
           7,
@@ -218,7 +236,10 @@
         "allowedFunctionTypes": [],
         "expression": {
           "interpolated": true,
-          "parameters": ["zoom", "measure-light"],
+          "parameters": [
+            "zoom",
+            "measure-light"
+          ],
           "relaxZoomRestriction": true
         },
         "transition": true,
@@ -234,14 +255,29 @@
         "values": [],
         "minimum": 0,
         "maximum": 1,
-        "default": ["interpolate", ["linear"], ["zoom"], 4, 0.2, 7, 0.1],
+        "default": [
+          "interpolate",
+          [
+            "linear"
+          ],
+          [
+            "zoom"
+          ],
+          4,
+          0.2,
+          7,
+          0.1
+        ],
         "description": "Horizon blend applies a smooth fade from the color of the atmosphere to the color of space. A value of zero leaves a sharp transition from atmosphere to space. Increasing the value blends the color of atmosphere into increasingly high angles of the sky.",
         "requires": [],
         "disabledBy": [],
         "allowedFunctionTypes": [],
         "expression": {
           "interpolated": true,
-          "parameters": ["zoom", "measure-light"],
+          "parameters": [
+            "zoom",
+            "measure-light"
+          ],
           "relaxZoomRestriction": true
         },
         "transition": true,
@@ -257,14 +293,29 @@
         "values": [],
         "minimum": 0,
         "maximum": 1,
-        "default": ["interpolate", ["linear"], ["zoom"], 5, 0.35, 6, 0],
+        "default": [
+          "interpolate",
+          [
+            "linear"
+          ],
+          [
+            "zoom"
+          ],
+          5,
+          0.35,
+          6,
+          0
+        ],
         "description": "A value controlling the star intensity where `0` will show no stars and `1` will show stars at their maximum intensity.",
         "requires": [],
         "disabledBy": [],
         "allowedFunctionTypes": [],
         "expression": {
           "interpolated": true,
-          "parameters": ["zoom", "measure-light"],
+          "parameters": [
+            "zoom",
+            "measure-light"
+          ],
           "relaxZoomRestriction": true
         },
         "transition": true,
@@ -400,11 +451,15 @@
         "default": "#000000",
         "description": "The color with which the background will be drawn.",
         "requires": [],
-        "disabledBy": ["backgroundPattern"],
+        "disabledBy": [
+          "backgroundPattern"
+        ],
         "allowedFunctionTypes": [],
         "expression": {
           "interpolated": true,
-          "parameters": ["zoom"]
+          "parameters": [
+            "zoom"
+          ]
         },
         "transition": true,
         "mbx": {
@@ -423,7 +478,9 @@
         "allowedFunctionTypes": [],
         "expression": {
           "interpolated": false,
-          "parameters": ["zoom"]
+          "parameters": [
+            "zoom"
+          ]
         },
         "transition": false,
         "mbx": {
@@ -445,7 +502,9 @@
         "allowedFunctionTypes": [],
         "expression": {
           "interpolated": true,
-          "parameters": ["zoom"]
+          "parameters": [
+            "zoom"
+          ]
         },
         "transition": true,
         "mbx": {
@@ -563,7 +622,9 @@
         "params": [],
         "returns": null,
         "description": "Zooms the camera to the provided level, with optional duration.",
-        "examples": ["\ncamera.zoomTo(16);\ncamera.zoomTo(16, 100);\n\n"]
+        "examples": [
+          "\ncamera.zoomTo(16);\ncamera.zoomTo(16, 100);\n\n"
+        ]
       }
     ],
     "props": [
@@ -953,7 +1014,10 @@
         "allowedFunctionTypes": [],
         "expression": {
           "interpolated": false,
-          "parameters": ["zoom", "feature"]
+          "parameters": [
+            "zoom",
+            "feature"
+          ]
         },
         "mbx": {
           "fullName": "layout-circle-circle-sort-key",
@@ -1001,7 +1065,12 @@
         "allowedFunctionTypes": [],
         "expression": {
           "interpolated": true,
-          "parameters": ["zoom", "feature", "feature-state", "measure-light"]
+          "parameters": [
+            "zoom",
+            "feature",
+            "feature-state",
+            "measure-light"
+          ]
         },
         "transition": true,
         "mbx": {
@@ -1021,7 +1090,12 @@
         "allowedFunctionTypes": [],
         "expression": {
           "interpolated": true,
-          "parameters": ["zoom", "feature", "feature-state", "measure-light"]
+          "parameters": [
+            "zoom",
+            "feature",
+            "feature-state",
+            "measure-light"
+          ]
         },
         "transition": true,
         "mbx": {
@@ -1041,7 +1115,12 @@
         "allowedFunctionTypes": [],
         "expression": {
           "interpolated": true,
-          "parameters": ["zoom", "feature", "feature-state", "measure-light"]
+          "parameters": [
+            "zoom",
+            "feature",
+            "feature-state",
+            "measure-light"
+          ]
         },
         "transition": true,
         "mbx": {
@@ -1063,7 +1142,12 @@
         "allowedFunctionTypes": [],
         "expression": {
           "interpolated": true,
-          "parameters": ["zoom", "feature", "feature-state", "measure-light"]
+          "parameters": [
+            "zoom",
+            "feature",
+            "feature-state",
+            "measure-light"
+          ]
         },
         "transition": true,
         "mbx": {
@@ -1077,14 +1161,19 @@
         "type": "array<number>",
         "values": [],
         "units": "pixels",
-        "default": [0, 0],
+        "default": [
+          0,
+          0
+        ],
         "description": "The geometry's offset. Values are [x, y] where negatives indicate left and up, respectively.",
         "requires": [],
         "disabledBy": [],
         "allowedFunctionTypes": [],
         "expression": {
           "interpolated": true,
-          "parameters": ["zoom"]
+          "parameters": [
+            "zoom"
+          ]
         },
         "transition": true,
         "mbx": {
@@ -1108,12 +1197,16 @@
         ],
         "default": "map",
         "description": "Controls the frame of reference for `circleTranslate`.",
-        "requires": ["circleTranslate"],
+        "requires": [
+          "circleTranslate"
+        ],
         "disabledBy": [],
         "allowedFunctionTypes": [],
         "expression": {
           "interpolated": false,
-          "parameters": ["zoom"]
+          "parameters": [
+            "zoom"
+          ]
         },
         "mbx": {
           "fullName": "paint-circle-circle-translate-anchor",
@@ -1141,7 +1234,9 @@
         "allowedFunctionTypes": [],
         "expression": {
           "interpolated": false,
-          "parameters": ["zoom"]
+          "parameters": [
+            "zoom"
+          ]
         },
         "mbx": {
           "fullName": "paint-circle-circle-pitch-scale",
@@ -1169,7 +1264,9 @@
         "allowedFunctionTypes": [],
         "expression": {
           "interpolated": false,
-          "parameters": ["zoom"]
+          "parameters": [
+            "zoom"
+          ]
         },
         "mbx": {
           "fullName": "paint-circle-circle-pitch-alignment",
@@ -1190,7 +1287,12 @@
         "allowedFunctionTypes": [],
         "expression": {
           "interpolated": true,
-          "parameters": ["zoom", "feature", "feature-state", "measure-light"]
+          "parameters": [
+            "zoom",
+            "feature",
+            "feature-state",
+            "measure-light"
+          ]
         },
         "transition": true,
         "mbx": {
@@ -1210,7 +1312,12 @@
         "allowedFunctionTypes": [],
         "expression": {
           "interpolated": true,
-          "parameters": ["zoom", "feature", "feature-state", "measure-light"]
+          "parameters": [
+            "zoom",
+            "feature",
+            "feature-state",
+            "measure-light"
+          ]
         },
         "transition": true,
         "mbx": {
@@ -1232,7 +1339,12 @@
         "allowedFunctionTypes": [],
         "expression": {
           "interpolated": true,
-          "parameters": ["zoom", "feature", "feature-state", "measure-light"]
+          "parameters": [
+            "zoom",
+            "feature",
+            "feature-state",
+            "measure-light"
+          ]
         },
         "transition": true,
         "mbx": {
@@ -1397,7 +1509,9 @@
         "allowedFunctionTypes": [],
         "expression": {
           "interpolated": true,
-          "parameters": ["zoom"]
+          "parameters": [
+            "zoom"
+          ]
         },
         "transition": true,
         "mbx": {
@@ -1413,11 +1527,18 @@
         "default": "#000000",
         "description": "The base color of the extruded fill. The extrusion's surfaces will be shaded differently based on this color in combination with the root `light` settings. If this color is specified as `rgba` with an alpha component, the alpha component will be ignored; use `fillExtrusionOpacity` to set layer opacity.",
         "requires": [],
-        "disabledBy": ["fillExtrusionPattern"],
+        "disabledBy": [
+          "fillExtrusionPattern"
+        ],
         "allowedFunctionTypes": [],
         "expression": {
           "interpolated": true,
-          "parameters": ["zoom", "feature", "feature-state", "measure-light"]
+          "parameters": [
+            "zoom",
+            "feature",
+            "feature-state",
+            "measure-light"
+          ]
         },
         "transition": true,
         "mbx": {
@@ -1431,14 +1552,19 @@
         "type": "array<number>",
         "values": [],
         "units": "pixels",
-        "default": [0, 0],
+        "default": [
+          0,
+          0
+        ],
         "description": "The geometry's offset. Values are [x, y] where negatives indicate left and up (on the flat plane), respectively.",
         "requires": [],
         "disabledBy": [],
         "allowedFunctionTypes": [],
         "expression": {
           "interpolated": true,
-          "parameters": ["zoom"]
+          "parameters": [
+            "zoom"
+          ]
         },
         "transition": true,
         "mbx": {
@@ -1462,12 +1588,16 @@
         ],
         "default": "map",
         "description": "Controls the frame of reference for `fillExtrusionTranslate`.",
-        "requires": ["fillExtrusionTranslate"],
+        "requires": [
+          "fillExtrusionTranslate"
+        ],
         "disabledBy": [],
         "allowedFunctionTypes": [],
         "expression": {
           "interpolated": false,
-          "parameters": ["zoom"]
+          "parameters": [
+            "zoom"
+          ]
         },
         "mbx": {
           "fullName": "paint-fill-extrusion-fill-extrusion-translate-anchor",
@@ -1485,7 +1615,10 @@
         "allowedFunctionTypes": [],
         "expression": {
           "interpolated": false,
-          "parameters": ["zoom", "feature"]
+          "parameters": [
+            "zoom",
+            "feature"
+          ]
         },
         "transition": false,
         "mbx": {
@@ -1507,7 +1640,11 @@
         "allowedFunctionTypes": [],
         "expression": {
           "interpolated": true,
-          "parameters": ["zoom", "feature", "feature-state"]
+          "parameters": [
+            "zoom",
+            "feature",
+            "feature-state"
+          ]
         },
         "transition": true,
         "mbx": {
@@ -1524,12 +1661,18 @@
         "units": "meters",
         "default": 0,
         "description": "The height with which to extrude the base of this layer. Must be less than or equal to `fillExtrusionHeight`.",
-        "requires": ["fillExtrusionHeight"],
+        "requires": [
+          "fillExtrusionHeight"
+        ],
         "disabledBy": [],
         "allowedFunctionTypes": [],
         "expression": {
           "interpolated": true,
-          "parameters": ["zoom", "feature", "feature-state"]
+          "parameters": [
+            "zoom",
+            "feature",
+            "feature-state"
+          ]
         },
         "transition": true,
         "mbx": {
@@ -1549,7 +1692,9 @@
         "allowedFunctionTypes": [],
         "expression": {
           "interpolated": false,
-          "parameters": ["zoom"]
+          "parameters": [
+            "zoom"
+          ]
         },
         "transition": false,
         "mbx": {
@@ -1564,12 +1709,16 @@
         "values": [],
         "default": true,
         "description": "Indicates whether top edges should be rounded when fillExtrusionEdgeRadius has a value greater than 0. If false, rounded edges are only applied to the sides. Default is true.",
-        "requires": ["fillExtrusionEdgeRadius"],
+        "requires": [
+          "fillExtrusionEdgeRadius"
+        ],
         "disabledBy": [],
         "allowedFunctionTypes": [],
         "expression": {
           "interpolated": false,
-          "parameters": ["zoom"]
+          "parameters": [
+            "zoom"
+          ]
         },
         "transition": false,
         "mbx": {
@@ -1687,7 +1836,10 @@
         "allowedFunctionTypes": [],
         "expression": {
           "interpolated": false,
-          "parameters": ["zoom", "feature"]
+          "parameters": [
+            "zoom",
+            "feature"
+          ]
         },
         "mbx": {
           "fullName": "layout-fill-fill-sort-key",
@@ -1733,7 +1885,9 @@
         "allowedFunctionTypes": [],
         "expression": {
           "interpolated": false,
-          "parameters": ["zoom"]
+          "parameters": [
+            "zoom"
+          ]
         },
         "mbx": {
           "fullName": "paint-fill-fill-antialias",
@@ -1754,7 +1908,12 @@
         "allowedFunctionTypes": [],
         "expression": {
           "interpolated": true,
-          "parameters": ["zoom", "feature", "feature-state", "measure-light"]
+          "parameters": [
+            "zoom",
+            "feature",
+            "feature-state",
+            "measure-light"
+          ]
         },
         "transition": true,
         "mbx": {
@@ -1770,11 +1929,18 @@
         "default": "#000000",
         "description": "The color of the filled part of this layer. This color can be specified as `rgba` with an alpha component and the color's opacity will not affect the opacity of the 1px stroke, if it is used.",
         "requires": [],
-        "disabledBy": ["fillPattern"],
+        "disabledBy": [
+          "fillPattern"
+        ],
         "allowedFunctionTypes": [],
         "expression": {
           "interpolated": true,
-          "parameters": ["zoom", "feature", "feature-state", "measure-light"]
+          "parameters": [
+            "zoom",
+            "feature",
+            "feature-state",
+            "measure-light"
+          ]
         },
         "transition": true,
         "mbx": {
@@ -1789,11 +1955,18 @@
         "values": [],
         "description": "The outline color of the fill. Matches the value of `fillColor` if unspecified.",
         "requires": [],
-        "disabledBy": ["fillPattern"],
+        "disabledBy": [
+          "fillPattern"
+        ],
         "allowedFunctionTypes": [],
         "expression": {
           "interpolated": true,
-          "parameters": ["zoom", "feature", "feature-state", "measure-light"]
+          "parameters": [
+            "zoom",
+            "feature",
+            "feature-state",
+            "measure-light"
+          ]
         },
         "transition": true,
         "mbx": {
@@ -1807,14 +1980,19 @@
         "type": "array<number>",
         "values": [],
         "units": "pixels",
-        "default": [0, 0],
+        "default": [
+          0,
+          0
+        ],
         "description": "The geometry's offset. Values are [x, y] where negatives indicate left and up, respectively.",
         "requires": [],
         "disabledBy": [],
         "allowedFunctionTypes": [],
         "expression": {
           "interpolated": true,
-          "parameters": ["zoom"]
+          "parameters": [
+            "zoom"
+          ]
         },
         "transition": true,
         "mbx": {
@@ -1838,12 +2016,16 @@
         ],
         "default": "map",
         "description": "Controls the frame of reference for `fillTranslate`.",
-        "requires": ["fillTranslate"],
+        "requires": [
+          "fillTranslate"
+        ],
         "disabledBy": [],
         "allowedFunctionTypes": [],
         "expression": {
           "interpolated": false,
-          "parameters": ["zoom"]
+          "parameters": [
+            "zoom"
+          ]
         },
         "mbx": {
           "fullName": "paint-fill-fill-translate-anchor",
@@ -1861,7 +2043,10 @@
         "allowedFunctionTypes": [],
         "expression": {
           "interpolated": false,
-          "parameters": ["zoom", "feature"]
+          "parameters": [
+            "zoom",
+            "feature"
+          ]
         },
         "transition": false,
         "mbx": {
@@ -2026,7 +2211,12 @@
         "allowedFunctionTypes": [],
         "expression": {
           "interpolated": true,
-          "parameters": ["zoom", "feature", "feature-state", "measure-light"]
+          "parameters": [
+            "zoom",
+            "feature",
+            "feature-state",
+            "measure-light"
+          ]
         },
         "transition": true,
         "mbx": {
@@ -2047,7 +2237,12 @@
         "allowedFunctionTypes": [],
         "expression": {
           "interpolated": true,
-          "parameters": ["zoom", "feature", "feature-state", "measure-light"]
+          "parameters": [
+            "zoom",
+            "feature",
+            "feature-state",
+            "measure-light"
+          ]
         },
         "transition": false,
         "mbx": {
@@ -2068,7 +2263,9 @@
         "allowedFunctionTypes": [],
         "expression": {
           "interpolated": true,
-          "parameters": ["zoom"]
+          "parameters": [
+            "zoom"
+          ]
         },
         "transition": true,
         "mbx": {
@@ -2083,8 +2280,12 @@
         "values": [],
         "default": [
           "interpolate",
-          ["linear"],
-          ["heatmap-density"],
+          [
+            "linear"
+          ],
+          [
+            "heatmap-density"
+          ],
           0,
           "rgba(0, 0, 255, 0)",
           0.1,
@@ -2104,7 +2305,9 @@
         "allowedFunctionTypes": [],
         "expression": {
           "interpolated": true,
-          "parameters": ["heatmap-density"]
+          "parameters": [
+            "heatmap-density"
+          ]
         },
         "transition": false,
         "mbx": {
@@ -2126,7 +2329,9 @@
         "allowedFunctionTypes": [],
         "expression": {
           "interpolated": true,
-          "parameters": ["zoom"]
+          "parameters": [
+            "zoom"
+          ]
         },
         "transition": true,
         "mbx": {
@@ -2342,7 +2547,9 @@
         "allowedFunctionTypes": [],
         "expression": {
           "interpolated": false,
-          "parameters": ["zoom"]
+          "parameters": [
+            "zoom"
+          ]
         },
         "transition": false,
         "mbx": {
@@ -2355,14 +2562,20 @@
         "name": "position",
         "type": "array<number>",
         "values": [],
-        "default": [1.15, 210, 30],
+        "default": [
+          1.15,
+          210,
+          30
+        ],
         "description": "Position of the light source relative to lit (extruded) geometries, in [r radial coordinate, a azimuthal angle, p polar angle] where r indicates the distance from the center of the base of an object to its light, a indicates the position of the light relative to 0° (0° when `light.anchor` is set to `viewport` corresponds to the top of the viewport, or 0° when `light.anchor` is set to `map` corresponds to due north, and degrees proceed clockwise), and p indicates the height of the light (from 0°, directly above, to 180°, directly below).",
         "requires": [],
         "disabledBy": [],
         "allowedFunctionTypes": [],
         "expression": {
           "interpolated": true,
-          "parameters": ["zoom"]
+          "parameters": [
+            "zoom"
+          ]
         },
         "transition": true,
         "mbx": {
@@ -2382,7 +2595,9 @@
         "allowedFunctionTypes": [],
         "expression": {
           "interpolated": true,
-          "parameters": ["zoom"]
+          "parameters": [
+            "zoom"
+          ]
         },
         "transition": true,
         "mbx": {
@@ -2404,7 +2619,9 @@
         "allowedFunctionTypes": [],
         "expression": {
           "interpolated": true,
-          "parameters": ["zoom"]
+          "parameters": [
+            "zoom"
+          ]
         },
         "transition": true,
         "mbx": {
@@ -2536,7 +2753,10 @@
         "allowedFunctionTypes": [],
         "expression": {
           "interpolated": false,
-          "parameters": ["zoom", "feature"]
+          "parameters": [
+            "zoom",
+            "feature"
+          ]
         },
         "mbx": {
           "fullName": "layout-line-line-cap",
@@ -2565,10 +2785,15 @@
         "description": "The display of lines when joining.",
         "requires": [],
         "disabledBy": [],
-        "allowedFunctionTypes": ["camera"],
+        "allowedFunctionTypes": [
+          "camera"
+        ],
         "expression": {
           "interpolated": false,
-          "parameters": ["zoom", "feature"]
+          "parameters": [
+            "zoom",
+            "feature"
+          ]
         },
         "mbx": {
           "fullName": "layout-line-line-join",
@@ -2587,7 +2812,9 @@
         "allowedFunctionTypes": [],
         "expression": {
           "interpolated": true,
-          "parameters": ["zoom"]
+          "parameters": [
+            "zoom"
+          ]
         },
         "mbx": {
           "fullName": "layout-line-line-miter-limit",
@@ -2606,7 +2833,9 @@
         "allowedFunctionTypes": [],
         "expression": {
           "interpolated": true,
-          "parameters": ["zoom"]
+          "parameters": [
+            "zoom"
+          ]
         },
         "mbx": {
           "fullName": "layout-line-line-round-limit",
@@ -2624,7 +2853,10 @@
         "allowedFunctionTypes": [],
         "expression": {
           "interpolated": false,
-          "parameters": ["zoom", "feature"]
+          "parameters": [
+            "zoom",
+            "feature"
+          ]
         },
         "mbx": {
           "fullName": "layout-line-line-sort-key",
@@ -2672,7 +2904,12 @@
         "allowedFunctionTypes": [],
         "expression": {
           "interpolated": true,
-          "parameters": ["zoom", "feature", "feature-state", "measure-light"]
+          "parameters": [
+            "zoom",
+            "feature",
+            "feature-state",
+            "measure-light"
+          ]
         },
         "transition": true,
         "mbx": {
@@ -2688,11 +2925,18 @@
         "default": "#000000",
         "description": "The color with which the line will be drawn.",
         "requires": [],
-        "disabledBy": ["linePattern"],
+        "disabledBy": [
+          "linePattern"
+        ],
         "allowedFunctionTypes": [],
         "expression": {
           "interpolated": true,
-          "parameters": ["zoom", "feature", "feature-state", "measure-light"]
+          "parameters": [
+            "zoom",
+            "feature",
+            "feature-state",
+            "measure-light"
+          ]
         },
         "transition": true,
         "mbx": {
@@ -2706,14 +2950,19 @@
         "type": "array<number>",
         "values": [],
         "units": "pixels",
-        "default": [0, 0],
+        "default": [
+          0,
+          0
+        ],
         "description": "The geometry's offset. Values are [x, y] where negatives indicate left and up, respectively.",
         "requires": [],
         "disabledBy": [],
         "allowedFunctionTypes": [],
         "expression": {
           "interpolated": true,
-          "parameters": ["zoom"]
+          "parameters": [
+            "zoom"
+          ]
         },
         "transition": true,
         "mbx": {
@@ -2737,12 +2986,16 @@
         ],
         "default": "map",
         "description": "Controls the frame of reference for `lineTranslate`.",
-        "requires": ["lineTranslate"],
+        "requires": [
+          "lineTranslate"
+        ],
         "disabledBy": [],
         "allowedFunctionTypes": [],
         "expression": {
           "interpolated": false,
-          "parameters": ["zoom"]
+          "parameters": [
+            "zoom"
+          ]
         },
         "mbx": {
           "fullName": "paint-line-line-translate-anchor",
@@ -2760,10 +3013,17 @@
         "description": "Stroke thickness.",
         "requires": [],
         "disabledBy": [],
-        "allowedFunctionTypes": ["camera"],
+        "allowedFunctionTypes": [
+          "camera"
+        ],
         "expression": {
           "interpolated": true,
-          "parameters": ["zoom", "feature", "feature-state", "measure-light"]
+          "parameters": [
+            "zoom",
+            "feature",
+            "feature-state",
+            "measure-light"
+          ]
         },
         "transition": true,
         "mbx": {
@@ -2785,7 +3045,12 @@
         "allowedFunctionTypes": [],
         "expression": {
           "interpolated": true,
-          "parameters": ["zoom", "feature", "feature-state", "measure-light"]
+          "parameters": [
+            "zoom",
+            "feature",
+            "feature-state",
+            "measure-light"
+          ]
         },
         "transition": true,
         "mbx": {
@@ -2806,7 +3071,12 @@
         "allowedFunctionTypes": [],
         "expression": {
           "interpolated": true,
-          "parameters": ["zoom", "feature", "feature-state", "measure-light"]
+          "parameters": [
+            "zoom",
+            "feature",
+            "feature-state",
+            "measure-light"
+          ]
         },
         "transition": true,
         "mbx": {
@@ -2828,7 +3098,12 @@
         "allowedFunctionTypes": [],
         "expression": {
           "interpolated": true,
-          "parameters": ["zoom", "feature", "feature-state", "measure-light"]
+          "parameters": [
+            "zoom",
+            "feature",
+            "feature-state",
+            "measure-light"
+          ]
         },
         "transition": true,
         "mbx": {
@@ -2845,11 +3120,16 @@
         "units": "line widths",
         "description": "Specifies the lengths of the alternating dashes and gaps that form the dash pattern. The lengths are later scaled by the line width. To convert a dash length to pixels, multiply the length by the current line width. Note that GeoJSON sources with `lineMetrics: true` specified won't render dashed lines to the expected scale. Also note that zoomDependent expressions will be evaluated only at integer zoom levels.",
         "requires": [],
-        "disabledBy": ["linePattern"],
+        "disabledBy": [
+          "linePattern"
+        ],
         "allowedFunctionTypes": [],
         "expression": {
           "interpolated": false,
-          "parameters": ["zoom", "feature"]
+          "parameters": [
+            "zoom",
+            "feature"
+          ]
         },
         "transition": false,
         "mbx": {
@@ -2868,7 +3148,10 @@
         "allowedFunctionTypes": [],
         "expression": {
           "interpolated": false,
-          "parameters": ["zoom", "feature"]
+          "parameters": [
+            "zoom",
+            "feature"
+          ]
         },
         "transition": false,
         "mbx": {
@@ -2883,11 +3166,15 @@
         "values": [],
         "description": "A gradient used to color a line feature at various distances along its length. Defined using a `step` or `interpolate` expression which outputs a color for each corresponding `lineProgress` input value. `lineProgress` is a percentage of the line feature's total length as measured on the webmercator projected coordinate plane (a `number` between `0` and `1`). Can only be used with GeoJSON sources that specify `\"lineMetrics\": true`.",
         "requires": [],
-        "disabledBy": ["linePattern"],
+        "disabledBy": [
+          "linePattern"
+        ],
         "allowedFunctionTypes": [],
         "expression": {
           "interpolated": true,
-          "parameters": ["line-progress"]
+          "parameters": [
+            "line-progress"
+          ]
         },
         "transition": false,
         "mbx": {
@@ -2900,9 +3187,18 @@
         "name": "lineTrimOffset",
         "type": "array<number>",
         "values": [],
-        "minimum": [0, 0],
-        "maximum": [1, 1],
-        "default": [0, 0],
+        "minimum": [
+          0,
+          0
+        ],
+        "maximum": [
+          1,
+          1
+        ],
+        "default": [
+          0,
+          0
+        ],
         "description": "The line part between [trimStart, trimEnd] will be marked as transparent to make a route vanishing effect. The line trimOff offset is based on the whole line range [0.0, 1.0].",
         "requires": [],
         "disabledBy": [],
@@ -3003,7 +3299,9 @@
       {
         "name": "getPointInView",
         "docblock": "Converts a geographic coordinate to a point in the given view’s coordinate system.\n\n@example\nconst pointInView = await this._map.getPointInView([-37.817070, 144.949901]);\n\n@param {Array<number>} coordinate - A point expressed in the map view's coordinate system.\n@return {Array}",
-        "modifiers": ["async"],
+        "modifiers": [
+          "async"
+        ],
         "params": [
           {
             "name": "coordinate",
@@ -3033,7 +3331,9 @@
       {
         "name": "getCoordinateFromView",
         "docblock": "Converts a point in the given view’s coordinate system to a geographic coordinate.\n\n@example\nconst coordinate = await this._map.getCoordinateFromView([100, 100]);\n\n@param {Array<number>} point - A point expressed in the given view’s coordinate system.\n@return {Array}",
-        "modifiers": ["async"],
+        "modifiers": [
+          "async"
+        ],
         "params": [
           {
             "name": "point",
@@ -3063,7 +3363,9 @@
       {
         "name": "getVisibleBounds",
         "docblock": "The coordinate bounds (ne, sw) visible in the user’s viewport.\n\n@example\nconst visibleBounds = await this._map.getVisibleBounds();\n\n@return {Array}",
-        "modifiers": ["async"],
+        "modifiers": [
+          "async"
+        ],
         "params": [],
         "returns": {
           "type": {
@@ -3093,7 +3395,9 @@
       {
         "name": "queryRenderedFeaturesAtPoint",
         "docblock": "Returns an array of rendered map features that intersect with a given point.\n\n@example\nthis._map.queryRenderedFeaturesAtPoint([30, 40], ['==', 'type', 'Point'], ['id1', 'id2'])\n\n@param  {Array<Number>} coordinate - A point expressed in the map view’s coordinate system.\n@param  {Array=} filter - A set of strings that correspond to the names of layers defined in the current style. Only the features contained in these layers are included in the returned array.\n@param  {Array=} layerIDs - A array of layer id's to filter the features by\n@return {FeatureCollection}",
-        "modifiers": ["async"],
+        "modifiers": [
+          "async"
+        ],
         "params": [
           {
             "name": "coordinate",
@@ -3148,7 +3452,9 @@
       {
         "name": "queryRenderedFeaturesInRect",
         "docblock": "Returns an array of rendered map features that intersect with the given rectangle,\nrestricted to the given style layers and filtered by the given predicate. In v10,\npassing an empty array will query the entire visible bounds of the map.\n\n@example\nthis._map.queryRenderedFeaturesInRect([30, 40, 20, 10], ['==', 'type', 'Point'], ['id1', 'id2'])\n\n@param  {Array<Number>} bbox - A rectangle expressed in the map view’s coordinate system. For v10, this can be an empty array to query the visible map area.\n@param  {Array=} filter - A set of strings that correspond to the names of layers defined in the current style. Only the features contained in these layers are included in the returned array.\n@param  {Array=} layerIDs -  A array of layer id's to filter the features by\n@return {FeatureCollection}",
-        "modifiers": ["async"],
+        "modifiers": [
+          "async"
+        ],
         "params": [
           {
             "name": "bbox",
@@ -3203,7 +3509,9 @@
       {
         "name": "querySourceFeatures",
         "docblock": "Returns an array of GeoJSON Feature objects representing features within the specified vector tile or GeoJSON source that satisfy the query parameters.\n\n@example\nthis._map.querySourceFeatures('your-source-id', [], ['your-source-layer'])\n\n@param  {String} sourceId - Style source identifier used to query for source features.\n@param  {Array=} filter - A filter to limit query results.\n@param  {Array=} sourceLayerIDs - The name of the source layers to query. For vector tile sources, this parameter is required. For GeoJSON sources, it is ignored.\n@return {FeatureCollection}",
-        "modifiers": ["async"],
+        "modifiers": [
+          "async"
+        ],
         "params": [
           {
             "name": "sourceId",
@@ -3258,7 +3566,9 @@
       {
         "name": "takeSnap",
         "docblock": "Takes snapshot of map with current tiles and returns a URI to the image\n@param  {Boolean} writeToDisk If true will create a temp file, otherwise it is in base64\n@return {String}",
-        "modifiers": ["async"],
+        "modifiers": [
+          "async"
+        ],
         "params": [
           {
             "name": "writeToDisk",
@@ -3286,7 +3596,9 @@
       {
         "name": "getZoom",
         "docblock": "Returns the current zoom of the map view.\n\n@example\nconst zoom = await this._map.getZoom();\n\n@return {Number}",
-        "modifiers": ["async"],
+        "modifiers": [
+          "async"
+        ],
         "params": [],
         "returns": {
           "type": {
@@ -3300,12 +3612,16 @@
           }
         },
         "description": "Returns the current zoom of the map view.",
-        "examples": ["\nconst zoom = await this._map.getZoom();\n\n"]
+        "examples": [
+          "\nconst zoom = await this._map.getZoom();\n\n"
+        ]
       },
       {
         "name": "getCenter",
         "docblock": "Returns the map's geographical centerpoint\n\n@example\nconst center = await this._map.getCenter();\n\n@return {Array<Number>} Coordinates",
-        "modifiers": ["async"],
+        "modifiers": [
+          "async"
+        ],
         "params": [],
         "returns": {
           "description": "Coordinates",
@@ -3320,12 +3636,16 @@
           }
         },
         "description": "Returns the map's geographical centerpoint",
-        "examples": ["\nconst center = await this._map.getCenter();\n\n"]
+        "examples": [
+          "\nconst center = await this._map.getCenter();\n\n"
+        ]
       },
       {
         "name": "clearData",
         "docblock": "Clears temporary map data from the data path defined in the given resource\noptions. Useful to reduce the disk usage or in case the disk cache contains\ninvalid data.\n\nv10 only",
-        "modifiers": ["async"],
+        "modifiers": [
+          "async"
+        ],
         "params": [],
         "returns": {
           "type": {
@@ -3344,7 +3664,9 @@
       {
         "name": "queryTerrainElevation",
         "docblock": "Queries the currently loaded data for elevation at a geographical location.\nThe elevation is returned in meters relative to mean sea-level.\nReturns null if terrain is disabled or if terrain data for the location hasn't been loaded yet.\n\n@param {Array<Number>} coordinate - the coordinates to query elevation at\n@return {Number}",
-        "modifiers": ["async"],
+        "modifiers": [
+          "async"
+        ],
         "params": [
           {
             "name": "coordinate",
@@ -4463,7 +4785,9 @@
         "allowedFunctionTypes": [],
         "expression": {
           "interpolated": true,
-          "parameters": ["zoom"]
+          "parameters": [
+            "zoom"
+          ]
         },
         "transition": true,
         "mbx": {
@@ -4484,7 +4808,9 @@
         "allowedFunctionTypes": [],
         "expression": {
           "interpolated": true,
-          "parameters": ["zoom"]
+          "parameters": [
+            "zoom"
+          ]
         },
         "transition": true,
         "mbx": {
@@ -4506,7 +4832,9 @@
         "allowedFunctionTypes": [],
         "expression": {
           "interpolated": true,
-          "parameters": ["zoom"]
+          "parameters": [
+            "zoom"
+          ]
         },
         "transition": true,
         "mbx": {
@@ -4528,7 +4856,9 @@
         "allowedFunctionTypes": [],
         "expression": {
           "interpolated": true,
-          "parameters": ["zoom"]
+          "parameters": [
+            "zoom"
+          ]
         },
         "transition": true,
         "mbx": {
@@ -4550,7 +4880,9 @@
         "allowedFunctionTypes": [],
         "expression": {
           "interpolated": true,
-          "parameters": ["zoom"]
+          "parameters": [
+            "zoom"
+          ]
         },
         "transition": true,
         "mbx": {
@@ -4572,7 +4904,9 @@
         "allowedFunctionTypes": [],
         "expression": {
           "interpolated": true,
-          "parameters": ["zoom"]
+          "parameters": [
+            "zoom"
+          ]
         },
         "transition": true,
         "mbx": {
@@ -4601,7 +4935,9 @@
         "allowedFunctionTypes": [],
         "expression": {
           "interpolated": false,
-          "parameters": ["zoom"]
+          "parameters": [
+            "zoom"
+          ]
         },
         "mbx": {
           "fullName": "paint-raster-raster-resampling",
@@ -4622,7 +4958,9 @@
         "allowedFunctionTypes": [],
         "expression": {
           "interpolated": true,
-          "parameters": ["zoom"]
+          "parameters": [
+            "zoom"
+          ]
         },
         "transition": false,
         "mbx": {
@@ -4720,7 +5058,9 @@
       {
         "name": "getClusterExpansionZoom",
         "docblock": "Returns the zoom needed to expand the cluster.\n\n@example\nconst zoom = await shapeSource.getClusterExpansionZoom(clusterId);\n\n@param  {Feature} feature - The feature cluster to expand.\n@return {number}",
-        "modifiers": ["async"],
+        "modifiers": [
+          "async"
+        ],
         "params": [
           {
             "name": "feature",
@@ -4750,7 +5090,9 @@
       {
         "name": "getClusterLeaves",
         "docblock": "Returns the FeatureCollection from the cluster.\n\n@example\nconst collection = await shapeSource.getClusterLeaves(clusterId, limit, offset);\n\n@param  {GeoJSON.Feature} feature - The feature cluster to expand.\n@param  {number} limit - The number of points to return.\n@param  {number} offset - The amount of points to skip (for pagination).\n@return {FeatureCollection}",
-        "modifiers": ["async"],
+        "modifiers": [
+          "async"
+        ],
         "params": [
           {
             "name": "feature",
@@ -4790,7 +5132,9 @@
       {
         "name": "getClusterChildren",
         "docblock": "Returns the FeatureCollection from the cluster (on the next zoom level).\n\n@example\nconst collection = await shapeSource.getClusterChildren(clusterId);\n\n@param  {GeoJSON.Feature} feature - The feature cluster to expand.\n@return {FeatureCollection}",
-        "modifiers": ["async"],
+        "modifiers": [
+          "async"
+        ],
         "params": [
           {
             "name": "feature",
@@ -5075,7 +5419,9 @@
         "allowedFunctionTypes": [],
         "expression": {
           "interpolated": false,
-          "parameters": ["zoom"]
+          "parameters": [
+            "zoom"
+          ]
         },
         "mbx": {
           "fullName": "paint-sky-sky-type",
@@ -5087,8 +5433,14 @@
         "name": "skyAtmosphereSun",
         "type": "array<number>",
         "values": [],
-        "minimum": [0, 0],
-        "maximum": [360, 180],
+        "minimum": [
+          0,
+          0
+        ],
+        "maximum": [
+          360,
+          180
+        ],
         "units": "degrees",
         "description": "Position of the sun center [a azimuthal angle, p polar angle]. The azimuthal angle indicates the position of the sun relative to 0° north, where degrees proceed clockwise. The polar angle indicates the height of the sun, where 0° is directly above, at zenith, and 90° at the horizon. When this property is ommitted, the sun center is directly inherited from the light position.",
         "requires": [],
@@ -5096,7 +5448,9 @@
         "allowedFunctionTypes": [],
         "expression": {
           "interpolated": false,
-          "parameters": ["zoom"]
+          "parameters": [
+            "zoom"
+          ]
         },
         "transition": false,
         "mbx": {
@@ -5127,17 +5481,28 @@
         "name": "skyGradientCenter",
         "type": "array<number>",
         "values": [],
-        "minimum": [0, 0],
-        "maximum": [360, 180],
+        "minimum": [
+          0,
+          0
+        ],
+        "maximum": [
+          360,
+          180
+        ],
         "units": "degrees",
-        "default": [0, 0],
+        "default": [
+          0,
+          0
+        ],
         "description": "Position of the gradient center [a azimuthal angle, p polar angle]. The azimuthal angle indicates the position of the gradient center relative to 0° north, where degrees proceed clockwise. The polar angle indicates the height of the gradient center, where 0° is directly above, at zenith, and 90° at the horizon.",
         "requires": [],
         "disabledBy": [],
         "allowedFunctionTypes": [],
         "expression": {
           "interpolated": false,
-          "parameters": ["zoom"]
+          "parameters": [
+            "zoom"
+          ]
         },
         "transition": false,
         "mbx": {
@@ -5159,7 +5524,9 @@
         "allowedFunctionTypes": [],
         "expression": {
           "interpolated": false,
-          "parameters": ["zoom"]
+          "parameters": [
+            "zoom"
+          ]
         },
         "transition": false,
         "mbx": {
@@ -5174,8 +5541,12 @@
         "values": [],
         "default": [
           "interpolate",
-          ["linear"],
-          ["sky-radial-progress"],
+          [
+            "linear"
+          ],
+          [
+            "sky-radial-progress"
+          ],
           0.8,
           "#87ceeb",
           1,
@@ -5187,7 +5558,9 @@
         "allowedFunctionTypes": [],
         "expression": {
           "interpolated": true,
-          "parameters": ["sky-radial-progress"]
+          "parameters": [
+            "sky-radial-progress"
+          ]
         },
         "transition": false,
         "mbx": {
@@ -5241,7 +5614,9 @@
         "allowedFunctionTypes": [],
         "expression": {
           "interpolated": true,
-          "parameters": ["zoom"]
+          "parameters": [
+            "zoom"
+          ]
         },
         "transition": true,
         "mbx": {
@@ -5440,7 +5815,9 @@
         "allowedFunctionTypes": [],
         "expression": {
           "interpolated": false,
-          "parameters": ["zoom"]
+          "parameters": [
+            "zoom"
+          ]
         },
         "mbx": {
           "fullName": "layout-symbol-symbol-placement",
@@ -5461,7 +5838,9 @@
         "allowedFunctionTypes": [],
         "expression": {
           "interpolated": true,
-          "parameters": ["zoom"]
+          "parameters": [
+            "zoom"
+          ]
         },
         "mbx": {
           "fullName": "layout-symbol-symbol-spacing",
@@ -5480,7 +5859,9 @@
         "allowedFunctionTypes": [],
         "expression": {
           "interpolated": false,
-          "parameters": ["zoom"]
+          "parameters": [
+            "zoom"
+          ]
         },
         "mbx": {
           "fullName": "layout-symbol-symbol-avoid-edges",
@@ -5498,7 +5879,10 @@
         "allowedFunctionTypes": [],
         "expression": {
           "interpolated": false,
-          "parameters": ["zoom", "feature"]
+          "parameters": [
+            "zoom",
+            "feature"
+          ]
         },
         "mbx": {
           "fullName": "layout-symbol-symbol-sort-key",
@@ -5530,7 +5914,9 @@
         "allowedFunctionTypes": [],
         "expression": {
           "interpolated": false,
-          "parameters": ["zoom"]
+          "parameters": [
+            "zoom"
+          ]
         },
         "mbx": {
           "fullName": "layout-symbol-symbol-z-order",
@@ -5544,12 +5930,16 @@
         "values": [],
         "default": false,
         "description": "If true, the icon will be visible even if it collides with other previously drawn symbols.",
-        "requires": ["iconImage"],
+        "requires": [
+          "iconImage"
+        ],
         "disabledBy": [],
         "allowedFunctionTypes": [],
         "expression": {
           "interpolated": false,
-          "parameters": ["zoom"]
+          "parameters": [
+            "zoom"
+          ]
         },
         "mbx": {
           "fullName": "layout-symbol-icon-allow-overlap",
@@ -5563,12 +5953,16 @@
         "values": [],
         "default": false,
         "description": "If true, other symbols can be visible even if they collide with the icon.",
-        "requires": ["iconImage"],
+        "requires": [
+          "iconImage"
+        ],
         "disabledBy": [],
         "allowedFunctionTypes": [],
         "expression": {
           "interpolated": false,
-          "parameters": ["zoom"]
+          "parameters": [
+            "zoom"
+          ]
         },
         "mbx": {
           "fullName": "layout-symbol-icon-ignore-placement",
@@ -5582,12 +5976,17 @@
         "values": [],
         "default": false,
         "description": "If true, text will display without their corresponding icons when the icon collides with other symbols and the text does not.",
-        "requires": ["iconImage", "textField"],
+        "requires": [
+          "iconImage",
+          "textField"
+        ],
         "disabledBy": [],
         "allowedFunctionTypes": [],
         "expression": {
           "interpolated": false,
-          "parameters": ["zoom"]
+          "parameters": [
+            "zoom"
+          ]
         },
         "mbx": {
           "fullName": "layout-symbol-icon-optional",
@@ -5614,12 +6013,16 @@
         ],
         "default": "auto",
         "description": "In combination with `symbolPlacement`, determines the rotation behavior of icons.",
-        "requires": ["iconImage"],
+        "requires": [
+          "iconImage"
+        ],
         "disabledBy": [],
         "allowedFunctionTypes": [],
         "expression": {
           "interpolated": false,
-          "parameters": ["zoom"]
+          "parameters": [
+            "zoom"
+          ]
         },
         "mbx": {
           "fullName": "layout-symbol-icon-rotation-alignment",
@@ -5635,12 +6038,17 @@
         "units": "factor of the original icon size",
         "default": 1,
         "description": "Scales the original size of the icon by the provided factor. The new pixel size of the image will be the original pixel size multiplied by `iconSize`. 1 is the original size; 3 triples the size of the image.",
-        "requires": ["iconImage"],
+        "requires": [
+          "iconImage"
+        ],
         "disabledBy": [],
         "allowedFunctionTypes": [],
         "expression": {
           "interpolated": true,
-          "parameters": ["zoom", "feature"]
+          "parameters": [
+            "zoom",
+            "feature"
+          ]
         },
         "mbx": {
           "fullName": "layout-symbol-icon-size",
@@ -5671,12 +6079,18 @@
         ],
         "default": "none",
         "description": "Scales the icon to fit around the associated text.",
-        "requires": ["iconImage", "textField"],
+        "requires": [
+          "iconImage",
+          "textField"
+        ],
         "disabledBy": [],
         "allowedFunctionTypes": [],
         "expression": {
           "interpolated": false,
-          "parameters": ["zoom", "feature"]
+          "parameters": [
+            "zoom",
+            "feature"
+          ]
         },
         "mbx": {
           "fullName": "layout-symbol-icon-text-fit",
@@ -5689,14 +6103,25 @@
         "type": "array<number>",
         "values": [],
         "units": "pixels",
-        "default": [0, 0, 0, 0],
+        "default": [
+          0,
+          0,
+          0,
+          0
+        ],
         "description": "Size of the additional area added to dimensions determined by `iconTextFit`, in clockwise order: top, right, bottom, left.",
-        "requires": ["iconImage", "textField"],
+        "requires": [
+          "iconImage",
+          "textField"
+        ],
         "disabledBy": [],
         "allowedFunctionTypes": [],
         "expression": {
           "interpolated": true,
-          "parameters": ["zoom", "feature"]
+          "parameters": [
+            "zoom",
+            "feature"
+          ]
         },
         "mbx": {
           "fullName": "layout-symbol-icon-text-fit-padding",
@@ -5714,7 +6139,10 @@
         "allowedFunctionTypes": [],
         "expression": {
           "interpolated": false,
-          "parameters": ["zoom", "feature"]
+          "parameters": [
+            "zoom",
+            "feature"
+          ]
         },
         "mbx": {
           "fullName": "layout-symbol-icon-image",
@@ -5729,12 +6157,17 @@
         "units": "degrees",
         "default": 0,
         "description": "Rotates the icon clockwise.",
-        "requires": ["iconImage"],
+        "requires": [
+          "iconImage"
+        ],
         "disabledBy": [],
         "allowedFunctionTypes": [],
         "expression": {
           "interpolated": true,
-          "parameters": ["zoom", "feature"]
+          "parameters": [
+            "zoom",
+            "feature"
+          ]
         },
         "mbx": {
           "fullName": "layout-symbol-icon-rotate",
@@ -5750,12 +6183,16 @@
         "units": "pixels",
         "default": 2,
         "description": "Size of the additional area around the icon bounding box used for detecting symbol collisions.",
-        "requires": ["iconImage"],
+        "requires": [
+          "iconImage"
+        ],
         "disabledBy": [],
         "allowedFunctionTypes": [],
         "expression": {
           "interpolated": true,
-          "parameters": ["zoom"]
+          "parameters": [
+            "zoom"
+          ]
         },
         "mbx": {
           "fullName": "layout-symbol-icon-padding",
@@ -5769,12 +6206,16 @@
         "values": [],
         "default": false,
         "description": "If true, the icon may be flipped to prevent it from being rendered upsideDown.",
-        "requires": ["iconImage"],
+        "requires": [
+          "iconImage"
+        ],
         "disabledBy": [],
         "allowedFunctionTypes": [],
         "expression": {
           "interpolated": false,
-          "parameters": ["zoom"]
+          "parameters": [
+            "zoom"
+          ]
         },
         "mbx": {
           "fullName": "layout-symbol-icon-keep-upright",
@@ -5786,14 +6227,22 @@
         "name": "iconOffset",
         "type": "array<number>",
         "values": [],
-        "default": [0, 0],
+        "default": [
+          0,
+          0
+        ],
         "description": "Offset distance of icon from its anchor. Positive values indicate right and down, while negative values indicate left and up. Each component is multiplied by the value of `iconSize` to obtain the final offset in pixels. When combined with `iconRotate` the offset will be as if the rotated direction was up.",
-        "requires": ["iconImage"],
+        "requires": [
+          "iconImage"
+        ],
         "disabledBy": [],
         "allowedFunctionTypes": [],
         "expression": {
           "interpolated": true,
-          "parameters": ["zoom", "feature"]
+          "parameters": [
+            "zoom",
+            "feature"
+          ]
         },
         "mbx": {
           "fullName": "layout-symbol-icon-offset",
@@ -5844,12 +6293,17 @@
         ],
         "default": "center",
         "description": "Part of the icon placed closest to the anchor.",
-        "requires": ["iconImage"],
+        "requires": [
+          "iconImage"
+        ],
         "disabledBy": [],
         "allowedFunctionTypes": [],
         "expression": {
           "interpolated": false,
-          "parameters": ["zoom", "feature"]
+          "parameters": [
+            "zoom",
+            "feature"
+          ]
         },
         "mbx": {
           "fullName": "layout-symbol-icon-anchor",
@@ -5876,12 +6330,16 @@
         ],
         "default": "auto",
         "description": "Orientation of icon when map is pitched.",
-        "requires": ["iconImage"],
+        "requires": [
+          "iconImage"
+        ],
         "disabledBy": [],
         "allowedFunctionTypes": [],
         "expression": {
           "interpolated": false,
-          "parameters": ["zoom"]
+          "parameters": [
+            "zoom"
+          ]
         },
         "mbx": {
           "fullName": "layout-symbol-icon-pitch-alignment",
@@ -5908,12 +6366,16 @@
         ],
         "default": "auto",
         "description": "Orientation of text when map is pitched.",
-        "requires": ["textField"],
+        "requires": [
+          "textField"
+        ],
         "disabledBy": [],
         "allowedFunctionTypes": [],
         "expression": {
           "interpolated": false,
-          "parameters": ["zoom"]
+          "parameters": [
+            "zoom"
+          ]
         },
         "mbx": {
           "fullName": "layout-symbol-text-pitch-alignment",
@@ -5940,12 +6402,16 @@
         ],
         "default": "auto",
         "description": "In combination with `symbolPlacement`, determines the rotation behavior of the individual glyphs forming the text.",
-        "requires": ["textField"],
+        "requires": [
+          "textField"
+        ],
         "disabledBy": [],
         "allowedFunctionTypes": [],
         "expression": {
           "interpolated": false,
-          "parameters": ["zoom"]
+          "parameters": [
+            "zoom"
+          ]
         },
         "mbx": {
           "fullName": "layout-symbol-text-rotation-alignment",
@@ -5964,7 +6430,10 @@
         "allowedFunctionTypes": [],
         "expression": {
           "interpolated": false,
-          "parameters": ["zoom", "feature"]
+          "parameters": [
+            "zoom",
+            "feature"
+          ]
         },
         "mbx": {
           "fullName": "layout-symbol-text-field",
@@ -5976,14 +6445,24 @@
         "name": "textFont",
         "type": "array<string>",
         "values": [],
-        "default": ["Open Sans Regular", "Arial Unicode MS Regular"],
+        "default": [
+          "Open Sans Regular",
+          "Arial Unicode MS Regular"
+        ],
         "description": "Font stack to use for displaying text.",
-        "requires": ["textField"],
+        "requires": [
+          "textField"
+        ],
         "disabledBy": [],
-        "allowedFunctionTypes": ["camera"],
+        "allowedFunctionTypes": [
+          "camera"
+        ],
         "expression": {
           "interpolated": false,
-          "parameters": ["zoom", "feature"]
+          "parameters": [
+            "zoom",
+            "feature"
+          ]
         },
         "mbx": {
           "fullName": "layout-symbol-text-font",
@@ -5999,12 +6478,17 @@
         "units": "pixels",
         "default": 16,
         "description": "Font size.",
-        "requires": ["textField"],
+        "requires": [
+          "textField"
+        ],
         "disabledBy": [],
         "allowedFunctionTypes": [],
         "expression": {
           "interpolated": true,
-          "parameters": ["zoom", "feature"]
+          "parameters": [
+            "zoom",
+            "feature"
+          ]
         },
         "mbx": {
           "fullName": "layout-symbol-text-size",
@@ -6020,12 +6504,19 @@
         "units": "ems",
         "default": 10,
         "description": "The maximum line width for text wrapping.",
-        "requires": ["textField"],
+        "requires": [
+          "textField"
+        ],
         "disabledBy": [],
-        "allowedFunctionTypes": ["camera"],
+        "allowedFunctionTypes": [
+          "camera"
+        ],
         "expression": {
           "interpolated": true,
-          "parameters": ["zoom", "feature"]
+          "parameters": [
+            "zoom",
+            "feature"
+          ]
         },
         "mbx": {
           "fullName": "layout-symbol-text-max-width",
@@ -6040,12 +6531,17 @@
         "units": "ems",
         "default": 1.2,
         "description": "Text leading value for multiLine text.",
-        "requires": ["textField"],
+        "requires": [
+          "textField"
+        ],
         "disabledBy": [],
         "allowedFunctionTypes": [],
         "expression": {
           "interpolated": true,
-          "parameters": ["zoom", "feature"]
+          "parameters": [
+            "zoom",
+            "feature"
+          ]
         },
         "mbx": {
           "fullName": "layout-symbol-text-line-height",
@@ -6060,12 +6556,19 @@
         "units": "ems",
         "default": 0,
         "description": "Text tracking amount.",
-        "requires": ["textField"],
+        "requires": [
+          "textField"
+        ],
         "disabledBy": [],
-        "allowedFunctionTypes": ["camera"],
+        "allowedFunctionTypes": [
+          "camera"
+        ],
         "expression": {
           "interpolated": true,
-          "parameters": ["zoom", "feature"]
+          "parameters": [
+            "zoom",
+            "feature"
+          ]
         },
         "mbx": {
           "fullName": "layout-symbol-text-letter-spacing",
@@ -6096,12 +6599,19 @@
         ],
         "default": "center",
         "description": "Text justification options.",
-        "requires": ["textField"],
+        "requires": [
+          "textField"
+        ],
         "disabledBy": [],
-        "allowedFunctionTypes": ["camera"],
+        "allowedFunctionTypes": [
+          "camera"
+        ],
         "expression": {
           "interpolated": false,
-          "parameters": ["zoom", "feature"]
+          "parameters": [
+            "zoom",
+            "feature"
+          ]
         },
         "mbx": {
           "fullName": "layout-symbol-text-justify",
@@ -6116,12 +6626,17 @@
         "units": "ems",
         "default": 0,
         "description": "Radial offset of text, in the direction of the symbol's anchor. Useful in combination with `textVariableAnchor`, which defaults to using the twoDimensional `textOffset` if present.",
-        "requires": ["textField"],
+        "requires": [
+          "textField"
+        ],
         "disabledBy": [],
         "allowedFunctionTypes": [],
         "expression": {
           "interpolated": true,
-          "parameters": ["zoom", "feature"]
+          "parameters": [
+            "zoom",
+            "feature"
+          ]
         },
         "mbx": {
           "fullName": "layout-symbol-text-radial-offset",
@@ -6134,12 +6649,16 @@
         "type": "array<enum>",
         "values": [],
         "description": "To increase the chance of placing highPriority labels on the map, you can provide an array of `textAnchor` locations: the renderer will attempt to place the label at each location, in order, before moving onto the next label. Use `textJustify: auto` to choose justification based on anchor position. To apply an offset, use the `textRadialOffset` or the twoDimensional `textOffset`.",
-        "requires": ["textField"],
+        "requires": [
+          "textField"
+        ],
         "disabledBy": [],
         "allowedFunctionTypes": [],
         "expression": {
           "interpolated": false,
-          "parameters": ["zoom"]
+          "parameters": [
+            "zoom"
+          ]
         },
         "mbx": {
           "fullName": "layout-symbol-text-variable-anchor",
@@ -6190,12 +6709,21 @@
         ],
         "default": "center",
         "description": "Part of the text placed closest to the anchor.",
-        "requires": ["textField"],
-        "disabledBy": ["textVariableAnchor"],
-        "allowedFunctionTypes": ["camera"],
+        "requires": [
+          "textField"
+        ],
+        "disabledBy": [
+          "textVariableAnchor"
+        ],
+        "allowedFunctionTypes": [
+          "camera"
+        ],
         "expression": {
           "interpolated": false,
-          "parameters": ["zoom", "feature"]
+          "parameters": [
+            "zoom",
+            "feature"
+          ]
         },
         "mbx": {
           "fullName": "layout-symbol-text-anchor",
@@ -6210,12 +6738,16 @@
         "units": "degrees",
         "default": 45,
         "description": "Maximum angle change between adjacent characters.",
-        "requires": ["textField"],
+        "requires": [
+          "textField"
+        ],
         "disabledBy": [],
         "allowedFunctionTypes": [],
         "expression": {
           "interpolated": true,
-          "parameters": ["zoom"]
+          "parameters": [
+            "zoom"
+          ]
         },
         "mbx": {
           "fullName": "layout-symbol-text-max-angle",
@@ -6228,12 +6760,16 @@
         "type": "array<enum>",
         "values": [],
         "description": "The property allows control over a symbol's orientation. Note that the property values act as a hint, so that a symbol whose language doesn’t support the provided orientation will be laid out in its natural orientation. Example: English point symbol will be rendered horizontally even if array value contains single 'vertical' enum value. For symbol with point placement, the order of elements in an array define priority order for the placement of an orientation variant. For symbol with line placement, the default text writing mode is either ['horizontal', 'vertical'] or ['vertical', 'horizontal'], the order doesn't affect the placement.",
-        "requires": ["textField"],
+        "requires": [
+          "textField"
+        ],
         "disabledBy": [],
         "allowedFunctionTypes": [],
         "expression": {
           "interpolated": false,
-          "parameters": ["zoom"]
+          "parameters": [
+            "zoom"
+          ]
         },
         "mbx": {
           "fullName": "layout-symbol-text-writing-mode",
@@ -6248,12 +6784,17 @@
         "units": "degrees",
         "default": 0,
         "description": "Rotates the text clockwise.",
-        "requires": ["textField"],
+        "requires": [
+          "textField"
+        ],
         "disabledBy": [],
         "allowedFunctionTypes": [],
         "expression": {
           "interpolated": true,
-          "parameters": ["zoom", "feature"]
+          "parameters": [
+            "zoom",
+            "feature"
+          ]
         },
         "mbx": {
           "fullName": "layout-symbol-text-rotate",
@@ -6269,12 +6810,16 @@
         "units": "pixels",
         "default": 2,
         "description": "Size of the additional area around the text bounding box used for detecting symbol collisions.",
-        "requires": ["textField"],
+        "requires": [
+          "textField"
+        ],
         "disabledBy": [],
         "allowedFunctionTypes": [],
         "expression": {
           "interpolated": true,
-          "parameters": ["zoom"]
+          "parameters": [
+            "zoom"
+          ]
         },
         "mbx": {
           "fullName": "layout-symbol-text-padding",
@@ -6288,12 +6833,16 @@
         "values": [],
         "default": true,
         "description": "If true, the text may be flipped vertically to prevent it from being rendered upsideDown.",
-        "requires": ["textField"],
+        "requires": [
+          "textField"
+        ],
         "disabledBy": [],
         "allowedFunctionTypes": [],
         "expression": {
           "interpolated": false,
-          "parameters": ["zoom"]
+          "parameters": [
+            "zoom"
+          ]
         },
         "mbx": {
           "fullName": "layout-symbol-text-keep-upright",
@@ -6320,12 +6869,17 @@
         ],
         "default": "none",
         "description": "Specifies how to capitalize text, similar to the CSS `textTransform` property.",
-        "requires": ["textField"],
+        "requires": [
+          "textField"
+        ],
         "disabledBy": [],
         "allowedFunctionTypes": [],
         "expression": {
           "interpolated": false,
-          "parameters": ["zoom", "feature"]
+          "parameters": [
+            "zoom",
+            "feature"
+          ]
         },
         "mbx": {
           "fullName": "layout-symbol-text-transform",
@@ -6338,14 +6892,24 @@
         "type": "array<number>",
         "values": [],
         "units": "ems",
-        "default": [0, 0],
+        "default": [
+          0,
+          0
+        ],
         "description": "Offset distance of text from its anchor. Positive values indicate right and down, while negative values indicate left and up. If used with textVariableAnchor, input values will be taken as absolute values. Offsets along the x and yAxis will be applied automatically based on the anchor position.",
-        "requires": ["textField"],
-        "disabledBy": ["textRadialOffset"],
+        "requires": [
+          "textField"
+        ],
+        "disabledBy": [
+          "textRadialOffset"
+        ],
         "allowedFunctionTypes": [],
         "expression": {
           "interpolated": true,
-          "parameters": ["zoom", "feature"]
+          "parameters": [
+            "zoom",
+            "feature"
+          ]
         },
         "mbx": {
           "fullName": "layout-symbol-text-offset",
@@ -6359,12 +6923,16 @@
         "values": [],
         "default": false,
         "description": "If true, the text will be visible even if it collides with other previously drawn symbols.",
-        "requires": ["textField"],
+        "requires": [
+          "textField"
+        ],
         "disabledBy": [],
         "allowedFunctionTypes": [],
         "expression": {
           "interpolated": false,
-          "parameters": ["zoom"]
+          "parameters": [
+            "zoom"
+          ]
         },
         "mbx": {
           "fullName": "layout-symbol-text-allow-overlap",
@@ -6378,12 +6946,16 @@
         "values": [],
         "default": false,
         "description": "If true, other symbols can be visible even if they collide with the text.",
-        "requires": ["textField"],
+        "requires": [
+          "textField"
+        ],
         "disabledBy": [],
         "allowedFunctionTypes": [],
         "expression": {
           "interpolated": false,
-          "parameters": ["zoom"]
+          "parameters": [
+            "zoom"
+          ]
         },
         "mbx": {
           "fullName": "layout-symbol-text-ignore-placement",
@@ -6397,12 +6969,17 @@
         "values": [],
         "default": false,
         "description": "If true, icons will display without their corresponding text when the text collides with other symbols and the icon does not.",
-        "requires": ["textField", "iconImage"],
+        "requires": [
+          "textField",
+          "iconImage"
+        ],
         "disabledBy": [],
         "allowedFunctionTypes": [],
         "expression": {
           "interpolated": false,
-          "parameters": ["zoom"]
+          "parameters": [
+            "zoom"
+          ]
         },
         "mbx": {
           "fullName": "layout-symbol-text-optional",
@@ -6445,12 +7022,19 @@
         "maximum": 1,
         "default": 1,
         "description": "The opacity at which the icon will be drawn.",
-        "requires": ["iconImage"],
+        "requires": [
+          "iconImage"
+        ],
         "disabledBy": [],
         "allowedFunctionTypes": [],
         "expression": {
           "interpolated": true,
-          "parameters": ["zoom", "feature", "feature-state", "measure-light"]
+          "parameters": [
+            "zoom",
+            "feature",
+            "feature-state",
+            "measure-light"
+          ]
         },
         "transition": true,
         "mbx": {
@@ -6465,12 +7049,19 @@
         "values": [],
         "default": "#000000",
         "description": "The color of the icon. This can only be used with [SDF icons](https://docs.mapbox.com/help/troubleshooting/using-recolorable-images-in-mapbox-maps/).",
-        "requires": ["iconImage"],
+        "requires": [
+          "iconImage"
+        ],
         "disabledBy": [],
         "allowedFunctionTypes": [],
         "expression": {
           "interpolated": true,
-          "parameters": ["zoom", "feature", "feature-state", "measure-light"]
+          "parameters": [
+            "zoom",
+            "feature",
+            "feature-state",
+            "measure-light"
+          ]
         },
         "transition": true,
         "mbx": {
@@ -6485,12 +7076,19 @@
         "values": [],
         "default": "rgba(0, 0, 0, 0)",
         "description": "The color of the icon's halo. Icon halos can only be used with [SDF icons](https://docs.mapbox.com/help/troubleshooting/using-recolorable-images-in-mapbox-maps/).",
-        "requires": ["iconImage"],
+        "requires": [
+          "iconImage"
+        ],
         "disabledBy": [],
         "allowedFunctionTypes": [],
         "expression": {
           "interpolated": true,
-          "parameters": ["zoom", "feature", "feature-state", "measure-light"]
+          "parameters": [
+            "zoom",
+            "feature",
+            "feature-state",
+            "measure-light"
+          ]
         },
         "transition": true,
         "mbx": {
@@ -6507,12 +7105,19 @@
         "units": "pixels",
         "default": 0,
         "description": "Distance of halo to the icon outline.",
-        "requires": ["iconImage"],
+        "requires": [
+          "iconImage"
+        ],
         "disabledBy": [],
         "allowedFunctionTypes": [],
         "expression": {
           "interpolated": true,
-          "parameters": ["zoom", "feature", "feature-state", "measure-light"]
+          "parameters": [
+            "zoom",
+            "feature",
+            "feature-state",
+            "measure-light"
+          ]
         },
         "transition": true,
         "mbx": {
@@ -6529,12 +7134,19 @@
         "units": "pixels",
         "default": 0,
         "description": "Fade out the halo towards the outside.",
-        "requires": ["iconImage"],
+        "requires": [
+          "iconImage"
+        ],
         "disabledBy": [],
         "allowedFunctionTypes": [],
         "expression": {
           "interpolated": true,
-          "parameters": ["zoom", "feature", "feature-state", "measure-light"]
+          "parameters": [
+            "zoom",
+            "feature",
+            "feature-state",
+            "measure-light"
+          ]
         },
         "transition": true,
         "mbx": {
@@ -6548,14 +7160,21 @@
         "type": "array<number>",
         "values": [],
         "units": "pixels",
-        "default": [0, 0],
+        "default": [
+          0,
+          0
+        ],
         "description": "Distance that the icon's anchor is moved from its original placement. Positive values indicate right and down, while negative values indicate left and up.",
-        "requires": ["iconImage"],
+        "requires": [
+          "iconImage"
+        ],
         "disabledBy": [],
         "allowedFunctionTypes": [],
         "expression": {
           "interpolated": true,
-          "parameters": ["zoom"]
+          "parameters": [
+            "zoom"
+          ]
         },
         "transition": true,
         "mbx": {
@@ -6579,12 +7198,17 @@
         ],
         "default": "map",
         "description": "Controls the frame of reference for `iconTranslate`.",
-        "requires": ["iconImage", "iconTranslate"],
+        "requires": [
+          "iconImage",
+          "iconTranslate"
+        ],
         "disabledBy": [],
         "allowedFunctionTypes": [],
         "expression": {
           "interpolated": false,
-          "parameters": ["zoom"]
+          "parameters": [
+            "zoom"
+          ]
         },
         "mbx": {
           "fullName": "paint-symbol-icon-translate-anchor",
@@ -6600,12 +7224,19 @@
         "maximum": 1,
         "default": 1,
         "description": "The opacity at which the text will be drawn.",
-        "requires": ["textField"],
+        "requires": [
+          "textField"
+        ],
         "disabledBy": [],
         "allowedFunctionTypes": [],
         "expression": {
           "interpolated": true,
-          "parameters": ["zoom", "feature", "feature-state", "measure-light"]
+          "parameters": [
+            "zoom",
+            "feature",
+            "feature-state",
+            "measure-light"
+          ]
         },
         "transition": true,
         "mbx": {
@@ -6620,12 +7251,19 @@
         "values": [],
         "default": "#000000",
         "description": "The color with which the text will be drawn.",
-        "requires": ["textField"],
+        "requires": [
+          "textField"
+        ],
         "disabledBy": [],
         "allowedFunctionTypes": [],
         "expression": {
           "interpolated": true,
-          "parameters": ["zoom", "feature", "feature-state", "measure-light"]
+          "parameters": [
+            "zoom",
+            "feature",
+            "feature-state",
+            "measure-light"
+          ]
         },
         "transition": true,
         "mbx": {
@@ -6640,12 +7278,19 @@
         "values": [],
         "default": "rgba(0, 0, 0, 0)",
         "description": "The color of the text's halo, which helps it stand out from backgrounds.",
-        "requires": ["textField"],
+        "requires": [
+          "textField"
+        ],
         "disabledBy": [],
         "allowedFunctionTypes": [],
         "expression": {
           "interpolated": true,
-          "parameters": ["zoom", "feature", "feature-state", "measure-light"]
+          "parameters": [
+            "zoom",
+            "feature",
+            "feature-state",
+            "measure-light"
+          ]
         },
         "transition": true,
         "mbx": {
@@ -6662,12 +7307,19 @@
         "units": "pixels",
         "default": 0,
         "description": "Distance of halo to the font outline. Max text halo width is 1/4 of the fontSize.",
-        "requires": ["textField"],
+        "requires": [
+          "textField"
+        ],
         "disabledBy": [],
         "allowedFunctionTypes": [],
         "expression": {
           "interpolated": true,
-          "parameters": ["zoom", "feature", "feature-state", "measure-light"]
+          "parameters": [
+            "zoom",
+            "feature",
+            "feature-state",
+            "measure-light"
+          ]
         },
         "transition": true,
         "mbx": {
@@ -6684,12 +7336,19 @@
         "units": "pixels",
         "default": 0,
         "description": "The halo's fadeout distance towards the outside.",
-        "requires": ["textField"],
+        "requires": [
+          "textField"
+        ],
         "disabledBy": [],
         "allowedFunctionTypes": [],
         "expression": {
           "interpolated": true,
-          "parameters": ["zoom", "feature", "feature-state", "measure-light"]
+          "parameters": [
+            "zoom",
+            "feature",
+            "feature-state",
+            "measure-light"
+          ]
         },
         "transition": true,
         "mbx": {
@@ -6703,14 +7362,21 @@
         "type": "array<number>",
         "values": [],
         "units": "pixels",
-        "default": [0, 0],
+        "default": [
+          0,
+          0
+        ],
         "description": "Distance that the text's anchor is moved from its original placement. Positive values indicate right and down, while negative values indicate left and up.",
-        "requires": ["textField"],
+        "requires": [
+          "textField"
+        ],
         "disabledBy": [],
         "allowedFunctionTypes": [],
         "expression": {
           "interpolated": true,
-          "parameters": ["zoom"]
+          "parameters": [
+            "zoom"
+          ]
         },
         "transition": true,
         "mbx": {
@@ -6734,12 +7400,17 @@
         ],
         "default": "map",
         "description": "Controls the frame of reference for `textTranslate`.",
-        "requires": ["textField", "textTranslate"],
+        "requires": [
+          "textField",
+          "textTranslate"
+        ],
         "disabledBy": [],
         "allowedFunctionTypes": [],
         "expression": {
           "interpolated": false,
-          "parameters": ["zoom"]
+          "parameters": [
+            "zoom"
+          ]
         },
         "mbx": {
           "fullName": "paint-symbol-text-translate-anchor",
@@ -6805,12 +7476,16 @@
         "maximum": 1000,
         "default": 1,
         "description": "Exaggerates the elevation of the terrain by multiplying the data from the DEM with this value.",
-        "requires": ["source"],
+        "requires": [
+          "source"
+        ],
         "disabledBy": [],
         "allowedFunctionTypes": [],
         "expression": {
           "interpolated": true,
-          "parameters": ["zoom"]
+          "parameters": [
+            "zoom"
+          ]
         },
         "transition": true,
         "mbx": {
@@ -6828,7 +7503,9 @@
       {
         "name": "setLocationManager",
         "docblock": "Whether to start or stop listening to the locationManager\n\nNotice, that listening will start automatically when\neither `onUpdate` or `visible` are set\n\n@async\n@param {Object} running - Object with key `running` and `boolean` value\n@return {Promise<void>}",
-        "modifiers": ["async"],
+        "modifiers": [
+          "async"
+        ],
         "params": [
           {
             "name": "{ running }: { running?: boolean }",
@@ -7085,7 +7762,9 @@
       {
         "name": "idle",
         "docblock": null,
-        "modifiers": ["async"],
+        "modifiers": [
+          "async"
+        ],
         "params": [],
         "returns": null
       },
@@ -7174,7 +7853,9 @@
             "optional": false
           }
         ],
-        "examples": ["locationManager.setLocationEventThrottle(500);"],
+        "examples": [
+          "locationManager.setLocationEventThrottle(500);"
+        ],
         "returns": {
           "description": "",
           "type": {
@@ -7244,7 +7925,9 @@
             "optional": false
           }
         ],
-        "examples": ["await Mapbox.offlineManager.invalidatePack('packName')"],
+        "examples": [
+          "await Mapbox.offlineManager.invalidatePack('packName')"
+        ],
         "returns": {
           "description": "",
           "type": {
@@ -7265,7 +7948,9 @@
             "optional": false
           }
         ],
-        "examples": ["await Mapbox.offlineManager.deletePack('packName')"],
+        "examples": [
+          "await Mapbox.offlineManager.deletePack('packName')"
+        ],
         "returns": {
           "description": "",
           "type": {
@@ -7277,7 +7962,9 @@
         "name": "invalidateAmbientCache",
         "description": "Forces a revalidation of the tiles in the ambient cache and downloads a fresh version of the tiles from the tile server.\nThis is the recommend method for clearing the cache.\nThis is the most efficient method because tiles in the ambient cache are re-downloaded to remove outdated data from a device.\nIt does not erase resources from the ambient cache or delete the database, which can be computationally expensive operations that may carry unintended side effects.",
         "params": [],
-        "examples": ["await Mapbox.offlineManager.invalidateAmbientCache();"],
+        "examples": [
+          "await Mapbox.offlineManager.invalidateAmbientCache();"
+        ],
         "returns": {
           "description": "",
           "type": {
@@ -7289,7 +7976,9 @@
         "name": "clearAmbientCache",
         "description": "Erases resources from the ambient cache.\nThis method clears the cache and decreases the amount of space that map resources take up on the device.",
         "params": [],
-        "examples": ["await Mapbox.offlineManager.clearAmbientCache();"],
+        "examples": [
+          "await Mapbox.offlineManager.clearAmbientCache();"
+        ],
         "returns": {
           "description": "",
           "type": {
@@ -7301,7 +7990,9 @@
         "name": "migrateOfflineCache",
         "description": "Migrates the offline cache from pre-v10 SDKs to the new v10 cache location",
         "params": [],
-        "examples": ["await Mapbox.offlineManager.migrateOfflineCache()"],
+        "examples": [
+          "await Mapbox.offlineManager.migrateOfflineCache()"
+        ],
         "returns": {
           "description": "",
           "type": {
@@ -7336,7 +8027,9 @@
         "name": "resetDatabase",
         "description": "Deletes the existing database, which includes both the ambient cache and offline packs, then reinitializes it.",
         "params": [],
-        "examples": ["await Mapbox.offlineManager.resetDatabase();"],
+        "examples": [
+          "await Mapbox.offlineManager.resetDatabase();"
+        ],
         "returns": {
           "description": "",
           "type": {
@@ -7394,7 +8087,9 @@
             "optional": false
           }
         ],
-        "examples": ["await Mapbox.offlineManager.mergeOfflineRegions(path);"],
+        "examples": [
+          "await Mapbox.offlineManager.mergeOfflineRegions(path);"
+        ],
         "returns": {
           "description": "",
           "type": {
@@ -7415,7 +8110,9 @@
             "optional": false
           }
         ],
-        "examples": ["Mapbox.offlineManager.setTileCountLimit(1000);"],
+        "examples": [
+          "Mapbox.offlineManager.setTileCountLimit(1000);"
+        ],
         "returns": {
           "description": "",
           "type": {
@@ -7436,7 +8133,9 @@
             "optional": false
           }
         ],
-        "examples": ["Mapbox.offlineManager.setProgressEventThrottle(500);"],
+        "examples": [
+          "Mapbox.offlineManager.setProgressEventThrottle(500);"
+        ],
         "returns": {
           "description": "",
           "type": {
@@ -7496,7 +8195,9 @@
             "optional": false
           }
         ],
-        "examples": ["Mapbox.offlineManager.unsubscribe('packName')"],
+        "examples": [
+          "Mapbox.offlineManager.unsubscribe('packName')"
+        ],
         "returns": {
           "description": "",
           "type": {
@@ -7587,7 +8288,9 @@
         "name": "migrateOfflineCache",
         "description": "Migrates the offline cache from pre-v10 SDKs to the new v10 cache location",
         "params": [],
-        "examples": ["await Mapbox.offlineManager.migrateOfflineCache()"],
+        "examples": [
+          "await Mapbox.offlineManager.migrateOfflineCache()"
+        ],
         "returns": {
           "description": "",
           "type": {
@@ -7599,7 +8302,9 @@
         "name": "resetDatabase",
         "description": "Deletes the existing database, which includes both the ambient cache and offline packs, then reinitializes it.",
         "params": [],
-        "examples": ["await Mapbox.offlineManager.resetDatabase();"],
+        "examples": [
+          "await Mapbox.offlineManager.resetDatabase();"
+        ],
         "returns": {
           "description": "",
           "type": {
