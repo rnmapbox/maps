@@ -221,7 +221,7 @@ public class ConvertUtils {
             return rectF;
         }
 
-        rectF.set((float)array.getDouble(3), (float)array.getDouble(0), (float)array.getDouble(1), (float)array.getDouble(2));
+        rectF.set((float)array.getDouble(3), (float)array.getDouble(2), (float)array.getDouble(1), (float)array.getDouble(0));
         return rectF;
     }
 
