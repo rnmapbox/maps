@@ -330,6 +330,13 @@ open class RNMBXMapViewManager(context: ReactApplicationContext, val viewTagReso
         mapView.requestDisallowInterceptTouchEvent = requestDisallowInterceptTouchEvent.asBoolean()
     }
 
+    @ReactProp(name = "deselectAnnotationOnTap")
+    override fun setDeselectAnnotationOnTap(mapView: RNMBXMapView, value: Dynamic?) {
+        value?.let {
+            mapView.deselectAnnotationOnTap = it.asBoolean()
+        }
+    }
+
     override fun setCompassImage(view: RNMBXMapView, value: Dynamic?) {
         // TODO: No-op on Android?
     }

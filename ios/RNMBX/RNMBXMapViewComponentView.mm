@@ -11,6 +11,8 @@
 #import <react/renderer/components/rnmapbox_maps_specs/Props.h>
 #import <react/renderer/components/rnmapbox_maps_specs/RCTComponentViewHelpers.h>
 
+#import "RNMBXFabricPropConvert.h"
+
 using namespace facebook::react;
 
 @interface RNMBXMapViewComponentView () <RCTRNMBXMapViewViewProtocol>
@@ -125,99 +127,103 @@ using namespace facebook::react;
 
 - (void)updateProps:(const Props::Shared &)props oldProps:(const Props::Shared &)oldProps
 {
-  const auto &newProps = static_cast<const RNMBXMapViewProps &>(*props);
-    id attributionEnabled = RNMBXConvertFollyDynamicToId(newProps.attributionEnabled);
+    const auto &oldViewProps = static_cast<const RNMBXMapViewProps &>(*oldProps);
+    const auto &newViewProps = static_cast<const RNMBXMapViewProps &>(*props);
+  
+    id attributionEnabled = RNMBXConvertFollyDynamicToId(newViewProps.attributionEnabled);
     if (attributionEnabled != nil) {
         _view.reactAttributionEnabled = attributionEnabled;
     }
 
-    id attributionPosition = RNMBXConvertFollyDynamicToId(newProps.attributionPosition);
+    id attributionPosition = RNMBXConvertFollyDynamicToId(newViewProps.attributionPosition);
     if (attributionPosition != nil) {
         _view.reactAttributionPosition = attributionPosition;
     }
 
-    id logoEnabled = RNMBXConvertFollyDynamicToId(newProps.logoEnabled);
+    id logoEnabled = RNMBXConvertFollyDynamicToId(newViewProps.logoEnabled);
     if (logoEnabled != nil) {
         _view.reactLogoEnabled = logoEnabled;
     }
 
-    id logoPosition = RNMBXConvertFollyDynamicToId(newProps.logoPosition);
+    id logoPosition = RNMBXConvertFollyDynamicToId(newViewProps.logoPosition);
     if (logoPosition != nil) {
         _view.reactLogoPosition = logoPosition;
     }
 
-    id compassEnabled = RNMBXConvertFollyDynamicToId(newProps.compassEnabled);
+    id compassEnabled = RNMBXConvertFollyDynamicToId(newViewProps.compassEnabled);
     if (compassEnabled != nil) {
         _view.reactCompassEnabled = compassEnabled;
     }
 
-    id compassFadeWhenNorth = RNMBXConvertFollyDynamicToId(newProps.compassFadeWhenNorth);
+    id compassFadeWhenNorth = RNMBXConvertFollyDynamicToId(newViewProps.compassFadeWhenNorth);
     if (compassFadeWhenNorth != nil) {
         _view.reactCompassFadeWhenNorth = compassFadeWhenNorth;
     }
 
-    id compassPosition = RNMBXConvertFollyDynamicToId(newProps.compassPosition);
+    id compassPosition = RNMBXConvertFollyDynamicToId(newViewProps.compassPosition);
     if (compassPosition != nil) {
         _view.reactCompassPosition = compassPosition;
     }
 
-    id compassViewPosition = RNMBXConvertFollyDynamicToId(newProps.compassViewPosition);
+    id compassViewPosition = RNMBXConvertFollyDynamicToId(newViewProps.compassViewPosition);
     if (compassViewPosition != nil) {
         _view.reactCompassViewPosition = [(NSNumber *)compassViewPosition doubleValue];
     }
 
-    NSDictionary<NSString *, NSNumber *> *compassViewMargins = RNMBXConvertFollyDynamicToId(newProps.compassViewMargins);
+    NSDictionary<NSString *, NSNumber *> *compassViewMargins = RNMBXConvertFollyDynamicToId(newViewProps.compassViewMargins);
     if (compassViewMargins != nil) {
         CGPoint margins = CGPointMake([compassViewMargins[@"x"] doubleValue], [compassViewMargins[@"y"] doubleValue]);
         _view.reactCompassViewMargins = margins;
     }
 
-    id compassImage = RNMBXConvertFollyDynamicToId(newProps.compassImage);
+    id compassImage = RNMBXConvertFollyDynamicToId(newViewProps.compassImage);
     if (compassImage != nil) {
         _view.reactCompassImage = compassImage;
     }
 
-    id scaleBarEnabled = RNMBXConvertFollyDynamicToId(newProps.scaleBarEnabled);
+    id scaleBarEnabled = RNMBXConvertFollyDynamicToId(newViewProps.scaleBarEnabled);
     if (scaleBarEnabled != nil) {
         _view.reactScaleBarEnabled = scaleBarEnabled;
     }
 
-    id scaleBarPosition = RNMBXConvertFollyDynamicToId(newProps.scaleBarPosition);
+    id scaleBarPosition = RNMBXConvertFollyDynamicToId(newViewProps.scaleBarPosition);
     if (scaleBarPosition != nil) {
         _view.reactScaleBarPosition = scaleBarPosition;
     }
 
-    id zoomEnabled = RNMBXConvertFollyDynamicToId(newProps.zoomEnabled);
+    id zoomEnabled = RNMBXConvertFollyDynamicToId(newViewProps.zoomEnabled);
     if (zoomEnabled != nil) {
         _view.reactZoomEnabled = zoomEnabled;
     }
 
-    id scrollEnabled = RNMBXConvertFollyDynamicToId(newProps.scrollEnabled);
+    id scrollEnabled = RNMBXConvertFollyDynamicToId(newViewProps.scrollEnabled);
     if (scrollEnabled != nil) {
         _view.reactScrollEnabled = scrollEnabled;
     }
 
-    id rotateEnabled = RNMBXConvertFollyDynamicToId(newProps.rotateEnabled);
+    id rotateEnabled = RNMBXConvertFollyDynamicToId(newViewProps.rotateEnabled);
     if (rotateEnabled != nil) {
         _view.reactRotateEnabled = rotateEnabled;
     }
 
-    id pitchEnabled = RNMBXConvertFollyDynamicToId(newProps.pitchEnabled);
+    id pitchEnabled = RNMBXConvertFollyDynamicToId(newViewProps.pitchEnabled);
     if (pitchEnabled != nil) {
         _view.reactPitchEnabled = pitchEnabled;
     }
 
-    id projection = RNMBXConvertFollyDynamicToId(newProps.projection);
+    id projection = RNMBXConvertFollyDynamicToId(newViewProps.projection);
     if (projection != nil) {
         _view.reactProjection = projection;
     }
 
-    id localizeLabels = RNMBXConvertFollyDynamicToId(newProps.localizeLabels);
+    id localizeLabels = RNMBXConvertFollyDynamicToId(newViewProps.localizeLabels);
     if (localizeLabels != nil) {
         _view.reactLocalizeLabels = localizeLabels;
     }
+  
+    RNMBX_OPTIONAL_PROP_BOOL(deselectAnnotationOnTap);
 
-    id styleURL = RNMBXConvertFollyDynamicToId(newProps.styleURL);
+    id styleURL = RNMBXConvertFollyDynamicToId(newViewProps.styleURL);
     if (styleURL != nil) {
         _view.reactStyleURL = styleURL;
     }

@@ -4227,6 +4227,13 @@
         "type": "number",
         "default": "500",
         "description": "The emitted frequency of regiondidchange events"
+      },
+      {
+        "name": "deselectAnnotationOnTap",
+        "required": false,
+        "type": "boolean",
+        "default": "none",
+        "description": "Set to true to deselect any selected annotation when the map is tapped. If set to true you will not receive\nthe onPress event for the taps that deselect the annotation. Default is false."
       }
     ],
     "fileNameWithExt": "MapView.tsx",

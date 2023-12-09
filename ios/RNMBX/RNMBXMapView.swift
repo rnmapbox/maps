@@ -129,13 +129,16 @@ open class RNMBXMapView: UIView {
   private var isGestureActive = false
   
   var layerWaiters : [String:[(String) -> Void]] = [:]
+
+  @objc
+  public var deselectAnnotationOnTap: Bool = false
   
 #if RNMBX_11
   var cancelables = Set<AnyCancelable>()
 #endif
   
-  lazy var pointAnnotationManager : PointAnnotationManager = {
-    let result = PointAnnotationManager(annotations: mapView.annotations, mapView: mapView)
+  lazy var pointAnnotationManager : RNMBXPointAnnotationManager = {
+    let result = RNMBXPointAnnotationManager(annotations: mapView.annotations, mapView: mapView)
     self._removeMapboxLongPressGestureRecognizer()
     return result
   }()
@@ -1158,11 +1161,29 @@ extension RNMBXMapView: GestureManagerDelegate {
     return orderedLayers.lazy.reversed().compactMap { layersToSource[$0.id] }.first ?? sources.first
   }
   
+  
+  
+  func _tapEvent(_ tapPoint: CGPoint) -> RNMBXEvent {
+    let location = self.mapboxMap.coordinate(for: tapPoint)
+    var geojson = Feature(geometry: .point(Point(location)));
+    geojson.properties = [
+      "screenPointX": .number(Double(tapPoint.x)),
+      "screenPointY": .number(Double(tapPoint.y))
+    ]
+    let event = RNMBXEvent(type:.tap, payload: logged("reactOnPress") { try geojson.toJSON() })
+    return event
+  }
+  
   @objc
   func doHandleTap(_ sender: UITapGestureRecognizer) {
     let tapPoint = sender.location(in: self)
     pointAnnotationManager.handleTap(sender) { (_: UITapGestureRecognizer) in
       DispatchQueue.main.async {
+        if (self.deselectAnnotationOnTap) {
+          if (self.pointAnnotationManager.deselecteCurrentlySelected(self._tapEvent(tapPoint))) {
+            return
+          }
+        }
         let touchableSources = self.touchableSources()
         self.doHandleTapInSources(sources: touchableSources, tapPoint: tapPoint, hits: [:], touchedSources: []) { (hits, touchedSources) in
           
@@ -1194,14 +1215,7 @@ extension RNMBXMapView: GestureManagerDelegate {
             
           } else {
             if let reactOnPress = self.reactOnPress {
-              let location = self.mapboxMap.coordinate(for: tapPoint)
-              var geojson = Feature(geometry: .point(Point(location)));
-              geojson.properties = [
-                "screenPointX": .number(Double(tapPoint.x)),
-                "screenPointY": .number(Double(tapPoint.y))
-              ]
-              let event = RNMBXEvent(type:.tap, payload: logged("reactOnPress") { try geojson.toJSON() })
-              self.fireEvent(event: event, callback: reactOnPress)
+              self.fireEvent(event: self._tapEvent(tapPoint), callback: reactOnPress)
             }
           }
         }
@@ -1341,13 +1355,25 @@ extension RNMBXMapView {
   }
 }
 
-class PointAnnotationManager : AnnotationInteractionDelegate {
+class RNMBXPointAnnotationManager : AnnotationInteractionDelegate {
   weak var selected : RNMBXPointAnnotation? = nil
   private var draggedAnnotation: PointAnnotation?
   
   func annotationManager(_ manager: AnnotationManager, didDetectTappedAnnotations annotations: [Annotation]) {
     // We handle taps ourselfs
     //   onTap(annotations: annotations)
+  }
+  
+  func deselecteCurrentlySelected(_ event: RNMBXEvent) -> Bool {
+    if let selected = selected {
+      if let onDeselected = selected.onDeselected {
+        onDeselected(event.toJSON())
+      }
+      selected.onDeselect()
+      self.selected = nil
+      return true
+    }
+    return false
   }
 
   func onTap(annotations: [Annotation]) {
@@ -1370,13 +1396,7 @@ class PointAnnotationManager : AnnotationInteractionDelegate {
               "screenPointY": .number(Double(position!.y))
             ]
             let event = RNMBXEvent(type:.tap, payload: logged("doHandleTap") { try geojson.toJSON() })
-            if let selected = selected {
-              guard let onDeselected = pt.onDeselected else {
-                return
-              }
-              onDeselected(event.toJSON())
-              selected.onDeselect()
-            }
+            deselecteCurrentlySelected(event)
             guard let onSelected = pt.onSelected else {
               return
             }

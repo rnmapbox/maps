@@ -522,6 +522,16 @@ The emitted frequency of regiondidchange events
   _defaults to:_ `500`
 
   
+### deselectAnnotationOnTap
+
+```tsx
+boolean
+```
+Set to true to deselect any selected annotation when the map is tapped. If set to true you will not receive
+the onPress event for the taps that deselect the annotation. Default is false.
+
+[Show Point Annotations](../examples/Annotations/ShowPointAnnotation)
+  
 
 
 
