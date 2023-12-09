@@ -36,9 +36,8 @@
     "prop-types": "^15.7.2",
     "react": "18.2.0",
     "react-native": "0.73.0",
-    "react-native-safe-area-context": "github:th3rdwave/react-native-safe-area-context#a16ed2e174a5a6103b0d934fe98368d67c4b4656",
-    "react-native-screens": "github:software-mansion/react-native-screens#811fe65b4c3ad21097c4a380ebb31e2bdb56d8cc",
-    "react-native-svg": "^12.1.0",
+    "react-native-safe-area-context": "4.8.0",
+    "react-native-screens": "3.29.0",
     "react-native-vector-icons": "9.2.0",
     "@rnmapbox/maps": "link:../"
   },
