@@ -100,6 +100,11 @@ object GeoJSONUtils {
         val map: WritableMap = WritableNativeMap()
         map.putString("type", "Feature")
         map.putMap("geometry", toPointGeometry(latLng))
+        properties?.let {
+            if (it.hasKey("id") == true) {
+                map.putString("id", it.getString("id"));
+            }
+        }
         map.putMap("properties", properties)
         return map
     }

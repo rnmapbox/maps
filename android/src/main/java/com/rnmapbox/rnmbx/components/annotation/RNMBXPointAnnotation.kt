@@ -168,7 +168,7 @@ class RNMBXPointAnnotation(private val mContext: Context, private val mManager: 
         }
     }
 
-    fun onSelect(shouldSendEvent: Boolean) {
+    fun doSelect(shouldSendEvent: Boolean) {
         if (calloutView != null) {
             makeCallout()
         }
@@ -177,7 +177,7 @@ class RNMBXPointAnnotation(private val mContext: Context, private val mManager: 
         }
     }
 
-    fun onDeselect() {
+    fun doDeselect() {
         mManager.handleEvent(makeEvent(false))
         if (mCalloutSymbol != null) {
             mMapView?.pointAnnotationManager?.delete(mCalloutSymbol!!)

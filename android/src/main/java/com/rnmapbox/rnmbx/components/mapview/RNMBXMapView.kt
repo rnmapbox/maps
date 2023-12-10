@@ -1560,15 +1560,24 @@ class RNMBXPointAnnotationManager(val mapView: MapView) {
         return false
     }
 
-    fun onAnnotationClick(symbol: PointAnnotation) {
-        annotationClicked = true
-        var oldSelected: RNMBXPointAnnotation? = selected
-        var newSelected: RNMBXPointAnnotation? = null
-
+    fun lookup(point: PointAnnotation): RNMBXPointAnnotation? {
         for (annotation in annotations.values) {
-            if (symbol.id == annotation.mapboxID && selected?.mapboxID != symbol.id) {
-                newSelected = annotation
+            if (point.id == annotation.mapboxID) {
+                return annotation;
             }
+        }
+        Logger.e(LOG_TAG, "Failed to find RNMBXPointAnntoation for ${point.id}")
+        return null;
+    }
+
+    fun onAnnotationClick(pointAnnotation: RNMBXPointAnnotation) {
+        var oldSelected: RNMBXPointAnnotation? = selected
+        var newSelected: RNMBXPointAnnotation? = pointAnnotation
+
+        annotationClicked = true
+
+        if (newSelected == oldSelected) {
+            newSelected = null
         }
 
         manager.addDragListener(object : OnPointAnnotationDragListener {
@@ -1613,6 +1622,13 @@ class RNMBXPointAnnotationManager(val mapView: MapView) {
 
         oldSelected?.let { deselectAnnotation(it) }
         newSelected?.let { selectAnnotation(it) }
+
+    }
+
+    fun onAnnotationClick(point: PointAnnotation) {
+        lookup(point)?.let {
+            onAnnotationClick(it)
+        }
     }
 
     fun deselectSelectedAnnotation(): Boolean {
@@ -1625,12 +1641,12 @@ class RNMBXPointAnnotationManager(val mapView: MapView) {
 
     fun selectAnnotation(annotation: RNMBXPointAnnotation) {
         selected = annotation
-        annotation.onSelect(true)
+        annotation.doSelect(true)
     }
 
     fun deselectAnnotation(annotation: RNMBXPointAnnotation) {
         selected = null
-        annotation.onDeselect()
+        annotation.doDeselect()
     }
 
     fun remove(annotation: RNMBXPointAnnotation) {
@@ -1654,6 +1670,10 @@ class RNMBXPointAnnotationManager(val mapView: MapView) {
 
     fun add(annotation: RNMBXPointAnnotation) {
         annotations[annotation.iD!!] = annotation
+    }
+
+    companion object {
+        const val LOG_TAG = "RNMBXPointAnnotationManager";
     }
 }
 
