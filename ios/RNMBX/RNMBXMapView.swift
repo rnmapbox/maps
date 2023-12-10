@@ -1180,7 +1180,7 @@ extension RNMBXMapView: GestureManagerDelegate {
     pointAnnotationManager.handleTap(sender) { (_: UITapGestureRecognizer) in
       DispatchQueue.main.async {
         if (self.deselectAnnotationOnTap) {
-          if (self.pointAnnotationManager.deselecteCurrentlySelected(self._tapEvent(tapPoint))) {
+          if (self.pointAnnotationManager.deselectCurrentlySelected(deselectAnnotationOnTap: true)) {
             return
           }
         }
@@ -1364,17 +1364,43 @@ class RNMBXPointAnnotationManager : AnnotationInteractionDelegate {
     //   onTap(annotations: annotations)
   }
   
-  func deselecteCurrentlySelected(_ event: RNMBXEvent) -> Bool {
+  func deselectCurrentlySelected(deselectAnnotationOnTap: Bool = false) -> Bool {
     if let selected = selected {
-      if let onDeselected = selected.onDeselected {
-        onDeselected(event.toJSON())
-      }
-      selected.onDeselect()
+      selected.doDeselect(deselectAnnotationOnMapTap: deselectAnnotationOnTap)
       self.selected = nil
       return true
     }
     return false
   }
+  
+  func onAnnotationClick(pointAnnotation: RNMBXPointAnnotation) {
+    let oldSelected = selected
+    var newSelected: RNMBXPointAnnotation? = pointAnnotation
+    
+    if (newSelected == oldSelected) {
+      newSelected = nil
+    }
+    
+    deselectCurrentlySelected()
+
+    if let newSelected = newSelected {
+      newSelected.doSelect()
+      selected = newSelected
+    }
+  }
+  
+  func lookup(_ annotation: PointAnnotation) -> RNMBXPointAnnotation? {
+    guard let userInfo = annotation.userInfo else {
+        return nil
+    }
+    if let rnmbxPointAnnotationWeakRef = userInfo[RNMBXPointAnnotation.key] as? WeakRef<RNMBXPointAnnotation> {
+      if let rnmbxPointAnnotation = rnmbxPointAnnotationWeakRef.object {
+        return rnmbxPointAnnotation
+      }
+    }
+    return nil
+  }
+  
 
   func onTap(annotations: [Annotation]) {
     guard annotations.count > 0 else {
@@ -1382,28 +1408,9 @@ class RNMBXPointAnnotationManager : AnnotationInteractionDelegate {
     }
     
     for annotation in annotations {
-      if let pointAnnotation = annotation as? PointAnnotation,
-         let userInfo = pointAnnotation.userInfo {
-        
-        if let RNMBXPointAnnotation = userInfo[RNMBXPointAnnotation.key] as? WeakRef<RNMBXPointAnnotation> {
-          if let pt = RNMBXPointAnnotation.object {
-            let position = pt.superview?.convert(pt.layer.position, to: nil)
-            let location = pt.map?.mapboxMap.coordinate(for: position!)
-            var geojson = Feature(geometry: .point(Point(location!)))
-            geojson.identifier = .string(pt.id)
-            geojson.properties = [
-              "screenPointX": .number(Double(position!.x)),
-              "screenPointY": .number(Double(position!.y))
-            ]
-            let event = RNMBXEvent(type:.tap, payload: logged("doHandleTap") { try geojson.toJSON() })
-            deselecteCurrentlySelected(event)
-            guard let onSelected = pt.onSelected else {
-              return
-            }
-            onSelected(event.toJSON())
-            pt.onSelect()
-            selected = pt
-          }
+      if let annotation = annotation as? PointAnnotation {
+        if let pointAnnotation = lookup(annotation) {
+          onAnnotationClick(pointAnnotation: pointAnnotation)
         }
       }
     }

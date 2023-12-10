@@ -155,6 +155,39 @@ public class RNMBXPointAnnotation : RNMBXInteractiveElement {
     return image
   }
   
+  func makeEvent(isSelect: Bool, deselectAnnotationOnMapTap: Bool = false) -> RNMBXEvent {
+    let position = superview?.convert(layer.position, to: nil)
+    let location = map?.mapboxMap.coordinate(for: position!)
+    var geojson = Feature(geometry: .point(Point(location!)))
+    geojson.identifier = .string(id)
+    var properties : [String: JSONValue?] = [
+      "screenPointX": .number(Double(position!.x)),
+      "screenPointY": .number(Double(position!.y))
+    ]
+    if deselectAnnotationOnMapTap {
+      properties["deselectAnnotationOnMapTap"] = true
+    }
+    geojson.properties = properties
+    let event = RNMBXEvent(type:isSelect ? .annotationSelected : .annotationDeselected, payload: logged("doHandleTap") { try geojson.toJSON() })
+    return event
+  }
+  
+  func doSelect() {
+    let event = makeEvent(isSelect: true)
+    if let onSelected = onSelected {
+      onSelected(event.toJSON())
+    }
+    onSelect()
+  }
+  
+  func doDeselect(deselectAnnotationOnMapTap: Bool = false) {
+    let event = makeEvent(isSelect: false, deselectAnnotationOnMapTap: deselectAnnotationOnMapTap)
+    if let onDeselected = onDeselected {
+      onDeselected(event.toJSON())
+    }
+    onDeselect()
+  }
+  
   func onSelect() {
     if let callout = callout,
        let calloutImage = _createViewSnapshot(view: callout),

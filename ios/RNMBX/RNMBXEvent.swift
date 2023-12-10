@@ -38,6 +38,8 @@ class RNMBXEvent : NSObject, RNMBXEventProtocol {
       case onUserTrackingModeChange
       case vectorSourceLayerPress
       case shapeSourceLayerPress
+      case annotationSelected = "annotationselected"
+      case annotationDeselected = "annotationdeselected"
     }
     
     init(type: EventType, payload: [String:Any?]?) {
