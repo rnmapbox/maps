@@ -285,7 +285,7 @@ extension RNMBXPointAnnotation {
         && annotation.point.coordinates.isValid()
         && (logged("PointAnnotation: missing id attribute") { return id }) != nil,
         let pointAnnotationManager = map?.pointAnnotationManager {
-      pointAnnotationManager.add(annotation)
+      pointAnnotationManager.add(annotation, self)
       added = true
       return true
     }
