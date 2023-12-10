@@ -25,6 +25,7 @@ RCT_REMAP_VIEW_PROPERTY(zoomEnabled, reactZoomEnabled, BOOL)
 RCT_REMAP_VIEW_PROPERTY(scrollEnabled, reactScrollEnabled, BOOL)
 RCT_REMAP_VIEW_PROPERTY(rotateEnabled, reactRotateEnabled, BOOL)
 RCT_REMAP_VIEW_PROPERTY(pitchEnabled, reactPitchEnabled, BOOL)
+RCT_EXPORT_VIEW_PROPERTY(deselectAnnotationOnTap, BOOL)
 
 RCT_REMAP_VIEW_PROPERTY(projection, reactProjection, NSString)
 RCT_REMAP_VIEW_PROPERTY(localizeLabels, reactLocalizeLabels, NSDictionary)

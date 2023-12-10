@@ -138,6 +138,7 @@ const ShowPointAnnotation = () => {
           ]);
         }}
         style={styles.matchParent}
+        deselectAnnotationOnTap={true}
       >
         <Camera
           defaultSettings={{ centerCoordinate: coordinates[0], zoomLevel: 16 }}
@@ -199,7 +200,12 @@ export default ShowPointAnnotation;
 
 const metadata: ExampleWithMetadata['metadata'] = {
   title: 'Show Point Annotations',
-  tags: ['PointAnnotation'],
+  tags: [
+    'PointAnnotation',
+    'MapView#deselectAnnotationOnTap',
+    'PointAnnotation#refresh',
+    'getAnnotationsLayerID',
+  ],
   docs: `
 Shows Point annotation with images
 `,

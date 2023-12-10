@@ -52,6 +52,8 @@ export interface NativeProps extends ViewProps {
   rotateEnabled?: OptionalProp<boolean>;
   pitchEnabled?: OptionalProp<boolean>;
 
+  deselectAnnotationOnTap?: OptionalProp<boolean>;
+
   requestDisallowInterceptTouchEvent?: OptionalProp<boolean>;
 
   projection?: OptionalProp<'mercator' | 'globe'>;

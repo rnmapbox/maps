@@ -566,7 +566,10 @@
         "metadata": {
           "title": "Show Point Annotations",
           "tags": [
-            "PointAnnotation"
+            "PointAnnotation",
+            "MapView#deselectAnnotationOnTap",
+            "PointAnnotation#refresh",
+            "getAnnotationsLayerID"
           ],
           "docs": "\nShows Point annotation with images\n"
         },
