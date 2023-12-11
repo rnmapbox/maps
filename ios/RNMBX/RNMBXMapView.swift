@@ -166,6 +166,10 @@ open class RNMBXMapView: UIView {
     get { _mapView.mapboxMap }
   }
 
+  public func getMapboxMap() -> MapboxMap {
+    return self.mapView.mapboxMap
+  }
+
   @objc public func addToMap(_ subview: UIView) {
     withMapView {
       if let mapComponent = subview as? RNMBXMapComponent {
