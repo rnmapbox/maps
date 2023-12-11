@@ -1398,6 +1398,12 @@ class RNMBXPointAnnotationManager : AnnotationInteractionDelegate {
         return rnmbxPointAnnotation
       }
     }
+    #if RNMBX_11
+    // see https://github.com/rnmapbox/maps/issues/3121
+    if let rnmbxPointAnnotation = annotations.object(forKey: annotation.id as NSString) {
+      return rnmbxPointAnnotation;
+    }
+    #endif
     return nil
   }
   
@@ -1474,41 +1480,36 @@ class RNMBXPointAnnotationManager : AnnotationInteractionDelegate {
     
     for annotation in annotations {
       if let pointAnnotation = annotation as? PointAnnotation,
-         let userInfo = pointAnnotation.userInfo {
-        
-        if let RNMBXPointAnnotation = userInfo[RNMBXPointAnnotation.key] as? WeakRef<RNMBXPointAnnotation> {
-          if let pt = RNMBXPointAnnotation.object {
+         let pt = lookup(pointAnnotation) {
             let position = pt.superview?.convert(pt.layer.position, to: nil)
             var geojson = Feature(geometry: .point(Point(targetPoint)))
-            geojson.identifier = .string(pt.id)
-            geojson.properties = [
-              "screenPointX": .number(Double(position!.x)),
-              "screenPointY": .number(Double(position!.y))
-            ]
-            let event = RNMBXEvent(type:.longPress, payload: logged("doHandleLongPress") { try geojson.toJSON() })
-            switch (dragState) {
-            case .began:
-              guard let onDragStart = pt.onDragStart else {
-                return
-              }
-              onDragStart(event.toJSON())
-            case .changed:
-              guard let onDrag = pt.onDrag else {
-                return
-              }
-              onDrag(event.toJSON())
-              return
-            case .ended:
-              guard let onDragEnd = pt.onDragEnd else {
-                return
-              }
-              onDragEnd(event.toJSON())
-              return
-            default:
+          geojson.identifier = .string(pt.id)
+          geojson.properties = [
+            "screenPointX": .number(Double(position!.x)),
+            "screenPointY": .number(Double(position!.y))
+          ]
+          let event = RNMBXEvent(type:.longPress, payload: logged("doHandleLongPress") { try geojson.toJSON() })
+          switch (dragState) {
+          case .began:
+            guard let onDragStart = pt.onDragStart else {
               return
             }
+            onDragStart(event.toJSON())
+          case .changed:
+            guard let onDrag = pt.onDrag else {
+              return
+            }
+            onDrag(event.toJSON())
+            return
+          case .ended:
+            guard let onDragEnd = pt.onDragEnd else {
+              return
+            }
+            onDragEnd(event.toJSON())
+            return
+          default:
+            return
           }
-        }
       }
     }
   }
@@ -1543,7 +1544,7 @@ class RNMBXPointAnnotationManager : AnnotationInteractionDelegate {
 
                   // Find if any `queriedFeatureIds` match an annotation's `id`
                 let draggedAnnotations = self.manager.annotations.filter { queriedFeatureIds.contains($0.id) }
-                let enabledAnnotations = draggedAnnotations.filter { ($0.userInfo?[RNMBXPointAnnotation.key] as? WeakRef<RNMBXPointAnnotation>)?.object?.draggable ?? false }
+                let enabledAnnotations = draggedAnnotations.filter { self.lookup($0)?.draggable ?? false }
                   // If `tappedAnnotations` is not empty, call delegate
                   if !enabledAnnotations.isEmpty {
                     self.draggedAnnotation = enabledAnnotations.first!
@@ -1586,9 +1587,19 @@ class RNMBXPointAnnotationManager : AnnotationInteractionDelegate {
     manager.annotations.removeAll(where: {$0.id == annotation.id})
   }
   
-  func add(_ annotation: PointAnnotation) {
+  #if RNMBX_11
+  var annotations = NSMapTable<NSString, RNMBXPointAnnotation>.init(
+        keyOptions: .copyIn,
+        valueOptions: .weakMemory
+    )
+  #endif
+  
+  func add(_ annotation: PointAnnotation, _ rnmbxPointAnnotation: RNMBXPointAnnotation) {
     manager.annotations.append(annotation)
     manager.refresh()
+    #if RNMBX_11
+    annotations.setObject(rnmbxPointAnnotation, forKey: annotation.id as NSString)
+    #endif
   }
   
   func update(_ annotation: PointAnnotation) {
