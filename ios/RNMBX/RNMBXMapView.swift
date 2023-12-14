@@ -273,6 +273,7 @@ open class RNMBXMapView: UIView {
     case scaleBar
     case onLongPress
     case onPress
+    case zoomEnabled
     case scrollEnabled
     case rotateEnabled
     case pitchEnabled
@@ -298,6 +299,8 @@ open class RNMBXMapView: UIView {
         map.applyOnLongPress()
       case .onPress:
         map.applyOnPress()
+      case .zoomEnabled:
+        map.applyZoomEnabled()
       case .scrollEnabled:
         map.applyScrollEnabled()
       case .rotateEnabled:
@@ -661,10 +664,18 @@ open class RNMBXMapView: UIView {
     changes.apply(self)
   }
 
+  var zoomEnabled: Bool? = nil
   @objc public func setReactZoomEnabled(_ value: Bool) {
-    self.mapView.gestures.options.quickZoomEnabled = value
-    self.mapView.gestures.options.doubleTapToZoomInEnabled = value
-    self.mapView.gestures.options.pinchZoomEnabled = value
+    self.zoomEnabled = value
+    changed(.zoomEnabled)
+  }
+
+  func applyZoomEnabled() {
+    if let value = zoomEnabled {
+      self.mapView.gestures.options.quickZoomEnabled = value
+      self.mapView.gestures.options.doubleTapToZoomInEnabled = value
+      self.mapView.gestures.options.pinchZoomEnabled = value
+    }
   }
 
   var scrollEnabled: Bool? = nil
