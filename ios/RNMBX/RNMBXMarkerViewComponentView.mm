@@ -113,6 +113,7 @@ using namespace facebook::react;
         layoutMetrics.borderWidth,
         layoutMetrics.displayType,
         layoutMetrics.layoutDirection,
+        layoutMetrics.wasLeftAndRightSwapped,
         layoutMetrics.pointScaleFactor,
         layoutMetrics.overflowInset
     };
