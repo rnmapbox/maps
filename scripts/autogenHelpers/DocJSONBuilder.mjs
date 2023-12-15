@@ -55,10 +55,16 @@ class DocJSONBuilder {
   }
 
   postprocess(component, name) {
-    // Remove all private methods and parse examples from docblock
+    // Remove all private methods, and properties and parse examples from docblock
 
     if (!Array.isArray(component.methods)) {
       return;
+    }
+
+    for (const [propName, prop] of Object.entries(component.props)) {
+      if (prop.description.includes('@private')) {
+        delete component.props[propName];
+      }
     }
 
     component.name = name;

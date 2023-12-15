@@ -100,6 +100,9 @@ public class RNMBXMapViewManagerDelegate<T extends View, U extends BaseViewManag
       case "compassImage":
         mViewManager.setCompassImage(view, new DynamicFromObject(value));
         break;
+      case "mapViewImpl":
+        mViewManager.setMapViewImpl(view, new DynamicFromObject(value));
+        break;
       default:
         super.setProperty(view, propName, value);
     }

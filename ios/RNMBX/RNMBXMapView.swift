@@ -2,6 +2,26 @@
 import Turf
 import MapKit
 
+public typealias RNMBXMapViewFactoryFunc = (String, UIView) -> MapView?;
+
+/**
+ * Experimental MapView factory for advanced usecases
+ */
+public class RNMBXMapViewFactory {
+  private static var factories: [String: RNMBXMapViewFactoryFunc] = [:];
+  
+  static func get(_ id: String) -> RNMBXMapViewFactoryFunc? {
+    if let id = id.split(separator: ":", maxSplits: 1).first {
+      return factories[String(id)]
+    }
+    return nil
+  }
+  
+  public static func register(_ id: String, factory: @escaping RNMBXMapViewFactoryFunc) {
+    factories.updateValue(factory, forKey: id)
+  }
+}
+
 class FeatureEntry {
   let feature: RNMBXMapComponent
   let view: UIView
@@ -132,6 +152,9 @@ open class RNMBXMapView: UIView {
 
   @objc
   public var deselectAnnotationOnTap: Bool = false
+
+  @objc
+  public var mapViewImpl : String? = nil
   
 #if RNMBX_11
   var cancelables = Set<AnyCancelable>()
@@ -149,19 +172,32 @@ open class RNMBXMapView: UIView {
   
   var _mapView: MapView! = nil
   func createMapView() {
-#if RNMBX_11
-    _mapView = MapView(frame: self.bounds, mapInitOptions:  MapInitOptions())
-#else
-    let resourceOptions = ResourceOptions(accessToken: RNMBXModule.accessToken!)
-    _mapView = MapView(frame: frame, mapInitOptions: MapInitOptions(resourceOptions: resourceOptions))
-#endif
-    _mapView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
-    addSubview(_mapView)
+    if let mapViewImpl = mapViewImpl, let mapViewInstance = createAndAddMapViewImpl(mapViewImpl, self) {
+      _mapView = mapViewInstance
+    } else {
+  #if RNMBX_11
+      _mapView = MapView(frame: self.bounds, mapInitOptions:  MapInitOptions())
+  #else
+      let resourceOptions = ResourceOptions(accessToken: RNMBXModule.accessToken!)
+      _mapView = MapView(frame: frame, mapInitOptions: MapInitOptions(resourceOptions: resourceOptions))
+  #endif
+      _mapView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
+      addSubview(_mapView)
+    }
     
     _mapView.gestures.delegate = self
     setupEvents()
   }
-  
+
+  func createAndAddMapViewImpl(_ impl: String, _ view: RNMBXMapView) -> MapView? {
+    if let factory = RNMBXMapViewFactory.get(impl) {
+      return factory(impl, view) as? MapView;
+    } else {
+      Logger.log(level:.error, message: "No mapview factory registered for: \(impl)")
+      return nil
+    }
+  }
+
   var mapView : MapView! {
     get { return _mapView }
   }

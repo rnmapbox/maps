@@ -195,6 +195,22 @@ data class FeatureEntry(val feature: AbstractMapFeature?, val view: View?, var a
 
 }
 
+typealias Factory = (impl: String, ViewGroup) -> MapView?;
+public class RNMBXMapViewFactory {
+    companion object {
+        var factories = mutableMapOf<String,Factory>();
+        fun regiser(impl: String, factory: Factory) {
+            val (impl, options) = impl.split(":",limit=2)
+            factories.put(impl, factory);
+        }
+
+        fun get(impl: String): Factory? {
+            val (impl, options) = impl.split(":",limit=2);
+            return factories.get(impl);
+        }
+    }
+}
+
 open class RNMBXMapView(private val mContext: Context, var mManager: RNMBXMapViewManager, options: MapInitOptions?) : FrameLayout(mContext), OnMapClickListener, OnMapLongClickListener, OnLayoutChangeListener {
     /**
      * `PointAnnotations` are rendered to a canvas, but the React Native `Image` component is
@@ -248,6 +264,8 @@ open class RNMBXMapView(private val mContext: Context, var mManager: RNMBXMapVie
 
     private var wasGestureActive = false
     private var isGestureActive = false
+
+    var mapViewImpl: String? = null
 
     val mapView: MapView
         get() = this.mMapView
@@ -1136,17 +1154,37 @@ open class RNMBXMapView(private val mContext: Context, var mManager: RNMBXMapVie
         const val LOG_TAG = "RNMBXMapView"
     }
 
-    fun createMapView() : MapView {
-        var options: MapInitOptions? = null
-        if (surfaceView == false) {
-            options = MapInitOptions(context= mContext, textureView= true)
+    fun createAndAddMapView(mapViewImpl: String): MapView? {
+        RNMBXMapViewFactory.get(mapViewImpl)?.let {
+            return it(mapViewImpl, this);
         }
-        val mapView = if (options != null) MapView(mContext, options) else MapView(mContext)
-        mMapView = mapView
+        return null;
+    }
 
-        val matchParent = FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT)
-        mapView.setLayoutParams(matchParent)
-        addView(mapView)
+    fun createMapView() : MapView {
+        var created = false;
+        mapViewImpl?.also {impl ->
+            createAndAddMapView(impl)?.let { mapView ->
+                mMapView = mapView
+                created = true;
+            }
+        }
+        if (!created) {
+            var options: MapInitOptions? = null
+            if (surfaceView == false) {
+                options = MapInitOptions(context = mContext, textureView = true)
+            }
+            val mapView = if (options != null) MapView(mContext, options) else MapView(mContext)
+            mMapView = mapView
+
+
+            val matchParent = FrameLayout.LayoutParams(
+                ViewGroup.LayoutParams.MATCH_PARENT,
+                ViewGroup.LayoutParams.MATCH_PARENT
+            )
+            mapView.setLayoutParams(matchParent)
+            addView(mapView)
+        }
         this.addOnLayoutChangeListener(this)
 
         val map = mapView.getMapboxMap()

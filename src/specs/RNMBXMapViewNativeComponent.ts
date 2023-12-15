@@ -76,6 +76,8 @@ export interface NativeProps extends ViewProps {
   onLongPress?: DirectEventHandler<OnPressEventType>;
   onMapChange?: DirectEventHandler<OnMapChangeEventType>;
   onCameraChanged?: DirectEventHandler<OnCameraChangedEventType>;
+
+  mapViewImpl?: OptionalProp<string>;
 }
 
 export default codegenNativeComponent<NativeProps>(

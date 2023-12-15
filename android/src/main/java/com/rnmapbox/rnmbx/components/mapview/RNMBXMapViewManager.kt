@@ -337,6 +337,13 @@ open class RNMBXMapViewManager(context: ReactApplicationContext, val viewTagReso
         }
     }
 
+    @ReactProp(name = "mapViewImpl")
+    override fun setMapViewImpl(mapView: RNMBXMapView, value: Dynamic?) {
+        value?.let {
+            mapView.mapViewImpl = it.asString()
+        }
+    }
+
     override fun setCompassImage(view: RNMBXMapView, value: Dynamic?) {
         // TODO: No-op on Android?
     }
