@@ -49,6 +49,7 @@ NSNumber* convertDynamicToOptional_boolean(const folly::dynamic &dyn, NSString* 
                           propertyName,
                           ss.str().c_str()
                          ]];
+      return NULL;
   }
 }
 
