@@ -120,7 +120,7 @@ class JSDocNodeTree {
   }
 
   _hasArray(node, propName) {
-    if (!this._root) {
+    if (!this._root || !node) {
       return false;
     }
     return Array.isArray(node[propName]) && node[propName].length;

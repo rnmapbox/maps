@@ -127,32 +127,32 @@ class RNMBXOfflineModule: RCTEventEmitter {
   )
   
   @objc override
-  func startObserving() {
+  public func startObserving() {
     super.startObserving()
     hasListeners = true
   }
   
   @objc override
-  func stopObserving() {
+  public func stopObserving() {
     super.stopObserving()
     hasListeners = false
   }
   
   @objc
   override
-  static func requiresMainQueueSetup() -> Bool {
+  static public func requiresMainQueueSetup() -> Bool {
     return true
   }
   
   @objc
   override
-  func constantsToExport() -> [AnyHashable: Any]! {
+  public func constantsToExport() -> [AnyHashable: Any]! {
     return [:]
   }
 
   @objc
   override
-  func supportedEvents() -> [String] {
+  public func supportedEvents() -> [String] {
     return [Callbacks.error.rawValue, Callbacks.progress.rawValue]
   }
   

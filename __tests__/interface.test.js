@@ -22,6 +22,7 @@ describe('Public Interface', () => {
 
       // modules
       'offlineManager',
+      'TileStore',
       'offlineManagerLegacy',
       'OfflineCreatePackOptions',
       'snapshotManager',
