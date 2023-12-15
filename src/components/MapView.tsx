@@ -433,6 +433,11 @@ type Props = ViewProps & {
    * the onPress event for the taps that deselect the annotation. Default is false.
    */
   deselectAnnotationOnTap?: boolean;
+
+  /**
+   * @private Experimental support for custom MapView instances
+   */
+  mapViewImpl?: string;
 };
 
 type CallbablePropKeys =
