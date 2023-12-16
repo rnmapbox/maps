@@ -8390,5 +8390,52 @@
         }
       }
     ]
+  },
+  "tileStore": {
+    "name": "tileStore",
+    "fileNameWithExt": "TileStore.ts",
+    "relPath": "src/modules/offline/TileStore.ts",
+    "description": "TileStore manages downloads and storage for requests to tile-related API endpoints,\nenforcing a disk usage quota: tiles available on disk may be deleted to make room for a new download.\nThis interface can be used by an app developer to set the disk quota.",
+    "props": [],
+    "styles": [],
+    "methods": [
+      {
+        "name": "setOption",
+        "description": "Sets additional options for this instance that are specific to a data type.\nParams:\nkey – The configuration option that should be changed. Valid keys are listed in \\c TileStoreOptions. domain – The data type this setting should be applied for. value – The value for the configuration option, or null if it should be reset.",
+        "params": [
+          {
+            "name": "key",
+            "description": "",
+            "type": {
+              "name": "string"
+            },
+            "optional": false
+          },
+          {
+            "name": "domain",
+            "description": "",
+            "type": {
+              "name": "TileDataDomain"
+            },
+            "optional": false
+          },
+          {
+            "name": "value",
+            "description": "",
+            "type": {
+              "name": "TileDataValue"
+            },
+            "optional": false
+          }
+        ],
+        "examples": [],
+        "returns": {
+          "description": "",
+          "type": {
+            "name": "Promise"
+          }
+        }
+      }
+    ]
   }
 }

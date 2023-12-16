@@ -50,6 +50,7 @@ import com.rnmapbox.rnmbx.modules.RNMBXModule
 import com.rnmapbox.rnmbx.modules.RNMBXOfflineModule
 import com.rnmapbox.rnmbx.modules.RNMBXOfflineModuleLegacy
 import com.rnmapbox.rnmbx.modules.RNMBXSnapshotModule
+import com.rnmapbox.rnmbx.modules.RNMBXTileStoreModule
 import com.rnmapbox.rnmbx.shape_animators.RNMBXMovePointShapeAnimatorModule
 import com.rnmapbox.rnmbx.shape_animators.ShapeAnimatorManager
 import com.rnmapbox.rnmbx.utils.ViewTagResolver
@@ -90,6 +91,7 @@ class RNMBXPackage : TurboReactPackage() {
             RNMBXModule.REACT_CLASS -> return RNMBXModule(reactApplicationContext)
             RNMBXLocationModule.REACT_CLASS -> return RNMBXLocationModule(reactApplicationContext)
             RNMBXOfflineModule.REACT_CLASS -> return RNMBXOfflineModule(reactApplicationContext)
+            RNMBXTileStoreModule.REACT_CLASS -> return RNMBXTileStoreModule(reactApplicationContext)
             RNMBXOfflineModuleLegacy.REACT_CLASS -> return RNMBXOfflineModuleLegacy(reactApplicationContext)
             RNMBXSnapshotModule.REACT_CLASS -> return RNMBXSnapshotModule(reactApplicationContext)
             RNMBXLogging.REACT_CLASS -> return RNMBXLogging(reactApplicationContext)
@@ -183,6 +185,15 @@ class RNMBXPackage : TurboReactPackage() {
             moduleInfos[RNMBXOfflineModule.REACT_CLASS] = ReactModuleInfo(
                 RNMBXOfflineModule.REACT_CLASS,
                 RNMBXOfflineModule.REACT_CLASS,
+                false,  // canOverrideExistingModule
+                false,  // needsEagerInit
+                true,  // hasConstants
+                false,  // isCxxModule
+                false // isTurboModule
+            )
+            moduleInfos[RNMBXTileStoreModule.REACT_CLASS] = ReactModuleInfo(
+                RNMBXTileStoreModule.REACT_CLASS,
+                RNMBXTileStoreModule.REACT_CLASS,
                 false,  // canOverrideExistingModule
                 false,  // needsEagerInit
                 true,  // hasConstants

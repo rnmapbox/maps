@@ -185,6 +185,11 @@ NativeModules.RNMBXViewportModule = {
   getState: jest.fn(),
 };
 
+NativeModules.RNMBXTileStoreModule = {
+  setOptions: jest.fn(),
+  shared: jest.fn(),
+};
+
 NativeModules.RNMBXMovePointShapeAnimatorModule = {
   create: jest.fn(),
   start: jest.fn(),

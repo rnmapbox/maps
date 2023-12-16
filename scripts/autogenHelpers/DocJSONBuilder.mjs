@@ -5,6 +5,9 @@ import * as url from 'url';
 
 import dir from 'node-dir';
 import { parse, utils } from 'react-docgen';
+
+import { pascelCase } from './globals.mjs';
+
 const { parseJsDoc } = utils;
 
 import JSDocNodeTree from './JSDocNodeTree.js';
