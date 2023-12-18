@@ -53,13 +53,15 @@ class CameraUpdateQueue {
         mCompleteListener = listener
     }
 
-    fun execute(map: RNMBXMapView?) {
+    fun execute(mapView: RNMBXMapView?) {
         if (mQueue.isEmpty()) {
             mCompleteListener?.let { it.onCompleteAll() }
             return
         }
+
         val stop = mQueue.poll() ?: return
-        val item = stop.toCameraUpdate(map!!)
+        val map = mapView ?: return
+        val item = stop.toCameraUpdate(map)
         item.run()
         execute(map)
     }
