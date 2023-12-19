@@ -15,7 +15,7 @@ import MapHeader from '../examples/common/MapHeader';
 import Page, { PageProps } from '../examples/common/Page';
 import sheet from '../styles/sheet';
 // ANIMATIONS
-import AnimatedLine from '../examples/Animations/AnimatedLine';
+import AnimatedPoint from '../examples/Animations/AnimatedPoint';
 import DriveTheLine from '../examples/Animations/DriveTheLine';
 // ANNOTATIONS
 import * as Annotations from '../examples/Annotations';
@@ -297,7 +297,7 @@ const Examples = new ExampleGroup('React Native Mapbox', [
   exampleGroup(LineLayer),
   exampleGroup(Annotations),
   new ExampleGroup('Animations', [
-    new ExampleItem('Animated Line', AnimatedLine),
+    new ExampleItem('Animated Point', AnimatedPoint),
     new ExampleItem('Animation Along a Line', DriveTheLine),
   ]),
   new ExampleItem('Cache management', CacheManagement),
