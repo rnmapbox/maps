@@ -118,6 +118,11 @@ export const UserTrackingModes = UserTrackingMode;
 
 /** @experimental */
 
+export interface ShapeAnimatorInterface {
+  __nativeTag: number;
+  start: () => void;
+}
+
 export const __experimental = {
   MovePointShapeAnimator,
 };
