@@ -75,7 +75,7 @@ const AnimatedPoint = memo((props: BaseExampleProps) => {
         }}
         pointerEvents={'box-none'}
       >
-        <Button title={'Change basePosition'} onPress={onPressButton} />
+        <Button title={'Change position'} onPress={onPressButton} />
       </SafeAreaView>
     </Page>
   );
