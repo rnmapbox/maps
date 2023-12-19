@@ -20,10 +20,11 @@ export default class MovePointShapeAnimator implements ShapeAnimatorInterface {
     NativeRNMBXMovePointShapeAnimatorModule.start(this.__nativeTag);
   }
 
-  moveTo(coordinate: Position) {
+  moveTo(args: { coordinate: Position; durationMs: number }) {
     NativeRNMBXMovePointShapeAnimatorModule.moveTo(
       this.__nativeTag,
-      coordinate,
+      args.coordinate,
+      args.durationMs,
     );
   }
 }
