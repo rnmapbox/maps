@@ -22,7 +22,6 @@ public class MovePointShapeAnimator: ShapeAnimatorCommon {
   }
   
   override func getAnimatedShape(dt: TimeInterval) -> GeoJSONObject {
-    print(">>> \(dt), \(totalSec)")
     progressSec += dt
     let line = LineString([sourceCoord, targetCoord])
     let lineLength = line.distance() ?? 0
