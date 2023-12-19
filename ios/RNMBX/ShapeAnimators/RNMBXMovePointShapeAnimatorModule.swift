@@ -3,7 +3,9 @@ import MapboxMaps
 @objc
 public class MovePointShapeAnimator: ShapeAnimatorCommon {
   private var sourceCoord: LocationCoordinate2D
+  private var progressCoord: LocationCoordinate2D
   private var targetCoord: LocationCoordinate2D
+  
   private var progressSec: TimeInterval
   private var totalSec: TimeInterval
   
@@ -12,7 +14,9 @@ public class MovePointShapeAnimator: ShapeAnimatorCommon {
       latitude: lat,
       longitude: lng
     )
+    progressCoord = sourceCoord
     targetCoord = sourceCoord
+    
     progressSec = 0
     totalSec = 0
     
@@ -25,8 +29,8 @@ public class MovePointShapeAnimator: ShapeAnimatorCommon {
     progressSec += dt
     let line = LineString([sourceCoord, targetCoord])
     let lineLength = line.distance() ?? 0
-    let currentCoord = line.coordinateFromStart(distance: lineLength * (progressSec / totalSec))!
-    return .geometry(.point(.init(currentCoord)))
+    progressCoord = line.coordinateFromStart(distance: lineLength * (progressSec / totalSec))!
+    return .geometry(.point(.init(progressCoord)))
   }
   
   private static func getAnimator(tag: NSNumber) -> MovePointShapeAnimator? {
@@ -90,7 +94,7 @@ extension MovePointShapeAnimator {
 
 extension MovePointShapeAnimator {
   private func _moveTo(coordinate: LocationCoordinate2D, durationSec: Double) {
-    sourceCoord = targetCoord
+    sourceCoord = progressCoord
     targetCoord = coordinate
     progressSec = 0
     totalSec = durationSec
