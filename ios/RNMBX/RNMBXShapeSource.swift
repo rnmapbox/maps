@@ -31,12 +31,10 @@ public class RNMBXShapeSource : RNMBXSource {
       shapeAnimator?.unsubscribe(consumer: self)
       shapeAnimator = nil
 
-      if let shape = shape, ShapeAnimatorManager.shared.isShapeAnimatorTag(shape: shape), let animatedShape = ShapeAnimatorManager.shared.get(shape: shape) {
+      if let shape = shape, ShapeAnimatorManager.shared.isShapeAnimatorTag(shape: shape) {
         if let shapeAnimator = ShapeAnimatorManager.shared.get(shape: shape) {
           self.shapeAnimator = shapeAnimator
           shapeAnimator.subscribe(consumer: self)
-          
-          shapeUpdated(shape: shapeAnimator.getShape())
         }
       } else {
         logged("RNMBXShapeSource.updateShape") {

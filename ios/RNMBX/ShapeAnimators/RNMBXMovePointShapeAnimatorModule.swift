@@ -2,46 +2,92 @@ import MapboxMaps
 
 @objc
 public class MovePointShapeAnimator: ShapeAnimatorCommon {
-  let start: LocationCoordinate2D
+  private var sourceCoord: LocationCoordinate2D
+  private var targetCoord: LocationCoordinate2D
+  private var durationProgress: TimeInterval
   
   init(tag: Int, lng: Double, lat: Double) {
-    self.start = LocationCoordinate2D(latitude: lat, longitude: lng)
+    sourceCoord = LocationCoordinate2D(
+      latitude: lat,
+      longitude: lng
+    )
+    targetCoord = sourceCoord
+    durationProgress = 0
+    
     super.init(tag: tag)
+    
+    super.start()
   }
   
-  override func getAnimatedShape(timeIntervalSinceStart: TimeInterval) -> GeoJSONObject {
-    return .geometry(.point(Point(LocationCoordinate2D(latitude: start.latitude + timeIntervalSinceStart * 0.01, longitude: start.longitude + timeIntervalSinceStart * 0.01))))
+  override func getAnimatedShape(dt: TimeInterval) -> GeoJSONObject {
+    durationProgress += dt
+    let line = LineString([sourceCoord, targetCoord])
+    let lineLength = line.distance() ?? 0
+    let currentCoord = line.coordinateFromStart(distance: lineLength * durationProgress)!
+    return .geometry(.point(.init(currentCoord)))
+  }
+  
+  private static func getAnimator(tag: NSNumber) -> MovePointShapeAnimator? {
+    let animator = ShapeAnimatorManager.shared.get(tag: tag.intValue)
+    return animator as? MovePointShapeAnimator
   }
 }
 
-// MARK: Manager functions
+// MARK: Exposed functions
 
 extension MovePointShapeAnimator {
   @objc
-  public func getTag() -> NSNumber
-  {
+  public func getTag() -> NSNumber {
     return NSNumber(value: tag)
   }
   
   @objc
   public static func start(tag: NSNumber, resolve: RCTPromiseResolveBlock, reject: @escaping (_ code: String, _ message: String, _ error: NSError) -> Void) {
-    if let animator = ShapeAnimatorManager.shared.get(tag: tag.intValue), let animator = animator as? MovePointShapeAnimator {
-      ShapeAnimatorManager.shared.register(tag: tag.intValue, animator: animator)
-      resolve(tag)
-    } else {
-      Logger.log(level: .error, message: "MovePointShapeAnimator: Unable to find MovePointShapeAnimator for tag: \(tag)")
-      reject("TagNotFound", "MovePointShapeAnimator: Unable to find MovePointShapeAnimator for tag: \(tag)", NSError())
+    guard let animator = getAnimator(tag: tag) else {
+      return
     }
+
+    ShapeAnimatorManager.shared.register(tag: tag.intValue, animator: animator)
+    resolve(tag)
+  }
+  
+  @objc
+  public static func moveTo(tag: NSNumber, coordinate: NSArray, resolve: RCTPromiseResolveBlock, reject: @escaping (_ code: String, _ message: String, _ error: NSError) -> Void) {
+    guard let lng = coordinate[0] as? Double, let lat = coordinate[1] as? Double else {
+      return
+    }
+    
+    guard let animator = getAnimator(tag: tag) else {
+      return
+    }
+    
+    let targetCoord = LocationCoordinate2D(
+      latitude: lat,
+      longitude: lng
+    )
+    animator._moveTo(coordinate: targetCoord)
+    
+    resolve(tag)
   }
   
   @objc
   public static func create(tag: NSNumber, coordinate: NSArray) -> MovePointShapeAnimator? {
-    if let lng = coordinate[0] as? NSNumber,
-       let lat = coordinate[1] as? NSNumber {
-      var animator = MovePointShapeAnimator(tag: tag.intValue, lng: lng.doubleValue, lat: lat.doubleValue)
-      ShapeAnimatorManager.shared.register(tag: tag.intValue, animator: animator)
-      return animator
+    guard let lng = coordinate[0] as? NSNumber, let lat = coordinate[1] as? NSNumber else {
+      return nil
     }
-    return nil
+    
+    let animator = MovePointShapeAnimator(tag: tag.intValue, lng: lng.doubleValue, lat: lat.doubleValue)
+    ShapeAnimatorManager.shared.register(tag: tag.intValue, animator: animator)
+    return animator
+  }
+}
+
+// - MARK: Implementation
+
+extension MovePointShapeAnimator {
+  private func _moveTo(coordinate: LocationCoordinate2D) {
+    sourceCoord = targetCoord
+    targetCoord = coordinate
+    durationProgress = 0
   }
 }
