@@ -25,6 +25,10 @@ public class MovePointShapeAnimator: ShapeAnimatorCommon {
     super.start()
   }
   
+  override func getShape() -> GeoJSONObject {
+    return .geometry(.point(.init(progressCoord)))
+  }
+  
   override func getAnimatedShape(dt: TimeInterval) -> GeoJSONObject {
     progressSec += dt
     let line = LineString([sourceCoord, targetCoord])

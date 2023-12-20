@@ -5,6 +5,7 @@ protocol ShapeAnimationConsumer: AnyObject {
 }
 
 protocol ShapeAnimator {
+  func getShape() -> GeoJSONObject
   func getAnimatedShape(dt: TimeInterval) -> GeoJSONObject
   func subscribe(consumer: ShapeAnimationConsumer)
   func unsubscribe(consumer: ShapeAnimationConsumer)
@@ -71,6 +72,10 @@ public class ShapeAnimatorCommon: NSObject, ShapeAnimator {
   }
   
   // - MARK: Subclasses should implement
+  
+  func getShape() -> GeoJSONObject {
+    fatalError("getShape() must be overridden in all subclasses of ShapeAnimatorCommon")
+  }
   
   func getAnimatedShape(dt: TimeInterval) -> GeoJSONObject {
     fatalError("getAnimatedShape() must be overridden in all subclasses of ShapeAnimatorCommon")
