@@ -7,12 +7,9 @@ import ShapeAnimatorManager from './ShapeAnimatorManager';
 export default class MovePointShapeAnimator implements ShapeAnimatorInterface {
   __nativeTag: number;
 
-  constructor(coordinate: Position) {
+  constructor(start: Position) {
     const tag = ShapeAnimatorManager.nextTag();
-    NativeRNMBXMovePointShapeAnimatorModule.create(tag, [
-      coordinate[0],
-      coordinate[1],
-    ]);
+    NativeRNMBXMovePointShapeAnimatorModule.create(tag, [start[0], start[1]]);
     this.__nativeTag = tag;
   }
 
@@ -20,10 +17,10 @@ export default class MovePointShapeAnimator implements ShapeAnimatorInterface {
     NativeRNMBXMovePointShapeAnimatorModule.start(this.__nativeTag);
   }
 
-  moveTo(args: { coordinate: Position; durationMs: number }) {
+  moveTo(args: { start: Position; durationMs: number }) {
     NativeRNMBXMovePointShapeAnimatorModule.moveTo(
       this.__nativeTag,
-      args.coordinate,
+      args.start,
       args.durationMs,
     );
   }
