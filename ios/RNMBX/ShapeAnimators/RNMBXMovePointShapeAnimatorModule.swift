@@ -6,22 +6,18 @@ public class MovePointShapeAnimator: ShapeAnimatorCommon {
   private var progressCoord: LocationCoordinate2D
   private var targetCoord: LocationCoordinate2D
   
-  private var progressSec: TimeInterval
-  private var totalSec: TimeInterval
+  private var startTimestamp: TimeInterval
+  private var totalDurationSec: TimeInterval
   
-  init(tag: Int, lng: Double, lat: Double) {
-    sourceCoord = LocationCoordinate2D(
-      latitude: lat,
-      longitude: lng
-    )
+  init(tag: Int, coordinate: LocationCoordinate2D) {
+    sourceCoord = coordinate
     progressCoord = sourceCoord
     targetCoord = sourceCoord
     
-    progressSec = 0
-    totalSec = 0
+    startTimestamp = 0
+    totalDurationSec = 0
     
     super.init(tag: tag)
-    
     super.start()
   }
   
@@ -29,11 +25,11 @@ public class MovePointShapeAnimator: ShapeAnimatorCommon {
     return .geometry(.point(.init(progressCoord)))
   }
   
-  override func getAnimatedShape(dt: TimeInterval) -> GeoJSONObject {
-    progressSec += dt
+  override func getAnimatedShape() -> GeoJSONObject {
+    let progressSec = currentTimestamp - startTimestamp
     let line = LineString([sourceCoord, targetCoord])
     let lineLength = line.distance() ?? 0
-    progressCoord = line.coordinateFromStart(distance: lineLength * (progressSec / totalSec))!
+    progressCoord = line.coordinateFromStart(distance: lineLength * (progressSec / totalDurationSec))!
     return .geometry(.point(.init(progressCoord)))
   }
   
@@ -57,7 +53,11 @@ extension MovePointShapeAnimator {
       return nil
     }
     
-    let animator = MovePointShapeAnimator(tag: tag.intValue, lng: lng.doubleValue, lat: lat.doubleValue)
+    let startCoordinate = LocationCoordinate2D(
+      latitude: lat.doubleValue,
+      longitude: lng.doubleValue
+    )
+    let animator = MovePointShapeAnimator(tag: tag.intValue, coordinate: startCoordinate)
     ShapeAnimatorManager.shared.register(tag: tag.intValue, animator: animator)
     return animator
   }
@@ -99,8 +99,10 @@ extension MovePointShapeAnimator {
 extension MovePointShapeAnimator {
   private func _moveTo(coordinate: LocationCoordinate2D, durationSec: Double) {
     sourceCoord = progressCoord
+    progressCoord = sourceCoord
     targetCoord = coordinate
-    progressSec = 0
-    totalSec = durationSec
+    
+    startTimestamp = currentTimestamp
+    totalDurationSec = durationSec
   }
 }
