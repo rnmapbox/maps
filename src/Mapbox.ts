@@ -88,7 +88,7 @@ export type {
 import { deprecatedClass } from './utils/deprecation';
 import { AnimatedPoint } from './classes';
 import { UserTrackingMode } from './components/Camera';
-import MovePointShapeAnimator from './shape_animators/MovePointShapeAnimator';
+import MovePointShapeAnimator from './shapeAnimators/MovePointShapeAnimator';
 import LocationPuck from './components/LocationPuck';
 
 /** @deprecated This will be removed in a future release. Use `AnimatedPoint` instead. */
@@ -117,11 +117,6 @@ export enum StyleURL {
 export const UserTrackingModes = UserTrackingMode;
 
 /** @experimental */
-
-export interface ShapeAnimatorInterface {
-  __nativeTag: number;
-  start: () => void;
-}
 
 export const __experimental = {
   MovePointShapeAnimator,

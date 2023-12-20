@@ -1,8 +1,9 @@
 import { Position } from '../types/Position';
 import NativeRNMBXMovePointShapeAnimatorModule from '../specs/NativeRNMBXMovePointShapeAnimatorModule';
-import { ShapeAnimatorInterface } from '..';
 
 import ShapeAnimatorManager from './ShapeAnimatorManager';
+
+import { ShapeAnimatorInterface } from '.';
 
 export default class MovePointShapeAnimator implements ShapeAnimatorInterface {
   __nativeTag: number;
