@@ -15,7 +15,7 @@ import {
 } from '../utils';
 import { copyPropertiesAsDeprecated } from '../utils/deprecation';
 import { OnPressEvent } from '../types/OnPressEvent';
-import { ShapeAnimatorInterface } from '..';
+import { ShapeAnimatorInterface } from '../shapeAnimators';
 
 import AbstractSource from './AbstractSource';
 import NativeBridgeComponent from './NativeBridgeComponent';
