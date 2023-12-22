@@ -38,11 +38,11 @@ export default class ChangeLineOffsetsShapeAnimator
     );
   }
 
-  // setEndOffset(args: { offset: number; durationMs: number }) {
-  //   NativeRNMBXChangeLineOffsetsShapeAnimatorModule.setEndOffset(
-  //     this.__nativeTag,
-  //     args.offset,
-  //     args.durationMs,
-  //   );
-  // }
+  setEndOffset(args: { offset: number; durationMs: number }) {
+    NativeRNMBXChangeLineOffsetsShapeAnimatorModule.setEndOffset(
+      this.__nativeTag,
+      args.offset,
+      args.durationMs,
+    );
+  }
 }

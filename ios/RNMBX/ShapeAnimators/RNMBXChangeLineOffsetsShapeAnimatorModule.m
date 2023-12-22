@@ -48,6 +48,10 @@ RCT_EXPORT_METHOD(setStartOffset:(nonnull NSNumber*)tag offset: (nonnull NSNumbe
   [ChangeLineOffsetsShapeAnimator setStartOffsetWithTag:tag offset:offset durationMs:durationMs resolve:resolve reject:reject];
 }
 
+RCT_EXPORT_METHOD(setEndOffset:(nonnull NSNumber*)tag offset: (nonnull NSNumber*)offset durationMs: (nonnull NSNumber*)durationMs resolve:(RCTPromiseResolveBlock)resolve reject:(RCTPromiseRejectBlock)reject) {
+  [ChangeLineOffsetsShapeAnimator setEndOffsetWithTag:tag offset:offset durationMs:durationMs resolve:resolve reject:reject];
+}
+
 // Thanks to this guard, we won't compile this code when we build for the old architecture.
 #ifdef RCT_NEW_ARCH_ENABLED
 - (std::shared_ptr<facebook::react::TurboModule>)getTurboModule:

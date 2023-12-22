@@ -1,29 +1,29 @@
 import MapboxMaps
 import Turf
 
+private struct LineOffset {
+  var sourceOffset: Double
+  var progressOffset: Double
+  var targetOffset: Double
+  var startedAt: TimeInterval
+  var progressDurationSec: Double
+  var totalDurationSec: TimeInterval
+  
+  var offsetRemaining: Double {
+    targetOffset - sourceOffset
+  }
+  
+  var durationRatio: Double {
+    min(progressDurationSec / totalDurationSec, 1)
+  }
+}
+
 @objc
 public class ChangeLineOffsetsShapeAnimator: ShapeAnimatorCommon {
   private var lineString: LineString
-  
-  private struct LineOffset {
-    var sourceOffset: Double
-    var progressOffset: Double
-    var targetOffset: Double
-    var startedAt: TimeInterval
-    var progressDurationSec: Double
-    var totalDurationSec: TimeInterval
-    
-    var offsetRemaining: Double {
-      targetOffset - sourceOffset
-    }
-    
-    var durationRatio: Double {
-      min(progressDurationSec / totalDurationSec, 1)
-    }
-  }
-  
   private var startOfLine: LineOffset
-    
+  private var endOfLine: LineOffset
+
   init(tag: Int, lineString: LineString, startOffset: Double, endOffset: Double) {
     self.lineString = lineString
     
@@ -31,6 +31,15 @@ public class ChangeLineOffsetsShapeAnimator: ShapeAnimatorCommon {
       sourceOffset: startOffset,
       progressOffset: startOffset,
       targetOffset: startOffset,
+      startedAt: 0,
+      progressDurationSec: 0,
+      totalDurationSec: 0
+    )
+    
+    endOfLine = .init(
+      sourceOffset: endOffset,
+      progressOffset: endOffset,
+      targetOffset: endOffset,
       startedAt: 0,
       progressDurationSec: 0,
       totalDurationSec: 0
@@ -48,8 +57,11 @@ public class ChangeLineOffsetsShapeAnimator: ShapeAnimatorCommon {
     startOfLine.progressOffset = startOfLine.sourceOffset + (startOfLine.offsetRemaining * startOfLine.durationRatio)
     startOfLine.progressDurationSec = currentTimestamp - startOfLine.startedAt
     
+    endOfLine.progressOffset = endOfLine.sourceOffset + (endOfLine.offsetRemaining * endOfLine.durationRatio)
+    endOfLine.progressDurationSec = currentTimestamp - endOfLine.startedAt
+    
     let totalDistance = lineString.distance() ?? 0
-    guard let trimmed = lineString.trimmed(from: startOfLine.progressOffset, to: totalDistance) else {
+    guard let trimmed = lineString.trimmed(from: startOfLine.progressOffset, to: totalDistance - endOfLine.progressOffset) else {
       return .geometry(.lineString(.init([])))
     }
     
@@ -95,11 +107,22 @@ extension ChangeLineOffsetsShapeAnimator {
   @objc
   public static func setStartOffset(tag: NSNumber, offset: NSNumber, durationMs: NSNumber, resolve: RCTPromiseResolveBlock, reject: @escaping (_ code: String, _ message: String, _ error: NSError) -> Void) {
     guard let animator = getAnimator(tag: tag) else {
-      reject("ChangeLineOffsetsShapeAnimator:moveTo", "Unable to find animator with tag \(tag)", NSError())
+      reject("ChangeLineOffsetsShapeAnimator:setStartOffset", "Unable to find animator with tag \(tag)", NSError())
       return
     }
     
     animator._setStartOffset(offset: offset.doubleValue, durationSec: durationMs.doubleValue / 1000)
+    resolve(tag)
+  }
+  
+  @objc
+  public static func setEndOffset(tag: NSNumber, offset: NSNumber, durationMs: NSNumber, resolve: RCTPromiseResolveBlock, reject: @escaping (_ code: String, _ message: String, _ error: NSError) -> Void) {
+    guard let animator = getAnimator(tag: tag) else {
+      reject("ChangeLineOffsetsShapeAnimator:setEndOffset", "Unable to find animator with tag \(tag)", NSError())
+      return
+    }
+    
+    animator._setEndOffset(offset: offset.doubleValue, durationSec: durationMs.doubleValue / 1000)
     resolve(tag)
   }
 }
@@ -111,6 +134,17 @@ extension ChangeLineOffsetsShapeAnimator {
     startOfLine = .init(
       sourceOffset: startOfLine.progressOffset,
       progressOffset: startOfLine.progressOffset,
+      targetOffset: offset,
+      startedAt: currentTimestamp,
+      progressDurationSec: 0,
+      totalDurationSec: durationSec
+    )
+  }
+  
+  private func _setEndOffset(offset: Double, durationSec: Double) {
+    endOfLine = .init(
+      sourceOffset: endOfLine.progressOffset,
+      progressOffset: endOfLine.progressOffset,
       targetOffset: offset,
       startedAt: currentTimestamp,
       progressDurationSec: 0,

@@ -73,12 +73,12 @@ const AnimatedPoint = memo((props: BaseExampleProps) => {
     });
   }, [animator, startOffset]);
 
-  // useEffect(() => {
-  //   animator.setEndOffset({
-  //     offset: endOffset,
-  //     durationMs: 1000,
-  //   });
-  // }, [animator, endOffset]);
+  useEffect(() => {
+    animator.setEndOffset({
+      offset: endOffset,
+      durationMs: 1000,
+    });
+  }, [animator, endOffset]);
 
   const onPressStartOffsetButton = useCallback(() => {
     setStartOffset(Math.random() * 1000);

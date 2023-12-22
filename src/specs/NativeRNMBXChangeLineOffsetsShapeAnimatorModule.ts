@@ -20,11 +20,11 @@ export interface Spec extends TurboModule {
     offset: Double,
     duration: Double,
   ): Promise<void>;
-  // setEndOffset(
-  //   tag: AnimatorTag,
-  //   offset: Double,
-  //   duration: Double,
-  // ): Promise<void>;
+  setEndOffset(
+    tag: AnimatorTag,
+    offset: Double,
+    duration: Double,
+  ): Promise<void>;
 }
 
 export default TurboModuleRegistry.getEnforcing<Spec>(
