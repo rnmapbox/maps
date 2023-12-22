@@ -89,6 +89,7 @@ import { deprecatedClass } from './utils/deprecation';
 import { AnimatedPoint } from './classes';
 import { UserTrackingMode } from './components/Camera';
 import MovePointShapeAnimator from './shapeAnimators/MovePointShapeAnimator';
+import ChangeLineOffsetsShapeAnimator from './shapeAnimators/ChangeLineOffsetsShapeAnimator';
 import LocationPuck from './components/LocationPuck';
 
 /** @deprecated This will be removed in a future release. Use `AnimatedPoint` instead. */
@@ -120,4 +121,5 @@ export const UserTrackingModes = UserTrackingMode;
 
 export const __experimental = {
   MovePointShapeAnimator,
+  ChangeLineOffsetsShapeAnimator,
 };
