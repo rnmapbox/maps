@@ -55,7 +55,7 @@ const AnimatedPoint = memo((props: BaseExampleProps) => {
       ne: [boundingBox[0], boundingBox[1]],
       sw: [boundingBox[2], boundingBox[3]],
       paddingTop: 40,
-      paddingBottom: 40,
+      paddingBottom: 160,
       paddingLeft: 40,
       paddingRight: 40,
     };
@@ -119,14 +119,19 @@ const AnimatedPoint = memo((props: BaseExampleProps) => {
         }}
         pointerEvents={'box-none'}
       >
+        <Button title={'Change start'} onPress={onPressStartOffsetButton} />
         <Button
-          title={'Change start offset'}
-          onPress={onPressStartOffsetButton}
+          style={{ marginTop: 10 }}
+          title={'Change end'}
+          onPress={onPressEndOffsetButton}
         />
         <Button
           style={{ marginTop: 10 }}
-          title={'Change end offset'}
-          onPress={onPressEndOffsetButton}
+          title={'Reset both'}
+          onPress={() => {
+            setStartOffset(0);
+            setEndOffset(0);
+          }}
         />
       </SafeAreaView>
     </Page>
