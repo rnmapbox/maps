@@ -12,6 +12,7 @@ import { Button } from '@rneui/base';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { lineString } from '@turf/helpers';
 import bbox from '@turf/bbox';
+import length from '@turf/length';
 
 import Page from '../common/Page';
 import { BaseExampleProps } from '../common/BaseExamplePropTypes';
@@ -34,7 +35,6 @@ const coordinates: Position[] = [
   [-83.51104278148429, 41.64353476124876],
 ];
 const line = lineString(coordinates);
-
 const boundingBox = bbox(line);
 
 const AnimatedPoint = memo((props: BaseExampleProps) => {
@@ -61,6 +61,10 @@ const AnimatedPoint = memo((props: BaseExampleProps) => {
     };
   }, []);
 
+  const lineLength = useMemo(() => {
+    return length(line, { units: 'meters' });
+  }, []);
+
   useEffect(() => {
     animator.start();
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -81,12 +85,12 @@ const AnimatedPoint = memo((props: BaseExampleProps) => {
   }, [animator, endOffset]);
 
   const onPressStartOffsetButton = useCallback(() => {
-    setStartOffset(Math.random() * 1000);
-  }, []);
+    setStartOffset(Math.random() * (lineLength / 2));
+  }, [lineLength]);
 
   const onPressEndOffsetButton = useCallback(() => {
-    setEndOffset(Math.random() * 1000);
-  }, []);
+    setEndOffset(Math.random() * (lineLength / 2));
+  }, [lineLength]);
 
   return (
     <Page {...props}>
