@@ -79,7 +79,7 @@ _See [iOS](ios/install.md) & [Android](android/install.md) setup guide for using
 
 ## Installation
 
-Check our [Installation insructions](https://rnmapbox.github.io/docs/install)
+Check our [Installation instructions](https://rnmapbox.github.io/docs/install)
 
 ### Getting Started
 For more information, check out our [Getting Started](/docs/GettingStarted.md) section
