@@ -1,6 +1,7 @@
+import { Position } from '@rnmapbox/maps/src/types/Position';
 import type { HostComponent, ViewProps } from 'react-native';
-import codegenNativeComponent from 'react-native/Libraries/Utilities/codegenNativeComponent';
 import { Int32 } from 'react-native/Libraries/Types/CodegenTypes';
+import codegenNativeComponent from 'react-native/Libraries/Utilities/codegenNativeComponent';
 
 import { UnsafeMixed } from './codegenUtils';
 
@@ -10,7 +11,7 @@ type Point = {
 };
 
 export interface NativeProps extends ViewProps {
-  coordinate?: UnsafeMixed<string>;
+  coordinate?: UnsafeMixed<Position>;
   anchor: UnsafeMixed<Point>;
   allowOverlap: UnsafeMixed<boolean>;
   allowOverlapWithPuck: UnsafeMixed<boolean>;
