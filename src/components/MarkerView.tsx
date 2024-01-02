@@ -116,7 +116,10 @@ class MarkerView extends React.PureComponent<Props> {
           },
           this.props.style,
         ]}
-        coordinate={[Number(this.props.coordinate[0]), Number(this.props.coordinate[1])]}
+        coordinate={[
+          Number(this.props.coordinate[0]),
+          Number(this.props.coordinate[1]),
+        ]}
         anchor={anchor}
         allowOverlap={this.props.allowOverlap}
         allowOverlapWithPuck={this.props.allowOverlapWithPuck}
