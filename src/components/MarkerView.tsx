@@ -1,11 +1,11 @@
 import React from 'react';
-import { Platform, NativeModules, type ViewProps } from 'react-native';
+import { NativeModules, Platform, type ViewProps } from 'react-native';
 
+import RNMBXMakerViewContentCoponent from '../specs/RNMBXMarkerViewContentNativeComponent';
+import NativeMarkerViewComponent from '../specs/RNMBXMarkerViewNativeComponent';
+import { type Position } from '../types/Position';
 import { toJSONString } from '../utils';
 import { makePoint } from '../utils/geoUtils';
-import { type Position } from '../types/Position';
-import NativeMarkerViewComponent from '../specs/RNMBXMarkerViewNativeComponent';
-import RNMBXMakerViewContentCoponent from '../specs/RNMBXMarkerViewContentNativeComponent';
 
 import PointAnnotation from './PointAnnotation';
 
@@ -116,7 +116,10 @@ class MarkerView extends React.PureComponent<Props> {
           },
           this.props.style,
         ]}
-        coordinate={this._getCoordinate(this.props.coordinate)}
+        coordinate={[
+          Number(this.props.coordinate[0]),
+          Number(this.props.coordinate[1]),
+        ]}
         anchor={anchor}
         allowOverlap={this.props.allowOverlap}
         allowOverlapWithPuck={this.props.allowOverlapWithPuck}

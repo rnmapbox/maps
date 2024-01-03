@@ -16,6 +16,8 @@ import com.mapbox.maps.ScreenCoordinate
 import com.mapbox.maps.viewannotation.ViewAnnotationManager
 import com.rnmapbox.rnmbx.components.mapview.RNMBXMapView
 import com.rnmapbox.rnmbx.v11compat.annotation.*
+import com.rnmapbox.rnmbx.utils.LatLng
+import com.rnmapbox.rnmbx.utils.GeoJSONUtils.toGNPointGeometry
 
 class RNMBXMarkerViewManager(reactApplicationContext: ReactApplicationContext) :
     AbstractEventEmitter<RNMBXMarkerView>(reactApplicationContext),
@@ -35,8 +37,9 @@ class RNMBXMarkerViewManager(reactApplicationContext: ReactApplicationContext) :
     }
 
     @ReactProp(name = "coordinate")
-    override fun setCoordinate(markerView: RNMBXMarkerView, geoJSONStr: Dynamic) {
-        markerView.setCoordinate(toPointGeometry(geoJSONStr.asString()))
+    override fun setCoordinate(markerView: RNMBXMarkerView, value: Dynamic) {
+        val array = value.asArray()
+        markerView.setCoordinate(toGNPointGeometry(LatLng(array.getDouble(1), array.getDouble(0))))
     }
 
     @ReactProp(name = "anchor")

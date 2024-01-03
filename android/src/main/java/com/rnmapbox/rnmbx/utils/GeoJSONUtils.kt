@@ -109,6 +109,11 @@ object GeoJSONUtils {
         return map
     }
 
+    @JvmStatic
+    fun toGNPointGeometry(latLng: LatLng): Point? {
+        return Point.fromLngLat(latLng.getLongitude(), latLng.getLatitude())
+    }
+
     fun toPointGeometry(latLng: LatLng): WritableMap {
         val geometry: WritableMap = WritableNativeMap()
         geometry.putString("type", "Point")
