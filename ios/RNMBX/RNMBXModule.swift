@@ -103,9 +103,7 @@ class RNMBXModule : NSObject {
   }
   
   @objc func setTelemetryEnabled(_ telemetryEnabled: Bool) {
-    #if !RNMBX_11 // RNMBX_11_TODO
-    UserDefaults.mme_configuration().mme_isCollectionEnabled = telemetryEnabled
-    #endif
+    UserDefaults.standard.set(telemetryEnabled, forKey: "MGLMapboxMetricsEnabled")
   }
 
   @objc func setWellKnownTileServer(_ tileServer: String) {
