@@ -1,23 +1,6 @@
 import MapboxMaps
 import Turf
 
-private struct LineOffset {
-  var sourceOffset: Double
-  var progressOffset: Double
-  var targetOffset: Double
-  var startedAt: TimeInterval
-  var progressDurationSec: Double
-  var totalDurationSec: TimeInterval
-  
-  var offsetRemaining: Double {
-    targetOffset - sourceOffset
-  }
-  
-  var durationRatio: Double {
-    min(progressDurationSec / totalDurationSec, 1)
-  }
-}
-
 @objc
 public class ChangeLineOffsetsShapeAnimator: ShapeAnimatorCommon {
   private var lineString: LineString
@@ -53,7 +36,7 @@ public class ChangeLineOffsetsShapeAnimator: ShapeAnimatorCommon {
     return .geometry(.lineString(lineString))
   }
   
-  override func getAnimatedShape() -> GeoJSONObject {
+  override func getAnimatedShape(currentTimestamp: TimeInterval) -> GeoJSONObject {
     startOfLine.progressOffset = startOfLine.sourceOffset + (startOfLine.offsetRemaining * startOfLine.durationRatio)
     startOfLine.progressDurationSec = currentTimestamp - startOfLine.startedAt
     
@@ -135,7 +118,7 @@ extension ChangeLineOffsetsShapeAnimator {
       sourceOffset: startOfLine.progressOffset,
       progressOffset: startOfLine.progressOffset,
       targetOffset: offset,
-      startedAt: currentTimestamp,
+      startedAt: getCurrentTimestamp(),
       progressDurationSec: 0,
       totalDurationSec: durationSec
     )
@@ -146,9 +129,26 @@ extension ChangeLineOffsetsShapeAnimator {
       sourceOffset: endOfLine.progressOffset,
       progressOffset: endOfLine.progressOffset,
       targetOffset: offset,
-      startedAt: currentTimestamp,
+      startedAt: getCurrentTimestamp(),
       progressDurationSec: 0,
       totalDurationSec: durationSec
     )
+  }
+}
+
+private struct LineOffset {
+  var sourceOffset: Double
+  var progressOffset: Double
+  var targetOffset: Double
+  var startedAt: TimeInterval
+  var progressDurationSec: Double
+  var totalDurationSec: TimeInterval
+  
+  var offsetRemaining: Double {
+    targetOffset - sourceOffset
+  }
+  
+  var durationRatio: Double {
+    min(progressDurationSec / totalDurationSec, 1)
   }
 }

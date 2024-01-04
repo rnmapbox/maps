@@ -25,7 +25,7 @@ public class MovePointShapeAnimator: ShapeAnimatorCommon {
     return .geometry(.point(.init(progressCoord)))
   }
   
-  override func getAnimatedShape() -> GeoJSONObject {
+  override func getAnimatedShape(currentTimestamp: TimeInterval) -> GeoJSONObject {
     let progressSec = currentTimestamp - startTimestamp
     let line = LineString([sourceCoord, targetCoord])
     let lineLength = line.distance() ?? 0
@@ -102,7 +102,7 @@ extension MovePointShapeAnimator {
     progressCoord = sourceCoord
     targetCoord = coordinate
     
-    startTimestamp = currentTimestamp
+    startTimestamp = getCurrentTimestamp()
     totalDurationSec = durationSec
   }
 }

@@ -6,7 +6,7 @@ protocol ShapeAnimationConsumer: AnyObject {
 
 protocol ShapeAnimator {
   func getShape() -> GeoJSONObject
-  func getAnimatedShape() -> GeoJSONObject
+  func getAnimatedShape(currentTimestamp: TimeInterval) -> GeoJSONObject
   func subscribe(consumer: ShapeAnimationConsumer)
   func unsubscribe(consumer: ShapeAnimationConsumer)
   func start()
@@ -30,8 +30,7 @@ public class ShapeAnimatorCommon: NSObject, ShapeAnimator {
     self.tag = tag
   }
   
-  /// The number of seconds since the global shape animator timer began.
-  public var currentTimestamp: Double {
+  public func getCurrentTimestamp() -> TimeInterval {
     timer?.fireDate.timeIntervalSinceReferenceDate ?? 0
   }
   
@@ -62,7 +61,7 @@ public class ShapeAnimatorCommon: NSObject, ShapeAnimator {
         withTimeInterval: 1 / self.fps,
         repeats: true,
         block: { timer in
-          let shape = self.getAnimatedShape()
+          let shape = self.getAnimatedShape(currentTimestamp: self.getCurrentTimestamp())
           self.subscribers.forEach {
             $0.consumer?.shapeUpdated(shape: shape)
           }
@@ -78,7 +77,7 @@ public class ShapeAnimatorCommon: NSObject, ShapeAnimator {
     fatalError("getShape() must be overridden in all subclasses of ShapeAnimatorCommon")
   }
   
-  func getAnimatedShape() -> GeoJSONObject {
+  func getAnimatedShape(currentTimestamp: TimeInterval) -> GeoJSONObject {
     fatalError("getAnimatedShape() must be overridden in all subclasses of ShapeAnimatorCommon")
   }
 }
