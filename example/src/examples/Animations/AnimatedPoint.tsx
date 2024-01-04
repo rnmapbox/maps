@@ -37,7 +37,7 @@ const AnimatedPoint = memo((props: BaseExampleProps) => {
 
   useEffect(() => {
     animator.moveTo({
-      start: currentPosition,
+      coordinate: currentPosition,
       durationMs: 1000,
     });
   }, [animator, currentPosition]);

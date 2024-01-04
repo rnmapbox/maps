@@ -48,16 +48,16 @@ extension MovePointShapeAnimator {
   }
     
   @objc
-  public static func create(tag: NSNumber, coordinate: NSArray) -> MovePointShapeAnimator? {
-    guard let lng = coordinate[0] as? NSNumber, let lat = coordinate[1] as? NSNumber else {
+  public static func create(tag: NSNumber, startCoordinate: NSArray) -> MovePointShapeAnimator? {
+    guard let lng = startCoordinate[0] as? NSNumber, let lat = startCoordinate[1] as? NSNumber else {
       return nil
     }
     
-    let startCoordinate = LocationCoordinate2D(
+    let coordinate = LocationCoordinate2D(
       latitude: lat.doubleValue,
       longitude: lng.doubleValue
     )
-    let animator = MovePointShapeAnimator(tag: tag.intValue, coordinate: startCoordinate)
+    let animator = MovePointShapeAnimator(tag: tag.intValue, coordinate: coordinate)
     ShapeAnimatorManager.shared.register(tag: tag.intValue, animator: animator)
     return animator
   }
