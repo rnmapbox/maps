@@ -67,11 +67,7 @@ extension ChangeLineOffsetsShapeAnimator {
 
   @objc
   public static func create(tag: NSNumber, coordinates: NSArray, startOffset: NSNumber, endOffset: NSNumber) -> ChangeLineOffsetsShapeAnimator? {
-    let _coordinates = coordinates.map { coord in
-      let coord = coord as! [NSNumber]
-      return LocationCoordinate2D(latitude: coord[1].doubleValue, longitude: coord[0].doubleValue)
-    }
-    let lineString = LineString(_coordinates)
+    let lineString = buildLineString(_coordinates: coordinates)
     let animator = ChangeLineOffsetsShapeAnimator(tag: tag.intValue, lineString: lineString, startOffset: startOffset.doubleValue, endOffset: endOffset.doubleValue)
     ShapeAnimatorManager.shared.register(tag: tag.intValue, animator: animator)
     return animator
@@ -84,6 +80,19 @@ extension ChangeLineOffsetsShapeAnimator {
     }
 
     ShapeAnimatorManager.shared.register(tag: tag.intValue, animator: animator)
+    resolve(tag)
+  }
+  
+  @objc
+  public static func setLineString(tag: NSNumber, coordinates: NSArray, resolve: RCTPromiseResolveBlock, reject: @escaping (_ code: String, _ message: String, _ error: NSError) -> Void) {
+    let lineString = buildLineString(_coordinates: coordinates)
+
+    guard let animator = getAnimator(tag: tag) else {
+      reject("ChangeLineOffsetsShapeAnimator:setLineString", "Unable to find animator with tag \(tag)", NSError())
+      return
+    }
+    
+    animator._setLineString(lineString: lineString)
     resolve(tag)
   }
   
@@ -113,6 +122,10 @@ extension ChangeLineOffsetsShapeAnimator {
 // - MARK: Implementation
 
 extension ChangeLineOffsetsShapeAnimator {
+  private func _setLineString(lineString: LineString) {
+    self.lineString = lineString
+  }
+  
   private func _setStartOffset(offset: Double, durationSec: Double) {
     startOfLine = .init(
       sourceOffset: startOfLine.progressOffset,
@@ -151,4 +164,13 @@ private struct LineOffset {
   var durationRatio: Double {
     min(progressDurationSec / totalDurationSec, 1)
   }
+}
+
+private func buildLineString(_coordinates: NSArray) -> LineString {
+  let coordinates = _coordinates.map { coord in
+    let coord = coord as! [NSNumber]
+    return LocationCoordinate2D(latitude: coord[1].doubleValue, longitude: coord[0].doubleValue)
+  }
+  
+  return .init(coordinates)
 }
