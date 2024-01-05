@@ -35,6 +35,7 @@ public class RNMBXShapeSource : RNMBXSource {
         if let shapeAnimator = ShapeAnimatorManager.shared.get(shape: shape) {
           self.shapeAnimator = shapeAnimator
           shapeAnimator.subscribe(consumer: self)
+          shapeUpdated(shape: shapeAnimator.getShape())
         }
       } else {
         logged("RNMBXShapeSource.updateShape") {
