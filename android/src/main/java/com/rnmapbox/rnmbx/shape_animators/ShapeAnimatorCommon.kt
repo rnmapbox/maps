@@ -15,8 +15,8 @@ typealias Tag = Long
 interface ShapeAnimationConsumer {
     fun shapeUpdated(geoJson: GeoJson)
 }
-abstract class ShapeAnimator(val tag: Tag) {
 
+abstract class ShapeAnimator(val tag: Tag) {
     abstract fun getShape(): GeoJson;
     abstract fun start()
 
@@ -59,7 +59,7 @@ abstract class ShapeAnimatorCommon(tag: Tag): ShapeAnimator(tag) {
                 val progress = diff.milliseconds
                 animator.progress = progress
 
-                val (shape,doContinue) = getAnimatedShape(progress)
+                val (shape, doContinue) = getAnimatedShape(progress)
                 if (!doContinue) {
                     timer.cancel()
                 }
@@ -67,17 +67,19 @@ abstract class ShapeAnimatorCommon(tag: Tag): ShapeAnimator(tag) {
                     subscribers.forEach { it.shapeUpdated(shape) }
                 }
             }
-        },0, period)
+        }, 0, period)
     }
 
     override fun getShape(): GeoJson {
         return getAnimatedShape(progress ?: 0.0.milliseconds).first
     }
-    abstract fun getAnimatedShape(timeSinceStart: Duration): Pair<GeoJson,Boolean>
 
+    abstract fun getAnimatedShape(timeSinceStart: Duration): Pair<GeoJson, Boolean>
 }
+
 class ShapeAnimatorManager {
     private val animators = hashMapOf<Tag, ShapeAnimator>();
+
     fun add(animator: ShapeAnimator) {
         animators.put(animator.tag, animator)
     }
@@ -89,13 +91,13 @@ class ShapeAnimatorManager {
     fun get(tag: String): ShapeAnimator? {
         if (isShapeAnimatorTag(tag)) {
             val obj = JSONObject(tag)
-            val tag = obj.getLong("__nativeTag")
-            return get(tag);
-        }
-        else {
+            val _tag = obj.getLong("__nativeTag")
+            return get(_tag);
+        } else {
             return null
         }
     }
+
     fun get(tag: Tag): ShapeAnimator? {
         val result = animators[tag]
         if (result == null) {
