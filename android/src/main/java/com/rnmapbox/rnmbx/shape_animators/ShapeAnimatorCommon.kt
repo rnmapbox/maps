@@ -25,7 +25,7 @@ abstract class ShapeAnimator(val tag: Tag) {
 }
 
 abstract class ShapeAnimatorCommon(tag: Tag): ShapeAnimator(tag) {
-    var timer: Timer? = null
+    private var timer: Timer? = null
     var progress: Duration? = null
 
     // region subscribers
@@ -41,7 +41,7 @@ abstract class ShapeAnimatorCommon(tag: Tag): ShapeAnimator(tag) {
     // endregion
 
     override fun start() {
-        timer?.let { it.cancel() }
+        timer?.cancel()
         timer = null
 
         val fps = 30.0
@@ -81,7 +81,7 @@ class ShapeAnimatorManager {
     private val animators = hashMapOf<Tag, ShapeAnimator>();
 
     fun add(animator: ShapeAnimator) {
-        animators.put(animator.tag, animator)
+        animators[animator.tag] = animator
     }
 
     fun isShapeAnimatorTag(shape: String): Boolean {
