@@ -349,7 +349,7 @@ open class RNMBXMapView: UIView {
         map.applyOnMapChange()
       case .styleURL:
         map.applyStyleURL()
-		map.applyLocalizeLabels()
+        map.applyLocalizeLabels()
       case .pitchEnabled:
         map.applyPitchEnabled()
       case .gestureSettings:
