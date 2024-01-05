@@ -76,6 +76,7 @@ extension ChangeLineOffsetsShapeAnimator {
   @objc
   public static func start(tag: NSNumber, resolve: RCTPromiseResolveBlock, reject: @escaping (_ code: String, _ message: String, _ error: NSError) -> Void) {
     guard let animator = getAnimator(tag: tag) else {
+      reject("ChangeLineOffsetsShapeAnimator:start", "Unable to find animator with tag \(tag)", NSError())
       return
     }
 

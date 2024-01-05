@@ -65,6 +65,7 @@ extension MovePointShapeAnimator {
   @objc
   public static func start(tag: NSNumber, resolve: RCTPromiseResolveBlock, reject: @escaping (_ code: String, _ message: String, _ error: NSError) -> Void) {
     guard let animator = getAnimator(tag: tag) else {
+      reject("MovePointShapeAnimator:start", "Unable to find animator with tag \(tag)", NSError())
       return
     }
 
@@ -75,7 +76,7 @@ extension MovePointShapeAnimator {
   @objc
   public static func moveTo(tag: NSNumber, coordinate: NSArray, durationMs: NSNumber, resolve: RCTPromiseResolveBlock, reject: @escaping (_ code: String, _ message: String, _ error: NSError) -> Void) {
     guard let lng = coordinate[0] as? Double, let lat = coordinate[1] as? Double else {
-      reject("MovePointShapeAnimator:moveTo", "Missing coordinate", NSError())
+      reject("MovePointShapeAnimator:moveTo", "Unable to find animator with tag \(tag)", NSError())
       return
     }
     
