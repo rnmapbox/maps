@@ -7,8 +7,6 @@ import org.json.JSONObject
 import java.util.Date
 import java.util.Timer
 import java.util.TimerTask
-import kotlin.time.Duration
-import kotlin.time.Duration.Companion.milliseconds
 
 typealias Tag = Long
 
@@ -17,16 +15,25 @@ interface ShapeAnimationConsumer {
 }
 
 abstract class ShapeAnimator(val tag: Tag) {
-    abstract fun getShape(): GeoJson;
-    abstract fun start()
-
+    abstract fun getShape(): GeoJson
+    abstract fun getAnimatedShape(currentTimestamp: Long): Pair<GeoJson, Boolean>
     abstract fun subscribe(consumer: ShapeAnimationConsumer)
     abstract fun unsubscribe(consumer: ShapeAnimationConsumer)
+    abstract fun start()
 }
 
 abstract class ShapeAnimatorCommon(tag: Tag): ShapeAnimator(tag) {
     private var timer: Timer? = null
-    var progress: Duration? = null
+    var start = Date()
+
+    val fps = 30.0
+    val period = (1000.0 / fps).toLong()
+
+    /** The animator's lifespan in milliseconds. */
+    public fun getCurrentTimestamp(): Long {
+        val now = Date()
+        return now.time - start.time
+    }
 
     // region subscribers
     var subscribers = mutableListOf<ShapeAnimationConsumer>()
@@ -44,24 +51,17 @@ abstract class ShapeAnimatorCommon(tag: Tag): ShapeAnimator(tag) {
         timer?.cancel()
         timer = null
 
-        val fps = 30.0
-        val period = (1000.0 / fps).toLong()
-        val start = Date()
-        val timer = Timer()
-        this.timer = timer
+        this.timer = Timer()
+        start = Date()
         val animator = this
 
-        timer.schedule(object : TimerTask() {
+        timer!!.schedule(object: TimerTask() {
             override fun run() {
+                val timestamp = getCurrentTimestamp()
 
-                val now = Date()
-                val diff = now.time - start.time
-                val progress = diff.milliseconds
-                animator.progress = progress
-
-                val (shape, doContinue) = getAnimatedShape(progress)
+                val (shape, doContinue) = getAnimatedShape(timestamp)
                 if (!doContinue) {
-                    timer.cancel()
+                    timer?.cancel()
                 }
                 runOnUiThread {
                     subscribers.forEach { it.shapeUpdated(shape) }
@@ -71,10 +71,8 @@ abstract class ShapeAnimatorCommon(tag: Tag): ShapeAnimator(tag) {
     }
 
     override fun getShape(): GeoJson {
-        return getAnimatedShape(progress ?: 0.0.milliseconds).first
+        return getAnimatedShape(getCurrentTimestamp()).first
     }
-
-    abstract fun getAnimatedShape(timeSinceStart: Duration): Pair<GeoJson, Boolean>
 }
 
 class ShapeAnimatorManager {

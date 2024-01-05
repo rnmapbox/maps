@@ -6,27 +6,43 @@ import com.facebook.react.bridge.ReactMethod
 import com.facebook.react.bridge.ReadableArray
 import com.facebook.react.module.annotations.ReactModule
 import com.mapbox.geojson.GeoJson
+import com.mapbox.geojson.LineString
 import com.mapbox.geojson.Point
+import com.mapbox.turf.TurfConstants
+import com.mapbox.turf.TurfMeasurement
 import com.rnmapbox.rnmbx.NativeRNMBXMovePointShapeAnimatorModuleSpec
-import kotlin.time.Duration
-import kotlin.time.DurationUnit
 
-/// Simple dummy animator that moves the point lng, lat by 0.01, 0.01 each second.
-class MovePointShapeAnimator(tag: Tag, val lng: Double, val lat: Double) : ShapeAnimatorCommon(tag) {
-    override fun getAnimatedShape(timeSinceStart: Duration): Pair<GeoJson, Boolean> {
-        return Pair(
-            Point.fromLngLat(
-                lng + timeSinceStart.toDouble(DurationUnit.SECONDS) * 0.01,
-                lat + timeSinceStart.toDouble(DurationUnit.SECONDS) * 0.01
-            ), true
-        );
+class MovePointShapeAnimator(tag: Tag, coordinate: Point) : ShapeAnimatorCommon(tag) {
+    var sourceCoord = coordinate
+    var progressCoord = sourceCoord
+    var targetCoord = sourceCoord
+
+    var startTimestamp: Long = 0
+    var totalDurationSec: Double = 0.0
+
+    override fun getAnimatedShape(currentTimestamp: Long): Pair<GeoJson, Boolean> {
+        val progressSec = (currentTimestamp - startTimestamp).toDouble() / 1000
+        val line = LineString.fromLngLats(listOf(sourceCoord, targetCoord))
+        val lineLength = TurfMeasurement.length(line, TurfConstants.UNIT_METERS)
+        progressCoord = TurfMeasurement.along(line, lineLength * (progressSec / totalDurationSec), TurfConstants.UNIT_METERS)
+        return Pair(progressCoord, true)
+    }
+
+    fun moveTo(coordinate: Point, durationSec: Double) {
+        sourceCoord = progressCoord
+        progressCoord = sourceCoord
+        targetCoord = coordinate
+
+        startTimestamp = getCurrentTimestamp()
+        totalDurationSec = durationSec
     }
 }
 
 @ReactModule(name = RNMBXMovePointShapeAnimatorModule.NAME)
-class RNMBXMovePointShapeAnimatorModule(reactContext: ReactApplicationContext?, val shapeAnimatorManager: ShapeAnimatorManager) :
-    NativeRNMBXMovePointShapeAnimatorModuleSpec(reactContext) {
-
+class RNMBXMovePointShapeAnimatorModule(
+    reactContext: ReactApplicationContext?,
+    val shapeAnimatorManager: ShapeAnimatorManager
+): NativeRNMBXMovePointShapeAnimatorModuleSpec(reactContext) {
     companion object {
         const val LOG_TAG = "RNMBXMovePointShapeAnimatorModule"
         const val NAME = "RNMBXMovePointShapeAnimatorModule"
@@ -34,20 +50,36 @@ class RNMBXMovePointShapeAnimatorModule(reactContext: ReactApplicationContext?, 
 
     @ReactMethod
     override fun start(tag: Double, promise: Promise?) {
-        shapeAnimatorManager?.get(tag.toLong())?.let {
-            it.start()
-        }
+        shapeAnimatorManager.get(tag.toLong())?.start()
     }
 
     @ReactMethod
-    override fun create(tag: Double, from: ReadableArray, promise: Promise) {
+    override fun create(tag: Double, startCoordinate: ReadableArray, promise: Promise) {
         shapeAnimatorManager.add(
             MovePointShapeAnimator(
                 tag.toLong(),
-                from.getDouble(0),
-                from.getDouble(1)
+                Point.fromLngLat(
+                    startCoordinate.getDouble(0),
+                    startCoordinate.getDouble(1)
+                )
             )
         )
         promise.resolve(tag.toInt())
+    }
+
+    @ReactMethod
+    override fun moveTo(
+        tag: Double,
+        coordinate: ReadableArray?,
+        duration: Double,
+        promise: Promise?
+    ) {
+        val animator = shapeAnimatorManager.get(tag.toLong()) as MovePointShapeAnimator
+
+        val targetCoord = Point.fromLngLat(
+            coordinate!!.getDouble(0),
+            coordinate.getDouble(1)
+        )
+        animator.moveTo(targetCoord, duration / 1000)
     }
 }

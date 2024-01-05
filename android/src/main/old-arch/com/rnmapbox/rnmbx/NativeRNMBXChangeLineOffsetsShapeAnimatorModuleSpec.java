@@ -44,5 +44,13 @@ public abstract class NativeRNMBXChangeLineOffsetsShapeAnimatorModuleSpec extend
 
   @ReactMethod
   @DoNotStrip
+  public abstract void setLineString(double tag, ReadableArray coordinates, Promise promise);
+
+  @ReactMethod
+  @DoNotStrip
   public abstract void setStartOffset(double tag, double offset, double duration, Promise promise);
+
+  @ReactMethod
+  @DoNotStrip
+  public abstract void setEndOffset(double tag, double offset, double duration, Promise promise);
 }
