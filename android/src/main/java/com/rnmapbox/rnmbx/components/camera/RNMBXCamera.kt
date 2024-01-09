@@ -59,7 +59,7 @@ class RNMBXCamera(private val mContext: Context, private val mManager: RNMBXCame
     private val mAnimated = false
     private val mHeading = 0.0
 
-    private var mFollowUserLocation = false
+    private var mFollowUserLocation = defaultFollowUserLocation
     private var mFollowUserMode: String? = null
     private var mFollowZoomLevel : Double? = null
     private var mFollowPitch : Double? = null
@@ -126,8 +126,8 @@ class RNMBXCamera(private val mContext: Context, private val mManager: RNMBXCame
         _updateViewportState()
     }
 
-    fun setFollowUserLocation(value: Boolean) {
-        mFollowUserLocation = value
+    fun setFollowUserLocation(value: Boolean?) {
+        mFollowUserLocation = value ?: defaultFollowUserLocation
         _updateViewportState()
     }
 
@@ -559,5 +559,7 @@ class RNMBXCamera(private val mContext: Context, private val mManager: RNMBXCame
         const val minimumZoomLevelForUserTracking = 10.5
         const val defaultZoomLevelForUserTracking = 14.0
         const val LOG_TAG = "RNMBXCamera"
+
+        const val defaultFollowUserLocation = false
     }
 }

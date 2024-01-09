@@ -9,7 +9,7 @@ import com.mapbox.geojson.FeatureCollection
 import com.rnmapbox.rnmbx.components.AbstractEventEmitter
 import com.rnmapbox.rnmbx.components.camera.CameraStop.Companion.fromReadableMap
 import com.rnmapbox.rnmbx.utils.GeoJSONUtils.toLatLngBounds
-
+import com.rnmapbox.rnmbx.utils.extensions.asBooleanOrNull
 
 class RNMBXCameraManager(private val mContext: ReactApplicationContext) :
     AbstractEventEmitter<RNMBXCamera?>(
@@ -66,7 +66,7 @@ class RNMBXCameraManager(private val mContext: ReactApplicationContext) :
 
     @ReactProp(name = "followUserLocation")
     override fun setFollowUserLocation(camera: RNMBXCamera, value: Dynamic) {
-        camera.setFollowUserLocation(value.asBoolean())
+        camera.setFollowUserLocation(value.asBooleanOrNull())
     }
 
     @ReactProp(name = "followUserMode")
