@@ -74,7 +74,7 @@ _See [iOS](ios/install.md) & [Android](android/install.md) setup guide for using
 
 - [node](https://nodejs.org)
 - [npm](https://www.npmjs.com/)
-- [React Native](https://facebook.github.io/react-native/) (0.64+)
+- [React Native](https://facebook.github.io/react-native/) (0.70+, older versions from 0.64+ might or might not work)
 
 
 ## Installation
