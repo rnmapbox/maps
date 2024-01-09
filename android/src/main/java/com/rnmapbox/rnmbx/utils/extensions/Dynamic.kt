@@ -55,3 +55,11 @@ fun Dynamic.toValue(): Value {
         ReadableType.Map -> asMap().toValue()
     }
 }
+
+fun Dynamic.asBooleanOrNull(): Boolean? {
+    return if (isNull) {
+        null
+    } else {
+        asBoolean()
+    }
+}
