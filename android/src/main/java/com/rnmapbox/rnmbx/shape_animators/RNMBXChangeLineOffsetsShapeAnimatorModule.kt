@@ -8,14 +8,77 @@ import com.facebook.react.module.annotations.ReactModule
 import com.mapbox.geojson.GeoJson
 import com.mapbox.geojson.LineString
 import com.mapbox.geojson.Point
+import com.mapbox.turf.TurfConstants
+import com.mapbox.turf.TurfMeasurement
+import com.mapbox.turf.TurfMisc
 import com.rnmapbox.rnmbx.NativeRNMBXChangeLineOffsetsShapeAnimatorModuleSpec
+import kotlin.math.min
 
-class ChangeLineOffsetsShapeAnimator(tag: Tag, lineString: LineString, startOffset: Double, endOffset: Double): ShapeAnimatorCommon(tag) {
+class ChangeLineOffsetsShapeAnimator(tag: Tag, _lineString: LineString, startOffset: Double, endOffset: Double): ShapeAnimatorCommon(tag) {
+    private var lineString = _lineString
+    private var startOfLine = LineOffset(
+        startOffset,
+        startOffset,
+        startOffset,
+        0.0,
+        0.0,
+        0.0
+    )
+    private var endOfLine = LineOffset(
+        endOffset,
+        endOffset,
+        endOffset,
+        0.0,
+        0.0,
+        0.0
+    )
+
+    override fun getShape(): GeoJson {
+        // TODO: Trim this.
+        return super.getShape()
+    }
+
     override fun getAnimatedShape(currentTimestamp: Long): Pair<GeoJson, Boolean> {
-        return Pair(
-            Point.fromLngLat(0.0, 0.0), // TODO
-            true
-        );
+        startOfLine.progressOffset = startOfLine.sourceOffset + (startOfLine.offsetRemaining() * startOfLine.durationRatio())
+        startOfLine.progressDurationSec = currentTimestamp - startOfLine.startedAt
+
+        endOfLine.progressOffset = endOfLine.sourceOffset + (endOfLine.offsetRemaining() * endOfLine.durationRatio())
+        endOfLine.progressDurationSec = currentTimestamp - endOfLine.startedAt
+
+        val totalDistance = TurfMeasurement.length(lineString, TurfConstants.UNIT_METERS)
+        val trimmed = TurfMisc.lineSliceAlong(
+            lineString,
+            startOfLine.progressOffset,
+            totalDistance - endOfLine.progressOffset,
+            TurfConstants.UNIT_METERS
+        )
+        return Pair(trimmed, true);
+    }
+
+    fun _setLineString(lineString: LineString) {
+        this.lineString = lineString
+    }
+
+    fun _setStartOffset(offset: Double, durationSec: Double) {
+        startOfLine = LineOffset(
+            startOfLine.progressOffset,
+            startOfLine.progressOffset,
+            offset,
+            getCurrentTimestamp().toDouble(),
+            0.0,
+            durationSec
+        )
+    }
+
+    fun _setEndOffset(offset: Double, durationSec: Double) {
+        endOfLine = LineOffset(
+            endOfLine.progressOffset,
+            endOfLine.progressOffset,
+            offset,
+            getCurrentTimestamp().toDouble(),
+            0.0,
+            durationSec
+        )
     }
 }
 
@@ -49,30 +112,67 @@ class RNMBXChangeLineOffsetsShapeAnimatorModule(
         promise?.resolve(tag.toInt())
     }
 
+    private fun getAnimator(tag: Double): ChangeLineOffsetsShapeAnimator {
+        return shapeAnimatorManager.get(tag.toLong()) as ChangeLineOffsetsShapeAnimator
+    }
+
     @ReactMethod
     override fun start(tag: Double, promise: Promise?) {
-        shapeAnimatorManager.get(tag.toLong())?.start()
+        val animator = getAnimator(tag)
+        animator.start()
     }
 
     override fun setLineString(tag: Double, coordinates: ReadableArray?, promise: Promise?) {
-        TODO("Not yet implemented")
+        val animator = getAnimator(tag)
+
+        if (coordinates == null) {
+            return
+        }
+
+        val lineString = buildLineString(coordinates)
+        animator._setLineString(lineString)
+        promise?.resolve(true)
     }
 
     override fun setStartOffset(tag: Double, offset: Double, duration: Double, promise: Promise?) {
-        TODO("Not yet implemented")
+        val animator = getAnimator(tag)
+        animator._setStartOffset(offset, duration)
+        promise?.resolve(true)
     }
 
     override fun setEndOffset(tag: Double, offset: Double, duration: Double, promise: Promise?) {
-        TODO("Not yet implemented")
+        val animator = getAnimator(tag)
+        animator._setEndOffset(offset, duration)
+        promise?.resolve(true)
     }
 }
 
+private class LineOffset(
+    var sourceOffset: Double,
+    var progressOffset: Double,
+    var targetOffset: Double,
+    var startedAt: Double,
+    var progressDurationSec: Double,
+    var totalDurationSec: Double
+) {
+    fun offsetRemaining(): Double {
+        return targetOffset - sourceOffset
+    }
+
+    fun durationRatio(): Double {
+        return min(progressDurationSec / totalDurationSec, 1.0)
+    }
+}
+
+
 private fun buildLineString(_coordinates: ReadableArray): LineString {
-    val coordinates: List<Point> = listOf() // TODO
-//    let coordinates = _coordinates.map { coord in
-//            let coord = coord as! [NSNumber]
-//        return LocationCoordinate2D(latitude: coord[1].doubleValue, longitude: coord[0].doubleValue)
-//    }
+    var coordinates: List<Point> = listOf()
+
+    for (i in 0 until _coordinates.size()) {
+        val arr = _coordinates.getArray(i)
+        val coord = Point.fromLngLat(arr.getDouble(0), arr.getDouble(1))
+        coordinates = coordinates.plus(coord)
+    }
 
     return LineString.fromLngLats(coordinates)
 }
