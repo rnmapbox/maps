@@ -1,6 +1,7 @@
 package com.rnmapbox.rnmbx.shape_animators
 
 import com.facebook.react.bridge.UiThreadUtil.runOnUiThread
+import com.mapbox.geojson.FeatureCollection
 import com.mapbox.geojson.GeoJson
 import com.rnmapbox.rnmbx.utils.Logger
 import org.json.JSONObject
@@ -28,6 +29,8 @@ abstract class ShapeAnimatorCommon(tag: Tag): ShapeAnimator(tag) {
 
     val fps = 30.0
     val period = (1000.0 / fps).toLong()
+
+    val emptyGeoJsonObj = FeatureCollection.fromFeatures(listOf())
 
     /** The animator's lifespan in milliseconds. */
     public fun getCurrentTimestamp(): Long {

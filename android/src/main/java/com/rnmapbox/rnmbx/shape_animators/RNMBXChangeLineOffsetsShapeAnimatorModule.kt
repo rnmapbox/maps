@@ -11,8 +11,8 @@ import com.mapbox.geojson.Point
 import com.mapbox.turf.TurfConstants
 import com.mapbox.turf.TurfMeasurement
 import com.mapbox.turf.TurfMisc
-import com.rnmapbox.rnmbx.NativeRNMBXChangeLineOffsetsShapeAnimatorModuleSpec
 import kotlin.math.min
+import com.rnmapbox.rnmbx.NativeRNMBXChangeLineOffsetsShapeAnimatorModuleSpec
 
 class ChangeLineOffsetsShapeAnimator(tag: Tag, _lineString: LineString, startOffset: Double, endOffset: Double): ShapeAnimatorCommon(tag) {
     private var lineString = _lineString
@@ -35,7 +35,7 @@ class ChangeLineOffsetsShapeAnimator(tag: Tag, _lineString: LineString, startOff
 
     override fun getAnimatedShape(currentTimestamp: Long): Pair<GeoJson, Boolean> {
         if (lineString.coordinates().count() < 2) {
-            return Pair(LineString.fromLngLats(listOf()), true)
+            return Pair(emptyGeoJsonObj, true)
         }
 
         startOfLine.progressOffset = startOfLine.sourceOffset + (startOfLine.offsetRemaining() * startOfLine.durationRatio())

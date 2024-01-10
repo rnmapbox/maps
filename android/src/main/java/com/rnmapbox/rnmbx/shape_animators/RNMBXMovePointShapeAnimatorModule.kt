@@ -1,6 +1,5 @@
 package com.rnmapbox.rnmbx.shape_animators
 
-import android.util.Log
 import com.facebook.react.bridge.Promise
 import com.facebook.react.bridge.ReactApplicationContext
 import com.facebook.react.bridge.ReactMethod
@@ -27,7 +26,7 @@ class MovePointShapeAnimator(tag: Tag, coordinate: Point) : ShapeAnimatorCommon(
 
         val lineLength = TurfMeasurement.length(line, TurfConstants.UNIT_METERS)
         if (lineLength == 0.0) {
-            return Pair(Point.fromLngLat(0.0, 0.0), true)
+            return Pair(emptyGeoJsonObj, true)
         }
 
         progressCoord = TurfMeasurement.along(line, lineLength * (progressSec / totalDurationSec), TurfConstants.UNIT_METERS)
