@@ -80,10 +80,10 @@ public class ShapeAnimatorCommon: NSObject, ShapeAnimator {
     start()
   }
   
-  // - MARK: Subclasses should implement
+  // - MARK: Data providers
   
   func getShape() -> GeoJSONObject {
-    fatalError("getShape() must be overridden in all subclasses of ShapeAnimatorCommon")
+    return getAnimatedShape(currentTimestamp: getCurrentTimestamp())
   }
   
   func getAnimatedShape(currentTimestamp: TimeInterval) -> GeoJSONObject {
