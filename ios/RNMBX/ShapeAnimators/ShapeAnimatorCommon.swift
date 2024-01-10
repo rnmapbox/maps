@@ -10,6 +10,7 @@ protocol ShapeAnimator {
   func subscribe(consumer: ShapeAnimationConsumer)
   func unsubscribe(consumer: ShapeAnimationConsumer)
   func start()
+  func startIfStopped()
 }
 
 class WeakShapeAnimationConsumer {
@@ -69,6 +70,14 @@ public class ShapeAnimatorCommon: NSObject, ShapeAnimator {
       )
       self.timer = timer
     }
+  }
+  
+  func startIfStopped() {
+    if let timer, timer.isValid {
+      return
+    }
+    
+    start()
   }
   
   // - MARK: Subclasses should implement

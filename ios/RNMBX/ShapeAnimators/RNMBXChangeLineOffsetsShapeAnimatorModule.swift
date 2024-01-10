@@ -68,6 +68,7 @@ extension ChangeLineOffsetsShapeAnimator {
   @objc
   public static func create(tag: NSNumber, coordinates: NSArray, startOffset: NSNumber, endOffset: NSNumber) -> ChangeLineOffsetsShapeAnimator? {
     let lineString = buildLineString(_coordinates: coordinates)
+
     let animator = ChangeLineOffsetsShapeAnimator(tag: tag.intValue, lineString: lineString, startOffset: startOffset.doubleValue, endOffset: endOffset.doubleValue)
     ShapeAnimatorManager.shared.register(tag: tag.intValue, animator: animator)
     return animator
@@ -87,7 +88,7 @@ extension ChangeLineOffsetsShapeAnimator {
   @objc
   public static func setLineString(tag: NSNumber, coordinates: NSArray, resolve: RCTPromiseResolveBlock, reject: @escaping (_ code: String, _ message: String, _ error: NSError) -> Void) {
     let lineString = buildLineString(_coordinates: coordinates)
-
+    
     guard let animator = getAnimator(tag: tag) else {
       reject("ChangeLineOffsetsShapeAnimator:setLineString", "Unable to find animator with tag \(tag)", NSError())
       return
@@ -125,6 +126,7 @@ extension ChangeLineOffsetsShapeAnimator {
 extension ChangeLineOffsetsShapeAnimator {
   private func _setLineString(lineString: LineString) {
     self.lineString = lineString
+    super.startIfStopped()
   }
   
   private func _setStartOffset(offset: Double, durationSec: Double) {
@@ -136,6 +138,7 @@ extension ChangeLineOffsetsShapeAnimator {
       progressDurationSec: 0,
       totalDurationSec: durationSec
     )
+    super.startIfStopped()
   }
   
   private func _setEndOffset(offset: Double, durationSec: Double) {
@@ -147,6 +150,7 @@ extension ChangeLineOffsetsShapeAnimator {
       progressDurationSec: 0,
       totalDurationSec: durationSec
     )
+    super.startIfStopped()
   }
 }
 
