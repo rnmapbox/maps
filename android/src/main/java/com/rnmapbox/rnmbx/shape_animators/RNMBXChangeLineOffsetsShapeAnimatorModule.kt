@@ -33,11 +33,6 @@ class ChangeLineOffsetsShapeAnimator(tag: Tag, _lineString: LineString, startOff
         0.0
     )
 
-    override fun getShape(): GeoJson {
-        // TODO: Trim this.
-        return super.getShape()
-    }
-
     override fun getAnimatedShape(currentTimestamp: Long): Pair<GeoJson, Boolean> {
         if (lineString.coordinates().count() < 2) {
             return Pair(LineString.fromLngLats(listOf()), true)
