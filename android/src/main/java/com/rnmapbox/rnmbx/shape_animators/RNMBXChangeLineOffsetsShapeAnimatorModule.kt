@@ -39,6 +39,10 @@ class ChangeLineOffsetsShapeAnimator(tag: Tag, _lineString: LineString, startOff
     }
 
     override fun getAnimatedShape(currentTimestamp: Long): Pair<GeoJson, Boolean> {
+        if (lineString.coordinates().count() < 2) {
+            return Pair(LineString.fromLngLats(listOf()), true)
+        }
+
         startOfLine.progressOffset = startOfLine.sourceOffset + (startOfLine.offsetRemaining() * startOfLine.durationRatio())
         startOfLine.progressDurationSec = currentTimestamp - startOfLine.startedAt
 
