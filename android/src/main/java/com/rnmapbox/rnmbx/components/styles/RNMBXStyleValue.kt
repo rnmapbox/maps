@@ -40,7 +40,7 @@ class RNMBXStyleValue(config: ReadableMap) {
     }
 
     fun getEnumName(): String {
-        return mPayload!!.getString("value")!!.toUpperCase().replace("-", "_")
+        return mPayload!!.getString("value")!!.uppercase().replace("-", "_")
     }
 
     fun getDouble(key: String?): Double {
