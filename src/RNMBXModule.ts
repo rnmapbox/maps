@@ -38,6 +38,18 @@ interface RNMBXModule {
 }
 
 const RNMBXModule: RNMBXModule = { ...NativeModules.RNMBXModule };
+if (NativeModules.RNMBXModule == null) {
+  if ((global as { expo?: unknown }).expo != null) {
+    // global.expo.modules.ExponentConstants;
+    throw new Error(
+      '@rnmapbox/maps native code not available. Make sure you have linked the library and rebuild your app. See https://rnmapbox.github.io/docs/install?rebuild=expo#rebuild',
+    );
+  } else {
+    throw new Error(
+      '@rnmapbox/maps native code not available. Make sure you have linked the library and rebuild your app. See https://rnmapbox.github.io/docs/install',
+    );
+  }
+}
 
 export const {
   StyleURL,
