@@ -7,7 +7,7 @@ extension QueriedSourceFeature {
 #endif
 
 @objc(RNMBXMapViewManager)
-public class RNMBXMapViewManager: RCTViewManager {
+open class RNMBXMapViewManager: RCTViewManager {
     @objc
     override public static func requiresMainQueueSetup() -> Bool {
         return true
@@ -17,7 +17,7 @@ public class RNMBXMapViewManager: RCTViewManager {
         return UIScreen.main.bounds
     }
   
-    override public func view() -> UIView! {
+    override open func view() -> UIView! {
         let result = RNMBXMapView(frame: self.defaultFrame(), eventDispatcher: self.bridge.eventDispatcher())
         return result
     }

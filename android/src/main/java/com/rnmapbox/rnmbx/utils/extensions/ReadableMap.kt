@@ -1,5 +1,6 @@
 package com.rnmapbox.rnmbx.utils.extensions
 
+import com.facebook.react.bridge.ReadableArray
 import com.facebook.react.bridge.ReadableMap
 import com.facebook.react.bridge.ReadableType
 import com.google.gson.JsonArray
@@ -76,6 +77,19 @@ fun ReadableMap.getAndLogIfNotString(key: String, tag: String = "RNMBXReadableMa
             getString(key)
         } else {
             Logger.e("RNMBXReadableMap", "$key is expected to be a string but was: ${getType(key)}")
+            null
+        }
+    } else {
+        null
+    }
+}
+
+fun ReadableMap.getAndLogIfNotArray(key: String, tag: String = "RNMBXReadableMap"): ReadableArray? {
+    return if (hasKey(key)) {
+        if (getType(key) == ReadableType.Array) {
+            getArray(key)
+        } else {
+            Logger.e("RNMBXReadableMap", "$key is exected to be a Map but was: ${getType(key)}")
             null
         }
     } else {
