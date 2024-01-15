@@ -75,11 +75,11 @@ open class RNMBXImages : UIView, RNMBXMapComponent {
   
   // MARK: - RNMBXMapComponent
 
-  func waitForStyleLoad() -> Bool {
+  public func waitForStyleLoad() -> Bool {
     return false
   }
   
-  func addToMap(_ map: RNMBXMapView, style: Style) {
+  public func addToMap(_ map: RNMBXMapView, style: Style) {
     self.style = style
     imageManager = map.imageManager
     map.images.append(self)
@@ -89,7 +89,7 @@ open class RNMBXImages : UIView, RNMBXMapComponent {
     self.addImageViews(style: style, imageViews: imageViews)
   }
   
-  func removeFromMap(_ map: RNMBXMapView, reason: RemovalReason) -> Bool {
+  public func removeFromMap(_ map: RNMBXMapView, reason: RemovalReason) -> Bool {
     self.style = nil
     imageManager = nil
     // v10todo

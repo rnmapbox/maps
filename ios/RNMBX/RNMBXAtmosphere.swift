@@ -1,7 +1,7 @@
 import MapboxMaps
 
 #if RNMBX_11
-typealias Style = StyleManager
+public typealias Style = StyleManager
 #endif
 
 @objc(RNMBXAtmosphere)
@@ -12,7 +12,7 @@ public class RNMBXAtmosphere : RNMBXSingletonLayer, RNMBXMapComponent, RNMBXSour
     return Atmosphere()
   }
 
-  func addToMap(_ map: RNMBXMapView, style: Style) {
+  public func addToMap(_ map: RNMBXMapView, style: Style) {
     self.map = map
     self.style = style
     
@@ -21,7 +21,7 @@ public class RNMBXAtmosphere : RNMBXSingletonLayer, RNMBXMapComponent, RNMBXSour
     addStylesAndUpdate()
   }
   
-  func removeFromMap(_ map: RNMBXMapView, reason _: RemovalReason) -> Bool {
+  public func removeFromMap(_ map: RNMBXMapView, reason _: RemovalReason) -> Bool {
     self.map = nil
     
     guard let mapboxMap = map.mapboxMap else {
@@ -33,7 +33,7 @@ public class RNMBXAtmosphere : RNMBXSingletonLayer, RNMBXMapComponent, RNMBXSour
     return true
   }
   
-  func waitForStyleLoad() -> Bool {
+  public func waitForStyleLoad() -> Bool {
     return true
   }
   

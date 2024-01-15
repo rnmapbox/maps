@@ -31,7 +31,7 @@ open class RNMBXModels : UIView, RNMBXMapComponent {
 
   }
   
-  func addToMap(_ map: RNMBXMapView, style: Style) {
+  public func addToMap(_ map: RNMBXMapView, style: Style) {
     modelIdToUrl.forEach { (id, uri) in
       logged("Models.addStyleModel") {
         if let link = URL(string: uri), let scheme = link.scheme, let host = link.host,
@@ -48,7 +48,7 @@ open class RNMBXModels : UIView, RNMBXMapComponent {
     }
   }
   
-  func removeFromMap(_ map: RNMBXMapView, reason: RemovalReason) -> Bool {
+  public func removeFromMap(_ map: RNMBXMapView, reason: RemovalReason) -> Bool {
     modelIdToUrl.forEach { (id, _) in
       #if RNMBX_11
       try? map._mapView?.mapboxMap.removeStyleModel(modelId: id)
@@ -57,7 +57,7 @@ open class RNMBXModels : UIView, RNMBXMapComponent {
     return true
   }
   
-  func waitForStyleLoad() -> Bool {
+  public func waitForStyleLoad() -> Bool {
     true
   }
 }

@@ -117,7 +117,7 @@ public class RNMBXLayer : UIView, RNMBXMapComponent, RNMBXSourceConsumer {
   var existingLayer = false
 
   // MARK: - RNMBXMapComponent
-  func waitForStyleLoad() -> Bool {
+  public func waitForStyleLoad() -> Bool {
     return true
   }
   
@@ -220,7 +220,7 @@ public class RNMBXLayer : UIView, RNMBXMapComponent, RNMBXSourceConsumer {
     
   }
   
-  func addToMap(_ map: RNMBXMapView, style: Style) {
+  public func addToMap(_ map: RNMBXMapView, style: Style) {
     self.map = map
     self.style = style
     guard let id = id else {
@@ -321,7 +321,7 @@ public class RNMBXLayer : UIView, RNMBXMapComponent, RNMBXSourceConsumer {
     }
   }
 
-  func removeFromMap(_ map: RNMBXMapView, reason: RemovalReason) -> Bool {
+  public func removeFromMap(_ map: RNMBXMapView, reason: RemovalReason) -> Bool {
     removeFromMap(map.mapboxMap.style)
     return true
   }

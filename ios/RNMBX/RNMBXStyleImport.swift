@@ -20,16 +20,16 @@ open class RNMBXStyleImport : UIView, RNMBXMapComponent {
     }
   }
   
-  func waitForStyleLoad() -> Bool {
+  public func waitForStyleLoad() -> Bool {
     true
   }
 
-  func addToMap(_ map: RNMBXMapView, style: Style) {
+  public func addToMap(_ map: RNMBXMapView, style: Style) {
     mapView = map.mapView
     apply(mapView: map.mapView)
   }
 
-  func removeFromMap(_ map: RNMBXMapView, reason: RemovalReason) -> Bool {
+  public func removeFromMap(_ map: RNMBXMapView, reason: RemovalReason) -> Bool {
     self.mapView = nil
     return true
   }

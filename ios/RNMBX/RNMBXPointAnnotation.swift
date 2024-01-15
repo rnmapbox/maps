@@ -250,13 +250,13 @@ public class RNMBXPointAnnotation : RNMBXInteractiveElement {
   
   // MARK: - RNMBXMapComponent
   
-  override func addToMap(_ map: RNMBXMapView, style: Style) {
+  public override func addToMap(_ map: RNMBXMapView, style: Style) {
     super.addToMap(map, style: style)
     self.map = map
     addIfPossible()
   }
 
-  override func removeFromMap(_ map: RNMBXMapView, reason: RemovalReason) -> Bool {
+  public override func removeFromMap(_ map: RNMBXMapView, reason: RemovalReason) -> Bool {
     removeIfAdded()
     self.map = nil
     return true
