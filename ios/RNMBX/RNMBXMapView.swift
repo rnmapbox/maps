@@ -203,7 +203,7 @@ open class RNMBXMapView: UIView {
     }
   }
 
-  var mapView : MapView! {
+  public var mapView : MapView! {
     get { return _mapView }
   }
   var mapboxMap: MapboxMap! {

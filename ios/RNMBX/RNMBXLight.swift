@@ -51,18 +51,18 @@ public class RNMBXLight: UIView, RNMBXMapComponent {
   
   // MARK: - RNMBXMapComponent
 
-  func waitForStyleLoad() -> Bool {
+  public func waitForStyleLoad() -> Bool {
     return true
   }
 
-  func addToMap(_ map: RNMBXMapView, style: Style) {
+  public func addToMap(_ map: RNMBXMapView, style: Style) {
     self.map = map.mapboxMap
     if (reactStyle != nil) {
       addStyles()
     }
   }
   
-  func removeFromMap(_ map: RNMBXMapView, reason: RemovalReason) -> Bool  {
+  public func removeFromMap(_ map: RNMBXMapView, reason: RemovalReason) -> Bool  {
     self.map = nil
     return true
   }

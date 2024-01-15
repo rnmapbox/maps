@@ -96,12 +96,12 @@ public class RNMBXMarkerView: UIView, RNMBXMapComponent {
 
   // MARK: - RNMBXMapComponent methods
 
-  func addToMap(_ map: RNMBXMapView, style: Style) {
+  public func addToMap(_ map: RNMBXMapView, style: Style) {
     self.map = map
     add()
   }
 
-  func removeFromMap(_ map: RNMBXMapView, reason: RemovalReason) -> Bool {
+  public func removeFromMap(_ map: RNMBXMapView, reason: RemovalReason) -> Bool {
     remove()
     return true
   }
@@ -149,10 +149,8 @@ public class RNMBXMarkerView: UIView, RNMBXMapComponent {
   @objc public func updateAnnotationViewSize(_ next: CGRect, _ prev: CGRect) {
     annotationView.updateSize(next.size, oldOffset:calcOffset(size: prev.size), newOffset: calcOffset(size: next.size))
   }
-  
-    
-  
-  func waitForStyleLoad() -> Bool {
+
+  public func waitForStyleLoad() -> Bool {
     true
   }
 

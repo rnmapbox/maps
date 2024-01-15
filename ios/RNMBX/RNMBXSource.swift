@@ -76,7 +76,7 @@ public class RNMBXSource : RNMBXInteractiveElement {
   
   // MARK: - RNMBXInteractiveElement
   
-  override func addToMap(_ map: RNMBXMapView, style: Style) {
+  public override func addToMap(_ map: RNMBXMapView, style: Style) {
     self.map = map
 
     if style.sourceExists(withId: self.id) {
@@ -108,7 +108,7 @@ public class RNMBXSource : RNMBXInteractiveElement {
     }
   }
 
-  override func removeFromMap(_ map: RNMBXMapView, reason: RemovalReason) -> Bool {
+  public override func removeFromMap(_ map: RNMBXMapView, reason: RemovalReason) -> Bool {
     self.map = nil
 
     for layer in self.layers {
