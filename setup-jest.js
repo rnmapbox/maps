@@ -40,6 +40,7 @@ NativeModules.RNMBXModule = {
   EventTypes: keyMirror([
     'MapClick',
     'MapLongClick',
+    'MapIdle',
     'RegionWillChange',
     'RegionIsChanging',
     'RegionDidChange',
