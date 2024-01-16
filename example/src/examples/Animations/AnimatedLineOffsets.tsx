@@ -59,7 +59,7 @@ const AnimatedPoint = memo((props: BaseExampleProps) => {
       ne: [boundingBox[0], boundingBox[1]],
       sw: [boundingBox[2], boundingBox[3]],
       paddingTop: 40,
-      paddingBottom: 160,
+      paddingBottom: 240,
       paddingLeft: 40,
       paddingRight: 40,
     };
