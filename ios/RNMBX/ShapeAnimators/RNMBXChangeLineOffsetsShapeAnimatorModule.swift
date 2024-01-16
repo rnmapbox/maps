@@ -6,6 +6,8 @@ public class ChangeLineOffsetsShapeAnimator: ShapeAnimatorCommon {
   private var lineString: LineString
   private var startOfLine: LineOffset
   private var endOfLine: LineOffset
+  
+  private let emptyGeometry: GeoJSONObject = .geometry(.lineString(.init([])))
 
   init(tag: Int, lineString: LineString, startOffset: Double, endOffset: Double) {
     self.lineString = lineString
@@ -43,9 +45,16 @@ public class ChangeLineOffsetsShapeAnimator: ShapeAnimatorCommon {
     endOfLine.progressOffset = endOfLine.sourceOffset + (endOfLine.offsetRemaining * endOfLine.durationRatio)
     endOfLine.progressDurationSec = currentTimestamp - endOfLine.startedAt
     
-    let totalDistance = lineString.distance() ?? 0
-    guard let trimmed = lineString.trimmed(from: startOfLine.progressOffset, to: totalDistance - endOfLine.progressOffset) else {
-      return .geometry(.lineString(.init([])))
+    guard let totalDistance = lineString.distance() else {
+      return emptyGeometry
+    }
+    
+    if startOfLine.progressOffset + endOfLine.progressOffset >= totalDistance {
+      return emptyGeometry
+    }
+    
+    guard let trimmed = lineString.trimmed(from: startOfLine.progressOffset, to: totalDistance -  endOfLine.progressOffset) else {
+      return emptyGeometry
     }
     
     return .geometry(.lineString(trimmed))
