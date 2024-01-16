@@ -1,3 +1,4 @@
+import { StyleProp, View, ViewStyle } from 'react-native';
 import {
   Camera,
   Logger,
@@ -8,7 +9,7 @@ import {
 } from '@rnmapbox/maps';
 import { Position } from 'geojson';
 import React, { memo, useCallback, useEffect, useMemo, useState } from 'react';
-import { Button } from '@rneui/base';
+import { Button, Divider, Slider, Text } from '@rneui/base';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { lineString } from '@turf/helpers';
 import bbox from '@turf/bbox';
@@ -37,9 +38,12 @@ const coordinates: Position[] = [
 const line = lineString(coordinates);
 const boundingBox = bbox(line);
 
+const maxDuration = 5000;
+
 const AnimatedPoint = memo((props: BaseExampleProps) => {
   const [startOffset, setStartOffset] = useState(0);
   const [endOffset, setEndOffset] = useState(0);
+  const [duration, setDuration] = useState(1000);
 
   const animator = useMemo(() => {
     return new __experimental.ChangeLineOffsetsShapeAnimator({
@@ -73,24 +77,80 @@ const AnimatedPoint = memo((props: BaseExampleProps) => {
   useEffect(() => {
     animator.setStartOffset({
       offset: startOffset,
-      durationMs: 1000,
+      durationMs: duration,
     });
-  }, [animator, startOffset]);
+  }, [animator, startOffset, duration]);
 
   useEffect(() => {
     animator.setEndOffset({
       offset: endOffset,
-      durationMs: 1000,
+      durationMs: duration,
     });
-  }, [animator, endOffset]);
+  }, [animator, endOffset, duration]);
 
-  const onPressStartOffsetButton = useCallback(() => {
-    setStartOffset(Math.random() * (lineLength / 2));
-  }, [lineLength]);
+  const sliderComponents = useMemo(() => {
+    const rowStyle: StyleProp<ViewStyle> = {
+      flex: 0,
+      flexDirection: 'row',
+      justifyContent: 'space-between',
+    };
 
-  const onPressEndOffsetButton = useCallback(() => {
-    setEndOffset(Math.random() * (lineLength / 2));
-  }, [lineLength]);
+    const sliderProps = {
+      thumbTintColor: 'black',
+      thumbStyle: { width: 15, height: 15 },
+    };
+
+    return (
+      <View
+        style={{
+          width: '100%',
+          padding: 15,
+          borderRadius: 10,
+          backgroundColor: 'white',
+        }}
+      >
+        <View>
+          <View style={rowStyle}>
+            <Text>{'Start Offset'}</Text>
+            <Text>{startOffset.toFixed(2)} m</Text>
+          </View>
+          <Slider
+            {...sliderProps}
+            value={startOffset / lineLength}
+            onSlidingComplete={(v) => setStartOffset(v * lineLength)}
+          />
+        </View>
+
+        <Divider style={{ marginVertical: 15 }} />
+
+        <View>
+          <View style={rowStyle}>
+            <Text>{'End Offset'}</Text>
+            <Text>{endOffset.toFixed(2)} m</Text>
+          </View>
+          <Slider
+            {...sliderProps}
+            value={endOffset / lineLength}
+            onSlidingComplete={(v) => setEndOffset(v * lineLength)}
+          />
+        </View>
+
+        <Divider style={{ marginVertical: 15 }} />
+
+        <View>
+          <View style={rowStyle}>
+            <Text>{'Duration'}</Text>
+            <Text>{(duration / 1000).toFixed(2)} s</Text>
+          </View>
+          <Slider
+            {...sliderProps}
+            value={duration / maxDuration}
+            onSlidingComplete={(v) => setDuration(v * maxDuration)}
+          />
+        </View>
+      </View>
+    );
+  }, [startOffset, endOffset, lineLength, duration]);
 
   return (
     <Page {...props}>
@@ -119,20 +179,7 @@ const AnimatedPoint = memo((props: BaseExampleProps) => {
         }}
         pointerEvents={'box-none'}
       >
-        <Button title={'Change start'} onPress={onPressStartOffsetButton} />
-        <Button
-          style={{ marginTop: 10 }}
-          title={'Change end'}
-          onPress={onPressEndOffsetButton}
-        />
-        <Button
-          style={{ marginTop: 10 }}
-          title={'Reset both'}
-          onPress={() => {
-            setStartOffset(0);
-            setEndOffset(0);
-          }}
-        />
+        {sliderComponents}
       </SafeAreaView>
     </Page>
   );
