@@ -8,8 +8,8 @@ import {
   LineLayer,
 } from '@rnmapbox/maps';
 import { Position } from 'geojson';
-import React, { memo, useCallback, useEffect, useMemo, useState } from 'react';
-import { Button, Divider, Slider, Text } from '@rneui/base';
+import React, { memo, useEffect, useMemo, useState } from 'react';
+import { Divider, Slider, Text } from '@rneui/base';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { lineString } from '@turf/helpers';
 import bbox from '@turf/bbox';
