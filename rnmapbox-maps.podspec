@@ -1,5 +1,4 @@
 # Customization:
-#  $RNMapboxMapsImpl - one of (maplibre, mapbox, mapbox-gl)
 #  $RNMapboxMapsVersion - version specification ("~> 10.4.3", "~> 5.9.0" or "exactVersion 5.12.1" mapblibre/SPM)
 #  $RNMapboxMapsSwiftPackageManager can be either
 #     "manual" - you're responsible for the Mapbox lib dependency either using cocoapods or SPM
@@ -14,6 +13,7 @@
 #         }
 #         ```
 #  $RNMapboxMapsDownloadToken - *expo only* download token
+#  $RNMapboxMapsCustomPods - use a custom pod for mapbox libs
 
 require 'json'
 
@@ -230,13 +230,19 @@ Pod::Spec.new do |s|
   s.header_dir = "rnmapbox_maps"
 
   unless $RNMapboxMapsSwiftPackageManager
-    case $RNMapboxMapsImpl
-    when 'mapbox'
-      s.dependency 'MapboxMaps', $MapboxImplVersion
-      s.dependency 'Turf'
-      s.swift_version = '5.0'
+    if $RNMapboxMapsCustomPods
+      $RNMapboxMapsCustomPods.each do |dependecy_spec|
+        s.dependency *dependecy_spec
+      end
     else
-      fail "$RNMapboxMapsImpl should be mapbox but was: $RNMapboxMapsImpl"
+      case $RNMapboxMapsImpl
+      when 'mapbox'
+        s.dependency 'MapboxMaps', $MapboxImplVersion
+        s.dependency 'Turf'
+        s.swift_version = '5.0'
+      else
+        fail "$RNMapboxMapsImpl should be mapbox but was: $RNMapboxMapsImpl"
+      end
     end
   end
 

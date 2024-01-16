@@ -1,19 +1,19 @@
 import Foundation
 import MapboxMaps
 
-enum RNMBXError: Error, LocalizedError {
+public enum RNMBXError: Error, LocalizedError {
   case parseError(String)
   case failed(String)
   case paramError(String)
 
-  var errorDescription: String? {
+  public var errorDescription: String? {
     return String(describing: self)
   }
 }
 
-class Logger {
-  enum LogLevel : String, Comparable {
-    static func < (lhs: Logger.LogLevel, rhs: Logger.LogLevel) -> Bool {
+public class Logger {
+  public enum LogLevel : String, Comparable {
+    public static func < (lhs: Logger.LogLevel, rhs: Logger.LogLevel) -> Bool {
       return lhs.intValue < rhs.intValue
     }
     
@@ -56,7 +56,7 @@ class Logger {
     }
   }
   
-  static func log(level: LogLevel, message: String) {
+  public static func log(level: LogLevel, message: String) {
     sharedInstance.log(level: level, message: message)
   }
   

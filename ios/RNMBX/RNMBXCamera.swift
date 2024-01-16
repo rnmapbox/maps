@@ -11,11 +11,11 @@ extension NSNumber {
 }
 #endif
 
-enum RemovalReason {
+public enum RemovalReason {
     case ViewRemoval, StyleChange, OnDestroy, ComponentChange, Reorder
 }
 
-protocol RNMBXMapComponent: AnyObject {
+public protocol RNMBXMapComponent: AnyObject {
   func addToMap(_ map: RNMBXMapView, style: Style)
   func removeFromMap(_ map: RNMBXMapView, reason: RemovalReason) -> Bool
   
@@ -99,11 +99,11 @@ open class RNMBXMapComponentBase : UIView, RNMBXMapComponent {
     }
   }
   
-  func waitForStyleLoad() -> Bool {
+  public func waitForStyleLoad() -> Bool {
     return false
   }
   
-  func addToMap(_ map: RNMBXMapView, style: Style) {
+  public func addToMap(_ map: RNMBXMapView, style: Style) {
     _mapCallbacks.forEach { callback in
         callback(map)
     }
@@ -111,7 +111,7 @@ open class RNMBXMapComponentBase : UIView, RNMBXMapComponent {
     _map = map
   }
   
-  func removeFromMap(_ map: RNMBXMapView, reason: RemovalReason) -> Bool {
+  public func removeFromMap(_ map: RNMBXMapView, reason: RemovalReason) -> Bool {
     _mapCallbacks = []
     _map = nil
     return true
@@ -514,12 +514,12 @@ open class RNMBXCamera : RNMBXMapComponentBase {
     _updateCamera()
   }
   
-  override func addToMap(_ map: RNMBXMapView, style: Style) {
+  public override func addToMap(_ map: RNMBXMapView, style: Style) {
     super.addToMap(map, style: style)
     map.reactCamera = self
   }
   
-  override func removeFromMap(_ map: RNMBXMapView, reason: RemovalReason) -> Bool {
+  public override func removeFromMap(_ map: RNMBXMapView, reason: RemovalReason) -> Bool {
     if (reason == .StyleChange) {
       return false
     }

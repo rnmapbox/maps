@@ -214,14 +214,14 @@ public class RNMBXNativeUserLocation: UIView, RNMBXMapComponent {
     }
   }
 
-  func addToMap(_ map: RNMBXMapView, style: Style) {
+  public func addToMap(_ map: RNMBXMapView, style: Style) {
     self.map = map
  
     _fetchImages(map)
     _apply()
   }
 
-  func removeFromMap(_ map: RNMBXMapView, reason: RemovalReason) -> Bool {
+  public func removeFromMap(_ map: RNMBXMapView, reason: RemovalReason) -> Bool {
     if let location = map.mapView.location {
       location.options.puckType = nil
       location.options.puckType = .none
@@ -234,7 +234,7 @@ public class RNMBXNativeUserLocation: UIView, RNMBXMapComponent {
     return true
   }
   
-  func waitForStyleLoad() -> Bool {
+  public func waitForStyleLoad() -> Bool {
     return true
   }
 }

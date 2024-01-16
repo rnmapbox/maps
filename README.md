@@ -154,7 +154,7 @@ const styles = StyleSheet.create({
 - [Callout](/docs/Callout.md)
 - [Camera](docs/Camera.md)
 - [UserLocation](docs/UserLocation.md)
-- [LocaitonPuck](docs/LocationPuck.md)
+- [LocationPuck](docs/LocationPuck.md)
 - [Images](docs/Images.md)
 - [Image](docs/Image.md)
 - [Models](docs/Models.md)

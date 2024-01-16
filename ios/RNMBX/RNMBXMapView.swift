@@ -2,7 +2,7 @@
 import Turf
 import MapKit
 
-public typealias RNMBXMapViewFactoryFunc = (String, UIView) -> MapView?;
+public typealias RNMBXMapViewFactoryFunc = (String, UIView) -> (MapView?)
 
 /**
  * Experimental MapView factory for advanced usecases
@@ -191,6 +191,7 @@ open class RNMBXMapView: UIView {
     
     _mapView.gestures.delegate = self
     setupEvents()
+    afterMapViewAdded()
   }
 
   func createAndAddMapViewImpl(_ impl: String, _ view: RNMBXMapView) -> MapView? {
@@ -202,7 +203,7 @@ open class RNMBXMapView: UIView {
     }
   }
 
-  var mapView : MapView! {
+  public var mapView : MapView! {
     get { return _mapView }
   }
   var mapboxMap: MapboxMap! {
@@ -841,6 +842,9 @@ open class RNMBXMapView: UIView {
       }
     }
   }
+  
+  // MARK: - hooks for subclasses
+  open func afterMapViewAdded() {}
 }
 
 // MARK: - event handlers

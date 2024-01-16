@@ -438,6 +438,11 @@ type Props = ViewProps & {
    * @private Experimental support for custom MapView instances
    */
   mapViewImpl?: string;
+
+  /**
+   * @private Experimental support for custom MapView instances
+   */
+  _nativeImpl?: NativeMapViewActual;
 };
 
 type CallbablePropKeys =
@@ -1155,11 +1160,15 @@ class MapView extends NativeBridgeComponent(
 
     let mapView = null;
     if (this.state.isReady) {
-      mapView = (
-        <RNMBXMapView {...props} {...callbacks}>
-          {this.props.children}
-        </RNMBXMapView>
-      );
+      if (props._nativeImpl) {
+        mapView = <props._nativeImpl {...props} {...callbacks} />;
+      } else {
+        mapView = (
+          <RNMBXMapView {...props} {...callbacks}>
+            {this.props.children}
+          </RNMBXMapView>
+        );
+      }
     }
 
     return (

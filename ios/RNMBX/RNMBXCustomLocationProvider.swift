@@ -43,7 +43,7 @@ public class RNMBXCustomLocationProvider: UIView, RNMBXMapComponent {
   var defaultLocationProvider: LocationProvider?
   #endif
 
-  func addToMap(_ map: RNMBXMapView, style: Style) {
+  public func addToMap(_ map: RNMBXMapView, style: Style) {
     self.map = map
     if let mapView = map.mapView {
       installCustomeLocationProviderIfNeeded(mapView: mapView)
@@ -58,7 +58,7 @@ public class RNMBXCustomLocationProvider: UIView, RNMBXMapComponent {
     updateHeading(heading: heading.doubleValue)
   }
   
-  func removeFromMap(_ map: RNMBXMapView, reason: RemovalReason) -> Bool {
+  public func removeFromMap(_ map: RNMBXMapView, reason: RemovalReason) -> Bool {
     if let mapView = map.mapView {
       removeCustomLocationProvider(mapView: mapView)
     }
@@ -66,7 +66,7 @@ public class RNMBXCustomLocationProvider: UIView, RNMBXMapComponent {
     return true
   }
 
-  func waitForStyleLoad() -> Bool {
+  public func waitForStyleLoad() -> Bool {
     false
   }
 }

@@ -194,7 +194,7 @@ public class RNMBXMapViewFactory {
         }
 
         fun get(impl: String): Factory? {
-            val (impl, options) = impl.split(":",limit=2);
+            val (impl, options) = impl.split(":",limit=2) + null;
             return factories.get(impl);
         }
     }

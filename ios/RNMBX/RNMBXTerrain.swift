@@ -13,7 +13,7 @@ public class RNMBXTerrain : RNMBXSingletonLayer, RNMBXMapComponent, RNMBXSourceC
     return Terrain(sourceId: sourceID)
   }
   
-  func addToMap(_ map: RNMBXMapView, style: Style) {
+  public func addToMap(_ map: RNMBXMapView, style: Style) {
     self.map = map
     self.style = style
     
@@ -22,7 +22,7 @@ public class RNMBXTerrain : RNMBXSingletonLayer, RNMBXMapComponent, RNMBXSourceC
     addStylesAndUpdate()
   }
   
-  func removeFromMap(_ map: RNMBXMapView, reason: RemovalReason) -> Bool {
+  public func removeFromMap(_ map: RNMBXMapView, reason: RemovalReason) -> Bool {
     self.map = nil
     
     guard let mapboxMap = map.mapboxMap else {
@@ -34,7 +34,7 @@ public class RNMBXTerrain : RNMBXSingletonLayer, RNMBXMapComponent, RNMBXSourceC
     return true
   }
   
-  func waitForStyleLoad() -> Bool {
+  public func waitForStyleLoad() -> Bool {
     return true
   }
   
