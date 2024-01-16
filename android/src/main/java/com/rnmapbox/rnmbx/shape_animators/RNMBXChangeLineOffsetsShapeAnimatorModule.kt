@@ -8,7 +8,7 @@ import com.facebook.react.module.annotations.ReactModule
 import com.mapbox.geojson.GeoJson
 import com.mapbox.geojson.LineString
 import com.mapbox.geojson.Point
-import com.mapbox.turf.TurfConstants
+import com.mapbox.turf.TurfConstants.UNIT_METERS
 import com.mapbox.turf.TurfMeasurement
 import com.mapbox.turf.TurfMisc
 import kotlin.math.min
@@ -34,23 +34,26 @@ class ChangeLineOffsetsShapeAnimator(tag: Tag, _lineString: LineString, startOff
     )
 
     override fun getAnimatedShape(currentTimestamp: Long): Pair<GeoJson, Boolean> {
-        if (lineString.coordinates().count() < 2) {
-            return Pair(emptyGeoJsonObj, true)
-        }
-
         startOfLine.progressOffset = startOfLine.sourceOffset + (startOfLine.offsetRemaining() * startOfLine.durationRatio())
         startOfLine.progressDurationSec = currentTimestamp - startOfLine.startedAt
 
         endOfLine.progressOffset = endOfLine.sourceOffset + (endOfLine.offsetRemaining() * endOfLine.durationRatio())
         endOfLine.progressDurationSec = currentTimestamp - endOfLine.startedAt
 
-        val totalDistance = TurfMeasurement.length(lineString, TurfConstants.UNIT_METERS)
-        val trimmed = TurfMisc.lineSliceAlong(
-            lineString,
-            startOfLine.progressOffset,
-            totalDistance - endOfLine.progressOffset,
-            TurfConstants.UNIT_METERS
-        )
+        if (lineString.coordinates().count() < 2) {
+            return Pair(emptyGeoJsonObj, true)
+        }
+
+        val totalDistance = TurfMeasurement.length(lineString, UNIT_METERS)
+        if (totalDistance == 0.0) {
+            return Pair(emptyGeoJsonObj, true)
+        }
+
+        if (startOfLine.progressOffset + endOfLine.progressOffset >= totalDistance) {
+            return Pair(emptyGeoJsonObj, true)
+        }
+
+        val trimmed = TurfMisc.lineSliceAlong(lineString, startOfLine.progressOffset, totalDistance - endOfLine.progressOffset, UNIT_METERS)
         return Pair(trimmed, true);
     }
 
@@ -159,10 +162,13 @@ private class LineOffset(
     }
 
     fun durationRatio(): Double {
-        return min(progressDurationSec / totalDurationSec, 1.0)
+        return if (totalDurationSec > 0.0) {
+            min(progressDurationSec / totalDurationSec, 1.0)
+        } else {
+            0.0
+        }
     }
 }
-
 
 private fun buildLineString(_coordinates: ReadableArray): LineString {
     var coordinates: List<Point> = listOf()
