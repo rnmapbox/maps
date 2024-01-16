@@ -40,7 +40,7 @@ const boundingBox = bbox(line);
 
 const maxDuration = 5000;
 
-const AnimatedPoint = memo((props: BaseExampleProps) => {
+const AnimatedLineOffsets = memo((props: BaseExampleProps) => {
   const [startOffset, setStartOffset] = useState(0);
   const [endOffset, setEndOffset] = useState(0);
   const [duration, setDuration] = useState(1000);
@@ -185,4 +185,4 @@ const AnimatedPoint = memo((props: BaseExampleProps) => {
   );
 });
 
-export default AnimatedPoint;
+export default AnimatedLineOffsets;
