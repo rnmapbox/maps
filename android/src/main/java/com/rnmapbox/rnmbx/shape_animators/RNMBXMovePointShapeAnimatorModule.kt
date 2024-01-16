@@ -8,29 +8,29 @@ import com.facebook.react.module.annotations.ReactModule
 import com.mapbox.geojson.GeoJson
 import com.mapbox.geojson.LineString
 import com.mapbox.geojson.Point
-import com.mapbox.turf.TurfConstants
+import com.mapbox.turf.TurfConstants.UNIT_METERS
 import com.mapbox.turf.TurfMeasurement
 import com.rnmapbox.rnmbx.NativeRNMBXMovePointShapeAnimatorModuleSpec
 
 class MovePointShapeAnimator(tag: Tag, coordinate: Point) : ShapeAnimatorCommon(tag) {
-    var sourceCoord = coordinate
-    var progressCoord = sourceCoord
-    var targetCoord = sourceCoord
+    private var sourceCoord = coordinate
+    private var progressCoord = sourceCoord
+    private var targetCoord = sourceCoord
 
-    var startTimestamp: Long = 0
-    var totalDurationSec: Double = 0.0
+    private var startTimestamp: Long = 0
+    private var totalDurationSec: Double = 0.0
 
-    override fun getAnimatedShape(currentTimestamp: Long): Pair<GeoJson, Boolean> {
+    override fun getAnimatedShape(currentTimestamp: Long): GeoJson {
         val progressSec = (currentTimestamp - startTimestamp).toDouble() / 1000
         val line = LineString.fromLngLats(listOf(sourceCoord, targetCoord))
 
-        val lineLength = TurfMeasurement.length(line, TurfConstants.UNIT_METERS)
+        val lineLength = TurfMeasurement.length(line, UNIT_METERS)
         if (lineLength == 0.0) {
-            return Pair(emptyGeoJsonObj, true)
+            return emptyGeoJsonObj
         }
 
-        progressCoord = TurfMeasurement.along(line, lineLength * (progressSec / totalDurationSec), TurfConstants.UNIT_METERS)
-        return Pair(progressCoord, true)
+        progressCoord = TurfMeasurement.along(line, lineLength * (progressSec / totalDurationSec), UNIT_METERS)
+        return progressCoord
     }
 
     fun moveTo(coordinate: Point, durationSec: Double) {

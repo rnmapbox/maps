@@ -33,7 +33,7 @@ class ChangeLineOffsetsShapeAnimator(tag: Tag, _lineString: LineString, startOff
         0.0
     )
 
-    override fun getAnimatedShape(currentTimestamp: Long): Pair<GeoJson, Boolean> {
+    override fun getAnimatedShape(currentTimestamp: Long): GeoJson {
         startOfLine.progressOffset = startOfLine.sourceOffset + (startOfLine.offsetRemaining() * startOfLine.durationRatio())
         startOfLine.progressDurationSec = currentTimestamp - startOfLine.startedAt
 
@@ -41,20 +41,20 @@ class ChangeLineOffsetsShapeAnimator(tag: Tag, _lineString: LineString, startOff
         endOfLine.progressDurationSec = currentTimestamp - endOfLine.startedAt
 
         if (lineString.coordinates().count() < 2) {
-            return Pair(emptyGeoJsonObj, true)
+            return emptyGeoJsonObj
         }
 
         val totalDistance = TurfMeasurement.length(lineString, UNIT_METERS)
         if (totalDistance == 0.0) {
-            return Pair(emptyGeoJsonObj, true)
+            return emptyGeoJsonObj
         }
 
         if (startOfLine.progressOffset + endOfLine.progressOffset >= totalDistance) {
-            return Pair(emptyGeoJsonObj, true)
+            return emptyGeoJsonObj
         }
 
         val trimmed = TurfMisc.lineSliceAlong(lineString, startOfLine.progressOffset, totalDistance - endOfLine.progressOffset, UNIT_METERS)
-        return Pair(trimmed, true);
+        return trimmed
     }
 
     fun _setLineString(lineString: LineString) {

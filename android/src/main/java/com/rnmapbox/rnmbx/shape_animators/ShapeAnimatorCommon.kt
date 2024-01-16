@@ -17,29 +17,29 @@ interface ShapeAnimationConsumer {
 
 abstract class ShapeAnimator(val tag: Tag) {
     abstract fun getShape(): GeoJson
-    abstract fun getAnimatedShape(currentTimestamp: Long): Pair<GeoJson, Boolean>
+    abstract fun getAnimatedShape(currentTimestamp: Long): GeoJson
     abstract fun subscribe(consumer: ShapeAnimationConsumer)
     abstract fun unsubscribe(consumer: ShapeAnimationConsumer)
     abstract fun start()
 }
 
 abstract class ShapeAnimatorCommon(tag: Tag): ShapeAnimator(tag) {
+    val emptyGeoJsonObj: FeatureCollection = FeatureCollection.fromFeatures(listOf())
+
     private var timer: Timer? = null
-    var start = Date()
+    private var start = Date()
 
-    val fps = 30.0
-    val period = (1000.0 / fps).toLong()
-
-    val emptyGeoJsonObj = FeatureCollection.fromFeatures(listOf())
+    private val fps = 30.0
+    private val period = (1000.0 / fps).toLong()
 
     /** The animator's lifespan in milliseconds. */
-    public fun getCurrentTimestamp(): Long {
+    fun getCurrentTimestamp(): Long {
         val now = Date()
         return now.time - start.time
     }
 
     // region subscribers
-    var subscribers = mutableListOf<ShapeAnimationConsumer>()
+    private var subscribers = mutableListOf<ShapeAnimationConsumer>()
 
     override fun subscribe(consumer: ShapeAnimationConsumer) {
         subscribers.add(consumer)
@@ -47,6 +47,10 @@ abstract class ShapeAnimatorCommon(tag: Tag): ShapeAnimator(tag) {
 
     override fun unsubscribe(consumer: ShapeAnimationConsumer) {
         subscribers.remove(consumer)
+        if (subscribers.isEmpty()) {
+            timer?.cancel()
+            timer = null
+        }
     }
     // endregion
 
@@ -54,27 +58,24 @@ abstract class ShapeAnimatorCommon(tag: Tag): ShapeAnimator(tag) {
         timer?.cancel()
         timer = null
 
-        this.timer = Timer()
         start = Date()
-        val animator = this
 
-        timer!!.schedule(object: TimerTask() {
+        timer = Timer()
+        timer?.schedule(object : TimerTask() {
             override fun run() {
                 val timestamp = getCurrentTimestamp()
-
-                val (shape, doContinue) = getAnimatedShape(timestamp)
-                if (!doContinue) {
-                    timer?.cancel()
-                }
+                val shape = getAnimatedShape(timestamp)
                 runOnUiThread {
-                    subscribers.forEach { it.shapeUpdated(shape) }
+                    subscribers.forEach {
+                        it.shapeUpdated(shape)
+                    }
                 }
             }
         }, 0, period)
     }
 
     override fun getShape(): GeoJson {
-        return getAnimatedShape(getCurrentTimestamp()).first
+        return getAnimatedShape(getCurrentTimestamp())
     }
 }
 
@@ -90,12 +91,12 @@ class ShapeAnimatorManager {
     }
 
     fun get(tag: String): ShapeAnimator? {
-        if (isShapeAnimatorTag(tag)) {
+        return if (isShapeAnimatorTag(tag)) {
             val obj = JSONObject(tag)
             val _tag = obj.getLong("__nativeTag")
-            return get(_tag);
+            get(_tag);
         } else {
-            return null
+            null
         }
     }
 
