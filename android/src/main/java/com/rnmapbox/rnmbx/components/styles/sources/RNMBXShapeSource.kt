@@ -4,6 +4,7 @@ import android.content.Context
 import com.mapbox.maps.extension.style.sources.generated.GeoJsonSource
 import com.rnmapbox.rnmbx.utils.ImageEntry
 import android.graphics.drawable.BitmapDrawable
+import android.util.Log
 import com.facebook.react.bridge.Promise
 import com.facebook.react.bridge.ReadableMap
 import com.rnmapbox.rnmbx.components.mapview.RNMBXMapView
@@ -18,6 +19,7 @@ import com.mapbox.geojson.GeoJson
 import com.mapbox.geojson.Geometry
 import com.mapbox.maps.*
 import com.mapbox.maps.extension.style.expressions.generated.Expression
+import com.rnmapbox.rnmbx.components.RemovalReason
 import com.rnmapbox.rnmbx.shape_animators.ShapeAnimationConsumer
 import com.rnmapbox.rnmbx.shape_animators.ShapeAnimator
 import com.rnmapbox.rnmbx.shape_animators.ShapeAnimatorManager
@@ -52,6 +54,11 @@ class RNMBXShapeSource(context: Context, private val mManager: RNMBXShapeSourceM
             val map = mapView.getMapboxMap()
             super@RNMBXShapeSource.addToMap(mapView)
         }
+    }
+
+    override fun removeFromMap(mapView: RNMBXMapView, reason: RemovalReason): Boolean {
+        mShapeAnimator?.unsubscribe(this)
+        return super.removeFromMap(mapView, reason)
     }
 
     override fun setId(id: Int) {
