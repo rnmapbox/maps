@@ -1,6 +1,5 @@
 package com.rnmapbox.rnmbx.shape_animators
 
-import android.util.Log
 import com.facebook.react.bridge.Promise
 import com.facebook.react.bridge.ReactApplicationContext
 import com.facebook.react.bridge.ReactMethod
@@ -14,53 +13,45 @@ import com.mapbox.turf.TurfMeasurement
 import com.rnmapbox.rnmbx.NativeRNMBXMovePointShapeAnimatorModuleSpec
 
 class MovePointShapeAnimator(tag: Tag, coordinate: Point) : ShapeAnimatorCommon(tag) {
-    private var coordinateInfo = CoordinateInfo(
+    private var point = AnimatableElement<Point>(
         coordinate,
         coordinate,
         coordinate,
+        0,
         0.0,
         0.0,
-        0.0
+        { a, b -> TurfMeasurement.distance(a, b) }
     )
 
     override fun getAnimatedShape(currentTimestamp: Long): GeoJson {
-        val line = LineString.fromLngLats(
-            listOf(
-                coordinateInfo.sourceCoordinate,
-                coordinateInfo.targetCoordinate
-            )
-        )
-
+        val line = LineString.fromLngLats(listOf(point.source, point.target))
         val lineLength = TurfMeasurement.length(line, UNIT_METERS)
         if (lineLength == 0.0) {
             stop()
         }
 
-        if (coordinateInfo.durationRatio() < 1) {
-            coordinateInfo.progressCoordinate = TurfMeasurement.along(
-                line,
-                lineLength * coordinateInfo.durationRatio(),
-                UNIT_METERS
+        if (point.durationRatio() < 1) {
+            point.setProgress(
+                TurfMeasurement.along(line, lineLength * point.durationRatio(), UNIT_METERS),
+                currentTimestamp
             )
-            coordinateInfo.progressDurationSec = (currentTimestamp - coordinateInfo.startedAt) / 1000
         }
 
-        if (coordinateInfo.durationRatio() >= 1) {
+        if (point.durationRatio() >= 1) {
             stop()
         }
 
-        return coordinateInfo.progressCoordinate
+        return point.progress
     }
 
     fun moveTo(coordinate: Point, durationSec: Double) {
         start()
-        coordinateInfo = CoordinateInfo(
-            coordinateInfo.progressCoordinate,
-            coordinateInfo.progressCoordinate,
+        point.reset(
+            point.progress,
+            point.progress,
             coordinate,
-            getCurrentTimestamp().toDouble(),
-            0.0,
-            durationSec
+            durationSec,
+            0
         )
     }
 }
@@ -108,26 +99,5 @@ class RNMBXMovePointShapeAnimatorModule(
             coordinate.getDouble(1)
         )
         animator.moveTo(targetCoord, duration / 1000)
-    }
-}
-
-private class CoordinateInfo(
-    var sourceCoordinate: Point,
-    var progressCoordinate: Point,
-    var targetCoordinate: Point,
-    var startedAt: Double,
-    var progressDurationSec: Double,
-    var totalDurationSec: Double
-) {
-    fun distanceRemaining(): Double {
-        return TurfMeasurement.distance(targetCoordinate, sourceCoordinate)
-    }
-
-    fun durationRatio(): Double {
-        return if (totalDurationSec > 0.0) {
-            progressDurationSec / totalDurationSec
-        } else {
-            0.0
-        }
     }
 }

@@ -15,34 +15,38 @@ import com.rnmapbox.rnmbx.NativeRNMBXChangeLineOffsetsShapeAnimatorModuleSpec
 
 class ChangeLineOffsetsShapeAnimator(tag: Tag, _lineString: LineString, startOffset: Double, endOffset: Double): ShapeAnimatorCommon(tag) {
     private var lineString = _lineString
-    private var startOfLine = LineOffset(
+    private var startOfLine = AnimatableElement<Double>(
         startOffset,
         startOffset,
         startOffset,
+        0,
         0.0,
         0.0,
-        0.0
+        { a, b -> b - a }
     )
-    private var endOfLine = LineOffset(
+    private var endOfLine = AnimatableElement<Double>(
         endOffset,
         endOffset,
         endOffset,
+        0,
         0.0,
         0.0,
-        0.0
+        { a, b -> b - a }
     )
 
     override fun getAnimatedShape(currentTimestamp: Long): GeoJson {
         if (startOfLine.durationRatio() < 1) {
-            startOfLine.progressOffset =
-                startOfLine.sourceOffset + (startOfLine.offsetRemaining() * startOfLine.durationRatio())
-            startOfLine.progressDurationSec = currentTimestamp - startOfLine.startedAt
+            startOfLine.setProgress(
+                startOfLine.source + (startOfLine.distanceRemaining() * startOfLine.durationRatio()),
+                currentTimestamp
+            )
         }
 
         if (endOfLine.durationRatio() < 1) {
-            endOfLine.progressOffset =
-                endOfLine.sourceOffset + (endOfLine.offsetRemaining() * endOfLine.durationRatio())
-            endOfLine.progressDurationSec = currentTimestamp - endOfLine.startedAt
+            endOfLine.setProgress(
+                endOfLine.source + (endOfLine.distanceRemaining() * endOfLine.durationRatio()),
+                currentTimestamp
+            )
         }
 
         if (startOfLine.durationRatio() >= 1 && endOfLine.durationRatio() >= 1) {
@@ -58,11 +62,16 @@ class ChangeLineOffsetsShapeAnimator(tag: Tag, _lineString: LineString, startOff
             return emptyGeoJsonObj
         }
 
-        if (startOfLine.progressOffset + endOfLine.progressOffset >= totalDistance) {
+        if (startOfLine.progress + endOfLine.progress >= totalDistance) {
             return emptyGeoJsonObj
         }
 
-        val trimmed = TurfMisc.lineSliceAlong(lineString, startOfLine.progressOffset, totalDistance - endOfLine.progressOffset, UNIT_METERS)
+        val trimmed = TurfMisc.lineSliceAlong(
+            lineString,
+            startOfLine.progress,
+            totalDistance - endOfLine.progress,
+            UNIT_METERS
+        )
         return trimmed
     }
 
@@ -72,25 +81,23 @@ class ChangeLineOffsetsShapeAnimator(tag: Tag, _lineString: LineString, startOff
 
     fun _setStartOffset(offset: Double, durationSec: Double) {
         start()
-        startOfLine = LineOffset(
-            startOfLine.progressOffset,
-            startOfLine.progressOffset,
+        startOfLine.reset(
+            startOfLine.progress,
+            startOfLine.progress,
             offset,
-            getCurrentTimestamp().toDouble(),
-            0.0,
-            durationSec
+            durationSec,
+            getCurrentTimestamp()
         )
     }
 
     fun _setEndOffset(offset: Double, durationSec: Double) {
         start()
-        endOfLine = LineOffset(
-            endOfLine.progressOffset,
-            endOfLine.progressOffset,
+        endOfLine.reset(
+            endOfLine.progress,
+            endOfLine.progress,
             offset,
-            getCurrentTimestamp().toDouble(),
-            0.0,
-            durationSec
+            durationSec,
+            getCurrentTimestamp()
         )
     }
 }
@@ -131,8 +138,8 @@ class RNMBXChangeLineOffsetsShapeAnimatorModule(
 
     @ReactMethod
     override fun start(tag: Double, promise: Promise?) {
-//        val animator = getAnimator(tag)
-//        animator.start()
+        val animator = getAnimator(tag)
+        animator.start()
     }
 
     override fun setLineString(tag: Double, coordinates: ReadableArray?, promise: Promise?) {
@@ -149,35 +156,14 @@ class RNMBXChangeLineOffsetsShapeAnimatorModule(
 
     override fun setStartOffset(tag: Double, offset: Double, duration: Double, promise: Promise?) {
         val animator = getAnimator(tag)
-        animator._setStartOffset(offset, duration)
+        animator._setStartOffset(offset, duration / 1000)
         promise?.resolve(true)
     }
 
     override fun setEndOffset(tag: Double, offset: Double, duration: Double, promise: Promise?) {
         val animator = getAnimator(tag)
-        animator._setEndOffset(offset, duration)
+        animator._setEndOffset(offset, duration / 1000)
         promise?.resolve(true)
-    }
-}
-
-private class LineOffset(
-    var sourceOffset: Double,
-    var progressOffset: Double,
-    var targetOffset: Double,
-    var startedAt: Double,
-    var progressDurationSec: Double,
-    var totalDurationSec: Double
-) {
-    fun offsetRemaining(): Double {
-        return targetOffset - sourceOffset
-    }
-
-    fun durationRatio(): Double {
-        return if (totalDurationSec > 0.0) {
-            progressDurationSec / totalDurationSec
-        } else {
-            0.0
-        }
     }
 }
 
