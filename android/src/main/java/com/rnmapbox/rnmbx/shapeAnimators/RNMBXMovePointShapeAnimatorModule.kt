@@ -51,7 +51,7 @@ class MovePointShapeAnimator(tag: Tag, coordinate: Point) : ShapeAnimatorCommon(
             point.progress,
             coordinate,
             durationSec,
-            0
+            getCurrentTimestamp()
         )
     }
 }
