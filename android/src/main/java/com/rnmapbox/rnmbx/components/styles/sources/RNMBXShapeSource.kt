@@ -92,7 +92,10 @@ class RNMBXShapeSource(context: Context, private val mManager: RNMBXShapeSourceM
                 mShapeAnimator = shapeAnimator
                 shapeAnimator.subscribe(this)
 
-                shapeUpdated(shapeAnimator.getShape())
+                val shape = shapeAnimator.getShape()
+                if (shape != null) {
+                    shapeUpdated(shape)
+                }
             }
         } else {
             mShape = geoJSONStr

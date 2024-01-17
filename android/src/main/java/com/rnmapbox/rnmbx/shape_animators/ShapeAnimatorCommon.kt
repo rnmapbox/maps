@@ -1,5 +1,6 @@
 package com.rnmapbox.rnmbx.shape_animators
 
+import android.util.Log
 import com.facebook.react.bridge.UiThreadUtil.runOnUiThread
 import com.mapbox.geojson.FeatureCollection
 import com.mapbox.geojson.GeoJson
@@ -21,13 +22,16 @@ abstract class ShapeAnimator(val tag: Tag) {
     abstract fun subscribe(consumer: ShapeAnimationConsumer)
     abstract fun unsubscribe(consumer: ShapeAnimationConsumer)
     abstract fun start()
+    abstract fun stop()
 }
+
+private const val LOG_TAG = "RNMBXShapeAnimator"
 
 abstract class ShapeAnimatorCommon(tag: Tag): ShapeAnimator(tag) {
     val emptyGeoJsonObj: FeatureCollection = FeatureCollection.fromFeatures(listOf())
 
     private var timer: Timer? = null
-    private var start = Date()
+    private var startedAt = Date()
 
     private val fps = 30.0
     private val period = (1000.0 / fps).toLong()
@@ -35,7 +39,7 @@ abstract class ShapeAnimatorCommon(tag: Tag): ShapeAnimator(tag) {
     /** The animator's lifespan in milliseconds. */
     fun getCurrentTimestamp(): Long {
         val now = Date()
-        return now.time - start.time
+        return now.time - startedAt.time
     }
 
     // region subscribers
@@ -48,30 +52,41 @@ abstract class ShapeAnimatorCommon(tag: Tag): ShapeAnimator(tag) {
     override fun unsubscribe(consumer: ShapeAnimationConsumer) {
         subscribers.remove(consumer)
         if (subscribers.isEmpty()) {
-            timer?.cancel()
-            timer = null
+            stop()
         }
     }
     // endregion
 
     override fun start() {
-        timer?.cancel()
-        timer = null
+        if (timer != null) {
+            Log.d(LOG_TAG,"Timer for animator $tag is already running")
+            return
+        }
 
-        start = Date()
+        Log.d(LOG_TAG,"Started timer for animator $tag")
 
+        startedAt = Date()
         timer = Timer()
         timer?.schedule(object : TimerTask() {
             override fun run() {
                 val timestamp = getCurrentTimestamp()
                 val shape = getAnimatedShape(timestamp)
-                runOnUiThread {
-                    subscribers.forEach {
-                        it.shapeUpdated(shape)
+                if (shape != null) {
+                    runOnUiThread {
+                        subscribers.forEach {
+                            it.shapeUpdated(shape)
+                        }
                     }
                 }
             }
         }, 0, period)
+    }
+
+    override fun stop() {
+        Log.d(LOG_TAG,"Stopped timer for animator $tag")
+
+        timer?.cancel()
+        timer = null
     }
 
     override fun getShape(): GeoJson {
@@ -103,12 +118,8 @@ class ShapeAnimatorManager {
     fun get(tag: Tag): ShapeAnimator? {
         val result = animators[tag]
         if (result == null) {
-            Logger.e(LOG_TAG, "Shape animator for tag: $tag was not found")
+            Logger.e(LOG_TAG, "Shape animator for tag $tag was not found")
         }
         return result
-    }
-
-    companion object {
-        const val LOG_TAG = "RNMBXShapeAnimators"
     }
 }
