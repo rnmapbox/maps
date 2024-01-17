@@ -67,6 +67,7 @@ const AnimatedPoint = memo((props: BaseExampleProps) => {
           flex: 1,
           justifyContent: 'flex-end',
           paddingHorizontal: 10,
+          paddingBottom: 10,
         }}
         pointerEvents={'box-none'}
       >
