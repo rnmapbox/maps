@@ -59,11 +59,11 @@ abstract class ShapeAnimatorCommon(tag: Tag): ShapeAnimator(tag) {
 
     override fun start() {
         if (timer != null) {
-            Log.d(LOG_TAG,"Timer for animator $tag is already running")
+            Log.d(LOG_TAG, "Timer for animator $tag is already running")
             return
         }
 
-        Log.d(LOG_TAG,"Started timer for animator $tag")
+        Log.d(LOG_TAG, "Started timer for animator $tag")
 
         startedAt = Date()
         timer = Timer()
@@ -71,11 +71,9 @@ abstract class ShapeAnimatorCommon(tag: Tag): ShapeAnimator(tag) {
             override fun run() {
                 val timestamp = getCurrentTimestamp()
                 val shape = getAnimatedShape(timestamp)
-                if (shape != null) {
-                    runOnUiThread {
-                        subscribers.forEach {
-                            it.shapeUpdated(shape)
-                        }
+                runOnUiThread {
+                    subscribers.forEach {
+                        it.shapeUpdated(shape)
                     }
                 }
             }
