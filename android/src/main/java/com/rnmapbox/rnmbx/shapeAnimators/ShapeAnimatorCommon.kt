@@ -1,4 +1,4 @@
-package com.rnmapbox.rnmbx.shape_animators
+package com.rnmapbox.rnmbx.shapeAnimators
 
 import android.util.Log
 import com.facebook.react.bridge.UiThreadUtil.runOnUiThread

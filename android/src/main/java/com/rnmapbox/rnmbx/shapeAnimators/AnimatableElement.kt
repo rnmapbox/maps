@@ -1,4 +1,4 @@
-package com.rnmapbox.rnmbx.shape_animators
+package com.rnmapbox.rnmbx.shapeAnimators
 
 internal class AnimatableElement<T>(
     var source: T,

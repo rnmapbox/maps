@@ -1,4 +1,4 @@
-package com.rnmapbox.rnmbx.shape_animators
+package com.rnmapbox.rnmbx.shapeAnimators
 
 import com.facebook.react.bridge.Promise
 import com.facebook.react.bridge.ReactApplicationContext

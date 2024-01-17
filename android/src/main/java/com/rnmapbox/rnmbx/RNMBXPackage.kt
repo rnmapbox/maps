@@ -13,7 +13,6 @@ import com.rnmapbox.rnmbx.components.annotation.RNMBXMarkerViewManager
 import com.rnmapbox.rnmbx.components.annotation.RNMBXPointAnnotationManager
 import com.rnmapbox.rnmbx.components.annotation.RNMBXPointAnnotationModule
 import com.rnmapbox.rnmbx.components.camera.RNMBXCameraManager
-import com.rnmapbox.rnmbx.components.camera.RNMBXViewport
 import com.rnmapbox.rnmbx.components.camera.RNMBXViewportManager
 import com.rnmapbox.rnmbx.components.camera.RNMBXViewportModule
 import com.rnmapbox.rnmbx.components.images.RNMBXImageManager
@@ -51,9 +50,9 @@ import com.rnmapbox.rnmbx.modules.RNMBXOfflineModule
 import com.rnmapbox.rnmbx.modules.RNMBXOfflineModuleLegacy
 import com.rnmapbox.rnmbx.modules.RNMBXSnapshotModule
 import com.rnmapbox.rnmbx.modules.RNMBXTileStoreModule
-import com.rnmapbox.rnmbx.shape_animators.RNMBXChangeLineOffsetsShapeAnimatorModule
-import com.rnmapbox.rnmbx.shape_animators.RNMBXMovePointShapeAnimatorModule
-import com.rnmapbox.rnmbx.shape_animators.ShapeAnimatorManager
+import com.rnmapbox.rnmbx.shapeAnimators.RNMBXChangeLineOffsetsShapeAnimatorModule
+import com.rnmapbox.rnmbx.shapeAnimators.RNMBXMovePointShapeAnimatorModule
+import com.rnmapbox.rnmbx.shapeAnimators.ShapeAnimatorManager
 import com.rnmapbox.rnmbx.utils.ViewTagResolver
 
 class RNMBXPackage : TurboReactPackage() {
