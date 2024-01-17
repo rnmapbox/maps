@@ -67,11 +67,6 @@ class RNMBXMovePointShapeAnimatorModule(
     }
 
     @ReactMethod
-    override fun start(tag: Double, promise: Promise?) {
-        shapeAnimatorManager.get(tag.toLong())?.start()
-    }
-
-    @ReactMethod
     override fun create(tag: Double, startCoordinate: ReadableArray, promise: Promise) {
         shapeAnimatorManager.add(
             MovePointShapeAnimator(

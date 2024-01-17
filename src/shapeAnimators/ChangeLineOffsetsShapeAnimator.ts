@@ -26,10 +26,6 @@ export default class ChangeLineOffsetsShapeAnimator
     this.__nativeTag = tag;
   }
 
-  start() {
-    NativeRNMBXChangeLineOffsetsShapeAnimatorModule.start(this.__nativeTag);
-  }
-
   setLineString(args: { coordinates: Position[] }) {
     NativeRNMBXChangeLineOffsetsShapeAnimatorModule.setLineString(
       this.__nativeTag,

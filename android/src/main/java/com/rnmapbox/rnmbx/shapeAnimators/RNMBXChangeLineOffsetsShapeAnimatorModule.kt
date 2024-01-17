@@ -136,12 +136,6 @@ class RNMBXChangeLineOffsetsShapeAnimatorModule(
         return shapeAnimatorManager.get(tag.toLong()) as ChangeLineOffsetsShapeAnimator
     }
 
-    @ReactMethod
-    override fun start(tag: Double, promise: Promise?) {
-        val animator = getAnimator(tag)
-        animator.start()
-    }
-
     override fun setLineString(tag: Double, coordinates: ReadableArray?, promise: Promise?) {
         val animator = getAnimator(tag)
 

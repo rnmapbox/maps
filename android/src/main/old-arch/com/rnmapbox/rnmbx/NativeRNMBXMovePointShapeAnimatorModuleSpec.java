@@ -40,9 +40,5 @@ public abstract class NativeRNMBXMovePointShapeAnimatorModuleSpec extends ReactC
 
   @ReactMethod
   @DoNotStrip
-  public abstract void start(double tag, Promise promise);
-
-  @ReactMethod
-  @DoNotStrip
   public abstract void moveTo(double tag, ReadableArray coordinate, double duration, Promise promise);
 }

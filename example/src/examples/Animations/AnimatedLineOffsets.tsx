@@ -70,11 +70,6 @@ const AnimatedLineOffsets = memo((props: BaseExampleProps) => {
   }, []);
 
   useEffect(() => {
-    animator.start();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
-  useEffect(() => {
     animator.setStartOffset({
       offset: startOffset,
       durationMs: duration,

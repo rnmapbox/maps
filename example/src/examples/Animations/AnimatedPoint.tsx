@@ -31,11 +31,6 @@ const AnimatedPoint = memo((props: BaseExampleProps) => {
   }, []);
 
   useEffect(() => {
-    animator.start();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
-  useEffect(() => {
     animator.moveTo({
       coordinate: currentPosition,
       durationMs: 1000,

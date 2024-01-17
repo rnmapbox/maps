@@ -17,10 +17,6 @@ export default class MovePointShapeAnimator implements ShapeAnimatorInterface {
     this.__nativeTag = tag;
   }
 
-  start() {
-    NativeRNMBXMovePointShapeAnimatorModule.start(this.__nativeTag);
-  }
-
   moveTo(args: { coordinate: Position; durationMs: number }) {
     NativeRNMBXMovePointShapeAnimatorModule.moveTo(
       this.__nativeTag,
