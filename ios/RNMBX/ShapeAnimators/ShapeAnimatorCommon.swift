@@ -59,6 +59,14 @@ public class ShapeAnimatorCommon: NSObject, ShapeAnimator {
   
   // - MARK: Lifecycle
   
+  func refresh() {
+    let timestamp = self.getCurrentTimestamp()
+    let shape = self.getAnimatedShape(currentTimestamp: timestamp)
+    self.subscribers.forEach { subscriber in
+      subscriber.consumer?.shapeUpdated(shape: shape)
+    }
+  }
+  
   func start() {
     if (timer != nil) {
       print("Timer for animator \(tag) is already running")
@@ -73,16 +81,12 @@ public class ShapeAnimatorCommon: NSObject, ShapeAnimator {
       self.timer = Timer.scheduledTimer(
         withTimeInterval: self.period,
         repeats: true
-      ) { timer in
-        let timestamp = self.getCurrentTimestamp()
-        let shape = self.getAnimatedShape(currentTimestamp: timestamp)
-        self.subscribers.forEach { subscriber in
-          subscriber.consumer?.shapeUpdated(shape: shape)
-        }
+      ) { _ in
+        self.refresh()
       }
     }
   }
-  
+
   func stop() {
     print("Stopped timer for animator \(tag)")
     
