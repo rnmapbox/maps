@@ -9,6 +9,7 @@ protocol ShapeAnimator {
   func getAnimatedShape(currentTimestamp: TimeInterval) -> GeoJSONObject
   func subscribe(consumer: ShapeAnimationConsumer)
   func unsubscribe(consumer: ShapeAnimationConsumer)
+  func refresh()
   func start()
   func stop()
 }
