@@ -18,6 +18,7 @@
     "@mapbox/geo-viewport": "^0.5.0",
     "@mapbox/mapbox-sdk": "^0.13.0",
     "@react-native-async-storage/async-storage": "^1.17.11",
+    "@react-native-masked-view/masked-view": "^0.2.9",
     "@react-navigation/compat": "^5.3.20",
     "@react-navigation/native": "^6.0.11",
     "@react-navigation/native-stack": "^6.7.0",
