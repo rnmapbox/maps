@@ -40,10 +40,6 @@ RCT_EXPORT_METHOD(create:(nonnull NSNumber*)tag lineString: (nonnull NSArray*)co
   resolve([[ChangeLineOffsetsShapeAnimator createWithTag:tag coordinates:coordinates startOffset:startOffset endOffset:endOffset] getTag]);
 }
 
-RCT_EXPORT_METHOD(start:(nonnull NSNumber*)tag resolve:(RCTPromiseResolveBlock)resolve reject:(RCTPromiseRejectBlock)reject) {
-  [ChangeLineOffsetsShapeAnimator startWithTag:tag resolve:resolve reject:reject];
-}
-
 RCT_EXPORT_METHOD(setLineString:(nonnull NSNumber*)tag coordinates: (nonnull NSArray*)coordinates resolve:(RCTPromiseResolveBlock)resolve reject:(RCTPromiseRejectBlock)reject) {
   [ChangeLineOffsetsShapeAnimator setLineStringWithTag:tag coordinates:coordinates resolve:resolve reject:reject];
 }

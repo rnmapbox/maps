@@ -4,34 +4,31 @@ import Turf
 @objc
 public class ChangeLineOffsetsShapeAnimator: ShapeAnimatorCommon {
   private var lineString: LineString
-  private var startOfLine: LineOffset
-  private var endOfLine: LineOffset
+  private var startOfLine: AnimatableElement<Double>
+  private var endOfLine: AnimatableElement<Double>
   
-  private let emptyGeometry: GeoJSONObject = .geometry(.lineString(.init([])))
-
   init(tag: Int, lineString: LineString, startOffset: Double, endOffset: Double) {
     self.lineString = lineString
-    
-    startOfLine = .init(
-      sourceOffset: startOffset,
-      progressOffset: startOffset,
-      targetOffset: startOffset,
-      startedAt: 0,
+    self.startOfLine = AnimatableElement<Double>(
+      source: startOffset,
+      progress: startOffset,
+      target: startOffset,
+      startedAtSec: 0,
       progressDurationSec: 0,
-      totalDurationSec: 0
+      totalDurationSec: 0,
+      getDistanceRemaining: { a, b in b - a }
     )
-    
-    endOfLine = .init(
-      sourceOffset: endOffset,
-      progressOffset: endOffset,
-      targetOffset: endOffset,
-      startedAt: 0,
+    self.endOfLine = AnimatableElement<Double>(
+      source: endOffset,
+      progress: endOffset,
+      target: endOffset,
+      startedAtSec: 0,
       progressDurationSec: 0,
-      totalDurationSec: 0
+      totalDurationSec: 0,
+      getDistanceRemaining: { a, b in b - a }
     )
     
     super.init(tag: tag)
-    super.start()
   }
   
   override func getShape() -> GeoJSONObject {
@@ -39,25 +36,67 @@ public class ChangeLineOffsetsShapeAnimator: ShapeAnimatorCommon {
   }
   
   override func getAnimatedShape(currentTimestamp: TimeInterval) -> GeoJSONObject {
-    startOfLine.progressOffset = startOfLine.sourceOffset + (startOfLine.offsetRemaining * startOfLine.durationRatio)
-    startOfLine.progressDurationSec = currentTimestamp - startOfLine.startedAt
-    
-    endOfLine.progressOffset = endOfLine.sourceOffset + (endOfLine.offsetRemaining * endOfLine.durationRatio)
-    endOfLine.progressDurationSec = currentTimestamp - endOfLine.startedAt
-    
-    guard let totalDistance = lineString.distance() else {
-      return emptyGeometry
+    if (startOfLine.durationRatio() < 1) {
+      startOfLine.setProgress(
+        value: startOfLine.source + (startOfLine.distanceRemaining() * startOfLine.durationRatio()),
+        currentTimestamp: currentTimestamp
+      )
     }
     
-    if startOfLine.progressOffset + endOfLine.progressOffset >= totalDistance {
-      return emptyGeometry
+    if (endOfLine.durationRatio() < 1) {
+      endOfLine.setProgress(
+        value: endOfLine.source + (endOfLine.distanceRemaining() * endOfLine.durationRatio()),
+        currentTimestamp: currentTimestamp
+      )
     }
     
-    guard let trimmed = lineString.trimmed(from: startOfLine.progressOffset, to: totalDistance -  endOfLine.progressOffset) else {
-      return emptyGeometry
+    if (startOfLine.durationRatio() >= 1 && endOfLine.durationRatio() >= 1) {
+      stop()
+    }
+    
+    if (lineString.coordinates.count < 2) {
+      return emptyGeoJsonObj
+    }
+    
+    guard let totalDistance = lineString.distance(), totalDistance > 0 else {
+      return emptyGeoJsonObj
+    }
+    
+    if (startOfLine.progress + endOfLine.progress >= totalDistance) {
+      return emptyGeoJsonObj
+    }
+    
+    guard let trimmed = lineString.trimmed(from: startOfLine.progress, to: totalDistance - endOfLine.progress) else {
+      return emptyGeoJsonObj
     }
     
     return .geometry(.lineString(trimmed))
+  }
+  
+  private func _setLineString(lineString: LineString) {
+    self.lineString = lineString
+  }
+  
+  private func _setStartOffset(offset: Double, durationSec: TimeInterval) {
+    start()
+    startOfLine.reset(
+      _source: startOfLine.progress,
+      _progress: startOfLine.progress,
+      _target: offset,
+      durationSec: durationSec,
+      currentTimestamp: getCurrentTimestamp()
+    )
+  }
+  
+  private func _setEndOffset(offset: Double, durationSec: TimeInterval) {
+    start()
+    endOfLine.reset(
+      _source: endOfLine.progress,
+      _progress: endOfLine.progress,
+      _target: offset,
+      durationSec: durationSec,
+      currentTimestamp: getCurrentTimestamp()
+    )
   }
   
   private static func getAnimator(tag: NSNumber) -> ChangeLineOffsetsShapeAnimator? {
@@ -81,18 +120,7 @@ extension ChangeLineOffsetsShapeAnimator {
     ShapeAnimatorManager.shared.register(tag: tag.intValue, animator: animator)
     return animator
   }
-  
-  @objc
-  public static func start(tag: NSNumber, resolve: RCTPromiseResolveBlock, reject: @escaping (_ code: String, _ message: String, _ error: NSError) -> Void) {
-    guard let animator = getAnimator(tag: tag) else {
-      reject("ChangeLineOffsetsShapeAnimator:start", "Unable to find animator with tag \(tag)", NSError())
-      return
-    }
 
-    ShapeAnimatorManager.shared.register(tag: tag.intValue, animator: animator)
-    resolve(tag)
-  }
-  
   @objc
   public static func setLineString(tag: NSNumber, coordinates: NSArray, resolve: RCTPromiseResolveBlock, reject: @escaping (_ code: String, _ message: String, _ error: NSError) -> Void) {
     let lineString = buildLineString(_coordinates: coordinates)
@@ -128,55 +156,7 @@ extension ChangeLineOffsetsShapeAnimator {
   }
 }
 
-// - MARK: Implementation
-
-extension ChangeLineOffsetsShapeAnimator {
-  private func _setLineString(lineString: LineString) {
-    self.lineString = lineString
-    super.startIfStopped()
-  }
-  
-  private func _setStartOffset(offset: Double, durationSec: Double) {
-    startOfLine = .init(
-      sourceOffset: startOfLine.progressOffset,
-      progressOffset: startOfLine.progressOffset,
-      targetOffset: offset,
-      startedAt: getCurrentTimestamp(),
-      progressDurationSec: 0,
-      totalDurationSec: durationSec
-    )
-    super.startIfStopped()
-  }
-  
-  private func _setEndOffset(offset: Double, durationSec: Double) {
-    endOfLine = .init(
-      sourceOffset: endOfLine.progressOffset,
-      progressOffset: endOfLine.progressOffset,
-      targetOffset: offset,
-      startedAt: getCurrentTimestamp(),
-      progressDurationSec: 0,
-      totalDurationSec: durationSec
-    )
-    super.startIfStopped()
-  }
-}
-
-private struct LineOffset {
-  var sourceOffset: Double
-  var progressOffset: Double
-  var targetOffset: Double
-  var startedAt: TimeInterval
-  var progressDurationSec: Double
-  var totalDurationSec: TimeInterval
-  
-  var offsetRemaining: Double {
-    targetOffset - sourceOffset
-  }
-  
-  var durationRatio: Double {
-    min(progressDurationSec / totalDurationSec, 1)
-  }
-}
+// - MARK: Utils
 
 private func buildLineString(_coordinates: NSArray) -> LineString {
   let coordinates = _coordinates.map { coord in

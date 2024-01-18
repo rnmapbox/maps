@@ -40,10 +40,6 @@ RCT_EXPORT_METHOD(create:(nonnull NSNumber*)tag startCoordinate: (nonnull NSArra
   resolve([[MovePointShapeAnimator createWithTag:tag startCoordinate:startCoordinate] getTag]);
 }
 
-RCT_EXPORT_METHOD(start:(nonnull NSNumber*)tag resolve:(RCTPromiseResolveBlock)resolve reject:(RCTPromiseRejectBlock)reject) {
-  [MovePointShapeAnimator startWithTag:tag resolve:resolve reject:reject];
-}
-
 RCT_EXPORT_METHOD(moveTo:(nonnull NSNumber*)tag coordinate: (nonnull NSArray*)coordinate durationMs: (nonnull NSNumber*)durationMs resolve:(RCTPromiseResolveBlock)resolve reject:(RCTPromiseRejectBlock)reject) {
   [MovePointShapeAnimator moveToTag:tag coordinate:coordinate durationMs:durationMs resolve:resolve reject:reject];
 }

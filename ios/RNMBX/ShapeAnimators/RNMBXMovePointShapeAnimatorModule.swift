@@ -2,35 +2,53 @@ import MapboxMaps
 
 @objc
 public class MovePointShapeAnimator: ShapeAnimatorCommon {
-  private var sourceCoord: LocationCoordinate2D
-  private var progressCoord: LocationCoordinate2D
-  private var targetCoord: LocationCoordinate2D
-  
-  private var startTimestamp: TimeInterval
-  private var totalDurationSec: TimeInterval
+  private var point: AnimatableElement<LocationCoordinate2D>
   
   init(tag: Int, coordinate: LocationCoordinate2D) {
-    sourceCoord = coordinate
-    progressCoord = sourceCoord
-    targetCoord = sourceCoord
-    
-    startTimestamp = 0
-    totalDurationSec = 0
+    point = AnimatableElement<LocationCoordinate2D>(
+      source: coordinate,
+      progress: coordinate,
+      target: coordinate,
+      startedAtSec: 0,
+      progressDurationSec: 0.0,
+      totalDurationSec: 0.0,
+      getDistanceRemaining: { a, b in a.distance(to: b)  }
+    )
     
     super.init(tag: tag)
-    super.start()
   }
   
   override func getShape() -> GeoJSONObject {
-    return .geometry(.point(.init(progressCoord)))
+    return .geometry(.point(.init(point.progress)))
   }
   
   override func getAnimatedShape(currentTimestamp: TimeInterval) -> GeoJSONObject {
-    let progressSec = currentTimestamp - startTimestamp
-    let line = LineString([sourceCoord, targetCoord])
+    let line = LineString([point.source, point.target])
     let lineLength = line.distance() ?? 0
-    progressCoord = line.coordinateFromStart(distance: lineLength * (progressSec / totalDurationSec))!
-    return .geometry(.point(.init(progressCoord)))
+    if lineLength == 0 {
+      stop()
+    }
+    
+    if point.durationRatio() < 1, let progressCoordinate = line.coordinateFromStart(distance: lineLength * point.durationRatio()) {
+      point.setProgress(value: progressCoordinate, currentTimestamp: currentTimestamp)
+    }
+    
+    if (point.durationRatio() >= 1) {
+      stop()
+    }
+    
+    return .geometry(.point(.init(point.progress)))
+  }
+  
+  private func _moveTo(coordinate: LocationCoordinate2D, durationSec: TimeInterval) {
+    start()
+    point.reset(
+      _source: point.progress,
+      _progress: point.progress,
+      _target: coordinate,
+      durationSec: durationSec,
+      currentTimestamp: getCurrentTimestamp()
+    )
   }
   
   private static func getAnimator(tag: NSNumber) -> MovePointShapeAnimator? {
@@ -61,18 +79,7 @@ extension MovePointShapeAnimator {
     ShapeAnimatorManager.shared.register(tag: tag.intValue, animator: animator)
     return animator
   }
-  
-  @objc
-  public static func start(tag: NSNumber, resolve: RCTPromiseResolveBlock, reject: @escaping (_ code: String, _ message: String, _ error: NSError) -> Void) {
-    guard let animator = getAnimator(tag: tag) else {
-      reject("MovePointShapeAnimator:start", "Unable to find animator with tag \(tag)", NSError())
-      return
-    }
 
-    ShapeAnimatorManager.shared.register(tag: tag.intValue, animator: animator)
-    resolve(tag)
-  }
-  
   @objc
   public static func moveTo(tag: NSNumber, coordinate: NSArray, durationMs: NSNumber, resolve: RCTPromiseResolveBlock, reject: @escaping (_ code: String, _ message: String, _ error: NSError) -> Void) {
     guard let lng = coordinate[0] as? Double, let lat = coordinate[1] as? Double else {
@@ -92,18 +99,5 @@ extension MovePointShapeAnimator {
     
     animator._moveTo(coordinate: targetCoord, durationSec: durationMs.doubleValue / 1000)
     resolve(tag)
-  }
-}
-
-// - MARK: Implementation
-
-extension MovePointShapeAnimator {
-  private func _moveTo(coordinate: LocationCoordinate2D, durationSec: Double) {
-    sourceCoord = progressCoord
-    progressCoord = sourceCoord
-    targetCoord = coordinate
-    
-    startTimestamp = getCurrentTimestamp()
-    totalDurationSec = durationSec
   }
 }

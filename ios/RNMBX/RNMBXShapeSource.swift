@@ -51,6 +51,11 @@ public class RNMBXShapeSource : RNMBXSource {
       }
     }
   }
+  
+  public override func removeFromMap(_ map: RNMBXMapView, reason: RemovalReason) -> Bool {
+    shapeAnimator?.unsubscribe(consumer: self)
+    return super.removeFromMap(map, reason: reason)
+  }
 
   @objc public var cluster : NSNumber?
   @objc public var clusterRadius : NSNumber?

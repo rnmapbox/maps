@@ -10,7 +10,7 @@ protocol ShapeAnimator {
   func subscribe(consumer: ShapeAnimationConsumer)
   func unsubscribe(consumer: ShapeAnimationConsumer)
   func start()
-  func startIfStopped()
+  func stop()
 }
 
 class WeakShapeAnimationConsumer {
@@ -22,15 +22,21 @@ class WeakShapeAnimationConsumer {
 }
 
 public class ShapeAnimatorCommon: NSObject, ShapeAnimator {
-  var tag: Int
-  var timer: Timer? = nil
+  public let tag: Int
+  public let emptyGeoJsonObj: GeoJSONObject = .geometry(.lineString(.init([])))
+  
+  private var timer: Timer?
+  private var startedAt = Date()
   
   private let fps: Double = 30
+  private let period: Double
   
   init(tag: Int) {
     self.tag = tag
+    period = 1 / fps
   }
   
+  /** The animator's lifespan in seconds. */
   public func getCurrentTimestamp() -> TimeInterval {
     timer?.fireDate.timeIntervalSinceReferenceDate ?? 0
   }
@@ -47,37 +53,43 @@ public class ShapeAnimatorCommon: NSObject, ShapeAnimator {
     subscribers.removeAll { $0.consumer === consumer }
     subscribers.removeAll { $0.consumer === nil }
     if subscribers.isEmpty {
-      timer?.invalidate()
-      timer = nil
+      stop()
     }
   }
   
   // - MARK: Lifecycle
-
-  func start() {
-    timer?.invalidate()
-    
-    DispatchQueue.main.async {
-      let timer = Timer.scheduledTimer(
-        withTimeInterval: 1 / self.fps,
-        repeats: true,
-        block: { timer in
-          let shape = self.getAnimatedShape(currentTimestamp: self.getCurrentTimestamp())
-          self.subscribers.forEach {
-            $0.consumer?.shapeUpdated(shape: shape)
-          }
-        }
-      )
-      self.timer = timer
-    }
-  }
   
-  func startIfStopped() {
-    if let timer, timer.isValid {
+  func start() {
+    if (timer != nil) {
+      print("Timer for animator \(tag) is already running")
       return
     }
     
-    start()
+    print("Started timer for animator \(tag)")
+    
+    startedAt = Date()
+    
+    DispatchQueue.main.async {
+      self.timer = Timer.scheduledTimer(
+        withTimeInterval: self.period,
+        repeats: true
+      ) { timer in
+        let timestamp = self.getCurrentTimestamp()
+        let shape = self.getAnimatedShape(currentTimestamp: timestamp)
+        self.subscribers.forEach { subscriber in
+          subscriber.consumer?.shapeUpdated(shape: shape)
+        }
+      }
+    }
+  }
+  
+  func stop() {
+    print("Stopped timer for animator \(tag)")
+    
+    DispatchQueue.main.async {
+      self.timer?.invalidate()
+      self.timer = nil
+    }
   }
   
   // - MARK: Data providers
