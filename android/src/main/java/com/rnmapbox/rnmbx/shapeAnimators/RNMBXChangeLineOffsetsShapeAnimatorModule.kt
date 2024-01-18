@@ -76,6 +76,7 @@ class ChangeLineOffsetsShapeAnimator(tag: Tag, _lineString: LineString, startOff
 
     fun _setLineString(lineString: LineString) {
         this.lineString = lineString
+        refresh()
     }
 
     fun _setStartOffset(offset: Double, durationSec: Double) {

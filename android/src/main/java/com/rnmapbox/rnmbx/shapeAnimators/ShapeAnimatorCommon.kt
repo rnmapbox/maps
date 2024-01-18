@@ -21,6 +21,7 @@ abstract class ShapeAnimator(val tag: Tag) {
     abstract fun getAnimatedShape(currentTimestamp: Long): GeoJson
     abstract fun subscribe(consumer: ShapeAnimationConsumer)
     abstract fun unsubscribe(consumer: ShapeAnimationConsumer)
+    abstract fun refresh()
     abstract fun start()
     abstract fun stop()
 }
@@ -57,6 +58,16 @@ abstract class ShapeAnimatorCommon(tag: Tag): ShapeAnimator(tag) {
     }
     // endregion
 
+    override fun refresh() {
+        val timestamp = getCurrentTimestamp()
+        val shape = getAnimatedShape(timestamp)
+        runOnUiThread {
+            subscribers.forEach {
+                it.shapeUpdated(shape)
+            }
+        }
+    }
+
     override fun start() {
         if (timer != null) {
             Log.d(LOG_TAG, "Timer for animator $tag is already running")
@@ -69,13 +80,7 @@ abstract class ShapeAnimatorCommon(tag: Tag): ShapeAnimator(tag) {
         timer = Timer()
         timer?.schedule(object : TimerTask() {
             override fun run() {
-                val timestamp = getCurrentTimestamp()
-                val shape = getAnimatedShape(timestamp)
-                runOnUiThread {
-                    subscribers.forEach {
-                        it.shapeUpdated(shape)
-                    }
-                }
+                refresh()
             }
         }, 0, period)
     }
