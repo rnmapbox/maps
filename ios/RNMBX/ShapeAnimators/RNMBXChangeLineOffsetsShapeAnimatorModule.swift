@@ -75,6 +75,7 @@ public class ChangeLineOffsetsShapeAnimator: ShapeAnimatorCommon {
   
   private func _setLineString(lineString: LineString) {
     self.lineString = lineString
+    refresh()
   }
   
   private func _setStartOffset(offset: Double, durationSec: TimeInterval) {

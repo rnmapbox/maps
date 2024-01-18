@@ -39,7 +39,7 @@ public class ShapeAnimatorCommon: NSObject, ShapeAnimator {
   
   /** The animator's lifespan in seconds. */
   public func getCurrentTimestamp() -> TimeInterval {
-    timer?.fireDate.timeIntervalSinceReferenceDate ?? 0
+    timer?.fireDate.timeIntervalSince(startedAt) ?? 0
   }
   
   // MARK: Subscriptions
@@ -61,9 +61,16 @@ public class ShapeAnimatorCommon: NSObject, ShapeAnimator {
   // - MARK: Lifecycle
   
   func refresh() {
-    let timestamp = self.getCurrentTimestamp()
-    let shape = self.getAnimatedShape(currentTimestamp: timestamp)
-    self.subscribers.forEach { subscriber in
+    guard let timer = timer, timer.isValid else {
+      return
+    }
+    
+    let timestamp = getCurrentTimestamp()
+    print("Refreshing: \(timestamp)")
+    
+    let shape = getAnimatedShape(currentTimestamp: timestamp)
+    
+    subscribers.forEach { subscriber in
       subscriber.consumer?.shapeUpdated(shape: shape)
     }
   }
