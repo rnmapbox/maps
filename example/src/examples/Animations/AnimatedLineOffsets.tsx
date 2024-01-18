@@ -8,8 +8,8 @@ import {
   LineLayer,
 } from '@rnmapbox/maps';
 import { Position } from 'geojson';
-import React, { memo, useEffect, useMemo, useState } from 'react';
-import { Divider, Slider, Text } from '@rneui/base';
+import React, { memo, useCallback, useEffect, useMemo, useState } from 'react';
+import { Button, Divider, Slider, Text } from '@rneui/base';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { lineString } from '@turf/helpers';
 import bbox from '@turf/bbox';
@@ -20,7 +20,7 @@ import { BaseExampleProps } from '../common/BaseExamplePropTypes';
 
 Logger.setLogLevel('verbose');
 
-const coordinates: Position[] = [
+const baseCoordinates: Position[] = [
   [-83.53808787278204, 41.66430343748789],
   [-83.53358035756604, 41.66640799713619],
   [-83.52969888612948, 41.66177787510651],
@@ -35,12 +35,11 @@ const coordinates: Position[] = [
   [-83.51110538586248, 41.64582712857808],
   [-83.51104278148429, 41.64353476124876],
 ];
-const line = lineString(coordinates);
-const boundingBox = bbox(line);
 
 const maxDuration = 5000;
 
 const AnimatedLineOffsets = memo((props: BaseExampleProps) => {
+  const [coordinates, setCoordinates] = useState<Position[]>(baseCoordinates);
   const [startOffset, setStartOffset] = useState(0);
   const [endOffset, setEndOffset] = useState(0);
   const [duration, setDuration] = useState(1000);
@@ -54,20 +53,32 @@ const AnimatedLineOffsets = memo((props: BaseExampleProps) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  const line = useMemo(() => {
+    return lineString(coordinates);
+  }, [coordinates]);
+
+  const lineLength = useMemo(() => {
+    return length(line, { units: 'meters' });
+  }, [line]);
+
+  const boundingBox = useMemo(() => bbox(line), [line]);
+
   const bounds = useMemo(() => {
     return {
       ne: [boundingBox[0], boundingBox[1]],
       sw: [boundingBox[2], boundingBox[3]],
-      paddingTop: 40,
-      paddingBottom: 240,
-      paddingLeft: 40,
-      paddingRight: 40,
+      paddingTop: 20,
+      paddingBottom: 320,
+      paddingLeft: 20,
+      paddingRight: 20,
     };
-  }, []);
+  }, [boundingBox]);
 
-  const lineLength = useMemo(() => {
-    return length(line, { units: 'meters' });
-  }, []);
+  useEffect(() => {
+    animator.setLineString({
+      coordinates,
+    });
+  }, [animator, coordinates]);
 
   useEffect(() => {
     animator.setStartOffset({
@@ -82,6 +93,13 @@ const AnimatedLineOffsets = memo((props: BaseExampleProps) => {
       durationMs: duration,
     });
   }, [animator, endOffset, duration]);
+
+  const randomizeLine = useCallback(() => {
+    const randomized = baseCoordinates.map((c) => {
+      return [c[0] + Math.random() * 0.001, c[1] + Math.random() * 0.001];
+    });
+    setCoordinates(randomized);
+  }, []);
 
   const sliderComponents = useMemo(() => {
     const rowStyle: StyleProp<ViewStyle> = {
@@ -99,7 +117,7 @@ const AnimatedLineOffsets = memo((props: BaseExampleProps) => {
       <View
         style={{
           width: '100%',
-          padding: 15,
+          padding: 10,
           borderRadius: 10,
           backgroundColor: 'white',
         }}
@@ -116,7 +134,7 @@ const AnimatedLineOffsets = memo((props: BaseExampleProps) => {
           />
         </View>
 
-        <Divider style={{ marginVertical: 15 }} />
+        <Divider style={{ marginVertical: 10 }} />
 
         <View>
           <View style={rowStyle}>
@@ -130,7 +148,7 @@ const AnimatedLineOffsets = memo((props: BaseExampleProps) => {
           />
         </View>
 
-        <Divider style={{ marginVertical: 15 }} />
+        <Divider style={{ marginVertical: 10 }} />
 
         <View>
           <View style={rowStyle}>
@@ -143,14 +161,24 @@ const AnimatedLineOffsets = memo((props: BaseExampleProps) => {
             onSlidingComplete={(v) => setDuration(v * maxDuration)}
           />
         </View>
+
+        <Button
+          style={{ marginTop: 5 }}
+          title={'Randomize line'}
+          onPress={() => randomizeLine()}
+        />
       </View>
     );
-  }, [startOffset, endOffset, lineLength, duration]);
+  }, [startOffset, lineLength, endOffset, duration, randomizeLine]);
 
   return (
     <Page {...props}>
       <MapView style={{ flex: 1 }}>
-        <Camera defaultSettings={{ bounds }} bounds={bounds} />
+        <Camera
+          defaultSettings={{ bounds }}
+          bounds={bounds}
+          animationDuration={1000}
+        />
         <ShapeSource id={'line-shape'} shape={animator}>
           <LineLayer
             id={'line-layer'}
