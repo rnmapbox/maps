@@ -327,7 +327,7 @@ open class RNMBXMapViewManager(context: ReactApplicationContext, val viewTagReso
 
     @ReactProp(name = "requestDisallowInterceptTouchEvent")
     override fun setRequestDisallowInterceptTouchEvent(mapView: RNMBXMapView, requestDisallowInterceptTouchEvent: Dynamic) {
-        map.withMapView {
+        mapView.withMapView {
             it.requestDisallowInterceptTouchEvent = requestDisallowInterceptTouchEvent.asBoolean()
         }
     }
