@@ -74,12 +74,30 @@ class ChangeLineOffsetsShapeAnimator(tag: Tag, _lineString: LineString, startOff
         return trimmed
     }
 
-    fun _setLineString(lineString: LineString) {
+    fun setLineString(lineString: LineString, startOffset: Double?, endOffset: Double?) {
         this.lineString = lineString
+        if (startOffset != null) {
+            startOfLine.reset(
+                startOffset,
+                startOffset,
+                startOffset,
+                0.0,
+                getCurrentTimestamp()
+            )
+        }
+        if (endOffset != null) {
+            endOfLine.reset(
+                endOffset,
+                endOffset,
+                endOffset,
+                0.0,
+                getCurrentTimestamp()
+            )
+        }
         refresh()
     }
 
-    fun _setStartOffset(offset: Double, durationSec: Double) {
+    fun setStartOffset(offset: Double, durationSec: Double) {
         start()
         startOfLine.reset(
             startOfLine.progress,
@@ -90,7 +108,7 @@ class ChangeLineOffsetsShapeAnimator(tag: Tag, _lineString: LineString, startOff
         )
     }
 
-    fun _setEndOffset(offset: Double, durationSec: Double) {
+    fun setEndOffset(offset: Double, durationSec: Double) {
         start()
         endOfLine.reset(
             endOfLine.progress,
@@ -136,27 +154,30 @@ class RNMBXChangeLineOffsetsShapeAnimatorModule(
         return shapeAnimatorManager.get(tag.toLong()) as ChangeLineOffsetsShapeAnimator
     }
 
-    override fun setLineString(tag: Double, coordinates: ReadableArray?, promise: Promise?) {
+    override fun setLineString(tag: Double, coordinates: ReadableArray?, startOffset: Double, endOffset: Double, promise: Promise?) {
         val animator = getAnimator(tag)
 
         if (coordinates == null) {
             return
         }
 
+        val _startOffset = if (startOffset != -1.0) startOffset else null
+        val _endOffset = if (endOffset != -1.0) endOffset else null
+
         val lineString = buildLineString(coordinates)
-        animator._setLineString(lineString)
+        animator.setLineString(lineString, _startOffset, _endOffset)
         promise?.resolve(true)
     }
 
     override fun setStartOffset(tag: Double, offset: Double, duration: Double, promise: Promise?) {
         val animator = getAnimator(tag)
-        animator._setStartOffset(offset, duration / 1000)
+        animator.setStartOffset(offset, duration / 1000)
         promise?.resolve(true)
     }
 
     override fun setEndOffset(tag: Double, offset: Double, duration: Double, promise: Promise?) {
         val animator = getAnimator(tag)
-        animator._setEndOffset(offset, duration / 1000)
+        animator.setEndOffset(offset, duration / 1000)
         promise?.resolve(true)
     }
 }
