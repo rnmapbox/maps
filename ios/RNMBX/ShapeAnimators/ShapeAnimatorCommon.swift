@@ -26,11 +26,12 @@ public class ShapeAnimatorCommon: NSObject, ShapeAnimator {
   public let tag: Int
   public let emptyGeoJsonObj: GeoJSONObject = .geometry(.lineString(.init([])))
   
-  private var timer: Timer?
-  private var startedAt = Date()
+  private var displayLink: CADisplayLink?
+  private var startedAt: Double?
   
   private let fps: Double = 30
   private let period: Double
+  
   
   init(tag: Int) {
     self.tag = tag
@@ -39,7 +40,7 @@ public class ShapeAnimatorCommon: NSObject, ShapeAnimator {
   
   /** The animator's lifespan in seconds. */
   public func getCurrentTimestamp() -> TimeInterval {
-    timer?.fireDate.timeIntervalSince(startedAt) ?? 0
+    (displayLink?.targetTimestamp.magnitude ?? 0) - (startedAt ?? 0)
   }
   
   // MARK: Subscriptions
@@ -60,9 +61,9 @@ public class ShapeAnimatorCommon: NSObject, ShapeAnimator {
   
   // - MARK: Lifecycle
   
-  func refresh() {
-    guard let timer = timer, timer.isValid else {
-      return
+  @objc func refresh() {
+    if startedAt == nil {
+      startedAt = displayLink?.targetTimestamp.magnitude ?? 0
     }
     
     let timestamp = getCurrentTimestamp()
@@ -76,32 +77,24 @@ public class ShapeAnimatorCommon: NSObject, ShapeAnimator {
   }
   
   func start() {
-    if (timer != nil) {
+    if displayLink != nil {
       print("Timer for animator \(tag) is already running")
       return
     }
-    
+
     print("Started timer for animator \(tag)")
     
-    startedAt = Date()
-    
-    DispatchQueue.main.async {
-      self.timer = Timer.scheduledTimer(
-        withTimeInterval: self.period,
-        repeats: true
-      ) { _ in
-        self.refresh()
-      }
-    }
+    startedAt = nil
+        
+    displayLink = CADisplayLink(target: self, selector: #selector(refresh))
+    displayLink!.add(to: .main, forMode: .default)
   }
 
   func stop() {
     print("Stopped timer for animator \(tag)")
     
-    DispatchQueue.main.async {
-      self.timer?.invalidate()
-      self.timer = nil
-    }
+    displayLink?.remove(from: .main, forMode: .default)
+    displayLink = nil
   }
   
   // - MARK: Data providers
