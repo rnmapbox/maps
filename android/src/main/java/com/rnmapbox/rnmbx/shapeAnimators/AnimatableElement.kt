@@ -18,7 +18,7 @@ internal class AnimatableElement<T>(
         return if (totalDurationSec > 0.0) {
             progressDurationSec / totalDurationSec
         } else {
-            0.0
+            1.0
         }
     }
 

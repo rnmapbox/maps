@@ -67,7 +67,7 @@ public class ShapeAnimatorCommon: NSObject, ShapeAnimator {
     }
     
     let timestamp = getCurrentTimestamp()
-    print("Refreshing: \(timestamp)")
+    print("Refreshing animator for tag \(tag): \(timestamp)")
     
     let shape = getAnimatedShape(currentTimestamp: timestamp)
     

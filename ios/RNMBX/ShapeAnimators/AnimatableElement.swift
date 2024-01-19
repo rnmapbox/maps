@@ -25,10 +25,10 @@ internal class AnimatableElement<T> {
   }
   
   func durationRatio() -> Double {
-    return if (totalDurationSec > 0.0) {
+    return if (totalDurationSec > 0) {
       progressDurationSec / totalDurationSec
     } else {
-      0.0
+      1
     }
   }
   
@@ -42,7 +42,7 @@ internal class AnimatableElement<T> {
     self.progress = _progress
     self.target = _target
     self.startedAtSec = currentTimestamp
-    self.progressDurationSec = 0.0
+    self.progressDurationSec = 0
     self.totalDurationSec = durationSec
   }
 }
