@@ -21,11 +21,11 @@ internal class AnimatableElement<T> {
   }
   
   func distanceRemaining() -> Double {
-    return getDistanceRemaining(source, target)
+    getDistanceRemaining(source, target)
   }
   
   func durationRatio() -> Double {
-    return if (totalDurationSec > 0) {
+    if (totalDurationSec > 0) {
       progressDurationSec / totalDurationSec
     } else {
       1
