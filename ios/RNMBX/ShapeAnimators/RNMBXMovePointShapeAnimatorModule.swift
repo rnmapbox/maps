@@ -40,7 +40,7 @@ public class MovePointShapeAnimator: ShapeAnimatorCommon {
     return .geometry(.point(.init(point.progress)))
   }
   
-  private func _moveTo(coordinate: LocationCoordinate2D, durationSec: TimeInterval) {
+  private func moveTo(coordinate: LocationCoordinate2D, durationSec: TimeInterval) {
     start()
     point.reset(
       _source: point.progress,
@@ -97,7 +97,7 @@ extension MovePointShapeAnimator {
       longitude: lng
     )
     
-    animator._moveTo(coordinate: targetCoord, durationSec: durationMs.doubleValue / 1000)
+    animator.moveTo(coordinate: targetCoord, durationSec: durationMs.doubleValue / 1000)
     resolve(tag)
   }
 }

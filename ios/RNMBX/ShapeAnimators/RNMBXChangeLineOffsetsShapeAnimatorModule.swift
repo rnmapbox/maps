@@ -73,12 +73,30 @@ public class ChangeLineOffsetsShapeAnimator: ShapeAnimatorCommon {
     return .geometry(.lineString(trimmed))
   }
   
-  private func _setLineString(lineString: LineString) {
+  private func setLineString(lineString: LineString, startOffset: Double?, endOffset: Double?) {
     self.lineString = lineString
+    if let _startOffset = startOffset {
+      startOfLine.reset(
+        _source: _startOffset,
+        _progress: _startOffset,
+        _target: _startOffset,
+        durationSec: 0,
+        currentTimestamp: getCurrentTimestamp()
+      )
+    }
+    if let _endOffset = endOffset {
+      endOfLine.reset(
+        _source: _endOffset,
+        _progress: _endOffset,
+        _target: _endOffset,
+        durationSec: 0,
+        currentTimestamp: getCurrentTimestamp()
+      )
+    }
     refresh()
   }
   
-  private func _setStartOffset(offset: Double, durationSec: TimeInterval) {
+  private func setStartOffset(offset: Double, durationSec: TimeInterval) {
     start()
     startOfLine.reset(
       _source: startOfLine.progress,
@@ -89,7 +107,7 @@ public class ChangeLineOffsetsShapeAnimator: ShapeAnimatorCommon {
     )
   }
   
-  private func _setEndOffset(offset: Double, durationSec: TimeInterval) {
+  private func setEndOffset(offset: Double, durationSec: TimeInterval) {
     start()
     endOfLine.reset(
       _source: endOfLine.progress,
@@ -123,14 +141,17 @@ extension ChangeLineOffsetsShapeAnimator {
   }
 
   @objc
-  public static func setLineString(tag: NSNumber, coordinates: NSArray, resolve: RCTPromiseResolveBlock, reject: @escaping (_ code: String, _ message: String, _ error: NSError) -> Void) {
+  public static func setLineString(tag: NSNumber, coordinates: NSArray, startOffset: NSNumber, endOffset: NSNumber, resolve: RCTPromiseResolveBlock, reject: @escaping (_ code: String, _ message: String, _ error: NSError) -> Void) {
     let lineString = buildLineString(_coordinates: coordinates)
     guard let animator = getAnimator(tag: tag) else {
       reject("ChangeLineOffsetsShapeAnimator:setLineString", "Unable to find animator with tag \(tag)", NSError())
       return
     }
     
-    animator._setLineString(lineString: lineString)
+    let _startOffset: NSNumber? = startOffset != -1 ? startOffset : nil
+    let _endOffset: NSNumber? = endOffset != -1 ? endOffset : nil
+    
+    animator.setLineString(lineString: lineString, startOffset: _startOffset?.doubleValue, endOffset: _endOffset?.doubleValue)
     resolve(tag)
   }
   
@@ -141,7 +162,7 @@ extension ChangeLineOffsetsShapeAnimator {
       return
     }
     
-    animator._setStartOffset(offset: offset.doubleValue, durationSec: durationMs.doubleValue / 1000)
+    animator.setStartOffset(offset: offset.doubleValue, durationSec: durationMs.doubleValue / 1000)
     resolve(tag)
   }
   
@@ -152,7 +173,7 @@ extension ChangeLineOffsetsShapeAnimator {
       return
     }
     
-    animator._setEndOffset(offset: offset.doubleValue, durationSec: durationMs.doubleValue / 1000)
+    animator.setEndOffset(offset: offset.doubleValue, durationSec: durationMs.doubleValue / 1000)
     resolve(tag)
   }
 }

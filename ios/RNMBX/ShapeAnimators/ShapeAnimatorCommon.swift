@@ -29,13 +29,8 @@ public class ShapeAnimatorCommon: NSObject, ShapeAnimator {
   private var displayLink: CADisplayLink?
   private var startedAt: Double?
   
-  private let fps: Double = 30
-  private let period: Double
-  
-  
   init(tag: Int) {
     self.tag = tag
-    period = 1 / fps
   }
   
   /** The animator's lifespan in seconds. */

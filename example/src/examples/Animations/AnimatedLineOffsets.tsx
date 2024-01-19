@@ -1,4 +1,4 @@
-import { StyleProp, View, ViewStyle } from 'react-native';
+import { Button, StyleProp, View, ViewStyle } from 'react-native';
 import {
   Camera,
   Logger,
@@ -8,8 +8,8 @@ import {
   LineLayer,
 } from '@rnmapbox/maps';
 import { Position } from 'geojson';
-import React, { memo, useCallback, useEffect, useMemo, useState } from 'react';
-import { Button, Divider, Slider, Text } from '@rneui/base';
+import React, { memo, useCallback, useMemo, useRef, useState } from 'react';
+import { Divider, Slider, Text } from '@rneui/base';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { lineString } from '@turf/helpers';
 import bbox from '@turf/bbox';
@@ -41,31 +41,29 @@ const maxDuration = 5000;
 const randNorm = () => Math.random() - 0.5;
 
 const AnimatedLineOffsets = memo((props: BaseExampleProps) => {
-  const [coordinates, setCoordinates] = useState<Position[]>(baseCoordinates);
-  const [startOffset, setStartOffset] = useState(0);
-  const [endOffset, setEndOffset] = useState(0);
-  const [duration, setDuration] = useState(1000);
+  const coordinates = useRef<Position[]>(baseCoordinates);
+  const startOffset = useRef(0);
+  const endOffset = useRef(0);
+  const duration = useRef(1000);
+
+  const [startOffsetState, setStartOffsetState] = useState(startOffset.current);
+  const [endOffsetState, setEndOffsetState] = useState(endOffset.current);
+  const [durationState, setDurationState] = useState(duration.current);
 
   const animator = useMemo(() => {
     return new __experimental.ChangeLineOffsetsShapeAnimator({
-      coordinates,
-      startOffset,
-      endOffset,
+      coordinates: coordinates.current,
+      startOffset: startOffset.current,
+      endOffset: endOffset.current,
     });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const line = useMemo(() => {
-    return lineString(coordinates);
-  }, [coordinates]);
-
   const lineLength = useMemo(() => {
-    return length(line, { units: 'meters' });
-  }, [line]);
-
-  const boundingBox = useMemo(() => bbox(line), [line]);
+    return length(lineString(coordinates.current), { units: 'meters' });
+  }, []);
 
   const bounds = useMemo(() => {
+    const boundingBox = bbox(lineString(coordinates.current));
     return {
       ne: [boundingBox[0], boundingBox[1]],
       sw: [boundingBox[2], boundingBox[3]],
@@ -74,33 +72,12 @@ const AnimatedLineOffsets = memo((props: BaseExampleProps) => {
       paddingLeft: 20,
       paddingRight: 20,
     };
-  }, [boundingBox]);
+  }, []);
 
-  useEffect(() => {
-    animator.setLineString({
-      coordinates,
-    });
-  }, [animator, coordinates]);
-
-  useEffect(() => {
-    animator.setStartOffset({
-      offset: startOffset,
-      durationMs: duration,
-    });
-  }, [animator, startOffset, duration]);
-
-  useEffect(() => {
-    animator.setEndOffset({
-      offset: endOffset,
-      durationMs: duration,
-    });
-  }, [animator, endOffset, duration]);
-
-  const randomizeLine = useCallback(() => {
-    const randomized = baseCoordinates.map((c) => {
+  const buildRandomizedLine = useCallback(() => {
+    return baseCoordinates.map((c) => {
       return [c[0] + randNorm() * 0.001, c[1] + randNorm() * 0.001];
     });
-    setCoordinates(randomized);
   }, []);
 
   const sliderComponents = useMemo(() => {
@@ -112,7 +89,7 @@ const AnimatedLineOffsets = memo((props: BaseExampleProps) => {
 
     const sliderProps = {
       thumbTintColor: 'black',
-      thumbStyle: { width: 15, height: 15 },
+      thumbStyle: { width: 10, height: 10 },
     };
 
     return (
@@ -125,53 +102,117 @@ const AnimatedLineOffsets = memo((props: BaseExampleProps) => {
         }}
       >
         <View>
+          <Text>{'Randomize Line'}</Text>
+          <View
+            style={{
+              flex: 0,
+              flexDirection: 'row',
+              justifyContent: 'space-around',
+            }}
+          >
+            <Button
+              title={'Keep offsets'}
+              onPress={() => {
+                animator.setLineString({
+                  coordinates: buildRandomizedLine(),
+                  startOffset: undefined,
+                  endOffset: undefined,
+                });
+              }}
+            />
+            <Button
+              title={'Zero offsets'}
+              onPress={() => {
+                startOffset.current = 0;
+                endOffset.current = 0;
+                animator.setLineString({
+                  coordinates: buildRandomizedLine(),
+                  startOffset: startOffset.current,
+                  endOffset: endOffset.current,
+                });
+                setStartOffsetState(startOffset.current);
+                setEndOffsetState(endOffset.current);
+              }}
+            />
+          </View>
+        </View>
+
+        <Divider style={{ marginVertical: 5 }} />
+
+        <View>
           <View style={rowStyle}>
             <Text>{'Start Offset'}</Text>
-            <Text>{startOffset.toFixed(2)} m</Text>
+            <Text>{startOffsetState.toFixed(2)} m</Text>
           </View>
           <Slider
             {...sliderProps}
-            value={startOffset / lineLength}
-            onSlidingComplete={(v) => setStartOffset(v * lineLength)}
+            value={startOffsetState / lineLength}
+            onSlidingComplete={(v) => {
+              startOffset.current = v * lineLength;
+              animator.setStartOffset({
+                offset: startOffset.current,
+                durationMs: duration.current,
+              });
+              setStartOffsetState(startOffset.current);
+            }}
           />
         </View>
 
-        <Divider style={{ marginVertical: 10 }} />
+        <Divider style={{ marginVertical: 5 }} />
 
         <View>
           <View style={rowStyle}>
             <Text>{'End Offset'}</Text>
-            <Text>{endOffset.toFixed(2)} m</Text>
+            <Text>{endOffsetState.toFixed(2)} m</Text>
           </View>
           <Slider
             {...sliderProps}
-            value={endOffset / lineLength}
-            onSlidingComplete={(v) => setEndOffset(v * lineLength)}
+            value={endOffsetState / lineLength}
+            onSlidingComplete={(v) => {
+              endOffset.current = v * lineLength;
+              animator.setEndOffset({
+                offset: endOffset.current,
+                durationMs: duration.current,
+              });
+              setEndOffsetState(endOffset.current);
+            }}
           />
         </View>
 
-        <Divider style={{ marginVertical: 10 }} />
+        <Divider style={{ marginVertical: 5 }} />
 
         <View>
           <View style={rowStyle}>
             <Text>{'Duration'}</Text>
-            <Text>{(duration / 1000).toFixed(2)} s</Text>
+            <Text>{(durationState / 1000).toFixed(2)} s</Text>
           </View>
           <Slider
             {...sliderProps}
-            value={duration / maxDuration}
-            onSlidingComplete={(v) => setDuration(v * maxDuration)}
+            value={durationState / maxDuration}
+            onSlidingComplete={(v) => {
+              duration.current = v * maxDuration;
+              animator.setStartOffset({
+                offset: startOffset.current,
+                durationMs: duration.current,
+              });
+              animator.setEndOffset({
+                offset: endOffset.current,
+                durationMs: duration.current,
+              });
+              setDurationState(duration.current);
+            }}
           />
         </View>
-
-        <Button
-          style={{ marginTop: 5 }}
-          title={'Randomize line'}
-          onPress={() => randomizeLine()}
-        />
       </View>
     );
-  }, [startOffset, lineLength, endOffset, duration, randomizeLine]);
+  }, [
+    startOffsetState,
+    endOffsetState,
+    durationState,
+    lineLength,
+    animator,
+    buildRandomizedLine,
+  ]);
 
   return (
     <Page {...props}>
