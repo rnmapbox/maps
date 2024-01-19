@@ -22,7 +22,7 @@ public class MovePointShapeAnimator: ShapeAnimatorCommon {
     return .geometry(.point(.init(point.progress)))
   }
   
-  override func getAnimatedShape(currentTimestamp: TimeInterval) -> GeoJSONObject {
+  override func getAnimatedShape(animatorAgeSec: TimeInterval) -> GeoJSONObject {
     let line = LineString([point.source, point.target])
     let lineLength = line.distance() ?? 0
     if lineLength == 0 {
@@ -30,7 +30,7 @@ public class MovePointShapeAnimator: ShapeAnimatorCommon {
     }
     
     if point.durationRatio() < 1, let progressCoordinate = line.coordinateFromStart(distance: lineLength * point.durationRatio()) {
-      point.setProgress(value: progressCoordinate, currentTimestamp: currentTimestamp)
+      point.setProgress(value: progressCoordinate, animatorAgeSec: animatorAgeSec)
     }
     
     if (point.durationRatio() >= 1) {
@@ -47,7 +47,7 @@ public class MovePointShapeAnimator: ShapeAnimatorCommon {
       _progress: point.progress,
       _target: coordinate,
       durationSec: durationSec,
-      currentTimestamp: getCurrentTimestamp()
+      animatorAgeSec: getAnimatorAgeSec()
     )
   }
   

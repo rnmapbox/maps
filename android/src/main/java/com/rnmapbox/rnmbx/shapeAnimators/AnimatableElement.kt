@@ -22,16 +22,16 @@ internal class AnimatableElement<T>(
         }
     }
 
-    fun setProgress(value: T, currentTimestamp: Double) {
+    fun setProgress(value: T, animatorAgeSec: Double) {
         progress = value
-        progressDurationSec = (currentTimestamp - startedAtSec)
+        progressDurationSec = (animatorAgeSec - startedAtSec)
     }
 
-    fun reset(_source: T, _progress: T, _target: T, durationSec: Double, currentTimestamp: Double) {
+    fun reset(_source: T, _progress: T, _target: T, durationSec: Double, animatorAgeSec: Double) {
         this.source = _source
         this.progress = _progress
         this.target = _target
-        this.startedAtSec = currentTimestamp
+        this.startedAtSec = animatorAgeSec
         this.progressDurationSec = 0.0
         this.totalDurationSec = durationSec
     }

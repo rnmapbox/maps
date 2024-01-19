@@ -6,7 +6,7 @@ protocol ShapeAnimationConsumer: AnyObject {
 
 protocol ShapeAnimator {
   func getShape() -> GeoJSONObject
-  func getAnimatedShape(currentTimestamp: TimeInterval) -> GeoJSONObject
+  func getAnimatedShape(animatorAgeSec: TimeInterval) -> GeoJSONObject
   func subscribe(consumer: ShapeAnimationConsumer)
   func unsubscribe(consumer: ShapeAnimationConsumer)
   func refresh()
@@ -33,8 +33,8 @@ public class ShapeAnimatorCommon: NSObject, ShapeAnimator {
     self.tag = tag
   }
   
-  /** The animator's lifespan in seconds. */
-  public func getCurrentTimestamp() -> TimeInterval {
+  /** The number of seconds the animator has been running continuously. */
+  public func getAnimatorAgeSec() -> TimeInterval {
     (displayLink?.targetTimestamp.magnitude ?? 0) - (startedAt ?? 0)
   }
   
@@ -61,10 +61,10 @@ public class ShapeAnimatorCommon: NSObject, ShapeAnimator {
       startedAt = displayLink?.targetTimestamp.magnitude ?? 0
     }
     
-    let timestamp = getCurrentTimestamp()
+    let timestamp = getAnimatorAgeSec()
     print("Refreshing animator for tag \(tag): \(timestamp)")
     
-    let shape = getAnimatedShape(currentTimestamp: timestamp)
+    let shape = getAnimatedShape(animatorAgeSec: timestamp)
     
     subscribers.forEach { subscriber in
       subscriber.consumer?.shapeUpdated(shape: shape)
@@ -95,10 +95,10 @@ public class ShapeAnimatorCommon: NSObject, ShapeAnimator {
   // - MARK: Data providers
   
   func getShape() -> GeoJSONObject {
-    return getAnimatedShape(currentTimestamp: getCurrentTimestamp())
+    return getAnimatedShape(animatorAgeSec: getAnimatorAgeSec())
   }
   
-  func getAnimatedShape(currentTimestamp: TimeInterval) -> GeoJSONObject {
+  func getAnimatedShape(animatorAgeSec: TimeInterval) -> GeoJSONObject {
     fatalError("getAnimatedShape() must be overridden in all subclasses of ShapeAnimatorCommon")
   }
 }

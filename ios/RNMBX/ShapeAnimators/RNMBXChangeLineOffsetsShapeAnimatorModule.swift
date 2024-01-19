@@ -35,18 +35,18 @@ public class ChangeLineOffsetsShapeAnimator: ShapeAnimatorCommon {
     return .geometry(.lineString(lineString))
   }
   
-  override func getAnimatedShape(currentTimestamp: TimeInterval) -> GeoJSONObject {
+  override func getAnimatedShape(animatorAgeSec: TimeInterval) -> GeoJSONObject {
     if (startOfLine.durationRatio() < 1) {
       startOfLine.setProgress(
         value: startOfLine.source + (startOfLine.distanceRemaining() * startOfLine.durationRatio()),
-        currentTimestamp: currentTimestamp
+        animatorAgeSec: animatorAgeSec
       )
     }
     
     if (endOfLine.durationRatio() < 1) {
       endOfLine.setProgress(
         value: endOfLine.source + (endOfLine.distanceRemaining() * endOfLine.durationRatio()),
-        currentTimestamp: currentTimestamp
+        animatorAgeSec: animatorAgeSec
       )
     }
     
@@ -81,7 +81,7 @@ public class ChangeLineOffsetsShapeAnimator: ShapeAnimatorCommon {
         _progress: _startOffset,
         _target: _startOffset,
         durationSec: 0,
-        currentTimestamp: getCurrentTimestamp()
+        animatorAgeSec: getAnimatorAgeSec()
       )
     }
     if let _endOffset = endOffset {
@@ -90,7 +90,7 @@ public class ChangeLineOffsetsShapeAnimator: ShapeAnimatorCommon {
         _progress: _endOffset,
         _target: _endOffset,
         durationSec: 0,
-        currentTimestamp: getCurrentTimestamp()
+        animatorAgeSec: getAnimatorAgeSec()
       )
     }
     refresh()
@@ -103,7 +103,7 @@ public class ChangeLineOffsetsShapeAnimator: ShapeAnimatorCommon {
       _progress: startOfLine.progress,
       _target: offset,
       durationSec: durationSec,
-      currentTimestamp: getCurrentTimestamp()
+      animatorAgeSec: getAnimatorAgeSec()
     )
   }
   
@@ -114,7 +114,7 @@ public class ChangeLineOffsetsShapeAnimator: ShapeAnimatorCommon {
       _progress: endOfLine.progress,
       _target: offset,
       durationSec: durationSec,
-      currentTimestamp: getCurrentTimestamp()
+      animatorAgeSec: getAnimatorAgeSec()
     )
   }
   

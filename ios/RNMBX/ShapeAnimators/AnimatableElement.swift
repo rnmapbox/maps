@@ -32,16 +32,16 @@ internal class AnimatableElement<T> {
     }
   }
   
-  func setProgress(value: T, currentTimestamp: TimeInterval) {
+  func setProgress(value: T, animatorAgeSec: TimeInterval) {
     progress = value
-    progressDurationSec = currentTimestamp - startedAtSec
+    progressDurationSec = animatorAgeSec - startedAtSec
   }
   
-  func reset(_source: T, _progress: T, _target: T, durationSec: TimeInterval, currentTimestamp: TimeInterval) {
+  func reset(_source: T, _progress: T, _target: T, durationSec: TimeInterval, animatorAgeSec: TimeInterval) {
     self.source = _source
     self.progress = _progress
     self.target = _target
-    self.startedAtSec = currentTimestamp
+    self.startedAtSec = animatorAgeSec
     self.progressDurationSec = 0
     self.totalDurationSec = durationSec
   }

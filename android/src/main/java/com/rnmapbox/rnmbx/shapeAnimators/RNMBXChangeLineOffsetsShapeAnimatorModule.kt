@@ -33,18 +33,18 @@ class ChangeLineOffsetsShapeAnimator(tag: Tag, _lineString: LineString, startOff
         { a, b -> b - a }
     )
 
-    override fun getAnimatedShape(currentTimestamp: Double): GeoJson {
+    override fun getAnimatedShape(animatorAgeSec: Double): GeoJson {
         if (startOfLine.durationRatio() < 1) {
             startOfLine.setProgress(
                 startOfLine.source + (startOfLine.distanceRemaining() * startOfLine.durationRatio()),
-                currentTimestamp
+                animatorAgeSec
             )
         }
 
         if (endOfLine.durationRatio() < 1) {
             endOfLine.setProgress(
                 endOfLine.source + (endOfLine.distanceRemaining() * endOfLine.durationRatio()),
-                currentTimestamp
+                animatorAgeSec
             )
         }
 
@@ -82,7 +82,7 @@ class ChangeLineOffsetsShapeAnimator(tag: Tag, _lineString: LineString, startOff
                 startOffset,
                 startOffset,
                 0.0,
-                getCurrentTimestamp()
+                getAnimatorAgeSec()
             )
         }
         if (endOffset != null) {
@@ -91,7 +91,7 @@ class ChangeLineOffsetsShapeAnimator(tag: Tag, _lineString: LineString, startOff
                 endOffset,
                 endOffset,
                 0.0,
-                getCurrentTimestamp()
+                getAnimatorAgeSec()
             )
         }
         refresh()
@@ -104,7 +104,7 @@ class ChangeLineOffsetsShapeAnimator(tag: Tag, _lineString: LineString, startOff
             startOfLine.progress,
             offset,
             durationSec,
-            getCurrentTimestamp()
+            getAnimatorAgeSec()
         )
     }
 
@@ -115,7 +115,7 @@ class ChangeLineOffsetsShapeAnimator(tag: Tag, _lineString: LineString, startOff
             endOfLine.progress,
             offset,
             durationSec,
-            getCurrentTimestamp()
+            getAnimatorAgeSec()
         )
     }
 }

@@ -23,7 +23,7 @@ class MovePointShapeAnimator(tag: Tag, coordinate: Point) : ShapeAnimatorCommon(
         { a, b -> TurfMeasurement.distance(a, b) }
     )
 
-    override fun getAnimatedShape(currentTimestamp: Double): GeoJson {
+    override fun getAnimatedShape(animatorAgeSec: Double): GeoJson {
         val line = LineString.fromLngLats(listOf(point.source, point.target))
         val lineLength = TurfMeasurement.length(line, UNIT_METERS)
         if (lineLength == 0.0) {
@@ -33,7 +33,7 @@ class MovePointShapeAnimator(tag: Tag, coordinate: Point) : ShapeAnimatorCommon(
         if (point.durationRatio() < 1) {
             point.setProgress(
                 TurfMeasurement.along(line, lineLength * point.durationRatio(), UNIT_METERS),
-                currentTimestamp
+                animatorAgeSec
             )
         }
 
@@ -51,7 +51,7 @@ class MovePointShapeAnimator(tag: Tag, coordinate: Point) : ShapeAnimatorCommon(
             point.progress,
             coordinate,
             durationSec,
-            getCurrentTimestamp()
+            getAnimatorAgeSec()
         )
     }
 }
