@@ -38,6 +38,8 @@ const baseCoordinates: Position[] = [
 
 const maxDuration = 5000;
 
+const randNorm = () => Math.random() - 0.5;
+
 const AnimatedLineOffsets = memo((props: BaseExampleProps) => {
   const [coordinates, setCoordinates] = useState<Position[]>(baseCoordinates);
   const [startOffset, setStartOffset] = useState(0);
@@ -96,7 +98,7 @@ const AnimatedLineOffsets = memo((props: BaseExampleProps) => {
 
   const randomizeLine = useCallback(() => {
     const randomized = baseCoordinates.map((c) => {
-      return [c[0] + Math.random() * 0.001, c[1] + Math.random() * 0.001];
+      return [c[0] + randNorm() * 0.001, c[1] + randNorm() * 0.001];
     });
     setCoordinates(randomized);
   }, []);
