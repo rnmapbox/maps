@@ -18,7 +18,7 @@ class ChangeLineOffsetsShapeAnimator(tag: Tag, _lineString: LineString, startOff
         startOffset,
         startOffset,
         startOffset,
-        0,
+        0.0,
         0.0,
         0.0,
         { a, b -> b - a }
@@ -27,13 +27,13 @@ class ChangeLineOffsetsShapeAnimator(tag: Tag, _lineString: LineString, startOff
         endOffset,
         endOffset,
         endOffset,
-        0,
+        0.0,
         0.0,
         0.0,
         { a, b -> b - a }
     )
 
-    override fun getAnimatedShape(currentTimestamp: Long): GeoJson {
+    override fun getAnimatedShape(currentTimestamp: Double): GeoJson {
         if (startOfLine.durationRatio() < 1) {
             startOfLine.setProgress(
                 startOfLine.source + (startOfLine.distanceRemaining() * startOfLine.durationRatio()),

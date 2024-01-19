@@ -18,7 +18,7 @@ interface ShapeAnimationConsumer {
 
 abstract class ShapeAnimator(val tag: Tag) {
     abstract fun getShape(): GeoJson
-    abstract fun getAnimatedShape(currentTimestamp: Long): GeoJson
+    abstract fun getAnimatedShape(currentTimestamp: Double): GeoJson
     abstract fun subscribe(consumer: ShapeAnimationConsumer)
     abstract fun unsubscribe(consumer: ShapeAnimationConsumer)
     abstract fun refresh()
@@ -35,12 +35,12 @@ abstract class ShapeAnimatorCommon(tag: Tag): ShapeAnimator(tag) {
     private var startedAt = Date()
 
     private val fps = 30.0
-    private val period = (1000.0 / fps).toLong()
+    private val period = 1.0 / fps
 
-    /** The animator's lifespan in milliseconds. */
-    fun getCurrentTimestamp(): Long {
+    /** The animator's lifespan in seconds. */
+    fun getCurrentTimestamp(): Double {
         val now = Date()
-        return now.time - startedAt.time
+        return (now.time - startedAt.time).toDouble() / 1000
     }
 
     // region subscribers
@@ -60,6 +60,8 @@ abstract class ShapeAnimatorCommon(tag: Tag): ShapeAnimator(tag) {
 
     override fun refresh() {
         val timestamp = getCurrentTimestamp()
+        Log.d(LOG_TAG, "Refreshing: $timestamp")
+
         val shape = getAnimatedShape(timestamp)
         runOnUiThread {
             subscribers.forEach {
@@ -82,7 +84,7 @@ abstract class ShapeAnimatorCommon(tag: Tag): ShapeAnimator(tag) {
             override fun run() {
                 refresh()
             }
-        }, 0, period)
+        }, 0, (period * 1000).toLong())
     }
 
     override fun stop() {

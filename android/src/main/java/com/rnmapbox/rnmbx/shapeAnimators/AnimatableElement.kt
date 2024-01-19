@@ -4,7 +4,7 @@ internal class AnimatableElement<T>(
     var source: T,
     var progress: T,
     var target: T,
-    var startedAt: Long,
+    var startedAtSec: Double,
     var progressDurationSec: Double,
     var totalDurationSec: Double,
     /** A function returning the difference in meters between the two values. */
@@ -22,16 +22,16 @@ internal class AnimatableElement<T>(
         }
     }
 
-    fun setProgress(value: T, currentTimestamp: Long) {
+    fun setProgress(value: T, currentTimestamp: Double) {
         progress = value
-        progressDurationSec = (currentTimestamp - startedAt).toDouble() / 1000
+        progressDurationSec = (currentTimestamp - startedAtSec)
     }
 
-    fun reset(_source: T, _progress: T, _target: T, durationSec: Double, currentTimestamp: Long) {
+    fun reset(_source: T, _progress: T, _target: T, durationSec: Double, currentTimestamp: Double) {
         this.source = _source
         this.progress = _progress
         this.target = _target
-        this.startedAt = currentTimestamp
+        this.startedAtSec = currentTimestamp
         this.progressDurationSec = 0.0
         this.totalDurationSec = durationSec
     }

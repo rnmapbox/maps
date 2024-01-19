@@ -17,13 +17,13 @@ class MovePointShapeAnimator(tag: Tag, coordinate: Point) : ShapeAnimatorCommon(
         coordinate,
         coordinate,
         coordinate,
-        0,
+        0.0,
         0.0,
         0.0,
         { a, b -> TurfMeasurement.distance(a, b) }
     )
 
-    override fun getAnimatedShape(currentTimestamp: Long): GeoJson {
+    override fun getAnimatedShape(currentTimestamp: Double): GeoJson {
         val line = LineString.fromLngLats(listOf(point.source, point.target))
         val lineLength = TurfMeasurement.length(line, UNIT_METERS)
         if (lineLength == 0.0) {
