@@ -5,19 +5,18 @@ import { lineString } from '@turf/helpers';
 import { Animated as RNAnimated } from 'react-native';
 import {
   MapView,
-  ShapeSource,
-  LineLayer,
   SkyLayer,
   Camera,
   Logger,
   Terrain,
   RasterDemSource,
   Animated,
+  AnimatedShape,
+  AnimatedRouteCoordinatesArray,
+  AnimatedExtractCoordinateFromArray,
   MarkerView,
   Atmosphere,
 } from '@rnmapbox/maps';
-
-import Page from '../common/Page';
 
 Logger.setLogLevel('verbose');
 
@@ -39,11 +38,9 @@ const styles = {
   }),
 };
 
-const QueryTerrainElevation = ({ ...props }) => {
-  let [routeGeojson, setRouteGeojson] = useState(null);
+const QueryTerrainElevation = () => {
   let [animatedRoute, setAnimatedRoute] = useState(null);
   let [actPoint, setActPoint] = useState(null);
-  // let [pinRoute, setPinRoute] = useState(null);
   let camera = useRef();
   let [altitude, setAltitude] = useState(null);
   let updateAltitudeInterval = useRef();
@@ -93,21 +90,20 @@ const QueryTerrainElevation = ({ ...props }) => {
         'https://docs.mapbox.com/mapbox-gl-js/assets/route-pin.geojson',
       );
       let featureCollection = await response.json();
-      setRouteGeojson(featureCollection);
+
       let pinRoute = featureCollection.features[0].geometry.coordinates;
 
-      let animatedRoute = new Animated.RouteCoordinatesArray(pinRoute, {
+      let animatedRoute = new AnimatedRouteCoordinatesArray(pinRoute, {
         end: {
           from: length(lineString(pinRoute)),
         },
       });
       setAnimatedRoute(animatedRoute);
-      setActPoint(new Animated.ExtractCoordinateFromArray(animatedRoute, -1));
-      //setPinRoute(pinRoute);
+      setActPoint(new AnimatedExtractCoordinateFromArray(animatedRoute, -1));
     })();
   }, []);
   return (
-    <Page {...props}>
+    <>
       <Button title="Start" onPress={() => startAnimation(animatedRoute)} />
       <MapView
         style={styles.mapView}
@@ -140,32 +136,19 @@ const QueryTerrainElevation = ({ ...props }) => {
           <Atmosphere
             style={{
               starIntensity: 1.0,
-              range: [-3.5, 10.0],
-              spaceColor: '#00ffff',
-              color: '#00ff00',
-              highColor: '#ff00ff',
+              range: [-0.7, 2.0],
+              spaceColor: '#def',
+              color: '#def',
+              highColor: '#def',
             }}
           />
         </RasterDemSource>
 
-        {routeGeojson && false && (
-          <ShapeSource id="route" shape={routeGeojson}>
-            <LineLayer
-              id="root"
-              style={{
-                lineColor: 'rgba(0,0,255,0)',
-                lineWidth: 5,
-                lineCap: 'round',
-                lineJoin: 'round',
-              }}
-            />
-          </ShapeSource>
-        )}
         {animatedRoute && (
           <Animated.ShapeSource
             id="animated-route"
             shape={
-              new Animated.Shape({
+              new AnimatedShape({
                 type: 'LineString',
                 coordinates: animatedRoute,
               })
@@ -174,7 +157,7 @@ const QueryTerrainElevation = ({ ...props }) => {
             <Animated.LineLayer
               id={'animated-route'}
               style={{
-                lineColor: 'rgba(255,0,0,0)',
+                lineColor: 'rgba(255,0,0,255)',
                 lineWidth: 3,
                 lineCap: 'round',
                 lineJoin: 'round',
@@ -187,7 +170,7 @@ const QueryTerrainElevation = ({ ...props }) => {
           <Animated.ShapeSource
             id="currentLocationSource"
             shape={
-              new Animated.Shape({
+              new AnimatedShape({
                 type: 'Point',
                 coordinates: actPoint,
               })
@@ -224,7 +207,7 @@ const QueryTerrainElevation = ({ ...props }) => {
           </AnimatedMarkerView>
         )}
       </MapView>
-    </Page>
+    </>
   );
 };
 
@@ -235,9 +218,14 @@ export default QueryTerrainElevation;
 /** @type ExampleWithMetadata['metadata'] */
 const metadata = {
   title: 'Query Terrain Elevation',
-  tags: ['MapView#queryTerrainElevation'],
+  tags: [
+    'MapView#queryTerrainElevation',
+    'AnimatedShape',
+    'AnimatedRouteCoordinatesArray',
+    'AnimatedExtractCoordinateFromArray',
+  ],
   docs: `
-Query Terrain Elevation
+This is a fairly complex example demonstraing the use of AnimatedShape, Camera animation, queryTerrainElevation and AnimatedMarkerView
 `,
 };
 QueryTerrainElevation.metadata = metadata;

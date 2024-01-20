@@ -468,9 +468,12 @@
         "metadata": {
           "title": "Query Terrain Elevation",
           "tags": [
-            "MapView#queryTerrainElevation"
+            "MapView#queryTerrainElevation",
+            "AnimatedShape",
+            "AnimatedRouteCoordinatesArray",
+            "AnimatedExtractCoordinateFromArray"
           ],
-          "docs": "\nQuery Terrain Elevation\n"
+          "docs": "\nThis is a fairly complex example demonstraing the use of AnimatedShape, Camera animation, queryTerrainElevation and AnimatedMarkerView\n"
         },
         "fullPath": "example/src/examples/V10/QueryTerrainElevation.js",
         "relPath": "V10/QueryTerrainElevation.js",

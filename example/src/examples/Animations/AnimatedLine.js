@@ -1,6 +1,14 @@
 import React from 'react';
 import { Easing, Button } from 'react-native';
-import { Animated, MapView, Camera } from '@rnmapbox/maps';
+import {
+  Animated,
+  MapView,
+  Camera,
+  AnimatedRouteCoordinatesArray,
+  AnimatedExtractCoordinateFromArray,
+  AnimatedCoordinatesArray,
+  AnimatedShape,
+} from '@rnmapbox/maps';
 import along from '@turf/along';
 import length from '@turf/length';
 import { point, lineString } from '@turf/helpers';
@@ -47,7 +55,7 @@ class AnimatedLine extends React.Component {
   constructor(props) {
     super(props);
 
-    const route = new Animated.RouteCoordinatesArray([
+    const route = new AnimatedRouteCoordinatesArray([
       [blon, blat],
       [blon, blat + 2 * bdelta],
       [blon + bdelta, blat + 2 * bdelta + bdelta],
@@ -58,7 +66,7 @@ class AnimatedLine extends React.Component {
       backgroundColor: 'blue',
       coordinates: [[-73.99155, 40.73581]],
 
-      shape: new Animated.CoordinatesArray(
+      shape: new AnimatedCoordinatesArray(
         [...Array(steps).keys()].map((v, i) => [
           lon + delta * (i / steps) * (i / steps),
           lat + (delta * i) / steps,
@@ -69,7 +77,7 @@ class AnimatedLine extends React.Component {
         features: [],
       },
       route,
-      actPoint: new Animated.ExtractCoordinateFromArray(route, -1),
+      actPoint: new AnimatedExtractCoordinateFromArray(route, -1),
     };
   }
 
@@ -219,7 +227,7 @@ class AnimatedLine extends React.Component {
           <Animated.ShapeSource
             id={'route'}
             shape={
-              new Animated.Shape({
+              new AnimatedShape({
                 type: 'LineString',
                 coordinates: this.state.route,
               })
@@ -231,7 +239,7 @@ class AnimatedLine extends React.Component {
           <Animated.ShapeSource
             id="currentLocationSource"
             shape={
-              new Animated.Shape({
+              new AnimatedShape({
                 type: 'Point',
                 coordinates: this.state.actPoint,
               })
@@ -246,7 +254,7 @@ class AnimatedLine extends React.Component {
           <Animated.ShapeSource
             id={'shape'}
             shape={
-              new Animated.Shape({
+              new AnimatedShape({
                 type: 'LineString',
                 coordinates: this.state.shape,
               })
