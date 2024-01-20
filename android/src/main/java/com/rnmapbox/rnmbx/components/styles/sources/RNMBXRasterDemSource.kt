@@ -21,6 +21,9 @@ import com.rnmapbox.rnmbx.v11compat.feature.*
 // import com.rnmapbox.rnmbx.utils.DownloadMapImageTask;
 class RNMBXRasterDemSource(context: Context?, private val mManager: RNMBXRasterDemSourceManager) :
     RNMBXTileSource<RasterDemSource?>(context) {
+
+    private var tileSize: Long? = null
+
     override fun onPress(event: OnPressEvent?) {
         mManager.handleEvent(FeatureClickEvent.makeVectorSourceEvent(this, event))
     }
@@ -35,15 +38,18 @@ class RNMBXRasterDemSource(context: Context?, private val mManager: RNMBXRasterD
             return mMap!!.getStyle()!!.getSource(DEFAULT_ID) as RasterDemSource
         }
         val configurationUrl = uRL
-        return if (configurationUrl != null) {
-            RasterDemSource(
-                RasterDemSource.Builder(id)
-                    .url(configurationUrl)
-            )
-        } else RasterDemSource(
+
+        val builder = if (configurationUrl != null) {
+            RasterDemSource.Builder(id)
+                .url(configurationUrl)
+        } else {
             RasterDemSource.Builder(id)
                 .tileSet(buildTileset())
-        )
+        }
+
+        tileSize?.let { builder.tileSize(it) }
+
+        return RasterDemSource(builder)
     }
 
     fun querySourceFeatures(
@@ -80,5 +86,9 @@ class RNMBXRasterDemSource(context: Context?, private val mManager: RNMBXRasterD
 
     override fun hasNoDataSoRefersToExisting(): Boolean {
         return uRL == null && tileUrlTemplates.isEmpty()
+    }
+
+    fun setTileSize(tileSize: Int) {
+        this.tileSize = tileSize.toLong()
     }
 }
