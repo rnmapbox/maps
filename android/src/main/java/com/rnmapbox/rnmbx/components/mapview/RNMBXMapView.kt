@@ -1512,14 +1512,18 @@ fun RNMBXMapView.updateRequestDisallowInterceptTouchEvent(oldValue: Boolean, val
         return
     }
     if (value) {
-        mapView.setOnTouchListener { view, event ->
-            this.requestDisallowInterceptTouchEvent(true)
-            mapView.onTouchEvent(event)
-            true
+        withMapView {
+            it.setOnTouchListener { view, event ->
+                this.requestDisallowInterceptTouchEvent(true)
+                mapView.onTouchEvent(event)
+                true
+            }
         }
     } else {
-        mapView.setOnTouchListener { view, event ->
-            mapView.onTouchEvent(event)
+        withMapView {
+            it.setOnTouchListener { view, event ->
+                mapView.onTouchEvent(event)
+            }
         }
     }
 }

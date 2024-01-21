@@ -327,9 +327,7 @@ open class RNMBXMapViewManager(context: ReactApplicationContext, val viewTagReso
 
     @ReactProp(name = "requestDisallowInterceptTouchEvent")
     override fun setRequestDisallowInterceptTouchEvent(mapView: RNMBXMapView, requestDisallowInterceptTouchEvent: Dynamic) {
-        mapView.withMapView {
-            it.requestDisallowInterceptTouchEvent = requestDisallowInterceptTouchEvent.asBoolean()
-        }
+        mapView.requestDisallowInterceptTouchEvent = requestDisallowInterceptTouchEvent.asBoolean()
     }
 
     @ReactProp(name = "deselectAnnotationOnTap")
