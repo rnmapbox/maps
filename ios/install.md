@@ -69,7 +69,7 @@ We have support for mapbox 11.
 Add the following to your Podfile:
 
 ```ruby
-$RNMapboxMapsVersion = '= 11.0.0'
+$RNMapboxMapsVersion = '= 11.1.0'
 ```
 
 If using expo managed workflow, set the "RNMapboxMapsVersion" variable. See the [expo guide](/plugin/install.md)

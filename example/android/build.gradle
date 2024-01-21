@@ -8,10 +8,10 @@ buildscript {
             RNMapboxMapsImpl = "mapbox"
             kotlinVersion = '1.6.21'
         } else if (System.getenv('CI_MAP_IMPL').equals('mapbox11')) {
-            RNMapboxMapsVersion = '11.0.0'
+            RNMapboxMapsVersion = '11.1.0'
             RNMapboxMapsImpl = "mapbox"
         } else if (project.hasProperty('RNMBX11') && project.getProperty('RNMBX11').toBoolean()) {
-            RNMapboxMapsVersion = '11.0.0'
+            RNMapboxMapsVersion = '11.1.0'
         }
 
         // Mapbox deps

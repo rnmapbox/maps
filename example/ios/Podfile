@@ -10,7 +10,7 @@ prepare_react_native_project!
 
 $RNMapboxMapsImpl = 'mapbox'
 if ENV['RNMBX11']
-  $RNMapboxMapsVersion = '= 11.0.0'
+  $RNMapboxMapsVersion = '= 11.1.0'
 end
 
 if ENV['CI_MAP_IMPL']

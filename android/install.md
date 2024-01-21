@@ -46,7 +46,7 @@ Set `RNMapboxMapsVersion` in `android/build.gradle > buildscript > ext` section
 ```groovy
 buildscript {
     ext {
-        RNMapboxMapsVersion = '11.0.0'
+        RNMapboxMapsVersion = '11.1.0'
     }
 }
 ```
