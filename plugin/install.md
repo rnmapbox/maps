@@ -20,7 +20,7 @@ After installing this package, add the [config plugin](https://docs.expo.io/guid
       [
         "@rnmapbox/maps",
         {
-          "RNMapboxMapsVersion": "11.0.0"
+          "RNMapboxMapsVersion": "11.1.0"
         }
       ]
     ]
@@ -93,7 +93,7 @@ To use V11 just set the version to a 11 version, see [the ios guide](/ios/instal
       [
         "@rnmapbox/maps",
         {
-          "RNMapboxMapsVersion": "11.0.0",
+          "RNMapboxMapsVersion": "11.1.0",
           "RNMapboxMapsDownloadToken": "sk.ey...qg",
         }
       ]
