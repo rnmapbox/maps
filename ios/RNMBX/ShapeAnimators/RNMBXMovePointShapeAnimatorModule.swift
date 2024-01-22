@@ -41,14 +41,25 @@ public class MovePointShapeAnimator: ShapeAnimatorCommon {
   }
   
   private func moveTo(coordinate: LocationCoordinate2D, durationSec: TimeInterval) {
-    start()
-    point.reset(
-      _source: point.progress,
-      _progress: point.progress,
-      _target: coordinate,
-      durationSec: durationSec,
-      animatorAgeSec: getAnimatorAgeSec()
-    )
+    if durationSec == 0 {
+      point.reset(
+        _source: coordinate,
+        _progress: coordinate,
+        _target: coordinate,
+        durationSec: durationSec,
+        animatorAgeSec: getAnimatorAgeSec()
+      )
+      refresh()
+    } else {
+      start()
+      point.reset(
+        _source: point.progress,
+        _progress: point.progress,
+        _target: coordinate,
+        durationSec: durationSec,
+        animatorAgeSec: getAnimatorAgeSec()
+      )
+    }
   }
   
   private static func getAnimator(tag: NSNumber) -> MovePointShapeAnimator? {

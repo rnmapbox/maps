@@ -45,14 +45,25 @@ class MovePointShapeAnimator(tag: Tag, coordinate: Point) : ShapeAnimatorCommon(
     }
 
     fun moveTo(coordinate: Point, durationSec: Double) {
-        start()
-        point.reset(
-            point.progress,
-            point.progress,
-            coordinate,
-            durationSec,
-            getAnimatorAgeSec()
-        )
+        if (durationSec == 0.0) {
+            point.reset(
+                coordinate,
+                coordinate,
+                coordinate,
+                durationSec,
+                getAnimatorAgeSec()
+            )
+            refresh()
+        } else {
+            start()
+            point.reset(
+                point.progress,
+                point.progress,
+                coordinate,
+                durationSec,
+                getAnimatorAgeSec()
+            )
+        }
     }
 }
 
