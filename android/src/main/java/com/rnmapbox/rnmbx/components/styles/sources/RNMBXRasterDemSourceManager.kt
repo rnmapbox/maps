@@ -39,6 +39,6 @@ class RNMBXRasterDemSourceManager(private val mContext: ReactApplicationContext)
 
     @ReactProp(name = "tileSize")
     override fun setTileSize(view: RNMBXRasterDemSource, value: Dynamic) {
-        Logger.e("RNMBXRasterDemSourceManager", "tileSize not implemented")
+        view.setTileSize(value.asInt())
     }
 }

@@ -22,7 +22,7 @@ export class AnimatedRouteCoordinatesArray extends AnimatedCoordinatesArray {
    * Calculate initial state
    *
    * @param {*} args - to value from animate
-   * @param {} options - options, example
+   * @param {{end?: {from?: number}}} options - options, example
    * @returns {object} - the state object
    */
   onInitialState(coordinatesArray, options = null) {
@@ -32,7 +32,7 @@ export class AnimatedRouteCoordinatesArray extends AnimatedCoordinatesArray {
     }
     return {
       fullRoute: coordinatesArray.map((coord) => [coord[0], coord[1]]),
-      end: { from: 0 },
+      end,
     };
   }
 
@@ -57,7 +57,6 @@ export class AnimatedRouteCoordinatesArray extends AnimatedCoordinatesArray {
     const { fullRoute, end } = state;
     const currentEnd = end.from * (1.0 - progress) + progress * end.to;
 
-    // console.log("Current end:", end, currentEnd);
     let prevsum = 0;
     let actsum = 0;
     let i = fullRoute.length - 1;
@@ -72,6 +71,10 @@ export class AnimatedRouteCoordinatesArray extends AnimatedCoordinatesArray {
     }
     if (actsum <= currentEnd) {
       const actRoute = [...fullRoute.slice(0, i + 1)];
+      const minLineStringElements = 2;
+      if (actRoute.length < minLineStringElements) {
+        actRoute.push(actRoute[0]);
+      }
       return { fullRoute, end: { ...end, current: currentEnd }, actRoute };
     }
     const r = (currentEnd - prevsum) / (actsum - prevsum);
