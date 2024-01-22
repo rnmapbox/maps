@@ -10,8 +10,8 @@ public class MovePointShapeAnimator: ShapeAnimatorCommon {
       progress: coordinate,
       target: coordinate,
       startedAtSec: 0,
-      progressDurationSec: 0.0,
-      totalDurationSec: 0.0,
+      progressDurationSec: 0,
+      totalDurationSec: 0,
       getDistanceRemaining: { a, b in a.distance(to: b)  }
     )
     
