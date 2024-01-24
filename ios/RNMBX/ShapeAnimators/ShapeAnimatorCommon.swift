@@ -1,5 +1,7 @@
 import MapboxMaps
 
+private let LOG_TAG = "RNMBXShapeAnimator"
+
 protocol ShapeAnimationConsumer: AnyObject {
   func shapeUpdated(shape: GeoJSONObject)
 }
@@ -43,6 +45,10 @@ public class ShapeAnimatorCommon: NSObject, ShapeAnimator {
   var subscribers: [WeakShapeAnimationConsumer] = []
   
   func subscribe(consumer: ShapeAnimationConsumer) {
+    if subscribers.contains(where: { $0.consumer === consumer }) {
+      return
+    }
+    
     subscribers.append(WeakShapeAnimationConsumer(consumer))
   }
   
@@ -62,7 +68,7 @@ public class ShapeAnimatorCommon: NSObject, ShapeAnimator {
     }
     
     let timestamp = getAnimatorAgeSec()
-    print("Refreshing animator for tag \(tag): \(timestamp)")
+    // print("\(LOG_TAG): Refreshing animator for tag \(tag) (timestamp: \(timestamp), subscribers: \(subscribers.count))")
     
     let shape = getAnimatedShape(animatorAgeSec: timestamp)
     
@@ -72,12 +78,12 @@ public class ShapeAnimatorCommon: NSObject, ShapeAnimator {
   }
   
   func start() {
-    if displayLink != nil {
-      print("Timer for animator \(tag) is already running")
+    if let _ = displayLink {
+      print("\(LOG_TAG): Timer for animator \(tag) is already running (subscribers: \(subscribers.count))")
       return
     }
 
-    print("Started timer for animator \(tag)")
+    print("\(LOG_TAG): Started timer for animator \(tag) (subscribers: \(subscribers.count))")
     
     startedAt = nil
         
@@ -86,7 +92,12 @@ public class ShapeAnimatorCommon: NSObject, ShapeAnimator {
   }
 
   func stop() {
-    print("Stopped timer for animator \(tag)")
+    guard let _ = displayLink else {
+      print("\(LOG_TAG): Timer for animator \(tag) is already stopped (subscribers: \(subscribers.count))")
+      return
+    }
+
+    print("\(LOG_TAG): Stopped timer for animator \(tag) (subscribers: \(subscribers.count))")
     
     displayLink?.remove(from: .main, forMode: .default)
     displayLink = nil

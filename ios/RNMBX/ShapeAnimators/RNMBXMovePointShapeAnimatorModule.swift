@@ -29,11 +29,10 @@ public class MovePointShapeAnimator: ShapeAnimatorCommon {
       stop()
     }
     
-    if point.durationRatio() < 1, let progressCoordinate = line.coordinateFromStart(distance: lineLength * point.durationRatio()) {
+    let ratio = point.durationRatio()
+    if ratio >= 0, ratio < 1, let progressCoordinate = line.coordinateFromStart(distance: lineLength * ratio) {
       point.setProgress(value: progressCoordinate, animatorAgeSec: animatorAgeSec)
-    }
-    
-    if (point.durationRatio() >= 1) {
+    } else if (ratio >= 1) {
       stop()
     }
     
