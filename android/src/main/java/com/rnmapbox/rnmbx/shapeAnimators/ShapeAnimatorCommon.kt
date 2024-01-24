@@ -64,7 +64,10 @@ abstract class ShapeAnimatorCommon(tag: Tag): ShapeAnimator(tag) {
 
     override fun refresh() {
         val timestamp = getAnimatorAgeSec()
-//        Log.d(LOG_TAG, "Refreshing: $timestamp")
+//        Log.d(
+//            LOG_TAG,
+//            "Refreshing animator for tag $tag (timestamp: $timestamp, subscribers: ${subscribers.count()})"
+//        )
 
         val shape = getAnimatedShape(timestamp)
         runOnUiThread {
