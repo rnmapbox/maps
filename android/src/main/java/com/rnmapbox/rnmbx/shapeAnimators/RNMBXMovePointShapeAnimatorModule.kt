@@ -30,14 +30,13 @@ class MovePointShapeAnimator(tag: Tag, coordinate: Point) : ShapeAnimatorCommon(
             stop()
         }
 
-        if (point.durationRatio() < 1) {
+        val ratio = point.durationRatio()
+        if (ratio >= 0 && ratio < 1) {
             point.setProgress(
-                TurfMeasurement.along(line, lineLength * point.durationRatio(), UNIT_METERS),
+                TurfMeasurement.along(line, lineLength * ratio, UNIT_METERS),
                 animatorAgeSec
             )
-        }
-
-        if (point.durationRatio() >= 1) {
+        } else if (ratio >= 1) {
             stop()
         }
 

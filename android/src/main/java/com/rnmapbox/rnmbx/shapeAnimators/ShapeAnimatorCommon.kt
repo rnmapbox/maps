@@ -47,6 +47,10 @@ abstract class ShapeAnimatorCommon(tag: Tag): ShapeAnimator(tag) {
     private var subscribers = mutableListOf<ShapeAnimationConsumer>()
 
     override fun subscribe(consumer: ShapeAnimationConsumer) {
+        if (subscribers.contains(consumer)) {
+            return
+        }
+
         subscribers.add(consumer)
     }
 
@@ -60,7 +64,7 @@ abstract class ShapeAnimatorCommon(tag: Tag): ShapeAnimator(tag) {
 
     override fun refresh() {
         val timestamp = getAnimatorAgeSec()
-        Log.d(LOG_TAG, "Refreshing: $timestamp")
+//        Log.d(LOG_TAG, "Refreshing: $timestamp")
 
         val shape = getAnimatedShape(timestamp)
         runOnUiThread {
@@ -72,11 +76,11 @@ abstract class ShapeAnimatorCommon(tag: Tag): ShapeAnimator(tag) {
 
     override fun start() {
         if (timer != null) {
-            Log.d(LOG_TAG, "Timer for animator $tag is already running")
+            Log.d(LOG_TAG, "Timer for animator $tag is already running (subscribers: ${subscribers.count()})")
             return
         }
 
-        Log.d(LOG_TAG, "Started timer for animator $tag")
+        Log.d(LOG_TAG, "Started timer for animator $tag (subscribers: ${subscribers.count()})")
 
         startedAt = Date()
         timer = Timer()
@@ -88,7 +92,12 @@ abstract class ShapeAnimatorCommon(tag: Tag): ShapeAnimator(tag) {
     }
 
     override fun stop() {
-        Log.d(LOG_TAG,"Stopped timer for animator $tag")
+        if (timer == null) {
+            Log.d(LOG_TAG, "Timer for animator $tag is already stopped (subscribers: ${subscribers.count()})")
+            return
+        }
+
+        Log.d(LOG_TAG,"Stopped timer for animator $tag (subscribers: ${subscribers.count()})")
 
         timer?.cancel()
         timer = null
