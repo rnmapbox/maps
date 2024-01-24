@@ -7,9 +7,10 @@ import {
   __experimental,
 } from '@rnmapbox/maps';
 import { Position } from 'geojson';
-import React, { memo, useCallback, useEffect, useMemo, useState } from 'react';
-import { Button } from '@rneui/base';
+import React, { memo, useMemo, useRef, useState } from 'react';
+import { Divider, Slider, Text } from '@rneui/base';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { View, Button, StyleProp, ViewStyle } from 'react-native';
 
 import Page from '../common/Page';
 import { BaseExampleProps } from '../common/BaseExamplePropTypes';
@@ -18,28 +19,82 @@ Logger.setLogLevel('verbose');
 
 const basePosition: Position = [-83.53808787278204, 41.66430343748789];
 
-const AnimatedPoint = memo((props: BaseExampleProps) => {
-  const [offset, setOffset] = useState([0, 0]);
+const maxDuration = 5000;
 
-  const currentPosition = useMemo((): Position => {
-    return [basePosition[0] + offset[0], basePosition[1] + offset[1]];
-  }, [offset]);
+const AnimatedPoint = memo((props: BaseExampleProps) => {
+  const currentPosition = useRef<Position>([0, 0]);
+  const duration = useRef(1000);
+
+  const [durationState, setDurationState] = useState(duration.current);
 
   const animator = useMemo(() => {
-    return new __experimental.MovePointShapeAnimator(currentPosition);
+    return new __experimental.MovePointShapeAnimator(basePosition);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  useEffect(() => {
-    animator.moveTo({
-      coordinate: currentPosition,
-      durationMs: 1000,
-    });
-  }, [animator, currentPosition]);
+  const contents = useMemo(() => {
+    const rowStyle: StyleProp<ViewStyle> = {
+      flex: 0,
+      flexDirection: 'row',
+      justifyContent: 'space-between',
+    };
 
-  const onPressButton = useCallback(() => {
-    setOffset([(Math.random() - 0.5) * 0.005, (Math.random() - 0.5) * 0.005]);
-  }, []);
+    const sliderProps = {
+      thumbTintColor: 'black',
+      thumbStyle: { width: 10, height: 10 },
+    };
+
+    return (
+      <View>
+        <View>
+          <Text>{'Randomize Position'}</Text>
+          <View
+            style={{
+              flex: 0,
+              flexDirection: 'row',
+              justifyContent: 'space-around',
+            }}
+          >
+            <Button
+              title={'Randomize'}
+              onPress={() => {
+                const nextPosition = [
+                  basePosition[0] + (Math.random() - 0.5) * 0.005,
+                  basePosition[1] + (Math.random() - 0.5) * 0.005,
+                ];
+                currentPosition.current = nextPosition;
+                animator.moveTo({
+                  coordinate: currentPosition.current,
+                  durationMs: duration.current,
+                });
+              }}
+            />
+          </View>
+        </View>
+
+        <Divider style={{ marginVertical: 5 }} />
+
+        <View>
+          <View style={rowStyle}>
+            <Text>{'Duration'}</Text>
+            <Text>{(durationState / 1000).toFixed(2)} s</Text>
+          </View>
+          <Slider
+            {...sliderProps}
+            value={durationState / maxDuration}
+            onSlidingComplete={(v) => {
+              duration.current = v * maxDuration;
+              animator.moveTo({
+                coordinate: currentPosition.current,
+                durationMs: duration.current,
+              });
+              setDurationState(duration.current);
+            }}
+          />
+        </View>
+      </View>
+    );
+  }, [durationState, animator]);
 
   return (
     <Page {...props}>
@@ -67,11 +122,19 @@ const AnimatedPoint = memo((props: BaseExampleProps) => {
           flex: 1,
           justifyContent: 'flex-end',
           paddingHorizontal: 10,
-          paddingBottom: 10,
         }}
         pointerEvents={'box-none'}
       >
-        <Button title={'Change position'} onPress={onPressButton} />
+        <View
+          style={{
+            width: '100%',
+            padding: 10,
+            borderRadius: 10,
+            backgroundColor: 'white',
+          }}
+        >
+          {contents}
+        </View>
       </SafeAreaView>
     </Page>
   );
