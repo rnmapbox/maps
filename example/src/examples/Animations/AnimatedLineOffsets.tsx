@@ -80,7 +80,7 @@ const AnimatedLineOffsets = memo((props: BaseExampleProps) => {
     });
   }, []);
 
-  const sliderComponents = useMemo(() => {
+  const contents = useMemo(() => {
     const rowStyle: StyleProp<ViewStyle> = {
       flex: 0,
       flexDirection: 'row',
@@ -93,14 +93,7 @@ const AnimatedLineOffsets = memo((props: BaseExampleProps) => {
     };
 
     return (
-      <View
-        style={{
-          width: '100%',
-          padding: 10,
-          borderRadius: 10,
-          backgroundColor: 'white',
-        }}
-      >
+      <View>
         <View>
           <Text>{'Randomize Line'}</Text>
           <View
@@ -245,7 +238,16 @@ const AnimatedLineOffsets = memo((props: BaseExampleProps) => {
         }}
         pointerEvents={'box-none'}
       >
-        {sliderComponents}
+        <View
+          style={{
+            width: '100%',
+            padding: 10,
+            borderRadius: 10,
+            backgroundColor: 'white',
+          }}
+        >
+          {contents}
+        </View>
       </SafeAreaView>
     </Page>
   );
