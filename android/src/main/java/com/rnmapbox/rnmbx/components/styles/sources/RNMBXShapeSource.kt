@@ -1,6 +1,8 @@
 package com.rnmapbox.rnmbx.components.styles.sources
 
+import android.app.AlertDialog
 import android.content.Context
+import android.content.DialogInterface
 import android.util.Log
 import com.facebook.react.bridge.Promise
 import com.facebook.react.bridge.WritableMap
@@ -55,9 +57,15 @@ class RNMBXShapeSource(context: Context, private val mManager: RNMBXShapeSourceM
     override fun removeFromMap(mapView: RNMBXMapView, reason: RemovalReason): Boolean {
         Log.d(LOG_TAG, "Removed '$iD' from map (reason: $reason)")
 
-         if (reason != RemovalReason.STYLE_CHANGE) {
-             mShapeAnimator?.unsubscribe(this)
-         }
+        val builder = AlertDialog.Builder(context)
+        builder.setTitle("Removed shape source from map")
+        builder.setMessage("ID: $iD\nreason: $reason")
+        builder.setNeutralButton("Dismiss")  { d, _ -> d.dismiss() }
+        builder.show()
+
+//         if (reason != RemovalReason.STYLE_CHANGE) {
+//             mShapeAnimator?.unsubscribe(this)
+//         }
         return super.removeFromMap(mapView, reason)
     }
 
