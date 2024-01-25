@@ -63,7 +63,7 @@ public class RNMBXShapeSource : RNMBXSource {
   public override func removeFromMap(_ map: RNMBXMapView, reason: RemovalReason) -> Bool {
     Logger.log(level: .info, message: "\(LOG_TAG): Removed '\(id ?? "")' from map (reason: $reason)")
 
-    if (reason != .StyleChange) {
+    if (reason == .ViewRemoval) {
       shapeAnimator?.unsubscribe(consumer: self)
     }
     return super.removeFromMap(map, reason: reason)

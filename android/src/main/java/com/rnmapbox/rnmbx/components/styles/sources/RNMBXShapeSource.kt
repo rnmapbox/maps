@@ -57,15 +57,9 @@ class RNMBXShapeSource(context: Context, private val mManager: RNMBXShapeSourceM
     override fun removeFromMap(mapView: RNMBXMapView, reason: RemovalReason): Boolean {
         Log.d(LOG_TAG, "Removed '$iD' from map (reason: $reason)")
 
-        val builder = AlertDialog.Builder(context)
-        builder.setTitle("Removed shape source from map")
-        builder.setMessage("ID: $iD\nreason: $reason")
-        builder.setNeutralButton("Dismiss")  { d, _ -> d.dismiss() }
-        builder.show()
-
-//         if (reason != RemovalReason.STYLE_CHANGE) {
-//             mShapeAnimator?.unsubscribe(this)
-//         }
+        if (reason == RemovalReason.VIEW_REMOVAL) {
+            mShapeAnimator?.unsubscribe(this)
+        }
         return super.removeFromMap(mapView, reason)
     }
 
