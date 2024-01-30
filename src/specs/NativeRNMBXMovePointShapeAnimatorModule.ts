@@ -8,7 +8,6 @@ type AnimatorTag = Int32;
 
 export interface Spec extends TurboModule {
   create(tag: AnimatorTag, coordinate: ReadonlyArray<Double>): Promise<void>;
-  start(tag: AnimatorTag): Promise<void>;
   moveTo(
     tag: AnimatorTag,
     coordinate: ReadonlyArray<Double>,

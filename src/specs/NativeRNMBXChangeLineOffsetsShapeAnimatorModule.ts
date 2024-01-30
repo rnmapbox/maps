@@ -14,7 +14,6 @@ export interface Spec extends TurboModule {
     startOffset: Double,
     endOffset: Double,
   ): Promise<void>;
-  start(tag: AnimatorTag): Promise<void>;
   setLineString(
     tag: AnimatorTag,
     coordinates: Position[],
