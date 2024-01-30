@@ -69,58 +69,62 @@ using namespace facebook::react;
 
 - (void)updateProps:(const Props::Shared &)props oldProps:(const Props::Shared &)oldProps
 {
-  const auto &newProps = static_cast<const RNMBXCameraProps &>(*props);
-    id maxBounds = RNMBXConvertFollyDynamicToId(newProps.maxBounds);
+    const auto &oldViewProps = static_cast<const RNMBXCameraProps &>(*oldProps);
+    const auto &newViewProps = static_cast<const RNMBXCameraProps &>(*props);
+    id maxBounds = RNMBXConvertFollyDynamicToId(newViewProps.maxBounds);
     if (maxBounds != nil) {
         _view.maxBounds = maxBounds;
     }
-    id animationDuration = RNMBXConvertFollyDynamicToId(newProps.animationDuration);
+    id animationDuration = RNMBXConvertFollyDynamicToId(newViewProps.animationDuration);
     if (animationDuration != nil) {
         _view.animationDuration = animationDuration;
     }
-    id animationMode = RNMBXConvertFollyDynamicToId(newProps.animationMode);
+    id animationMode = RNMBXConvertFollyDynamicToId(newViewProps.animationMode);
     if (animationMode != nil) {
         _view.animationMode = animationMode;
     }
-    id defaultStop = RNMBXConvertFollyDynamicToId(newProps.defaultStop);
+    id defaultStop = RNMBXConvertFollyDynamicToId(newViewProps.defaultStop);
     if (defaultStop != nil) {
         _view.defaultStop = defaultStop;
     }
-    id followUserLocation = RNMBXConvertFollyDynamicToId(newProps.followUserLocation);
+    id followUserLocation = RNMBXConvertFollyDynamicToId(newViewProps.followUserLocation);
     if (followUserLocation != nil) {
         _view.followUserLocation = followUserLocation;
     }
-    id followUserMode = RNMBXConvertFollyDynamicToId(newProps.followUserMode);
+    id followUserMode = RNMBXConvertFollyDynamicToId(newViewProps.followUserMode);
     if (followUserMode != nil) {
         _view.followUserMode = followUserMode;
     }
-    id followZoomLevel = RNMBXConvertFollyDynamicToId(newProps.followZoomLevel);
+    id followZoomLevel = RNMBXConvertFollyDynamicToId(newViewProps.followZoomLevel);
     if (followZoomLevel != nil) {
         _view.followZoomLevel = followZoomLevel;
     }
-    id followPitch = RNMBXConvertFollyDynamicToId(newProps.followPitch);
+    id followPitch = RNMBXConvertFollyDynamicToId(newViewProps.followPitch);
     if (followPitch != nil) {
         _view.followPitch = followPitch;
     }
-    id followHeading = RNMBXConvertFollyDynamicToId(newProps.followHeading);
+    id followHeading = RNMBXConvertFollyDynamicToId(newViewProps.followHeading);
     if (followHeading != nil) {
         _view.followHeading = followHeading;
     }
-    id followPadding = RNMBXConvertFollyDynamicToId(newProps.followPadding);
+    id followPadding = RNMBXConvertFollyDynamicToId(newViewProps.followPadding);
     if (followPadding != nil) {
         _view.followPadding = followPadding;
     }
-    id maxZoomLevel = RNMBXConvertFollyDynamicToId(newProps.maxZoomLevel);
+    id maxZoomLevel = RNMBXConvertFollyDynamicToId(newViewProps.maxZoomLevel);
     if (maxZoomLevel != nil) {
         _view.maxZoomLevel = maxZoomLevel;
     }
-    id minZoomLevel = RNMBXConvertFollyDynamicToId(newProps.minZoomLevel);
+    id minZoomLevel = RNMBXConvertFollyDynamicToId(newViewProps.minZoomLevel);
     if (minZoomLevel != nil) {
         _view.minZoomLevel = minZoomLevel;
     }
-    id stop = RNMBXConvertFollyDynamicToId(newProps.stop);
-    if (stop != nil) {
+
+    if (!oldProps || oldViewProps.stop != newViewProps.stop) {
+      id stop = RNMBXConvertFollyDynamicToId(newViewProps.stop);
+      if (stop != nil) {
         _view.stop = stop;
+      }
     }
   [super updateProps:props oldProps:oldProps];
 }
