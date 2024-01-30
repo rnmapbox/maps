@@ -72,6 +72,9 @@ class RNMBXCamera(private val mContext: Context, private val mManager: RNMBXCame
     private var mMaxBounds: LatLngBounds? = null
 
 
+    var ts: Int? = null;
+
+
     private val mCameraCallback: Animator.AnimatorListener = object : Animator.AnimatorListener {
         override fun onAnimationStart(animator: Animator) {}
         override fun onAnimationEnd(animator: Animator) {
@@ -110,10 +113,12 @@ class RNMBXCamera(private val mContext: Context, private val mManager: RNMBXCame
         }
     }
     fun setStop(stop: CameraStop) {
-        mCameraStop = stop
-        stop.setCallback(mCameraCallback)
-        if (mMapView != null) {
-            stop.let { updateCamera(it) }
+        if (stop.ts != mCameraStop?.ts) {
+            mCameraStop = stop
+            stop.setCallback(mCameraCallback)
+            if (mMapView != null) {
+                stop.let { updateCamera(it) }
+            }
         }
     }
 
