@@ -68,7 +68,7 @@ public class RNMBXNativeUserLocation: UIView, RNMBXMapComponent {
       case nil:
         _puckBearing = nil
       default:
-        Logger.error("RNMBXNativeUserLocation puckBearing is uncrecognized: \(String(describing: value))")
+        Logger.error("RNMBXNativeUserLocation puckBearing is uncrecognized: \(optional: value)")
         _puckBearing = nil
       }
     }
