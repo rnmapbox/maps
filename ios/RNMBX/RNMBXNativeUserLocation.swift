@@ -122,7 +122,7 @@ public class RNMBXNativeUserLocation: UIView, RNMBXMapComponent {
         return Value.constant(0.0)
       }
     default:
-      Logger.error("toDoubleValue: \(name): has unknown type: \(type(of:value)) \(String(describing: value)) ")
+      Logger.error("toDoubleValue: \(name): has unknown type: \(type(of:value)) \(optional: value) ")
       return .constant(1.0)
     }
   }
