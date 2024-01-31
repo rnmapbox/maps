@@ -20,7 +20,7 @@ public class RNMBXNativeUserLocation: UIView, RNMBXMapComponent {
     case shadow
   }
   
-  var imageNames: [PuckImagePart: String] = [:]
+  var imageNames: [PuckImagePart: String?] = [:]
   var subscriptions: [PuckImagePart: ImageManager.Subscription] = [:]
   var images: [PuckImagePart: UIImage] = [:]
   
@@ -63,12 +63,12 @@ public class RNMBXNativeUserLocation: UIView, RNMBXMapComponent {
       switch(value) {
       case "heading":
         _puckBearing = .heading
-      case "coures":
+      case "course":
         _puckBearing = .course
       case nil:
         _puckBearing = nil
       default:
-        Logger.error("RNMBXNativeUserLocation puckBearing is uncrecognized: \(value)")
+        Logger.error("RNMBXNativeUserLocation puckBearing is uncrecognized: \(String(describing: value))")
         _puckBearing = nil
       }
     }
@@ -87,18 +87,8 @@ public class RNMBXNativeUserLocation: UIView, RNMBXMapComponent {
 
   func imageNameUpdated(_ image: PuckImagePart, _ name: String?) {
     imageNames[image] = name
-    if let subscription = subscriptions[image] {
-      subscription.cancel()
-      subscriptions.removeValue(forKey: image)
-    }
-    
-    guard let name = name else {
-      imageUpdated(image, nil)
-      return
-    }
-    
-    if let imageManager = imageManager {
-      subscribe(imageManager, image, name)
+    if let map = self.map {
+      _fetchImages(map)
     }
   }
   
@@ -132,11 +122,11 @@ public class RNMBXNativeUserLocation: UIView, RNMBXMapComponent {
         return Value.constant(0.0)
       }
     default:
-      Logger.error("toDoubleValue: \(name): has unknown type: \(type(of:value)) \(value) ")
+      Logger.error("toDoubleValue: \(name): has unknown type: \(type(of:value)) \(String(describing: value)) ")
       return .constant(1.0)
     }
   }
-  
+
   func _apply() {
     guard let map = self.map else {
       return
@@ -145,10 +135,6 @@ public class RNMBXNativeUserLocation: UIView, RNMBXMapComponent {
       Logger.error("RNMBXNativeUserLocation mapView was nil")
       return
     }
-    _apply(mapView)
-  }
-
-  func _apply(_ mapView: MapView) {
     guard let location = mapView.location else {
       Logger.error("RNMBXNativeUserLocation location was nil")
       return
@@ -195,7 +181,7 @@ public class RNMBXNativeUserLocation: UIView, RNMBXMapComponent {
             pulsingConfig.radius = .constant(radius.doubleValue)
           }
           
-          if let color = pulsing["color"] as? Any {
+          if let color = pulsing["color"] {
             if let uicolor = RCTConvert.uiColor(color) {
               pulsingConfig.color = uicolor
             } else {
@@ -264,8 +250,14 @@ extension RNMBXNativeUserLocation {
   func _fetchImages(_ map: RNMBXMapView) {
     if let style = map.mapView?.mapboxMap?.style {
       imageNames.forEach { (part, name) in
-        if style.imageExists(withId: name), let image = style.image(withId: name) {
-          images[part] = image
+        if let name = name {
+          if style.imageExists(withId: name), let image = style.image(withId: name) {
+            images[part] = image
+          } else {
+            images.removeValue(forKey: part)
+          }
+        } else {
+          images.removeValue(forKey: part)
         }
       }
     }
@@ -274,7 +266,9 @@ extension RNMBXNativeUserLocation {
     removeSubscriptions()
     self.imageManager = imageManager
     imageNames.forEach { (part,name) in
-      subscribe(imageManager, part, name)
+      if let name = name {
+        subscribe(imageManager, part, name)
+      }
     }
   }
 
