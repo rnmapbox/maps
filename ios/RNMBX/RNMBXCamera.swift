@@ -386,7 +386,7 @@ open class RNMBXCamera : RNMBXMapComponentBase {
       heading = CLLocationDirection(h)
     }
     
-    let padding = UIEdgeInsets(
+    var padding = UIEdgeInsets(
       top: stop["paddingTop"] as? Double ?? 0,
       left: stop["paddingLeft"] as? Double ?? 0,
       bottom: stop["paddingBottom"] as? Double ?? 0,
@@ -394,8 +394,8 @@ open class RNMBXCamera : RNMBXMapComponentBase {
     )
 
     var center: LocationCoordinate2D?
+    
     if let feature: String = stop["centerCoordinate"] as? String {
-      
       let centerFeature : Turf.Feature? = logged("RNMBXCamera.toUpdateItem.decode.cc") { try
         JSONDecoder().decode(Turf.Feature.self, from: feature.data(using: .utf8)!)
       }
@@ -439,13 +439,14 @@ open class RNMBXCamera : RNMBXMapComponentBase {
         let camera = map.mapboxMap.camera(
           for: bounds,
           padding: padding,
-          bearing: heading ?? map.cameraState.bearing,
-          pitch: pitch ?? map.cameraState.pitch
+          bearing: heading ?? map.mapboxMap.cameraState.bearing,
+          pitch: pitch ?? map.mapboxMap.cameraState.pitch
         )
 
         if let _center = camera.center, let _zoom = camera.zoom {
           center = _center
           zoom = _zoom
+          padding = .zero
         }
       }
     }
