@@ -1,9 +1,8 @@
-import { Divider, Text } from '@rneui/base';
+import { CheckBox, Divider, Slider, Text } from '@rneui/base';
 import {
   Camera,
   CameraAnimationMode,
   CameraBounds,
-  CameraPadding,
   CircleLayer,
   Logger,
   MapView,
@@ -36,80 +35,47 @@ const initialCoordinate: Coordinate = {
   longitude: -73.984638,
 };
 
-const zeroPadding: CameraPadding = {
-  paddingTop: 0,
-  paddingBottom: 0,
-  paddingLeft: 0,
-  paddingRight: 0,
-};
-const evenPadding: CameraPadding = {
-  paddingTop: 40,
-  paddingBottom: 40,
-  paddingLeft: 40,
-  paddingRight: 40,
-};
 const minZoomLevel = 8;
 const maxZoomLevel = 16;
-
-const randPadding = (): CameraPadding => {
-  const randNum = () => {
-    const items = [0, 150, 300];
-    return items[Math.floor(Math.random() * items.length)];
-  };
-
-  return {
-    paddingTop: randNum(),
-    paddingBottom: randNum(),
-    paddingLeft: randNum(),
-    paddingRight: randNum(),
-  };
-};
 
 const toPosition = (coordinate: Coordinate): Position => {
   return [coordinate.longitude, coordinate.latitude];
 };
 
 const CameraAnimation = () => {
-  const [animationMode, setAnimationMode] =
-    useState<CameraAnimationMode>('moveTo');
+  const [easing, setEasing] = useState<CameraAnimationMode>('easeTo');
   const [coordinates, setCoordinates] = useState<Coordinate[]>([
     initialCoordinate,
   ]);
-  const [padding, setPadding] = useState<CameraPadding>(zeroPadding);
+  const [paddingLeft, setPaddingLeft] = useState(0);
+  const [paddingRight, setPaddingRight] = useState(0);
+  const [paddingTop, setPaddingTop] = useState(0);
+  const [paddingBottom, setPaddingBottom] = useState(0);
 
-  const paddingDisplay = useMemo(() => {
-    return `L ${padding.paddingLeft} | R ${padding.paddingRight} | T ${padding.paddingTop} | B ${padding.paddingBottom}`;
-  }, [padding]);
-
-  const move = useCallback(
-    (_animationMode: CameraAnimationMode, shouldCreateMultiple: boolean) => {
-      setAnimationMode(_animationMode);
-
-      if (shouldCreateMultiple) {
-        const _centerCoordinate = {
+  const move = useCallback((kind: 'center' | 'bounds') => {
+    if (kind === 'bounds') {
+      const _centerCoordinate = {
+        latitude: initialCoordinate.latitude + Math.random() * 0.2,
+        longitude: initialCoordinate.longitude + Math.random() * 0.2,
+      };
+      const _coordinates = Array(10)
+        .fill(0)
+        .map((_) => {
+          return {
+            latitude: _centerCoordinate.latitude + Math.random() * 0.2,
+            longitude: _centerCoordinate.longitude + Math.random() * 0.2,
+          };
+        });
+      setCoordinates(_coordinates);
+    } else if (kind === 'center') {
+      setCoordinates([
+        {
           latitude: initialCoordinate.latitude + Math.random() * 0.2,
           longitude: initialCoordinate.longitude + Math.random() * 0.2,
-        };
-        const _coordinates = Array(10)
-          .fill(0)
-          .map((_) => {
-            return {
-              latitude: _centerCoordinate.latitude + Math.random() * 0.2,
-              longitude: _centerCoordinate.longitude + Math.random() * 0.2,
-            };
-          });
-        setCoordinates(_coordinates);
-      } else {
-        setCoordinates([
-          {
-            latitude: initialCoordinate.latitude + Math.random() * 0.2,
-            longitude: initialCoordinate.longitude + Math.random() * 0.2,
-          },
-        ]);
-      }
-    },
-    [],
-  );
+        },
+      ]);
+    }
+  }, []);
 
   const features = useMemo((): Feature<Point>[] => {
     return coordinates.map((p) => {
@@ -152,19 +118,47 @@ const CameraAnimation = () => {
     }
   }, [coordinates]);
 
-  const locationDisplay = useMemo(() => {
-    if (coordinates.length > 1) {
-      const ne = centerOrBounds.bounds?.ne.map((n) => n.toFixed(3));
-      const sw = centerOrBounds.bounds?.sw.map((n) => n.toFixed(3));
-      return `ne ${ne} | sw ${sw}`;
-    } else if (coordinates.length === 1) {
-      const lon = coordinates[0].longitude.toFixed(4);
-      const lat = coordinates[0].latitude.toFixed(4);
-      return `lon ${lon} | lat ${lat}`;
-    } else {
-      throw new Error('invalid location passed');
-    }
-  }, [coordinates, centerOrBounds]);
+  const easingCheckBox = useCallback(
+    (value: CameraAnimationMode, label: string) => {
+      return (
+        <View style={{ flex: 1, paddingHorizontal: 5 }}>
+          <Text style={{ textAlign: 'center' }}>{label}</Text>
+          <CheckBox
+            checked={value === easing}
+            center={true}
+            onIconPress={() => setEasing(value)}
+            containerStyle={{ backgroundColor: 'transparent' }}
+          />
+        </View>
+      );
+    },
+    [easing],
+  );
+
+  const paddingCounter = useCallback(
+    (value: number, setValue: (value: number) => void, label: string) => {
+      return (
+        <View style={{ flex: 1, paddingHorizontal: 10 }}>
+          <View style={{ flex: 0, alignItems: 'center' }}>
+            <Text>{label}</Text>
+            <Text style={{ fontWeight: 'bold' }}>{`${Math.round(value)}`}</Text>
+          </View>
+          <Slider
+            thumbStyle={{
+              backgroundColor: 'black',
+              width: 15,
+              height: 15,
+            }}
+            value={value}
+            minimumValue={0}
+            maximumValue={400}
+            onSlidingComplete={(_value) => setValue(_value)}
+          />
+        </View>
+      );
+    },
+    [],
+  );
 
   return (
     <>
@@ -174,9 +168,14 @@ const CameraAnimation = () => {
           zoomLevel={12}
           minZoomLevel={minZoomLevel}
           maxZoomLevel={maxZoomLevel}
-          padding={padding}
+          padding={{
+            paddingTop,
+            paddingBottom,
+            paddingLeft,
+            paddingRight,
+          }}
           animationDuration={800}
-          animationMode={animationMode}
+          animationMode={easing}
         />
 
         {features.map((feature) => {
@@ -192,53 +191,31 @@ const CameraAnimation = () => {
       <SafeAreaView>
         <View style={styles.sheet}>
           <View style={styles.content}>
-            <Text style={styles.fadedText}>centerCoordinate</Text>
+            <Text style={styles.fadedText}>Coordinate</Text>
             <View style={styles.buttonRow}>
-              <Button title="Flight" onPress={() => move('flyTo', false)} />
-              <Button title="Ease" onPress={() => move('easeTo', false)} />
-              <Button title="Linear" onPress={() => move('linearTo', false)} />
-              <Button title="Instant" onPress={() => move('moveTo', false)} />
+              <Button title="Center" onPress={() => move('center')} />
+              <Button title="Bounds" onPress={() => move('bounds')} />
             </View>
 
             <Divider style={styles.divider} />
 
-            <Text style={styles.fadedText}>bounds</Text>
-            <View style={styles.buttonRow}>
-              <Button title="Flight" onPress={() => move('flyTo', true)} />
-              <Button title="Ease" onPress={() => move('easeTo', true)} />
-              <Button title="Linear" onPress={() => move('linearTo', true)} />
-              <Button title="Instant" onPress={() => move('moveTo', true)} />
+            <Text style={styles.fadedText}>Easing</Text>
+            <View style={[styles.buttonRow, { marginTop: 10 }]}>
+              {easingCheckBox('easeTo', 'Ease')}
+              {easingCheckBox('linearTo', 'Linear')}
+              {easingCheckBox('flyTo', 'Fly')}
+              {easingCheckBox('moveTo', 'Move')}
             </View>
 
             <Divider style={styles.divider} />
 
-            <Text style={styles.fadedText}>padding</Text>
-            <View style={styles.buttonRow}>
-              <Button
-                title="Zero"
-                onPress={() => {
-                  setPadding(zeroPadding);
-                }}
-              />
-              <Button
-                title="Even"
-                onPress={() => {
-                  setPadding(evenPadding);
-                }}
-              />
-              <Button
-                title="Random"
-                onPress={() => {
-                  setPadding(randPadding());
-                }}
-              />
+            <Text style={styles.fadedText}>Padding</Text>
+            <View style={[styles.buttonRow, { marginTop: 10 }]}>
+              {paddingCounter(paddingTop, setPaddingTop, 'Top')}
+              {paddingCounter(paddingBottom, setPaddingBottom, 'Bottom')}
+              {paddingCounter(paddingLeft, setPaddingLeft, 'Left')}
+              {paddingCounter(paddingRight, setPaddingRight, 'Right')}
             </View>
-
-            <Divider style={styles.divider} />
-
-            <Text style={styles.fadedText}>info</Text>
-            <Text>position: {locationDisplay}</Text>
-            <Text>padding: {paddingDisplay}</Text>
           </View>
         </View>
       </SafeAreaView>
@@ -260,7 +237,7 @@ const styles = StyleSheet.create({
   buttonRow: {
     flex: 0,
     flexDirection: 'row',
-    justifyContent: 'space-around',
+    justifyContent: 'space-evenly',
   },
   divider: {
     marginVertical: 10,
