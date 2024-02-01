@@ -399,7 +399,7 @@ open class RNMBXCamera : RNMBXMapComponentBase {
       heading = CLLocationDirection(h)
     }
     
-    var padding: UIEdgeInsets? = UIEdgeInsets(
+    var padding: UIEdgeInsets = UIEdgeInsets(
       top: stop["paddingTop"] as? Double ?? 0,
       left: stop["paddingLeft"] as? Double ?? 0,
       bottom: stop["paddingBottom"] as? Double ?? 0,
@@ -461,8 +461,20 @@ open class RNMBXCamera : RNMBXMapComponentBase {
         let bounds = CoordinateBounds(southwest: sw, northeast: ne)
         #endif
         
-        print(">>> \(padding?.top) + \(padding?.bottom) = \((padding?.top ?? 0) + (padding?.bottom ?? 0)) ... \(map.bounds.height)")
-
+        if padding.top + padding.bottom >= map.bounds.height {
+          Logger.log(level: .info, message: "RNMBXCamera.toUpdateItem: Vertical padding (top: \(round(padding.top)), bottom: \(round(padding.bottom)), total: \(round(padding.top + padding.bottom))) exceeds map height (\(round(map.bounds.height)))")
+          let overflowRatio = (padding.top + padding.bottom) / map.bounds.height
+          padding.top = (padding.top / overflowRatio) - 1
+          padding.bottom = (padding.bottom / overflowRatio) - 1
+        }
+        
+        if padding.left + padding.right >= map.bounds.width {
+          Logger.log(level: .info, message: "RNMBXCamera.toUpdateItem: Horizontal padding (left: \(round(padding.left)), right: \(round(padding.right)), total: \(round(padding.left + padding.right))) exceeds map width (\(round(map.bounds.width)))")
+          let overflowRatio = (padding.left + padding.right) / map.bounds.width
+          padding.left = (padding.left / overflowRatio) - 1
+          padding.right = (padding.right / overflowRatio) - 1
+        }
+        
         camera = map.mapboxMap.camera(
           for: bounds,
           padding: padding,
