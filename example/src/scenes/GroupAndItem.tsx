@@ -17,6 +17,7 @@ import sheet from '../styles/sheet';
 // ANIMATIONS
 import AnimatedPoint from '../examples/Animations/AnimatedPoint';
 import AnimatedLineOffsets from '../examples/Animations/AnimatedLineOffsets';
+import AnimatedLine from '../examples/Animations/AnimatedLine';
 import DriveTheLine from '../examples/Animations/DriveTheLine';
 // ANNOTATIONS
 import * as Annotations from '../examples/Annotations';
@@ -298,9 +299,13 @@ const Examples = new ExampleGroup('React Native Mapbox', [
   exampleGroup(LineLayer),
   exampleGroup(Annotations),
   new ExampleGroup('Animations', [
-    new ExampleItem('Animated Point', AnimatedPoint),
-    new ExampleItem('Animated Line Offsets', AnimatedLineOffsets),
-    new ExampleItem('Animation Along a Line', DriveTheLine),
+    new ExampleItem('Animated Point (Native Animator)', AnimatedPoint),
+    new ExampleItem(
+      'Animated Line Offsets (Native Animator)',
+      AnimatedLineOffsets,
+    ),
+    new ExampleItem('Animated Line', AnimatedLine),
+    new ExampleItem('Animated Point Along a Line', DriveTheLine),
   ]),
   new ExampleItem('Cache management', CacheManagement),
 ]);
