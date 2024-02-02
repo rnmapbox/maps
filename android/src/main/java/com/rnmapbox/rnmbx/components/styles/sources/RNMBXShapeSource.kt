@@ -45,7 +45,6 @@ class RNMBXShapeSource(context: Context, private val mManager: RNMBXShapeSourceM
     }
 
     override fun addToMap(mapView: RNMBXMapView) {
-        Log.d(LOG_TAG, "Added '$iD' to map")
 
         // Wait for style before adding the source to the map
         mapView.getMapboxMap().getStyle {
