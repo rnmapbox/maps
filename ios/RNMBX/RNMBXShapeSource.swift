@@ -56,13 +56,10 @@ public class RNMBXShapeSource : RNMBXSource {
   }
   
   public override func addToMap(_ map: RNMBXMapView, style: Style) {
-    Logger.log(level: .info, tag: LOG_TAG, message: " Added '\(id ?? "")' to map")
     super.addToMap(map, style: style)
   }
   
   public override func removeFromMap(_ map: RNMBXMapView, reason: RemovalReason) -> Bool {
-    Logger.log(level: .info, tag: LOG_TAG, message: " Removed '\(id ?? "")' from map (reason: $reason)")
-
     if (reason == .ViewRemoval) {
       shapeAnimator?.unsubscribe(consumer: self)
     }
