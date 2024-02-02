@@ -208,7 +208,7 @@ const AnimatedLineOffsets = memo((props: BaseExampleProps) => {
   ]);
 
   return (
-    <Page {...props}>
+    <>
       <MapView style={{ flex: 1 }}>
         <Camera
           defaultSettings={{ bounds }}
