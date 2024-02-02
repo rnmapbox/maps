@@ -99,25 +99,47 @@ public class ChangeLineOffsetsShapeAnimator: ShapeAnimatorCommon {
   }
   
   private func setStartOffset(offset: Double, durationSec: TimeInterval) {
-    start()
-    startOfLine.reset(
-      _source: startOfLine.progress,
-      _progress: startOfLine.progress,
-      _target: offset,
-      durationSec: durationSec,
-      animatorAgeSec: getAnimatorAgeSec()
-    )
+    if durationSec == 0 {
+      startOfLine.reset(
+        _source: offset,
+        _progress: offset,
+        _target: offset,
+        durationSec: durationSec,
+        animatorAgeSec: getAnimatorAgeSec()
+      )
+      refresh()
+    } else {
+      start()
+      startOfLine.reset(
+        _source: startOfLine.progress,
+        _progress: startOfLine.progress,
+        _target: offset,
+        durationSec: durationSec,
+        animatorAgeSec: getAnimatorAgeSec()
+      )
+    }
   }
   
   private func setEndOffset(offset: Double, durationSec: TimeInterval) {
-    start()
-    endOfLine.reset(
-      _source: endOfLine.progress,
-      _progress: endOfLine.progress,
-      _target: offset,
-      durationSec: durationSec,
-      animatorAgeSec: getAnimatorAgeSec()
-    )
+    if durationSec == 0 {
+      endOfLine.reset(
+        _source: offset,
+        _progress: offset,
+        _target: offset,
+        durationSec: durationSec,
+        animatorAgeSec: getAnimatorAgeSec()
+      )
+      refresh()
+    } else {
+      start()
+      endOfLine.reset(
+        _source: endOfLine.progress,
+        _progress: endOfLine.progress,
+        _target: offset,
+        durationSec: durationSec,
+        animatorAgeSec: getAnimatorAgeSec()
+      )
+    }
   }
   
   private static func getAnimator(tag: NSNumber) -> ChangeLineOffsetsShapeAnimator? {

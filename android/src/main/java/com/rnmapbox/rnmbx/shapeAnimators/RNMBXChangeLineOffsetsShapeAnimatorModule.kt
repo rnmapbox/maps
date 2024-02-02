@@ -98,25 +98,47 @@ class ChangeLineOffsetsShapeAnimator(tag: Tag, _lineString: LineString, startOff
     }
 
     fun setStartOffset(offset: Double, durationSec: Double) {
-        start()
-        startOfLine.reset(
-            startOfLine.progress,
-            startOfLine.progress,
-            offset,
-            durationSec,
-            getAnimatorAgeSec()
-        )
+        if (durationSec == 0.0) {
+            startOfLine.reset(
+                offset,
+                offset,
+                offset,
+                durationSec,
+                getAnimatorAgeSec()
+            )
+            refresh()
+        } else {
+            start()
+            startOfLine.reset(
+                startOfLine.progress,
+                startOfLine.progress,
+                offset,
+                durationSec,
+                getAnimatorAgeSec()
+            )
+        }
     }
 
     fun setEndOffset(offset: Double, durationSec: Double) {
-        start()
-        endOfLine.reset(
-            endOfLine.progress,
-            endOfLine.progress,
-            offset,
-            durationSec,
-            getAnimatorAgeSec()
-        )
+        if (durationSec == 0.0) {
+            endOfLine.reset(
+                offset,
+                offset,
+                offset,
+                durationSec,
+                getAnimatorAgeSec()
+            )
+            refresh()
+        } else {
+            start()
+            endOfLine.reset(
+                endOfLine.progress,
+                endOfLine.progress,
+                offset,
+                durationSec,
+                getAnimatorAgeSec()
+            )
+        }
     }
 }
 
