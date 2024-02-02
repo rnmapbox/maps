@@ -97,7 +97,7 @@ const AnimatedPoint = memo((props: BaseExampleProps) => {
   }, [durationState, animator]);
 
   return (
-    <Page {...props}>
+    <>
       <MapView style={{ flex: 1 }}>
         <Camera
           defaultSettings={{ centerCoordinate: basePosition, zoomLevel: 15 }}
