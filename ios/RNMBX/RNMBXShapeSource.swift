@@ -29,6 +29,9 @@ public class RNMBXShapeSource : RNMBXSource {
 
   @objc public var shape : String? {
     didSet {
+      shapeAnimator?.unsubscribe(consumer: self)
+      shapeAnimator = nil
+      
       if let shape = shape, ShapeAnimatorManager.shared.isShapeAnimatorTag(shape: shape) {
         if let shapeAnimator = ShapeAnimatorManager.shared.get(shape: shape) {
           self.shapeAnimator = shapeAnimator
@@ -37,10 +40,7 @@ public class RNMBXShapeSource : RNMBXSource {
           let shape = shapeAnimator.getShape()
           shapeUpdated(shape: shape)
         }
-      } else {
-        shapeAnimator?.unsubscribe(consumer: self)
-        shapeAnimator = nil
-        
+      } else {        
         logged(LOG_TAG, "updateShape") {
           let obj : GeoJSONObject = try parse(shape)
           shapeObject = obj

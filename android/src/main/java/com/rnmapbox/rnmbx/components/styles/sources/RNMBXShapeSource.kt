@@ -83,6 +83,9 @@ class RNMBXShapeSource(context: Context, private val mManager: RNMBXShapeSourceM
     }
 
     fun setShape(geoJSONStr: String) {
+        mShapeAnimator?.unsubscribe(this)
+        mShapeAnimator = null
+
         val shapeAnimatorManager = mManager.shapeAnimatorManager
         if (shapeAnimatorManager.isShapeAnimatorTag(geoJSONStr)) {
             shapeAnimatorManager.get(geoJSONStr)?.let { shapeAnimator ->
@@ -93,9 +96,6 @@ class RNMBXShapeSource(context: Context, private val mManager: RNMBXShapeSourceM
                 shapeUpdated(shape)
             }
         } else {
-            mShapeAnimator?.unsubscribe(this)
-            mShapeAnimator = null
-
             mShape = geoJSONStr
             if (mSource != null && mMapView != null && !mMapView!!.isDestroyed) {
                 mSource!!.data(mShape!!)
