@@ -40,19 +40,14 @@ struct CameraUpdateItem {
       if let center = camera.center {
         try center.validate()
       }
-      
-      guard let duration = duration, duration > 0 else {
-        map.mapboxMap.setCamera(to: camera)
-        return
-      }
-      
+
       switch mode {
       case .flight:
         map.mapView.camera.fly(to: camera, duration: duration)
       case .ease:
-        map.mapView.camera.ease(to: camera, duration: duration, curve: .easeInOut, completion: nil)
+        map.mapView.camera.ease(to: camera, duration: duration ?? 0, curve: .easeInOut, completion: nil)
       case .linear:
-        map.mapView.camera.ease(to: camera, duration: duration, curve: .linear, completion: nil)
+        map.mapView.camera.ease(to: camera, duration: duration ?? 0, curve: .linear, completion: nil)
       default:
         map.mapboxMap.setCamera(to: camera)
       }
