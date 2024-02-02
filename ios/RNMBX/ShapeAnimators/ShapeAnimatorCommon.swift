@@ -68,7 +68,6 @@ public class ShapeAnimatorCommon: NSObject, ShapeAnimator {
     }
     
     let timestamp = getAnimatorAgeSec()
-    // print("\(LOG_TAG): Refreshing animator for tag \(tag) (timestamp: \(timestamp), subscribers: \(subscribers.count))")
     
     let shape = getAnimatedShape(animatorAgeSec: timestamp)
     
@@ -79,11 +78,11 @@ public class ShapeAnimatorCommon: NSObject, ShapeAnimator {
   
   func start() {
     if let _ = displayLink {
-      print("\(LOG_TAG): Timer for animator \(tag) is already running (subscribers: \(subscribers.count))")
+      Logger.log(level: .debug, tag: LOG_TAG, message: "Timer for animator \(tag) is already running (subscribers: \(subscribers.count))")
       return
     }
 
-    print("\(LOG_TAG): Started timer for animator \(tag) (subscribers: \(subscribers.count))")
+    Logger.log(level: .debug, tag: LOG_TAG, message: "Started timer for animator \(tag) (subscribers: \(subscribers.count))")
     
     startedAt = nil
         
@@ -93,11 +92,11 @@ public class ShapeAnimatorCommon: NSObject, ShapeAnimator {
 
   func stop() {
     guard let _ = displayLink else {
-      print("\(LOG_TAG): Timer for animator \(tag) is already stopped (subscribers: \(subscribers.count))")
+      Logger.log(level: .debug, tag: LOG_TAG, message: "Timer for animator \(tag) is already stopped (subscribers: \(subscribers.count))")
       return
     }
 
-    print("\(LOG_TAG): Stopped timer for animator \(tag) (subscribers: \(subscribers.count))")
+    Logger.log(level: .debug, tag: LOG_TAG, message: "Stopped timer for animator \(tag) (subscribers: \(subscribers.count))")
     
     displayLink?.remove(from: .main, forMode: .default)
     displayLink = nil

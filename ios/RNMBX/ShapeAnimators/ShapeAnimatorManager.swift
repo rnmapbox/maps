@@ -1,3 +1,5 @@
+private let LOG_TAG = "ShapeAnimatorManager"
+
 class ShapeAnimatorManager {
   static let shared = ShapeAnimatorManager();
 
@@ -37,7 +39,7 @@ class ShapeAnimatorManager {
           }
         }
       } catch {
-        Logger.log(level: .error, message: "Unable to get animator tag from \(shape): \(error)")
+        Logger.log(level: .error, tag: LOG_TAG, message: "Unable to get animator tag from \(shape): \(error)")
       }
     }
     return nil

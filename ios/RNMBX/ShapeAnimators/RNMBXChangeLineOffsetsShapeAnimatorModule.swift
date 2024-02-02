@@ -1,6 +1,8 @@
 import MapboxMaps
 import Turf
 
+private let LOG_TAG = "ChangeLineOffsetsShapeAnimator"
+
 @objc
 public class ChangeLineOffsetsShapeAnimator: ShapeAnimatorCommon {
   private var lineString: LineString
@@ -144,7 +146,7 @@ extension ChangeLineOffsetsShapeAnimator {
   public static func setLineString(tag: NSNumber, coordinates: NSArray, startOffset: NSNumber, endOffset: NSNumber, resolve: RCTPromiseResolveBlock, reject: @escaping (_ code: String, _ message: String, _ error: NSError) -> Void) {
     let lineString = buildLineString(_coordinates: coordinates)
     guard let animator = getAnimator(tag: tag) else {
-      reject("ChangeLineOffsetsShapeAnimator:setLineString", "Unable to find animator with tag \(tag)", NSError())
+      reject("\(LOG_TAG): setLineString", "Unable to find animator with tag \(tag)", NSError())
       return
     }
     
@@ -158,7 +160,7 @@ extension ChangeLineOffsetsShapeAnimator {
   @objc
   public static func setStartOffset(tag: NSNumber, offset: NSNumber, durationMs: NSNumber, resolve: RCTPromiseResolveBlock, reject: @escaping (_ code: String, _ message: String, _ error: NSError) -> Void) {
     guard let animator = getAnimator(tag: tag) else {
-      reject("ChangeLineOffsetsShapeAnimator:setStartOffset", "Unable to find animator with tag \(tag)", NSError())
+      reject("\(LOG_TAG): setStartOffset", "Unable to find animator with tag \(tag)", NSError())
       return
     }
     
@@ -169,7 +171,7 @@ extension ChangeLineOffsetsShapeAnimator {
   @objc
   public static func setEndOffset(tag: NSNumber, offset: NSNumber, durationMs: NSNumber, resolve: RCTPromiseResolveBlock, reject: @escaping (_ code: String, _ message: String, _ error: NSError) -> Void) {
     guard let animator = getAnimator(tag: tag) else {
-      reject("ChangeLineOffsetsShapeAnimator:setEndOffset", "Unable to find animator with tag \(tag)", NSError())
+      reject("\(LOG_TAG): setEndOffset", "Unable to find animator with tag \(tag)", NSError())
       return
     }
     

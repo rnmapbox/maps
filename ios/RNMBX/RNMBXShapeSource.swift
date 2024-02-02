@@ -13,7 +13,7 @@ public class RNMBXShapeSource : RNMBXSource {
         switch result {
           case .success(let obj):
             self.doUpdate { (style) in
-              logged("\(LOG_TAG):setUrl") {
+              logged(LOG_TAG, "setUrl") {
                 try style.updateGeoJSONSource(withId: self.id, geoJSON: obj)
               }
             }
@@ -41,12 +41,12 @@ public class RNMBXShapeSource : RNMBXSource {
         shapeAnimator?.unsubscribe(consumer: self)
         shapeAnimator = nil
         
-        logged("\(LOG_TAG):updateShape") {
+        logged(LOG_TAG, "updateShape") {
           let obj : GeoJSONObject = try parse(shape)
           shapeObject = obj
           
           doUpdate { (style) in
-            logged("\(LOG_TAG):setShape") {
+            logged(LOG_TAG, "setShape") {
               try style.updateGeoJSONSource(withId: id, geoJSON: obj)
             }
           }
@@ -56,12 +56,12 @@ public class RNMBXShapeSource : RNMBXSource {
   }
   
   public override func addToMap(_ map: RNMBXMapView, style: Style) {
-    Logger.log(level: .info, message: "\(LOG_TAG): Added '\(id ?? "")' to map")
+    Logger.log(level: .info, tag: LOG_TAG, message: " Added '\(id ?? "")' to map")
     super.addToMap(map, style: style)
   }
   
   public override func removeFromMap(_ map: RNMBXMapView, reason: RemovalReason) -> Bool {
-    Logger.log(level: .info, message: "\(LOG_TAG): Removed '\(id ?? "")' from map (reason: $reason)")
+    Logger.log(level: .info, tag: LOG_TAG, message: " Removed '\(id ?? "")' from map (reason: $reason)")
 
     if (reason == .ViewRemoval) {
       shapeAnimator?.unsubscribe(consumer: self)
@@ -73,10 +73,10 @@ public class RNMBXShapeSource : RNMBXSource {
   @objc public var clusterRadius : NSNumber?
   @objc public var clusterMaxZoomLevel : NSNumber? {
     didSet {
-      logged("\(LOG_TAG):clusterMaxZoomLevel") {
+      logged(LOG_TAG, "clusterMaxZoomLevel") {
         if let number = clusterMaxZoomLevel?.doubleValue {
           doUpdate { (style) in
-            logged("\(LOG_TAG):clusterMaxZoomLevel") {
+            logged(LOG_TAG, "clusterMaxZoomLevel") {
               try style.setSourceProperty(for: id, property: "clusterMaxZoom", value: number)
             }
           }
@@ -135,7 +135,7 @@ public class RNMBXShapeSource : RNMBXSource {
         }
       }
     } catch {
-      Logger.log(level: .error, message: "\(LOG_TAG):makeSource: parsing clusterProperties failed", error: error)
+      Logger.log(level: .error, tag: LOG_TAG, message: "makeSource: parsing clusterProperties failed", error: error)
     }
 
     if let maxZoomLevel = maxZoomLevel {
@@ -287,10 +287,10 @@ extension RNMBXShapeSource
       return nil
     }
     guard let data = shape.data(using: .utf8) else {
-      Logger.log(level: .error, message: "\(LOG_TAG):parseAsJSONObject: Shape is not utf8")
+      Logger.log(level: .error, tag: LOG_TAG, message: "parseAsJSONObject: Shape is not utf8")
       return nil
     }
-    let objs = logged("\(LOG_TAG):parseAsJSONObject") {
+    let objs = logged(LOG_TAG, "parseAsJSONObject") {
       try JSONSerialization.jsonObject(with: data)
     }
     return objs
@@ -360,7 +360,7 @@ extension RNMBXShapeSource
       return
     }
 
-    logged("\(LOG_TAG):getClusterExpansionZoom", rejecter: { (_,_,error) in
+    logged(LOG_TAG, "getClusterExpansionZoom", rejecter: { (_,_,error) in
       completion(.failure(error!))
     }) {
       let cluster : Feature = try parse(featureJSON);
@@ -391,7 +391,7 @@ extension RNMBXShapeSource
       return
     }
 
-    logged("\(LOG_TAG):getClusterLeaves", rejecter: { (_,_,error) in
+    logged(LOG_TAG, "getClusterLeaves", rejecter: { (_,_,error) in
       completion(.failure(error!))
     }) {
       let cluster : Feature = try parse(featureJSON);
@@ -413,7 +413,7 @@ extension RNMBXShapeSource
       return
     }
 
-    logged("\(LOG_TAG):getClusterChildren", rejecter: { (_,_,error) in
+    logged(LOG_TAG, "getClusterChildren", rejecter: { (_,_,error) in
       completion(.failure(error!))
     }) {
       let cluster : Feature = try parse(featureJSON);

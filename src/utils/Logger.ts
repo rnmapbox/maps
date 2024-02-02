@@ -9,8 +9,8 @@ export type LogLevel = 'error' | 'warning' | 'info' | 'debug' | 'verbose';
 
 export interface LogObject {
   level: LogLevel;
-  message: string;
   tag: string;
+  message: string;
 }
 
 type LogCallback = (object: LogObject) => boolean;
@@ -58,9 +58,9 @@ class Logger {
    * This callback is displayed as part of the Requester class.
    * @callback Logger~logCallback
    * @param {object} log
-   * @param {string} log.message - the message of the log
    * @param {string} log.level - log level
    * @param {string} log.tag - optional tag used on android
+   * @param {string} log.message - the message of the log
    */
 
   /**
@@ -116,14 +116,22 @@ class Logger {
 
   onLog(log: LogObject) {
     if (!this.logCallback || !this.logCallback(log)) {
-      const { message } = log;
-      const level = this.effectiveLevel(log);
-      if (level === 'error') {
-        console.error('Mapbox error', message, log);
-      } else if (level === 'warning') {
-        console.warn('Mapbox warning', message, log);
+      const { tag, message } = log;
+
+      const _level = this.effectiveLevel(log);
+      const _levelDisp = `Mapbox [${_level}]`;
+
+      let _message = message;
+      if (tag) {
+        _message = `${tag} | ${_message}`;
+      }
+
+      if (_level === 'error') {
+        console.error(_levelDisp, _message);
+      } else if (_level === 'warning') {
+        console.warn(_levelDisp, _message);
       } else {
-        console.log(`Mapbox [${level}]`, message, log);
+        console.log(_levelDisp, _message);
       }
     }
   }
