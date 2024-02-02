@@ -1,9 +1,6 @@
 package com.rnmapbox.rnmbx.components.styles.sources
 
-import android.app.AlertDialog
 import android.content.Context
-import android.content.DialogInterface
-import android.util.Log
 import com.facebook.react.bridge.Promise
 import com.facebook.react.bridge.WritableMap
 import com.facebook.react.bridge.WritableNativeMap
@@ -22,6 +19,7 @@ import com.rnmapbox.rnmbx.events.FeatureClickEvent
 import com.rnmapbox.rnmbx.shapeAnimators.ShapeAnimationConsumer
 import com.rnmapbox.rnmbx.shapeAnimators.ShapeAnimator
 import com.rnmapbox.rnmbx.utils.Logger
+import com.rnmapbox.rnmbx.v11compat.feature.*
 import java.net.URL
 
 private const val LOG_TAG = "RNMBXShapeSource"
