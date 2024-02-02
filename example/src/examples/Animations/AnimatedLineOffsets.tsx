@@ -15,9 +15,6 @@ import { lineString } from '@turf/helpers';
 import bbox from '@turf/bbox';
 import length from '@turf/length';
 
-import Page from '../common/Page';
-import { BaseExampleProps } from '../common/BaseExamplePropTypes';
-
 Logger.setLogLevel('verbose');
 
 const baseCoordinates: Position[] = [
@@ -40,7 +37,7 @@ const maxDuration = 5000;
 
 const randNorm = () => Math.random() - 0.5;
 
-const AnimatedLineOffsets = memo((props: BaseExampleProps) => {
+const AnimatedLineOffsets = memo(() => {
   const coordinates = useRef<Position[]>(baseCoordinates);
   const startOffset = useRef(0);
   const endOffset = useRef(0);
@@ -249,7 +246,7 @@ const AnimatedLineOffsets = memo((props: BaseExampleProps) => {
           {contents}
         </View>
       </SafeAreaView>
-    </Page>
+    </>
   );
 });
 

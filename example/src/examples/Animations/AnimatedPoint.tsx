@@ -12,16 +12,13 @@ import { Divider, Slider, Text } from '@rneui/base';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { View, Button, StyleProp, ViewStyle } from 'react-native';
 
-import Page from '../common/Page';
-import { BaseExampleProps } from '../common/BaseExamplePropTypes';
-
 Logger.setLogLevel('verbose');
 
 const basePosition: Position = [-83.53808787278204, 41.66430343748789];
 
 const maxDuration = 5000;
 
-const AnimatedPoint = memo((props: BaseExampleProps) => {
+const AnimatedPoint = memo(() => {
   const currentPosition = useRef<Position>([0, 0]);
   const duration = useRef(1000);
 
@@ -136,7 +133,7 @@ const AnimatedPoint = memo((props: BaseExampleProps) => {
           {contents}
         </View>
       </SafeAreaView>
-    </Page>
+    </>
   );
 });
 
