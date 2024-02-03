@@ -17,25 +17,18 @@ using namespace facebook::react;
 @end
 
 @implementation RNMBXMarkerViewContentComponentView {
-  RNMBXMarkerView *_view;
+  UIView *_view;
   CGRect _frame;
 }
 
 - (instancetype)initWithFrame:(CGRect)frame
 {
   if (self = [super initWithFrame:frame]) {
-    static const auto defaultProps = std::make_shared<const RNMBXMarkerViewProps>();
+    static const auto defaultProps = std::make_shared<const RNMBXMarkerViewContentProps>();
     _props = defaultProps;
     _frame = frame;
-    [self prepareView];
   }
   return self;
-}
-
-- (void)prepareView
-{
-  _view =  [[RNMBXMarkerView alloc] initWithFrame:_frame];
-  self.contentView = _view;
 }
 
 #pragma mark - RCTComponentViewProtocol
