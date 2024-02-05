@@ -25,7 +25,7 @@ using namespace facebook::react;
   if (self = [super initWithFrame:frame]) {
     static const auto defaultProps = std::make_shared<const RNMBXMarkerViewProps>();
     _props = defaultProps;
-      [self prepareView];
+    [self prepareView];
   }
 
   return self;
@@ -39,26 +39,18 @@ using namespace facebook::react;
 
 - (void)prepareForRecycle
 {
-    [super prepareForRecycle];
-    [self prepareView];
+  [super prepareForRecycle];
+  [self prepareView];
 }
 
 - (void)mountChildComponentView:(UIView<RCTComponentViewProtocol> *)childComponentView index:(NSInteger)index
 {
-    if ([childComponentView isKindOfClass:[RCTViewComponentView class]] && ((RCTViewComponentView *)childComponentView).contentView != nil) {
-        [_view insertSubview:((RCTViewComponentView *)childComponentView).contentView atIndex:index];
-    } else {
-        [_view insertSubview:childComponentView atIndex:index];
-    }
+  [_view insertSubview:childComponentView atIndex:index];
 }
 
 - (void)unmountChildComponentView:(UIView<RCTComponentViewProtocol> *)childComponentView index:(NSInteger)index
 {
-    if ([childComponentView isKindOfClass:[RCTViewComponentView class]] && ((RCTViewComponentView *)childComponentView).contentView != nil) {
-        [((RCTViewComponentView *)childComponentView).contentView removeFromSuperview];
-    } else {
-        [childComponentView removeFromSuperview];
-    }
+  [childComponentView removeFromSuperview];
 }
 
 #pragma mark - RCTComponentViewProtocol
