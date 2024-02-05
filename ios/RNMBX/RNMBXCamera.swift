@@ -260,14 +260,12 @@ open class RNMBXCamera : RNMBXMapComponentBase {
         logged("RNMBXCamera._updateMaxBounds._toCoordinateBounds") {
           options.bounds = try self._toCoordinateBounds(maxBounds)
         }
+      } else {
+        options.bounds = nil
       }
-      if let minZoomLevel = self.minZoomLevel {
-        options.minZoom = minZoomLevel.CGFloat
-      }
-      if let maxZoomLevel = self.maxZoomLevel {
-        options.maxZoom = maxZoomLevel.CGFloat
-      }
-
+      options.minZoom = self.minZoomLevel?.CGFloat
+      options.maxZoom = self.maxZoomLevel?.CGFloat
+      
       logged("RNMBXCamera._updateMaxBounds") {
         try map.mapboxMap.setCameraBounds(with: options)
       }
@@ -377,13 +375,7 @@ open class RNMBXCamera : RNMBXMapComponentBase {
     if let z = stop["zoom"] as? Double {
       zoom = CGFloat(z)
     }
-    if let _minNS = minZoomLevel, let _min = CGFloat(exactly: _minNS), let _zoom = zoom, _zoom < _min {
-      zoom = _min
-    }
-    if let _maxNS = maxZoomLevel, let _max = CGFloat(exactly: _maxNS), let _zoom = zoom, _zoom < _max {
-      zoom = _max
-    }
-    
+
     var pitch: CGFloat?
     if let p = stop["pitch"] as? Double {
       pitch = CGFloat(p)
@@ -455,21 +447,7 @@ open class RNMBXCamera : RNMBXMapComponentBase {
         #else
         let bounds = CoordinateBounds(southwest: sw, northeast: ne)
         #endif
-        
-        if padding.top + padding.bottom >= map.bounds.height {
-          Logger.log(level: .info, message: "RNMBXCamera.toUpdateItem: Vertical padding (top: \(round(padding.top)), bottom: \(round(padding.bottom)), total: \(round(padding.top + padding.bottom))) exceeds map height (\(round(map.bounds.height)))")
-          let overflowRatio = (padding.top + padding.bottom) / map.bounds.height
-          padding.top = (padding.top / overflowRatio) - 1
-          padding.bottom = (padding.bottom / overflowRatio) - 1
-        }
-        
-        if padding.left + padding.right >= map.bounds.width {
-          Logger.log(level: .info, message: "RNMBXCamera.toUpdateItem: Horizontal padding (left: \(round(padding.left)), right: \(round(padding.right)), total: \(round(padding.left + padding.right))) exceeds map width (\(round(map.bounds.width)))")
-          let overflowRatio = (padding.left + padding.right) / map.bounds.width
-          padding.left = (padding.left / overflowRatio) - 1
-          padding.right = (padding.right / overflowRatio) - 1
-        }
-        
+
         camera = map.mapboxMap.camera(
           for: bounds,
           padding: padding,
@@ -482,7 +460,7 @@ open class RNMBXCamera : RNMBXMapComponentBase {
     guard let camera = camera else {
       return nil
     }
-    
+
     var duration: TimeInterval?
     if let d = stop["duration"] as? Double {
       duration = toSeconds(d)
