@@ -1,4 +1,4 @@
-import { CheckBox, Divider, Slider, Text } from '@rneui/base';
+import { CheckBox, Divider, Slider, Text, color } from '@rneui/base';
 import {
   Camera,
   CameraAnimationMode,
@@ -35,12 +35,11 @@ const initialCoordinate: Coordinate = {
   longitude: -73.984638,
 };
 
-const minZoomLevel = 8;
-const maxZoomLevel = 16;
-
 const toPosition = (coordinate: Coordinate): Position => {
   return [coordinate.longitude, coordinate.latitude];
 };
+
+const rand = () => Math.random() * 0.008;
 
 const CameraAnimation = () => {
   const [easing, setEasing] = useState<CameraAnimationMode>('easeTo');
@@ -51,27 +50,29 @@ const CameraAnimation = () => {
   const [paddingRight, setPaddingRight] = useState(0);
   const [paddingTop, setPaddingTop] = useState(0);
   const [paddingBottom, setPaddingBottom] = useState(0);
+  const [minZoom, setMinZoom] = useState<number | undefined>(undefined);
+  const [maxZoom, setMaxZoom] = useState<number | undefined>(undefined);
 
   const move = useCallback((kind: 'center' | 'bounds') => {
     if (kind === 'bounds') {
       const _centerCoordinate = {
-        latitude: initialCoordinate.latitude + Math.random() * 0.2,
-        longitude: initialCoordinate.longitude + Math.random() * 0.2,
+        latitude: initialCoordinate.latitude + rand(),
+        longitude: initialCoordinate.longitude + rand(),
       };
       const _coordinates = Array(10)
         .fill(0)
         .map((_) => {
           return {
-            latitude: _centerCoordinate.latitude + Math.random() * 0.2,
-            longitude: _centerCoordinate.longitude + Math.random() * 0.2,
+            latitude: _centerCoordinate.latitude + rand(),
+            longitude: _centerCoordinate.longitude + rand(),
           };
         });
       setCoordinates(_coordinates);
     } else if (kind === 'center') {
       setCoordinates([
         {
-          latitude: initialCoordinate.latitude + Math.random() * 0.2,
-          longitude: initialCoordinate.longitude + Math.random() * 0.2,
+          latitude: initialCoordinate.latitude + rand(),
+          longitude: initialCoordinate.longitude + rand(),
         },
       ]);
     }
@@ -120,15 +121,32 @@ const CameraAnimation = () => {
 
   const easingCheckBox = useCallback(
     (value: CameraAnimationMode, label: string) => {
+      const isChecked = value === easing;
       return (
-        <View style={{ flex: 1, paddingHorizontal: 5 }}>
-          <Text style={{ textAlign: 'center' }}>{label}</Text>
+        <View
+          style={{
+            flex: 0,
+            flexDirection: 'row',
+            alignItems: 'center',
+          }}
+        >
           <CheckBox
-            checked={value === easing}
+            checked={isChecked}
             center={true}
             onIconPress={() => setEasing(value)}
-            containerStyle={{ backgroundColor: 'transparent' }}
+            containerStyle={{
+              backgroundColor: 'transparent',
+              marginRight: -4,
+            }}
           />
+          <Text
+            style={{
+              flex: 0,
+              color: isChecked ? colors.primary.blue : undefined,
+            }}
+          >
+            {label}
+          </Text>
         </View>
       );
     },
@@ -151,8 +169,45 @@ const CameraAnimation = () => {
             }}
             value={value}
             minimumValue={0}
-            maximumValue={400}
+            maximumValue={500}
             onSlidingComplete={(_value) => setValue(_value)}
+          />
+        </View>
+      );
+    },
+    [],
+  );
+
+  const zoomLimitCounter = useCallback(
+    (
+      value: number | undefined,
+      setValue: (value?: number) => void,
+      label: string,
+    ) => {
+      return (
+        <View style={{ flex: 1, paddingHorizontal: 10 }}>
+          <View style={{ flex: 0, alignItems: 'center' }}>
+            <Text>{label}</Text>
+            <Text style={{ fontWeight: 'bold' }}>{`${
+              value ?? 'Not set'
+            }`}</Text>
+          </View>
+          <Slider
+            thumbStyle={{
+              backgroundColor: 'black',
+              width: 15,
+              height: 15,
+            }}
+            value={value}
+            minimumValue={-1}
+            maximumValue={20}
+            onSlidingComplete={(_value) => {
+              if (_value < 0) {
+                setValue(undefined);
+              } else {
+                setValue(Math.round(_value));
+              }
+            }}
           />
         </View>
       );
@@ -166,8 +221,8 @@ const CameraAnimation = () => {
         <Camera
           {...centerOrBounds}
           zoomLevel={12}
-          minZoomLevel={minZoomLevel}
-          maxZoomLevel={maxZoomLevel}
+          minZoomLevel={minZoom}
+          maxZoomLevel={maxZoom}
           padding={{
             paddingTop,
             paddingBottom,
@@ -191,7 +246,7 @@ const CameraAnimation = () => {
       <SafeAreaView>
         <View style={styles.sheet}>
           <View style={styles.content}>
-            <Text style={styles.fadedText}>Coordinate</Text>
+            <Text style={styles.sectionText}>Coordinate</Text>
             <View style={styles.buttonRow}>
               <Button title="Center" onPress={() => move('center')} />
               <Button title="Bounds" onPress={() => move('bounds')} />
@@ -199,8 +254,8 @@ const CameraAnimation = () => {
 
             <Divider style={styles.divider} />
 
-            <Text style={styles.fadedText}>Easing</Text>
-            <View style={[styles.buttonRow, { marginTop: 10 }]}>
+            <Text style={styles.sectionText}>Easing</Text>
+            <View style={[styles.buttonRow, { marginBottom: -6 }]}>
               {easingCheckBox('easeTo', 'Ease')}
               {easingCheckBox('linearTo', 'Linear')}
               {easingCheckBox('flyTo', 'Fly')}
@@ -209,12 +264,20 @@ const CameraAnimation = () => {
 
             <Divider style={styles.divider} />
 
-            <Text style={styles.fadedText}>Padding</Text>
-            <View style={[styles.buttonRow, { marginTop: 10 }]}>
+            <Text style={styles.sectionText}>Padding</Text>
+            <View style={[styles.buttonRow, { marginTop: 6 }]}>
               {paddingCounter(paddingTop, setPaddingTop, 'Top')}
               {paddingCounter(paddingBottom, setPaddingBottom, 'Bottom')}
               {paddingCounter(paddingLeft, setPaddingLeft, 'Left')}
               {paddingCounter(paddingRight, setPaddingRight, 'Right')}
+            </View>
+
+            <Divider style={styles.divider} />
+
+            <Text style={styles.sectionText}>Zoom limits</Text>
+            <View style={[styles.buttonRow, { marginTop: 6 }]}>
+              {zoomLimitCounter(minZoom, setMinZoom, 'Min')}
+              {zoomLimitCounter(maxZoom, setMaxZoom, 'Max')}
             </View>
           </View>
         </View>
@@ -228,11 +291,15 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   sheet: {
-    paddingTop: 10,
     paddingHorizontal: 10,
+    marginBottom: -10,
   },
   content: {
     padding: 10,
+  },
+  sectionText: {
+    fontSize: 10,
+    color: 'gray',
   },
   buttonRow: {
     flex: 0,
@@ -240,10 +307,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-evenly',
   },
   divider: {
-    marginVertical: 10,
-  },
-  fadedText: {
-    color: 'gray',
+    marginVertical: 8,
   },
 });
 
