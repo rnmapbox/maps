@@ -1,7 +1,7 @@
 import Foundation
 import MapboxMaps
 
-enum RNMBXError: Error, LocalizedError {
+public enum RNMBXError: Error, LocalizedError {
   case parseError(String)
   case failed(String)
   case paramError(String)
