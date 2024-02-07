@@ -22,10 +22,13 @@ public class ExpressionParser {
     if (rawExpressions == null || rawExpressions.size() == 0) {
       return null;
     }
-
-    JsonArray array = ConvertUtils.toJsonArray(rawExpressions);
-    String jsonString = new Gson().toJson(array);
-    return Expression.fromRaw(jsonString);
+    try {
+      JsonArray array = ConvertUtils.toJsonArray(rawExpressions);
+      String jsonString = new Gson().toJson(array);
+      return Expression.fromRaw(jsonString);
+    } catch (Exception e) {
+      return null;
+    }
   }
 
   public static @Nullable Expression fromTyped(ReadableMap rawExpressions) {
