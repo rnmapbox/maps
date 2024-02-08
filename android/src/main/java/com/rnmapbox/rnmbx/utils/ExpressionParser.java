@@ -1,5 +1,7 @@
 package com.rnmapbox.rnmbx.utils;
 
+import android.util.Log;
+
 import com.facebook.react.bridge.ReadableArray;
 
 import com.facebook.react.bridge.ReadableMap;
@@ -12,6 +14,7 @@ import java.util.Locale;
 import javax.annotation.Nullable;
 
 public class ExpressionParser {
+  static final String LOG_TAG = "RNMBXMapView";
   static final String TYPE_STRING = "string";
   static final String TYPE_ARRAY = "array";
   static final String TYPE_NUMBER = "number";
@@ -27,6 +30,7 @@ public class ExpressionParser {
       String jsonString = new Gson().toJson(array);
       return Expression.fromRaw(jsonString);
     } catch (Exception e) {
+      Log.e(LOG_TAG, "An error occurred while attempting to parse the expression", e);
       return null;
     }
   }
