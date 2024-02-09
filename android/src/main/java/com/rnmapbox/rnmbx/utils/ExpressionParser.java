@@ -1,13 +1,12 @@
 package com.rnmapbox.rnmbx.utils;
 
-import android.util.Log;
-
 import com.facebook.react.bridge.ReadableArray;
 
 import com.facebook.react.bridge.ReadableMap;
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.mapbox.maps.extension.style.expressions.generated.Expression;
+import com.rnmapbox.rnmbx.utils.Logger;
 
 import java.util.Locale;
 
@@ -30,7 +29,7 @@ public class ExpressionParser {
       String jsonString = new Gson().toJson(array);
       return Expression.fromRaw(jsonString);
     } catch (Exception e) {
-      Log.e(LOG_TAG, "An error occurred while attempting to parse the expression", e);
+      Logger.e(LOG_TAG, "An error occurred while attempting to parse the expression", e);
       return null;
     }
   }
