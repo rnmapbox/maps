@@ -1,6 +1,6 @@
 import { ConfigPlugin } from 'expo/config-plugins';
-declare type InstallerBlockName = 'pre' | 'post';
-export declare type MapboxPlugProps = {
+type InstallerBlockName = 'pre' | 'post';
+export type MapboxPlugProps = {
     /**
      * @deprecated
      */
