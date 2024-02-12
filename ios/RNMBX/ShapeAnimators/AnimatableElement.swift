@@ -26,9 +26,9 @@ internal class AnimatableElement<T> {
   
   func durationRatio() -> Double {
     if (totalDurationSec > 0) {
-      progressDurationSec / totalDurationSec
+      return progressDurationSec / totalDurationSec
     } else {
-      1
+      return 1
     }
   }
   
