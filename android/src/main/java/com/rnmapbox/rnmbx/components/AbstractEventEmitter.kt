@@ -1,6 +1,7 @@
 package com.rnmapbox.rnmbx.components
 
 import android.app.Activity
+import android.util.Log
 import android.view.ViewGroup
 import com.facebook.react.bridge.ReactApplicationContext
 import com.facebook.react.common.MapBuilder
@@ -40,14 +41,19 @@ abstract class AbstractEventEmitter<T : ViewGroup?>(reactApplicationContext: Rea
             return
         }
         mRateLimitedEvents[eventCacheKey] = System.currentTimeMillis()
-        mEventDispatcher!!.dispatchEvent(
-            AbstractEvent(
-                event.iD,
-                event.key,
-                event.canCoalesce(),
-                event.toJSON()
+
+        try {
+            mEventDispatcher!!.dispatchEvent(
+                AbstractEvent(
+                    event.iD,
+                    event.key,
+                    event.canCoalesce(),
+                    event.toJSON()
+                )
             )
-        )
+        } catch (e: Exception) {
+            Log.e("Error", e.toString())
+        }
     }
 
     override fun addEventEmitters(context: ThemedReactContext, view: T) {
