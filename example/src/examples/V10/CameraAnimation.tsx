@@ -1,4 +1,4 @@
-import { CheckBox, Divider, Slider, Text, color } from '@rneui/base';
+import { CheckBox, Divider, Slider, Text } from '@rneui/base';
 import {
   Camera,
   CameraAnimationMode,
