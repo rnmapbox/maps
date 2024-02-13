@@ -143,12 +143,13 @@ public class RNMBXShapeSource : RNMBXSource {
 
   func doUpdate(_ update:(Style) -> Void) {
     guard let map = self.map,
+          let mapboxMap = map.mapboxMap,
           let _ = self.source,
-          map.mapboxMap.style.sourceExists(withId: id) else {
+      mapboxMap.style.sourceExists(withId: id) else {
       return
     }
 
-    let style = map.mapboxMap.style
+      let style = mapboxMap.style
     update(style)
   }
 

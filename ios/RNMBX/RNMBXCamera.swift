@@ -48,7 +48,10 @@ struct CameraUpdateItem {
         case .linear:
         map.mapView.camera.ease(to: camera, duration: duration ?? 0, curve: .linear, completion: nil)
         default:
-          map.mapboxMap.setCamera(to: camera)
+        if let mapboxMap = map.mapboxMap {
+          mapboxMap.setCamera(to: camera)
+        }
+          
       }
     }
   }
