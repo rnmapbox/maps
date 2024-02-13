@@ -136,17 +136,17 @@ class RNMBXCamera(private val mContext: Context, private val mManager: RNMBXCame
         _updateViewportState()
     }
 
-    fun setFollowZoomLevel(zoomLevel: Double) {
+    fun setFollowZoomLevel(zoomLevel: Double?) {
         mFollowZoomLevel = zoomLevel
         _updateViewportState();
     }
 
-    fun setFollowPitch(pitch: Double) {
+    fun setFollowPitch(pitch: Double?) {
         mFollowPitch = pitch
         _updateViewportState();
     }
 
-    fun setFollowHeading(heading: Double) {
+    fun setFollowHeading(heading: Double?) {
         mFollowHeading = heading
         _updateViewportState();
     }
