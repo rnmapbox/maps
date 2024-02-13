@@ -96,6 +96,17 @@ jobs:
           path: ios/Pods
           key: pods-${{ hashFiles('**/Podfile.lock') }}-${{ inputs.MAP_IMPL }}-${{ inputs.NEW_ARCH }}}
 
+      - name: Check CocoaPods version
+        id: cocoapods-version
+        run: |
+          pod --version > version.txt
+          cat version.txt
+          echo "version=$(cat version.txt)" >> $GITHUB_OUTPUT
+
+      - name: Upgrade CocoaPods
+        if: steps.cocoapods-version.outputs.version == '1.15.0'
+        run: sudo gem install cocoapods -v 1.15.2
+
       - name: Install Pod Dependencies
         if: steps.pods-cache.outputs.cache-hit != 'true'
         run: cd ios && pod --version && pod update MapboxMaps hermes-engine RCT-Folly && pod install
