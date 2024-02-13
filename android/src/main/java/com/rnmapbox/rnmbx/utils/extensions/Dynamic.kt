@@ -63,3 +63,19 @@ fun Dynamic.asBooleanOrNull(): Boolean? {
         asBoolean()
     }
 }
+
+fun Dynamic.asDoubleOrNull(): Double? {
+    return if (isNull) {
+        null
+    } else {
+        asDouble()
+    }
+}
+
+fun Dynamic.asStringOrNull(): String? {
+    return if (isNull) {
+        null
+    } else {
+        asString()
+    }
+}

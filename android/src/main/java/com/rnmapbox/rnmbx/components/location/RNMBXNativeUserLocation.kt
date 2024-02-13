@@ -46,6 +46,7 @@ enum class RenderMode {
 class RNMBXNativeUserLocation(context: Context) : AbstractMapFeature(context), OnMapReadyCallback, Style.OnStyleLoaded {
     private var mEnabled = true
     private var mMap: MapboxMap? = null
+    private var mMBXMapView: RNMBXMapView? = null
     private var mRenderMode : RenderMode = RenderMode.NORMAL;
     private var mContext : Context = context
 
@@ -63,7 +64,7 @@ class RNMBXNativeUserLocation(context: Context) : AbstractMapFeature(context), O
         SHADOW
     }
 
-    private var imageNames = mutableMapOf<PuckImagePart, String>()
+    private var imageNames = mutableMapOf<PuckImagePart, String?>()
     private var subscriptions = mutableMapOf<PuckImagePart, Subscription>()
     private var images = mutableMapOf<PuckImagePart, ImageHolder>()
 
@@ -98,23 +99,10 @@ class RNMBXNativeUserLocation(context: Context) : AbstractMapFeature(context), O
         }
 
     private fun imageNameUpdated(image: PuckImagePart, name: String?) {
-        if (name != null) {
-            imageNames[image] = name
-        } else {
-            imageNames.remove(image)
+        imageNames[image] = name
+        mMBXMapView?.let {
+            _fetchImages(it)
         }
-        subscriptions[image]?.let {
-            it.cancel()
-        }
-        subscriptions.remove(image)
-
-        if (name == null) {
-            imageUpdated(image, null)
-            return
-        }
-
-        imageManager?.let { subscribe(it, image, name) }
-
     }
 
     private fun imageUpdated(image: PuckImagePart, imageHolder: ImageHolder?) {
@@ -208,6 +196,7 @@ class RNMBXNativeUserLocation(context: Context) : AbstractMapFeature(context), O
         mapView.getMapboxMap()
         mapView.getMapAsync(this)
         mMapView?.locationComponentManager?.showNativeUserLocation(true)
+        mMBXMapView = mapView
         _fetchImages(mapView)
         _apply()
     }
@@ -216,6 +205,7 @@ class RNMBXNativeUserLocation(context: Context) : AbstractMapFeature(context), O
         mEnabled = false
         mMapView?.locationComponentManager?.showNativeUserLocation(false)
         mMap?.getStyle(this)
+        mMBXMapView = null
         return super.removeFromMap(mapView, reason)
     }
 
@@ -244,7 +234,6 @@ class RNMBXNativeUserLocation(context: Context) : AbstractMapFeature(context), O
             subscriptions.remove(image)
             Logger.e("RNMBXNativeUserLocation", "subscribe: there is alread a subscription for image: $image")
         }
-
         subscriptions[image] = imageManager.subscribe(name, Resolver { _, imageData  ->
             imageUpdated(image, imageData.toImageHolder())
         })
@@ -260,19 +249,27 @@ class RNMBXNativeUserLocation(context: Context) : AbstractMapFeature(context), O
     private fun _fetchImages(map: RNMBXMapView) {
         map.mapView?.getMapboxMap()?.getStyle()?.let { style ->
             imageNames.forEach { (part,name) ->
-                if (style.hasStyleImage(name)) {
-                    style.getStyleImage(name)?.let { image ->
-                        images[part] = image.toImageHolder()
+                if (name != null) {
+                    if (style.hasStyleImage(name)) {
+                        style.getStyleImage(name)?.let { image ->
+                            images[part] = image.toImageHolder()
+                        }
+                    } else {
+                        images.remove(part)
                     }
+                } else {
+                    images.remove(part)
                 }
             }
         }
-
         removeSubscriptions()
         val imageManager = map.imageManager
         this.imageManager = imageManager
+        _apply()
         imageNames.forEach { (part,name) ->
-            subscribe(imageManager, part, name)
+            if (name != null) {
+                subscribe(imageManager, part, name)
+            }
         }
     }
     // endregion

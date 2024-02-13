@@ -6,12 +6,14 @@ import com.facebook.react.bridge.ReadableMap;
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.mapbox.maps.extension.style.expressions.generated.Expression;
+import com.rnmapbox.rnmbx.utils.Logger;
 
 import java.util.Locale;
 
 import javax.annotation.Nullable;
 
 public class ExpressionParser {
+  static final String LOG_TAG = "RNMBXMapView";
   static final String TYPE_STRING = "string";
   static final String TYPE_ARRAY = "array";
   static final String TYPE_NUMBER = "number";
@@ -22,10 +24,14 @@ public class ExpressionParser {
     if (rawExpressions == null || rawExpressions.size() == 0) {
       return null;
     }
-
-    JsonArray array = ConvertUtils.toJsonArray(rawExpressions);
-    String jsonString = new Gson().toJson(array);
-    return Expression.fromRaw(jsonString);
+    try {
+      JsonArray array = ConvertUtils.toJsonArray(rawExpressions);
+      String jsonString = new Gson().toJson(array);
+      return Expression.fromRaw(jsonString);
+    } catch (Exception e) {
+      Logger.e(LOG_TAG, "An error occurred while attempting to parse the expression", e);
+      return null;
+    }
   }
 
   public static @Nullable Expression fromTyped(ReadableMap rawExpressions) {

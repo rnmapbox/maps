@@ -91,7 +91,7 @@ object Logger {
         }
     }
 
-    fun e(tag: String, msg: String, tr: Throwable) {
+    @JvmStatic fun e(tag: String, msg: String, tr: Throwable) {
         if (logLevel <= Log.ERROR) {
             logger.e(tag, msg, tr)
         }
