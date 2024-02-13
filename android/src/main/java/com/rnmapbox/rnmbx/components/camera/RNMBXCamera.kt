@@ -113,7 +113,7 @@ class RNMBXCamera(private val mContext: Context, private val mManager: RNMBXCame
         }
     }
     fun setStop(stop: CameraStop) {
-        if (stop.ts != mCameraStop?.ts) {
+        if ((stop.ts != mCameraStop?.ts) || (mCameraStop == null)) {
             mCameraStop = stop
             stop.setCallback(mCameraCallback)
             if (mMapView != null) {
