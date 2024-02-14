@@ -237,6 +237,10 @@ open class RNMBXCamera : RNMBXMapComponentBase {
     map.viewport.idle()
   }
   
+  @objc public func updateCameraStop(_ stop: [String: Any]) {
+    self.stop = stop
+  }
+  
   func _toCoordinateBounds(_ bounds: FeatureCollection) throws -> CoordinateBounds  {
     guard bounds.features.count == 2 else {
       throw RNMBXError.paramError("Expected two Points in FeatureColletion")

@@ -3,6 +3,7 @@ package com.rnmapbox.rnmbx.components.camera
 import android.animation.Animator
 import android.content.Context
 import android.location.Location
+import com.facebook.react.bridge.Dynamic
 import com.facebook.react.bridge.ReadableMap
 import com.mapbox.maps.plugin.gestures.gestures
 import com.rnmapbox.rnmbx.location.LocationManager.Companion.getInstance
@@ -15,6 +16,7 @@ import com.mapbox.maps.plugin.locationcomponent.OnIndicatorBearingChangedListene
 import com.mapbox.maps.plugin.locationcomponent.OnIndicatorPositionChangedListener
 import com.facebook.react.bridge.WritableMap
 import com.facebook.react.bridge.WritableNativeMap
+import com.facebook.react.uimanager.annotations.ReactProp
 import com.mapbox.maps.*
 import com.mapbox.maps.plugin.locationcomponent.location
 import com.mapbox.maps.plugin.viewport.ViewportStatus
@@ -113,13 +115,16 @@ class RNMBXCamera(private val mContext: Context, private val mManager: RNMBXCame
         }
     }
     fun setStop(stop: CameraStop) {
-        if ((stop.ts != mCameraStop?.ts) || (mCameraStop == null)) {
-            mCameraStop = stop
-            stop.setCallback(mCameraCallback)
-            if (mMapView != null) {
-                stop.let { updateCamera(it) }
-            }
+        mCameraStop = stop
+        stop.setCallback(mCameraCallback)
+        if (mMapView != null) {
+            stop.let { updateCamera(it) }
         }
+    }
+
+    fun updateCameraStop(map: ReadableMap) {
+        val stop = CameraStop.fromReadableMap(mContext, map, null)
+        setStop(stop)
     }
 
     fun setDefaultStop(stop: CameraStop?) {

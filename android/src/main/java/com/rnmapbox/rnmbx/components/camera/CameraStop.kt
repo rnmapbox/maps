@@ -31,8 +31,6 @@ class CameraStop {
     private var mDuration = 2000
     private var mCallback: Animator.AnimatorListener? = null
 
-    var ts: Int? = null
-
     fun setBearing(bearing: Double) {
         mBearing = bearing
     }
@@ -155,10 +153,6 @@ class CameraStop {
             callback: Animator.AnimatorListener?
         ): CameraStop {
             val stop = CameraStop()
-
-            if (readableMap.hasKey("__updateTS")) {
-                stop.ts = readableMap.getInt("__updateTS")
-            }
 
             if (readableMap.hasKey("pitch")) {
                 stop.setTilt(readableMap.getDouble("pitch"))

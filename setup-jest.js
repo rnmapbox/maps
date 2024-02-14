@@ -186,6 +186,10 @@ NativeModules.RNMBXViewportModule = {
   getState: jest.fn(),
 };
 
+NativeModules.RNMBXCameraModule = {
+  updateCameraStop: jest.fn(),
+};
+
 NativeModules.RNMBXTileStoreModule = {
   setOptions: jest.fn(),
   shared: jest.fn(),
