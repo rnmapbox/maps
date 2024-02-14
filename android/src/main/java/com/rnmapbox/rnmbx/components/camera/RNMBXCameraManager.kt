@@ -9,9 +9,12 @@ import com.mapbox.geojson.FeatureCollection
 import com.rnmapbox.rnmbx.components.AbstractEventEmitter
 import com.rnmapbox.rnmbx.components.camera.CameraStop.Companion.fromReadableMap
 import com.rnmapbox.rnmbx.utils.GeoJSONUtils.toLatLngBounds
+import com.rnmapbox.rnmbx.utils.ViewTagResolver
 import com.rnmapbox.rnmbx.utils.extensions.asBooleanOrNull
+import com.rnmapbox.rnmbx.utils.extensions.asDoubleOrNull
+import com.rnmapbox.rnmbx.utils.extensions.asStringOrNull
 
-class RNMBXCameraManager(private val mContext: ReactApplicationContext) :
+class RNMBXCameraManager(private val mContext: ReactApplicationContext, val viewTagResolver: ViewTagResolver) :
     AbstractEventEmitter<RNMBXCamera?>(
         mContext
     ), RNMBXCameraManagerInterface<RNMBXCamera> {
@@ -71,22 +74,22 @@ class RNMBXCameraManager(private val mContext: ReactApplicationContext) :
 
     @ReactProp(name = "followUserMode")
     override fun setFollowUserMode(camera: RNMBXCamera, value: Dynamic) {
-        camera.setFollowUserMode(value.asString())
+        camera.setFollowUserMode(value.asStringOrNull())
     }
 
     @ReactProp(name = "followZoomLevel")
     override fun setFollowZoomLevel(camera: RNMBXCamera, value: Dynamic) {
-        camera.setFollowZoomLevel(value.asDouble())
+        camera.setFollowZoomLevel(value.asDoubleOrNull())
     }
 
     @ReactProp(name = "followPitch")
     override fun setFollowPitch(camera: RNMBXCamera, value: Dynamic) {
-        camera.setFollowPitch(value.asDouble())
+        camera.setFollowPitch(value.asDoubleOrNull())
     }
 
     @ReactProp(name = "followHeading")
     override fun setFollowHeading(camera: RNMBXCamera, value: Dynamic) {
-        camera.setFollowHeading(value.asDouble())
+        camera.setFollowHeading(value.asDoubleOrNull())
     }
 
     @ReactProp(name = "followPadding")

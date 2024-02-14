@@ -40,12 +40,13 @@ struct CameraUpdateItem {
       if let center = camera.center {
         try center.validate()
       }
+
       switch mode {
-        case .flight:
+      case .flight:
         map.mapView.camera.fly(to: camera, duration: duration)
-        case .ease:
+      case .ease:
         map.mapView.camera.ease(to: camera, duration: duration ?? 0, curve: .easeInOut, completion: nil)
-        case .linear:
+      case .linear:
         map.mapView.camera.ease(to: camera, duration: duration ?? 0, curve: .linear, completion: nil)
         default:
         if let mapboxMap = map.mapboxMap {
@@ -239,6 +240,10 @@ open class RNMBXCamera : RNMBXMapComponentBase {
     map.viewport.idle()
   }
   
+  @objc public func updateCameraStop(_ stop: [String: Any]) {
+    self.stop = stop
+  }
+  
   func _toCoordinateBounds(_ bounds: FeatureCollection) throws -> CoordinateBounds  {
     guard bounds.features.count == 2 else {
       throw RNMBXError.paramError("Expected two Points in FeatureColletion")
@@ -262,14 +267,12 @@ open class RNMBXCamera : RNMBXMapComponentBase {
         logged("RNMBXCamera._updateMaxBounds._toCoordinateBounds") {
           options.bounds = try self._toCoordinateBounds(maxBounds)
         }
+      } else {
+        options.bounds = nil
       }
-      if let minZoomLevel = self.minZoomLevel {
-        options.minZoom = minZoomLevel.CGFloat
-      }
-      if let maxZoomLevel = self.maxZoomLevel {
-        options.maxZoom = maxZoomLevel.CGFloat
-      }
-
+      options.minZoom = self.minZoomLevel?.CGFloat
+      options.maxZoom = self.maxZoomLevel?.CGFloat
+      
       logged("RNMBXCamera._updateMaxBounds") {
         try map.mapboxMap.setCameraBounds(with: options)
       }
@@ -374,11 +377,12 @@ open class RNMBXCamera : RNMBXMapComponentBase {
     if (stop.isEmpty) {
       return nil
     }
+    
     var zoom: CGFloat?
     if let z = stop["zoom"] as? Double {
       zoom = CGFloat(z)
     }
-    
+
     var pitch: CGFloat?
     if let p = stop["pitch"] as? Double {
       pitch = CGFloat(p)
@@ -389,19 +393,21 @@ open class RNMBXCamera : RNMBXMapComponentBase {
       heading = CLLocationDirection(h)
     }
     
-    let padding = UIEdgeInsets(
+    var padding: UIEdgeInsets = UIEdgeInsets(
       top: stop["paddingTop"] as? Double ?? 0,
       left: stop["paddingLeft"] as? Double ?? 0,
       bottom: stop["paddingBottom"] as? Double ?? 0,
       right: stop["paddingRight"] as? Double ?? 0
     )
-
-    var center: LocationCoordinate2D?
-    if let feature: String = stop["centerCoordinate"] as? String {
-      
+    
+    var camera: CameraOptions?
+    
+    if let feature = stop["centerCoordinate"] as? String {
       let centerFeature : Turf.Feature? = logged("RNMBXCamera.toUpdateItem.decode.cc") { try
         JSONDecoder().decode(Turf.Feature.self, from: feature.data(using: .utf8)!)
       }
+      
+      var center: LocationCoordinate2D?
       
       switch centerFeature?.geometry {
       case .point(let centerPoint):
@@ -410,7 +416,16 @@ open class RNMBXCamera : RNMBXMapComponentBase {
         Logger.log(level: .error, message: "RNMBXCamera.toUpdateItem: Unexpected geometry: \(String(describing: centerFeature?.geometry))")
         return nil
       }
-    } else if let feature: String = stop["bounds"] as? String {
+      
+      camera = CameraOptions(
+        center: center,
+        padding: padding,
+        anchor: nil,
+        zoom: zoom,
+        bearing: heading,
+        pitch: pitch
+      )
+    } else if let feature = stop["bounds"] as? String {
       let collection : Turf.FeatureCollection? = logged("RNMBXCamera.toUpdateItem.decode.bound") { try
         JSONDecoder().decode(Turf.FeatureCollection.self, from: feature.data(using: .utf8)!) }
       let features = collection?.features
@@ -439,55 +454,35 @@ open class RNMBXCamera : RNMBXMapComponentBase {
         #else
         let bounds = CoordinateBounds(southwest: sw, northeast: ne)
         #endif
-        let camera = map.mapboxMap.camera(
+
+        camera = map.mapboxMap.camera(
           for: bounds,
           padding: padding,
-          bearing: heading ?? map.cameraState.bearing,
-          pitch: pitch ?? map.cameraState.pitch
+          bearing: heading ?? map.mapboxMap.cameraState.bearing,
+          pitch: pitch ?? map.mapboxMap.cameraState.pitch
         )
-
-        if let _center = camera.center, let _zoom = camera.zoom {
-          center = _center
-          zoom = _zoom
-        }
       }
     }
 
-    let duration: TimeInterval? = {
-      if let d = stop["duration"] as? Double {
-        return toSeconds(d)
-      }
+    guard let camera = camera else {
       return nil
-    }()
-    
-    let mode: CameraMode = {
-      if let m = stop["mode"] as? String, let m = CameraMode(rawValue: m) {
-        return m
-      }
-      return .flight
-    }()
-    
-    if let z1 = minZoomLevel, let z2 = CGFloat(exactly: z1), zoom ?? 100 < z2 {
-      zoom = z2
     }
 
-    if let z1 = maxZoomLevel, let z2 = CGFloat(exactly: z1), zoom ?? 0 > z2 {
-      zoom = z2
+    var duration: TimeInterval?
+    if let d = stop["duration"] as? Double {
+      duration = toSeconds(d)
+    }
+    
+    var mode: CameraMode = .flight
+    if let m = stop["mode"] as? String, let m = CameraMode(rawValue: m) {
+      mode = m
     }
 
-    let result = CameraUpdateItem(
-      camera: CameraOptions(
-        center: center,
-        padding: padding,
-        anchor: nil,
-        zoom: zoom,
-        bearing: heading,
-        pitch: pitch
-      ),
+    return CameraUpdateItem(
+      camera: camera,
       mode: mode,
       duration: duration
     )
-    return result
   }
   
   func _updateCamera() {
