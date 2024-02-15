@@ -90,6 +90,7 @@ class RNMBXModule(private val mReactContext: ReactApplicationContext) : ReactCon
         cameraModes["Flight"] = CameraMode.FLIGHT
         cameraModes["Ease"] = CameraMode.EASE
         cameraModes["Linear"] = CameraMode.LINEAR
+        cameraModes["Move"] = CameraMode.MOVE
         cameraModes["None"] = CameraMode.NONE
 
         // offline region download states
