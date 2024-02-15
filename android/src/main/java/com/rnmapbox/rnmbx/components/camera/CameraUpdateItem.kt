@@ -83,7 +83,7 @@ class CameraUpdateItem(
         val animationOptions = MapAnimationOptions.Builder();
 
         // animateCamera / easeCamera only allows positive duration
-        if (duration == 0 || mCameraMode == CameraMode.NONE) {
+        if (duration == 0 || mCameraMode == CameraMode.MOVE || mCameraMode == CameraMode.NONE) {
             map.flyToV11(mCameraUpdate, animationOptions.apply {
                 duration(0)
             },
@@ -109,7 +109,6 @@ class CameraUpdateItem(
                 callback
             )
         }
-        null
     }
 
     override fun cancel(mayInterruptIfRunning: Boolean): Boolean {
