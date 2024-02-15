@@ -180,11 +180,14 @@ class RNMBXCamera(private val mContext: Context, private val mManager: RNMBXCame
         withMapView { mapView ->
             val map = mapView.getMapboxMap()
             val maxBounds = mMaxBounds
-            val builder = CameraBoundsOptions.Builder()
 
+            val builder = CameraBoundsOptions.Builder()
             if (maxBounds != null) {
                 builder.bounds(maxBounds.toBounds())
+            } else {
+                builder.bounds(null)
             }
+
             mMinZoomLevel?.let { builder.minZoom(it) }
             mMaxZoomLevel?.let { builder.maxZoom(it) }
             map.setBounds(builder.build())

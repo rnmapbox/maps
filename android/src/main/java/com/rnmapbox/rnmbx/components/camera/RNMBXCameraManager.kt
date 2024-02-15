@@ -59,12 +59,12 @@ class RNMBXCameraManager(private val mContext: ReactApplicationContext, val view
 
     @ReactProp(name = "minZoomLevel")
     override fun setMinZoomLevel(camera: RNMBXCamera, value: Dynamic) {
-        camera.setMinZoomLevel(value.asDouble())
+        camera.setMinZoomLevel(value.asDoubleOrNull())
     }
 
     @ReactProp(name = "maxZoomLevel")
     override fun setMaxZoomLevel(camera: RNMBXCamera, value: Dynamic) {
-        camera.setMaxZoomLevel(value.asDouble())
+        camera.setMaxZoomLevel(value.asDoubleOrNull())
     }
 
     @ReactProp(name = "followUserLocation")
