@@ -3,7 +3,6 @@ package com.rnmapbox.rnmbx.components.camera
 import android.animation.Animator
 import android.content.Context
 import android.location.Location
-import android.util.Log
 import com.facebook.react.bridge.Dynamic
 import com.facebook.react.bridge.ReadableMap
 import com.mapbox.maps.plugin.gestures.gestures
