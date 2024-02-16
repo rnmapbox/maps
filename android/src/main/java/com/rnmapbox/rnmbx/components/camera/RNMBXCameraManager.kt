@@ -9,11 +9,12 @@ import com.mapbox.geojson.FeatureCollection
 import com.rnmapbox.rnmbx.components.AbstractEventEmitter
 import com.rnmapbox.rnmbx.components.camera.CameraStop.Companion.fromReadableMap
 import com.rnmapbox.rnmbx.utils.GeoJSONUtils.toLatLngBounds
+import com.rnmapbox.rnmbx.utils.ViewTagResolver
 import com.rnmapbox.rnmbx.utils.extensions.asBooleanOrNull
 import com.rnmapbox.rnmbx.utils.extensions.asDoubleOrNull
 import com.rnmapbox.rnmbx.utils.extensions.asStringOrNull
 
-class RNMBXCameraManager(private val mContext: ReactApplicationContext) :
+class RNMBXCameraManager(private val mContext: ReactApplicationContext, val viewTagResolver: ViewTagResolver) :
     AbstractEventEmitter<RNMBXCamera?>(
         mContext
     ), RNMBXCameraManagerInterface<RNMBXCamera> {
