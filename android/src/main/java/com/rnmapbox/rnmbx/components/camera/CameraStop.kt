@@ -95,12 +95,10 @@ class CameraStop {
     fun toCameraUpdate(mapView: RNMBXMapView): CameraUpdateItem {
         val map = mapView.getMapboxMap()
         val currentCamera = map.cameraState
+
         val builder = CameraOptions.Builder()
         builder.center(currentCamera.center)
         builder.bearing(currentCamera.bearing)
-
-        val currentPadding = currentCamera.padding
-
         builder.padding(currentCamera.padding)
         builder.zoom(currentCamera.zoom)
         if (mBearing != null) {
@@ -109,7 +107,11 @@ class CameraStop {
         if (mTilt != null) {
             builder.pitch(mTilt)
         }
+        if (mZoom != null) {
+            builder.zoom(mZoom)
+        }
 
+        val currentPadding = currentCamera.padding
         val paddingLeft: Int = mPaddingLeft ?: currentPadding.left.toInt()
         val paddingTop: Int = mPaddingTop ?: currentPadding.top.toInt()
         val paddingRight: Int = mPaddingRight ?: currentPadding.right.toInt()
@@ -117,10 +119,10 @@ class CameraStop {
         val cameraPadding = intArrayOf(paddingLeft, paddingTop, paddingRight, paddingBottom)
         val cameraPaddingClipped = clippedPadding(cameraPadding, mapView)
         val cameraPaddingEdgeInsets = convert(cameraPaddingClipped)
+        builder.padding(cameraPaddingEdgeInsets)
 
         if (mLatLng != null) {
             builder.center(mLatLng!!.point)
-            builder.padding(cameraPaddingEdgeInsets)
         } else if (mBounds != null) {
             val tilt = if (mTilt != null) mTilt!! else currentCamera.pitch
             val bearing = if (mBearing != null) mBearing!! else currentCamera.bearing
@@ -131,15 +133,12 @@ class CameraStop {
                 bearing,
                 tilt
             )
-
             builder.center(boundsCamera.center)
             builder.anchor(boundsCamera.anchor)
             builder.zoom(boundsCamera.zoom)
+            builder.bearing(boundsCamera.bearing)
+            builder.pitch(boundsCamera.pitch)
             builder.padding(boundsCamera.padding)
-        }
-
-        if (mZoom != null) {
-            builder.zoom(mZoom)
         }
 
         return CameraUpdateItem(map, builder.build(), mDuration, mCallback, mMode)
@@ -195,6 +194,7 @@ class CameraStop {
                 when (readableMap.getInt("mode")) {
                     CameraMode.FLIGHT -> stop.setMode(CameraMode.FLIGHT)
                     CameraMode.LINEAR -> stop.setMode(CameraMode.LINEAR)
+                    CameraMode.MOVE -> stop.setMode(CameraMode.MOVE)
                     CameraMode.NONE -> stop.setMode(CameraMode.NONE)
                     else -> stop.setMode(CameraMode.EASE)
                 }
