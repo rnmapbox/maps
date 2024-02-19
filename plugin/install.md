@@ -28,7 +28,7 @@ After installing this package, add the [config plugin](https://docs.expo.io/guid
 }
 ```
 
-You'll need to provide `RNMapboxMapsDownloadToken` as well. This secret token requires the `DOWNLOADS:READ` scope. You can refer to the [iOS guide](https://docs.mapbox.com/ios/maps/guides/install/#configure-credentials), which explains how to configure this token under the section `Configure your secret token`.  This is the same string you will pass to Mapbox.setAccessToken().
+You'll need to provide `RNMapboxMapsDownloadToken` as well. This secret token requires the `DOWNLOADS:READ` scope. You can refer to the [iOS guide](https://docs.mapbox.com/ios/maps/guides/install/#configure-credentials), which explains how to configure this token under the section `Configure your secret token`.  This is NOT the same as the public token string passed to `Mapbox.setAccessToken()`.
 
 ```json
 {
@@ -37,7 +37,7 @@ You'll need to provide `RNMapboxMapsDownloadToken` as well. This secret token re
       [
         "@rnmapbox/maps",
         {
-          "RNMapboxMapsDownloadToken": "your-secret-access-token-from-mapbox"
+          "RNMapboxMapsDownloadToken": "YOUR_SECRET_ACCESS_TOKEN_STARTING_WITH_sk.ey"
         }
       ]
     ]
