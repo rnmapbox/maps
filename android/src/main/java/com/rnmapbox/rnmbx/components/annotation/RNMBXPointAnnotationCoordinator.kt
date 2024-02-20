@@ -29,6 +29,45 @@ class RNMBXPointAnnotationCoordinator(val mapView: MapView) {
             onAnnotationClick(pointAnnotation)
             false
         })
+        manager.addDragListener(object : OnPointAnnotationDragListener {
+            override fun onAnnotationDragStarted(_annotation: Annotation<*>) {
+                annotationDragged = true;
+                var reactAnnotation: RNMBXPointAnnotation? = null
+                for (key in annotations.keys) {
+                    val annotation = annotations[key]
+                    val curMarkerID = annotation?.mapboxID
+                    if (_annotation.id == curMarkerID) {
+                        reactAnnotation = annotation
+                    }
+                }
+                reactAnnotation?.let { it.onDragStart() }
+            }
+
+            override fun onAnnotationDrag(_annotation: Annotation<*>) {
+                var reactAnnotation: RNMBXPointAnnotation? = null
+                for (key in annotations.keys) {
+                    val annotation = annotations[key]
+                    val curMarkerID = annotation?.mapboxID
+                    if (_annotation.id == curMarkerID) {
+                        reactAnnotation = annotation
+                    }
+                }
+                reactAnnotation?.let { it.onDrag() }
+            }
+
+            override fun onAnnotationDragFinished(_annotation: Annotation<*>) {
+                annotationDragged = false;
+                var reactAnnotation: RNMBXPointAnnotation? = null
+                for (key in annotations.keys) {
+                    val annotation = annotations[key]
+                    val curMarkerID = annotation?.mapboxID
+                    if (_annotation.id == curMarkerID) {
+                        reactAnnotation = annotation
+                    }
+                }
+                reactAnnotation?.let { it.onDragEnd() }
+            }
+        })
     }
 
     fun getAndClearAnnotationClicked(): Boolean {
@@ -69,46 +108,6 @@ class RNMBXPointAnnotationCoordinator(val mapView: MapView) {
         if (newSelected == oldSelected) {
             newSelected = null
         }
-
-        manager.addDragListener(object : OnPointAnnotationDragListener {
-            override fun onAnnotationDragStarted(_annotation: Annotation<*>) {
-                annotationDragged = true;
-                var reactAnnotation: RNMBXPointAnnotation? = null
-                for (key in annotations.keys) {
-                    val annotation = annotations[key]
-                    val curMarkerID = annotation?.mapboxID
-                    if (_annotation.id == curMarkerID) {
-                        reactAnnotation = annotation
-                    }
-                }
-                reactAnnotation?.let { it.onDragStart() }
-            }
-
-            override fun onAnnotationDrag(_annotation: Annotation<*>) {
-                var reactAnnotation: RNMBXPointAnnotation? = null
-                for (key in annotations.keys) {
-                    val annotation = annotations[key]
-                    val curMarkerID = annotation?.mapboxID
-                    if (_annotation.id == curMarkerID) {
-                        reactAnnotation = annotation
-                    }
-                }
-                reactAnnotation?.let { it.onDrag() }
-            }
-
-            override fun onAnnotationDragFinished(_annotation: Annotation<*>) {
-                annotationDragged = false;
-                var reactAnnotation: RNMBXPointAnnotation? = null
-                for (key in annotations.keys) {
-                    val annotation = annotations[key]
-                    val curMarkerID = annotation?.mapboxID
-                    if (_annotation.id == curMarkerID) {
-                        reactAnnotation = annotation
-                    }
-                }
-                reactAnnotation?.let { it.onDragEnd() }
-            }
-        })
 
         oldSelected?.let { deselectAnnotation(it) }
         newSelected?.let { selectAnnotation(it) }
