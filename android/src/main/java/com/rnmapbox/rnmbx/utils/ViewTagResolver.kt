@@ -14,6 +14,8 @@ data class ViewTagWaiter<V>(
     val reject: Promise?
 )
 
+const val LOG_TAG = "ViewTagResolver"
+
 // see https://github.com/rnmapbox/maps/pull/3074
 open class ViewTagResolver(val context: ReactApplicationContext) {
     private val createdViews: HashSet<Int> = hashSetOf<Int>()
@@ -55,8 +57,14 @@ open class ViewTagResolver(val context: ReactApplicationContext) {
     fun <V>withViewResolved(viewTag: Int, reject: Promise? = null, fn: (V) -> Unit) {
         context.runOnUiQueueThread() {
             try {
-                val view = manager.resolveView(viewTag) as V
-                fn(view)
+                val resolvedView: View? = manager.resolveView(viewTag)
+                val view = resolvedView as? V
+                if (view != null) {
+                    fn(view)
+                } else {
+                    Logger.e(LOG_TAG, "view: $resolvedView found with tag: $viewTag but it's either null or not the correct type")
+                    reject?.reject(Throwable("view: $resolvedView found with tag: $viewTag but it's either null or not the correct type"))
+                }
             } catch (err: IllegalViewOperationException) {
                 if (!createdViews.contains(viewTag)) {
                     viewWaiters.getOrPut(viewTag) { mutableListOf<ViewTagWaiter<View>>() }.add(ViewTagWaiter<View>({ view -> fn(view as V) }, reject))

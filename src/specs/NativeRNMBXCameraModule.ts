@@ -30,7 +30,7 @@ type NativeAnimationMode = 'flight' | 'ease' | 'linear' | 'none' | 'move';
 type ObjectOr<T> = Object;
 
 export interface Spec extends TurboModule {
-  updateCameraStop(viewRef: ViewRef, stops: ObjectOr<Stop>): Promise<void>;
+  updateCameraStop(viewRef: ViewRef, stop: ObjectOr<Stop>): Promise<void>;
 }
 
 export default TurboModuleRegistry.getEnforcing<Spec>('RNMBXCameraModule');
