@@ -28,6 +28,15 @@ body:
     placeholder: 10.7.0
   validations:
     required: true
+- type: input
+  id: react-native-version
+  attributes:
+    label: React Native Version
+    description: |-
+      The React Native version
+    placeholder: 0.73.2
+  validations:
+    required: true
 - type: dropdown
   id: platform
   attributes:
