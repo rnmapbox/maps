@@ -2,8 +2,6 @@
 delete global.MessageChannel;
 import { NativeModules } from 'react-native';
 
-jest.useFakeTimers('legacy');
-
 function keyMirror(keys) {
   const obj = {};
   keys.forEach((key) => (obj[key] = key));
