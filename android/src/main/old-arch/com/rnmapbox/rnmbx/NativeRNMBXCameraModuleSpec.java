@@ -37,5 +37,5 @@ public abstract class NativeRNMBXCameraModuleSpec extends ReactContextBaseJavaMo
 
   @ReactMethod
   @DoNotStrip
-  public abstract void updateCameraStop(@Nullable Double viewRef, ReadableMap stops, Promise promise);
+  public abstract void updateCameraStop(@Nullable Double viewRef, ReadableMap stop, Promise promise);
 }
