@@ -62,6 +62,22 @@ async function generate() {
     ),
   );
 
+  outputPaths.push(
+    ...codepartReplace(
+      path.join(
+        __dirname,
+        '..',
+        'ios/RNMBX',
+      ),
+      path.join(
+        __dirname,
+        '..',
+        'ios/RNMBX/codeparts/',
+      ),
+      ['.swift'],
+    ),
+  );
+
   // autogenerate docs
   const docsRoot = path.join(__dirname, '..', 'docs');
   const docsJsonPath = path.join(docsRoot, 'docs.json');

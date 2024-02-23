@@ -13,13 +13,34 @@ public class RNMBXSkyLayer: RNMBXLayer {
     return LayerType.self
   }
 
+// @{codepart-replace-start(LayerPropsCommon.codepart-swift.ejs,{layerType:"Sky"})}
+  func setCommonOptions(_ layer: inout SkyLayer) -> Bool {
+    var changed = false
+
+    return changed
+  }
+
+  override func setOptions(_ layer: inout Layer) {
+    if var actualLayer = layer as? LayerType {
+      if self.setCommonOptions(&actualLayer) {
+        layer = actualLayer
+      }
+    } else {
+      Logger.log(level: .error, message: "Expected layer type to be Sky but was \(type(of: layer))")
+    }
+  }
+
   override func apply(style : Style) throws {
-    try style.updateLayer(withId: id, type: LayerType.self) { (layer : inout LayerType) in
+    try style.updateLayer(withId: id, type: LayerType.self) { (layer : inout SkyLayer) in
+      if self.styleLayer != nil {
+        self.setOptions(&self.styleLayer!)
+      }
       if let styleLayer = self.styleLayer as? LayerType {
         layer = styleLayer
       }
     }
   }
+// @{codepart-replace-end}
   
   override func addStyles() {
     if let style : Style = self.style {
