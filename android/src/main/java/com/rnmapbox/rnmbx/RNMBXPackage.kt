@@ -52,8 +52,9 @@ import com.rnmapbox.rnmbx.modules.RNMBXOfflineModule
 import com.rnmapbox.rnmbx.modules.RNMBXOfflineModuleLegacy
 import com.rnmapbox.rnmbx.modules.RNMBXSnapshotModule
 import com.rnmapbox.rnmbx.modules.RNMBXTileStoreModule
-import com.rnmapbox.rnmbx.shape_animators.RNMBXMovePointShapeAnimatorModule
-import com.rnmapbox.rnmbx.shape_animators.ShapeAnimatorManager
+import com.rnmapbox.rnmbx.shapeAnimators.RNMBXChangeLineOffsetsShapeAnimatorModule
+import com.rnmapbox.rnmbx.shapeAnimators.RNMBXMovePointShapeAnimatorModule
+import com.rnmapbox.rnmbx.shapeAnimators.ShapeAnimatorManager
 import com.rnmapbox.rnmbx.utils.ViewTagResolver
 
 class RNMBXPackage : TurboReactPackage() {
@@ -103,6 +104,7 @@ class RNMBXPackage : TurboReactPackage() {
             RNMBXImageModule.NAME -> return RNMBXImageModule(reactApplicationContext, getViewTagResolver(reactApplicationContext, s))
             RNMBXPointAnnotationModule.NAME -> return RNMBXPointAnnotationModule(reactApplicationContext, getViewTagResolver(reactApplicationContext, s))
             RNMBXMovePointShapeAnimatorModule.NAME -> return RNMBXMovePointShapeAnimatorModule(reactApplicationContext, getShapeAnimators(s))
+            RNMBXChangeLineOffsetsShapeAnimatorModule.NAME -> return RNMBXChangeLineOffsetsShapeAnimatorModule(reactApplicationContext, getShapeAnimators(s))
         }
         return null
     }
@@ -286,6 +288,15 @@ class RNMBXPackage : TurboReactPackage() {
             moduleInfos[RNMBXMovePointShapeAnimatorModule.NAME] = ReactModuleInfo(
                 RNMBXMovePointShapeAnimatorModule.NAME,
                 RNMBXMovePointShapeAnimatorModule.NAME,
+                false,
+                false,
+                false,
+                false,
+                isTurboModule
+            )
+            moduleInfos[RNMBXChangeLineOffsetsShapeAnimatorModule.NAME] = ReactModuleInfo(
+                RNMBXChangeLineOffsetsShapeAnimatorModule.NAME,
+                RNMBXChangeLineOffsetsShapeAnimatorModule.NAME,
                 false,
                 false,
                 false,

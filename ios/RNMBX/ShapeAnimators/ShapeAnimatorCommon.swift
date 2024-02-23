@@ -1,15 +1,19 @@
 import MapboxMaps
 
- protocol ShapeAnimationConsumer: AnyObject {
-   func shapeUpdated(shape: GeoJSONObject)
- }
+private let LOG_TAG = "RNMBXShapeAnimator"
+
+protocol ShapeAnimationConsumer: AnyObject {
+  func shapeUpdated(shape: GeoJSONObject)
+}
 
 protocol ShapeAnimator {
   func getShape() -> GeoJSONObject
+  func getAnimatedShape(animatorAgeSec: TimeInterval) -> GeoJSONObject
   func subscribe(consumer: ShapeAnimationConsumer)
   func unsubscribe(consumer: ShapeAnimationConsumer)
-
+  func refresh()
   func start()
+  func stop()
 }
 
 class WeakShapeAnimationConsumer {
@@ -20,57 +24,91 @@ class WeakShapeAnimationConsumer {
   }
 }
 
-public class ShapeAnimatorCommon : NSObject, ShapeAnimator {
-  var tag: Int
+public class ShapeAnimatorCommon: NSObject, ShapeAnimator {
+  public let tag: Int
+  public let emptyGeoJsonObj: GeoJSONObject = .geometry(.lineString(.init([])))
   
-  var timer: Timer? = nil
-  var progress: TimeInterval = 0.0
+  private var displayLink: CADisplayLink?
+  private var startedAt: Double?
   
   init(tag: Int) {
     self.tag = tag
   }
-
-  // MARK: subscriptions
+  
+  /** The number of seconds the animator has been running continuously. */
+  public func getAnimatorAgeSec() -> TimeInterval {
+    (displayLink?.targetTimestamp.magnitude ?? 0) - (startedAt ?? 0)
+  }
+  
+  // MARK: Subscriptions
+  
   var subscribers: [WeakShapeAnimationConsumer] = []
-
+  
   func subscribe(consumer: ShapeAnimationConsumer) {
+    if subscribers.contains(where: { $0.consumer === consumer }) {
+      return
+    }
+    
     subscribers.append(WeakShapeAnimationConsumer(consumer))
   }
-
+  
   func unsubscribe(consumer: ShapeAnimationConsumer) {
     subscribers.removeAll { $0.consumer === consumer }
     subscribers.removeAll { $0.consumer === nil }
     if subscribers.isEmpty {
-      timer?.invalidate()
-      timer = nil
+      stop()
     }
   }
-
+  
+  // - MARK: Lifecycle
+  
+  @objc func refresh() {
+    if startedAt == nil {
+      startedAt = displayLink?.targetTimestamp.magnitude ?? 0
+    }
+    
+    let timestamp = getAnimatorAgeSec()
+    
+    let shape = getAnimatedShape(animatorAgeSec: timestamp)
+    
+    subscribers.forEach { subscriber in
+      subscriber.consumer?.shapeUpdated(shape: shape)
+    }
+  }
+  
   func start() {
-    if let timer = timer {
-      timer.invalidate()
+    if let _ = displayLink {
+      Logger.log(level: .debug, tag: LOG_TAG, message: "Timer for animator \(tag) is already running (subscribers: \(subscribers.count))")
+      return
     }
 
-    let start = Date()
-    DispatchQueue.main.async {
-      let timer = Timer.scheduledTimer(withTimeInterval: 0.1, repeats: true, block: { timer in
-        let diff = timer.fireDate.timeIntervalSince(start)
-        self.progress = diff
-
-        let shape = self.getAnimatedShape(timeIntervalSinceStart: diff)
-        self.subscribers.forEach { $0.consumer?.shapeUpdated(shape: shape) }
-      })
-      self.timer = timer
-    }
+    Logger.log(level: .debug, tag: LOG_TAG, message: "Started timer for animator \(tag) (subscribers: \(subscribers.count))")
+    
+    startedAt = nil
+        
+    displayLink = CADisplayLink(target: self, selector: #selector(refresh))
+    displayLink!.add(to: .main, forMode: .default)
   }
 
-  /// - MARK: Subclasses should implement
-   
+  func stop() {
+    guard let _ = displayLink else {
+      Logger.log(level: .debug, tag: LOG_TAG, message: "Timer for animator \(tag) is already stopped (subscribers: \(subscribers.count))")
+      return
+    }
+
+    Logger.log(level: .debug, tag: LOG_TAG, message: "Stopped timer for animator \(tag) (subscribers: \(subscribers.count))")
+    
+    displayLink?.remove(from: .main, forMode: .default)
+    displayLink = nil
+  }
+  
+  // - MARK: Data providers
+  
   func getShape() -> GeoJSONObject {
-    return getAnimatedShape(timeIntervalSinceStart: progress)
+    return getAnimatedShape(animatorAgeSec: getAnimatorAgeSec())
   }
-
-  func getAnimatedShape(timeIntervalSinceStart: TimeInterval) -> GeoJSONObject {
-    fatalError("Subclasses should implement")
+  
+  func getAnimatedShape(animatorAgeSec: TimeInterval) -> GeoJSONObject {
+    fatalError("getAnimatedShape() must be overridden in all subclasses of ShapeAnimatorCommon")
   }
 }

@@ -22,10 +22,10 @@ import com.facebook.react.bridge.ReadableArray;
 import com.facebook.react.turbomodule.core.interfaces.TurboModule;
 import javax.annotation.Nonnull;
 
-public abstract class NativeRNMBXMovePointShapeAnimatorModuleSpec extends ReactContextBaseJavaModule implements ReactModuleWithSpec, TurboModule {
-  public static final String NAME = "RNMBXMovePointShapeAnimatorModule";
+public abstract class NativeRNMBXChangeLineOffsetsShapeAnimatorModuleSpec extends ReactContextBaseJavaModule implements ReactModuleWithSpec, TurboModule {
+  public static final String NAME = "RNMBXChangeLineOffsetsShapeAnimatorModule";
 
-  public NativeRNMBXMovePointShapeAnimatorModuleSpec(ReactApplicationContext reactContext) {
+  public NativeRNMBXChangeLineOffsetsShapeAnimatorModuleSpec(ReactApplicationContext reactContext) {
     super(reactContext);
   }
 
@@ -36,9 +36,17 @@ public abstract class NativeRNMBXMovePointShapeAnimatorModuleSpec extends ReactC
 
   @ReactMethod
   @DoNotStrip
-  public abstract void create(double tag, ReadableArray coordinate, Promise promise);
+  public abstract void create(double tag, ReadableArray coordinates, double startOffset, double endOffset, Promise promise);
 
   @ReactMethod
   @DoNotStrip
-  public abstract void moveTo(double tag, ReadableArray coordinate, double duration, Promise promise);
+  public abstract void setLineString(double tag, ReadableArray coordinates, double startOffset, double endOffset, Promise promise);
+
+  @ReactMethod
+  @DoNotStrip
+  public abstract void setStartOffset(double tag, double offset, double duration, Promise promise);
+
+  @ReactMethod
+  @DoNotStrip
+  public abstract void setEndOffset(double tag, double offset, double duration, Promise promise);
 }

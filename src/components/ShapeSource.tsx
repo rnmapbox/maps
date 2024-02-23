@@ -15,6 +15,7 @@ import {
 } from '../utils';
 import { copyPropertiesAsDeprecated } from '../utils/deprecation';
 import { OnPressEvent } from '../types/OnPressEvent';
+import { ShapeAnimatorInterface } from '../shapeAnimators';
 
 import AbstractSource from './AbstractSource';
 import NativeBridgeComponent from './NativeBridgeComponent';
@@ -48,7 +49,8 @@ export type Props = {
     | GeoJSON.GeometryCollection
     | GeoJSON.Feature
     | GeoJSON.FeatureCollection
-    | GeoJSON.Geometry;
+    | GeoJSON.Geometry
+    | ShapeAnimatorInterface;
 
   /**
    * Enables clustering on the source for point shapes.

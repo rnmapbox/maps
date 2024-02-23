@@ -1,6 +1,8 @@
 import MapboxMaps
 import Turf
 
+private let LOG_TAG = "RNMBXShapeSource"
+
 @objc
 public class RNMBXShapeSource : RNMBXSource {
   @objc public var url : String? {
@@ -11,13 +13,12 @@ public class RNMBXShapeSource : RNMBXSource {
         switch result {
           case .success(let obj):
             self.doUpdate { (style) in
-              logged("RNMBXShapeSource.setUrl") {
+              logged(LOG_TAG, "setUrl") {
                 try style.updateGeoJSONSource(withId: self.id, geoJSON: obj)
               }
             }
-
           case .failure(let error):
-            Logger.log(level: .error, message: ":: Error - update url failed \(error) \(error.localizedDescription)")
+            Logger.log(level: .error, message: "Update url failed", error: error)
         }
       }
     }
@@ -30,21 +31,22 @@ public class RNMBXShapeSource : RNMBXSource {
     didSet {
       shapeAnimator?.unsubscribe(consumer: self)
       shapeAnimator = nil
-
-      if let shape = shape, ShapeAnimatorManager.shared.isShapeAnimatorTag(shape: shape), let animatedShape = ShapeAnimatorManager.shared.get(shape: shape) {
+      
+      if let shape = shape, ShapeAnimatorManager.shared.isShapeAnimatorTag(shape: shape) {
         if let shapeAnimator = ShapeAnimatorManager.shared.get(shape: shape) {
           self.shapeAnimator = shapeAnimator
           shapeAnimator.subscribe(consumer: self)
           
-          shapeUpdated(shape: shapeAnimator.getShape())
+          let shape = shapeAnimator.getShape()
+          shapeUpdated(shape: shape)
         }
-      } else {
-        logged("RNMBXShapeSource.updateShape") {
+      } else {        
+        logged(LOG_TAG, "updateShape") {
           let obj : GeoJSONObject = try parse(shape)
           shapeObject = obj
           
           doUpdate { (style) in
-            logged("RNMBXShapeSource.setShape") {
+            logged(LOG_TAG, "setShape") {
               try style.updateGeoJSONSource(withId: id, geoJSON: obj)
             }
           }
@@ -52,15 +54,26 @@ public class RNMBXShapeSource : RNMBXSource {
       }
     }
   }
+  
+  public override func addToMap(_ map: RNMBXMapView, style: Style) {
+    super.addToMap(map, style: style)
+  }
+  
+  public override func removeFromMap(_ map: RNMBXMapView, reason: RemovalReason) -> Bool {
+    if (reason == .ViewRemoval) {
+      shapeAnimator?.unsubscribe(consumer: self)
+    }
+    return super.removeFromMap(map, reason: reason)
+  }
 
   @objc public var cluster : NSNumber?
   @objc public var clusterRadius : NSNumber?
   @objc public var clusterMaxZoomLevel : NSNumber? {
     didSet {
-      logged("RNMBXShapeSource.clusterMaxZoomLevel") {
+      logged(LOG_TAG, "clusterMaxZoomLevel") {
         if let number = clusterMaxZoomLevel?.doubleValue {
           doUpdate { (style) in
-            logged("RNMBXShapeSource.doUpdate") {
+            logged(LOG_TAG, "clusterMaxZoomLevel") {
               try style.setSourceProperty(for: id, property: "clusterMaxZoom", value: number)
             }
           }
@@ -119,7 +132,7 @@ public class RNMBXShapeSource : RNMBXSource {
         }
       }
     } catch {
-      Logger.log(level: .error, message: "RNMBXShapeSource.parsing clusterProperties failed", error: error)
+      Logger.log(level: .error, tag: LOG_TAG, message: "makeSource: parsing clusterProperties failed", error: error)
     }
 
     if let maxZoomLevel = maxZoomLevel {
@@ -271,10 +284,10 @@ extension RNMBXShapeSource
       return nil
     }
     guard let data = shape.data(using: .utf8) else {
-      Logger.log(level: .error, message: "shapeSource.setShape: Shape is not utf8")
+      Logger.log(level: .error, tag: LOG_TAG, message: "parseAsJSONObject: Shape is not utf8")
       return nil
     }
-    let objs = logged("shapeSource.setShape.parseJSON") {
+    let objs = logged(LOG_TAG, "parseAsJSONObject") {
       try JSONSerialization.jsonObject(with: data)
     }
     return objs
@@ -344,7 +357,7 @@ extension RNMBXShapeSource
       return
     }
 
-    logged("RNMBXShapeSource.getClusterExpansionZoom", rejecter: { (_,_,error) in
+    logged(LOG_TAG, "getClusterExpansionZoom", rejecter: { (_,_,error) in
       completion(.failure(error!))
     }) {
       let cluster : Feature = try parse(featureJSON);
@@ -375,7 +388,7 @@ extension RNMBXShapeSource
       return
     }
 
-    logged("RNMBXShapeSource.getClusterLeaves", rejecter: { (_,_,error) in
+    logged(LOG_TAG, "getClusterLeaves", rejecter: { (_,_,error) in
       completion(.failure(error!))
     }) {
       let cluster : Feature = try parse(featureJSON);
@@ -397,7 +410,7 @@ extension RNMBXShapeSource
       return
     }
 
-    logged("RNMBXShapeSource.getClusterChildren", rejecter: { (_,_,error) in
+    logged(LOG_TAG, "getClusterChildren", rejecter: { (_,_,error) in
       completion(.failure(error!))
     }) {
       let cluster : Feature = try parse(featureJSON);

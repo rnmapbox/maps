@@ -7,13 +7,12 @@ import com.rnmapbox.rnmbx.components.AbstractEventEmitter
 import com.facebook.react.uimanager.ThemedReactContext
 import com.facebook.react.uimanager.annotations.ReactProp
 import com.facebook.react.bridge.ReadableType
-import com.facebook.react.common.MapBuilder
 import com.facebook.react.viewmanagers.RNMBXShapeSourceManagerInterface
 import com.mapbox.bindgen.Value
 import com.mapbox.maps.extension.style.expressions.generated.Expression
 import com.rnmapbox.rnmbx.events.constants.EventKeys
 import com.rnmapbox.rnmbx.events.constants.eventMapOf
-import com.rnmapbox.rnmbx.shape_animators.ShapeAnimatorManager
+import com.rnmapbox.rnmbx.shapeAnimators.ShapeAnimatorManager
 import com.rnmapbox.rnmbx.utils.ExpressionParser
 import com.rnmapbox.rnmbx.utils.Logger
 import com.rnmapbox.rnmbx.utils.ViewTagResolver

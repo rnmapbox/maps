@@ -10,6 +10,7 @@ import com.facebook.react.uimanager.ViewGroupManager
 import com.facebook.react.uimanager.events.Event
 import com.facebook.react.uimanager.events.EventDispatcher
 import com.rnmapbox.rnmbx.events.IEvent
+import com.rnmapbox.rnmbx.utils.Logger
 
 /**
  * Created by nickitaliano on 8/23/17.
@@ -40,14 +41,19 @@ abstract class AbstractEventEmitter<T : ViewGroup?>(reactApplicationContext: Rea
             return
         }
         mRateLimitedEvents[eventCacheKey] = System.currentTimeMillis()
-        mEventDispatcher!!.dispatchEvent(
-            AbstractEvent(
-                event.iD,
-                event.key,
-                event.canCoalesce(),
-                event.toJSON()
+
+        try {
+            mEventDispatcher!!.dispatchEvent(
+                AbstractEvent(
+                    event.iD,
+                    event.key,
+                    event.canCoalesce(),
+                    event.toJSON()
+                )
             )
-        )
+        } catch (e: Exception) {
+            Logger.e("Error dispatching event:", e.toString())
+        }
     }
 
     override fun addEventEmitters(context: ThemedReactContext, view: T) {

@@ -49,6 +49,7 @@ An HTTP(S) URL, absolute file URL, or local file URL relative to the current app
 | GeoJSON.Feature
 | GeoJSON.FeatureCollection
 | GeoJSON.Geometry
+| ShapeAnimatorInterface
 ```
 The contents of the source. A shape can represent a GeoJSON geometry, a feature, or a feature collection.
 

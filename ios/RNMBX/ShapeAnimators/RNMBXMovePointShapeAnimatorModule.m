@@ -30,22 +30,19 @@ RCT_EXPORT_MODULE();
 #endif // RCT_NEW_ARCH_ENABLED
 @synthesize bridge = _bridge;
 
-- (dispatch_queue_t)methodQueue
-{
+- (dispatch_queue_t)methodQueue {
   // It seems that due to how UIBlocks work with uiManager, we need to call the methods there
   // for the blocks to be dispatched before the batch is completed
   return RCTGetUIManagerQueue();
 }
 
-RCT_EXPORT_METHOD(start:(nonnull NSNumber*)tag resolve:(RCTPromiseResolveBlock)resolve reject:(RCTPromiseRejectBlock)reject) {
-  [MovePointShapeAnimator startWithTag:tag resolve:resolve reject: reject];
+RCT_EXPORT_METHOD(create:(nonnull NSNumber*)tag startCoordinate: (nonnull NSArray*)startCoordinate resolve:(RCTPromiseResolveBlock)resolve reject:(RCTPromiseRejectBlock)reject) {
+  resolve([[MovePointShapeAnimator createWithTag:tag startCoordinate:startCoordinate] getTag]);
 }
 
-RCT_EXPORT_METHOD(create:(nonnull NSNumber*)tag coordinate: (nonnull NSArray*)coordinate resolve:(RCTPromiseResolveBlock)resolve reject:(RCTPromiseRejectBlock)reject) {
-  
-  resolve([[MovePointShapeAnimator createWithTag:tag coordinate:coordinate] getTag]);
+RCT_EXPORT_METHOD(moveTo:(nonnull NSNumber*)tag coordinate: (nonnull NSArray*)coordinate durationMs: (nonnull NSNumber*)durationMs resolve:(RCTPromiseResolveBlock)resolve reject:(RCTPromiseRejectBlock)reject) {
+  [MovePointShapeAnimator moveToTag:tag coordinate:coordinate durationMs:durationMs resolve:resolve reject:reject];
 }
-
 
 // Thanks to this guard, we won't compile this code when we build for the old architecture.
 #ifdef RCT_NEW_ARCH_ENABLED
@@ -57,5 +54,3 @@ RCT_EXPORT_METHOD(create:(nonnull NSNumber*)tag coordinate: (nonnull NSArray*)co
 #endif // RCT_NEW_ARCH_ENABLED
 
 @end
-
-

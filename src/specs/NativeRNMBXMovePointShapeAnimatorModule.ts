@@ -7,8 +7,12 @@ import { TurboModuleRegistry } from 'react-native';
 type AnimatorTag = Int32;
 
 export interface Spec extends TurboModule {
-  create(tag: AnimatorTag, from: ReadonlyArray<Double>): Promise<void>;
-  start(tag: AnimatorTag): Promise<void>;
+  create(tag: AnimatorTag, coordinate: ReadonlyArray<Double>): Promise<void>;
+  moveTo(
+    tag: AnimatorTag,
+    coordinate: ReadonlyArray<Double>,
+    duration: Double,
+  ): Promise<void>;
 }
 
 export default TurboModuleRegistry.getEnforcing<Spec>(

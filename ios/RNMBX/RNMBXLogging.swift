@@ -12,7 +12,7 @@ public enum RNMBXError: Error, LocalizedError {
 }
 
 public class Logger {
-  public enum LogLevel : String, Comparable {
+  public enum LogLevel: String, Comparable {
     public static func < (lhs: Logger.LogLevel, rhs: Logger.LogLevel) -> Bool {
       return lhs.intValue < rhs.intValue
     }
@@ -42,76 +42,116 @@ public class Logger {
     }
   }
   
-  static let sharedInstance = Logger()
+  internal static let sharedInstance = Logger()
   
-  var level: LogLevel = .info
-  var handler : (LogLevel, String) -> Void = { (level, message) in
+  fileprivate var level: LogLevel = .info
+  fileprivate var handler: (LogLevel, String) -> Void = { (level, message) in
     fatalError("Handler not yet installed")
   }
   
-  func log(level: LogLevel, message: String) {
-    print("LOG \(level) \(message)")
+  public func log(level: LogLevel, tag: String, message: String) {
+    log(level: level, message: "\(tag) | \(message)")
+  }
+    
+  @available(*, deprecated, message: "Use log(level:tag:message:) instead.")
+  public func log(level: LogLevel, message: String) {
+    print("\(level) | \(message)")
     if self.level <= level {
       handler(level, message)
     }
   }
   
-  public static func log(level: LogLevel, message: String) {
-    sharedInstance.log(level: level, message: message)
+  public static func log(level: LogLevel, tag: String, message: String, error: Error? = nil) {
+    if let error = error {
+      sharedInstance.log(level: level, message: "\(tag) | \(message), \(error.localizedDescription), \(error)")
+    } else {
+      sharedInstance.log(level: level, message: "\(tag) | \(message)")
+    }
   }
   
-  static func log(level: LogLevel, message: String, error: Error) {
-    sharedInstance.log(level: level, message: "\(message) - error: \(error.localizedDescription) \(error)")
+  @available(*, deprecated, message: "Use log(level:tag:message:error:) instead.")
+  public static func log(level: LogLevel, message: String, error: Error? = nil) {
+    if let error = error {
+      sharedInstance.log(level: level, message: "\(message), \(error.localizedDescription), \(error)")
+    } else {
+      sharedInstance.log(level: level, message: message)
+    }
   }
-
-  static func error(_ message: String) {
+  
+  public static func error(_ message: String) {
     log(level: .error, message: message)
   }
 
-  static func assert(_ message: String) {
+  public static func assert(_ message: String) {
     log(level: .error, message: "Assertion failure: \(message)")
   }
 }
 
-func errorMessage(_ error: Error) -> String {
+/// Logs tag and message if `fn` throws and returns nil
+public func logged<T>(_ tag: String, _ msg: String, info: (() -> String)? = nil, level: Logger.LogLevel = .error, rejecter: RCTPromiseRejectBlock? = nil, fn: () throws -> T) -> T? {
+  logged(
+    "\(tag) | \(msg)",
+    info: info,
+    level: level,
+    rejecter: rejecter, 
+    fn: fn
+  )
+}
+
+/// Logs tag and message if `fn` returns nil
+public func logged<T>(_ tag: String, _ msg: String, info: (() -> String)? = nil, level: Logger.LogLevel = .error, rejecter: RCTPromiseRejectBlock? = nil, fn: () -> T) -> T? {
+  logged(
+    "\(tag) | \(msg)",
+    info: info,
+    level: level,
+    rejecter: rejecter, 
+    fn: fn
+  )
+}
+
+@available(*, deprecated, message: "Use logged(tag:msg:info:level:rejecter:fn:) instead.")
+public func logged<T>(_ msg: String, info: (() -> String)? = nil, level: Logger.LogLevel = .error, rejecter: RCTPromiseRejectBlock? = nil, fn: () throws -> T) -> T? {
+  do {
+    return try fn()
+  } catch {
+    let _info = info?() ?? ""
+    let _error = errorMessage(error)
+    Logger.log(level: level, message: "\(msg) \(_info) \(_error)")
+    rejecter?(msg, "\(_info) \(_error)", error)
+    return nil
+  }
+}
+
+@available(*, deprecated, message: "Use logged(tag:msg:info:level:rejecter:fn:) instead.")
+public func logged<T>(_ msg: String, info: (() -> String)? = nil, level: Logger.LogLevel = .error, rejecter: RCTPromiseRejectBlock? = nil, fn: () -> T?) ->T? {
+  if let ret = fn() {
+    return ret
+  } else {
+    let _info = info?() ?? ""
+    Logger.log(level: level, message: "\(msg) \(_info)")
+    rejecter?(msg, _info, NSError(domain: "is null", code: 0))
+    return nil
+  }
+}
+
+@available(*, deprecated, message: "Use logged(tag:msg:info:level:rejecter:fn:) instead.")
+public func logged<T>(_ msg: String, info: (() -> String)? = nil, errorResult: (Error) -> T, level: Logger.LogLevel = .error, fn: () throws -> T) -> T {
+  do {
+    return try fn()
+  } catch {
+    let _info = info?() ?? ""
+    Logger.log(level: level, message: "\(msg) \(_info) \(error.localizedDescription)")
+    return errorResult(error)
+  }
+}
+
+private func errorMessage(_ error: Error) -> String {
   if case DecodingError.typeMismatch(let _, let context) = error {
     return "\(error.localizedDescription) \(context.codingPath) \(context.debugDescription)"
   } else if let mapError = error as? MapError {
     return "MapError: \(mapError.errorDescription)"
   } else {
     return "\(error.localizedDescription)"
-  }
-}
-
-/// log message if optional returned by `fn` is nil
-func logged<T>(_ msg: String, info: (() -> String)? = nil, level: Logger.LogLevel = .error, rejecter: RCTPromiseRejectBlock? = nil, fn: () -> T?) ->T? {
-  let ret = fn()
-  if ret == nil {
-    Logger.log(level:level, message: "\(msg) \(info?() ?? "")")
-    rejecter?(msg, "\(info?() ?? "")", NSError(domain:"is null", code: 0))
-    return nil
-  } else {
-    return ret
-  }
-}
-
-/// log message if `fn` throws and return nil
-func logged<T>(_ msg: String, info: (() -> String)? = nil, level: Logger.LogLevel = .error, rejecter: RCTPromiseRejectBlock? = nil, fn : () throws -> T) -> T? {
-  do {
-    return try fn()
-  } catch {
-    Logger.log(level:level, message: "\(msg) \(info?() ?? "") \(errorMessage(error))")
-    rejecter?(msg, "\(info?() ?? "") \(errorMessage(error))", error)
-    return nil
-  }
-}
-
-func logged<T>(_ msg: String, info: (() -> String)? = nil, errorResult: (Error) -> T, level: Logger.LogLevel = .error, fn : () throws -> T) -> T {
-  do {
-    return try fn()
-  } catch {
-    Logger.log(level:level, message: "\(msg) \(info?() ?? "") \(error.localizedDescription)")
-    return errorResult(error)
   }
 }
 
@@ -165,8 +205,7 @@ class RNMBXLogging: RCTEventEmitter {
   }
   
   @objc
-  override func supportedEvents() -> [String]
-  {
+  override func supportedEvents() -> [String] {
       return ["LogEvent"];
   }
 }

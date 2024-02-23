@@ -198,6 +198,11 @@ NativeModules.RNMBXMovePointShapeAnimatorModule = {
   start: jest.fn(),
 };
 
+NativeModules.RNMBXChangeLineOffsetsShapeAnimatorModule = {
+  create: jest.fn(),
+  start: jest.fn(),
+};
+
 NativeModules.RNMBXLogging = nativeModule({
   setLogLevel: jest.fn(),
 });

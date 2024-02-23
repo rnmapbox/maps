@@ -5203,7 +5203,7 @@
       {
         "name": "shape",
         "required": false,
-        "type": "\\| GeoJSON.GeometryCollection\n\\| GeoJSON.Feature\n\\| GeoJSON.FeatureCollection\n\\| GeoJSON.Geometry",
+        "type": "\\| GeoJSON.GeometryCollection\n\\| GeoJSON.Feature\n\\| GeoJSON.FeatureCollection\n\\| GeoJSON.Geometry\n\\| ShapeAnimatorInterface",
         "default": "none",
         "description": "The contents of the source. A shape can represent a GeoJSON geometry, a feature, or a feature collection."
       },

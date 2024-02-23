@@ -1,32 +1,28 @@
 package com.rnmapbox.rnmbx.components.styles.sources
 
 import android.content.Context
-import com.mapbox.maps.extension.style.sources.generated.GeoJsonSource
-import com.rnmapbox.rnmbx.utils.ImageEntry
-import android.graphics.drawable.BitmapDrawable
 import com.facebook.react.bridge.Promise
-import com.facebook.react.bridge.ReadableMap
-import com.rnmapbox.rnmbx.components.mapview.RNMBXMapView
-import com.rnmapbox.rnmbx.events.FeatureClickEvent
 import com.facebook.react.bridge.WritableMap
 import com.facebook.react.bridge.WritableNativeMap
 import com.mapbox.bindgen.Value
 import com.mapbox.geojson.Feature
-import com.rnmapbox.rnmbx.events.AndroidCallbackEvent
 import com.mapbox.geojson.FeatureCollection
 import com.mapbox.geojson.GeoJson
 import com.mapbox.geojson.Geometry
 import com.mapbox.maps.*
 import com.mapbox.maps.extension.style.expressions.generated.Expression
-import com.rnmapbox.rnmbx.shape_animators.ShapeAnimationConsumer
-import com.rnmapbox.rnmbx.shape_animators.ShapeAnimator
-import com.rnmapbox.rnmbx.shape_animators.ShapeAnimatorManager
+import com.mapbox.maps.extension.style.sources.generated.GeoJsonSource
+import com.rnmapbox.rnmbx.components.RemovalReason
+import com.rnmapbox.rnmbx.components.mapview.RNMBXMapView
+import com.rnmapbox.rnmbx.events.AndroidCallbackEvent
+import com.rnmapbox.rnmbx.events.FeatureClickEvent
+import com.rnmapbox.rnmbx.shapeAnimators.ShapeAnimationConsumer
+import com.rnmapbox.rnmbx.shapeAnimators.ShapeAnimator
 import com.rnmapbox.rnmbx.utils.Logger
-import java.net.URL
-import java.util.ArrayList
-import java.util.HashMap
-
 import com.rnmapbox.rnmbx.v11compat.feature.*
+import java.net.URL
+
+private const val LOG_TAG = "RNMBXShapeSource"
 
 class RNMBXShapeSource(context: Context, private val mManager: RNMBXShapeSourceManager) :
     RNMBXSource<GeoJsonSource>(context), ShapeAnimationConsumer {
@@ -47,11 +43,20 @@ class RNMBXShapeSource(context: Context, private val mManager: RNMBXShapeSourceM
     }
 
     override fun addToMap(mapView: RNMBXMapView) {
+
         // Wait for style before adding the source to the map
         mapView.getMapboxMap().getStyle {
             val map = mapView.getMapboxMap()
             super@RNMBXShapeSource.addToMap(mapView)
         }
+    }
+
+    override fun removeFromMap(mapView: RNMBXMapView, reason: RemovalReason): Boolean {
+
+        if (reason == RemovalReason.VIEW_REMOVAL) {
+            mShapeAnimator?.unsubscribe(this)
+        }
+        return super.removeFromMap(mapView, reason)
     }
 
     override fun setId(id: Int) {
@@ -85,7 +90,8 @@ class RNMBXShapeSource(context: Context, private val mManager: RNMBXShapeSourceM
                 mShapeAnimator = shapeAnimator
                 shapeAnimator.subscribe(this)
 
-                shapeUpdated(shapeAnimator.getShape())
+                val shape = shapeAnimator.getShape()
+                shapeUpdated(shape)
             }
         } else {
             mShape = geoJSONStr
@@ -108,8 +114,8 @@ class RNMBXShapeSource(context: Context, private val mManager: RNMBXShapeSourceM
             else -> {
                 Logger.e(
                     LOG_TAG,
-                    "Cannot convert shape to GeoJSONSourceData, neitthe Geometry, nor Feature or FeatureCollection: $geoJson"
-                );
+                    "Cannot convert shape to Geometry, Feature, or FeatureCollection: $geoJson"
+                )
                 return null
             }
         }
@@ -214,7 +220,7 @@ class RNMBXShapeSource(context: Context, private val mManager: RNMBXShapeSourceM
             )
         ) { features ->
             if (features.isError) {
-                Logger.e("RNMBXShapeSource", String.format("Error: %s", features.error))
+                Logger.e(LOG_TAG, String.format("Error: %s", features.error))
             } else {
                 val payload: WritableMap = WritableNativeMap()
                 val result: MutableList<Feature> = ArrayList(
