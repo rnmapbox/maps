@@ -147,7 +147,9 @@ open class RNMBXMapViewManager(context: ReactApplicationContext, val viewTagReso
     @ReactProp(name = "surfaceView")
     override fun setSurfaceView(mapView: RNMBXMapView, value: Dynamic) {
         if (mapView.isInitialized) {
-            Logger.d(LOG_TAG, "setSurafaceView cannot be changed")
+            if (mapView.surfaceView != value.asBoolean()) {
+                Logger.d(LOG_TAG, "surafaceView cannot be changed on existing map")
+            }
         } else {
             mapView.surfaceView = value.asBoolean()
         }
