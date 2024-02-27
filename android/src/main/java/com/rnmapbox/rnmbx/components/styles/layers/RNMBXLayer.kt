@@ -37,7 +37,6 @@ abstract class RNMBXLayer<T : Layer?>(protected var mContext: Context) : Abstrac
     protected var mFilter: Expression? = null
     @JvmField
     protected var mMap: MapboxMap? = null
-    @JvmField
     protected var mLayer: T? = null
     protected var mHadFilter = false
 
@@ -109,8 +108,8 @@ abstract class RNMBXLayer<T : Layer?>(protected var mContext: Context) : Abstrac
 
     fun setMaxZoomLevel(maxZoomLevel: Double) {
         mMaxZoomLevel = maxZoomLevel
-        if (mLayer != null) {
-            mLayer!!.maxZoom(maxZoomLevel.toFloat().toDouble())
+        mLayer?.let {
+           it.maxZoom(maxZoomLevel.toFloat().toDouble())
         }
     }
 
@@ -163,7 +162,7 @@ abstract class RNMBXLayer<T : Layer?>(protected var mContext: Context) : Abstrac
         } */
 
         Logger.logged("RNMBXLayer.add") {
-            style!!.addLayer(mLayer!!);
+            style!!.addLayer(mLayer!!)
             mMapView!!.layerAdded(mLayer!!)
         }
     }
@@ -310,6 +309,7 @@ abstract class RNMBXLayer<T : Layer?>(protected var mContext: Context) : Abstrac
             val layer = mLayer
             if (layer != null) {
                 it.removeStyleLayer(layer.layerId)
+                mLayer = null // see https://github.com/rnmapbox/maps/pull/3392
             } else {
                 Logger.e("RNMBXLayer","mLayer is null on removal layer from map")
             }
