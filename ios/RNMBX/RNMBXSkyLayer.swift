@@ -21,6 +21,7 @@ public class RNMBXSkyLayer: RNMBXLayer {
   }
 
   override func setOptions(_ layer: inout Layer) {
+    super.setOptions(&layer)
     if var actualLayer = layer as? LayerType {
       if self.setCommonOptions(&actualLayer) {
         layer = actualLayer
