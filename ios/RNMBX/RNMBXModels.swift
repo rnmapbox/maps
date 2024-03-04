@@ -22,8 +22,7 @@ open class RNMBXModels : UIView, RNMBXMapComponent {
       self.modelIdToUrl = newModels
     }
     get {
-      Logger.error("RNMBXModels.models.getter not implemented")
-      return NSDictionary()
+      return modelIdToUrl as NSDictionary
     }
   }
   
