@@ -117,12 +117,7 @@ extension RNMBXCustomLocationProvider {
       }
       let customLocationProvider = CustomLocationProvider()
       self.customLocationProvider = customLocationProvider
-      if let locationModule = RNMBXLocationModule.shared {
-        locationModule.override(for: mapView.location)
-        locationModule.locationProvider = customLocationProvider
-        // mapView.location.overrideLocationProvider(with: customLocationProvider!)
-      }
-      
+      mapView.location.overrideLocationProvider(with: customLocationProvider)
     }
   }
   
