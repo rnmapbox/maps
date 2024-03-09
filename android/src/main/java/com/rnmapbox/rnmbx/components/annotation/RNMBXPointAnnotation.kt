@@ -46,6 +46,8 @@ class RNMBXPointAnnotation(private val mContext: Context, private val mManager: 
     private var mCalloutSymbol: PointAnnotation? = null
     private var mCalloutBitmap: Bitmap? = null
     private var mCalloutBitmapId: String? = null
+
+    private val childViews = mutableListOf<View>();
     override fun addView(childView: View, childPosition: Int) {
         if (childView is RNMBXCallout) {
             calloutView = childView
@@ -55,6 +57,20 @@ class RNMBXPointAnnotation(private val mContext: Context, private val mManager: 
         childView.addOnLayoutChangeListener(this)
 
         mMapView?.offscreenAnnotationViewContainer?.addView(childView)
+        childViews.add(childPosition, childView)
+    }
+
+    override fun getChildAt(childPosition: Int): View {
+        return childViews.get(childPosition)
+    }
+
+    override fun getChildCount(): Int {
+        return childViews.size
+    }
+
+    override fun removeViewAt(index: Int) {
+        val view = childViews.removeAt(index)
+        removeView(view)
     }
 
     override fun removeView(childView: View) {

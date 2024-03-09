@@ -42,7 +42,6 @@ class RNMBXPointAnnotationManager(reactApplicationContext: ReactApplicationConte
         )
     }
 
-    // TODO: check why it does not work correctly
     override fun createViewInstance(reactContext: ThemedReactContext): RNMBXPointAnnotation {
         return RNMBXPointAnnotation(reactContext!!, this)
     }
