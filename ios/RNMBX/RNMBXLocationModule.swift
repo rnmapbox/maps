@@ -460,6 +460,7 @@ class RNMBXLocationModule: RCTEventEmitter, LocationProviderRNMBXDelegate {
   var hasListener = false
   
   var locationProvider : LocationProvider
+  var defaultLocationProvider : LocationProvider? = nil
   
   var locationEventThrottle : (
     waitBetweenEvents: Double?,
@@ -471,6 +472,7 @@ class RNMBXLocationModule: RCTEventEmitter, LocationProviderRNMBXDelegate {
 
   override init() {
     locationProvider = LocationProviderRNMBX()
+    defaultLocationProvider = locationProvider
     super.init()
     if let locationProvider = locationProvider as? LocationProviderRNMBX {
       locationProvider.delegate = self
@@ -568,6 +570,12 @@ class RNMBXLocationModule: RCTEventEmitter, LocationProviderRNMBXDelegate {
     }
   }
   
+  func resetLocationProvider() {
+    if let defaultLocationProvider = defaultLocationProvider {
+      self.locationProvider = defaultLocationProvider
+    }
+  }
+
   // MARK: - location event throttle
   @objc
   func setLocationEventThrottle(_ throttleValue:NSNumber) {

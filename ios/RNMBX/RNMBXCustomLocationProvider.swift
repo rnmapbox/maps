@@ -1,5 +1,7 @@
 import MapboxMaps
 
+let TAG = "RNMBXCustomLocationProvider"
+
 @objc
 public class RNMBXCustomLocationProvider: UIView, RNMBXMapComponent {
   var map: RNMBXMapView? = nil
@@ -118,16 +120,21 @@ extension RNMBXCustomLocationProvider {
       let customLocationProvider = CustomLocationProvider()
       self.customLocationProvider = customLocationProvider
       if let locationModule = RNMBXLocationModule.shared {
-        locationModule.override(for: mapView.location)
         locationModule.locationProvider = customLocationProvider
-        // mapView.location.overrideLocationProvider(with: customLocationProvider!)
+        locationModule.override(for: mapView.location)
+      } else {
+        Logger.error(TAG, "RNMBXLocationModule.shared is nil")
+        mapView.location.overrideLocationProvider(with: customLocationProvider)
       }
       
     }
   }
   
   func removeCustomLocationProvider(mapView: MapView) {
-    if let provider = defaultLocationProvider {
+    if let locationModule = RNMBXLocationModule.shared {
+      locationModule.resetLocationProvider()
+      locationModule.override(for: mapView.location)
+    } else if let provider = defaultLocationProvider {
       mapView.location.overrideLocationProvider(with: provider)
     }
     customLocationProvider = nil

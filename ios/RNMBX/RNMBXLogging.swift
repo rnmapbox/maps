@@ -78,6 +78,10 @@ public class Logger {
     }
   }
   
+  public static func error(_ tag: String, _ message: String) {
+    log(level: .error, tag: tag, message: message)
+  }
+
   public static func error(_ message: String) {
     log(level: .error, message: message)
   }
