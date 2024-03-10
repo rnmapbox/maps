@@ -111,7 +111,7 @@ import React from 'react';
 import { StyleSheet, View } from 'react-native';
 import Mapbox from '@rnmapbox/maps';
 
-Mapbox.setAccessToken('<YOUR_ACCESSTOKEN>');
+Mapbox.setAccessToken('<YOUR_PUBLIC_ACCESS_TOKEN_STARTING_WITH_pk.ey>');
 
 const App = () => {
   return (
