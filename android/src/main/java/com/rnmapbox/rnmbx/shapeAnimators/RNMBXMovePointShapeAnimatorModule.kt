@@ -11,6 +11,7 @@ import com.mapbox.geojson.Point
 import com.mapbox.turf.TurfConstants.UNIT_METERS
 import com.mapbox.turf.TurfMeasurement
 import com.rnmapbox.rnmbx.NativeRNMBXMovePointShapeAnimatorModuleSpec
+import com.rnmapbox.rnmbx.utils.ViewRefTag
 
 class MovePointShapeAnimator(tag: Tag, coordinate: Point) : ShapeAnimatorCommon(tag) {
     private var point = AnimatableElement<Point>(
@@ -77,7 +78,7 @@ class RNMBXMovePointShapeAnimatorModule(
     }
 
     @ReactMethod
-    override fun create(tag: Double, startCoordinate: ReadableArray, promise: Promise) {
+    override fun create(tag: ViewRefTag, startCoordinate: ReadableArray, promise: Promise) {
         shapeAnimatorManager.add(
             MovePointShapeAnimator(
                 tag.toLong(),
@@ -92,7 +93,7 @@ class RNMBXMovePointShapeAnimatorModule(
 
     @ReactMethod
     override fun moveTo(
-        tag: Double,
+        tag: ViewRefTag,
         coordinate: ReadableArray?,
         duration: Double,
         promise: Promise?

@@ -11,6 +11,7 @@ import com.mapbox.turf.TurfConstants.UNIT_METERS
 import com.mapbox.turf.TurfMeasurement
 import com.mapbox.turf.TurfMisc
 import com.rnmapbox.rnmbx.NativeRNMBXChangeLineOffsetsShapeAnimatorModuleSpec
+import com.rnmapbox.rnmbx.utils.ViewRefTag
 
 class ChangeLineOffsetsShapeAnimator(tag: Tag, _lineString: LineString, startOffset: Double, endOffset: Double): ShapeAnimatorCommon(tag) {
     private var lineString = _lineString
@@ -153,7 +154,7 @@ class RNMBXChangeLineOffsetsShapeAnimatorModule(
     }
 
     override fun create(
-        tag: Double,
+        tag: ViewRefTag,
         coordinates: ReadableArray,
         startOffset: Double,
         endOffset: Double,
@@ -172,11 +173,11 @@ class RNMBXChangeLineOffsetsShapeAnimatorModule(
         promise?.resolve(tag.toInt())
     }
 
-    private fun getAnimator(tag: Double): ChangeLineOffsetsShapeAnimator {
+    private fun getAnimator(tag: ViewRefTag): ChangeLineOffsetsShapeAnimator {
         return shapeAnimatorManager.get(tag.toLong()) as ChangeLineOffsetsShapeAnimator
     }
 
-    override fun setLineString(tag: Double, coordinates: ReadableArray?, startOffset: Double, endOffset: Double, promise: Promise?) {
+    override fun setLineString(tag: ViewRefTag, coordinates: ReadableArray?, startOffset: Double, endOffset: Double, promise: Promise?) {
         val animator = getAnimator(tag)
 
         if (coordinates == null) {
@@ -191,13 +192,13 @@ class RNMBXChangeLineOffsetsShapeAnimatorModule(
         promise?.resolve(true)
     }
 
-    override fun setStartOffset(tag: Double, offset: Double, duration: Double, promise: Promise?) {
+    override fun setStartOffset(tag: ViewRefTag, offset: Double, duration: Double, promise: Promise?) {
         val animator = getAnimator(tag)
         animator.setStartOffset(offset, duration / 1000)
         promise?.resolve(true)
     }
 
-    override fun setEndOffset(tag: Double, offset: Double, duration: Double, promise: Promise?) {
+    override fun setEndOffset(tag: ViewRefTag, offset: Double, duration: Double, promise: Promise?) {
         val animator = getAnimator(tag)
         animator.setEndOffset(offset, duration / 1000)
         promise?.resolve(true)

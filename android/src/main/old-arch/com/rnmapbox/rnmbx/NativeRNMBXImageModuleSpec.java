@@ -36,5 +36,5 @@ public abstract class NativeRNMBXImageModuleSpec extends ReactContextBaseJavaMod
 
   @ReactMethod
   @DoNotStrip
-  public abstract void refresh(@Nullable Double viewRef, Promise promise);
+  public abstract void refresh(@Nullable Integer viewRef, Promise promise);
 }

@@ -9,12 +9,13 @@ import com.facebook.react.bridge.WritableMap
 import com.facebook.react.bridge.WritableNativeMap
 import com.rnmapbox.rnmbx.NativeRNMBXCameraModuleSpec
 import com.rnmapbox.rnmbx.components.mapview.CommandResponse
+import com.rnmapbox.rnmbx.utils.ViewRefTag
 import com.rnmapbox.rnmbx.utils.ViewTagResolver
 
 
 class RNMBXCameraModule(context: ReactApplicationContext, val viewTagResolver: ViewTagResolver) : NativeRNMBXCameraModuleSpec(context) {
     private fun withViewportOnUIThread(
-        viewRef: Double?,
+        viewRef: ViewRefTag?,
         reject: Promise,
         fn: (RNMBXCamera) -> Unit
     ) {
@@ -42,7 +43,7 @@ class RNMBXCameraModule(context: ReactApplicationContext, val viewTagResolver: V
       const val NAME = "RNMBXCameraModule"
     }
 
-    override fun updateCameraStop(viewRef: Double?, stop: ReadableMap, promise: Promise) {
+    override fun updateCameraStop(viewRef: ViewRefTag?, stop: ReadableMap, promise: Promise) {
         withViewportOnUIThread(viewRef, promise) {
             it.updateCameraStop(stop)
             promise.resolve(null)

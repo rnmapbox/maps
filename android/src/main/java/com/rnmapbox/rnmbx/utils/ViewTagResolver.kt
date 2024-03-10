@@ -16,6 +16,7 @@ data class ViewTagWaiter<V>(
 
 const val LOG_TAG = "ViewTagResolver"
 
+typealias ViewRefTag = Int
 // see https://github.com/rnmapbox/maps/pull/3074
 open class ViewTagResolver(val context: ReactApplicationContext) {
     private val createdViews: HashSet<Int> = hashSetOf<Int>()

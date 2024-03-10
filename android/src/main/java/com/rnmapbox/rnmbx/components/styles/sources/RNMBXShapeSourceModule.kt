@@ -9,6 +9,7 @@ import com.facebook.react.uimanager.common.UIManagerType
 import com.rnmapbox.rnmbx.BuildConfig
 import com.rnmapbox.rnmbx.NativeRNMBXShapeSourceModuleSpec
 import com.rnmapbox.rnmbx.components.mapview.RNMBXMapView
+import com.rnmapbox.rnmbx.utils.ViewRefTag
 import com.rnmapbox.rnmbx.utils.ViewTagResolver
 
 @ReactModule(name = RNMBXShapeSourceModule.NAME)
@@ -16,7 +17,7 @@ class RNMBXShapeSourceModule(reactContext: ReactApplicationContext?, private val
     NativeRNMBXShapeSourceModuleSpec(reactContext) {
 
 
-    private fun withShapeSourceOnUIThread(viewRef: Double?, reject: Promise, fn: (RNMBXShapeSource) -> Unit) {
+    private fun withShapeSourceOnUIThread(viewRef: ViewRefTag?, reject: Promise, fn: (RNMBXShapeSource) -> Unit) {
         if (viewRef == null) {
             reject.reject(Exception("viewRef is null for RNMBXShapeSource"))
         } else {
@@ -30,7 +31,7 @@ class RNMBXShapeSourceModule(reactContext: ReactApplicationContext?, private val
 
     @ReactMethod
     override fun getClusterExpansionZoom(
-        viewRef: Double?,
+        viewRef: ViewRefTag?,
         featureJSON: String,
         promise: Promise
     ) {
@@ -41,10 +42,10 @@ class RNMBXShapeSourceModule(reactContext: ReactApplicationContext?, private val
 
     @ReactMethod
     override fun getClusterLeaves(
-        viewRef: Double?,
+        viewRef: ViewRefTag?,
         featureJSON: String,
-        number: Double,
-        offset: Double,
+        number: Int,
+        offset: Int,
         promise: Promise
     ) {
         withShapeSourceOnUIThread(viewRef, promise) {
@@ -53,7 +54,7 @@ class RNMBXShapeSourceModule(reactContext: ReactApplicationContext?, private val
     }
 
     @ReactMethod
-    override fun getClusterChildren(viewRef: Double?, featureJSON: String, promise: Promise) {
+    override fun getClusterChildren(viewRef: ViewRefTag?, featureJSON: String, promise: Promise) {
         withShapeSourceOnUIThread(viewRef, promise) {
             it.getClusterChildren(featureJSON, promise)
         }

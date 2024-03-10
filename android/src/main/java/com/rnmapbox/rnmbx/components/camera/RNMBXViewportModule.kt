@@ -8,11 +8,12 @@ import com.facebook.react.bridge.WritableMap
 import com.facebook.react.bridge.WritableNativeMap
 import com.rnmapbox.rnmbx.NativeRNMBXViewportModuleSpec
 import com.rnmapbox.rnmbx.components.mapview.CommandResponse
+import com.rnmapbox.rnmbx.utils.ViewRefTag
 import com.rnmapbox.rnmbx.utils.ViewTagResolver
 
 class RNMBXViewportModule(context: ReactApplicationContext, val viewTagResolver: ViewTagResolver) : NativeRNMBXViewportModuleSpec(context) {
     private fun withViewportOnUIThread(
-        viewRef: Double?,
+        viewRef: ViewRefTag?,
         reject: Promise,
         fn: (RNMBXViewport) -> Unit
     ) {
@@ -36,14 +37,14 @@ class RNMBXViewportModule(context: ReactApplicationContext, val viewTagResolver:
         }
     }
 
-    override fun getState(viewRef: Double?, promise: Promise) {
+    override fun getState(viewRef: ViewRefTag?, promise: Promise) {
         withViewportOnUIThread(viewRef, promise) {
             promise.resolve(it.getState())
         }
     }
 
     override fun transitionTo(
-        viewRef: Double?,
+        viewRef: ViewRefTag?,
         state: ReadableMap,
         transition: ReadableMap?,
         promise: Promise
@@ -53,7 +54,7 @@ class RNMBXViewportModule(context: ReactApplicationContext, val viewTagResolver:
         }
     }
 
-    override fun idle(viewRef: Double?, promise: Promise) {
+    override fun idle(viewRef: ViewRefTag?, promise: Promise) {
         withViewportOnUIThread(viewRef, promise) {
             it.idle()
             promise.resolve(true)

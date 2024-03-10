@@ -5,6 +5,7 @@ import com.facebook.react.bridge.ReactApplicationContext
 import com.facebook.react.bridge.ReactMethod
 import com.facebook.react.module.annotations.ReactModule
 import com.rnmapbox.rnmbx.NativeRNMBXPointAnnotationModuleSpec
+import com.rnmapbox.rnmbx.utils.ViewRefTag
 import com.rnmapbox.rnmbx.utils.ViewTagResolver
 
 @ReactModule(name = RNMBXPointAnnotationModule.NAME)
@@ -15,7 +16,7 @@ class RNMBXPointAnnotationModule(reactContext: ReactApplicationContext?, private
         const val NAME = "RNMBXPointAnnotationModule"
     }
 
-    private fun withPointAnnotationOnUIThread(viewRef: Double?, reject: Promise, fn: (RNMBXPointAnnotation) -> Unit) {
+    private fun withPointAnnotationOnUIThread(viewRef: ViewRefTag?, reject: Promise, fn: (RNMBXPointAnnotation) -> Unit) {
         if (viewRef == null) {
             reject.reject(Exception("viewRef is null for RNMBXPointAnnotation"))
         } else {
@@ -24,7 +25,7 @@ class RNMBXPointAnnotationModule(reactContext: ReactApplicationContext?, private
     }
 
     @ReactMethod
-    override fun refresh(viewRef: Double?, promise: Promise) {
+    override fun refresh(viewRef: ViewRefTag?, promise: Promise) {
         withPointAnnotationOnUIThread(viewRef, promise) {
             it.refresh()
             promise.resolve(null)

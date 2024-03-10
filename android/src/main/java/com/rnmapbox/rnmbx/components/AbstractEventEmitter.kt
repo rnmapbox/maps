@@ -56,7 +56,7 @@ abstract class AbstractEventEmitter<T : ViewGroup?>(reactApplicationContext: Rea
         }
     }
 
-    override fun addEventEmitters(context: ThemedReactContext, view: T) {
+    override fun addEventEmitters(context: ThemedReactContext, view: T & Any) {
         mEventDispatcher = UIManagerHelper.getEventDispatcherForReactTag(context, view!!.id)
     }
 
