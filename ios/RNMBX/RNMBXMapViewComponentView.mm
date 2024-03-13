@@ -185,6 +185,11 @@ using namespace facebook::react;
     if (scaleBarEnabled != nil) {
         _view.reactScaleBarEnabled = scaleBarEnabled;
     }
+    
+    id scaleBarIsMetricUnits = RNMBXConvertFollyDynamicToId(newViewProps.scaleBarIsMetricUnits);
+    if (scaleBarIsMetricUnits != nil) {
+        _view.reactScaleBarEnabled = scaleBarIsMetricUnits;
+    }
 
     id scaleBarPosition = RNMBXConvertFollyDynamicToId(newViewProps.scaleBarPosition);
     if (scaleBarPosition != nil) {

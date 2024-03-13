@@ -37,8 +37,10 @@ type OrnamentButtonsProps = {
   ornamentType: OrnamentType;
   visibility: Record<OrnamentType, true | false | undefined>;
   position: Record<OrnamentType, OrnamentPosition>;
+  isMetricUnits?: boolean;
   onPressVisibility: (ornamentType: OrnamentType) => void;
   onPressPosition: (ornamentType: OrnamentType) => void;
+  onPressIsMetricUnits?: () => void;
 };
 
 const OrnamentButtons = ({
@@ -47,6 +49,8 @@ const OrnamentButtons = ({
   position,
   onPressVisibility,
   onPressPosition,
+  isMetricUnits,
+  onPressIsMetricUnits,
 }: OrnamentButtonsProps) => (
   <>
     <Button
@@ -57,6 +61,12 @@ const OrnamentButtons = ({
       title={'Position: ' + position[ornamentType]}
       onPress={(): void => onPressPosition(ornamentType)}
     />
+    {!!onPressIsMetricUnits && (
+      <Button
+        title={'Metric Units: ' + isMetricUnits}
+        onPress={(): void => onPressIsMetricUnits()}
+      />
+    )}
   </>
 );
 
@@ -67,6 +77,8 @@ const Ornaments = () => {
     [OrnamentType.Compass]: undefined,
     [OrnamentType.ScaleBar]: undefined,
   });
+
+  const [scaleBarIsMetricUnits, setScaleBarIsMetricUnits] = useState(false);
 
   const [position, setPosition] = useState({
     [OrnamentType.Logo]: OrnamentPosition.BottomLeft,
@@ -125,6 +137,7 @@ const Ornaments = () => {
         compassEnabled={visibility[OrnamentType.Compass]}
         compassPosition={POSITIONS[position[OrnamentType.Compass]]}
         compassImage={compassImage}
+        scaleBarIsMetricUnits={scaleBarIsMetricUnits}
         compassFadeWhenNorth={compassFadeWhenNorth}
         scaleBarEnabled={visibility[OrnamentType.ScaleBar]}
         scaleBarPosition={POSITIONS[position[OrnamentType.ScaleBar]]}
@@ -196,8 +209,12 @@ const Ornaments = () => {
           ornamentType={OrnamentType.ScaleBar}
           visibility={visibility}
           position={position}
+          isMetricUnits={scaleBarIsMetricUnits}
           onPressVisibility={handlePressVisibility}
           onPressPosition={handlePressPosition}
+          onPressIsMetricUnits={() => {
+            setScaleBarIsMetricUnits(!scaleBarIsMetricUnits);
+          }}
         />
       </Bubble>
     </>

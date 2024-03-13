@@ -280,6 +280,11 @@ open class RNMBXMapViewManager(context: ReactApplicationContext, val viewTagReso
         mapView.setReactScaleBarEnabled(scaleBarEnabled.asBoolean())
     }
 
+    @ReactProp(name = "scaleBarIsMetricUnits")
+    override fun setScaleBarIsMetricUnits(mapView: RNMBXMapView, isMetricUnits: Dynamic) {
+        mapView.setReactScaleBarIsMetricUnits(isMetricUnits.asBoolean())
+    }
+
     @ReactProp(name = "scaleBarViewMargins")
     override fun setScaleBarViewMargins(mapView: RNMBXMapView, scaleBarMargins: Dynamic) {
         mapView.setReactScaleBarViewMargins(scaleBarMargins.asMap())

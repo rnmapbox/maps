@@ -23,6 +23,7 @@ public interface RNMBXMapViewManagerInterface<T extends View> {
   void setCompassViewPosition(T view, Dynamic value);
   void setCompassViewMargins(T view, Dynamic value);
   void setScaleBarEnabled(T view, Dynamic value);
+  void setScaleBarIsMetricUnits(T view, Dynamic value);
   void setScaleBarPosition(T view, Dynamic value);
   void setZoomEnabled(T view, Dynamic value);
   void setScrollEnabled(T view, Dynamic value);
