@@ -2,120 +2,107 @@ package com.rnmapbox.rnmbx.utils
 
 import android.content.Context
 import android.graphics.Bitmap
-import com.mapbox.maps.Style
 import com.mapbox.maps.MapboxMap
-import android.os.AsyncTask
-import com.rnmapbox.rnmbx.utils.ImageEntry
 import android.util.DisplayMetrics
-import android.graphics.BitmapFactory
 import android.net.Uri
 import android.util.Log
-import com.facebook.common.logging.FLog
 import com.facebook.common.references.CloseableReference
+import com.facebook.common.util.UriUtil
 import com.facebook.datasource.DataSources
 import com.facebook.drawee.backends.pipeline.Fresco
 import com.facebook.imagepipeline.common.RotationOptions
 import com.facebook.imagepipeline.image.CloseableImage
 import com.facebook.imagepipeline.image.CloseableStaticBitmap
 import com.facebook.imagepipeline.request.ImageRequestBuilder
-import com.facebook.react.views.imagehelper.ImageSource
 import com.rnmapbox.rnmbx.components.images.ImageInfo
 import com.rnmapbox.rnmbx.components.images.ImageManager
 import java.io.File
 import java.lang.ref.WeakReference
-import java.util.HashMap
 import com.rnmapbox.rnmbx.v11compat.image.*
+import kotlinx.coroutines.*
+import kotlinx.coroutines.flow.*
 
 data class DownloadedImage(val name: String, val bitmap: Bitmap, val info: ImageInfo)
 
-class DownloadMapImageTask(context: Context, map: MapboxMap, imageManager: ImageManager?, callback: OnAllImagesLoaded? = null) :
-    AsyncTask<Map.Entry<String, ImageEntry>, Void?, List<DownloadedImage>>() {
-    private val mContext: WeakReference<Context>
-    private val mMap: WeakReference<MapboxMap>
-    private val mCallback: OnAllImagesLoaded?
-    private val mCallerContext: Any
-    private val mImageManager: WeakReference<ImageManager>
+class DownloadMapImageTask(context: Context, map: MapboxMap, imageManager: ImageManager?, callback: OnAllImagesLoaded? = null) {
+    private val mMap: WeakReference<MapboxMap> = WeakReference(map)
+    private val mCallback: OnAllImagesLoaded? = callback
+    private val mImageManager: WeakReference<ImageManager> = WeakReference(imageManager)
+    private val contextRef = WeakReference(context.applicationContext)
 
     interface OnAllImagesLoaded {
         fun onAllImagesLoaded()
     }
 
-    @SafeVarargs
-    protected override fun doInBackground(vararg objects: Map.Entry<String, ImageEntry>): List<DownloadedImage> {
-        val images = mutableListOf<DownloadedImage>()
-        val context = mContext.get() ?: return images
-        val resources = context.resources
-        val metrics = resources.displayMetrics
-        for ((key, imageEntry) in objects) {
-            var uri = imageEntry.uri
-            if (uri.startsWith("/")) {
-                uri = Uri.fromFile(File(uri)).toString()
+    fun execute(entries: Array<Map.Entry<String, ImageEntry>>) {
+        val context = contextRef.get() ?: return
+        CoroutineScope(Dispatchers.Main).launch {
+            val images = withContext(Dispatchers.IO) {
+                downloadImages(entries, context)
             }
-            val source = ImageSource(context, uri)
-            val request = ImageRequestBuilder.newBuilderWithSource(source.uri)
-                .setRotationOptions(RotationOptions.autoRotate())
-                .build()
-            val dataSource =
-                Fresco.getImagePipeline().fetchDecodedImage(request, mCallerContext)
-            var result: CloseableReference<CloseableImage>? = null
-            try {
-                result = DataSources.waitForFinalResult(dataSource)
-                if (result != null) {
-                    val image = result.get()
-                    if (image is CloseableStaticBitmap) {
-                        val bitmap =
-                            image.underlyingBitmap // Copy the bitmap to make sure it doesn't get recycled when we release
-                                // the fresco reference.
-                                .copy(Bitmap.Config.ARGB_8888, true)
-                        Log.e("RNMBXImageManager", "downloadImage: $key $uri $image ${image.width}x${image.height}")
-                        bitmap.density = DisplayMetrics.DENSITY_DEFAULT
-                        images.add(
-                            DownloadedImage(name=key, bitmap=bitmap, info=imageEntry.info)
-                        )
-                    } else {
-                        FLog.e(LOG_TAG, "Failed to load bitmap from: $uri")
-                    }
-                } else {
-                    FLog.e(LOG_TAG, "Failed to load bitmap from: $uri")
-                }
-            } catch (e: Throwable) {
-                Log.w(LOG_TAG, e.localizedMessage)
-            } finally {
-                dataSource.close()
-                if (result != null) {
-                    CloseableReference.closeSafely(result)
-                }
-            }
+
+            mCallback?.onAllImagesLoaded()
         }
-        return images
     }
 
-    override fun onPostExecute(images: List<DownloadedImage>) {
-        val map = mMap.get()
-        if (map != null && images != null && images.size > 0) {
-            val style = map.getStyle()
-            if (style != null) {
-                val bitmapImages = HashMap<String, Bitmap>()
-                for (image in images) {
-                    bitmapImages[image.name] = image.bitmap
-                    val info = image.info
-                    mImageManager.get()?.resolve(image.name, image.bitmap)
-                    style.addBitmapImage(image.name, image.bitmap, info)
+    private suspend fun downloadImages(entries: Array<Map.Entry<String, ImageEntry>>, context: Context): List<DownloadedImage> = coroutineScope {
+        entries.asFlow()
+                .flatMapMerge(concurrency = entries.size) { entry ->
+                    flow { emit(downloadImage(entry.key, entry.value, context)) }
                 }
+                .filterNotNull()
+                .toList()
+    }
+
+    private fun downloadImage(key: String, imageEntry: ImageEntry, context: Context): DownloadedImage? {
+        var uri = imageEntry.uri
+        if (uri.startsWith("/")) {
+            uri = Uri.fromFile(File(uri)).toString()
+        }
+        else if (!uri.startsWith("http://") && !uri.startsWith("https://")){
+            var resourceId = context.resources.getIdentifier(uri, "drawable", context.applicationContext.packageName)
+            if (resourceId > 0) {
+                uri = UriUtil.getUriForResourceId(resourceId).toString()
+            }
+            else {
+                Log.e(LOG_TAG, "Failed to find resource for image: $key ${imageEntry.info.name} ${imageEntry.uri}")
             }
         }
-        mCallback?.onAllImagesLoaded()
+        val request = ImageRequestBuilder.newBuilderWithSource(Uri.parse(uri))
+                .setRotationOptions(RotationOptions.autoRotate())
+                .build()
+        val dataSource = Fresco.getImagePipeline().fetchDecodedImage(request, this)
+        var result: CloseableReference<CloseableImage>? = null
+        return try {
+            result = DataSources.waitForFinalResult(dataSource)
+            result?.get()?.let { image ->
+                if (image is CloseableStaticBitmap) {
+                    val bitmap = image.underlyingBitmap.copy(Bitmap.Config.ARGB_8888, true)
+                    bitmap.density = DisplayMetrics.DENSITY_DEFAULT
+
+                    CoroutineScope(Dispatchers.Main).launch {
+                        val style = mMap.get()?.getStyle()
+                        if (style != null) {
+                            mImageManager.get()?.resolve(key, bitmap)
+                            style.addBitmapImage(key, bitmap, imageEntry.info)
+                        } else {
+                            Log.e(LOG_TAG, "Failed to get map style to add bitmap: $uri")
+                        }
+                    }
+
+                    DownloadedImage(key, bitmap, imageEntry.info)
+                } else null
+            }
+        } catch (e: Throwable) {
+            Log.e(LOG_TAG, "Failed to load image: $uri", e)
+            null
+        } finally {
+            dataSource.close()
+            result?.let { CloseableReference.closeSafely(it) }
+        }
     }
 
     companion object {
         const val LOG_TAG = "DownloadMapImageTask"
-    }
-
-    init {
-        mContext = WeakReference(context.applicationContext)
-        mMap = WeakReference(map)
-        mImageManager = WeakReference(imageManager)
-        mCallback = callback
-        mCallerContext = this
     }
 }

@@ -2,13 +2,10 @@ package com.rnmapbox.rnmbx.components.images
 
 import android.content.Context
 import android.graphics.Bitmap
-import com.rnmapbox.rnmbx.components.images.RNMBXImagesManager
-import com.rnmapbox.rnmbx.components.AbstractMapFeature
-import com.rnmapbox.rnmbx.utils.ImageEntry
 import android.graphics.drawable.BitmapDrawable
 import android.util.DisplayMetrics
+import android.util.Log
 import androidx.core.content.res.ResourcesCompat
-import com.mapbox.bindgen.DataRef
 import com.mapbox.bindgen.Expected
 import com.mapbox.bindgen.None
 import com.mapbox.maps.Image
@@ -17,21 +14,20 @@ import com.mapbox.maps.ImageStretches
 import com.mapbox.maps.MapboxMap
 import com.mapbox.maps.Style
 import com.rnmapbox.rnmbx.R
+import com.rnmapbox.rnmbx.components.AbstractMapFeature
 import com.rnmapbox.rnmbx.components.RemovalReason
 import com.rnmapbox.rnmbx.components.mapview.RNMBXMapView
-import com.rnmapbox.rnmbx.components.images.RNMBXImages
 import com.rnmapbox.rnmbx.events.ImageMissingEvent
 import com.rnmapbox.rnmbx.utils.BitmapUtils
 import com.rnmapbox.rnmbx.utils.DownloadMapImageTask
+import com.rnmapbox.rnmbx.utils.ImageEntry
+import com.rnmapbox.rnmbx.v11compat.image.addStyleImage
+import com.rnmapbox.rnmbx.v11compat.image.emptyImage
+import com.rnmapbox.rnmbx.v11compat.image.toImageData
+import com.rnmapbox.rnmbx.v11compat.image.toMapboxImage
+import java.lang.Float.max
 import java.nio.ByteBuffer
 import java.util.AbstractMap
-import java.util.ArrayList
-import java.util.HashMap
-import java.util.HashSet
-
-import com.rnmapbox.rnmbx.v11compat.image.*;
-import java.lang.Float.max
-import java.lang.Math.ceil
 import kotlin.math.ceil
 
 fun Style.addBitmapImage(imageId: String, bitmap: Bitmap, sdf: Boolean = false, stretchX: List<ImageStretches> = listOf(), stretchY: List<ImageStretches> = listOf(), content: ImageContent? = null, scale: Double = 1.0) : Expected<String, None> {
@@ -79,7 +75,7 @@ class RNMBXImages(context: Context, private val mManager: RNMBXImagesManager) : 
         val newImages: MutableMap<String, ImageEntry> = HashMap()
         for ((key, value) in images) {
             val oldValue = mImages?.put(key, value)
-            if (oldValue == null) {
+            if (oldValue == null || value.uri != oldValue.uri) {
                 newImages[key] = value
             }
         }
@@ -260,14 +256,15 @@ class RNMBXImages(context: Context, private val mManager: RNMBXImagesManager) : 
                 placeholderImage?.let {
                     style.addStyleImage(imageEntry.key, it, info)
                 }
-                missingImages.add(imageEntry)
                 mCurrentImages.add(imageEntry.key)
             }
+            // make image download even in case the URL changed
+            missingImages.add(imageEntry)
         }
         if (missingImages.size > 0) {
             val task = DownloadMapImageTask(context, map, mMapView!!.imageManager)
             val params = missingImages.toTypedArray()
-            task.execute(*params)
+            task.execute(params)
         }
     }
 
