@@ -38,13 +38,13 @@ public class RNMBXSource : RNMBXInteractiveElement {
     
     @objc public func insertReactSubviewInternal(_ subview: UIView!, at atIndex: Int) {
         if let layer = subview as? RNMBXSourceConsumer {
-          if let map = map {
-            layer.addToMap(map, style: map.mapboxMap.style)
-          }
+            if let map = map, let mapboxMap = map.mapboxMap {
+                layer.addToMap(map, style: mapboxMap.style)
+            }
           layers.append(layer)
         } else if let component = subview as? RNMBXMapComponent {
-          if let map = map {
-            component.addToMap(map, style: map.mapboxMap.style)
+            if let map = map, let mapboxMap = map.mapboxMap {
+              component.addToMap(map, style: mapboxMap.style)
           }
           components.append(component)
         }
@@ -57,8 +57,8 @@ public class RNMBXSource : RNMBXInteractiveElement {
     
     @objc public func removeReactSubviewInternal(_ subview: UIView!) {
         if let layer : RNMBXSourceConsumer = subview as? RNMBXSourceConsumer {
-          if let map = map {
-            layer.removeFromMap(map, style: map.mapboxMap.style)
+          if let map = map, let mapboxMap = map.mapboxMap {
+            layer.removeFromMap(map, style: mapboxMap.style)
           }
           layers.removeAll { $0 as AnyObject === layer }
         } else if let component = subview as? RNMBXMapComponent {
@@ -99,29 +99,35 @@ public class RNMBXSource : RNMBXInteractiveElement {
         #endif
       }
     }
+      if let mapboxMap = map.mapboxMap {
+          for layer in self.layers {
 
-    for layer in self.layers {
-      layer.addToMap(map, style: map.mapboxMap.style)
-    }
-    for component in self.components {
-      component.addToMap(map, style: map.mapboxMap.style)
-    }
+              layer.addToMap(map, style: mapboxMap.style)
+          }
+          for component in self.components {
+              component.addToMap(map, style: mapboxMap.style)
+          }
+      }
   }
 
   public override func removeFromMap(_ map: RNMBXMapView, reason: RemovalReason) -> Bool {
     self.map = nil
 
-    for layer in self.layers {
-      layer.removeFromMap(map, style: map.mapboxMap.style)
-    }
+      if let mapboxMap = map.mapboxMap {
+          for layer in self.layers {
+              layer.removeFromMap(map, style: mapboxMap.style)
+          }
 
-    if self.ownsSource {
-      let style = map.mapboxMap.style
-      logged("StyleSource.removeFromMap", info: { "id: \(optional: self.id)"}) {
-        try style.removeSource(withId: id)
+          if self.ownsSource {
+              let style = mapboxMap.style
+              logged("StyleSource.removeFromMap", info: { "id: \(optional: self.id)"}) {
+                  try style.removeSource(withId: id)
+              }
+              self.ownsSource = false
+          }
       }
-      self.ownsSource = false
-    }
+
+   
     return true
   }
 }
