@@ -58,7 +58,7 @@ code ios/Podfile
   # change these
   $RNMapboxMapsImpl = 'mapbox'
 
-  platform :ios, '13.0'
+  platform :ios, min_ios_version_supported
 
   ...
 
