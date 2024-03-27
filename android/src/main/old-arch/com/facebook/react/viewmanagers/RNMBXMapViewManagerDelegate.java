@@ -52,6 +52,9 @@ public class RNMBXMapViewManagerDelegate<T extends View, U extends BaseViewManag
       case "scaleBarEnabled":
         mViewManager.setScaleBarEnabled(view, new DynamicFromObject(value));
         break;
+      case "scaleBarIsMetricUnits":
+        mViewManager.setScaleBarIsMetricUnits(view, new DynamicFromObject(value));
+        break;
       case "scaleBarPosition":
         mViewManager.setScaleBarPosition(view, new DynamicFromObject(value));
         break;
