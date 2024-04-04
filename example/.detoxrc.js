@@ -18,7 +18,7 @@ module.exports = {
     },
     "ios.debug.ci": {
       type: "ios.app",
-      build: "FORCE_BUNDLING=1 xcodebuild -quiet -workspace ios/RNMapboxGLExample.xcworkspace -configuration Debug -scheme RNMapboxGLExample DISABLE_MANUAL_TARGET_ORDER_BUILD_WARNING=1 GCC_PREPROCESSOR_DEFINITIONS='$GCC_PREPROCESSOR_DEFINITIONS DEBUG_RCT_BUNDLE=1' -sdk iphonesimulator -derivedDataPath ios/build -destination 'platform=iOS Simulator,OS=16.2,name=iPhone SE (3rd generation)'",
+      build: "FORCE_BUNDLING=1 xcodebuild -quiet -workspace ios/RNMapboxGLExample.xcworkspace -configuration Debug -scheme RNMapboxGLExample DISABLE_MANUAL_TARGET_ORDER_BUILD_WARNING=1 GCC_PREPROCESSOR_DEFINITIONS='$GCC_PREPROCESSOR_DEFINITIONS DEBUG_RCT_BUNDLE=1' -sdk iphonesimulator -derivedDataPath ios/build -destination 'platform=iOS Simulator,OS=17.2,name=iPhone SE (3rd generation)'",
       binaryPath: "ios/build/Build/Products/Debug-iphonesimulator/RNMapboxGLExample.app"
     },
   },
@@ -34,7 +34,7 @@ module.exports = {
       type: "ios.simulator",
       device: {
         type: "iPhone SE (3rd generation)",
-        os: "16.2"
+        os: "17.2"
       }
     },
   },
