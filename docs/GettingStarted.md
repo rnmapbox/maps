@@ -15,7 +15,7 @@ Once you have your accessToken, set it like this
 ```js
 import MapboxGL from "@rnmapbox/maps";
 
-MapboxGL.setAccessToken("<YOUR_ACCESSTOKEN>");
+MapboxGL.setAccessToken("<YOUR_PUBLIC_ACCESS_TOKEN_STARTING_WITH_pk.ey>");
 ```
 
 ## Setting connection status [Android only]
@@ -50,7 +50,7 @@ import React, { Component } from "react";
 import { StyleSheet, View } from "react-native";
 import MapboxGL from "@rnmapbox/maps";
 
-MapboxGL.setAccessToken("<YOUR_ACCESSTOKEN>");
+MapboxGL.setAccessToken("<YOUR_PUBLIC_ACCESS_TOKEN_STARTING_WITH_pk.ey>");
 
 const styles = StyleSheet.create({
   page: {
