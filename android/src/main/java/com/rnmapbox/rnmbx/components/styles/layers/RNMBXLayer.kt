@@ -217,7 +217,11 @@ abstract class RNMBXLayer<T : Layer?>(protected var mContext: Context) : Abstrac
         }
         val layer = mLayer ?: return
         val mapView = mMapView ?: return
-        style.addLayerAt(layer, index)
+        if(index < 0) {
+            style.addLayer(layer)
+        } else {
+            style.addLayerAt(layer, index)
+        }
         mapView.layerAdded(layer)
     }
 
