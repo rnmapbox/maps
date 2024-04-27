@@ -143,8 +143,8 @@ dependencies {
     implementation "com.facebook.react:react-native:+"
 
     // kotlin coroutines
-    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:${rootProject.ext.has('kotlinVersion') ? rootProject.ext.get('kotlinVersion') : '1.6.21'}"
-    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:${rootProject.ext.has('kotlinVersion') ? rootProject.ext.get('kotlinVersion') : '1.6.21'}"
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:${safeExtGet('kotlinxCoroutinesCoreVersion', '1.8.0')}"
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:${safeExtGet('kotlinxCoroutinesAndroidVersion', '1.8.0')}"
 
     // Mapbox SDK
     customizableDependencies('RNMapboxMapsLibs') {
