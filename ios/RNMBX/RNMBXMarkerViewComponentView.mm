@@ -104,6 +104,7 @@ using namespace facebook::react;
         layoutMetrics.contentInsets,
         layoutMetrics.borderWidth,
         layoutMetrics.displayType,
+        layoutMetrics.positionType, // RN074
         layoutMetrics.layoutDirection,
         layoutMetrics.wasLeftAndRightSwapped,
         layoutMetrics.pointScaleFactor,

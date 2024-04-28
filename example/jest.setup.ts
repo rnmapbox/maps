@@ -5,4 +5,5 @@ jest.mock('@rnmapbox/maps', () => ({
   Logger: {
     setLogLevel: jest.fn(),
   },
+  MarkerView: jest.fn(),
 }));
