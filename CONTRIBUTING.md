@@ -29,6 +29,12 @@ Some notes about example app:
   ```
   On android change `newArchEnabled=true` in `example/android/gralde.properties`
 
+### Running example app for Web
+
+```
+npx expo start -c --web
+```
+
 
 ## Best practices for PR's
 - If you plan to work on a bigger feature, please open a discussion, to discuss the best way to address it

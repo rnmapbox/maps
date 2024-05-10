@@ -1,4 +1,10 @@
 {
-  "name": "RNMapboxGLExample",
-  "displayName": "RNMapboxGLExample"
+  "expo": {
+    "name": "RNMapboxGLExample",
+    "displayName": "RNMapboxGLExample",
+    "web": {
+      "bundler": "metro",
+      "output": "single"
+    }
+  }
 }
