@@ -34,7 +34,7 @@ function MarkerView(props: MarkerViewProps, ref: Ref<Marker>) {
     _marker.setLngLat(props.coordinate);
 
     // Fix marker position
-    const { style } = marker.getElement();
+    const { style } = _marker.getElement();
     style.position = 'absolute';
     style.top = '0';
     style.left = '0';

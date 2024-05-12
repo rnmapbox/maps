@@ -16,5 +16,5 @@ const Mapbox = {
   ...ExportedComponents,
 };
 
-export { Camera, Logger, MapView, MarkerView };
+export { Camera, MapView, Logger, MarkerView };
 export default Mapbox;
