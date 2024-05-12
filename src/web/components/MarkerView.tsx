@@ -11,6 +11,7 @@ import {
   useMemo,
 } from 'react';
 import { createPortal } from 'react-dom';
+
 import MapContext from '../MapContext';
 
 type MarkerViewProps = {
@@ -23,22 +24,23 @@ function MarkerView(props: MarkerViewProps, ref: Ref<Marker>) {
 
   // Create marker instance
   const marker: Marker = useMemo(() => {
-    const marker = new Marker({
+    const _marker = new Marker({
       element: isValidElement(props.children)
         ? document.createElement('div')
         : undefined,
     });
 
     // Set marker coordinates
-    marker.setLngLat(props.coordinate);
+    _marker.setLngLat(props.coordinate);
 
     // Fix marker position
-    const style = marker.getElement().style;
+    const { style } = marker.getElement();
     style.position = 'absolute';
     style.top = '0';
     style.left = '0';
 
-    return marker;
+    return _marker;
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   // Add marker to map
@@ -52,9 +54,11 @@ function MarkerView(props: MarkerViewProps, ref: Ref<Marker>) {
     return () => {
       marker.remove();
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [map]);
 
   // Expose marker instance
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   useImperativeHandle(ref, () => marker, []);
 
   // Update marker coordinates
