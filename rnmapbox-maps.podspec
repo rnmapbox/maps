@@ -193,7 +193,7 @@ def $RNMapboxMaps.pre_install(installer)
 end
 
 ## RNMapboxMapsDownloadToken
-# expo does not supports `.netrc`, so we need to patch curl commend used by cocoapods to pass the credentials
+# expo does not support `.netrc`, so we need to patch curl command used by cocoapods to pass the credentials
 
 if $RNMapboxMapsDownloadToken
   module AddCredentialsToCurlWhenDownloadingMapbox
