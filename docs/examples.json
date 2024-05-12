@@ -759,6 +759,58 @@
     "metadata": {
       "title": "Camera"
     },
-    "examples": []
+    "examples": [
+      {
+        "metadata": {
+          "title": "Fit",
+          "tags": [
+            "Camera",
+            "Camera#zoomTo"
+          ],
+          "docs": "\nChange camera via imperative methods"
+        },
+        "fullPath": "example/src/examples/Camera/Fit.js",
+        "relPath": "Camera/Fit.js",
+        "name": "Fit"
+      },
+      {
+        "metadata": {
+          "title": "FlyTo",
+          "tags": [
+            "Camera"
+          ],
+          "docs": "\nChange camera via change of camera properties\n"
+        },
+        "fullPath": "example/src/examples/Camera/FlyTo.js",
+        "relPath": "Camera/FlyTo.js",
+        "name": "FlyTo"
+      },
+      {
+        "metadata": {
+          "title": "GetCenter",
+          "tags": [
+            "Camera",
+            "Camera#getCenter"
+          ],
+          "docs": "\nGet center of map via Camera#getCenter\n"
+        },
+        "fullPath": "example/src/examples/Camera/GetCenter.js",
+        "relPath": "Camera/GetCenter.js",
+        "name": "GetCenter"
+      },
+      {
+        "metadata": {
+          "title": "GetZoom",
+          "tags": [
+            "Camera",
+            "Camera#getZoom"
+          ],
+          "docs": "\nGet zoom level of map via Camera#getZoom\n"
+        },
+        "fullPath": "example/src/examples/Camera/GetZoom.js",
+        "relPath": "Camera/GetZoom.js",
+        "name": "GetZoom"
+      }
+    ]
   }
 ]

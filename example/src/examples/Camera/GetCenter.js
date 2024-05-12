@@ -1,9 +1,7 @@
 import React from 'react';
 import { Text } from 'react-native';
-import MapboxGL from '@rnmapbox/maps';
+import Mapbox from '@rnmapbox/maps';
 
-import BaseExamplePropTypes from '../common/BaseExamplePropTypes';
-import Page from '../common/Page';
 import Bubble from '../common/Bubble';
 
 const styles = {
@@ -11,10 +9,6 @@ const styles = {
 };
 
 class GetCenter extends React.Component {
-  static propTypes = {
-    ...BaseExamplePropTypes,
-  };
-
   constructor(props) {
     super(props);
 
@@ -44,27 +38,38 @@ class GetCenter extends React.Component {
 
   render() {
     return (
-      <Page {...this.props}>
-        <MapboxGL.MapView
+      <>
+        <Mapbox.MapView
           onRegionDidChange={this.onRegionDidChange}
           ref={(c) => (this._map = c)}
           onPress={this.onPress}
           style={styles.mapView}
         >
-          <MapboxGL.Camera
+          <Mapbox.Camera
             zoomLevel={9}
             centerCoordinate={[-73.970895, 40.723279]}
           />
-        </MapboxGL.MapView>
+        </Mapbox.MapView>
 
         <Bubble>
           <Text>Center</Text>
           <Text>{this.getLng()}</Text>
           <Text>{this.getLat()}</Text>
         </Bubble>
-      </Page>
+      </>
     );
   }
 }
 
 export default GetCenter;
+/* end-example-doc */
+
+/** @type ExampleWithMetadata['metadata'] */
+const metadata = {
+  title: 'GetCenter',
+  tags: ['Camera', 'Camera#getCenter'],
+  docs: `
+Get center of map via Camera#getCenter
+`,
+};
+GetCenter.metadata = metadata;

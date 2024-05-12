@@ -1,11 +1,9 @@
 import React from 'react';
 import { View, Text, ScrollView, TouchableOpacity } from 'react-native';
 import { isEqual } from 'lodash';
-import MapboxGL from '@rnmapbox/maps';
+import Mapbox from '@rnmapbox/maps';
 
 import sheet from '../../styles/sheet';
-import BaseExamplePropTypes from '../common/BaseExamplePropTypes';
-import Page from '../common/Page';
 
 const buildPadding = ([top, right, bottom, left] = [0, 0, 0, 0]) => {
   return {
@@ -40,8 +38,6 @@ const paddingTop = buildPadding([200, 40, 40, 40]);
 const paddingBottom = buildPadding([40, 40, 200, 40]);
 
 class Fit extends React.Component {
-  static propTypes = { ...BaseExamplePropTypes };
-
   constructor(props) {
     super(props);
 
@@ -210,19 +206,19 @@ class Fit extends React.Component {
     });
 
     return (
-      <Page {...this.props}>
-        <MapboxGL.MapView
-          styleURL={MapboxGL.StyleURL.Satellite}
+      <>
+        <Mapbox.MapView
+          styleURL={Mapbox.StyleURL.Satellite}
           style={sheet.matchParent}
         >
-          <MapboxGL.Camera
+          <Mapbox.Camera
             ref={(ref) => (this.camera = ref)}
             {...this.cameraProps()}
           />
           <View style={{ flex: 1, ...padding }}>
             <View style={{ flex: 1, borderColor: 'white', borderWidth: 4 }} />
           </View>
-        </MapboxGL.MapView>
+        </Mapbox.MapView>
 
         <ScrollView
           style={{
@@ -293,9 +289,19 @@ class Fit extends React.Component {
             },
           ])}
         </ScrollView>
-      </Page>
+      </>
     );
   }
 }
 
 export default Fit;
+/* end-example-doc */
+
+/** @type ExampleWithMetadata['metadata'] */
+const metadata = {
+  title: 'Fit',
+  tags: ['Camera', 'Camera#zoomTo'],
+  docs: `
+Change camera via imperative methods`,
+};
+Fit.metadata = metadata;

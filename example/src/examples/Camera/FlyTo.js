@@ -1,5 +1,5 @@
 import React from 'react';
-import { Alert } from 'react-native';
+import { Alert, Platform } from 'react-native';
 import Mapbox from '@rnmapbox/maps';
 import { ButtonGroup } from '@rneui/base';
 
@@ -87,13 +87,17 @@ class FlyTo extends React.Component {
             centerCoordinate={this.state.location}
           />
 
-          <Mapbox.UserLocation />
+          {Platform.OS !== 'web' && (
+            <>
+              <Mapbox.UserLocation />
 
-          <Mapbox.FillExtrusionLayer
-            id="building3d"
-            sourceLayerID="building"
-            style={layerStyles.building}
-          />
+              <Mapbox.FillExtrusionLayer
+                id="building3d"
+                sourceLayerID="building"
+                style={layerStyles.building}
+              />
+            </>
+          )}
         </Mapbox.MapView>
       </>
     );
@@ -101,3 +105,14 @@ class FlyTo extends React.Component {
 }
 
 export default FlyTo;
+/* end-example-doc */
+
+/** @type ExampleWithMetadata['metadata'] */
+const metadata = {
+  title: 'FlyTo',
+  tags: ['Camera'],
+  docs: `
+Change camera via change of camera properties
+`,
+};
+FlyTo.metadata = metadata;
