@@ -1,12 +1,14 @@
 import MapboxModule from './MapboxModule';
 import Camera from './components/Camera';
 import MapView from './components/MapView';
+import MarkerView from './components/MarkerView';
 import Logger from './utils/Logger';
 
 const ExportedComponents = {
   Camera,
   MapView,
   Logger,
+  MarkerView,
 };
 
 const Mapbox = {
@@ -14,5 +16,5 @@ const Mapbox = {
   ...ExportedComponents,
 };
 
-export { Camera, MapView, Logger };
+export { Camera, Logger, MapView, MarkerView };
 export default Mapbox;
