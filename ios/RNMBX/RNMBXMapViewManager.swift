@@ -23,25 +23,6 @@ open class RNMBXMapViewManager: RCTViewManager {
     }
 }
 
-// MARK: helpers
-
-extension RNMBXMapViewManager {
-    static func withMapboxMap(
-        _ view: RNMBXMapView,
-        name: String,
-        rejecter: @escaping RCTPromiseRejectBlock,
-        fn: @escaping (_: MapboxMap) -> Void) -> Void
-    {
-        guard let mapboxMap = view.mapboxMap else {
-          RNMBXLogError("MapboxMap is not yet available");
-          rejecter(name, "Map not loaded yet", nil)
-          return;
-        }
-        
-        fn(mapboxMap)
-    }
-}
-
 // MARK: - react methods
 
 extension RNMBXMapViewManager {
@@ -76,12 +57,12 @@ extension RNMBXMapViewManager {
     }
     
     @objc public static func getCenter(_ view: RNMBXMapView, resolver: @escaping RCTPromiseResolveBlock, rejecter: @escaping RCTPromiseRejectBlock) {
-        withMapboxMap(view, name: "getCenter", rejecter:rejecter) { map in
-            resolver(["center": [
-                map.cameraState.center.longitude,
-                map.cameraState.center.latitude
-            ]])
-        }
+      view.withMapboxMap { map in
+        resolver(["center": [
+            map.cameraState.center.longitude,
+            map.cameraState.center.latitude
+        ]])
+      }
     }
 
     @objc public static func getCoordinateFromView(
@@ -89,10 +70,10 @@ extension RNMBXMapViewManager {
         atPoint point: CGPoint,
         resolver: @escaping RCTPromiseResolveBlock,
         rejecter: @escaping RCTPromiseRejectBlock) {
-            withMapboxMap(view, name: "getCoordinateFromView", rejecter:rejecter) { map in
-                let coordinates = map.coordinate(for: point)
-                resolver(["coordinateFromView": [coordinates.longitude, coordinates.latitude]])
-            }
+          view.withMapboxMap { map in
+            let coordinates = map.coordinate(for: point)
+            resolver(["coordinateFromView": [coordinates.longitude, coordinates.latitude]])
+          }
             
     }
 
@@ -101,12 +82,11 @@ extension RNMBXMapViewManager {
         atCoordinate coordinate: [NSNumber],
         resolver: @escaping RCTPromiseResolveBlock,
         rejecter: @escaping RCTPromiseRejectBlock) {
-            withMapboxMap(view, name: "getPointInView", rejecter:rejecter) { map in
-                let coordinate = CLLocationCoordinate2DMake(coordinate[1].doubleValue, coordinate[0].doubleValue)
-                let point = map.point(for: coordinate)
-                resolver(["pointInView": [(point.x), (point.y)]])
-            }
-            
+          view.withMapboxMap { map in
+              let coordinate = CLLocationCoordinate2DMake(coordinate[1].doubleValue, coordinate[0].doubleValue)
+              let point = map.point(for: coordinate)
+              resolver(["pointInView": [(point.x), (point.y)]])
+          }
       }
 
     @objc public static func setHandledMapChangedEvents(
@@ -124,10 +104,9 @@ extension RNMBXMapViewManager {
         _ view: RNMBXMapView,
         resolver: @escaping RCTPromiseResolveBlock,
         rejecter: @escaping RCTPromiseRejectBlock) {
-            withMapboxMap(view, name: "getZoom", rejecter:rejecter) { map in
-                resolver(["zoom": map.cameraState.zoom])
-            }
-            
+          view.withMapboxMap { map in
+              resolver(["zoom": map.cameraState.zoom])
+          }
     }
 
     @objc public static func getVisibleBounds(
@@ -148,27 +127,26 @@ extension RNMBXMapViewManager {
         withLayerIDs layerIDs: [String]?,
         resolver: @escaping RCTPromiseResolveBlock,
         rejecter: @escaping RCTPromiseRejectBlock) -> Void {
-            withMapboxMap(view, name: "queryRenderedFeaturesAtPoint", rejecter:rejecter) { map in
-                let point = CGPoint(x: CGFloat(point[0].floatValue), y: CGFloat(point[1].floatValue))
+          view.withMapboxMap { map in
+              let point = CGPoint(x: CGFloat(point[0].floatValue), y: CGFloat(point[1].floatValue))
 
-                logged("queryRenderedFeaturesAtPoint.option", rejecter: rejecter) {
-                  let options = try RenderedQueryOptions(layerIds: (layerIDs ?? []).isEmpty ? nil : layerIDs, filter: filter?.asExpression())
-                  
-                  map.queryRenderedFeatures(with: point, options: options) { result in
-                    switch result {
-                    case .success(let features):
-                      resolver([
-                        "data": ["type": "FeatureCollection", "features": features.compactMap { queriedFeature in
-                          logged("queryRenderedFeaturesAtPoint.feature.toJSON") { try queriedFeature.feature.toJSON() }
-                        }]
-                      ])
-                    case .failure(let error):
-                      rejecter("queryRenderedFeaturesAtPoint","failed to query features", error)
-                    }
+              logged("queryRenderedFeaturesAtPoint.option", rejecter: rejecter) {
+                let options = try RenderedQueryOptions(layerIds: (layerIDs ?? []).isEmpty ? nil : layerIDs, filter: filter?.asExpression())
+                
+                map.queryRenderedFeatures(with: point, options: options) { result in
+                  switch result {
+                  case .success(let features):
+                    resolver([
+                      "data": ["type": "FeatureCollection", "features": features.compactMap { queriedFeature in
+                        logged("queryRenderedFeaturesAtPoint.feature.toJSON") { try queriedFeature.feature.toJSON() }
+                      }]
+                    ])
+                  case .failure(let error):
+                    rejecter("queryRenderedFeaturesAtPoint","failed to query features", error)
                   }
                 }
-            }
-        
+              }
+          }
       }
 
     @objc public static func queryRenderedFeaturesInRect(

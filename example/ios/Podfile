@@ -20,22 +20,11 @@ if ENV['CI_MAP_IMPL']
     $RNMapboxMapsImpl = 'mapbox'
   when 'mapbox11'
     $RNMapboxMapsImpl = 'mapbox'
-    $RNMapboxMapsVersion = '= 11.0.0'
+    $RNMapboxMapsVersion = '= 11.3.0'
   else
     fail "Invalid CI_MAP_IMPL value: #{ENV['CI_MAP_IMPL']}"
   end
 end
-
-# If you are using a `react-native-flipper` your iOS build will fail when `NO_FLIPPER=1` is set.
-# because `react-native-flipper` depends on (FlipperKit,...) that will be excluded
-#
-# To fix this you can also exclude `react-native-flipper` using a `react-native.config.js`
-# ```js
-# module.exports = {
-#   dependencies: {
-#     ...(process.env.NO_FLIPPER ? { 'react-native-flipper': { platforms: { ios: null } } } : {}),
-# ```
-flipper_config = ENV['NO_FLIPPER'] == "1" ? FlipperConfiguration.disabled : FlipperConfiguration.enabled
 
 linkage = ENV['USE_FRAMEWORKS']
 if linkage != nil
@@ -75,11 +64,6 @@ target 'RNMapboxGLExample' do
 
   use_react_native!(
     :path => config[:reactNativePath],
-    # Enables Flipper.
-    #
-    # Note that if you have use_frameworks! enabled, Flipper will not work and
-    # you should disable the next line.
-    :flipper_configuration => flipper_config,
     # An absolute path to your application root.
     :app_path => "#{Pod::Config.instance.installation_root}/.."
   )
@@ -110,7 +94,8 @@ target 'RNMapboxGLExample' do
         installer,
         # Set `mac_catalyst_enabled` to `true` in order to apply patches
         # necessary for Mac Catalyst builds
-        :mac_catalyst_enabled => false
+        :mac_catalyst_enabled => false,
+        # :ccache_enabled => true
       )
       $RNMapboxMaps.post_install(installer)
     end

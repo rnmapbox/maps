@@ -1,5 +1,5 @@
 def defaultMapboxMapsImpl = "mapbox"
-def defaultMapboxMapsVersion = "10.16.4"
+def defaultMapboxMapsVersion = "10.17.0"
 
 def safeExtGet(prop, fallback) {
     rootProject.ext.has(prop) ? rootProject.ext.get(prop) : fallback
@@ -13,6 +13,10 @@ def isNewArchitectureEnabled() {
     return project.hasProperty("newArchEnabled") && project.newArchEnabled == "true"
 }
 
+def getCoroutinesVersion(kotlinVersion) {
+    return kotlinVersion >= '1.9' ? '1.8.0' : '1.6.4'
+}
+
 // expo plugin
 if (rootProject.ext.has('expoRNMapboxMapsImpl')) {
     rootProject.ext.set('RNMapboxMapsImpl', rootProject.ext.get('expoRNMapboxMapsImpl'))
@@ -21,15 +25,15 @@ if (rootProject.ext.has('expoRNMapboxMapsVersion')) {
     rootProject.ext.set('RNMapboxMapsVersion', rootProject.ext.get('expoRNMapboxMapsVersion'))
 }
 
-
 buildscript {
   repositories {
     google()
     mavenCentral()
   }
 
+  project.ext.set("kotlinVersion", rootProject.ext.has('kotlinVersion') ? rootProject.ext.get('kotlinVersion') : '1.7.21')
   dependencies {
-    classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:${rootProject.ext.has('kotlinVersion') ? rootProject.ext.get('kotlinVersion') : '1.6.21'}"
+      classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:${project.kotlinVersion}"
   }
 }
 
@@ -141,6 +145,9 @@ dependencies {
 
     // React Native
     implementation "com.facebook.react:react-native:+"
+
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:${safeExtGet('kotlinxCoroutinesCoreVersion', getCoroutinesVersion(project.kotlinVersion))}"
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:${safeExtGet('kotlinxCoroutinesAndroidVersion', getCoroutinesVersion(project.kotlinVersion))}"
 
     // Mapbox SDK
     customizableDependencies('RNMapboxMapsLibs') {

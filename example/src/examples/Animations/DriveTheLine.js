@@ -226,3 +226,13 @@ class DriveTheLine extends React.Component {
 }
 
 export default DriveTheLine;
+
+/** @type ExampleWithMetadata['metadata'] */
+const metadata = {
+  title: 'Animated Point Along a Line',
+  tags: [],
+  docs: `
+Shows animation of a point along a line-layer
+`,
+};
+DriveTheLine.metadata = metadata;

@@ -171,7 +171,7 @@ open class RNMBXMapView: UIView {
   }()
   
   var _mapView: MapView! = nil
-  func createMapView() {
+  func createMapView() -> MapView {
     if let mapViewImpl = mapViewImpl, let mapViewInstance = createAndAddMapViewImpl(mapViewImpl, self) {
       _mapView = mapViewInstance
     } else {
@@ -192,6 +192,7 @@ open class RNMBXMapView: UIView {
     _mapView.gestures.delegate = self
     setupEvents()
     afterMapViewAdded()
+    return _mapView
   }
 
   func createAndAddMapViewImpl(_ impl: String, _ view: RNMBXMapView) -> MapView? {
@@ -203,17 +204,20 @@ open class RNMBXMapView: UIView {
     }
   }
 
+  @available(*, deprecated, renamed: "withMapView", message: "mapView can be nil if the map initialization has not finished, use withMapView instead")
   public var mapView : MapView! {
     get { return _mapView }
   }
+  
+  @available(*, deprecated, renamed: "withMapboxMap", message: "mapboxMap can be nil if the map initialization has not finished, use withMapboxMap instead")
   var mapboxMap: MapboxMap! {
-    get { _mapView.mapboxMap }
+    get { _mapView?.mapboxMap }
   }
 
   @objc public func addToMap(_ subview: UIView) {
-    withMapView {
+    withMapView { mapView in
       if let mapComponent = subview as? RNMBXMapComponent {
-        let style = self.mapView.mapboxMap.style
+        let style = mapView.mapboxMap.style
         var addToMap = false
         if mapComponent.waitForStyleLoad() {
           if (self.styleLoaded) {
@@ -303,7 +307,7 @@ open class RNMBXMapView: UIView {
   
   // MARK: - React Native properties
   let changes : PropertyChanges<RNMBXMapView> = PropertyChanges()
-  var mapViewWaiters : [()->Void] = []
+  var mapViewWaiters : [(_: MapView)->Void] = []
   
   enum Property : String {
     case projection
@@ -363,11 +367,21 @@ open class RNMBXMapView: UIView {
     changes.add(name: property.rawValue, update: property.apply)
   }
   
-  func withMapView(callback: @escaping () -> Void) {
-    if _mapView != nil {
-      callback()
+  func withMapView(callback: @escaping (_: MapView) -> Void) {
+    if let mapView = _mapView {
+      callback(mapView)
     } else {
       mapViewWaiters.append(callback)
+    }
+  }
+  
+  func withMapboxMap(callback: @escaping (_: MapboxMap) -> Void) {
+    if let mapboxMap = _mapView?.mapboxMap {
+      callback(mapboxMap)
+    } else {
+      mapViewWaiters.append { mapView in
+        callback(mapView.mapboxMap)
+      }
     }
   }
   
@@ -698,9 +712,9 @@ open class RNMBXMapView: UIView {
 
   @objc override public func didSetProps(_ props: [String]) {
     if (_mapView == nil) {
-      createMapView()
+      let view = createMapView()
       
-      mapViewWaiters.forEach { $0() }
+      mapViewWaiters.forEach { $0(view) }
       mapViewWaiters.removeAll()
     }
     changes.apply(self)

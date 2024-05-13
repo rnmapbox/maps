@@ -6,7 +6,6 @@
     "baseUrl": ".",
     "paths": {
       "@rnmapbox/maps": ["../src"],
-      "react": ["./node_modules/@types/react"],
     }
   },
   "include": ["global.d.ts", "index.js", "./__tests__/dumpExamplesJson.ts", "jest.config.ts", "jest.setup.ts"]

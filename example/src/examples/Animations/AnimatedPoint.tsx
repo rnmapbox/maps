@@ -12,6 +12,8 @@ import { Divider, Slider, Text } from '@rneui/base';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { View, Button, StyleProp, ViewStyle } from 'react-native';
 
+import type { ExampleWithMetadata } from '../common/ExampleMetadata';
+
 Logger.setLogLevel('verbose');
 
 const basePosition: Position = [-83.53808787278204, 41.66430343748789];
@@ -138,3 +140,13 @@ const AnimatedPoint = memo(() => {
 });
 
 export default AnimatedPoint;
+
+/** @type ExampleWithMetadata['metadata'] */
+const metadata = {
+  title: 'Animaated point',
+  tags: [],
+  docs: `
+Animated Point (Native Animator)
+`,
+};
+(AnimatedPoint as unknown as ExampleWithMetadata).metadata = metadata;

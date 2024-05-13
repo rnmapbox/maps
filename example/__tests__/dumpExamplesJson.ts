@@ -33,7 +33,6 @@ const allTests = {
   SymbolCircleLayer,
   UserLocation,
   Map,
-
   V10,
   Annotations,
   FillRasterLayer,

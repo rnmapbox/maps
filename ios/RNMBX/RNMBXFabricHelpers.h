@@ -67,7 +67,7 @@ static std::tuple<std::string, std::string> RNMBXStringifyEventData(NSDictionary
 }
 
 template <typename T>
-void RNMBXSetCommonLayerPropsWithoutSourceID(T newProps, RNMBXLayer *_view)
+void RNMBXSetCommonLayerPropsWithoutSourceID(const T& newProps, RNMBXLayer *_view)
 {
     id idx = RNMBXConvertFollyDynamicToId(newProps.id);
     if (idx != nil) {
@@ -108,7 +108,7 @@ void RNMBXSetCommonLayerPropsWithoutSourceID(T newProps, RNMBXLayer *_view)
 }
 
 template <typename T>
-void RNMBXSetCommonLayerProps(T newProps, RNMBXLayer *_view)
+void RNMBXSetCommonLayerProps(const T& newProps, RNMBXLayer *_view)
 {
     RNMBXSetCommonLayerPropsWithoutSourceID(newProps, _view);
     id sourceLayerID = RNMBXConvertFollyDynamicToId(newProps.sourceLayerID);

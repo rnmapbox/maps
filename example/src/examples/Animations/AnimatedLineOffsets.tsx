@@ -15,6 +15,8 @@ import { lineString } from '@turf/helpers';
 import bbox from '@turf/bbox';
 import length from '@turf/length';
 
+import type { ExampleWithMetadata } from '../common/ExampleMetadata';
+
 Logger.setLogLevel('verbose');
 
 const baseCoordinates: Position[] = [
@@ -251,3 +253,13 @@ const AnimatedLineOffsets = memo(() => {
 });
 
 export default AnimatedLineOffsets;
+
+/** @type ExampleWithMetadata['metadata'] */
+const metadata = {
+  title: 'Animated Line Offset',
+  tags: [],
+  docs: `
+Animated Line Offsets (Native Animator)
+`,
+};
+(AnimatedLineOffsets as unknown as ExampleWithMetadata).metadata = metadata;

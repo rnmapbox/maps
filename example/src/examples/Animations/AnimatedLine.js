@@ -288,3 +288,13 @@ class AnimatedLine extends React.Component {
 }
 
 export default AnimatedLine;
+
+/** @type ExampleWithMetadata['metadata'] */
+const metadata = {
+  title: 'Animated Line',
+  tags: [],
+  docs: `
+Animated Line
+`,
+};
+AnimatedLine.metadata = metadata;

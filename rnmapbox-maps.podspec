@@ -20,7 +20,7 @@ require 'json'
 package = JSON.parse(File.read(File.join(__dir__, 'package.json')))
 
 ## Warning: these lines are scanned by autogenerate.js
-rnMapboxMapsDefaultMapboxVersion = '~> 10.16.4'
+rnMapboxMapsDefaultMapboxVersion = '~> 10.17.0'
 
 rnMapboxMapsDefaultImpl = 'mapbox'
 
@@ -193,7 +193,7 @@ def $RNMapboxMaps.pre_install(installer)
 end
 
 ## RNMapboxMapsDownloadToken
-# expo does not supports `.netrc`, so we need to patch curl commend used by cocoapods to pass the credentials
+# expo does not support `.netrc`, so we need to patch curl command used by cocoapods to pass the credentials
 
 if $RNMapboxMapsDownloadToken
   module AddCredentialsToCurlWhenDownloadingMapbox
