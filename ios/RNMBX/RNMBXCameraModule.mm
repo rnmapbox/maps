@@ -60,7 +60,8 @@ RCT_EXPORT_METHOD(updateCameraStop:(nonnull NSNumber *)viewRef
                    reject:(RCTPromiseRejectBlock)reject)
 {
     [self withCamera:viewRef block:^(RNMBXCamera *view) {
-      [view updateCameraStop: stop];
+        [view updateCameraStop: stop];
+        resolve(@true);
     } reject:reject methodName:@"someMethod"];
 }
 
