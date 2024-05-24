@@ -1,3 +1,5 @@
+import 'mapbox-gl/dist/mapbox-gl.css';
+
 import MapboxModule from './MapboxModule';
 import Camera from './components/Camera';
 import MapView from './components/MapView';
@@ -16,5 +18,5 @@ const Mapbox = {
   ...ExportedComponents,
 };
 
-export { Camera, MapView, Logger, MarkerView };
+export { Camera, Logger, MapView, MarkerView };
 export default Mapbox;
