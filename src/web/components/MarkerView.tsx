@@ -3,7 +3,6 @@ import {
   forwardRef,
   isValidElement,
   memo,
-  ReactElement,
   Ref,
   useContext,
   useEffect,
@@ -12,14 +11,13 @@ import {
 } from 'react';
 import { createPortal } from 'react-dom';
 
+import { MarkerViewProps } from '../../components/MarkerView';
 import MapContext from '../MapContext';
 
-type MarkerViewProps = {
-  coordinate: [number, number];
-  children?: ReactElement;
-};
-
-function MarkerView(props: MarkerViewProps, ref: Ref<Marker>) {
+function MarkerView(
+  props: Pick<MarkerViewProps, 'coordinate' | 'children'>,
+  ref: Ref<Marker>,
+) {
   const { map } = useContext(MapContext);
 
   // Create marker instance
@@ -30,8 +28,12 @@ function MarkerView(props: MarkerViewProps, ref: Ref<Marker>) {
         : undefined,
     });
 
-    // Set marker coordinates
-    _marker.setLngLat(props.coordinate);
+    if (props.coordinate.length !== 2) {
+      console.error('MarkerView - coordinate should be an array of length 2');
+    } else {
+      // Set marker coordinates
+      _marker.setLngLat(props.coordinate as [number, number]);
+    }
 
     // Fix marker position
     const { style } = _marker.getElement();
