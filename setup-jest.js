@@ -206,9 +206,3 @@ NativeModules.RNMBXChangeLineOffsetsShapeAnimatorModule = {
 NativeModules.RNMBXLogging = nativeModule({
   setLogLevel: jest.fn(),
 });
-
-// Mock for global AbortController
-global.AbortController = class {
-  signal = 'test-signal';
-  abort = jest.fn();
-};
