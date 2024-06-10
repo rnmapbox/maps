@@ -30,7 +30,7 @@ Added `your feature` that allows ...
 
 <!-- If it's a visual PR, we appreciate a screenshot or video -->
 
-## Component to reprocuce the issue you're fixing
+## Component to reproduce the issue you're fixing
 
 <!-- If you're fixing an issue and the component you've used to repro the issue is not already on the issue you're fixing, add that here  -->
 ```jsx
