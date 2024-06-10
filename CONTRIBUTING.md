@@ -36,7 +36,7 @@ npx expo start -c --web
 ```
 
 
-## Best practices for PR's
+## Best practices for PRs
 - If you plan to work on a bigger feature, please open a discussion, to discuss the best way to address it
 - If you add a feature, make sure you add it to the documentation
 - Use meaningful commit messages, use semantic commit messages
