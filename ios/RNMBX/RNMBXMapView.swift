@@ -5,6 +5,42 @@ import MapKit
 public typealias RNMBXMapViewFactoryFunc = (String, UIView) -> (MapView?)
 
 /**
+ * InitWaiter: simple waiters gets queued unitl the init happens
+ */
+class InitWaiter<Type> {
+  var object: Type? = nil;
+  typealias Callback = (_ t:Type) -> Void;
+  var waiters: [Callback] = []
+
+  /// if the object has value call immediately, otherwise queue
+  func callOrWait(_ callback: @escaping Callback) {
+    if let object = object {
+      callback(object)
+      assert(waiters.count == 0, "the object is inited but there are still waiters")
+    } else {
+      waiters.append(callback)
+    }
+  }
+  
+  func hasInited() -> Bool {
+    return object != nil
+  }
+  
+  /// call whan the object has inited, queued calls will be executed
+  func onInit(_ object: Type) {
+    self.object = object
+    waiters.forEach { $0(object) }
+    waiters = []
+  }
+  
+  /// reset, calls will be queued again
+  func reset() {
+    self.object = nil
+  }
+}
+
+
+/**
  * Experimental MapView factory for advanced usecases
  */
 public class RNMBXMapViewFactory {
@@ -131,8 +167,8 @@ open class RNMBXMapView: UIView {
   @objc
   var onCameraChanged: RCTDirectEventBlock?
   
-  var styleLoaded: Bool = false
-  var styleLoadWaiters : [(MapboxMap)->Void] = []
+  var styleLoadWaiters = InitWaiter<MapboxMap>()
+  var cameraWaiters = InitWaiter<MapView>()
   
   var features: [FeatureEntry] = []
   
@@ -220,7 +256,7 @@ open class RNMBXMapView: UIView {
         let style = mapView.mapboxMap.style
         var addToMap = false
         if mapComponent.waitForStyleLoad() {
-          if (self.styleLoaded) {
+          if (self.styleLoadWaiters.hasInited()) {
             addToMap = true
           }
         } else {
@@ -307,7 +343,7 @@ open class RNMBXMapView: UIView {
   
   // MARK: - React Native properties
   let changes : PropertyChanges<RNMBXMapView> = PropertyChanges()
-  var mapViewWaiters : [(_: MapView)->Void] = []
+  var mapViewWaiters = InitWaiter<MapView>()
   
   enum Property : String {
     case projection
@@ -368,18 +404,14 @@ open class RNMBXMapView: UIView {
   }
   
   func withMapView(callback: @escaping (_: MapView) -> Void) {
-    if let mapView = _mapView {
-      callback(mapView)
-    } else {
-      mapViewWaiters.append(callback)
-    }
+    mapViewWaiters.callOrWait(callback)
   }
   
   func withMapboxMap(callback: @escaping (_: MapboxMap) -> Void) {
     if let mapboxMap = _mapView?.mapboxMap {
       callback(mapboxMap)
     } else {
-      mapViewWaiters.append { mapView in
+      mapViewWaiters.callOrWait { mapView in
         callback(mapView.mapboxMap)
       }
     }
@@ -714,8 +746,7 @@ open class RNMBXMapView: UIView {
     if (_mapView == nil) {
       let view = createMapView()
       
-      mapViewWaiters.forEach { $0(view) }
-      mapViewWaiters.removeAll()
+      mapViewWaiters.onInit(view)
     }
     changes.apply(self)
   }
@@ -804,10 +835,11 @@ open class RNMBXMapView: UIView {
   }
   
   public func applyStyleURL() {
-    var initialLoad = !self.styleLoaded
+    var initialLoad = !self.styleLoadWaiters.hasInited()
     if !initialLoad { refreshComponentsBeforeStyleChange() }
-    self.styleLoaded = false
     if let value = reactStyleURL {
+      self.styleLoadWaiters.reset()
+
       if let _ = URL(string: value) {
           if let styleURI = StyleURI(rawValue: value) {
               mapView.mapboxMap.loadStyleURI(styleURI)
@@ -1059,13 +1091,8 @@ extension RNMBXMapView {
     self.onEvery(event: .styleLoaded, handler: { (self, event) in
       self.addFeaturesToMap(style: self.mapboxMap.style)
       
-      if !self.styleLoaded {
-        self.styleLoaded = true
-        if let mapboxMap = self.mapboxMap {
-          let waiters = self.styleLoadWaiters
-          self.styleLoadWaiters = []
-          waiters.forEach { $0(mapboxMap) }
-        }
+      if !self.styleLoadWaiters.hasInited(), let mapboxMap = self.mapboxMap {
+        self.styleLoadWaiters.onInit(mapboxMap)
       }
 
       let event = RNMBXEvent(type:.didFinishLoadingStyle, payload: nil)
@@ -1384,11 +1411,7 @@ extension RNMBXMapView {
       fatalError("mapboxMap is null")
     }
     
-    if styleLoaded {
-      block(mapboxMap)
-    } else {
-      styleLoadWaiters.append(block)
-    }
+    styleLoadWaiters.callOrWait(block)
   }
 }
 
