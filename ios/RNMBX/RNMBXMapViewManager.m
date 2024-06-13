@@ -19,6 +19,7 @@ RCT_REMAP_VIEW_PROPERTY(compassViewMargins, reactCompassViewMargins, CGPoint)
 RCT_REMAP_VIEW_PROPERTY(compassImage, reactCompassImage, NSString)
 
 RCT_REMAP_VIEW_PROPERTY(scaleBarEnabled, reactScaleBarEnabled, BOOL)
+RCT_REMAP_VIEW_PROPERTY(scaleBarIsMetricUnits, reactScaleBarIsMetricUnits, BOOL)
 RCT_REMAP_VIEW_PROPERTY(scaleBarPosition, reactScaleBarPosition, NSDictionary)
 
 RCT_REMAP_VIEW_PROPERTY(zoomEnabled, reactZoomEnabled, BOOL)

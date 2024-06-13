@@ -150,7 +150,7 @@ class LocationManager private constructor(private val context: Context) : Locati
 
     fun destroy() {
         dispose();
-        nStarts = -1000;
+        nStarts = 0;
     }
 
     ////
