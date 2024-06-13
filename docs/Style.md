@@ -23,7 +23,7 @@ MapboxJSON | URL
 _required_
 A JSON object conforming to the schema described in the Mapbox Style Specification , or a URL to such JSON.
 
-[Style JSON](../examples/Map/StyleJson)
+[Style JSON](../examples/Map/StyleJson.js)
   
 
 
