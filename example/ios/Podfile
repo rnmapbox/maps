@@ -20,7 +20,7 @@ if ENV['CI_MAP_IMPL']
     $RNMapboxMapsImpl = 'mapbox'
   when 'mapbox11'
     $RNMapboxMapsImpl = 'mapbox'
-    $RNMapboxMapsVersion = '= 11.3.0'
+    $RNMapboxMapsVersion = '= 11.4.0'
   else
     fail "Invalid CI_MAP_IMPL value: #{ENV['CI_MAP_IMPL']}"
   end
