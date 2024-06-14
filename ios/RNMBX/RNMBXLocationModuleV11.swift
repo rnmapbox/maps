@@ -276,7 +276,15 @@ class RNMBXLocationModule: RCTEventEmitter {
       throttler.waitBetweenEvents = nil
     }
   }
-  
+
+  @objc func setRequestsAlwaysUse(_ requestsAlwaysUse: Bool) {
+    // V11TODO
+  }
+
+  @objc func simulateHeading(_ changesPerSecond: NSNumber, increment: NSNumber) {
+    // V11TODO
+  }
+
   @objc
   override func startObserving() {
     super.startObserving()
