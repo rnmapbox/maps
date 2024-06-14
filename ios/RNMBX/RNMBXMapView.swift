@@ -29,8 +29,9 @@ class InitWaiter<Type> {
   /// call whan the object has inited, queued calls will be executed
   func onInit(_ object: Type) {
     self.object = object
-    waiters.forEach { $0(object) }
+    let oldWaiters = waiters
     waiters = []
+    oldWaiters.forEach { $0(object) }
   }
   
   /// reset, calls will be queued again
