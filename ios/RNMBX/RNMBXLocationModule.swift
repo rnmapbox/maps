@@ -521,7 +521,7 @@ class RNMBXLocationModule: RCTEventEmitter, LocationProviderRNMBXDelegate {
       locationProvider.setDistanceFilter(minDisplacement)
     }
   }
-  
+
   @objc func setRequestsAlwaysUse(_ requestsAlwaysUse: Bool) {
     if let locationProvider = locationProvider as? LocationProviderRNMBX {
       locationProvider.setRequestsAlwaysUse(requestsAlwaysUse)
