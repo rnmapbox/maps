@@ -5,6 +5,9 @@
     "web": {
       "bundler": "metro",
       "output": "single"
+    },
+    "experiments": {
+      "baseUrl": "/example-app"
     }
   }
 }
