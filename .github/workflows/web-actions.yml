@@ -1,0 +1,59 @@
+name: Web Build
+
+on:
+  workflow_call:
+    inputs:
+      env_name:
+        required: true
+        default: default
+        type: string
+      ref:
+        required: false
+        type: string 
+      NVMRC:
+        required: true
+        type: string
+    secrets:
+      MAPBOX_ACCESS_TOKEN:
+        required: true
+      MAPBOX_DOWNLOAD_TOKEN:
+        required: true
+      ENV_MAPBOX_ACCESS_TOKEN:
+        required: false
+      ENV_MAPBOX_DOWNLOAD_TOKEN:
+        required: false
+
+jobs:
+  build_example:
+    name: Example Build for Web
+    runs-on: ubuntu-latest
+    environment: ${{ inputs.env_name }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        if: ${{ inputs.ref == '' }}
+      
+      - name: Checkout fork
+        uses: actions/checkout@v4
+        if: ${{ inputs.ref != '' }}
+        with:
+          ref: ${{ inputs.ref }}
+
+      - name: Setup node ${{ inputs.NVMRC }}
+        uses: actions/setup-node@v3.5.1
+        with:
+          node-version: ${{ inputs.NVMRC }}
+
+      - run: echo $MAPBOX_ACCESS_TOKEN > ./accesstoken
+        working-directory: example
+        env:
+          MAPBOX_ACCESS_TOKEN: ${{ secrets.MAPBOX_ACCESS_TOKEN || secrets.ENV_MAPBOX_ACCESS_TOKEN }}
+
+      - run: yarn install --network-timeout 1000000
+        working-directory: example
+
+      - run: yarn postinstall
+        working-directory: example
+
+      - run: npx expo export --platform web
+        working-directory: example

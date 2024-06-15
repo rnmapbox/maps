@@ -41,6 +41,15 @@ jobs:
         run: node scripts/doc-generate.mjs
       - name: Generate example docs into maps-docs repo
         run: bun scripts/example-docs.ts
+      - name: Generate example app into maps-docs repo
+        run: |
+          cd example
+          echo $MAPBOX_WEB_ACCESS_TOKEN > accesstoken
+          yarn install
+          npx expo export -p web --outpub-dir ../../maps-docs/example-app
+        working-directory: maps
+        env:
+          MAPBOX_WEB_ACCESS_TOKEN: ${{ secrets.MAPBOX_WEB_ACCESS_TOKEN }}
       - name: Setup deploy key for github deploy
         uses: webfactory/ssh-agent@v0.5.0
         with:

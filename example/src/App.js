@@ -3,6 +3,7 @@ import Mapbox from '@rnmapbox/maps';
 import { StyleSheet, Text, View, LogBox, SafeAreaView } from 'react-native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { NavigationContainer } from '@react-navigation/native';
+import { SafeAreaProvider } from 'react-native-safe-area-context';
 
 import sheet from './styles/sheet';
 import colors from './styles/colors';
@@ -41,9 +42,11 @@ function AppStackNavigator() {
 }
 
 const AppContainer = () => (
-  <NavigationContainer>
-    <AppStackNavigator />
-  </NavigationContainer>
+  <SafeAreaProvider>
+    <NavigationContainer>
+      <AppStackNavigator />
+    </NavigationContainer>
+  </SafeAreaProvider>
 );
 class App extends React.Component {
   constructor(props) {
