@@ -3212,6 +3212,13 @@
       }
     ]
   },
+  "Location": {
+    "description": "",
+    "displayName": "Location",
+    "methods": [],
+    "fileNameWithExt": "Location.tsx",
+    "relPath": "src/components/Location.tsx"
+  },
   "LocationPuck": {
     "description": "Renders a puck on the map that shows the device's current location.",
     "displayName": "LocationPuck",
