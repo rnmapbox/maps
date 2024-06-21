@@ -85,56 +85,59 @@ using namespace facebook::react;
 
 - (void)updateProps:(const Props::Shared &)props oldProps:(const Props::Shared &)oldProps
 {
-  const auto &newProps = static_cast<const RNMBXShapeSourceProps &>(*props);
-    id idx = RNMBXConvertFollyDynamicToId(newProps.id);
+    const auto &oldShapeSourceProps = static_cast<const RNMBXShapeSourceProps &>(*_props);
+    const auto &newShapeSourceProps = static_cast<const RNMBXShapeSourceProps &>(*props);
+    id idx = RNMBXConvertFollyDynamicToId(newShapeSourceProps.id);
     if (idx != nil) {
         _view.id = idx;
     }
-    id existing = RNMBXConvertFollyDynamicToId(newProps.existing);
+    id existing = RNMBXConvertFollyDynamicToId(newShapeSourceProps.existing);
     if (existing != nil) {
         _view.existing = existing;
     }
-    id shape = RNMBXConvertFollyDynamicToId(newProps.shape);
+    id shape = RNMBXConvertFollyDynamicToId(newShapeSourceProps.shape);
     if (shape != nil) {
         _view.shape = shape;
     }
-    id cluster = RNMBXConvertFollyDynamicToId(newProps.cluster);
+    id cluster = RNMBXConvertFollyDynamicToId(newShapeSourceProps.cluster);
     if (cluster != nil) {
         _view.cluster = cluster;
     }
-    id clusterRadius = RNMBXConvertFollyDynamicToId(newProps.clusterRadius);
+    id clusterRadius = RNMBXConvertFollyDynamicToId(newShapeSourceProps.clusterRadius);
     if (clusterRadius != nil) {
         _view.clusterRadius = clusterRadius;
     }
-    id clusterMaxZoomLevel = RNMBXConvertFollyDynamicToId(newProps.clusterMaxZoomLevel);
-    if (clusterMaxZoomLevel != nil) {
-        _view.clusterMaxZoomLevel = clusterMaxZoomLevel;
+    if (oldShapeSourceProps.clusterMaxZoomLevel != newShapeSourceProps.clusterMaxZoomLevel) {
+        id clusterMaxZoomLevel = RNMBXConvertFollyDynamicToId(newShapeSourceProps.clusterMaxZoomLevel);
+        if (clusterMaxZoomLevel != nil) {
+            _view.clusterMaxZoomLevel = clusterMaxZoomLevel;
+        }
     }
-    id clusterProperties = RNMBXConvertFollyDynamicToId(newProps.clusterProperties);
+    id clusterProperties = RNMBXConvertFollyDynamicToId(newShapeSourceProps.clusterProperties);
     if (clusterProperties != nil) {
         _view.clusterProperties = clusterProperties;
     }
-    id maxZoomLevel = RNMBXConvertFollyDynamicToId(newProps.maxZoomLevel);
+    id maxZoomLevel = RNMBXConvertFollyDynamicToId(newShapeSourceProps.maxZoomLevel);
     if (maxZoomLevel != nil) {
         _view.maxZoomLevel = maxZoomLevel;
     }
-    id buffer = RNMBXConvertFollyDynamicToId(newProps.buffer);
+    id buffer = RNMBXConvertFollyDynamicToId(newShapeSourceProps.buffer);
     if (buffer != nil) {
         _view.buffer = buffer;
     }
-    id tolerance = RNMBXConvertFollyDynamicToId(newProps.tolerance);
+    id tolerance = RNMBXConvertFollyDynamicToId(newShapeSourceProps.tolerance);
     if (tolerance != nil) {
         _view.tolerance = tolerance;
     }
-    id lineMetrics = RNMBXConvertFollyDynamicToId(newProps.lineMetrics);
+    id lineMetrics = RNMBXConvertFollyDynamicToId(newShapeSourceProps.lineMetrics);
     if (lineMetrics != nil) {
         _view.lineMetrics = lineMetrics;
     }
-    id hasPressListener = RNMBXConvertFollyDynamicToId(newProps.hasPressListener);
+    id hasPressListener = RNMBXConvertFollyDynamicToId(newShapeSourceProps.hasPressListener);
     if (hasPressListener != nil) {
         _view.hasPressListener = hasPressListener;
     }
-    id hitbox = RNMBXConvertFollyDynamicToId(newProps.hitbox);
+    id hitbox = RNMBXConvertFollyDynamicToId(newShapeSourceProps.hitbox);
     if (hitbox != nil) {
         _view.hitbox = hitbox;
     }
