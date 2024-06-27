@@ -1,17 +1,20 @@
+/***
+to: ios/RNMBX/generated/<%= Name %>.mm
+***/
 #import <React/RCTBridge.h>
 #import <React/RCTUIManager.h>
 #import <React/RCTUIManagerUtils.h>
 
-#import "RNMBXLocationComponentModule.h"
+#import "<%= Name %>.h"
+
+#import "<%= ComponentName %>ComponentView.h"
 #ifdef RCT_NEW_ARCH_ENABLED
-#import "RNMBXLocationComponentView.h"
+#import "<%= ComponentName %>ComponentView.h"
 #endif // RCT_NEW_ARCH_ENABLED
 
 #import "rnmapbox_maps-Swift.pre.h"
 
-@class RNMBXLocation;
-
-@implementation RNMBXLocationComponentModule
+@implementation <%= Name %>
 
 RCT_EXPORT_MODULE();
 
@@ -32,39 +35,39 @@ RCT_EXPORT_MODULE();
 - (std::shared_ptr<facebook::react::TurboModule>)getTurboModule:
     (const facebook::react::ObjCTurboModule::InitParams &)params
 {
-    return std::make_shared<facebook::react::NativeRNMBXLocationModuleSpecJSI>(params);
+    return std::make_shared<facebook::react::Native<%= Name %>ModuleSpecJSI>(params);
 }
 #endif // RCT_NEW_ARCH_ENABLED
 
-- (void)withLocation:(nonnull NSNumber*)viewRef block:(void (^)(RNMBXLocation *))block reject:(RCTPromiseRejectBlock)reject methodName:(NSString *)methodName
+- (void)with<%= Name %>:(nonnull NSNumber*)viewRef block:(void (^)(<%= ComponentName %> *))block reject:(RCTPromiseRejectBlock)reject methodName:(NSString *)methodName
 {
 #ifdef RCT_NEW_ARCH_ENABLED
     [self.viewRegistry_DEPRECATED addUIBlock:^(RCTViewRegistry *viewRegistry) {
-    RNMBXLocationComponentView *componentView = [self.viewRegistry_DEPRECATED viewForReactTag:viewRef];
-        RNMBXLocation *view = componentView.contentView;
+    <%= ComponentName %>ComponentView *componentView = [self.viewRegistry_DEPRECATED viewForReactTag:viewRef];
+        <%= ComponentName %> *view = componentView.contentView;
         
 #else
     [self.bridge.uiManager
      addUIBlock:^(RCTUIManager *uiManager, NSDictionary<NSNumber *, UIView *> *viewRegistry) {
-        RNMBXLocation *view = [uiManager viewForReactTag:viewRef];
+        <%= ComponentName %> *view = [uiManager viewForReactTag:viewRef];
 #endif // RCT_NEW_ARCH_ENABLED
         if (view != nil) {
-           block(view);
+            block(view);
         } else {
             reject(methodName, [NSString stringWithFormat:@"Unknown reactTag: %@", viewRef], nil);
         }
     }];
 }
 
-#if false
-RCT_EXPORT_METHOD(someMethod:(nonnull NSNumber *)viewRef
+<% module.spec.properties.forEach(function (property) { %>
+RCT_EXPORT_METHOD(<%= property.name %>:(nonnull NSNumber *)viewRef
                   resolve:(RCTPromiseResolveBlock)resolve
                    reject:(RCTPromiseRejectBlock)reject)
 {
-    [self withLocation:viewRef block:^(RNMBXCamera *view) {
-        [RNMBXLocationManager someMethod:view resolve:resolve reject:reject];
-    } reject:reject methodName:@"someMethod"];
+    [self with<%= Name %>:viewRef block:^(<%= ComponentName %> *view) {
+        [<%= ComponentName %> <%= property.name %>:view resolve:resolve reject:reject];
+    } reject:reject methodName:@"<%= property.name %>"];
 }
-#endif
+<% }) %>
 
 @end
