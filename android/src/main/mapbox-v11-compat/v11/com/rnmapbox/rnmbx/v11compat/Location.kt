@@ -18,6 +18,7 @@ import com.mapbox.common.location.LocationService
 import com.mapbox.common.location.LocationServiceFactory
 import com.rnmapbox.rnmbx.utils.Logger
 import kotlin.math.absoluteValue
+import com.mapbox.maps.plugin.locationcomponent.LocationConsumer as _LocationConsumer
 
 typealias PuckBearing = _PuckBearing
 
@@ -114,3 +115,5 @@ fun createLocationEngine(context: Context): LocationEngine? {
   }
   return null
 }
+
+typealias LocationConsumer = _LocationConsumer;

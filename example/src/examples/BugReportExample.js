@@ -9,6 +9,7 @@ import {
   Camera,
   VectorSource,
   LineLayer,
+  Location,
 } from '@rnmapbox/maps';
 
 const styles = {

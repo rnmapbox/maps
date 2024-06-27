@@ -1,3 +1,6 @@
+/***
+to: ios/rnmbx/generated/RNMBXLocationComponentView.h
+***/
 #ifdef RCT_NEW_ARCH_ENABLED
 
 #import <UIKit/UIKit.h>
@@ -6,7 +9,6 @@
 #import <React/RCTViewComponentView.h>
 
 NS_ASSUME_NONNULL_BEGIN
-
 
 @interface RNMBXLocationComponentView : RCTViewComponentView
 

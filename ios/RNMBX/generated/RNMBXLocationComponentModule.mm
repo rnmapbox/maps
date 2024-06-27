@@ -1,15 +1,18 @@
+/***
+to: ios/RNMBX/generated/RNMBXLocationComponentModule.mm
+***/
 #import <React/RCTBridge.h>
 #import <React/RCTUIManager.h>
 #import <React/RCTUIManagerUtils.h>
 
 #import "RNMBXLocationComponentModule.h"
+
+#import "RNMBXLocationComponentView.h"
 #ifdef RCT_NEW_ARCH_ENABLED
 #import "RNMBXLocationComponentView.h"
 #endif // RCT_NEW_ARCH_ENABLED
 
 #import "rnmapbox_maps-Swift.pre.h"
-
-@class RNMBXLocation;
 
 @implementation RNMBXLocationComponentModule
 
@@ -32,11 +35,11 @@ RCT_EXPORT_MODULE();
 - (std::shared_ptr<facebook::react::TurboModule>)getTurboModule:
     (const facebook::react::ObjCTurboModule::InitParams &)params
 {
-    return std::make_shared<facebook::react::NativeRNMBXLocationModuleSpecJSI>(params);
+    return std::make_shared<facebook::react::NativeRNMBXLocationComponentModuleSpecJSI>(params);
 }
 #endif // RCT_NEW_ARCH_ENABLED
 
-- (void)withLocation:(nonnull NSNumber*)viewRef block:(void (^)(RNMBXLocation *))block reject:(RCTPromiseRejectBlock)reject methodName:(NSString *)methodName
+- (void)withRNMBXLocationComponentModule:(nonnull NSNumber*)viewRef block:(void (^)(RNMBXLocation *))block reject:(RCTPromiseRejectBlock)reject methodName:(NSString *)methodName
 {
 #ifdef RCT_NEW_ARCH_ENABLED
     [self.viewRegistry_DEPRECATED addUIBlock:^(RCTViewRegistry *viewRegistry) {
@@ -49,22 +52,22 @@ RCT_EXPORT_MODULE();
         RNMBXLocation *view = [uiManager viewForReactTag:viewRef];
 #endif // RCT_NEW_ARCH_ENABLED
         if (view != nil) {
-           block(view);
+            block(view);
         } else {
             reject(methodName, [NSString stringWithFormat:@"Unknown reactTag: %@", viewRef], nil);
         }
     }];
 }
 
-#if false
+
 RCT_EXPORT_METHOD(someMethod:(nonnull NSNumber *)viewRef
                   resolve:(RCTPromiseResolveBlock)resolve
                    reject:(RCTPromiseRejectBlock)reject)
 {
-    [self withLocation:viewRef block:^(RNMBXCamera *view) {
-        [RNMBXLocationManager someMethod:view resolve:resolve reject:reject];
+    [self withRNMBXLocationComponentModule:viewRef block:^(RNMBXLocation *view) {
+        [RNMBXLocation someMethod:view resolve:resolve reject:reject];
     } reject:reject methodName:@"someMethod"];
 }
-#endif
+
 
 @end

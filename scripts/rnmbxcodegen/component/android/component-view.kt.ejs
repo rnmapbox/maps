@@ -1,0 +1,18 @@
+/***
+to: android/src/main/java/<%= meta.javapkg.replaceAll('.','/') %>/<%= Name %>.kt
+userEditable: true
+***/
+package <%= meta.javapkg %>
+
+import android.content.Context
+import com.rnmapbox.rnmbx.components.AbstractMapFeature
+
+class <%= Name %>(private val mContext: Context, private val mManager: <%= Name %>Manager) :
+AbstractMapFeature(
+mContext
+) {
+
+  <%_ component.props.forEach(function(prop) { _%>
+    var <%= prop.name %>: <%= typeAnnotationKotlinType(prop.typeAnnotation) %> = false;
+  <%_ }); _%>
+}
