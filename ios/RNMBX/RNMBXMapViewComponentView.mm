@@ -181,10 +181,7 @@ using namespace facebook::react;
         _view.reactCompassImage = compassImage;
     }
 
-    id scaleBarEnabled = RNMBXConvertFollyDynamicToId(newViewProps.scaleBarEnabled);
-    if (scaleBarEnabled != nil) {
-        _view.reactScaleBarEnabled = scaleBarEnabled;
-    }
+    RNMBX_REMAP_OPTIONAL_PROP_BOOL(scaleBarEnabled, reactScaleBarEnabled)
 
     id scaleBarPosition = RNMBXConvertFollyDynamicToId(newViewProps.scaleBarPosition);
     if (scaleBarPosition != nil) {
