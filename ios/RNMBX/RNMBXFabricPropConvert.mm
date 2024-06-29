@@ -55,7 +55,7 @@ BOOL RNMBXPropConvert_Optional_BOOL(const folly::dynamic &dyn, NSString* propert
 }
 
 NSString* RNMBXPropConvert_Optional_NSString(const folly::dynamic &dyn, NSString* propertyName) {
-    switch (dyn.type()) {
+  switch (dyn.type()) {
     case folly::dynamic::STRING:
       return [NSString stringWithCString:dyn.getString().c_str() encoding:NSUTF8StringEncoding];
     case folly::dynamic::NULLT:
@@ -72,7 +72,7 @@ NSString* RNMBXPropConvert_Optional_NSString(const folly::dynamic &dyn, NSString
 }
 
 NSNumber* RNMBXPropConvert_Optional_NSNumber(const folly::dynamic &dyn, NSString* propertyName) {
-    switch (dyn.type()) {
+  switch (dyn.type()) {
     case folly::dynamic::INT64:
       return @(dyn.getInt());
     case folly::dynamic::DOUBLE:
