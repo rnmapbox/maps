@@ -7603,7 +7603,7 @@
         "required": false,
         "type": "UserLocationRenderMode",
         "default": "UserLocationRenderMode.Normal",
-        "description": "@deprecated use NativeUserLocation component instead of UserLocationRenderMode.Native\nWhich render mode to use."
+        "description": "@deprecated use LocationPuck component instead of UserLocationRenderMode.Native\nWhich render mode to use."
       },
       {
         "name": "requestsAlwaysUse",
