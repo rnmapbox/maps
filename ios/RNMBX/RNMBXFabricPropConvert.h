@@ -21,10 +21,12 @@ NSDictionary* RNMBXPropConvert_Optional_NSDictionary(const folly::dynamic &dyn, 
     _view.name = RNMBXPropConvert_Optional_BOOL_NSNumber(newViewProps.name, @#name); \
   }
 
-#define RNMBX_OPTIONAL_PROP_BOOL(name) \
+#define RNMBX_REMAP_OPTIONAL_PROP_BOOL(name, viewName) \
   if ((!oldProps.get() || oldViewProps.name != newViewProps.name) && !newViewProps.name.isNull()) { \
-    _view.name = RNMBXPropConvert_Optional_BOOL(newViewProps.name, @#name); \
+    _view.viewName = RNMBXPropConvert_Optional_BOOL(newViewProps.name, @#name); \
   }
+
+#define RNMBX_OPTIONAL_PROP_BOOL(name) RNMBX_REMAP_OPTIONAL_PROP_BOOL(name, name)
 
 #define RNMBX_OPTIONAL_PROP_NSString(name) \
   if ((!oldProps.get() || oldViewProps.name != newViewProps.name) && !newViewProps.name.isNull()) { \
