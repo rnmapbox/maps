@@ -71,6 +71,26 @@ NSString* RNMBXPropConvert_Optional_NSString(const folly::dynamic &dyn, NSString
   }
 }
 
+NSNumber* RNMBXPropConvert_Optional_NSNumber(const folly::dynamic &dyn, NSString* propertyName) {
+    switch (dyn.type()) {
+    case folly::dynamic::INT64:
+      return @(dyn.getInt());
+    case folly::dynamic::DOUBLE:
+      return @(dyn.getDouble());
+    case folly::dynamic::NULLT:
+      return nil;
+    default:
+      std::stringstream ss;
+      ss << dyn;
+      [RNMBXLogger error:[NSString stringWithFormat:@"Property %@ expected to be a number or nil but was: %s",
+                          propertyName,
+                          ss.str().c_str()
+                         ]];
+      return nil;
+  }
+}
+
+
 
 id RNMBXPropConvert_ID(const folly::dynamic &dyn)
 {
