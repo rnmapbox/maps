@@ -14,11 +14,11 @@ class RNMBXStyleValue {
   var styleType: String? = nil
   var styleValue: [String:Any]? = nil
   var styleObject: Any? = nil
-  
-  
+
+
   init(value: Any) {
     self.value = value
-  
+
     if let dict = value as? [String:Any] {
       guard let styleType = dict["styletype"] as? String else {
         fatalError("StyleType should be string in \(dict)")
@@ -31,15 +31,15 @@ class RNMBXStyleValue {
       self.styleObject = parse(rawStyleValue: styleValue)
     }
   }
-  
+
   static func make(_ reactStyleValue: Any) ->RNMBXStyleValue {
     return RNMBXStyleValue(value: reactStyleValue)
   }
-  
+
   func isVisible() -> Value<Visibility> {
     return mglStyleValueEnum()
   }
-  
+
   func getTransition() -> StyleTransition {
     guard let dict = styleObject as? [String:Any] else {
       Logger.log(level:.error, message: "Invalid transition value: \(optional: styleObject)")
@@ -54,7 +54,7 @@ class RNMBXStyleValue {
     let millisecondsToSeconds = 1.0/1000.0;
     return StyleTransition(duration: millisecondsToSeconds * (duration?.doubleValue ?? 0.0), delay: millisecondsToSeconds * (delay?.doubleValue ?? 0.0))
   }
-  
+
   func getImageScale() -> Double {
     if let dict = styleObject as? [String:Any] {
       if let scale = dict["scale"] as? NSNumber {
@@ -65,13 +65,13 @@ class RNMBXStyleValue {
     }
     return 1.0
   }
-  
+
   func parse(rawStyleValue: [String:Any]) -> Any
   {
     guard let type = rawStyleValue["type"] as? String else {
       fatalError("type is not a string in \(rawStyleValue)")
     }
-    
+
     let value = rawStyleValue["value"]
     if type == "string" {
       guard let string = value as? String else {
@@ -114,7 +114,7 @@ class RNMBXStyleValue {
       fatalError("unepxected type: \(type)")
     }
   }
-  
+
   static func convert(_ from:[String: Any]) -> Any {
     guard let type = from["type"] as? String else {
       fatalError("Type should be string but was \(optional: from["type"])")
@@ -130,14 +130,14 @@ class RNMBXStyleValue {
       guard let value = from["value"] as? String else {
         fatalError("Value for string should be String")
       }
-      
+
       return value
     }
     else if type == "hashmap" {
       guard let values = from["value"] as? [[Any]] else {
         fatalError("Value for hashmap should be array of array")
       }
-    
+
       let result = values.map { items -> (String,Any) in
         var key = items[0]
         let value = items[1]
@@ -176,11 +176,11 @@ class RNMBXStyleValue {
       fatalError("Unexpected type \(type)")
     }
   }
-  
+
   func mglStyleValueNumber() -> Value<Double> {
     if let value = value as? Dictionary<String,Any> {
       let value = RNMBXStyleValue.convert(value["stylevalue"] as! [String:Any])
-      
+
       if let num = value as? NSNumber {
         return Value.constant(Double(num.doubleValue))
       } else if let num = value as? Double {
@@ -209,9 +209,9 @@ class RNMBXStyleValue {
       Logger.log(level: .error, message: "Invalid value for number: \(value) retuning 0.0")
       return .constant(0.0)
     }
-    
+
     let valueObj = RNMBXStyleValue.convert(value["stylevalue"] as! [String:Any])
-    
+
     if let num = valueObj as? NSNumber {
       return .constant(num.doubleValue)
     } else if let num = valueObj as? Double {
@@ -230,9 +230,9 @@ class RNMBXStyleValue {
       Logger.log(level: .error, message: "Invalid value for number: \(value) retuning 0.0")
       return 0.0
     }
-    
+
     let valueObj = RNMBXStyleValue.convert(value["stylevalue"] as! [String:Any])
-    
+
     if let num = valueObj as? NSNumber {
       return num.doubleValue
     } else if let num = valueObj as? Double {
@@ -259,12 +259,12 @@ class RNMBXStyleValue {
     //return Value.constant(ColorRepresentable(color: UIColor.black))
     if let value = value as? Dictionary<String,Any> {
       let value = RNMBXStyleValue.convert(value["stylevalue"] as! [String:Any])
-      
+
       if let num = value as? Int {
         let uicolor = uicolor(num)
         return Value.constant(StyleColor(uicolor))
       }
-      
+
       let data = try! JSONSerialization.data(withJSONObject: value, options: .prettyPrinted)
 
       let decodedExpression = try! JSONDecoder().decode(Expression.self, from: data)
@@ -273,8 +273,8 @@ class RNMBXStyleValue {
       return Value.constant(StyleColor(UIColor.red))
     }
   }
-  
-  func asExpression(json: [Any]) -> Expression {
+
+  func asExpression(json: [Any]) -> MapboxMaps.Expression {
     let data = try! JSONSerialization.data(withJSONObject: json, options: .prettyPrinted)
     let decodedExpression = try! JSONDecoder().decode(Expression.self, from: data)
     return decodedExpression
@@ -313,15 +313,15 @@ class RNMBXStyleValue {
     }
   }
   #endif
-  
+
   func mglStyleValueBoolean() -> Value<Bool> {
     guard let value = value as? Dictionary<String,Any> else {
       Logger.log(level: .error, message: "Invalid value for boolean: \(value)")
       return Value.constant(true)
     }
-    
+
     let valueObj = RNMBXStyleValue.convert(value["stylevalue"] as! [String:Any])
-    
+
     if let valueObj = valueObj as? NSNumber {
       return .constant(valueObj.boolValue)
     } else {
@@ -335,15 +335,15 @@ class RNMBXStyleValue {
       }
     }
   }
-  
+
   func mglStyleValueArrayNumber() -> Value<[Double]> {
     guard let value = value as? Dictionary<String,Any> else {
       Logger.log(level: .error, message: "Invalid value for array number: \(value)")
       return Value.constant([1.0,1.0])
     }
-  
+
     let valueObj = RNMBXStyleValue.convert(value["stylevalue"] as! [String:Any])
-      
+
     if let valueObj = valueObj as? [NSNumber] {
       return .constant(valueObj.map { $0.doubleValue })
     } else {
@@ -355,8 +355,8 @@ class RNMBXStyleValue {
       }
     }
   }
-  
-  private func _toExpressions(_ valueObj: Any) throws -> Expression {
+
+  private func _toExpressions(_ valueObj: Any) throws -> MapboxMaps.Expression {
     if let valueObj = valueObj as? NSNumber {
       throw RNMBXError.parseError("valueObj is a single number and cannot be converted to expressions")
     }
@@ -365,7 +365,7 @@ class RNMBXStyleValue {
     let decodedExpression = try JSONDecoder().decode(Expression.self, from: data)
     return decodedExpression
   }
-  
+
   func mglStyleValueString() -> Value<String> {
     if let value = value as? Dictionary<String,Any> {
       let value = RNMBXStyleValue.convert(value["stylevalue"] as! [String:Any])
@@ -388,7 +388,7 @@ class RNMBXStyleValue {
       return Value.constant("")
     }
   }
-  
+
   func mglStyleValueArrayString() -> Value<[String]> {
     guard let value = value as? Dictionary<String,Any> else {
       Logger.log(level: .error, message: "Invalid value for array of strings: \(value)")
@@ -396,7 +396,7 @@ class RNMBXStyleValue {
     }
 
     let valueObj = RNMBXStyleValue.convert(value["stylevalue"] as! [String:Any])
-      
+
     if let valueObj = valueObj as? [String] {
       return .constant(valueObj)
     } else {
@@ -413,7 +413,7 @@ class RNMBXStyleValue {
       }
     }
   }
-  
+
   func mglStyleValueResolvedImage() -> Value<ResolvedImage> {
     if let exprJSON = styleObject as? [Any] {
       return Value.expression(asExpression(json: exprJSON))
@@ -434,13 +434,13 @@ class RNMBXStyleValue {
   func mglStyleValueLineCap() -> Value<LineCap> {
     return mglStyleValueEnum()
   }
-    
-  func parseExpression(_ expression: [Any]) throws -> Expression {
+
+  func parseExpression(_ expression: [Any]) throws -> MapboxMaps.Expression {
     let data = try JSONSerialization.data(withJSONObject: expression, options: .prettyPrinted)
     let decodedExpression = try JSONDecoder().decode(Expression.self, from: data)
     return decodedExpression
   }
-  
+
   func mglStyleValueEnum<Enum : RawRepresentable>() -> Value<Enum> where Enum.RawValue == String {
     if let value = value as? Dictionary<String,Any> {
       let value = RNMBXStyleValue.convert(value["stylevalue"] as! [String:Any])
@@ -473,11 +473,11 @@ class RNMBXStyleValue {
       return Enum(rawValue: value as! String)!
     }
   }
-  
+
   func mglStyleValueArrayTextWritingMode() -> Value<[TextWritingMode]> {
     return Value.constant([])
   }
-  
+
   #if RNMBX_11
   func mglStyleValueAnchorRaw() -> Value<Anchor> {
     // RNMBX_11 TODO Support expressions
@@ -495,7 +495,7 @@ class RNMBXStyleValue {
     }
     return false
   }
-  
+
   func setImage(
     bridge: RCTBridge,
     style: Style,
@@ -509,7 +509,7 @@ class RNMBXStyleValue {
       setImageOnLayer(self)
     } else {
       let imageURI = getImageURI()
-      
+
       if let oldRawValue = oldValue as? [String:Any] {
         if let oldRawValue = oldRawValue["stylevalue"] as? [String:Any] {
           if let oldValue = parse(rawStyleValue: oldRawValue) as? [String:Any] {
@@ -537,7 +537,7 @@ class RNMBXStyleValue {
       });
     }
   }
-  
+
   func getImageURI(_ dict: [String:Any]) -> String? {
     if let uri = dict["uri"] as? String {
       return uri
@@ -545,7 +545,7 @@ class RNMBXStyleValue {
       return nil
     }
   }
-  
+
   func getImageURI() -> String? {
     if let dict = styleObject as? [String:Any] {
       return getImageURI(dict)
@@ -554,7 +554,7 @@ class RNMBXStyleValue {
     }
     return nil
   }
-  
+
   func mglStyleValueArrayTextVariableAnchor() -> Value<[TextAnchor]> {
     guard let value = value as? Dictionary<String,Any> else {
       Logger.log(level: .error, message: "Invalid value for array of TextAnchor: \(value)")
@@ -579,7 +579,7 @@ class RNMBXStyleValue {
       }
     }
   }
-  
+
   #if RNMBX_11
   func getSphericalPosition() -> Value<[Double]> {
     if let array = styleObject as? [NSNumber] {
@@ -601,15 +601,15 @@ class RNMBXStyleValue {
     return []
   }
   #endif
-  
+
   func mglStyleValueFormatted() -> Value<String> {
     if let value = value as? Dictionary<String,Any> {
       let value = RNMBXStyleValue.convert(value["stylevalue"] as! [String:Any])
-      
+
       if let string = value as? String {
         return Value.constant(string)
       }
-      
+
       let data = try! JSONSerialization.data(withJSONObject: value, options: .prettyPrinted)
 
       let decodedExpression = try! JSONDecoder().decode(Expression.self, from: data)
@@ -618,11 +618,11 @@ class RNMBXStyleValue {
       fatalError("mglStyleValueFormatted - Unpexected value: \(value)")
     }
   }
-  
+
   func mglStyleValueLineJoin() -> Value<LineJoin> {
     return mglStyleValueEnum()
   }
-  
+
   func mglStyleValueLineTranslateAnchor() -> Value<LineTranslateAnchor> {
     return mglStyleValueEnum()
   }
