@@ -1,7 +1,7 @@
 #import "React/RCTBridgeModule.h"
 #import <React/RCTEventEmitter.h>
 
-@class RNMBXLocation;
+@class RNMBXLocationData;
 
 @interface RCT_EXTERN_MODULE(RNMBXLocationModule, RCTEventEmitter)
 

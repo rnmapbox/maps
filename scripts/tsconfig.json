@@ -3,5 +3,5 @@
   "compilerOptions": {
     "allowJs": true,
   },
-  "include": ["*.ts", "codepart-replace.mjs"]
+  "include": ["*.ts", "codepart-replace.mjs", "*/**/*.ts"],
 }

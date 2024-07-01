@@ -3,8 +3,8 @@ import MapboxMaps
 
 let RCT_MAPBOX_USER_LOCATION_UPDATE = "MapboxUserLocationUpdate";
 
-@objc(RNMBXLocation)
-class RNMBXLocation: NSObject {
+@objc(RNMBXLocationData)
+class RNMBXLocationData: NSObject {
   var location : Location? = nil
   
   var heading : Heading? = nil
@@ -137,7 +137,7 @@ class RNMBXLocationModule: RCTEventEmitter {
   var locationUpdateObserver : Cancelable? = nil
   var locationHeadingObserver : Cancelable? = nil
   
-  var actLocation : RNMBXLocation = RNMBXLocation()
+  var actLocation : RNMBXLocationData = RNMBXLocationData()
   
   var hasListener : Bool = false
 
@@ -251,8 +251,8 @@ class RNMBXLocationModule: RCTEventEmitter {
     throttler.cancel()
   }
   
-  @objc func getLastKnownLocation() -> RNMBXLocation? {
-    let last = RNMBXLocation()
+  @objc func getLastKnownLocation() -> RNMBXLocationData? {
+    let last = RNMBXLocationData()
     last.heading = _locationProvider.latestHeading
     last.location = _locationProvider.getLastObservedLocation()
     return last
