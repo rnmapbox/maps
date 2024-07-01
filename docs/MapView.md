@@ -712,7 +712,9 @@ Queries the currently loaded data for elevation at a geographical location.<br/>
 | `coordinate` | `Position` | `Yes` | the coordinates to query elevation at |
 
 
-[Query Terrain Elevation](../examples/V10/QueryTerrainElevation)### setSourceVisibility(visible, sourceId[, sourceLayerId])
+[Query Terrain Elevation](../examples/V10/QueryTerrainElevation)
+
+### setSourceVisibility(visible, sourceId[, sourceLayerId])
 
 Sets the visibility of all the layers referencing the specified `sourceLayerId` and/or `sourceId`
 
