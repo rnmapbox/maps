@@ -1,7 +1,7 @@
 import MapboxMaps
 
 internal extension Array where Element == Any {
-  func asExpression() throws -> Expression? {
+  func asExpression() throws -> MapboxMaps.Expression? {
     let filter = self
     if filter.count > 0 {
       let data = try JSONSerialization.data(withJSONObject: filter, options: .prettyPrinted)
