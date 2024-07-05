@@ -129,6 +129,11 @@
     "name": "rnmapbox_maps_specs",
     "type": "all",
     "jsSrcsDir": "src/specs",
+    "includesGeneratedCode": true,
+    "outputDir": {
+      "android": "android/src/main/codegen",
+      "ios": "ios/codegen"
+    },
     "android": {
       "javaPackageName": "com.rnmapbox.rnmbx"
     }
