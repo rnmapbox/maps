@@ -143,11 +143,11 @@ class NativeMapViewModule(context: ReactApplicationContext, val viewTagResolver:
 
     override fun setHandledMapChangedEvents(
         viewRef: ViewRefTag?,
-        events: ReadableArray,
-        promise: Promise
+        events: ReadableArray?,
+        promise: Promise?
     ) {
-        withMapViewOnUIThread(viewRef, promise) {
-            it.setHandledMapChangedEvents(events.asArrayString())
+        withMapViewOnUIThread(viewRef, promise!!) {
+            it.setHandledMapChangedEvents(events!!.asArrayString())
             promise.resolve(null)
         }
     }

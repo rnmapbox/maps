@@ -8,6 +8,7 @@ import com.mapbox.maps.extension.style.types.StyleTransition
 import com.rnmapbox.rnmbx.components.styles.RNMBXStyleFactory
 import com.mapbox.maps.extension.style.expressions.generated.Expression
 import com.mapbox.maps.extension.style.light.LightPosition
+import com.rnmapbox.rnmbx.rncompat.dynamic.*
 import com.rnmapbox.rnmbx.utils.ExpressionParser
 import com.rnmapbox.rnmbx.utils.Logger
 import java.util.ArrayList

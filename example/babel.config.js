@@ -6,7 +6,7 @@ module.exports = function (api) {
   api.cache(true);
 
   return {
-    presets: ['babel-preset-expo'],
+    presets: ['@react-native/babel-preset'], //'babel-preset-expo'],
     plugins: [
       [
         'module-resolver',

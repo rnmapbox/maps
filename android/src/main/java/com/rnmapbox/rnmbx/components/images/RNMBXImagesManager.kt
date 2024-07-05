@@ -15,6 +15,7 @@ import com.mapbox.maps.ImageStretches
 import com.rnmapbox.rnmbx.components.AbstractEventEmitter
 import com.rnmapbox.rnmbx.events.constants.EventKeys
 import com.rnmapbox.rnmbx.events.constants.eventMapOf
+import com.rnmapbox.rnmbx.rncompat.dynamic.*
 import com.rnmapbox.rnmbx.utils.ImageEntry
 import com.rnmapbox.rnmbx.utils.Logger
 import com.rnmapbox.rnmbx.utils.ResourceUtils
@@ -202,15 +203,13 @@ class RNMBXImagesManager(private val mContext: ReactApplicationContext) :
         images.setNativeImages(nativeImages)
     }
 
-    override fun customEvents(): Map<String, String>? {
-        return eventMapOf(
+    override fun customEvents(): Map<String, String>? { return eventMapOf(
             EventKeys.IMAGES_MISSING to "onImageMissing"
         )
     }
 
     // region RNMBXImage children
-
-    override fun addView(parent: RNMBXImages?, childView: View?, childPosition: Int) {
+    override fun addView(parent: RNMBXImages, childView: View, childPosition: Int) {
         if (parent == null || childView == null) {
             Logger.e("RNMBXImages", "addView: parent or childView is null")
             return
@@ -225,7 +224,7 @@ class RNMBXImagesManager(private val mContext: ReactApplicationContext) :
         childView.nativeImageUpdater = parent
     }
 
-    override fun removeView(parent: RNMBXImages?, view: View?) {
+    override fun removeView(parent: RNMBXImages, view: View) {
         if (parent == null || view == null) {
             Logger.e("RNMBXImages", "removeView: parent or view is null")
             return
@@ -234,7 +233,7 @@ class RNMBXImagesManager(private val mContext: ReactApplicationContext) :
         parent.mImageViews.remove(view)
     }
 
-    override fun removeAllViews(parent: RNMBXImages?) {
+    override fun removeAllViews(parent: RNMBXImages) {
         if (parent == null) {
             Logger.e("RNMBXImages", "removeAllViews parent is null")
             return

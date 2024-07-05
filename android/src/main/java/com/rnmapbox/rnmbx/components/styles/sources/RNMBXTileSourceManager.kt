@@ -10,19 +10,19 @@ import com.rnmapbox.rnmbx.components.AbstractEventEmitter
 abstract class RNMBXTileSourceManager<T : RNMBXTileSource<*>?> internal constructor(
     reactApplicationContext: ReactApplicationContext
 ) : AbstractEventEmitter<T>(reactApplicationContext) {
-    override fun getChildAt(source: T, childPosition: Int): View {
+    override fun getChildAt(source: T & Any, childPosition: Int): View {
         return source!!.getChildAt(childPosition)
     }
 
-    override fun getChildCount(source: T): Int {
+    override fun getChildCount(source: T & Any): Int {
         return source!!.childCount
     }
 
-    override fun addView(source: T, childView: View, childPosition: Int) {
+    override fun addView(source: T & Any, childView: View, childPosition: Int) {
         source!!.addLayer(childView, childPosition)
     }
 
-    override fun removeViewAt(source: T, childPosition: Int) {
+    override fun removeViewAt(source: T & Any, childPosition: Int) {
         source!!.removeLayer(childPosition)
     }
 
