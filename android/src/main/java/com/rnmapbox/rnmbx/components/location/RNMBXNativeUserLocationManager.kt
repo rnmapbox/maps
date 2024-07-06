@@ -11,6 +11,7 @@ import com.google.gson.Gson
 import com.google.gson.stream.JsonWriter
 import com.mapbox.bindgen.Value
 import com.mapbox.maps.extension.style.expressions.generated.Expression
+import com.rnmapbox.rnmbx.rncompat.dynamic.*
 import com.rnmapbox.rnmbx.utils.Logger
 import com.rnmapbox.rnmbx.utils.extensions.toJsonArray
 import java.io.StringWriter

@@ -6,7 +6,9 @@ import com.facebook.react.uimanager.ThemedReactContext
 import com.facebook.react.uimanager.ViewGroupManager
 import com.facebook.react.uimanager.annotations.ReactProp
 import com.facebook.react.viewmanagers.RNMBXCustomLocationProviderManagerInterface
+import com.rnmapbox.rnmbx.rncompat.dynamic.*
 import com.rnmapbox.rnmbx.utils.Logger
+
 
 class RNMBXCustomLocationProviderManager : ViewGroupManager<RNMBXCustomLocationProvider>(),
     RNMBXCustomLocationProviderManagerInterface<RNMBXCustomLocationProvider> {

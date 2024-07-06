@@ -37,53 +37,53 @@ public abstract class NativeMapViewModuleSpec extends ReactContextBaseJavaModule
 
   @ReactMethod
   @DoNotStrip
-  public abstract void takeSnap(@Nullable Integer viewRef, boolean writeToDisk, Promise promise);
+  public abstract void takeSnap(@Nullable Double viewRef, boolean writeToDisk, Promise promise);
 
   @ReactMethod
   @DoNotStrip
-  public abstract void queryTerrainElevation(@Nullable Integer viewRef, ReadableArray coordinates, Promise promise);
+  public abstract void queryTerrainElevation(@Nullable Double viewRef, ReadableArray coordinates, Promise promise);
 
   @ReactMethod
   @DoNotStrip
-  public abstract void setSourceVisibility(@Nullable Integer viewRef, boolean visible, String sourceId, String sourceLayerId, Promise promise);
+  public abstract void setSourceVisibility(@Nullable Double viewRef, boolean visible, String sourceId, String sourceLayerId, Promise promise);
 
   @ReactMethod
   @DoNotStrip
-  public abstract void getCenter(@Nullable Integer viewRef, Promise promise);
+  public abstract void getCenter(@Nullable Double viewRef, Promise promise);
 
   @ReactMethod
   @DoNotStrip
-  public abstract void getCoordinateFromView(@Nullable Integer viewRef, ReadableArray atPoint, Promise promise);
+  public abstract void getCoordinateFromView(@Nullable Double viewRef, ReadableArray atPoint, Promise promise);
 
   @ReactMethod
   @DoNotStrip
-  public abstract void getPointInView(@Nullable Integer viewRef, ReadableArray atCoordinate, Promise promise);
+  public abstract void getPointInView(@Nullable Double viewRef, ReadableArray atCoordinate, Promise promise);
 
   @ReactMethod
   @DoNotStrip
-  public abstract void getZoom(@Nullable Integer viewRef, Promise promise);
+  public abstract void getZoom(@Nullable Double viewRef, Promise promise);
 
   @ReactMethod
   @DoNotStrip
-  public abstract void getVisibleBounds(@Nullable Integer viewRef, Promise promise);
+  public abstract void getVisibleBounds(@Nullable Double viewRef, Promise promise);
 
   @ReactMethod
   @DoNotStrip
-  public abstract void queryRenderedFeaturesAtPoint(@Nullable Integer viewRef, ReadableArray atPoint, ReadableArray withFilter, ReadableArray withLayerIDs, Promise promise);
+  public abstract void queryRenderedFeaturesAtPoint(@Nullable Double viewRef, ReadableArray atPoint, ReadableArray withFilter, ReadableArray withLayerIDs, Promise promise);
 
   @ReactMethod
   @DoNotStrip
-  public abstract void queryRenderedFeaturesInRect(@Nullable Integer viewRef, ReadableArray withBBox, ReadableArray withFilter, ReadableArray withLayerIDs, Promise promise);
+  public abstract void queryRenderedFeaturesInRect(@Nullable Double viewRef, ReadableArray withBBox, ReadableArray withFilter, ReadableArray withLayerIDs, Promise promise);
 
   @ReactMethod
   @DoNotStrip
-  public abstract void setHandledMapChangedEvents(@Nullable Integer viewRef, ReadableArray events, Promise promise);
+  public abstract void setHandledMapChangedEvents(@Nullable Double viewRef, ReadableArray events, Promise promise);
 
   @ReactMethod
   @DoNotStrip
-  public abstract void clearData(@Nullable Integer viewRef, Promise promise);
+  public abstract void clearData(@Nullable Double viewRef, Promise promise);
 
   @ReactMethod
   @DoNotStrip
-  public abstract void querySourceFeatures(@Nullable Integer viewRef, String sourceId, ReadableArray withFilter, ReadableArray withSourceLayerIDs, Promise promise);
+  public abstract void querySourceFeatures(@Nullable Double viewRef, String sourceId, ReadableArray withFilter, ReadableArray withSourceLayerIDs, Promise promise);
 }

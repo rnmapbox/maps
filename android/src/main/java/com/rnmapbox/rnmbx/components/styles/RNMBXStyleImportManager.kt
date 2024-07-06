@@ -11,6 +11,7 @@ import com.facebook.react.viewmanagers.RNMBXStyleImportManagerInterface
 import com.rnmapbox.rnmbx.components.AbstractEventEmitter
 import com.rnmapbox.rnmbx.components.mapview.RNMBXMapView
 import com.mapbox.bindgen.Value
+import com.rnmapbox.rnmbx.rncompat.dynamic.*
 import com.rnmapbox.rnmbx.utils.Logger
 import com.rnmapbox.rnmbx.utils.extensions.toValueHashMap
 import org.json.JSONObject

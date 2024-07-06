@@ -5,6 +5,7 @@ import com.facebook.react.bridge.ReadableArray
 import com.facebook.react.bridge.ReadableMap
 import com.facebook.react.bridge.ReadableType
 import com.mapbox.bindgen.Value
+import com.rnmapbox.rnmbx.rncompat.dynamic.*
 
 fun ReadableMap.toValueHashMap(): HashMap<String, Value> {
     var result = hashMapOf<String, Value>()

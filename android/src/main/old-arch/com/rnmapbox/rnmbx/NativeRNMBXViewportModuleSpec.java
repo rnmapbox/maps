@@ -37,13 +37,13 @@ public abstract class NativeRNMBXViewportModuleSpec extends ReactContextBaseJava
 
   @ReactMethod
   @DoNotStrip
-  public abstract void getState(@Nullable Integer viewRef, Promise promise);
+  public abstract void getState(@Nullable Double viewRef, Promise promise);
 
   @ReactMethod
   @DoNotStrip
-  public abstract void transitionTo(@Nullable Integer viewRef, ReadableMap state, ReadableMap transition, Promise promise);
+  public abstract void transitionTo(@Nullable Double viewRef, ReadableMap state, ReadableMap transition, Promise promise);
 
   @ReactMethod
   @DoNotStrip
-  public abstract void idle(@Nullable Integer viewRef, Promise promise);
+  public abstract void idle(@Nullable Double viewRef, Promise promise);
 }
