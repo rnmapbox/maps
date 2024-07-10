@@ -470,6 +470,11 @@ type CallbablePropKeysWithoutOn = CallbablePropKeys extends `on${infer C}`
 
 type Debounced<F> = F & { clear(): void; flush(): void };
 
+type LayerProperties = {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  [key: string]: any;
+};
+
 /**
  * MapView backed by Mapbox Native GL
  */
@@ -775,6 +780,55 @@ class MapView extends NativeBridgeComponent(
     }
   }
 
+  async queryRenderedLayersInRect(
+    bbox: BBox | [],
+    filter: FilterExpression | [] = [],
+    layerIDs: string[] | null = null,
+  ) {
+    if (
+      bbox != null &&
+      (bbox.length === 4 || (RNMBXModule.MapboxV10 && bbox.length === 0))
+    ) {
+      const res = await this._runNative('queryRenderedLayersInRect', [
+        bbox,
+        getFilter(filter),
+        layerIDs,
+      ]);
+
+      if (isAndroid()) {
+        return JSON.parse(res as unknown as string);
+      }
+
+      return res;
+    } else {
+      throw new Error(
+        'Must pass in a valid bounding box: [top, right, bottom, left]. An empty array [] is also acceptable in v10.',
+      );
+    }
+  }
+  async getStyles() {
+    return JSON.parse(await this._runNative('getStyles'));
+  }
+
+  async setLayerProperties(layerID: string, properities: LayerProperties) {
+    return await this._runNative('setLayerProperties', [layerID, properities]);
+  }
+
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  async setLayerProperty(layerID: string, property: string, value: any) {
+    return await this._runNative('setLayerProperty', [
+      layerID,
+      property,
+      value,
+    ]);
+  }
+
+  async setLayerFilter(layerID: string, filter: string[]) {
+    return await this._runNative('setLayerFilter', [
+      layerID,
+      getFilter(filter),
+    ]);
+  }
   /**
    * Returns an array of GeoJSON Feature objects representing features within the specified vector tile or GeoJSON source that satisfy the query parameters.
    *

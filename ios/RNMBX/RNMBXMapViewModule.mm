@@ -139,6 +139,36 @@ RCT_EXPORT_METHOD(querySourceFeatures:(nonnull NSNumber*)viewRef sourceId:(NSStr
     } reject:reject methodName:@"querySourceFeatures"];
 }
 
+RCT_EXPORT_METHOD(queryRenderedLayersInRect:(nonnull NSNumber*)viewRef withBBox:(NSArray *)withBBox withFilter:(NSArray *)withFilter withLayerIDs:(NSArray *)withLayerIDs resolve:(RCTPromiseResolveBlock)resolve reject:(RCTPromiseRejectBlock)reject) {
+    [self withMapView:viewRef block:^(RNMBXMapView *view) {
+        [RNMBXMapViewManager queryRenderedLayersInRect:view withBBox:withBBox withFilter:withFilter withLayerIDs:withLayerIDs resolver:resolve rejecter:reject];
+    } reject:reject methodName:@"queryRenderedLayersInRect"];
+}
+
+RCT_EXPORT_METHOD(getStyles:(nonnull NSNumber*)viewRef resolve:(RCTPromiseResolveBlock)resolve reject:(RCTPromiseRejectBlock)reject) {
+    [self withMapView:viewRef block:^(RNMBXMapView *view) {
+        [RNMBXMapViewManager getStyles:view resolver:resolve rejecter:reject];
+    } reject:reject methodName:@"getStyles"];
+}
+
+RCT_EXPORT_METHOD(setLayerProperties: (nonnull NSNumber *)viewRef withLayerID:(NSString *)withLayerID withProperties: (NSDictionary *)withProperties resolve:(RCTPromiseResolveBlock)resolve reject:(RCTPromiseRejectBlock)reject){
+    [self withMapView:viewRef block:^(RNMBXMapView *view) {
+        [RNMBXMapViewManager setLayerProperties:view withLayerID:withLayerID withProperties:withProperties resolver:resolve rejecter:reject];
+    } reject:reject methodName:@"setLayerProperties"];
+}
+
+RCT_EXPORT_METHOD(setLayerProperty : (nonnull NSNumber *)viewRef withLayerID: (nonnull NSString *)withLayerID withProperty: (nonnull NSString *)withProperty withValue: (id)withValue resolve: (RCTPromiseResolveBlock)resolve reject: (RCTPromiseRejectBlock)reject){
+    [self withMapView:viewRef block:^(RNMBXMapView *view) {
+        [RNMBXMapViewManager setLayerProperty:view withLayerID:withLayerID withProperty:withProperty withValue:withValue resolver:resolve rejecter:reject];
+    } reject:reject methodName:@"setLayerProperty"];
+}
+
+RCT_EXPORT_METHOD(setLayerFilter: (nonnull NSNumber *)viewRef withLayerID: (NSString *)withLayerID withFilter: (NSArray *)withFilter resolve: (RCTPromiseResolveBlock)resolve rejecte: (RCTPromiseRejectBlock)reject){
+    [self withMapView:viewRef block:^(RNMBXMapView *view) {
+        [RNMBXMapViewManager setLayerFilter:view withLayerID:withLayerID withFilter:withFilter resolver:resolve rejecter:reject];
+    } reject:reject methodName:@"setLayerFilter"];
+}
+
 // Thanks to this guard, we won't compile this code when we build for the old architecture.
 #ifdef RCT_NEW_ARCH_ENABLED
 - (std::shared_ptr<facebook::react::TurboModule>)getTurboModule:

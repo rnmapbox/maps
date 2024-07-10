@@ -224,4 +224,101 @@ extension RNMBXMapViewManager {
           }
         }
     }
+
+    @objc public static func queryRenderedLayersInRect(
+        _ map: RNMBXMapView,
+        withBBox bbox: [NSNumber],
+        withFilter filter: [Any]?,
+        withLayerIDs layerIDs: [String]?,
+        resolver: @escaping RCTPromiseResolveBlock,
+        rejecter: @escaping RCTPromiseRejectBlock) -> Void {
+            let top = bbox.isEmpty ? 0.0 : CGFloat(bbox[0].floatValue)
+            let right = bbox.isEmpty ? 0.0 : CGFloat(bbox[1].floatValue)
+            let bottom = bbox.isEmpty ? 0.0 : CGFloat(bbox[2].floatValue)
+            let left = bbox.isEmpty ? 0.0 : CGFloat(bbox[3].floatValue)
+            let rect = bbox.isEmpty ? CGRect(x: 0.0, y: 0.0, width: map.bounds.size.width, height: map.bounds.size.height) : CGRect(x: [left,right].min()!, y: [top,bottom].min()!, width: abs(right-left), height: abs(bottom-top))
+            logged("queryRenderedLayersInRect.option", rejecter: rejecter) {
+              let options = try RenderedQueryOptions(layerIds: layerIDs?.isEmpty ?? true ? nil : layerIDs, filter: filter?.asExpression())
+              map.mapboxMap.queryRenderedFeatures(with: rect, options: options) { result in
+                switch result {
+                case .success(let features):
+                  resolver(features.compactMap { queriedFeature in
+                      logged("queryRenderedLayersInRect.queriedfeature.map") { 
+                        return ["id":queriedFeature.sourceLayer, "feature": try queriedFeature.feature.toJSON()] }
+                    })
+                case .failure(let error):
+                  rejecter("queryRenderedLayersInRect","failed to query features", error)
+                }
+              }
+            }
+        }
+    @objc public static func getStyles(
+        _ map: RNMBXMapView,
+        resolver: @escaping RCTPromiseResolveBlock,
+        rejecter: @escaping RCTPromiseRejectBlock) -> Void {
+            logged("getStyles.option", rejecter: rejecter) {
+              resolver(map.mapboxMap.style.JSON)
+            }
+        }
+    
+    @objc public static func setLayerProperties(
+        _ map: RNMBXMapView,
+        withLayerID layerID: String,
+        withProperties properties: [String: Any],
+        resolver: @escaping RCTPromiseResolveBlock,
+        rejecter: @escaping RCTPromiseRejectBlock) -> Void {
+          do{
+            try map.mapboxMap.style.setLayerProperties(for: layerID, properties: properties)
+            resolver(nil)
+          } catch let error {
+            rejecter("failed_to_set_properties", "An error occurred while setting layer properties: \(error.localizedDescription)", error)
+          }
+        }
+
+    @objc public static func setLayerProperty(
+        _ map: RNMBXMapView,
+        withLayerID layerID: String,
+        withProperty property: String,
+        withValue value: Any,
+        resolver: @escaping RCTPromiseResolveBlock,
+        rejecter: @escaping RCTPromiseRejectBlock) -> Void {
+          do{
+            try map.mapboxMap.style.setLayerProperty(for: layerID, property: property, value: value)
+            resolver(nil)
+          } catch let error {
+            rejecter("failed_to_set_property", "An error occurred while setting layer property: \(error.localizedDescription)", error)
+          }
+        }
+
+    @objc public static func setLayerFilter(
+        _ map: RNMBXMapView,
+        withLayerID layerID: String,
+        withFilter filter: [Any],
+        resolver: @escaping RCTPromiseResolveBlock,
+        rejecter: @escaping RCTPromiseRejectBlock) -> Void {
+        
+        do {
+            var layer:Layer = try map.mapboxMap.style.layer(withId: layerID)
+            if let specificLayer = layer as? FillLayer {
+                try map.mapboxMap.style.updateLayer(withId: layerID, type: FillLayer.self) { (updatedLayer: inout FillLayer) in
+                    updatedLayer.filter = try filter.asExpression()
+                }
+            } else if let specificLayer = layer as? LineLayer {
+                try map.mapboxMap.style.updateLayer(withId: layerID, type: LineLayer.self) { (updatedLayer: inout LineLayer) in
+                    updatedLayer.filter = try filter.asExpression()
+                }
+            } else if let specificLayer = layer as? CircleLayer {
+                try map.mapboxMap.style.updateLayer(withId: layerID, type: CircleLayer.self) { (updatedLayer: inout CircleLayer) in
+                    updatedLayer.filter = try filter.asExpression()
+                }
+            } else {
+                // Handle other layer types as needed
+                throw NSError(domain: "", code: 0, userInfo: [NSLocalizedDescriptionKey: "Unsupported layer type"])
+            }
+
+            resolver(nil)
+        } catch let error {
+            rejecter("failed_to_set_filter", "Set Layer Filter: \(error.localizedDescription)", error)
+        }
+    }
 }

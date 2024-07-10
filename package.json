@@ -1,7 +1,7 @@
 {
-  "name": "@rnmapbox/maps",
-  "description": "A Mapbox react native module for creating custom maps",
-  "version": "10.1.27",
+  "name": "rnmapbox-ditch",
+  "description": "A customized Mapbox React Native module designed to create tailored maps, specifically enhanced for the unique requirements of Ditch Navigation.",
+  "version": "1.0.6",
   "publishConfig": {
     "access": "public"
   },
@@ -13,10 +13,9 @@
     "mapbox",
     "react-native"
   ],
-  "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/rnmapbox/maps"
+    "url": "https://github.com/extentdevices/ditch-rnmapbox"
   },
   "main": "lib/commonjs/index",
   "module": "lib/module/index",
