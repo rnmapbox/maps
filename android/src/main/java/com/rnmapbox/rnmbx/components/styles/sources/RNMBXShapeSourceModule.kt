@@ -44,8 +44,8 @@ class RNMBXShapeSourceModule(reactContext: ReactApplicationContext?, private val
     override fun getClusterLeaves(
         viewRef: ViewRefTag?,
         featureJSON: String,
-        number: Int,
-        offset: Int,
+        number: Double,
+        offset: Double,
         promise: Promise
     ) {
         withShapeSourceOnUIThread(viewRef, promise) {

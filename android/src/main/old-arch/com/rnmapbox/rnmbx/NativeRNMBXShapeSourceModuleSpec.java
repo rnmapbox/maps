@@ -36,13 +36,13 @@ public abstract class NativeRNMBXShapeSourceModuleSpec extends ReactContextBaseJ
 
   @ReactMethod
   @DoNotStrip
-  public abstract void getClusterExpansionZoom(@Nullable Integer viewRef, String featureJSON, Promise promise);
+  public abstract void getClusterExpansionZoom(@Nullable Double viewRef, String featureJSON, Promise promise);
 
   @ReactMethod
   @DoNotStrip
-  public abstract void getClusterLeaves(@Nullable Integer viewRef, String featureJSON, int number, int offset, Promise promise);
+  public abstract void getClusterLeaves(@Nullable Double viewRef, String featureJSON, double number, double offset, Promise promise);
 
   @ReactMethod
   @DoNotStrip
-  public abstract void getClusterChildren(@Nullable Integer viewRef, String featureJSON, Promise promise);
+  public abstract void getClusterChildren(@Nullable Double viewRef, String featureJSON, Promise promise);
 }
