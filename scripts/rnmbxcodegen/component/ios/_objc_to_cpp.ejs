@@ -1,0 +1,29 @@
+<%_ let type = property.typeAnnotation.type _%>
+<%_ if (type == "StringTypeAnnotation") { _%>
+  auto <%= property.name %> = std::string([[<%= objcDictName %> objectForKey:@"<%= property.name %>"] UTF8String]);
+<%_ } else if (type == "DoubleTypeAnnotation") { _%>
+  auto <%= property.name %> = [[<%= objcDictName %> objectForKey:@"<%= property.name %>"] doubleValue];
+<%_ } else if (type == "ArrayTypeAnnotation") { _%>
+  NSArray* <%= property.name %>Array = [<%= objcDictName %> objectForKey:@"<%= property.name %>"];
+  std::vector<<%= cppType %>> <%= property.name %>;
+  <%= property.name %>.reserve(<%= property.name %>Array.count);
+  for (auto i in <%= property.name %>Array) {
+    <%- include('_objc_to_cpp.ejs', {property: {name: "element", isObj: false, typeAnnotation: property.typeAnnotation.elementType}, objcDictName: "i", cppType: cppType}) _%> 
+    <%= property.name %>.push_back(element);
+  }
+<%_ } else if (type == "ObjectTypeAnnotation") { _%>
+  auto <%= property.name %> = [&<%= objcDictName %>]() {
+      auto <%= property.name %>Dict = <% -%>
+        <%_ if (property.isObj === false) { -%>
+          <%_ %><%= objcDictName %>;
+        <%_ } else { -%>
+          [<%= objcDictName %> objectForKey:@"<%= property.name %>"];
+        <%_ } _%>
+      <%_ let properties = property.typeAnnotation.properties _%>
+      <%_ let nestedObjcDictName = `${property.name}Dict` _%>
+      <%_ properties.forEach(function(property) { _%>
+        <%- include('_objc_to_cpp.ejs', {property: property, objcDictName: nestedObjcDictName, cppType: `${cppType}${pascelCase(property.name)}`}) %>
+      <%_ }); _%>
+      return <%= cppType %>{<%= properties.map(p => p.name).join(",") %>}; 
+    }();
+<%_ } _%>

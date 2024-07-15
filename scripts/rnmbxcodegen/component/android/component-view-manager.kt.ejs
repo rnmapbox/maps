@@ -1,0 +1,56 @@
+/***
+to: android/src/main/java/<%= meta.javapkg.replaceAll('.','/') %>/<%= Name %>Manager.kt
+***/
+package <%= meta.javapkg %>
+
+import com.facebook.react.bridge.ReactApplicationContext
+import com.facebook.react.uimanager.ThemedReactContext
+import com.rnmapbox.rnmbx.components.AbstractEventEmitter
+import com.rnmapbox.rnmbx.utils.ViewTagResolver
+import <%= meta.javapkg %>.<%= Name %>
+import com.facebook.react.viewmanagers.<%= Name %>ManagerInterface
+import com.facebook.react.uimanager.annotations.ReactProp
+import com.rnmapbox.rnmbx.events.constants.EventKeys
+import com.rnmapbox.rnmbx.events.constants.eventMapOf
+
+class <%= Name %>Manager(private val mContext: ReactApplicationContext, val viewTagResolver: ViewTagResolver) : AbstractEventEmitter<<%= Name %>?>(
+        mContext
+), <%= Name %>ManagerInterface<<%= Name %>> {
+
+    override fun getName(): String {
+        return NAME
+    }
+
+    override fun createViewInstance(reactContext: ThemedReactContext): <%= Name %> {
+        return <%= Name %>(reactContext, this)
+    }
+
+    <%_ component.props.forEach(function(prop) { _%>
+    @ReactProp(name = "<%= prop.name %>")
+    override fun set<%= pascelCase(prop.name) %>(view: <%= Name %>, value: <%= typeAnnotationKotlinType(prop.typeAnnotation) %>) {
+        view?.<%= prop.name %> = value;
+    }
+    <%_ }); _%>
+  
+    <%_ if (component.events.length > 0) { _%>
+    //region Custom Events
+    override fun customEvents(): Map<String, String>? {
+        return eventMapOf(
+          <%_ component.events.forEach(function(event, index) { _%>
+            EventKeys.<%= camelToUpperSnakeCase(removePrefix(Name, "RNMBX")) %>_<%= pascelToUpperSnakeCase(event.name) %> to "<%= event.name %>",
+          <%_ }); _%>
+        )
+    }
+
+    override fun getCommandsMap(): Map<String, Int>? {
+        return mapOf(
+            "_useCommandName" to 1
+        );
+    }
+    //endregion
+    <%_ } _%>
+
+    companion object {
+        const val NAME = "<%= Name %>"
+    }
+}

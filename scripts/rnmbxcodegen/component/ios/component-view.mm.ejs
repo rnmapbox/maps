@@ -1,0 +1,115 @@
+/***
+to: ios/rnmbx/generated/<%= Name %>ComponentView.mm
+***/
+#ifdef RCT_NEW_ARCH_ENABLED
+
+#import "<%= Name %>ComponentView.h"
+
+#import <React/RCTConversions.h>
+#import <React/RCTFabricComponentsPlugins.h>
+
+#import <react/renderer/components/rnmapbox_maps_specs/ComponentDescriptors.h>
+#import <react/renderer/components/rnmapbox_maps_specs/EventEmitters.h>
+#import <react/renderer/components/rnmapbox_maps_specs/Props.h>
+#import <react/renderer/components/rnmapbox_maps_specs/RCTComponentViewHelpers.h>
+
+#import "rnmapbox_maps-Swift.pre.h"
+
+#import "RCTFollyConvert.h"
+
+using namespace facebook::react;
+
+
+@implementation <%= Name %>ComponentView {
+    <%= Name %> *_view;
+}
+
+- (instancetype)initWithFrame:(CGRect)frame
+{
+  if (self = [super initWithFrame:frame]) {
+    static const auto defaultProps = std::make_shared<const <%= Name %>Props>();
+    _props = defaultProps;
+    _view = [[<%= Name %> alloc] init];
+    [self prepareView];
+    
+    self.contentView = _view;
+  }
+  
+  return self;
+}
+
+- (void)prepareView
+{
+  __weak __typeof__(self) weakSelf = self;
+
+  [_view setOnStatusChanged:^(NSDictionary* event) {
+    __typeof__(self) strongSelf = weakSelf;
+    
+    if (strongSelf != nullptr && strongSelf->_eventEmitter != nullptr) {
+      auto type = std::string([[event objectForKey:@"type"] UTF8String]);
+      auto payload = convertIdToFollyDynamic([event objectForKey:@"payload"]);
+      <%= Name %>EventEmitter::OnStatusChanged event = {type, payload};
+      strongSelf->_eventEmitter->onStatusChanged(event);
+    }
+  }];
+}
+
+
+#pragma mark - RCTComponentViewProtocol
+
++ (ComponentDescriptorProvider)componentDescriptorProvider
+{
+  return concreteComponentDescriptorProvider<<%= Name %>ComponentDescriptor>();
+}
+
+- (void)updateProps:(const Props::Shared &)props oldProps:(const Props::Shared &)oldProps
+{
+  const auto &oldViewProps = static_cast<const <%= Name %>Props &>(*oldProps);
+  const auto &newViewProps = static_cast<const <%= Name %>Props &>(*props);
+
+    /*
+  if (!oldProps.get() || oldViewProps.transitionsToIdleUponUserInteraction != newViewProps.transitionsToIdleUponUserInteraction) {
+    _view.transitionsToIdleUponUserInteraction = convertDynamicToOptional_boolean(newViewProps.transitionsToIdleUponUserInteraction, @"transitionsToIdleUponUserInteraction");
+  }
+*/
+  <% component.props.forEach(function(prop) { %>
+    <% if (prop.typeAnnotation.type == "BooleanTypeAnnotation") { %>
+      if (!oldProps.get() || oldViewProps.<%= prop.name %> != newViewProps.<%= prop.name %>) {
+        _view.<%= prop.name %> = newViewProps.<%= prop.name %>;
+      }
+    <% } %>
+  <% }); %>
+
+  [super updateProps:props oldProps:oldProps];
+
+  <% component.events.forEach(function (event) { %>
+    <% let eventGuardProp = component.findEventGuard(event) %>
+    <% if (eventGuardProp != null) { %>
+        if (!oldProps.get() || oldViewProps.<%= eventGuardProp.name %> != newViewProps.<%= eventGuardProp.name %>) {
+          if (newViewProps.<%= eventGuardProp.name %>) {
+            __weak __typeof__(self) weakSelf = self;
+            [_view set<%= pascelCase(event.name) %>:^(NSDictionary* event) {
+              __typeof__(self) strongSelf = weakSelf;
+              if (strongSelf != nullptr && strongSelf->_eventEmitter != nullptr) {
+                <% let arguments = event.typeAnnotation.argument.properties %>
+                <%_ arguments.forEach(function (property) { %>
+                  <%- include('_objc_to_cpp.ejs', { property, objcDictName: "event", cppType: `${Name}EventEmitter::${pascelCase(event.name)}${pascelCase(property.name)}` }) %>
+                <%_ }); _%>
+                std::dynamic_pointer_cast<const facebook::react::<%= Name %>EventEmitter>(strongSelf->_eventEmitter)-><%= event.name %>({<%= arguments.map(a => a.name).join(",") %>});
+              }
+            }];
+          } else {
+            [_view set<%= pascelCase(event.name) %>:nil];
+          }
+        }
+    <% } %>
+  <% }); %>
+}
+@end
+
+Class<RCTComponentViewProtocol> <%= Name %>Cls(void)
+{
+  return <%= Name %>ComponentView.class;
+}
+
+#endif // RCT_NEW_ARCH_ENABLED

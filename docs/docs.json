@@ -3212,6 +3212,36 @@
       }
     ]
   },
+  "Location": {
+    "description": "",
+    "displayName": "Location",
+    "methods": [],
+    "props": [
+      {
+        "name": "onHeadingChange",
+        "required": true,
+        "type": {
+          "name": "func",
+          "funcSignature": "(event:OnHeadingChangeEventType['payload']) => void"
+        },
+        "default": "none",
+        "description": "FIX ME NO DESCRIPTION\n*signature:*`(event:OnHeadingChangeEventType['payload']) => void`"
+      },
+      {
+        "name": "onLocationChange",
+        "required": true,
+        "type": {
+          "name": "func",
+          "funcSignature": "(event:OnLocationChangeEventType['payload']) => void"
+        },
+        "default": "none",
+        "description": "FIX ME NO DESCRIPTION\n*signature:*`(event:OnLocationChangeEventType['payload']) => void`"
+      }
+    ],
+    "fileNameWithExt": "Location.tsx",
+    "relPath": "src/components/Location.tsx",
+    "name": "Location"
+  },
   "LocationPuck": {
     "description": "Renders a puck on the map that shows the device's current location.",
     "displayName": "LocationPuck",

@@ -2,6 +2,7 @@ package com.rnmapbox.rnmbx.v11compat.location;
 
 import android.Manifest.permission.ACCESS_COARSE_LOCATION
 import android.Manifest.permission.ACCESS_FINE_LOCATION
+import android.animation.ValueAnimator
 import android.content.Context
 import android.os.Looper
 import androidx.annotation.RequiresPermission
@@ -14,6 +15,8 @@ import com.mapbox.android.core.location.LocationEngine as _LocationEngine
 import com.mapbox.android.core.location.LocationEngineCallback as _LocationEngineCallback
 import com.mapbox.android.core.location.LocationEngineRequest
 import com.mapbox.android.core.location.LocationEngineProvider
+import com.mapbox.common.location.LocationError
+import com.mapbox.maps.plugin.locationcomponent.LocationConsumer as _LocationConsumer
 
 
 import android.location.Location as _Location
@@ -59,4 +62,13 @@ val Location.timestamp: Long
 
 fun createLocationEngine(context: Context): LocationEngine {
     return LocationEngineProvider.getBestLocationEngine(context)
+}
+
+interface LocationConsumer : _LocationConsumer {
+    fun onError(error: LocationError);
+    fun onHorizontalAccuracyRadiusUpdated(
+        vararg radius: Double,
+        options: (ValueAnimator.() -> Unit)?
+    );
+    fun onPuckAccuracyRadiusAnimatorDefaultOptionsUpdated(options: ValueAnimator.() -> Unit);
 }

@@ -3,8 +3,8 @@ import MapboxMaps
 
 #if !RNMBX_11
 
-@objc(RNMBXLocation)
-class RNMBXLocation: NSObject {
+@objc(RNMBXLocationData)
+class RNMBXLocationData: NSObject {
   var location : CLLocation = CLLocation(latitude: 0.0, longitude: 0.0)
   
   var heading : CLHeading? = nil

@@ -63,7 +63,9 @@ class DocJSONBuilder {
     if (!Array.isArray(component.methods)) {
       return;
     }
-
+    if (!component.props) {
+      return;
+    }
     for (const [propName, prop] of Object.entries(component.props)) {
       if (prop.description.includes('@private')) {
         delete component.props[propName];

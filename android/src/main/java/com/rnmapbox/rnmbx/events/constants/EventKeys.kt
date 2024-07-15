@@ -32,7 +32,12 @@ enum class EventKeys(val value: String) {
     USER_LOCATION_UPDATE(ns("user.location.update")),
 
     // viewport events
-    VIEWPORT_STATUS_CHANGE(ns("viewport.statuschange"))
+    VIEWPORT_STATUS_CHANGE(ns("viewport.statuschange")),
+
+    // location events
+    LOCATION_ON_BEARING_CHANGE(ns("location.onbearingchange")),
+
+    LOCATION_ON_LOCATION_CHANGE(ns("location.onlocationchange")),
 }
 
 fun eventMapOf(vararg values: Pair<EventKeys, String>): Map<String, String> {

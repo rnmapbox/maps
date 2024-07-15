@@ -21,6 +21,7 @@ import com.rnmapbox.rnmbx.components.images.RNMBXImageManager
 import com.rnmapbox.rnmbx.components.images.RNMBXImageModule
 import com.rnmapbox.rnmbx.components.images.RNMBXImagesManager
 import com.rnmapbox.rnmbx.components.location.RNMBXCustomLocationProviderManager
+import com.rnmapbox.rnmbx.components.location.RNMBXLocationManager
 import com.rnmapbox.rnmbx.components.location.RNMBXNativeUserLocationManager
 import com.rnmapbox.rnmbx.components.mapview.NativeMapViewModule
 import com.rnmapbox.rnmbx.components.mapview.RNMBXMapViewManager
@@ -60,7 +61,7 @@ import com.rnmapbox.rnmbx.utils.ViewTagResolver
 class RNMBXPackage : TurboReactPackage() {
 
     var viewTagResolver: ViewTagResolver? = null
-    fun getViewTagResolver(context: ReactApplicationContext, module: String) : ViewTagResolver {
+    fun getViewTagResolver(context: ReactApplicationContext, @Suppress("UNUSED_PARAMETER") module: String) : ViewTagResolver {
         val viewTagResolver = viewTagResolver
         if (viewTagResolver == null) {
             val result = ViewTagResolver(context)
@@ -71,7 +72,7 @@ class RNMBXPackage : TurboReactPackage() {
     }
 
     var shapeAnimators: ShapeAnimatorManager? = null
-    fun getShapeAnimators(module: String): ShapeAnimatorManager {
+    fun getShapeAnimators(@Suppress("UNUSED_PARAMETER") module: String): ShapeAnimatorManager {
         val shapeAnimators = shapeAnimators
         if (shapeAnimators == null) {
             val result = ShapeAnimatorManager()
@@ -123,6 +124,7 @@ class RNMBXPackage : TurboReactPackage() {
         managers.add(RNMBXMapViewManager(reactApplicationContext, getViewTagResolver(reactApplicationContext, "RNMBXMapViewManager")))
         managers.add(RNMBXStyleImportManager(reactApplicationContext))
         managers.add(RNMBXModelsManager(reactApplicationContext))
+        managers.add(RNMBXLocationManager(reactApplicationContext, getViewTagResolver(reactApplicationContext, "RNMBXLocationManager")))
 
         // annotations
         managers.add(RNMBXMarkerViewManager(reactApplicationContext))
@@ -163,145 +165,64 @@ class RNMBXPackage : TurboReactPackage() {
         return managers
     }
 
+    fun reactModuleInfo(
+        name: String,
+        isTurboModule: Boolean = false
+    ): ReactModuleInfo {
+        return ReactModuleInfo(
+            /*name=*/name,
+            /*className=*/name,
+            /*canOverrideExistingModule=*/false,
+            /*needsEagerInit=*/false,
+            /*hasConstants=*/true,
+            /*isCxxModule=*/false,
+            /*isTurboModule=*/isTurboModule
+        )
+    }
+
     override fun getReactModuleInfoProvider(): ReactModuleInfoProvider {
         resetViewTagResolver()
         return ReactModuleInfoProvider {
             val moduleInfos: MutableMap<String, ReactModuleInfo> = HashMap()
             val isTurboModule = BuildConfig.IS_NEW_ARCHITECTURE_ENABLED
-            moduleInfos[RNMBXModule.REACT_CLASS] = ReactModuleInfo(
-                RNMBXModule.REACT_CLASS,
-                RNMBXModule.REACT_CLASS,
-                false,  // canOverrideExistingModule
-                false,  // needsEagerInit
-                true,  // hasConstants
-                false,  // isCxxModule
-                false // isTurboModule
-            )
-            moduleInfos[RNMBXLocationModule.REACT_CLASS] = ReactModuleInfo(
-                RNMBXLocationModule.REACT_CLASS,
-                RNMBXLocationModule.REACT_CLASS,
-                false,  // canOverrideExistingModule
-                false,  // needsEagerInit
-                true,  // hasConstants
-                false,  // isCxxModule
-                false // isTurboModule
-            )
-            moduleInfos[RNMBXOfflineModule.REACT_CLASS] = ReactModuleInfo(
-                RNMBXOfflineModule.REACT_CLASS,
-                RNMBXOfflineModule.REACT_CLASS,
-                false,  // canOverrideExistingModule
-                false,  // needsEagerInit
-                true,  // hasConstants
-                false,  // isCxxModule
-                false // isTurboModule
-            )
-            moduleInfos[RNMBXTileStoreModule.REACT_CLASS] = ReactModuleInfo(
-                RNMBXTileStoreModule.REACT_CLASS,
-                RNMBXTileStoreModule.REACT_CLASS,
-                false,  // canOverrideExistingModule
-                false,  // needsEagerInit
-                true,  // hasConstants
-                false,  // isCxxModule
-                false // isTurboModule
-            )
-            moduleInfos[RNMBXOfflineModuleLegacy.REACT_CLASS] = ReactModuleInfo(
-                RNMBXOfflineModuleLegacy.REACT_CLASS,
-                RNMBXOfflineModuleLegacy.REACT_CLASS,
-                false,  // canOverrideExistingModule
-                false,  // needsEagerInit
-                true,  // hasConstants
-                false,  // isCxxModule
-                false // isTurboModule
-            )
-            moduleInfos[RNMBXSnapshotModule.REACT_CLASS] = ReactModuleInfo(
-                RNMBXSnapshotModule.REACT_CLASS,
-                RNMBXSnapshotModule.REACT_CLASS,
-                false,  // canOverrideExistingModule
-                false,  // needsEagerInit
-                true,  // hasConstants
-                false,  // isCxxModule
-                false // isTurboModule
-            )
-            moduleInfos[RNMBXLogging.REACT_CLASS] = ReactModuleInfo(
-                RNMBXLogging.REACT_CLASS,
-                RNMBXLogging.REACT_CLASS,
-                false,  // canOverrideExistingModule
-                false,  // needsEagerInit
-                true,  // hasConstants
-                false,  // isCxxModule
-                false // isTurboModule
-            )
-            moduleInfos[NativeMapViewModule.NAME] = ReactModuleInfo(
+            moduleInfos[RNMBXModule.REACT_CLASS] = reactModuleInfo(RNMBXModule.REACT_CLASS)
+            moduleInfos[RNMBXLocationModule.REACT_CLASS] = reactModuleInfo(RNMBXLocationModule.REACT_CLASS)
+            moduleInfos[RNMBXOfflineModule.REACT_CLASS] = reactModuleInfo(RNMBXOfflineModule.REACT_CLASS)
+            moduleInfos[RNMBXTileStoreModule.REACT_CLASS] = reactModuleInfo(RNMBXTileStoreModule.REACT_CLASS)
+            moduleInfos[RNMBXOfflineModuleLegacy.REACT_CLASS] = reactModuleInfo(RNMBXOfflineModuleLegacy.REACT_CLASS)
+            moduleInfos[RNMBXSnapshotModule.REACT_CLASS] = reactModuleInfo(RNMBXSnapshotModule.REACT_CLASS)
+            moduleInfos[RNMBXLogging.REACT_CLASS] = reactModuleInfo(RNMBXLogging.REACT_CLASS)
+            moduleInfos[NativeMapViewModule.NAME] = reactModuleInfo(
                 NativeMapViewModule.NAME,
-                NativeMapViewModule.NAME,
-                false,  // canOverrideExistingModule
-                false,  // needsEagerInit
-                false,  // hasConstants
-                false,  // isCxxModule
-                isTurboModule // isTurboModule
+                isTurboModule=isTurboModule
             )
-            moduleInfos[RNMBXViewportModule.NAME] = ReactModuleInfo(
+            moduleInfos[RNMBXViewportModule.NAME] = reactModuleInfo(
                 RNMBXViewportModule.NAME,
-                RNMBXViewportModule.NAME,
-                false,  // canOverrideExistingModule
-                false,  // needsEagerInit
-                false,  // hasConstants
-                false,  // isCxxModule
-                isTurboModule // isTurboModule
+                isTurboModule= isTurboModule
             )
-            moduleInfos[RNMBXCameraModule.NAME] = ReactModuleInfo(
+            moduleInfos[RNMBXCameraModule.NAME] = reactModuleInfo(
                 RNMBXCameraModule.NAME,
-                RNMBXCameraModule.NAME,
-                false,  // canOverrideExistingModule
-                false,  // needsEagerInit
-                false,  // hasConstants
-                false,  // isCxxModule
-                isTurboModule // isTurboModule
+                isTurboModule= isTurboModule
             )
-            moduleInfos[RNMBXShapeSourceModule.NAME] = ReactModuleInfo(
+            moduleInfos[RNMBXShapeSourceModule.NAME] = reactModuleInfo(
                 RNMBXShapeSourceModule.NAME,
-                RNMBXShapeSourceModule.NAME,
-                false,  // canOverrideExistingModule
-                false,  // needsEagerInit
-                false,  // hasConstants
-                false,  // isCxxModule
-                isTurboModule // isTurboModule
+                isTurboModule= isTurboModule
             )
-            moduleInfos[RNMBXImageModule.NAME] = ReactModuleInfo(
+            moduleInfos[RNMBXImageModule.NAME] = reactModuleInfo(
                 RNMBXImageModule.NAME,
-                RNMBXImageModule.NAME,
-                false,  // canOverrideExistingModule
-                false,  // needsEagerInit
-                false,  // hasConstants
-                false,  // isCxxModule
-                isTurboModule // isTurboModule
+                isTurboModule= isTurboModule
             )
-            moduleInfos[RNMBXPointAnnotationModule.NAME] = ReactModuleInfo(
+            moduleInfos[RNMBXPointAnnotationModule.NAME] = reactModuleInfo(
                 RNMBXPointAnnotationModule.NAME,
-                RNMBXPointAnnotationModule.NAME,
-                false,  // canOverrideExistingModule
-                false,  // needsEagerInit
-                false,  // hasConstants
-                false,  // isCxxModule
-                isTurboModule // isTurboModule
+                isTurboModule= isTurboModule
             )
-            moduleInfos[RNMBXMovePointShapeAnimatorModule.NAME] = ReactModuleInfo(
+            moduleInfos[RNMBXMovePointShapeAnimatorModule.NAME] = reactModuleInfo(
                 RNMBXMovePointShapeAnimatorModule.NAME,
-                RNMBXMovePointShapeAnimatorModule.NAME,
-                false,
-                false,
-                false,
-                false,
-                isTurboModule
+                isTurboModule= isTurboModule
             )
-            moduleInfos[RNMBXChangeLineOffsetsShapeAnimatorModule.NAME] = ReactModuleInfo(
+            moduleInfos[RNMBXChangeLineOffsetsShapeAnimatorModule.NAME] = reactModuleInfo(
                 RNMBXChangeLineOffsetsShapeAnimatorModule.NAME,
-                RNMBXChangeLineOffsetsShapeAnimatorModule.NAME,
-                false,
-                false,
-                false,
-                false,
-                isTurboModule
+                isTurboModule= isTurboModule
             )
             moduleInfos
         }
