@@ -95,6 +95,11 @@ data class OrnamentSettings(
     var position: Int = -1
 )
 
+data class FeatureObject(
+    val id: String, 
+    val feature: String
+)
+
 enum class MapGestureType {
     Move,Scale,Rotate,Fling,Shove
 }
@@ -1502,7 +1507,74 @@ open class RNMBXMapView(private val mContext: Context, var mManager: RNMBXMapVie
         }
     }
 
+    fun queryRenderedLayersInRect(rect: RectF?, filter: Expression?, layerIDs: List<String>?, response: CommandResponse) {
+        val size = mMap!!.getMapOptions().size
+        val screenBox = if (rect == null) ScreenBox(ScreenCoordinate(0.0, 0.0), ScreenCoordinate(size?.width!!.toDouble(), size?.height!!.toDouble())) else ScreenBox(
+                ScreenCoordinate(rect.right.toDouble(), rect.bottom.toDouble() ),
+                ScreenCoordinate(rect.left.toDouble(), rect.top.toDouble()),
+        )
+        mMap.queryRenderedFeatures(
+                RenderedQueryGeometry(screenBox),
+                RenderedQueryOptions(layerIDs, filter)
+        ) { features ->
+            if (features.isValue) {
+                val featuresList = ArrayList<FeatureObject>()
+                for (i in features.value!!) {
+                    val featureJson = try {
+                        i.feature.toJson()
+                    } catch (e: Exception) {
+                        Logger.e("queryRenderedFeaturesAtPoint", "Error converting feature to JSON", e)
+                        continue
+                    }
+                    featuresList.add(FeatureObject(i.sourceLayer ?: "unknown", featureJson))
+                }
 
+                response.success {
+                    it.putString("data", featuresList.toString())
+                }
+            } else {
+                response.error(features.error ?: "n/a")
+            }
+        }
+    }
+
+    fun getStyles(response: CommandResponse) {
+        val styleJSON = try {
+            val style = mMap!!.getStyle()
+            val json = style?.styleJSON ?: throw Exception("Style JSON is null")
+            json
+        } catch (e: Exception) {
+            response.error("Error converting styles to JSON: ${e.message}")
+            return
+        }
+        response.success {
+            it.putString("data", styleJSON)
+        }
+    }
+
+    fun setLayerProperties(layerId: String, properties: Value, response: CommandResponse) {
+        val style = mMap!!.getStyle()
+        try {
+            style?.setStyleLayerProperties(layerId,properties)
+            response.success {
+                it.putString("data", "Successfully set layer properties")
+            }
+        } catch (e: Exception) {
+            response.error("Error setting layer properties")
+        }
+    }
+
+    fun setLayerProperty(layerId: String, property: String, value: Value, response: CommandResponse) {
+        val style = mMap!!.getStyle()
+        try {
+            style?.setStyleLayerProperty(layerId,property,value)
+            response.success {
+                it.putString("data", "Successfully set layer property")
+            }
+        } catch (e: Exception) {
+            response.error("Error setting layer property")
+        }
+    }
     // endregion
 }
 

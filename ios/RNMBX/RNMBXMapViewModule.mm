@@ -163,12 +163,6 @@ RCT_EXPORT_METHOD(setLayerProperty : (nonnull NSNumber *)viewRef withLayerID: (n
     } reject:reject methodName:@"setLayerProperty"];
 }
 
-RCT_EXPORT_METHOD(setLayerFilter: (nonnull NSNumber *)viewRef withLayerID: (NSString *)withLayerID withFilter: (NSArray *)withFilter resolve: (RCTPromiseResolveBlock)resolve rejecte: (RCTPromiseRejectBlock)reject){
-    [self withMapView:viewRef block:^(RNMBXMapView *view) {
-        [RNMBXMapViewManager setLayerFilter:view withLayerID:withLayerID withFilter:withFilter resolver:resolve rejecter:reject];
-    } reject:reject methodName:@"setLayerFilter"];
-}
-
 // Thanks to this guard, we won't compile this code when we build for the old architecture.
 #ifdef RCT_NEW_ARCH_ENABLED
 - (std::shared_ptr<facebook::react::TurboModule>)getTurboModule:

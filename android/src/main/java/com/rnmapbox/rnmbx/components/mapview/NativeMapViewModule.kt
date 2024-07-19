@@ -12,6 +12,7 @@ import com.rnmapbox.rnmbx.utils.ViewRefTag
 import com.rnmapbox.rnmbx.utils.ViewTagResolver
 import com.rnmapbox.rnmbx.utils.extensions.toCoordinate
 import com.rnmapbox.rnmbx.utils.extensions.toScreenCoordinate
+import com.mapbox.bindgen.Value
 
 class NativeMapViewModule(context: ReactApplicationContext, val viewTagResolver: ViewTagResolver) : NativeMapViewModuleSpec(context) {
     private fun withMapViewOnUIThread(
@@ -180,6 +181,70 @@ class NativeMapViewModule(context: ReactApplicationContext, val viewTagResolver:
                 sourceId,
                 ExpressionParser.from(withFilter),
                 if (sourceLayerIds.size == 0) null else sourceLayerIds,
+                createCommandResponse(promise)
+            )
+        }
+    }
+    fun queryRenderedLayersInRect(
+        viewRef: ViewRefTag?,
+        withBBox: ReadableArray,
+        withFilter: ReadableArray,
+        withLayerIDs: ReadableArray?,
+        promise: Promise
+    ) {
+        withMapViewOnUIThread(viewRef, promise) {
+            val layerIds = ConvertUtils.toStringList(withLayerIDs)
+
+            it.queryRenderedLayersInRect(
+                ConvertUtils.toRectF(withBBox),
+                ExpressionParser.from(withFilter),
+                if (layerIds.size == 0) null else layerIds,
+                createCommandResponse(promise)
+            )
+        }
+    }
+
+    fun getStyles(
+        viewRef: ViewRefTag?,
+        promise: Promise
+    ) {
+        withMapViewOnUIThread(viewRef, promise) {
+
+            it.getStyles(
+                createCommandResponse(promise)
+            )
+        }
+    }
+
+    fun setLayerProperties(
+        viewRef: ViewRefTag?,
+        layerId: String, 
+        properties: Value,
+        promise: Promise
+    ) {
+        withMapViewOnUIThread(viewRef, promise) {
+
+            it.setLayerProperties(
+                layerId,
+                properties,
+                createCommandResponse(promise)
+            )
+        }
+    }
+
+    fun setLayerProperty(
+        viewRef: ViewRefTag?,
+        layerId: String, 
+        property: String,
+        value: Value,
+        promise: Promise
+    ) {
+        withMapViewOnUIThread(viewRef, promise) {
+
+            it.setLayerProperty(
+                layerId,
+                property,
+                value,
                 createCommandResponse(promise)
             )
         }

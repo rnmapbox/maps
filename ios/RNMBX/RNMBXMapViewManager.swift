@@ -290,35 +290,35 @@ extension RNMBXMapViewManager {
           }
         }
 
-    @objc public static func setLayerFilter(
-        _ map: RNMBXMapView,
-        withLayerID layerID: String,
-        withFilter filter: [Any],
-        resolver: @escaping RCTPromiseResolveBlock,
-        rejecter: @escaping RCTPromiseRejectBlock) -> Void {
+    // @objc public static func setLayerFilter(
+    //     _ map: RNMBXMapView,
+    //     withLayerID layerID: String,
+    //     withFilter filter: [Any],
+    //     resolver: @escaping RCTPromiseResolveBlock,
+    //     rejecter: @escaping RCTPromiseRejectBlock) -> Void {
         
-        do {
-            var layer:Layer = try map.mapboxMap.style.layer(withId: layerID)
-            if let specificLayer = layer as? FillLayer {
-                try map.mapboxMap.style.updateLayer(withId: layerID, type: FillLayer.self) { (updatedLayer: inout FillLayer) in
-                    updatedLayer.filter = try filter.asExpression()
-                }
-            } else if let specificLayer = layer as? LineLayer {
-                try map.mapboxMap.style.updateLayer(withId: layerID, type: LineLayer.self) { (updatedLayer: inout LineLayer) in
-                    updatedLayer.filter = try filter.asExpression()
-                }
-            } else if let specificLayer = layer as? CircleLayer {
-                try map.mapboxMap.style.updateLayer(withId: layerID, type: CircleLayer.self) { (updatedLayer: inout CircleLayer) in
-                    updatedLayer.filter = try filter.asExpression()
-                }
-            } else {
-                // Handle other layer types as needed
-                throw NSError(domain: "", code: 0, userInfo: [NSLocalizedDescriptionKey: "Unsupported layer type"])
-            }
+    //     do {
+    //         var layer:Layer = try map.mapboxMap.style.layer(withId: layerID)
+    //         if let specificLayer = layer as? FillLayer {
+    //             try map.mapboxMap.style.updateLayer(withId: layerID, type: FillLayer.self) { (updatedLayer: inout FillLayer) in
+    //                 updatedLayer.filter = try filter.asExpression()
+    //             }
+    //         } else if let specificLayer = layer as? LineLayer {
+    //             try map.mapboxMap.style.updateLayer(withId: layerID, type: LineLayer.self) { (updatedLayer: inout LineLayer) in
+    //                 updatedLayer.filter = try filter.asExpression()
+    //             }
+    //         } else if let specificLayer = layer as? CircleLayer {
+    //             try map.mapboxMap.style.updateLayer(withId: layerID, type: CircleLayer.self) { (updatedLayer: inout CircleLayer) in
+    //                 updatedLayer.filter = try filter.asExpression()
+    //             }
+    //         } else {
+    //             // Handle other layer types as needed
+    //             throw NSError(domain: "", code: 0, userInfo: [NSLocalizedDescriptionKey: "Unsupported layer type"])
+    //         }
 
-            resolver(nil)
-        } catch let error {
-            rejecter("failed_to_set_filter", "Set Layer Filter: \(error.localizedDescription)", error)
-        }
-    }
+    //         resolver(nil)
+    //     } catch let error {
+    //         rejecter("failed_to_set_filter", "Set Layer Filter: \(error.localizedDescription)", error)
+    //     }
+    // }
 }
