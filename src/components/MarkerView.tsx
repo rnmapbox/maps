@@ -11,7 +11,7 @@ import PointAnnotation from './PointAnnotation';
 
 const Mapbox = NativeModules.RNMBXModule;
 
-type Props = ViewProps & {
+export type MarkerViewProps = ViewProps & {
   /**
    * The center point (specified as a map coordinate) of the marker.
    */
@@ -61,8 +61,8 @@ type Props = ViewProps & {
  * This component has no dedicated `onPress` method. Instead, you should handle gestures
  * with the React views passed in as `children`.
  */
-class MarkerView extends React.PureComponent<Props> {
-  static defaultProps: Partial<Props> = {
+class MarkerView extends React.PureComponent<MarkerViewProps> {
+  static defaultProps: Partial<MarkerViewProps> = {
     anchor: { x: 0.5, y: 0.5 },
     allowOverlap: false,
     allowOverlapWithPuck: false,
