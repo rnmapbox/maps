@@ -789,17 +789,16 @@ class MapView extends NativeBridgeComponent(
       bbox != null &&
       (bbox.length === 4 || (RNMBXModule.MapboxV10 && bbox.length === 0))
     ) {
-      const res = await this._runNative('queryRenderedLayersInRect', [
-        bbox,
-        getFilter(filter),
-        layerIDs,
-      ]);
+      const res = await this._runNative<{ data: GeoJSON.Feature }>(
+        'queryRenderedLayersInRect',
+        [bbox, getFilter(filter), layerIDs],
+      );
 
       if (isAndroid()) {
-        return JSON.parse(res as unknown as string);
+        return JSON.parse(res.data as unknown as string);
       }
 
-      return res;
+      return res.data;
     } else {
       throw new Error(
         'Must pass in a valid bounding box: [top, right, bottom, left]. An empty array [] is also acceptable in v10.',
@@ -807,7 +806,8 @@ class MapView extends NativeBridgeComponent(
     }
   }
   async getStyles() {
-    return JSON.parse(await this._runNative('getStyles'));
+    const res = await this._runNative<{ data: string }>('getStyles');
+    return JSON.parse(res.data);
   }
 
   async setLayerProperties(layerID: string, properities: LayerProperties) {
@@ -823,12 +823,6 @@ class MapView extends NativeBridgeComponent(
     ]);
   }
 
-  async setLayerFilter(layerID: string, filter: string[]) {
-    return await this._runNative('setLayerFilter', [
-      layerID,
-      getFilter(filter),
-    ]);
-  }
   /**
    * Returns an array of GeoJSON Feature objects representing features within the specified vector tile or GeoJSON source that satisfy the query parameters.
    *

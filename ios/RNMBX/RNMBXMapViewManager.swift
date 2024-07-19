@@ -244,7 +244,7 @@ extension RNMBXMapViewManager {
                 case .success(let features):
                   resolver(features.compactMap { queriedFeature in
                       logged("queryRenderedLayersInRect.queriedfeature.map") { 
-                        return ["id":queriedFeature.sourceLayer, "feature": try queriedFeature.feature.toJSON()] }
+                        return ["data": ["id": queriedFeature.sourceLayer, "feature": try queriedFeature.feature.toJSON()]] }
                     })
                 case .failure(let error):
                   rejecter("queryRenderedLayersInRect","failed to query features", error)
@@ -257,7 +257,7 @@ extension RNMBXMapViewManager {
         resolver: @escaping RCTPromiseResolveBlock,
         rejecter: @escaping RCTPromiseRejectBlock) -> Void {
             logged("getStyles.option", rejecter: rejecter) {
-              resolver(map.mapboxMap.style.JSON)
+              resolver(["data": map.mapboxMap.style.JSON])
             }
         }
     

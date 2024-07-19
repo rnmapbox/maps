@@ -185,7 +185,7 @@ class NativeMapViewModule(context: ReactApplicationContext, val viewTagResolver:
             )
         }
     }
-    fun queryRenderedLayersInRect(
+    override fun queryRenderedLayersInRect(
         viewRef: ViewRefTag?,
         withBBox: ReadableArray,
         withFilter: ReadableArray,
@@ -204,7 +204,7 @@ class NativeMapViewModule(context: ReactApplicationContext, val viewTagResolver:
         }
     }
 
-    fun getStyles(
+    override fun getStyles(
         viewRef: ViewRefTag?,
         promise: Promise
     ) {
@@ -216,7 +216,7 @@ class NativeMapViewModule(context: ReactApplicationContext, val viewTagResolver:
         }
     }
 
-    fun setLayerProperties(
+    override fun setLayerProperties(
         viewRef: ViewRefTag?,
         layerId: String, 
         properties: Value,
@@ -232,7 +232,7 @@ class NativeMapViewModule(context: ReactApplicationContext, val viewTagResolver:
         }
     }
 
-    fun setLayerProperty(
+    override fun setLayerProperty(
         viewRef: ViewRefTag?,
         layerId: String, 
         property: String,
