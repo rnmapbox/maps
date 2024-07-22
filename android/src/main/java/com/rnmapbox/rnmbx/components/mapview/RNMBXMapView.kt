@@ -68,6 +68,7 @@ import java.util.*
 
 import com.rnmapbox.rnmbx.components.annotation.RNMBXPointAnnotationCoordinator
 import com.rnmapbox.rnmbx.components.images.ImageManager
+import com.google.gson.Gson;
 
 import com.rnmapbox.rnmbx.v11compat.event.*
 import com.rnmapbox.rnmbx.v11compat.feature.*
@@ -75,6 +76,7 @@ import com.rnmapbox.rnmbx.v11compat.mapboxmap.*
 import com.rnmapbox.rnmbx.v11compat.ornamentsettings.*
 import org.json.JSONException
 import org.json.JSONObject
+import com.facebook.react.bridge.ReadableMapKeySetIterator;
 
 fun <T> MutableList<T>.removeIf21(predicate: (T) -> Boolean): Boolean {
     var removed = false
@@ -87,6 +89,40 @@ fun <T> MutableList<T>.removeIf21(predicate: (T) -> Boolean): Boolean {
         }
     }
     return removed
+}
+fun convertReadableArrayToList(readableArray: ReadableArray): List<Value> {
+    val list = mutableListOf<Value>()
+    for (i in 0 until readableArray.size()) {
+        val value = when (readableArray.getType(i)) {
+            ReadableType.Boolean -> Value.valueOf(readableArray.getBoolean(i))
+            ReadableType.Number -> Value.valueOf(readableArray.getDouble(i))
+            ReadableType.String -> Value.valueOf(readableArray.getString(i) ?: "")
+            ReadableType.Map -> Value.valueOf(convertReadableMapToHashMap(readableArray.getMap(i)!!))
+            ReadableType.Array -> Value.valueOf(convertReadableArrayToList(readableArray.getArray(i)!!))
+            else -> throw IllegalArgumentException("Unsupported type in array")
+        }
+        list.add(value)
+    }
+    return list
+}
+fun convertReadableMapToHashMap(readableMap: ReadableMap): HashMap<String, Value> {
+    val hashMap = HashMap<String, Value>()
+    val iterator: ReadableMapKeySetIterator = readableMap.keySetIterator()
+
+    while (iterator.hasNextKey()) {
+        val key = iterator.nextKey()
+        val value = when (readableMap.getType(key)) {
+            ReadableType.Boolean -> Value.valueOf(readableMap.getBoolean(key))
+            ReadableType.Number -> Value.valueOf(readableMap.getDouble(key))
+            ReadableType.String -> Value.valueOf(readableMap.getString(key)!!)
+            ReadableType.Map -> Value.valueOf(convertReadableMapToHashMap(readableMap.getMap(key)!!))
+            ReadableType.Array -> Value.valueOf(convertReadableArrayToList(readableMap.getArray(key)!!))
+            else -> throw IllegalArgumentException("Unsupported type")
+        }
+        hashMap[key] = value
+    }
+
+    return hashMap
 }
 
 data class OrnamentSettings(
@@ -1530,7 +1566,9 @@ open class RNMBXMapView(private val mContext: Context, var mManager: RNMBXMapVie
                 }
 
                 response.success {
-                    it.putString("data", featuresList.toString())
+                    val gson = Gson();
+                    val json = gson.toJson(featuresList);
+                    it.putString("data", json)
                 }
             } else {
                 response.error(features.error ?: "n/a")
@@ -1552,22 +1590,23 @@ open class RNMBXMapView(private val mContext: Context, var mManager: RNMBXMapVie
         }
     }
 
-    fun setLayerProperties(layerId: String, properties: Value, response: CommandResponse) {
+    fun setLayerProperties(layerId: String, properties: ReadableMap, response: CommandResponse) {
         val style = mMap!!.getStyle()
+        val propertiesValue = convertReadableMapToHashMap(properties)
         try {
-            style?.setStyleLayerProperties(layerId,properties)
+            style?.setStyleLayerProperties(layerId, Value.valueOf(propertiesValue))
             response.success {
                 it.putString("data", "Successfully set layer properties")
             }
         } catch (e: Exception) {
-            response.error("Error setting layer properties")
+            response.error("Error setting layer properties: ${e.message}")
         }
     }
 
-    fun setLayerProperty(layerId: String, property: String, value: Value, response: CommandResponse) {
+    fun setLayerProperty(layerId: String, property: String, value: String, response: CommandResponse) {
         val style = mMap!!.getStyle()
         try {
-            style?.setStyleLayerProperty(layerId,property,value)
+            style?.setStyleLayerProperty(layerId,property,value as Value)
             response.success {
                 it.putString("data", "Successfully set layer property")
             }

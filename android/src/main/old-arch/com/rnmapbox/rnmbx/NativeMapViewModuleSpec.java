@@ -17,10 +17,10 @@ import com.facebook.react.bridge.ReactContextBaseJavaModule;
 import com.facebook.react.bridge.ReactMethod;
 import com.facebook.react.bridge.ReactModuleWithSpec;
 import com.facebook.react.bridge.ReadableArray;
+import com.facebook.react.bridge.ReadableMap;
 import com.facebook.react.turbomodule.core.interfaces.TurboModule;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import com.mapbox.bindgen.Value;
 
 public abstract class NativeMapViewModuleSpec extends ReactContextBaseJavaModule implements ReactModuleWithSpec, TurboModule {
 
@@ -98,10 +98,10 @@ public abstract class NativeMapViewModuleSpec extends ReactContextBaseJavaModule
 
     @ReactMethod
     @DoNotStrip
-    public abstract void setLayerProperties(@Nullable Integer viewRef, String layerId, Value properties, Promise promise);
+    public abstract void setLayerProperties(@Nullable Integer viewRef, String layerId, ReadableMap properties, Promise promise);
 
     @ReactMethod
     @DoNotStrip
-    public abstract void setLayerProperty(@Nullable Integer viewRef, String layerId, String property, Value value, Promise promise);
+    public abstract void setLayerProperty(@Nullable Integer viewRef, String layerId, String property, String value, Promise promise);
 
 }

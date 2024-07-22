@@ -470,9 +470,14 @@ type CallbablePropKeysWithoutOn = CallbablePropKeys extends `on${infer C}`
 
 type Debounced<F> = F & { clear(): void; flush(): void };
 
+type LayerProperty = Array<LayerProperty> | string | number | boolean;
+
 type LayerProperties = {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  [key: string]: any;
+  [key: string]: LayerProperty;
+};
+type FeatureLayer = {
+  id: string;
+  feature: GeoJSON.Feature | string;
 };
 
 /**
@@ -789,13 +794,16 @@ class MapView extends NativeBridgeComponent(
       bbox != null &&
       (bbox.length === 4 || (RNMBXModule.MapboxV10 && bbox.length === 0))
     ) {
-      const res = await this._runNative<{ data: GeoJSON.Feature }>(
-        'queryRenderedLayersInRect',
-        [bbox, getFilter(filter), layerIDs],
-      );
+      const res = await this._runNative<{
+        data: FeatureLayer[] | string;
+      }>('queryRenderedLayersInRect', [bbox, getFilter(filter), layerIDs]);
 
       if (isAndroid()) {
-        return JSON.parse(res.data as unknown as string);
+        const data = JSON.parse(res.data as unknown as string);
+
+        return data.map((layer: FeatureLayer) => {
+          return { ...res, feature: JSON.parse(layer.feature) };
+        });
       }
 
       return res.data;
@@ -814,8 +822,7 @@ class MapView extends NativeBridgeComponent(
     return await this._runNative('setLayerProperties', [layerID, properities]);
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  async setLayerProperty(layerID: string, property: string, value: any) {
+  async setLayerProperty(layerID: string, property: string, value: string) {
     return await this._runNative('setLayerProperty', [
       layerID,
       property,

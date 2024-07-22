@@ -157,7 +157,7 @@ RCT_EXPORT_METHOD(setLayerProperties: (nonnull NSNumber *)viewRef withLayerID:(N
     } reject:reject methodName:@"setLayerProperties"];
 }
 
-RCT_EXPORT_METHOD(setLayerProperty : (nonnull NSNumber *)viewRef withLayerID: (nonnull NSString *)withLayerID withProperty: (nonnull NSString *)withProperty withValue: (id)withValue resolve: (RCTPromiseResolveBlock)resolve reject: (RCTPromiseRejectBlock)reject){
+RCT_EXPORT_METHOD(setLayerProperty : (nonnull NSNumber *)viewRef withLayerID: (nonnull NSString *)withLayerID withProperty: (nonnull NSString *)withProperty withValue: (nonnull NSString *)withValue resolve: (RCTPromiseResolveBlock)resolve reject: (RCTPromiseRejectBlock)reject){
     [self withMapView:viewRef block:^(RNMBXMapView *view) {
         [RNMBXMapViewManager setLayerProperty:view withLayerID:withLayerID withProperty:withProperty withValue:withValue resolver:resolve rejecter:reject];
     } reject:reject methodName:@"setLayerProperty"];

@@ -3,6 +3,7 @@ package com.rnmapbox.rnmbx.components.mapview
 import com.facebook.react.bridge.Promise
 import com.facebook.react.bridge.ReactApplicationContext
 import com.facebook.react.bridge.ReadableArray
+import com.facebook.react.bridge.ReadableMap
 import com.facebook.react.bridge.WritableMap
 import com.facebook.react.bridge.WritableNativeMap
 import com.rnmapbox.rnmbx.NativeMapViewModuleSpec
@@ -219,7 +220,7 @@ class NativeMapViewModule(context: ReactApplicationContext, val viewTagResolver:
     override fun setLayerProperties(
         viewRef: ViewRefTag?,
         layerId: String, 
-        properties: Value,
+        properties: ReadableMap,
         promise: Promise
     ) {
         withMapViewOnUIThread(viewRef, promise) {
@@ -236,7 +237,7 @@ class NativeMapViewModule(context: ReactApplicationContext, val viewTagResolver:
         viewRef: ViewRefTag?,
         layerId: String, 
         property: String,
-        value: Value,
+        value: String,
         promise: Promise
     ) {
         withMapViewOnUIThread(viewRef, promise) {
