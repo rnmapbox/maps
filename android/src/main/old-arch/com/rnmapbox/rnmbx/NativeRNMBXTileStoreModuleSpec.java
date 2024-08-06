@@ -41,5 +41,5 @@ public abstract class NativeRNMBXTileStoreModuleSpec extends ReactContextBaseJav
 
   @ReactMethod
   @DoNotStrip
-  public abstract void setOption(int tag, String key, String domain, ReadableMap value, Promise promise);
+  public abstract void setOption(double tag, String key, String domain, ReadableMap value, Promise promise);
 }
