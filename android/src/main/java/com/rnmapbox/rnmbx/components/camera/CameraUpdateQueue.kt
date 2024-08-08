@@ -59,6 +59,9 @@ class CameraUpdateQueue {
             return
         }
         val stop = mQueue.poll() ?: return
+        if (map == null) {
+            return
+        }
         val item = stop.toCameraUpdate(map!!)
         item.run()
         execute(map)
