@@ -309,7 +309,9 @@ abstract class RNMBXLayer<T : Layer?>(protected var mContext: Context) : Abstrac
             val layer = mLayer
             if (layer != null) {
                 it.removeStyleLayer(layer.layerId)
-                mLayer = null // see https://github.com/rnmapbox/maps/pull/3392
+                if (reason != RemovalReason.REORDER) {
+                    mLayer = null // see https://github.com/rnmapbox/maps/pull/3392
+                }
             } else {
                 Logger.e("RNMBXLayer","mLayer is null on removal layer from map")
             }
