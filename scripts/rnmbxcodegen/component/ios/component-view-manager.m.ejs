@@ -1,0 +1,16 @@
+/***
+to: ios/rnmbx/generated/<%= Name %>Manager.m
+***/
+#import <React/RCTBridgeModule.h>
+#import <React/RCTViewManager.h>
+
+@interface RCT_EXTERN_REMAP_MODULE(<%= Name %>, <%= Name %>Manager, RCTViewManager)
+
+<% component.events.forEach(function(event) { %>
+  RCT_EXPORT_VIEW_PROPERTY(<%= event.name %>, <%= event.bubblingType ? "RCTBubblingEventBlock" : "RCTDirectEventBlock" %>)
+<% }); %>
+<% component.props.forEach(function(prop) { %>
+  RCT_EXPORT_VIEW_PROPERTY(<%= prop.name %>, <%= typeAnnotationObjCType(prop.typeAnnotation) %>)
+<% }); %>
+
+@end

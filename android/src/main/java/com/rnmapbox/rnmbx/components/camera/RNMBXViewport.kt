@@ -37,27 +37,8 @@ import com.mapbox.maps.EdgeInsets
 import com.mapbox.maps.plugin.viewport.data.FollowPuckViewportStateBearing
 import com.mapbox.maps.plugin.viewport.data.FollowPuckViewportStateOptions
 import com.mapbox.maps.plugin.viewport.data.OverviewViewportStateOptions
+import com.rnmapbox.rnmbx.events.BaseEvent
 import com.rnmapbox.rnmbx.events.constants.EventKeys
-
-class BaseEvent(
-    private val surfaceId: Int,
-    private val viewTag: Int,
-    private val eventName: String,
-    private val eventData: WritableMap,
-    private val canCoalesce: Boolean = false
-): Event<BaseEvent>(surfaceId, viewTag) {
-    override fun getEventName(): String {
-        return eventName
-    }
-
-    override fun canCoalesce(): Boolean {
-        return canCoalesce
-    }
-
-    override fun getEventData(): WritableMap? {
-        return eventData
-    }
-}
 
 class RNMBXViewport(private val mContext: Context, private val mManager: RNMBXViewportManager) :
 AbstractMapFeature(

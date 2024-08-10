@@ -1,0 +1,15 @@
+/***
+to: ios/rnmbx/<%= Name %>.swift
+userEditable: true
+***/
+
+@objc(<%= Name %>)
+open class <%= Name %> : RNMBXMapComponentBase {
+
+<% module.spec.properties.forEach(function (property) { %>
+  @objc
+  public static func <%= property.name %>(_ view: <%= ComponentName %>, resolve: @escaping RCTPromiseResolveBlock, reject: @escaping RCTPromiseRejectBlock) {
+    // TODO implement
+  }
+<% }) %>
+}

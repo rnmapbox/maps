@@ -40,6 +40,9 @@ class RNMBXEvent : NSObject, RNMBXEventProtocol {
       case shapeSourceLayerPress
       case annotationSelected = "annotationselected"
       case annotationDeselected = "annotationdeselected"
+      
+      case headingChange
+      case locationChange
     }
     
     init(type: EventType, payload: [String:Any?]?) {

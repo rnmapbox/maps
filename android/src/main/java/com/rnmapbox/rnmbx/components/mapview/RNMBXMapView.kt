@@ -68,6 +68,7 @@ import java.util.*
 
 import com.rnmapbox.rnmbx.components.annotation.RNMBXPointAnnotationCoordinator
 import com.rnmapbox.rnmbx.components.images.ImageManager
+import com.rnmapbox.rnmbx.components.location.LocationProviderManager
 
 import com.rnmapbox.rnmbx.v11compat.event.*
 import com.rnmapbox.rnmbx.v11compat.feature.*
@@ -258,6 +259,8 @@ open class RNMBXMapView(private val mContext: Context, var mManager: RNMBXMapVie
 
     val mapView: MapView
         get() = this.mMapView
+
+    val locationProviderManager by lazy { LocationProviderManager(this) }
 
     val viewAnnotationManager: ViewAnnotationManager
         get() = mapView.viewAnnotationManager

@@ -20,6 +20,7 @@ export {
   UserLocationRenderMode,
 } from './components/UserLocation';
 export { default as LocationPuck } from './components/LocationPuck';
+export { default as Location } from './components/Location';
 export { default as VectorSource } from './components/VectorSource';
 export { ShapeSource } from './components/ShapeSource';
 export { default as RasterSource } from './components/RasterSource';
