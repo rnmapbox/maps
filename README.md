@@ -252,4 +252,4 @@ Help drive this repo forward - be a sponsor. Add a comment [here](https://github
 ---
 ## Developer Group
 
-Have a question or need some help? Join our [Gitter developer group](https://gitter.im/rnmapbox/Lobby)!
+Have a question or need some help? Use [Github discussions](https://github.com/rnmapbox/maps/discussions) or the [react-native channel](https://discord.com/channels/1004826913229000704/1092426983696248893) in the mapbox discord.
