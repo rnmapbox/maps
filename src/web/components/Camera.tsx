@@ -1,6 +1,6 @@
 import { Component, ContextType } from 'react';
 
-import { CameraProps, CameraRef } from '../../components/Camera';
+import { CameraProps, CameraStop, CameraRef } from '../../components/Camera';
 import { Position } from '../../types/Position';
 import MapContext from '../MapContext';
 
@@ -137,6 +137,66 @@ class Camera
         zoom: zoomLevel,
         duration: animationDuration,
       });
+    }
+  }
+
+  setCamera(props: CameraStop) {
+    const { map } = this.context;
+    if (!map) {
+      return;
+    }
+    const {
+      centerCoordinate,
+      bounds,
+      zoomLevel,
+      heading,
+      pitch,
+      padding,
+      animationDuration = 2000,
+    } = props;
+
+    let options: mapboxgl.CameraOptions = {
+      center: centerCoordinate?.slice(0, 2) as [number, number],
+      zoom: zoomLevel ?? map.getZoom(),
+      bearing: heading ?? map.getBearing(),
+      pitch: pitch ?? map.getPitch(),
+    };
+
+    if (
+      padding?.paddingTop &&
+      padding?.paddingRight &&
+      padding?.paddingBottom &&
+      padding?.paddingLeft
+    ) {
+      options.padding = buildMapboxGlPadding([
+        padding.paddingTop,
+        padding.paddingRight,
+        padding.paddingBottom,
+        padding.paddingLeft,
+      ]);
+    }
+
+    if (bounds?.ne && bounds?.sw) {
+      const newCameraTransform = map.cameraForBounds(
+        [bounds.ne as mapboxgl.LngLatLike, bounds.sw as mapboxgl.LngLatLike],
+        options,
+      );
+      options = { ...options, ...newCameraTransform };
+    }
+
+    switch (props.animationMode) {
+      default:
+      case 'easeTo':
+      case 'linearTo':
+        map.easeTo({ ...options, duration: animationDuration });
+        break;
+      case 'flyTo':
+        map.flyTo({ ...options, duration: animationDuration });
+        break;
+      case 'moveTo':
+      case 'none':
+        map.jumpTo(options);
+        break;
     }
   }
 
