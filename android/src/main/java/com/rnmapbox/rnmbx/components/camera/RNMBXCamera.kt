@@ -99,9 +99,11 @@ class RNMBXCamera(private val mContext: Context, private val mManager: RNMBXCame
     override fun addToMap(mapView: RNMBXMapView) {
         super.addToMap(mapView)
         mapView.callIfAttachedToWindow {
-            setInitialCamera()
-            updateMaxBounds()
-            mCameraStop?.let { updateCamera(it) }
+            withMapView { mapView ->
+                setInitialCamera(mapView)
+                updateMaxBounds(mapView)
+                mCameraStop?.let { updateCamera(it, mapView) }
+            }
         }
         _observeViewportState(mapView.mapView)
         _updateViewportState()
@@ -117,8 +119,8 @@ class RNMBXCamera(private val mContext: Context, private val mManager: RNMBXCame
     fun setStop(stop: CameraStop) {
         mCameraStop = stop
         stop.setCallback(mCameraCallback)
-        if (mMapView != null) {
-            stop.let { updateCamera(it) }
+        withMapView { mapView ->
+            stop.let { updateCamera(it, mapView) }
         }
     }
 
@@ -172,25 +174,24 @@ class RNMBXCamera(private val mContext: Context, private val mManager: RNMBXCame
 
     fun setMaxBounds(bounds: LatLngBounds?) {
         mMaxBounds = bounds
-        updateMaxBounds()
-    }
-
-
-    private fun updateMaxBounds() {
         withMapView { mapView ->
-            val map = mapView.getMapboxMap()
-            val builder = CameraBoundsOptions.Builder()
-            builder.bounds(mMaxBounds?.toBounds())
-            builder.minZoom(mMinZoomLevel ?: 0.0) // Passing null does not reset this value.
-            builder.maxZoom(mMaxZoomLevel ?: 25.0) // Passing null does not reset this value.
-            map.setBounds(builder.build())
-            mCameraStop?.let { updateCamera(it) }
+            updateMaxBounds(mapView)
         }
     }
 
-    private fun setInitialCamera() {
+
+    private fun updateMaxBounds(mapView: RNMBXMapView) {
+        val map = mapView.getMapboxMap()
+        val builder = CameraBoundsOptions.Builder()
+        builder.bounds(mMaxBounds?.toBounds())
+        builder.minZoom(mMinZoomLevel ?: 0.0) // Passing null does not reset this value.
+        builder.maxZoom(mMaxZoomLevel ?: 25.0) // Passing null does not reset this value.
+        map.setBounds(builder.build())
+        mCameraStop?.let { updateCamera(it, mapView) }
+    }
+
+    private fun setInitialCamera(mapView: RNMBXMapView) {
         mDefaultStop?.let {
-            val mapView = mMapView!!
             val map = mapView.getMapboxMap()
 
             it.setDuration(0)
@@ -200,9 +201,9 @@ class RNMBXCamera(private val mContext: Context, private val mManager: RNMBXCame
         }
     }
 
-    private fun updateCamera(cameraStop: CameraStop) {
+    private fun updateCamera(cameraStop: CameraStop, mapView: RNMBXMapView) {
         mCameraUpdateQueue.offer(cameraStop)
-        mCameraUpdateQueue.execute(mMapView)
+        mCameraUpdateQueue.execute(mapView)
     }
 
     private fun updateUserLocation(isAnimated: Boolean) {
@@ -243,12 +244,12 @@ class RNMBXCamera(private val mContext: Context, private val mManager: RNMBXCame
 
     fun setMinZoomLevel(zoomLevel: Double?) {
         mMinZoomLevel = zoomLevel
-        updateMaxBounds()
+        withMapView { updateMaxBounds(it) }
     }
 
     fun setMaxZoomLevel(zoomLevel: Double?) {
         mMaxZoomLevel = zoomLevel
-        updateMaxBounds()
+        withMapView { updateMaxBounds(it) }
     }
 
     fun setZoomLevel(zoomLevel: Double) {
