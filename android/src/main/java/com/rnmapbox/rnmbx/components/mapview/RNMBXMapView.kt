@@ -1557,12 +1557,12 @@ open class RNMBXMapView(private val mContext: Context, var mManager: RNMBXMapVie
                 val featuresList = ArrayList<FeatureObject>()
                 for (i in features.value!!) {
                     val featureJson = try {
-                        i.feature.toJson()
+                        i.queriedFeature.feature.toJson()
                     } catch (e: Exception) {
                         Logger.e("queryRenderedFeaturesAtPoint", "Error converting feature to JSON", e)
                         continue
                     }
-                    featuresList.add(FeatureObject(i.sourceLayer ?: "unknown", featureJson))
+                    featuresList.add(FeatureObject(i.queriedFeature.sourceLayer ?: "unknown", featureJson))
                 }
 
                 response.success {
