@@ -242,9 +242,9 @@ extension RNMBXMapViewManager {
               map.mapboxMap.queryRenderedFeatures(with: rect, options: options) { result in
                 switch result {
                 case .success(let features):
-                  resolver(["data": features.compactMap { queriedFeature in
+                  resolver(["data": features.compactMap { feature in
                       logged("queryRenderedLayersInRect.queriedfeature.map") { 
-                        return  ["id": queriedFeature.sourceLayer, "feature": try queriedFeature.feature.toJSON()] }
+                        return  ["id": feature.queriedFeature.sourceLayer, "feature": try feature.queriedFeature.feature.toJSON()] }
                     }])
                 case .failure(let error):
                   rejecter("queryRenderedLayersInRect","failed to query features", error)
