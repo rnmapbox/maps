@@ -802,7 +802,7 @@ class MapView extends NativeBridgeComponent(
         const data = JSON.parse(res.data as unknown as string);
 
         return data.map((layer: FeatureLayer) => {
-          return { ...res, feature: JSON.parse(layer.feature) };
+          return { ...res, feature: JSON.parse(layer.feature as string) };
         });
       }
 
