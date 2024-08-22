@@ -25,6 +25,12 @@ using namespace facebook::react;
     RNMBXMapViewComponentView* _componentView;
 }
 
+// Needed because of this: https://github.com/facebook/react-native/pull/37274
++ (void)load
+{
+  [super load];
+}
+
 - (instancetype)initWithComponentView:(RNMBXMapViewComponentView*)componentView {
     if (self = [super init]) {
         _componentView = componentView;

@@ -21,6 +21,11 @@ using namespace facebook::react;
     RNMBXShapeSource *_view;
 }
 
+// Needed because of this: https://github.com/facebook/react-native/pull/37274
++ (void)load
+{
+  [super load];
+}
 
 - (instancetype)initWithFrame:(CGRect)frame
 {
