@@ -1129,8 +1129,13 @@ open class RNMBXMapView(private val mContext: Context, var mManager: RNMBXMapVie
             Logger.e("MapView", "setSourceVisibility, map is null")
             return
         }
-        val style = mMap!!.getStyle();
-        style!!.styleLayers.forEach {
+        val style = mMap.getStyle();
+
+        if (style?.styleLayers == null) {
+            Logger.e("MapView", "setSourceVisibility, map.getStyle().styleLayers is null")
+        }
+
+        style?.styleLayers?.forEach {
             val layer = style.getLayer(it.id)
             if ((layer != null) && match(layer, sourceId, sourceLayerId)) {
                 layer.visibility(
