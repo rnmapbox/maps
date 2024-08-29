@@ -41,16 +41,24 @@ struct CameraUpdateItem {
         try center.validate()
       }
 
-      switch mode {
-      case .flight:
-        map.mapView.camera.fly(to: camera, duration: duration)
-      case .ease:
-        map.mapView.camera.ease(to: camera, duration: duration ?? 0, curve: .easeInOut, completion: nil)
-      case .linear:
-        map.mapView.camera.ease(to: camera, duration: duration ?? 0, curve: .linear, completion: nil)
-      default:
-        map.mapboxMap.setCamera(to: camera)
-      }
+        switch mode {
+        case .flight:
+          map.withMapView { mapView in
+            mapView.camera.fly(to: camera, duration: duration)
+          }
+        case .ease:
+          map.withMapView { mapView in
+            mapView.camera.ease(to: camera, duration: duration ?? 0, curve: .easeInOut, completion: nil)
+          }
+          case .linear:
+          map.withMapView { mapView in
+            mapView.camera.ease(to: camera, duration: duration ?? 0, curve: .linear, completion: nil)
+          }
+        default:
+          map.withMapboxMap { mapboxMap in
+            mapboxMap.setCamera(to: camera)
+          }
+        }
     }
   }
 }
@@ -87,8 +95,10 @@ open class RNMBXMapComponentBase : UIView, RNMBXMapComponent {
   }
 
   func withMapView(_ callback: @escaping (_ mapView: MapView) -> Void) {
-    withRNMBXMapView { mapView in
-      callback(mapView.mapView)
+    withRNMBXMapView { map in
+      map.withMapView { mapView in
+        callback(mapView)
+      }
     }
   }
 
@@ -544,8 +554,11 @@ open class RNMBXCamera : RNMBXMapComponentBase {
       return false
     }
 
-    map.mapView.viewport.removeStatusObserver(self)
-    return super.removeFromMap(map, reason:reason)
+    withMapView { mapView in
+      mapView.viewport.removeStatusObserver(self)
+    }
+
+    return super.removeFromMap(map, reason: reason)
   }
 }
 
@@ -584,12 +597,12 @@ extension RNMBXCamera : ViewportStatusObserver {
         return "compass"
       case .course:
         return "course"
-      case .some(let bearing):
+      case .some(_):
         return "constant"
       case .none:
         return "normal"
       }
-    } else if let state = state as? OverviewViewportState {
+    } else if let _ = state as? OverviewViewportState {
       return "overview"
     } else {
       return "custom"
