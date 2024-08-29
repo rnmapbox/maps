@@ -447,17 +447,33 @@ open class RNMBXCamera : RNMBXMapComponentBase {
       
       withMapView { map in
         #if RNMBX_11
-        let bounds = [sw, ne]
+        do {
+          let bounds: [CLLocationCoordinate2D] = [sw, ne]
+          camera = try map.mapboxMap.camera(
+            for: bounds,
+            camera: .init(cameraState: .init(
+              center: .init(),
+              padding: .zero,
+              zoom: zoom ?? 0,
+              bearing: heading ?? map.mapboxMap.cameraState.bearing,
+              pitch: pitch ?? map.mapboxMap.cameraState.pitch
+            )),
+            coordinatesPadding: padding,
+            maxZoom: nil,
+            offset: nil
+          )
+        } catch {
+          Logger.log(level: .error, message: "RNMBXCamera.toUpdateItem: Failed to build camera configuration: \(error)")
+        }
         #else
         let bounds = CoordinateBounds(southwest: sw, northeast: ne)
-        #endif
-
         camera = map.mapboxMap.camera(
           for: bounds,
           padding: padding,
           bearing: heading ?? map.mapboxMap.cameraState.bearing,
           pitch: pitch ?? map.mapboxMap.cameraState.pitch
         )
+        #endif
       }
     } else {
       camera = CameraOptions(
