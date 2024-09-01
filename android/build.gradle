@@ -31,7 +31,11 @@ buildscript {
     mavenCentral()
   }
 
-  project.ext.set("kotlinVersion", rootProject.ext.has('kotlinVersion') ? rootProject.ext.get('kotlinVersion') : '1.7.21')
+  ext {
+    rnmapboxDefaultKotlinVersion = '1.7.21'
+  }
+
+  project.ext.set("kotlinVersion", rootProject.ext.has('kotlinVersion') ? rootProject.ext.get('kotlinVersion') : rnmapboxDefaultKotlinVersion)
   dependencies {
       classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:${project.kotlinVersion}"
   }

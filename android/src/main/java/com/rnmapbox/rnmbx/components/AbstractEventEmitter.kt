@@ -15,7 +15,7 @@ import com.rnmapbox.rnmbx.utils.Logger
 /**
  * Created by nickitaliano on 8/23/17.
  */
-abstract class AbstractEventEmitter<T : ViewGroup?>(reactApplicationContext: ReactApplicationContext) :
+abstract class AbstractEventEmitter<T : ViewGroup>(reactApplicationContext: ReactApplicationContext) :
     ViewGroupManager<T>() {
     private val mRateLimitedEvents: MutableMap<String, Long>
     private var mEventDispatcher: EventDispatcher? = null
@@ -56,8 +56,8 @@ abstract class AbstractEventEmitter<T : ViewGroup?>(reactApplicationContext: Rea
         }
     }
 
-    override fun addEventEmitters(context: ThemedReactContext, view: T & Any) {
-        mEventDispatcher = UIManagerHelper.getEventDispatcherForReactTag(context, view!!.id)
+    override fun addEventEmitters(context: ThemedReactContext, view: T) {
+        mEventDispatcher = UIManagerHelper.getEventDispatcherForReactTag(context, view.id)
     }
 
     override fun getExportedCustomDirectEventTypeConstants(): Map<String, Any>? {
