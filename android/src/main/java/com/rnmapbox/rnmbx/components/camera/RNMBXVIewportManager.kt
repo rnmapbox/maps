@@ -14,7 +14,7 @@ import com.rnmapbox.rnmbx.events.constants.EventKeys
 import com.rnmapbox.rnmbx.events.constants.eventMapOf
 import com.rnmapbox.rnmbx.utils.ViewTagResolver
 
-class RNMBXViewportManager(private val mContext: ReactApplicationContext, val viewTagResolver: ViewTagResolver) : AbstractEventEmitter<RNMBXViewport?>(
+class RNMBXViewportManager(private val mContext: ReactApplicationContext, val viewTagResolver: ViewTagResolver) : AbstractEventEmitter<RNMBXViewport>(
         mContext
     ), RNMBXViewportManagerInterface<RNMBXViewport> {
 
