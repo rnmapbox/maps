@@ -2,7 +2,7 @@ import React, { ReactElement } from 'react';
 
 import locationManager from '../modules/location/locationManager';
 import { type Location } from '../modules/location/locationManager';
-import { CircleLayerStyle } from '../Mapbox';
+import { CircleLayerStyle, LineLayer, ShapeSource } from '../Mapbox';
 
 import Annotation from './Annotation';
 import CircleLayer from './CircleLayer';
@@ -32,6 +32,40 @@ const layerStyles: Record<'normal', Record<string, CircleLayerStyle>> = {
   },
 };
 
+function calculateDestination(
+  coordinates: number[],
+  distance: number,
+  bearing: number | null,
+) {
+  if (!bearing) return coordinates;
+  const R = 6371; // Radius of the Earth in km
+  const [lng, lat] = coordinates;
+  const latRad = (lat * Math.PI) / 180;
+  const lngRad = (lng * Math.PI) / 180;
+  const bearingRad = (bearing * Math.PI) / 180;
+  const distRad = distance / R;
+
+  const destLatRad = Math.asin(
+    Math.sin(latRad) * Math.cos(distRad) +
+      Math.cos(latRad) * Math.sin(distRad) * Math.cos(bearingRad),
+  );
+
+  const destLngRad =
+    lngRad +
+    Math.atan2(
+      Math.sin(bearingRad) * Math.sin(distRad) * Math.cos(latRad),
+      Math.cos(distRad) - Math.sin(latRad) * Math.sin(destLatRad),
+    );
+
+  const destLat = (destLatRad * 180) / Math.PI;
+  const destLng = (destLngRad * 180) / Math.PI;
+  const dest: [number, number] = [destLng, destLat];
+  return dest;
+}
+const noseLineStyle = {
+  lineColor: 'red',
+  lineWidth: 2,
+};
 const normalIcon = (
   showsUserHeadingIndicator?: boolean,
   heading?: number | null,
@@ -237,7 +271,7 @@ class UserLocation extends React.Component<Props, UserLocationState> {
 
     if (location && location.coords) {
       const { longitude, latitude } = location.coords;
-      ({ heading } = location.coords);
+      heading = location.coords.course ?? location.coords.heading;
       coordinates = [longitude, latitude];
     }
 
@@ -279,17 +313,47 @@ class UserLocation extends React.Component<Props, UserLocationState> {
     }
 
     return (
-      <Annotation
-        id="mapboxUserLocation"
-        animated={animated}
-        onPress={onPress}
-        coordinates={coordinates}
-        style={{
-          iconRotate: heading,
-        }}
-      >
-        {children || normalIcon(showsUserHeadingIndicator, heading)}
-      </Annotation>
+      <>
+        <Annotation
+          id="mapboxUserLocation"
+          animated={animated}
+          onPress={onPress}
+          coordinates={coordinates}
+          style={{
+            iconRotate: heading,
+          }}
+        >
+          {children || normalIcon(false, heading)}
+        </Annotation>
+        {showsUserHeadingIndicator && heading && (
+          <ShapeSource
+            id="BearingLine"
+            shape={{
+              type: 'FeatureCollection',
+              features: [
+                {
+                  type: 'Feature',
+                  geometry: {
+                    coordinates: [
+                      coordinates,
+                      calculateDestination(coordinates, 10, heading),
+                    ],
+                    type: 'LineString',
+                  },
+                  properties: {},
+                },
+              ],
+            }}
+          >
+            <LineLayer
+              id="BearingLine"
+              key="BearingLine"
+              style={noseLineStyle}
+              belowLayerID="boatIcon"
+            />
+          </ShapeSource>
+        )}
+      </>
     );
   }
 }
