@@ -43,7 +43,7 @@ class RNMBXPointAnnotationManager(reactApplicationContext: ReactApplicationConte
     }
 
     override fun createViewInstance(reactContext: ThemedReactContext): RNMBXPointAnnotation {
-        return RNMBXPointAnnotation(reactContext!!, this)
+        return RNMBXPointAnnotation(reactContext, this)
     }
 
     override fun onDropViewInstance(view: RNMBXPointAnnotation) {

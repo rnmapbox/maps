@@ -24,7 +24,7 @@ import com.rnmapbox.rnmbx.utils.extensions.getIfDouble
 import java.util.*
 
 class RNMBXImagesManager(private val mContext: ReactApplicationContext) :
-    AbstractEventEmitter<RNMBXImages?>(
+    AbstractEventEmitter<RNMBXImages>(
         mContext
     ), RNMBXImagesManagerInterface<RNMBXImages> {
     override fun getName(): String {
@@ -53,7 +53,7 @@ class RNMBXImagesManager(private val mContext: ReactApplicationContext) :
             stretchY = convertStretch(map.getDynamic("stretchY")) ?: listOf()
         }
         if (map.hasKey("content")) {
-            content = convertContent(map.getDynamic("content")) ?: null
+            content = convertContent(map.getDynamic("content"))
         }
         if (map.hasKey("scale")) {
             if (map.getType("scale") != ReadableType.Number) {
@@ -210,11 +210,6 @@ class RNMBXImagesManager(private val mContext: ReactApplicationContext) :
 
     // region RNMBXImage children
     override fun addView(parent: RNMBXImages, childView: View, childPosition: Int) {
-        if (parent == null || childView == null) {
-            Logger.e("RNMBXImages", "addView: parent or childView is null")
-            return
-        }
-
         if (childView !is RNMBXImage) {
             Logger.e("RNMBXImages", "child view should be RNMBXImage")
             return
@@ -234,11 +229,6 @@ class RNMBXImagesManager(private val mContext: ReactApplicationContext) :
     }
 
     override fun removeAllViews(parent: RNMBXImages) {
-        if (parent == null) {
-            Logger.e("RNMBXImages", "removeAllViews parent is null")
-            return
-        }
-
         parent.mImageViews.clear()
     }
 

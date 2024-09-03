@@ -7,33 +7,33 @@ import com.facebook.react.bridge.ReadableType
 import com.facebook.react.uimanager.annotations.ReactProp
 import com.rnmapbox.rnmbx.components.AbstractEventEmitter
 
-abstract class RNMBXTileSourceManager<T : RNMBXTileSource<*>?> internal constructor(
+abstract class RNMBXTileSourceManager<T : RNMBXTileSource<*>> internal constructor(
     reactApplicationContext: ReactApplicationContext
 ) : AbstractEventEmitter<T>(reactApplicationContext) {
-    override fun getChildAt(source: T & Any, childPosition: Int): View {
-        return source!!.getChildAt(childPosition)
+    override fun getChildAt(source: T, childPosition: Int): View {
+        return source.getChildAt(childPosition)
     }
 
-    override fun getChildCount(source: T & Any): Int {
-        return source!!.childCount
+    override fun getChildCount(source: T): Int {
+        return source.childCount
     }
 
-    override fun addView(source: T & Any, childView: View, childPosition: Int) {
-        source!!.addLayer(childView, childPosition)
+    override fun addView(source: T, childView: View, childPosition: Int) {
+        source.addLayer(childView, childPosition)
     }
 
-    override fun removeViewAt(source: T & Any, childPosition: Int) {
-        source!!.removeLayer(childPosition)
+    override fun removeViewAt(source: T, childPosition: Int) {
+        source.removeLayer(childPosition)
     }
 
     @ReactProp(name = "id")
     fun setId(source: T, id: Dynamic) {
-        source!!.iD = id.asString()
+        source.iD = id.asString()
     }
 
     @ReactProp(name = "url")
     fun setUrl(source: T, url: Dynamic) {
-        source!!.uRL = url.asString()
+        source.uRL = url.asString()
     }
 
     @ReactProp(name = "tileUrlTemplates")

@@ -8,7 +8,7 @@ import com.facebook.react.viewmanagers.RNMBXRasterSourceManagerInterface
 import javax.annotation.Nonnull
 
 class RNMBXRasterSourceManager(reactApplicationContext: ReactApplicationContext) :
-    RNMBXTileSourceManager<RNMBXRasterSource?>(reactApplicationContext),
+    RNMBXTileSourceManager<RNMBXRasterSource>(reactApplicationContext),
     RNMBXRasterSourceManagerInterface<RNMBXRasterSource> {
     @Nonnull
     override fun getName(): String {

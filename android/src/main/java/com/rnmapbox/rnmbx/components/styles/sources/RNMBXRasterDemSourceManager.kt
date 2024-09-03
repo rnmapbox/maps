@@ -11,7 +11,7 @@ import com.rnmapbox.rnmbx.utils.Logger
 // import com.rnmapbox.rnmbx.components.annotation.RNMBXCallout;
 // import com.rnmapbox.rnmbx.utils.ResourceUtils;
 class RNMBXRasterDemSourceManager(private val mContext: ReactApplicationContext) :
-    RNMBXTileSourceManager<RNMBXRasterDemSource?>(
+    RNMBXTileSourceManager<RNMBXRasterDemSource>(
         mContext
     ), RNMBXRasterDemSourceManagerInterface<RNMBXRasterDemSource> {
     override fun customEvents(): Map<String, String>? {

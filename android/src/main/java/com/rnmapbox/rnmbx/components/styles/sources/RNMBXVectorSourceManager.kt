@@ -11,7 +11,7 @@ import com.rnmapbox.rnmbx.events.constants.eventMapOf
 import javax.annotation.Nonnull
 
 class RNMBXVectorSourceManager(reactApplicationContext: ReactApplicationContext) :
-    RNMBXTileSourceManager<RNMBXVectorSource?>(reactApplicationContext),
+    RNMBXTileSourceManager<RNMBXVectorSource>(reactApplicationContext),
     RNMBXVectorSourceManagerInterface<RNMBXVectorSource> {
     @Nonnull
     override fun getName(): String {
