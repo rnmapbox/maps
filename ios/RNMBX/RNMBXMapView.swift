@@ -1416,6 +1416,30 @@ extension RNMBXMapView {
   }
 }
 
+#if RNMBX_11
+func getLayerSourceDetails(layer: (any Layer)?) -> (source: String?, sourceLayer: String?)? {
+    if let circleLayer = layer as? CircleLayer {
+        return (circleLayer.source, circleLayer.sourceLayer)
+    } else if let fillExtrusionLayer = layer as? FillExtrusionLayer {
+        return (fillExtrusionLayer.source, fillExtrusionLayer.sourceLayer)
+    } else if let fillLayer = layer as? FillLayer {
+        return (fillLayer.source, fillLayer.sourceLayer)
+    } else if let heatmapLayer = layer as? HeatmapLayer {
+        return (heatmapLayer.source, heatmapLayer.sourceLayer)
+    } else if let hillshadeLayer = layer as? HillshadeLayer {
+        return (hillshadeLayer.source, hillshadeLayer.sourceLayer)
+    } else if let lineLayer = layer as? LineLayer {
+        return (lineLayer.source, lineLayer.sourceLayer)
+    } else if let rasterLayer = layer as? RasterLayer {
+        return (rasterLayer.source, rasterLayer.sourceLayer)
+    } else if let symbolLayer = layer as? SymbolLayer {
+        return (symbolLayer.source, symbolLayer.sourceLayer)
+    } else {
+        return nil
+    }
+}
+#endif
+
 extension RNMBXMapView {
   func setSourceVisibility(_ visible: Bool, sourceId: String, sourceLayerId: String?) -> Void {
     let style = self.mapboxMap.style
@@ -1424,14 +1448,18 @@ extension RNMBXMapView {
       let layer = logged("setSourceVisibility.layer", info: { "\(layerInfo.id)" }) {
         try style.layer(withId: layerInfo.id)
       }
+
       #if RNMBX_11
-      // RNMBX_11_TODO
+        let sourceDetails = getLayerSourceDetails(layer: layer)
       #else
-      if let layer = layer {
-        if layer.source == sourceId {
+        let sourceDetails = (layer?.source, layer?.sourceLayer)
+      #endif
+
+      if let layer = layer, let sourceDetails = sourceDetails {
+        if sourceDetails.source == sourceId {
           var good = true
           if let sourceLayerId = sourceLayerId {
-            if sourceLayerId != layer.sourceLayer {
+            if sourceLayerId != sourceDetails.sourceLayer {
               good = false
             }
           }
@@ -1444,7 +1472,6 @@ extension RNMBXMapView {
           }
         }
       }
-      #endif
     }
   }
 }
