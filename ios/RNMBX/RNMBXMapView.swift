@@ -1416,8 +1416,10 @@ extension RNMBXMapView {
   }
 }
 
+typealias LayerSourceDetails = (source: String?, sourceLayer: String?)
+
 #if RNMBX_11
-func getLayerSourceDetails(layer: (any Layer)?) -> (source: String?, sourceLayer: String?)? {
+func getLayerSourceDetails(layer: (any Layer)?) -> LayerSourceDetails? {
     if let circleLayer = layer as? CircleLayer {
         return (circleLayer.source, circleLayer.sourceLayer)
     } else if let fillExtrusionLayer = layer as? FillExtrusionLayer {
@@ -1452,7 +1454,7 @@ extension RNMBXMapView {
       #if RNMBX_11
         let sourceDetails = getLayerSourceDetails(layer: layer)
       #else
-        let sourceDetails = (layer?.source, layer?.sourceLayer)
+        let sourceDetails: LayerSourceDetails? = (source: layer?.source, sourceLayer: layer?.sourceLayer)
       #endif
 
       if let layer = layer, let sourceDetails = sourceDetails {
