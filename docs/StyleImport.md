@@ -49,6 +49,16 @@ See https://github.com/mapbox/mapbox-maps-ios/blob/main/Sources/MapboxMaps/Docum
 
 
   
+### merge
+
+```tsx
+boolean
+```
+_required_
+whether to merge the style import with the existing style import config or replace it entirely. Defaults to `false`
+
+
+  
 
 
 

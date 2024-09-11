@@ -31,6 +31,9 @@ public class RNMBXStyleImportManagerDelegate<T extends View, U extends BaseViewM
       case "config":
         mViewManager.setConfig(view, new DynamicFromObject(value));
         break;
+      case "merge":
+        mViewManager.setMerge(view, value == null ? false : (boolean) value);
+        break;
       default:
         super.setProperty(view, propName, value);
     }
