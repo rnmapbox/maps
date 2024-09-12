@@ -40,25 +40,19 @@ struct CameraUpdateItem {
       if let center = camera.center {
         try center.validate()
       }
-
+      
+      map.withMapView { mapView in
         switch mode {
         case .flight:
-          map.withMapView { mapView in
-            mapView.camera.fly(to: camera, duration: duration)
-          }
+          mapView.camera.fly(to: camera, duration: duration)
         case .ease:
-          map.withMapView { mapView in
-            mapView.camera.ease(to: camera, duration: duration ?? 0, curve: .easeInOut, completion: nil)
-          }
-          case .linear:
-          map.withMapView { mapView in
-            mapView.camera.ease(to: camera, duration: duration ?? 0, curve: .linear, completion: nil)
-          }
+          mapView.camera.ease(to: camera, duration: duration ?? 0, curve: .easeInOut, completion: nil)
+        case .linear:
+          mapView.camera.ease(to: camera, duration: duration ?? 0, curve: .linear, completion: nil)
         default:
-          map.withMapboxMap { mapboxMap in
-            mapboxMap.setCamera(to: camera)
-          }
+          mapView.mapboxMap.setCamera(to: camera)
         }
+      }
     }
   }
 }
