@@ -5,7 +5,6 @@ import android.net.Uri
 import android.util.Log
 import com.facebook.react.views.imagehelper.ResourceDrawableIdHelper
 import com.mapbox.maps.extension.style.sources.generated.ImageSource
-import com.rnmapbox.rnmbx.rncompat.resourcedrawableidhelper.*
 import com.rnmapbox.rnmbx.utils.LatLngQuad
 import java.net.URL
 
