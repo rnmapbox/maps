@@ -548,10 +548,7 @@ open class RNMBXCamera : RNMBXMapComponentBase {
       return false
     }
 
-    withMapView { mapView in
-      mapView.viewport.removeStatusObserver(self)
-    }
-
+    map._mapView.viewport.removeStatusObserver(self)
     return super.removeFromMap(map, reason: reason)
   }
 }
