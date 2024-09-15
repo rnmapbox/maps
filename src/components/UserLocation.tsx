@@ -3,6 +3,7 @@ import React, { ReactElement } from 'react';
 import locationManager from '../modules/location/locationManager';
 import { type Location } from '../modules/location/locationManager';
 import { CircleLayerStyle } from '../Mapbox';
+import { OnPressEvent } from '../types/OnPressEvent';
 
 import Annotation from './Annotation';
 import CircleLayer from './CircleLayer';
@@ -92,7 +93,7 @@ type Props = {
   /**
    * Callback that is triggered on location icon press
    */
-  onPress?: () => void;
+  onPress?: (event: OnPressEvent) => void;
 
   /**
    * Callback that is triggered on location update

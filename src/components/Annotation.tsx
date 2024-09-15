@@ -129,7 +129,7 @@ class Annotation extends React.Component<Props, AnnotationState> {
     return (
       <Animated.ShapeSource
         id={this.props.id}
-        onPress={this.onPress}
+        onPress={this.props.onPress ? this.onPress : undefined}
         shape={this.state.shape as RNAnimated.WithAnimatedObject<Point>}
       >
         {children}
