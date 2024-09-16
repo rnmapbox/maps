@@ -76,10 +76,11 @@ class CameraUpdateItem(
             }
         }
         val map = mMap.get()
-        if (map == null) {
+        if (map == null || mCameraUpdate.center == null) {
             isCameraActionCancelled = true
             return
         }
+
         val animationOptions = MapAnimationOptions.Builder();
 
         // animateCamera / easeCamera only allows positive duration
