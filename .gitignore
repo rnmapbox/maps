@@ -55,11 +55,11 @@ node_modules
 /bots/node_modules/
 package-lock.json
 /example/package-lock.json
-yarn.lock
 /example/yarn.lock
 
 # Expo
 .expo
+example/dist
 
 # Test generated files
 /ReactAndroid/src/androidTest/assets/AndroidTestBundle.js
