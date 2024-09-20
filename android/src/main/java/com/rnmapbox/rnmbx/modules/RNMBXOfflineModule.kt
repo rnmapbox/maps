@@ -51,6 +51,7 @@ class TileRegionPack(var name: String, var state: TileRegionPackState = TileRegi
 
         // stored in metadata for resume functionality
     var styleURI: String? = null
+    var tilesets: List<String> = emptyList()
     var bounds: Geometry? = null
     var zoomRange: ZoomRange? = null
 
@@ -79,10 +80,11 @@ class TileRegionPack(var name: String, var state: TileRegionPackState = TileRegi
         name: String,
         state: TileRegionPackState = TileRegionPackState.UNKNOWN,
         styleURI: String,
+        tilesets: List<String>,
         bounds: Geometry,
         zoomRange: ZoomRange,
         metadata: JSONObject
-    ) : this(name= name, state= state,progress= null, metadata= metadata) {
+    ) : this(name= name, state= state, progress= null, metadata= metadata) {
         val rnmeta = JSONObject()
         rnmeta.put("styleURI", styleURI)
         this.styleURI = styleURI
@@ -90,6 +92,8 @@ class TileRegionPack(var name: String, var state: TileRegionPackState = TileRegi
         this.bounds = bounds
         rnmeta.put("zoomRange", JSONArray(arrayOf(zoomRange.minZoom, zoomRange.maxZoom)))
         this.zoomRange = zoomRange
+        rnmeta.put("tilesets", JSONArray(tilesets))
+        this.tilesets = tilesets
         this.metadata.put(RNMapboxInfoMetadataKey, rnmeta);
     }
 }
@@ -143,9 +147,11 @@ class RNMBXOfflineModule(private val mReactContext: ReactApplicationContext) :
             val boundsFC = FeatureCollection.fromJson(boundsStr)
             val bounds = convertPointPairToBounds(boundsFC)
 
+            val tilesets = options.getArray("tilesets")?.toArrayList()?.map { it as String } ?: emptyList()
             val actPack = TileRegionPack(
                 name = id,
                 styleURI = options.getString("styleURL")!!,
+                tilesets = tilesets,
                 bounds = bounds,
                 zoomRange = ZoomRange(
                     minZoom = options.getInt("minZoom").toByte(),
@@ -280,30 +286,25 @@ class RNMBXOfflineModule(private val mReactContext: ReactApplicationContext) :
                 ?: return Result.failure(IllegalArgumentException("startLoading failed as there is no styleURI in pack"))
             val metadata = pack.metadata
                 ?: return Result.failure(IllegalArgumentException("startLoading failed as there is no metadata in pack"))
-
             val stylePackOptions = StylePackLoadOptions.Builder()
                 .glyphsRasterizationMode(GlyphsRasterizationMode.IDEOGRAPHS_RASTERIZED_LOCALLY)
                 .metadata(metadata.toMapboxValue())
                 .build()
-
-            val descriptorOptions = TilesetDescriptorOptions.Builder()
-                .styleURI(styleURI)
-                .minZoom(zoomRange.minZoom)
-                .maxZoom(zoomRange.maxZoom)
-                .stylePackOptions(stylePackOptions)
-                .pixelRatio(2.0f)
-                .build()
-            val tilesetDescriptor = offlineManager.createTilesetDescriptor(descriptorOptions)
-
+            val descriptors = getTilesetDescriptors(
+                offlineManager = offlineManager,
+                styleURI = styleURI,
+                minZoom = zoomRange.minZoom,
+                maxZoom = zoomRange.maxZoom,
+                stylePackOptions = stylePackOptions,
+                tilesets = pack.tilesets)
             val loadOptions = TileRegionLoadOptions.Builder()
                 .geometry(bounds)
-                .descriptors(arrayListOf(tilesetDescriptor))
+                .descriptors(descriptors)
                 .metadata(metadata.toMapboxValue())
                 .acceptExpired(true)
                 .networkRestriction(NetworkRestriction.NONE)
                 .averageBytesPerSecond(null)
                 .build()
-
             var lastProgress: TileRegionLoadProgress? = null
             val task = this.tileStore.loadTileRegion(
                 id, loadOptions,
