@@ -22,12 +22,12 @@ Some notes about example app:
   cd example/ios ; RNMBX11=1 pod update MapboxMaps
   ```
   To build example in this mode on android:
-  Change `RNMBX11=true` in `example/android/gralde.properties`
+  Change `RNMBX11=true` in `example/android/gradle.properties`
 - NewArchitecture/Fabric:
   ```
   cd example/ios ; RCT_NEW_ARCH_ENABLED=1 pod update MapboxMaps
   ```
-  On android change `newArchEnabled=true` in `example/android/gralde.properties`
+  On android change `newArchEnabled=true` in `example/android/gradle.properties`
 
 ### Running example app for Web
 
