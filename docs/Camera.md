@@ -13,7 +13,7 @@ Controls the perspective from which the user sees the map.
 To use imperative methods, pass in a ref object:
 
 ```tsx
-const camera = useRef&lt;Camera&gt;(null);
+const camera = useRef<Camera>(null);
 
 useEffect(() => {
   camera.current?.setCamera({
@@ -22,7 +22,7 @@ useEffect(() => {
 }, []);
 
 return (
-  &lt;Camera ref={camera} />
+  <Camera ref={camera} />
 );
 ```
 
