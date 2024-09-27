@@ -100,6 +100,7 @@ export interface CameraRef {
   flyTo: (centerCoordinate: Position, animationDuration?: number) => void;
   moveTo: (centerCoordinate: Position, animationDuration?: number) => void;
   zoomTo: (zoomLevel: number, animationDuration?: number) => void;
+  flyAndZoomTo: (centerCoordinate: Position, zoomLevel: number, animationDuration?: number) => void;
 }
 
 export type CameraStop = {
@@ -202,6 +203,7 @@ export type CameraAnimationMode =
   | 'easeTo'
   | 'linearTo'
   | 'moveTo'
+  | 'flyAndZoomTo'
   | 'none';
 
 /**
@@ -520,6 +522,20 @@ export const Camera = memo(
       };
       const zoomTo = useCallback(_zoomTo, [setCamera]);
 
+      const _flyAndZoomTo: CameraRef['flyAndZoomTo'] = (
+        _centerCoordinate,
+        _zoomLevel,
+        _animationDuration = 2000,
+      ) => {
+        setCamera({
+          type: 'CameraStop',
+          zoomLevel: _zoomLevel,
+          centerCoordinate: _centerCoordinate,
+          animationDuration: _animationDuration,
+        });
+      };
+      const flyAndZoomTo = useCallback(_flyAndZoomTo, [setCamera]);
+
       useImperativeHandle(ref, () => ({
         /**
          * Sets any camera properties, with default fallbacks if unspecified.
@@ -580,6 +596,19 @@ export const Camera = memo(
          * @param {number} animationDuration The transition duration
          */
         zoomTo,
+        /**
+         * Sets the camera to center and zoom around the provided coordinate using a realistic 'travel'
+         * animation, with optional duration.
+         *
+         * @example
+         * camera.flyAndZoomTo([lon, lat], 6);
+         * camera.flyAndZoomTo([lon, lat], 6, 12000);
+         *
+         *  @param {Position} centerCoordinate The coordinate to center in the view
+         *  @param {number} zoomLevel The target zoom
+         *  @param {number} animationDuration The transition duration
+         */
+        flyAndZoomTo,
       }));
 
       return (
