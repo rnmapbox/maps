@@ -1,31 +1,31 @@
+import { debounce } from 'debounce';
 import React, { Component } from 'react';
 import {
-  View,
-  StyleSheet,
-  NativeModules,
-  ViewProps,
-  NativeSyntheticEvent,
-  NativeMethods,
   HostComponent,
   LayoutChangeEvent,
+  NativeMethods,
+  NativeModules,
+  NativeSyntheticEvent,
+  StyleSheet,
+  View,
+  ViewProps,
 } from 'react-native';
-import { debounce } from 'debounce';
 
+import { type Location } from '../modules/location/locationManager';
+import NativeMapViewModule from '../specs/NativeMapViewModule';
 import NativeMapView, {
   type NativeMapViewActual,
 } from '../specs/RNMBXMapViewNativeComponent';
-import NativeMapViewModule from '../specs/NativeMapViewModule';
+import { type Position } from '../types/Position';
 import {
-  isFunction,
   isAndroid,
+  isFunction,
   type NativeArg,
   type OrnamentPositonProp,
 } from '../utils';
 import { getFilter } from '../utils/filterUtils';
 import Logger from '../utils/Logger';
 import { FilterExpression } from '../utils/MapboxStyles';
-import { type Position } from '../types/Position';
-import { type Location } from '../modules/location/locationManager';
 
 import NativeBridgeComponent from './NativeBridgeComponent';
 
@@ -158,7 +158,7 @@ type LocalizeLabels =
     }
   | true;
 
-type Props = ViewProps & {
+export type MapViewProps = ViewProps & {
   /**
    * The distance from the edges of the map view’s frame to the edges of the map view’s logical viewport.
    * @deprecated use Camera `padding` instead
@@ -474,10 +474,10 @@ type Debounced<F> = F & { clear(): void; flush(): void };
  * MapView backed by Mapbox Native GL
  */
 class MapView extends NativeBridgeComponent(
-  React.PureComponent<Props>,
+  React.PureComponent<MapViewProps>,
   NativeMapViewModule,
 ) {
-  static defaultProps: Props = {
+  static defaultProps: MapViewProps = {
     scrollEnabled: true,
     pitchEnabled: true,
     rotateEnabled: true,
@@ -527,7 +527,7 @@ class MapView extends NativeBridgeComponent(
     isUserInteraction: boolean;
   };
 
-  constructor(props: Props) {
+  constructor(props: MapViewProps) {
     super(props);
 
     this.logger = Logger.sharedInstance();
@@ -570,11 +570,11 @@ class MapView extends NativeBridgeComponent(
     this.logger.stop();
   }
 
-  UNSAFE_componentWillReceiveProps(nextProps: Props) {
+  UNSAFE_componentWillReceiveProps(nextProps: MapViewProps) {
     this._setHandledMapChangedEvents(nextProps);
   }
 
-  _setHandledMapChangedEvents(props: Props) {
+  _setHandledMapChangedEvents(props: MapViewProps) {
     if (isAndroid() || RNMBXModule.MapboxV10) {
       const events: string[] = [];
 
@@ -1110,7 +1110,7 @@ class MapView extends NativeBridgeComponent(
     }
   }
 
-  _setStyleURL(props: Props) {
+  _setStyleURL(props: MapViewProps) {
     // user set a styleURL, no need to alter props
     if (props.styleURL) {
       return;
@@ -1128,7 +1128,7 @@ class MapView extends NativeBridgeComponent(
     }
   }
 
-  _setLocalizeLabels(props: Props) {
+  _setLocalizeLabels(props: MapViewProps) {
     if (!RNMBXModule.MapboxV10) {
       return;
     }
@@ -1184,7 +1184,7 @@ class MapView extends NativeBridgeComponent(
 }
 
 type NativeProps = Omit<
-  Props,
+  MapViewProps,
   'onPress' | 'onLongPress' | 'onCameraChanged'
 > & {
   onPress?: (
