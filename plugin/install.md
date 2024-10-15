@@ -28,22 +28,33 @@ After installing this package, add the [config plugin](https://docs.expo.io/guid
 }
 ```
 
+### Setup Download Token
+
 You'll need to provide `RNMapboxMapsDownloadToken` as well. This secret token requires the `DOWNLOADS:READ` scope. You can refer to the [iOS guide](https://docs.mapbox.com/ios/maps/guides/install/#configure-credentials), which explains how to configure this token under the section `Configure your secret token`.
 
-```json
-{
-  "expo": {
-    "plugins": [
-      [
-        "@rnmapbox/maps",
-        {
-          "RNMapboxMapsDownloadToken": "sk.ey...qg"
-        }
-      ]
-    ]
-  }
-}
-```
+1. Recommended Approach. Follow the guidelines listed in the offical mapbox-gl guide for [iOS](https://docs.mapbox.com/ios/maps/guides/install/#configure-credentials) and [android](https://docs.mapbox.com/android/maps/guides/install/).
+    - For internal docs go to [ios-install](../ios/install.md) [android-install](../android/install.md)
+  
+2. Alternative approach **for private repos only**.
+    - :warning: If this is a public repo **DO NOT follow this approach as this will expose the mapbox download token**. Furthermore if the token has addition permissions (which it should not) it could lead to a monitary cost, security risk (stolen tiles etc) :warning:.
+      - **FYI** _Publicizing this private download token is against mapbox policy._
+    - Running expo prebuild, a require step, will statically generate the token within ios/Podfile and android/build.gradle. These files typically need to be committed for functionality so be sure that you are okay with sharing these tokens with your **private** team.
+
+    ```json
+    {
+      "expo": {
+        <!-- "plugins": [ -->
+          [
+            "@rnmapbox/maps",
+            {
+              <!-- WARNING This WILL BE PUBLIC if on a public repo -->
+              "RNMapboxMapsDownloadToken": "sk.ey...qg"
+            }
+          ]
+        ]
+      }
+    }
+    ```
 
 If you want to show the user's current location on the map with the [UserLocation](../docs/UserLocation.md) component, you can use the [expo-location](https://docs.expo.dev/versions/latest/sdk/location/) plugin to configure the required `NSLocationWhenInUseUsageDescription` property. Install the plugin with `npx expo install expo-location` and add its config plugin to the plugins array of your `app.{json,config.js,config.ts}`:
 
