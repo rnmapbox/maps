@@ -30,8 +30,8 @@ public class RNMBXRasterDemSource : RNMBXSource {
 
   override func makeSource() -> Source
   {
-    #if RNMBX_11 // RNMBX_11_TODO
-    var result = SourceType(id: "raster-dem-source-id-todo")
+    #if RNMBX_11
+    var result = SourceType(id: self.id)
     #else
     var result = SourceType()
     #endif
