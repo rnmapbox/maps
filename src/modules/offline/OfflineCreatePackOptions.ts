@@ -5,6 +5,7 @@ export type OfflineCreatePackOptionsArgs = {
   name: string;
   styleURL: string;
   bounds: [GeoJSON.Position, GeoJSON.Position];
+  tilesets?: string[];
   minZoom?: number;
   maxZoom?: number;
   metadata?: Record<string, unknown>;
@@ -13,6 +14,7 @@ export type OfflineCreatePackOptionsArgs = {
 class OfflineCreatePackOptions {
   public readonly name: string;
   public readonly styleURL: string;
+  public readonly tilesets: string[] | undefined;
   public readonly bounds: string;
   public readonly minZoom: number | undefined;
   public readonly maxZoom: number | undefined;
@@ -27,6 +29,7 @@ class OfflineCreatePackOptions {
     this.minZoom = options.minZoom;
     this.maxZoom = options.maxZoom;
     this.metadata = this._makeMetadata(options.metadata);
+    this.tilesets = options.tilesets;
   }
 
   _assert(options: OfflineCreatePackOptionsArgs) {

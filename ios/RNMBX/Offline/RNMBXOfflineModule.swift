@@ -11,8 +11,6 @@ extension Date {
   }
 }
 
-
-
 @objc(RNMBXOfflineModule)
 class RNMBXOfflineModule: RCTEventEmitter {
   var hasListeners = false
@@ -60,6 +58,9 @@ class RNMBXOfflineModule: RCTEventEmitter {
       self.state = state
 
       if let rnMetadata = metadata[RNMapboxInfoMetadataKey] as? [String:Any] {
+        if let tilesets = rnMetadata["tilesets"] as? [String] {
+          self.tilesets = tilesets
+        }
         if let styleURI = rnMetadata["styleURI"] as? String {
           self.styleURI = StyleURI(rawValue: styleURI)
         }
@@ -82,20 +83,22 @@ class RNMBXOfflineModule: RCTEventEmitter {
          state: State = .unknown,
          styleURI: StyleURI,
          bounds: Geometry,
+         tilesets: [String],
          zoomRange: ClosedRange<UInt8>,
          metadata: [String:Any]) {
       self.name = name
       self.progress = nil
-      self.cancelable = nil
+      self.cancelables = []
       self.state = state
-      
       self.styleURI = styleURI
       self.bounds = bounds
       self.zoomRange = zoomRange
+      self.tilesets = tilesets
       
       var metadata = metadata
       metadata[RNMapboxInfoMetadataKey] = [
         "styleURI": styleURI.rawValue,
+        "tilesets": logged("RNMBXOfflineModule.TileRegionPack: cannot encode tilesets") { try JSONSerialization.jsonObject(with: try! JSONEncoder().encode(tilesets)) },
         "bounds": logged("RNMBXOfflineModule.TileRegionPack: cannot encode bounds") { try JSONSerialization.jsonObject(with: try! JSONEncoder().encode(bounds)) },
         "zoomRange": logged("RNMBXOfflineModule.TileRegionPack: cannot encode zoomRange") { try JSONSerialization.jsonObject(with: try! JSONEncoder().encode(zoomRange))}
       ]
@@ -103,12 +106,13 @@ class RNMBXOfflineModule: RCTEventEmitter {
     }
 
     var name: String
-    var cancelable: Cancelable? = nil
+    var cancelables: [Cancelable] = []
     var progress : TileRegionLoadProgress? = nil
     var state : State = .inactive
     var metadata : [String:Any]
 
     // Stored in metadata for resume functionality:
+    var tilesets : [String] = []
     var bounds: Geometry? = nil
     var zoomRange: ClosedRange<UInt8>? = nil
     var styleURI: StyleURI? = nil
@@ -177,9 +181,11 @@ class RNMBXOfflineModule: RCTEventEmitter {
           name: id,
           styleURI: StyleURI(rawValue: options["styleURL"] as! String)!,
           bounds: bounds,
+          tilesets: options["tilesets"] as? [String] ?? [],
           zoomRange: (options["minZoom"] as! NSNumber).uint8Value...(options["maxZoom"] as! NSNumber).uint8Value,
           metadata: metadata
         )
+
         self.tileRegionPacks[id] = actPack
         self.startLoading(pack: actPack)
         
@@ -242,13 +248,8 @@ class RNMBXOfflineModule: RCTEventEmitter {
   func pausePackDownload(_ name: String, resolver: RCTPromiseResolveBlock, rejecter: RCTPromiseRejectBlock)
   {
     if let pack = tileRegionPacks[name] {
-      if let cancelable = pack.cancelable {
-        cancelable.cancel()
-        tileRegionPacks[name]?.cancelable = nil
-        resolver(nil)
-      } else {
-        rejecter("pausePackDownload", "Offline pack: \(name) already cancelled", nil)
-      }
+      pack.cancelables.forEach { $0.cancel() }
+      resolver(nil)
     } else {
       rejecter("pausePackDownload", "Unknown offline region: \(name)", nil)
     }
@@ -343,6 +344,8 @@ class RNMBXOfflineModule: RCTEventEmitter {
   func startLoading(pack: TileRegionPack) {
     let id = pack.name
     let metadata = pack.metadata
+    let taskGroup = DispatchGroup()
+
     guard let bounds = pack.bounds else {
       RNMBXLogError("RNMBXOfflineModule.startLoading failed as there are no bounds in pack")
       return
@@ -355,34 +358,65 @@ class RNMBXOfflineModule: RCTEventEmitter {
       RNMBXLogError("RNMBXOfflineModule.startLoading failed as there is no styleURI in pack")
       return
     }
+      
+    var downloadError = false
     
-    let stylePackLoadOptions = StylePackLoadOptions(glyphsRasterizationMode: .ideographsRasterizedLocally, metadata: pack.metadata)
+    let stylePackLoadOptions = StylePackLoadOptions(glyphsRasterizationMode: .ideographsRasterizedLocally, metadata: pack.metadata)!
     
     #if RNMBX_11
+    let threadedOfflineManager = OfflineManager()
+    taskGroup.enter()
+    let stylePackTask = threadedOfflineManager.loadStylePack(for: styleURI, loadOptions: stylePackLoadOptions) { progress in
+      self.tileRegionPacks[id]!.state = .active
+    } completion: { result in
+      DispatchQueue.main.async {
+        defer {
+          taskGroup.leave()
+        }
+
+        switch result {
+        case let .success(stylePack): break
+        case let .failure(error):
+          Logger.log(level: .warn,
+                     message: "RNMBXOfflineModule: startLoading: error loading style pack: " + error.localizedDescription)
+          downloadError = true
+          self.offlinePackDidReceiveError(name: id, error: error)
+        }
+      }
+    }
     let descriptorOptions = TilesetDescriptorOptions(
       styleURI: styleURI,
       zoomRange: zoomRange,
-      tilesets: [], // RNMBX_11_TODO
-      stylePackOptions: stylePackLoadOptions
+      tilesets: pack.tilesets
     )
+    let tilesetDescriptor = threadedOfflineManager.createTilesetDescriptor(for: descriptorOptions)
+    let descriptors = [tilesetDescriptor]
     #else
     let descriptorOptions = TilesetDescriptorOptions(
       styleURI: styleURI,
       zoomRange: zoomRange,
       stylePackOptions: stylePackLoadOptions
     )
+    let descriptor = self.offlineManager.createTilesetDescriptor(for: descriptorOptions)
+    let tilesetDescriptorOptions = TilesetDescriptorOptionsForTilesets(tilesets: pack.tilesets, zoomRange: zoomRange)
+    let tilesetDescriptor = self.offlineManager.createTilesetDescriptorForTilesetDescriptorOptions(tilesetDescriptorOptions)
+    var descriptors = [descriptor]
+    if (!pack.tilesets.isEmpty) {
+      descriptors.append(tilesetDescriptor)
+    }
     #endif
-    let tilesetDescriptor = self.offlineManager.createTilesetDescriptor(for: descriptorOptions)
     
     let loadOptions = TileRegionLoadOptions(
       geometry: bounds, // RNMBXFeatureUtils.geometryToGeometry(bounds),
-      descriptors: [tilesetDescriptor],
+      descriptors: descriptors,
       metadata: metadata,
       acceptExpired: true,
       networkRestriction: .none,
       averageBytesPerSecond: nil)
     
     var lastProgress : TileRegionLoadProgress? = nil
+    
+    taskGroup.enter()
     let task = self.tileStore.loadTileRegion(forId: id, loadOptions: loadOptions!, progress: {
       progress in
       lastProgress = progress
@@ -390,25 +424,39 @@ class RNMBXOfflineModule: RCTEventEmitter {
       self.tileRegionPacks[id]!.state = .active
       self.offlinePackProgressDidChange(progress: progress, metadata: metadata, state: .active)
     }) { result in
-      switch result {
-      case .success(let _):
         DispatchQueue.main.async {
-          if let progess = lastProgress {
-            self.offlinePackProgressDidChange(progress: progess, metadata: metadata, state: .complete)
-          } else {
-            Logger.log(level: .warn,
-                       message: "RNMBXOfflineModule: startLoading: tile region completed, but got no progress information")
-          }
-          self.tileRegionPacks[id]!.state = .complete
+            defer {
+                taskGroup.leave()
+            }
+            switch result {
+            case .success(let _):
+                if let progess = lastProgress {
+                    self.offlinePackProgressDidChange(progress: progess, metadata: metadata, state: .complete)
+                } else {
+                    Logger.log(level: .warn,
+                               message: "RNMBXOfflineModule: startLoading: tile region completed, but got no progress information")
+                }
+                self.tileRegionPacks[id]!.state = .complete
+            case .failure(let error):
+                Logger.log(level: .warn,
+                           message: "RNMBXOfflineModule: startLoading: error loading tile region: " + error.localizedDescription)
+                
+                self.tileRegionPacks[id]!.state = .inactive
+                self.offlinePackDidReceiveError(name: id, error: error)
+            }
         }
-      case .failure(let error):
-        DispatchQueue.main.async {
-          self.tileRegionPacks[id]!.state = .inactive
-          self.offlinePackDidReceiveError(name: id, error: error)
-        }
-      }
     }
-    self.tileRegionPacks[id]!.cancelable = task
+
+    taskGroup.notify(queue: .main) {
+      self.tileRegionPacks[id]!.cancelables = []
+      self.tileRegionPacks[id]!.state = downloadError ? .inactive : .complete
+    }
+
+    #if RNMBX_11
+    self.tileRegionPacks[id]!.cancelables = [task, stylePackTask]
+    #else
+    self.tileRegionPacks[id]!.cancelables = [task]
+    #endif
   }
   
   func convertRegionsToJSON(regions: [TileRegion], resolve: @escaping RCTPromiseResolveBlock, rejecter: @escaping RCTPromiseRejectBlock) {
