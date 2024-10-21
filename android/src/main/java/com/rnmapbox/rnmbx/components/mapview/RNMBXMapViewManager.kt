@@ -210,9 +210,9 @@ open class RNMBXMapViewManager(context: ReactApplicationContext, val viewTagReso
         mapView.setReactStyleURL(styleURL.asString())
     }
 
-    @ReactProp(name = "preferredFramesPerSecond") @Suppress("UNUSED_PARAMETER")
-    fun setPreferredFramesPerSecond(mapView: RNMBXMapView, preferredFramesPerSecond: Int) {
-        //mapView.setReactPreferredFramesPerSecond(preferredFramesPerSecond);
+    @ReactProp(name = "preferredFramesPerSecond")
+    override fun setPreferredFramesPerSecond(mapView: RNMBXMapView, preferredFramesPerSecond: Dynamic) {
+        mapView.setReactPreferredFramesPerSecond(preferredFramesPerSecond.asInt())
     }
 
     @ReactProp(name = "zoomEnabled")
