@@ -87,7 +87,7 @@ RCT_EXPORT_METHOD(getPointInView:(nonnull NSNumber*)viewRef atCoordinate:(NSArra
 
 RCT_EXPORT_METHOD(getVisibleBounds:(nonnull NSNumber*)viewRef resolve:(RCTPromiseResolveBlock)resolve reject:(RCTPromiseRejectBlock)reject) {
     [self withMapView:viewRef block:^(RNMBXMapView *view) {
-        [RNMBXMapViewManager getVisibleBounds:view resolver:resolve];
+        [RNMBXMapViewManager getVisibleBounds:view resolver:resolve rejecter:reject];
     } reject:reject methodName:@"getVisibleBounds"];
 }
 
