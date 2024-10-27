@@ -20,7 +20,7 @@ typealias ViewRefTag = Double
 // see https://github.com/rnmapbox/maps/pull/3074
 open class ViewTagResolver(val context: ReactApplicationContext) {
     private val createdViews: HashSet<Int> = hashSetOf<Int>()
-    private val viewWaiters: HashMap<Int, MutableList<ViewTagWaiter<View>>> = hashMapOf()
+    private val viewWaiters: HashMap<Int, MutableList<ViewTagWaiter<View?>>> = hashMapOf()
 
     // to be called from view.setId
     fun tagAssigned(viewTag: Int) {
@@ -68,7 +68,14 @@ open class ViewTagResolver(val context: ReactApplicationContext) {
                 }
             } catch (err: IllegalViewOperationException) {
                 if (!createdViews.contains(viewTag)) {
-                    viewWaiters.getOrPut(viewTag) { mutableListOf<ViewTagWaiter<View>>() }.add(ViewTagWaiter<View>({ view -> fn(view as V) }, reject))
+                    viewWaiters.getOrPut(viewTag) { mutableListOf<ViewTagWaiter<View?>>() }.add(ViewTagWaiter<View?>({ view ->
+                        if (view != null) {
+                            fn(view as V)
+                        } else {
+                            Logger.e(LOG_TAG, "view: $viewTag but is null")
+                            reject?.reject(Throwable("view: $viewTag but is null"))
+                        }
+                    }, reject))
                 } else {
                     reject?.reject(err)
                 }
