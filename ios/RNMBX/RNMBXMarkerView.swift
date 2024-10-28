@@ -229,6 +229,7 @@ public class RNMBXMarkerView: UIView, RNMBXMapComponent {
     )
     #if RNMBX_11
     options.allowOverlapWithPuck = allowOverlapWithPuck
+    options.ignoreCameraPadding = true
     #endif
     return options
   }
