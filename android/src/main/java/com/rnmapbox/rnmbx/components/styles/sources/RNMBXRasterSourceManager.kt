@@ -8,6 +8,10 @@ import com.facebook.react.viewmanagers.RNMBXRasterSourceManagerInterface
 import com.rnmapbox.rnmbx.events.constants.EventKeys
 import com.rnmapbox.rnmbx.events.constants.eventMapOf
 import javax.annotation.Nonnull
+import com.facebook.react.bridge.ReadableArray
+import com.rnmapbox.rnmbx.components.styles.RNMBXStyleImportManager
+import com.rnmapbox.rnmbx.components.styles.RNMBXStyleImportManager.Companion
+import com.rnmapbox.rnmbx.utils.Logger
 
 class RNMBXRasterSourceManager(reactApplicationContext: ReactApplicationContext) :
     RNMBXTileSourceManager<RNMBXRasterSource>(reactApplicationContext),
@@ -41,5 +45,37 @@ class RNMBXRasterSourceManager(reactApplicationContext: ReactApplicationContext)
     @ReactProp(name = "existing")
     override fun setExisting(source: RNMBXRasterSource, value: Dynamic) {
         source.mExisting = value.asBoolean()
+    }
+
+    @ReactProp(name = "sourceBounds")
+    override fun setSourceBounds(source: RNMBXRasterSource, value: Dynamic) {
+        if (value.type.name == "Array") {
+            val readableArray: ReadableArray = value.asArray()
+
+            if (readableArray.size() == 4) {
+                val bboxArray = Array(4) { i -> readableArray.getDouble(i) }
+
+                if(this.validateBbox(bboxArray)){
+                    source.setSourceBounds(bboxArray)
+                 } else {
+                    Logger.e(RNMBXRasterSourceManager.REACT_CLASS, "source bounds contain invalid bbox")
+                }
+
+                return
+            }
+        }
+        Logger.e(RNMBXRasterSourceManager.REACT_CLASS, "source bounds must be an array with left, bottom, top, and right values")
+    }
+
+    fun validateBbox(bbox: Array<Double>): Boolean {
+        if (bbox.size != 4) return false
+
+        val (swLng, swLat, neLng, neLat) = bbox
+
+        val isLngValid = swLng in -180.0..180.0 && neLng in -180.0..180.0
+        val isLatValid = swLat in -90.0..90.0 && neLat in -90.0..90.0
+        val isSouthWestOfNorthEast = swLng < neLng && swLat < neLat
+
+        return isLngValid && isLatValid && isSouthWestOfNorthEast
     }
 }

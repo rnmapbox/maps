@@ -22,4 +22,5 @@ public interface RNMBXRasterSourceManagerInterface<T extends View> {
   void setTileSize(T view, Dynamic value);
   void setTms(T view, Dynamic value);
   void setAttribution(T view, Dynamic value);
+  void setSourceBounds(T view, Dynamic value);
 }

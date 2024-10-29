@@ -5052,6 +5052,13 @@
         "type": "React.ReactElement \\| React.ReactElement[]",
         "default": "none",
         "description": "FIX ME NO DESCRIPTION"
+      },
+      {
+        "name": "sourceBounds",
+        "required": false,
+        "type": "Array",
+        "default": "none",
+        "description": "An array containing the longitude and latitude of the southwest and northeast corners of\nthe source's bounding box in the following order: `[sw.lng, sw.lat, ne.lng, ne.lat]`.\nWhen this property is included in a source, no tiles outside of the given bounds are requested by Mapbox GL."
       }
     ],
     "fileNameWithExt": "RasterSource.tsx",
