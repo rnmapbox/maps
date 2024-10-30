@@ -36,9 +36,8 @@ abstract class RNMBXTileSource<T : Source?>(context: Context?) : RNMBXSource<T>(
         if (attribution != null) {
             builder.attribution(attribution)
         }
-        if(bounds != null) {
-             val boundsArray = bounds!!.clone()
-             builder.bounds(Arrays.asList(*boundsArray))
+        bounds?.let {
+           builder.bounds(it.toList())
         }
         return builder.build()
     }

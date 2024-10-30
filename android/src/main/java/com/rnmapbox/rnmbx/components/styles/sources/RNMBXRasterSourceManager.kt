@@ -8,9 +8,7 @@ import com.facebook.react.viewmanagers.RNMBXRasterSourceManagerInterface
 import com.rnmapbox.rnmbx.events.constants.EventKeys
 import com.rnmapbox.rnmbx.events.constants.eventMapOf
 import javax.annotation.Nonnull
-import com.facebook.react.bridge.ReadableArray
-import com.rnmapbox.rnmbx.components.styles.RNMBXStyleImportManager
-import com.rnmapbox.rnmbx.components.styles.RNMBXStyleImportManager.Companion
+import com.facebook.react.bridge.ReadableType
 import com.rnmapbox.rnmbx.utils.Logger
 
 class RNMBXRasterSourceManager(reactApplicationContext: ReactApplicationContext) :
@@ -49,25 +47,21 @@ class RNMBXRasterSourceManager(reactApplicationContext: ReactApplicationContext)
 
     @ReactProp(name = "sourceBounds")
     override fun setSourceBounds(source: RNMBXRasterSource, value: Dynamic) {
-        if (value.type.name == "Array") {
-            val readableArray: ReadableArray = value.asArray()
-
-            if (readableArray.size() == 4) {
-                val bboxArray = Array(4) { i -> readableArray.getDouble(i) }
-
-                if(this.validateBbox(bboxArray)){
-                    source.setSourceBounds(bboxArray)
-                 } else {
-                    Logger.e(RNMBXRasterSourceManager.REACT_CLASS, "source bounds contain invalid bbox")
-                }
-
-                return
-            }
+        if (value.type != ReadableType.Array || value.asArray().size() != 4) {
+           Logger.e(REACT_CLASS, "source bounds must be an array with left, bottom, top, and right values")
+           return
         }
-        Logger.e(RNMBXRasterSourceManager.REACT_CLASS, "source bounds must be an array with left, bottom, top, and right values")
+        val bboxArray = Array(4) { i -> value.asArray().getDouble(i) }
+
+        if(!this.validateBbox(bboxArray)){
+            Logger.e(REACT_CLASS, "source bounds contain invalid bbox")
+            return
+        }
+
+        source.setSourceBounds(bboxArray)
     }
 
-    fun validateBbox(bbox: Array<Double>): Boolean {
+    private fun validateBbox(bbox: Array<Double>): Boolean {
         if (bbox.size != 4) return false
 
         val (swLng, swLat, neLng, neLat) = bbox
