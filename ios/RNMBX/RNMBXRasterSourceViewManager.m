@@ -14,6 +14,6 @@ RCT_EXPORT_VIEW_PROPERTY(maxZoomLevel, NSNumber)
 
 RCT_EXPORT_VIEW_PROPERTY(tms, BOOL)
 RCT_EXPORT_VIEW_PROPERTY(attribution, NSString)
-
+RCT_EXPORT_VIEW_PROPERTY(sourceBounds, NSArray)
 
 @end

@@ -23,6 +23,10 @@ export default function RasterSourceExample() {
       <RasterSource
         id="stamen-watercolor"
         tileSize={256}
+        sourceBounds={[
+          -74.01010105570786, 40.7096750598196, -74.00028742807824,
+          40.71670107507063,
+        ]}
         tileUrlTemplates={['https://tile.openstreetmap.org/{z}/{x}/{y}.png']}
       />
       <RasterLayer
