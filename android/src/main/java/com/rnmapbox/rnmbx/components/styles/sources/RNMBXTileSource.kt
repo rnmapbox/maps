@@ -13,6 +13,7 @@ abstract class RNMBXTileSource<T : Source?>(context: Context?) : RNMBXSource<T>(
     var attribution: String? = null
     var minZoomLevel: Int? = null
     var maxZoomLevel: Int? = null
+    var bounds: Array<Double>? = null
     var tMS = false
     fun buildTileset(): TileSet {
         val tileUrlTemplates =
@@ -34,6 +35,9 @@ abstract class RNMBXTileSource<T : Source?>(context: Context?) : RNMBXSource<T>(
         val attribution = this.attribution
         if (attribution != null) {
             builder.attribution(attribution)
+        }
+        bounds?.let {
+           builder.bounds(it.toList())
         }
         return builder.build()
     }

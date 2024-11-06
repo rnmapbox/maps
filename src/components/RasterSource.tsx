@@ -67,6 +67,12 @@ type Props = BaseProps & {
   attribution?: string;
 
   children?: React.ReactElement | React.ReactElement[];
+  /**
+   * An array containing the longitude and latitude of the southwest and northeast corners of
+   * the source's bounding box in the following order: `[sw.lng, sw.lat, ne.lng, ne.lat]`.
+   * When this property is included in a source, no tiles outside of the given bounds are requested by Mapbox GL.
+   */
+  sourceBounds?: number[];
 };
 
 type NativeProps = Props;

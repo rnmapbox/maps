@@ -12,6 +12,7 @@ import com.rnmapbox.rnmbx.modules.RNMBXOfflineModule
 import com.rnmapbox.rnmbx.modules.RNMBXLocationModule
 import com.facebook.react.bridge.ReactMethod
 import com.facebook.react.common.MapBuilder
+import com.mapbox.bindgen.None
 import com.mapbox.common.*
 import com.mapbox.maps.MapView
 import com.mapbox.maps.MapboxMap
@@ -137,7 +138,11 @@ class RNMBXModule(private val mReactContext: ReactApplicationContext) : ReactCon
         mReactContext.runOnUiQueueThread {
             MapboxMap.clearData(mReactContext) {
                 if (it.isValue) {
-                    promise.resolve(it.value)
+                    if (it.value == None.getInstance()) {
+                        promise.resolve(null)
+                    } else {
+                        promise.resolve(it.value)
+                    }
                 } else {
                     promise.reject("error", "RNMBXModule.clearError ${it.error}")
                 }
