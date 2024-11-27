@@ -17,4 +17,5 @@ public interface RNMBXStyleImportManagerInterface<T extends View> {
   void setId(T view, @Nullable String value);
   void setExisting(T view, boolean value);
   void setConfig(T view, Dynamic value);
+  void setMerge(T view, boolean value);
 }

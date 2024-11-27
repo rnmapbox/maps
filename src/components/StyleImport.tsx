@@ -21,6 +21,12 @@ type Props = {
   config: {
     [key: string]: string;
   };
+
+  /**
+   * Determines whether the style import config should merge with the existing style import config.
+   * @default false
+   */
+  merge?: boolean;
 };
 
 /**
