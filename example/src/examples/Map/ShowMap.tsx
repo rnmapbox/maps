@@ -15,9 +15,11 @@ const ShowMap = () => {
         data: (Mapbox.StyleURL as any)[key], // bad any, because enums
       };
     })
-    .sort(onSortOptions);
+    .sort(onSortOptions)
+    .concat({ data: 'mount', label: '(un)mount' });
 
   const [styleURL, setStyleURL] = useState({ styleURL: _mapOptions[0].data });
+  const [isMounted, setIsMounted] = useState(true);
 
   useEffect(() => {
     Mapbox.locationManager.start();
@@ -42,17 +44,26 @@ const ShowMap = () => {
         selectedIndex={_mapOptions.findIndex(
           (i) => i.data === styleURL.styleURL,
         )}
-        onPress={(index) => onMapChange(index, _mapOptions[index].data)}
+        onPress={(index) => {
+          const { data } = _mapOptions[index];
+          if (data === 'mount') {
+            setIsMounted((m) => !m);
+            return;
+          }
+          onMapChange(index, data);
+        }}
       />
-      <Mapbox.MapView
-        styleURL={styleURL.styleURL}
-        style={sheet.matchParent}
-        testID={'show-map'}
-      >
-        <Mapbox.Camera followZoomLevel={12} followUserLocation />
+      {isMounted ? (
+        <Mapbox.MapView
+          styleURL={styleURL.styleURL}
+          style={sheet.matchParent}
+          testID={'show-map'}
+        >
+          <Mapbox.Camera followZoomLevel={12} followUserLocation />
 
-        <Mapbox.UserLocation onPress={onUserMarkerPress} />
-      </Mapbox.MapView>
+          <Mapbox.UserLocation onPress={onUserMarkerPress} />
+        </Mapbox.MapView>
+      ) : null}
     </>
   );
 };
