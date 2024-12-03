@@ -59,8 +59,8 @@
     "expo": ">=47.0.0",
     "mapbox-gl": "^2.9.0",
     "react": ">=16.6.1",
-    "react-native": ">=0.59.9",
-    "react-dom": ">= 17.0.0"
+    "react-dom": ">= 17.0.0",
+    "react-native": ">=0.59.9"
   },
   "peerDependenciesMeta": {
     "expo": {
@@ -85,11 +85,12 @@
   "devDependencies": {
     "@babel/core": "7.19.1",
     "@babel/eslint-parser": "^7.19.1",
-    "@babel/plugin-proposal-class-properties": "7.18.6",
-    "@babel/helper-split-export-declaration": "7.24.7",
-    "@babel/helper-hoist-variables": "7.24.7",
     "@babel/helper-function-name": "7.24.7",
+    "@babel/helper-hoist-variables": "7.24.7",
+    "@babel/helper-split-export-declaration": "7.24.7",
+    "@babel/plugin-proposal-class-properties": "7.18.6",
     "@babel/runtime": "7.19.0",
+    "@mdx-js/mdx": "^3.0.0",
     "@react-native/eslint-config": "^0.72.2",
     "@sinonjs/fake-timers": "^8.0.1",
     "@testing-library/react-native": "^12.4.0",
@@ -122,8 +123,7 @@
     "react-native-builder-bob": "^0.23.1",
     "react-test-renderer": "18.2.0",
     "ts-node": "10.9.1",
-    "typescript": "5.1.3",
-    "@mdx-js/mdx": "^3.0.0"
+    "typescript": "5.1.3"
   },
   "codegenConfig": {
     "name": "rnmapbox_maps_specs",
@@ -148,5 +148,6 @@
   "eslintIgnore": [
     "node_modules/",
     "lib/"
-  ]
+  ],
+  "packageManager": "yarn@4.4.1+sha512.f825273d0689cc9ead3259c14998037662f1dcd06912637b21a450e8da7cfeb4b1965bbee73d16927baa1201054126bc385c6f43ff4aa705c8631d26e12460f1"
 }

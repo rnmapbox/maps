@@ -56,6 +56,7 @@ node_modules
 package-lock.json
 /example/package-lock.json
 /example/yarn.lock
+.yarn/install-state.gz
 
 # Expo
 .expo
