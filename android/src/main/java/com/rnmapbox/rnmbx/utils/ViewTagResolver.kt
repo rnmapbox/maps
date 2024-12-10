@@ -32,7 +32,7 @@ open class ViewTagResolver(val context: ReactApplicationContext) {
                 try {
                     val view = manager.resolveView(viewTag)
 
-                    list.forEach { it.fn(view) }
+                    list.forEach { view?.let { itView -> it.fn(view) } }
                 } catch (err: IllegalViewOperationException) {
                     list.forEach { it.reject?.reject(err) }
                 }
