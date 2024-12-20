@@ -136,35 +136,23 @@ using namespace facebook::react;
     const auto &oldViewProps = static_cast<const RNMBXMapViewProps &>(*oldProps);
     const auto &newViewProps = static_cast<const RNMBXMapViewProps &>(*props);
   
-    id attributionEnabled = RNMBXConvertFollyDynamicToId(newViewProps.attributionEnabled);
-    if (attributionEnabled != nil) {
-        _view.reactAttributionEnabled = attributionEnabled;
-    }
+    RNMBX_REMAP_OPTIONAL_PROP_BOOL(attributionEnabled, reactAttributionEnabled)
 
     id attributionPosition = RNMBXConvertFollyDynamicToId(newViewProps.attributionPosition);
     if (attributionPosition != nil) {
         _view.reactAttributionPosition = attributionPosition;
     }
 
-    id logoEnabled = RNMBXConvertFollyDynamicToId(newViewProps.logoEnabled);
-    if (logoEnabled != nil) {
-        _view.reactLogoEnabled = logoEnabled;
-    }
+    RNMBX_REMAP_OPTIONAL_PROP_BOOL(logoEnabled, reactLogoEnabled)
 
     id logoPosition = RNMBXConvertFollyDynamicToId(newViewProps.logoPosition);
     if (logoPosition != nil) {
         _view.reactLogoPosition = logoPosition;
     }
 
-    id compassEnabled = RNMBXConvertFollyDynamicToId(newViewProps.compassEnabled);
-    if (compassEnabled != nil) {
-        _view.reactCompassEnabled = compassEnabled;
-    }
+    RNMBX_REMAP_OPTIONAL_PROP_BOOL(compassEnabled, reactCompassEnabled)
 
-    id compassFadeWhenNorth = RNMBXConvertFollyDynamicToId(newViewProps.compassFadeWhenNorth);
-    if (compassFadeWhenNorth != nil) {
-        _view.reactCompassFadeWhenNorth = compassFadeWhenNorth;
-    }
+    RNMBX_REMAP_OPTIONAL_PROP_BOOL(compassFadeWhenNorth, reactCompassFadeWhenNorth)
 
     id compassPosition = RNMBXConvertFollyDynamicToId(newViewProps.compassPosition);
     if (compassPosition != nil) {
@@ -194,25 +182,13 @@ using namespace facebook::react;
         _view.reactScaleBarPosition = scaleBarPosition;
     }
 
-    id zoomEnabled = RNMBXConvertFollyDynamicToId(newViewProps.zoomEnabled);
-    if (zoomEnabled != nil) {
-        _view.reactZoomEnabled = zoomEnabled;
-    }
+    RNMBX_REMAP_OPTIONAL_PROP_BOOL(zoomEnabled, reactZoomEnabled)
 
-    id scrollEnabled = RNMBXConvertFollyDynamicToId(newViewProps.scrollEnabled);
-    if (scrollEnabled != nil) {
-        _view.reactScrollEnabled = scrollEnabled;
-    }
+    RNMBX_REMAP_OPTIONAL_PROP_BOOL(scrollEnabled, reactScrollEnabled)
 
-    id rotateEnabled = RNMBXConvertFollyDynamicToId(newViewProps.rotateEnabled);
-    if (rotateEnabled != nil) {
-        _view.reactRotateEnabled = rotateEnabled;
-    }
-
-    id pitchEnabled = RNMBXConvertFollyDynamicToId(newViewProps.pitchEnabled);
-    if (pitchEnabled != nil) {
-        _view.reactPitchEnabled = pitchEnabled;
-    }
+    RNMBX_REMAP_OPTIONAL_PROP_BOOL(rotateEnabled, reactRotateEnabled)
+    
+    RNMBX_REMAP_OPTIONAL_PROP_BOOL(pitchEnabled, reactPitchEnabled)
 
     id projection = RNMBXConvertFollyDynamicToId(newViewProps.projection);
     if (projection != nil) {
