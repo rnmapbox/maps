@@ -262,6 +262,16 @@
       },
       {
         "metadata": {
+          "title": "Map (un-)mount",
+          "tags": [],
+          "docs": "\nShowing and hiding the the map should not lead to increased memory consumption, use this example to check it on the profiler.\n"
+        },
+        "fullPath": "example/src/examples/Map/MapUnMount.tsx",
+        "relPath": "Map/MapUnMount.tsx",
+        "name": "MapUnMount"
+      },
+      {
+        "metadata": {
           "title": "Offline Example",
           "tags": [
             "offlineManager#createPack",
