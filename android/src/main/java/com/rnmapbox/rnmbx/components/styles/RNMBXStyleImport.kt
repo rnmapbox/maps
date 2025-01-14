@@ -10,6 +10,7 @@ import com.rnmapbox.rnmbx.v11compat.style.*
 
 class RNMBXStyleImport(context: Context) : AbstractMapFeature(context) {
     var id: String? = null;
+    var merge: Boolean = false;
 
     var config: HashMap<String, Value> = hashMapOf()
         set(value: HashMap<String, Value>) {
@@ -27,11 +28,16 @@ class RNMBXStyleImport(context: Context) : AbstractMapFeature(context) {
             id?.let { id ->
                 val config = this.config
                 if (config.isNotEmpty()) {
-                    mapView.mapView.getMapboxMap().getStyle()
-                        ?.setStyleImportConfigProperties(id, config)
+                    val mapStyle = mapView.mapView.getMapboxMap().getStyle()
+                    if (merge) {
+                        config.forEach { (key, value) ->
+                            mapStyle?.setStyleImportConfigProperty(id, key, value)
+                        }
+                    } else {
+                        mapStyle?.setStyleImportConfigProperties(id, config)
+                    }
                 }
             }
         }
-
     }
 }

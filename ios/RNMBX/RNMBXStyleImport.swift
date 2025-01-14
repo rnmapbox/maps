@@ -19,6 +19,9 @@ open class RNMBXStyleImport : UIView, RNMBXMapComponent {
       }
     }
   }
+
+  @objc
+  var merge: Bool = false;
   
   public func waitForStyleLoad() -> Bool {
     true
@@ -37,8 +40,16 @@ open class RNMBXStyleImport : UIView, RNMBXMapComponent {
   func apply(mapView: MapView) {
     if let config = config, let id = id {
       #if RNMBX_11
-      logged("RNMBXStyleImport.setStyleImportConfigProperties id=\(id)") {
-        try mapView.mapboxMap.setStyleImportConfigProperties(for: id, configs: config)
+      if merge {
+        for (key, value) in config {
+          logged("RNMBXStyleImport.setStyleImportConfigProperty for id=\(id), config=\(key), value=\(value)") {
+            try mapView.mapboxMap.setStyleImportConfigProperty(for: id, config: key, value: value)
+          }
+        }
+      } else {
+        logged("RNMBXStyleImport.setStyleImportConfigProperties id=\(id)") {
+          try mapView.mapboxMap.setStyleImportConfigProperties(for: id, configs: config)
+        }
       }
       #else
       Logger.error("RNMBXStyleImport.setStyleImportConfigProperties is only implemented on v11")
