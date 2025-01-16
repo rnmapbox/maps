@@ -712,7 +712,9 @@ Queries the currently loaded data for elevation at a geographical location.<br/>
 | `coordinate` | `Position` | `Yes` | the coordinates to query elevation at |
 
 
-[Query Terrain Elevation](../examples/V10/QueryTerrainElevation)### setSourceVisibility(visible, sourceId[, sourceLayerId])
+[Query Terrain Elevation](../examples/V10/QueryTerrainElevation)
+
+### setSourceVisibility(visible, sourceId[, sourceLayerId])
 
 Sets the visibility of all the layers referencing the specified `sourceLayerId` and/or `sourceId`
 
@@ -721,7 +723,7 @@ Sets the visibility of all the layers referencing the specified `sourceLayerId` 
 | ---- | :--: | :------: | :----------: |
 | `visible` | `boolean` | `Yes` | Visibility of the layers |
 | `sourceId` | `string` | `Yes` | Identifier of the target source (e.g. 'composite') |
-| `sourceLayerId` | `String` | `No` | Identifier of the target source-layer (e.g. 'building') |
+| `sourceLayerId` | `string` | `No` | Identifier of the target source-layer (e.g. 'building') |
 
 
 
@@ -729,5 +731,58 @@ Sets the visibility of all the layers referencing the specified `sourceLayerId` 
 await this._map.setSourceVisibility(false, 'composite', 'building')
 ```
 
+### setFeatureState(featureId, state, sourceId [, sourceLayerId])
+
+Updates the state map of a feature within a style source.
+
+Updates entries in the state map of a given feature within a style source.
+
+Only entries listed in the `state` will be updated.
+
+An entry in the feature state map that is not listed in `state` will retain its previous value.
+
+#### arguments
+| Name | Type | Required | Description  |
+| ---- | :--: | :------: | :----------: |
+| `featureId` | `string` | `Yes` | Identifier of the feature whose state should be updated |
+| `state` | `object` | `Yes` | Map of entries to update with their respective new values. |
+| `sourceId` | `string` | `Yes` | Style source identifier |
+| `sourceLayerId` | `string` | `No` | Style source layer identifier (for multi-layer sources such as vector sources). |
+
+```javascript
+await this._map.setFeatureState('my-feature-id', { 'my-feature-state-key': 'my-feature-state-value' }, 'my-source-id', 'my-source-layer-id')
+```
 
 
+### getFeatureState(featureId, sourceId [, sourceLayerId])
+
+Returns the state map of a feature within a style source.
+
+#### arguments
+| Name | Type | Required | Description  |
+| ---- | :--: | :------: | :----------: |
+| `featureId` | `string` | `Yes` | Identifier of the feature whose state should be updated. |
+| `sourceId` | `string` | `Yes` | Style source identifier. |
+| `sourceLayerId` | `string` | `No` | Style source layer identifier (for multi-layer sources such as vector sources). |
+
+```javascript
+await this._map.getFeatureState('my-feature-id', 'my-source-id', 'my-source-layer-id')
+```
+
+### removeFeatureState(featureId, stateKey, sourceId [, sourceLayerId])
+
+Removes entries from a feature state object.
+
+Removes a specified property or all properties from a feature's state object depending on the value of `stateKey`.
+
+#### arguments
+| Name | Type | Required | Description  |
+| ---- | :--: | :------: | :----------: |
+| `featureId` | `string` | `Yes` | Identifier of the feature whose state should be removed. |
+| `stateKey` | `string` or `null` | `Yes` | The name of the property to remove. If `null`, all feature’s state object properties are removed. |
+| `sourceId` | `string` | `Yes` | Style source identifier. |
+| `sourceLayerId` | `string` | `No` | Style source layer identifier (for multi-layer sources such as vector sources). |
+
+```javascript
+await this._map.removeFeatureState('my-feature-id', 'my-feature-state-key', 'my-source-id', 'my-source-layer-id')
+```
