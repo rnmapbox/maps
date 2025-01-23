@@ -12,10 +12,11 @@ package com.facebook.react.viewmanagers;
 import android.view.View;
 import androidx.annotation.Nullable;
 import com.facebook.react.bridge.DynamicFromObject;
+import com.facebook.react.uimanager.BaseViewManager;
 import com.facebook.react.uimanager.BaseViewManagerDelegate;
-import com.facebook.react.uimanager.BaseViewManagerInterface;
+import com.facebook.react.uimanager.LayoutShadowNode;
 
-public class RNMBXTerrainManagerDelegate<T extends View, U extends BaseViewManagerInterface<T> & RNMBXTerrainManagerInterface<T>> extends BaseViewManagerDelegate<T, U> {
+public class RNMBXTerrainManagerDelegate<T extends View, U extends BaseViewManager<T, ? extends LayoutShadowNode> & RNMBXTerrainManagerInterface<T>> extends BaseViewManagerDelegate<T, U> {
   public RNMBXTerrainManagerDelegate(U viewManager) {
     super(viewManager);
   }
