@@ -1,11 +1,11 @@
-import { useState } from 'react';
 import geoViewport from '@mapbox/geo-viewport';
 import Mapbox, {
   Camera,
   MapView,
-  offlineManager,
+  offlineManagerLegacy,
   StyleURL,
 } from '@rnmapbox/maps';
+import React, { useRef, useState } from 'react';
 import { Button, Dimensions, TextInput } from 'react-native';
 
 import { ExampleWithMetadata } from '../common/ExampleMetadata'; // exclude-from-doc
@@ -17,9 +17,13 @@ console.log('=> Mapbox.StyleURL[1]:', Mapbox.StyleURL);
 console.log('=> StyleURL[2]:', StyleURL);
 const STYLE_URL = Mapbox.StyleURL.Satellite;
 
-const OfflineExample = () => {
+const OfflineLegacyExample = () => {
   const [packName, setPackName] = useState('pack-1');
   const [showEditTitle, setShowEditTitle] = useState(false);
+  const [tileLimit, setTileLimit] = useState(6000);
+  const [timeout, setTimeout] = useState(60);
+
+  const map = useRef();
 
   return (
     <>
@@ -38,9 +42,25 @@ const OfflineExample = () => {
         />
       )}
       <Button
+        title={`Toggle tile limit (${tileLimit})`}
+        onPress={() => {
+          setTileLimit(tileLimit === 6000 ? 10 : 6000);
+          offlineManagerLegacy.setTileCountLimit(
+            tileLimit === 6000 ? 10 : 6000,
+          );
+        }}
+      />
+      <Button
+        title={`Toggle timeout (${timeout})`}
+        onPress={() => {
+          setTimeout(timeout === 60 ? 10 : 60);
+          offlineManagerLegacy.setTimeout(timeout === 60 ? 10 : 60);
+        }}
+      />
+      <Button
         title="Get all packs"
         onPress={async () => {
-          const packs = await offlineManager.getPacks();
+          const packs = await offlineManagerLegacy.getPacks();
           console.log('=> packs:', packs);
           packs.forEach((pack) => {
             console.log(
@@ -59,7 +79,7 @@ const OfflineExample = () => {
       <Button
         title="Get pack"
         onPress={async () => {
-          const pack = await offlineManager.getPack(packName);
+          const pack = await offlineManagerLegacy.getPack(packName);
           if (pack) {
             console.log(
               'pack:',
@@ -79,7 +99,7 @@ const OfflineExample = () => {
       <Button
         title="Pause pack"
         onPress={async () => {
-          const pack = await offlineManager.getPack(packName);
+          const pack = await offlineManagerLegacy.getPack(packName);
           if (pack) {
             await pack.pause();
           }
@@ -88,7 +108,7 @@ const OfflineExample = () => {
       <Button
         title="Resume pack"
         onPress={async () => {
-          const pack = await offlineManager.getPack(packName);
+          const pack = await offlineManagerLegacy.getPack(packName);
           if (pack) {
             await pack.resume();
           }
@@ -97,60 +117,70 @@ const OfflineExample = () => {
       <Button
         title="Remove packs"
         onPress={async () => {
-          const result = await offlineManager.resetDatabase();
+          const result = await offlineManagerLegacy.resetDatabase();
           console.log('Reset DB done:', result);
         }}
       />
       <Button
         title="Create Pack"
-        onPress={() => {
-          const { width, height } = Dimensions.get('window');
-          const bounds: [number, number, number, number] = geoViewport.bounds(
-            CENTER_COORD,
-            12,
-            [width, height],
-            MAPBOX_VECTOR_TILE_SIZE,
-          );
+        onPress={async () => {
+          if (map.current) {
+            const { width, height } = Dimensions.get('window');
+            const mapCenter = await map.current.getCenter();
 
-          const options = {
-            name: packName,
-            styleURL: STYLE_URL,
-            tilesets: [],
-            bounds: [
-              [bounds[0], bounds[1]],
-              [bounds[2], bounds[3]],
-            ] as [[number, number], [number, number]],
-            minZoom: 10,
-            maxZoom: 20,
-            metadata: {
-              whatIsThat: 'foo',
-            },
-          };
-          offlineManager.createPack(options, (_region, status) =>
-            console.log('=> progress callback region:', 'status: ', status),
-          );
+            const bounds: [number, number, number, number] = geoViewport.bounds(
+              mapCenter,
+              13,
+              [width, height],
+              MAPBOX_VECTOR_TILE_SIZE,
+            );
+
+            const options = {
+              name: packName,
+              styleURL: STYLE_URL,
+              bounds: [
+                [bounds[0], bounds[1]],
+                [bounds[2], bounds[3]],
+              ] as [[number, number], [number, number]],
+              minZoom: 9,
+              maxZoom: 18,
+              metadata: {
+                whatIsThat: 'foo',
+              },
+            };
+
+            const pack = await offlineManagerLegacy.createPack(
+              options,
+              (region, status) =>
+                console.log('=> progress callback region:', 'status: ', status),
+              (region, error) =>
+                console.error('=> error callback region:', 'error:', error),
+            );
+
+            console.log('Create pack', pack);
+          }
         }}
       />
-      <MapView style={{ flex: 1 }} styleURL={STYLE_URL}>
+      <MapView ref={map} style={{ flex: 1 }} styleURL={STYLE_URL}>
         <Camera zoomLevel={10} centerCoordinate={CENTER_COORD} />
       </MapView>
     </>
   );
 };
 
-export default OfflineExample;
+export default OfflineLegacyExample;
 
 /* end-example-doc */
 
 const metadata: ExampleWithMetadata['metadata'] = {
-  title: 'Offline Example',
+  title: 'Offline Legacy Example',
   tags: [
-    'offlineManager#createPack',
-    'offlineManager#getPack',
-    'offlineManager#getPacks',
+    'offlineManagerLegacy#createPack',
+    'offlineManagerLegacy#getPack',
+    'offlineManagerLegacy#getPacks',
   ],
   docs: `
-Demonstates basic use of offlineManager api.
+Demonstates basic use of offlineManagerLegacy api.
 `,
 };
-OfflineExample.metadata = metadata;
+OfflineLegacyExample.metadata = metadata;
