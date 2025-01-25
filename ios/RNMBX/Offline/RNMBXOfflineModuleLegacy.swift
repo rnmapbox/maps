@@ -7,7 +7,7 @@ class TimeoutHandler {
     private var timeoutDuration: TimeInterval
     private weak var timer: Timer?
     private let onTimeout: (String, TimeInterval) -> Void
-    
+
     init(name: String,
          timeoutDuration: TimeInterval = 1 * 30,
          delegate: AnyObject? = nil,
@@ -17,7 +17,7 @@ class TimeoutHandler {
         self.timeoutDuration = timeoutDuration
         self.onTimeout = onTimeout
     }
-    
+
     func startTimer(){
         cancelTimer()
 
@@ -26,22 +26,22 @@ class TimeoutHandler {
             self.onTimeout(self.name, self.timeoutDuration)
         }
     }
-    
+
     func cancelTimer(){
         timer?.invalidate()
         timer = nil
     }
-    
+
     func start() {
         print("TimeoutHandler start.")
         startTimer()
     }
-    
+
     func reset() {
         print("TimeoutHandler reset.")
         startTimer()
     }
-    
+
     func cancel() {
         print("TimeoutHandler cancel.")
         cancelTimer()
@@ -55,7 +55,7 @@ class RNMBXOfflineModuleLegacy: RCTEventEmitter {
   var hasListeners = false
   private var offlineRegion: OfflineRegion!
   private var defaultTimeoutDuration: TimeInterval = 1 * 30
-    
+
   enum Callbacks : String {
     case error = "MapboOfflineRegionError"
     case progress = "MapboxOfflineRegionProgress"
@@ -263,24 +263,24 @@ func getRegionByName(name: String, offlineRegions: [OfflineRegion]) -> OfflineRe
   private func startLoading(for region: OfflineRegion, name: String) {
       let timeoutHandler = TimeoutHandler(name: name, timeoutDuration: self.defaultTimeoutDuration) { [weak self] timeoutName, timeoutDuration in
           guard let self = self else { return }
-          
+
           let timeoutError = OfflineRegionError(
               type: .other,
               message: "Offline region download timed out after \(timeoutDuration) seconds",
               isFatal: true,
               retryAfter: nil
           )
-          
+
           region.setOfflineRegionDownloadStateFor(.inactive)
           self.offlinePackDidReceiveError(name: timeoutName, error: timeoutError)
       }
-      
+
     let observer = OfflineRegionExampleObserver(
       name: name,
       statusChanged: { [weak self] (status) in
         guard let self = self else { return }
         timeoutHandler.reset()
-        
+
         let sentences = [
           "Downloaded \(status.completedResourceCount)/\(status.requiredResourceCount) resources and \(status.completedResourceSize) bytes.",
           "Required resource count is \(status.requiredResourceCountIsPrecise ? "precise" : "a lower bound").",
@@ -335,7 +335,7 @@ func getRegionByName(name: String, offlineRegions: [OfflineRegion]) -> OfflineRe
     )
 
     timeoutHandler.start()
-      
+
     offlineRegion = region
     offlineRegion.setOfflineRegionObserverFor(observer)
     offlineRegion.setOfflineRegionDownloadStateFor(.active)
@@ -605,7 +605,7 @@ func getPackStatus(_ name: String,
     print("setTimeout \(seconds)");
     self.defaultTimeoutDuration = seconds.doubleValue
   }
-  
+
   func _sendEvent(_ name:String, event: RNMBXEvent) {
     if !hasListeners {
       return
@@ -625,7 +625,8 @@ func getPackStatus(_ name: String,
       "completedResourceSize": status.completedResourceSize,
       "completedTileSize": status.completedTileSize,
       "completedTileCount": status.completedTileCount,
-      "requiredResourceCount": status.requiredResourceCount
+      "requiredResourceCount": status.requiredResourceCount,
+      "requiredTileCount":  status.requiredResourceCount
     ]
 
     if let metadata = metadata {

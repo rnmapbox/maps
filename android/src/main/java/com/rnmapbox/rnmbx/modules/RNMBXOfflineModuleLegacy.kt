@@ -529,6 +529,7 @@ class RNMBXOfflineModuleLegacy(private val mReactContext: ReactApplicationContex
             putInt("completedTileSize", status.completedTileSize.toInt())
             putInt("completedTileCount", status.completedTileCount.toInt())
             putInt("requiredResourceCount", status.requiredResourceCount.toInt())
+            putInt("requiredTileCount", status.requiredTileCount.toInt())
 
             metadata?.let {
                 putMap("metadata", metadata.toReadableMap())
