@@ -25,7 +25,7 @@ fun ReadableMap.forEach(action: (String, Any) -> Unit) {
     val iterator = this.entryIterator
     while (iterator.hasNext()) {
         val next = iterator.next()
-        action(next.key, next.value)
+        next.value?.let { action(next.key, it) }
     }
 }
 fun ReadableMap.getIfDouble(key: String): Double? {
