@@ -55,8 +55,22 @@ class RNMBXNativeUserLocation(context: Context) : AbstractMapFeature(context), O
 
     // region bearing
     var androidRenderMode: RenderMode? = null
+        set(value) {
+            field = value
+            _apply()
+        }
+
     var puckBearing: PuckBearing? = null
+        set(value) {
+            field = value
+            _apply()
+        }
+
     var puckBearingEnabled: Boolean? = null
+        set(value) {
+            field = value
+            _apply()
+        }
     // endregion
 
     enum class PuckImagePart {
@@ -125,19 +139,26 @@ class RNMBXNativeUserLocation(context: Context) : AbstractMapFeature(context), O
 
     private fun _apply(mapView: MapView) {
         val location2 = mapView.location2;
-
-        val withBearing = puckBearingEnabled ?: when (androidRenderMode ?: RenderMode.NORMAL) {
-            RenderMode.GPS -> true
-            RenderMode.COMPASS -> true
-            RenderMode.NORMAL -> false
+        // Log a warning if both puckBearingEnabled and androidRenderMode are provided
+        if (puckBearingEnabled != null && androidRenderMode != null) {
+            Logger.w(LOG_TAG, "Both `puckBearingEnabled` and `androidRenderMode` are provided. `androidRenderMode` takes precedence, and `puckBearingEnabled` will be ignored.")
         }
 
-        // Always start with the default puck
-        location2.locationPuck = createDefault2DPuck(withBearing = withBearing)
+        val withBearing = androidRenderMode?.let { it != RenderMode.NORMAL } ?: (puckBearingEnabled == true)
+        val puck = createDefault2DPuck(withBearing = withBearing)
 
-        // If custom images are provided, overwrite the corresponding fields
+        // Update the bearing image based on androidRenderMode
+        androidRenderMode?.let { renderMode ->
+            when (renderMode) {
+                RenderMode.GPS -> puck.bearingImage = AppCompatResourcesV11.getDrawableImageHolder(context, LR.drawable.mapbox_user_bearing_icon)
+                RenderMode.COMPASS -> puck.bearingImage = AppCompatResourcesV11.getDrawableImageHolder(context, LR.drawable.mapbox_user_puck_icon)
+                RenderMode.NORMAL -> puck.bearingImage = AppCompatResourcesV11.getDrawableImageHolder(context, LR.drawable.mapbox_user_stroke_icon)
+            }
+        }
+
+        // Overwrite images if custom ones are provided
         if (images.isNotEmpty()) {
-            (location2.locationPuck as? LocationPuck2D)?.apply {
+            (puck as? LocationPuck2D)?.apply {
                 topImage = images[PuckImagePart.TOP] ?: topImage
                 bearingImage = images[PuckImagePart.BEARING] ?: bearingImage
                 shadowImage = images[PuckImagePart.SHADOW] ?: shadowImage
@@ -145,15 +166,17 @@ class RNMBXNativeUserLocation(context: Context) : AbstractMapFeature(context), O
             }
         }
 
-        // If visibility is false, overwrite the images with empty placeholders
+        // Handle visibility: use empty placeholders if not visible
         if (!visible) {
             val empty = AppCompatResourcesV11.getDrawableImageHolder(mContext, R.drawable.empty)
-            (location2.locationPuck as? LocationPuck2D)?.apply {
+            (puck as? LocationPuck2D)?.apply {
                 topImage = empty
                 bearingImage = empty
                 shadowImage = empty
             }
         }
+
+        location2.locationPuck = puck
 
         this.puckBearing?.let {
             location2.puckBearing = it
@@ -175,7 +198,7 @@ class RNMBXNativeUserLocation(context: Context) : AbstractMapFeature(context), O
                     ReadableType.Number ->
                         location2.pulsingColor = pulsing.getInt("color")
                     else ->
-                        Logger.e(LOG_TAG, "pusling.color should be either a map or a number, but was ${pulsing.getDynamic("color")}")
+                        Logger.e(LOG_TAG, "pulsing.color should be either a map or a number, but was ${pulsing.getDynamic("color")}")
                 }
             }
             pulsing.getAndLogIfNotBoolean("isEnabled")?.let { enabled ->

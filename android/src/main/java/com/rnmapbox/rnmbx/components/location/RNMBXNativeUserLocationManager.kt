@@ -29,11 +29,18 @@ class RNMBXNativeUserLocationManager : ViewGroupManager<RNMBXNativeUserLocation>
     override fun setAndroidRenderMode(userLocation: RNMBXNativeUserLocation, mode: Dynamic) {
         if (!mode.isNull) {
             Logger.e("RNMBXNativeUserLocationManager", "androidRenderMode is deprecated, use puckBearing instead")
+        } else {
+            userLocation.androidRenderMode = null
+            return
         }
         when (mode.asString()) {
             "compass" -> userLocation.androidRenderMode = RenderMode.COMPASS
             "gps" -> userLocation.androidRenderMode = RenderMode.GPS
             "normal" -> userLocation.androidRenderMode = RenderMode.NORMAL
+            else -> {
+                Logger.e("RNMBXNativeUserLocationManager", "Invalid androidRenderMode value: ${mode.asString()}")
+                userLocation.androidRenderMode = null
+            }
         }
     }
 
