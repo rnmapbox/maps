@@ -9,7 +9,7 @@ class TimeoutHandler {
     private let onTimeout: (String, TimeInterval) -> Void
 
     init(name: String,
-         timeoutDuration: TimeInterval = 1 * 30,
+         timeoutDuration: TimeInterval = 1 * 60,
          delegate: AnyObject? = nil,
          onTimeout: @escaping (String, TimeInterval) -> Void) {
         self.name = name
@@ -54,7 +54,7 @@ class RNMBXOfflineModuleLegacy: RCTEventEmitter {
 
   var hasListeners = false
   private var offlineRegion: OfflineRegion!
-  private var defaultTimeoutDuration: TimeInterval = 1 * 30
+  private var defaultTimeoutDuration: TimeInterval = 1 * 60
 
   enum Callbacks : String {
     case error = "MapboOfflineRegionError"
