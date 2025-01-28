@@ -262,6 +262,16 @@
       },
       {
         "metadata": {
+          "title": "Map FPS",
+          "tags": [],
+          "docs": "Toggles preferredFramesPerSecond between 10 fps and 60 fps, move the map around to feel the difference."
+        },
+        "fullPath": "example/src/examples/Map/MapFps.tsx",
+        "relPath": "Map/MapFps.tsx",
+        "name": "MapFps"
+      },
+      {
+        "metadata": {
           "title": "Map (un-)mount",
           "tags": [],
           "docs": "\nShowing and hiding the the map should not lead to increased memory consumption, use this example to check it on the profiler.\n"
