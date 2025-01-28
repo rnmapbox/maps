@@ -249,12 +249,10 @@ class RNMBXImagesManager(private val mContext: ReactApplicationContext) :
                     Logger.e("RNMBXImages", "each element of strech should be an array but was: ${array.getDynamic(i)}")
                 } else {
                     val pair = array.getArray(i)
-                   if (pair != null) {
+                    if (pair != null) {
                        if (pair.size() != 2 || pair.getType(0) != ReadableType.Number || pair.getType(1) != ReadableType.Number) {
                            Logger.e("RNMBXImages", "each element of stretch should be pair of 2 integers but was ${pair}")
                        }
-                   }
-                   if (pair != null) {
                        result.add(ImageStretches(pair.getDouble(0).toFloat(), pair.getDouble(1).toFloat()))
                    }
                 }
