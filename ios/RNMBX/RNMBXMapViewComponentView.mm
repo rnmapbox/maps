@@ -192,7 +192,7 @@ using namespace facebook::react;
 
     id preferredFramesPerSecond = RNMBXConvertFollyDynamicToId(newViewProps.preferredFramesPerSecond);
     if (preferredFramesPerSecond != nil) {
-        _view.reactPreferredFramesPerSecond = preferredFramesPerSecond;
+        _view.reactPreferredFramesPerSecond = [preferredFramesPerSecond integerValue];
     }
 
     id projection = RNMBXConvertFollyDynamicToId(newViewProps.projection);
