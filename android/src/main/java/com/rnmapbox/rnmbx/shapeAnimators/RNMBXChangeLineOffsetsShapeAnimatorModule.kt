@@ -210,7 +210,7 @@ private fun buildLineString(_coordinates: ReadableArray): LineString {
 
     for (i in 0 until _coordinates.size()) {
         val arr = _coordinates.getArray(i)
-        val coord = Point.fromLngLat(arr.getDouble(0), arr.getDouble(1))
+        val coord = Point.fromLngLat(arr!!.getDouble(0), arr.getDouble(1))
         coordinates = coordinates.plus(coord)
     }
 
