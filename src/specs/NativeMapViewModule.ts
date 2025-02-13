@@ -49,6 +49,26 @@ export interface Spec extends TurboModule {
     withFilter: ReadonlyArray<Object>,
     withSourceLayerIDs: ReadonlyArray<string>,
   ) => Promise<Object>;
+  setFeatureState: (
+    viewRef: Int32 | null,
+    featureId: string,
+    state: Object,
+    sourceId: string,
+    sourceLayerId: string | null,
+  ) => Promise<Object>;
+  getFeatureState: (
+    viewRef: Int32 | null,
+    featureId: string,
+    sourceId: string,
+    sourceLayerId: string | null,
+  ) => Promise<Object>;
+  removeFeatureState: (
+    viewRef: Int32 | null,
+    featureId: string,
+    stateKey: string | null,
+    sourceId: string,
+    sourceLayerId: string | null,
+  ) => Promise<Object>;
 }
 
 export default TurboModuleRegistry.getEnforcing<Spec>('RNMBXMapViewModule');
