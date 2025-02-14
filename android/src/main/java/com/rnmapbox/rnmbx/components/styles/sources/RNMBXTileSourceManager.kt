@@ -41,7 +41,7 @@ abstract class RNMBXTileSourceManager<T : RNMBXTileSource<*>> internal construct
         val urls: MutableList<String> = ArrayList()
         for (i in 0 until tileUrlTemplates.asArray().size()) {
             if (tileUrlTemplates.asArray().getType(0) == ReadableType.String) {
-                urls.add(tileUrlTemplates.asArray().getString(i))
+                tileUrlTemplates.asArray().getString(i)?.let { urls.add(it) }
             }
         }
         source!!.tileUrlTemplates = urls
