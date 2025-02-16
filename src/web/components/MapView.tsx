@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { type JSX } from 'react';
 import mapboxgl from 'mapbox-gl';
 
 import MapContext from '../MapContext';
@@ -34,7 +34,9 @@ class MapView extends React.Component<
     return (
       <div
         style={{ width: '100%', height: '100%' }}
-        ref={(el) => (this.mapContainer = el)}
+        ref={(el) => {
+          this.mapContainer = el;
+        }}
       >
         {map && (
           <div style={{ position: 'absolute' }}>

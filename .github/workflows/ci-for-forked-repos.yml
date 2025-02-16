@@ -8,7 +8,7 @@ jobs:
     name: "CI requiring tokens"
     uses: ./.github/workflows/ci-requiring-tokens.yml
     with:
-      NVMRC: v18.18.0
+      NVMRC: v20.14.0
       env_name: CI with Mapbox Tokens
       ref: ${{ github.event.pull_request.head.sha }}
     secrets:
