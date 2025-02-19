@@ -53,7 +53,8 @@
     "build:examples.json": "cd example; jest __tests__/dumpExamplesJson.ts",
     "lint:plugin": "yarn eslint plugin/src/*",
     "build": "yarn bob build",
-    "prepare": "yarn bob build"
+    "prepare": "yarn bob build",
+    "build:copy-plugin": "yarn ts-node plugin/copy-plugin.ts"
   },
   "peerDependencies": {
     "expo": ">=47.0.0",
@@ -121,9 +122,9 @@
     "react-docgen": "rnmapbox/react-docgen#rnmapbox-dist-react-docgen-v6",
     "to-fast-properties": "3.0.1",
     "react-native": "0.76.7",
-    "react-native-builder-bob": "^0.36.0",
+    "react-native-builder-bob": "^0.37.0",
     "react-test-renderer": "18.3.1",
-    "ts-node": "10.9.1",
+    "ts-node": "10.9.2",
     "typescript": "5.1.3",
     "@mdx-js/mdx": "^3.0.0",
     "@types/react": "^18.3.1",
@@ -139,15 +140,6 @@
   },
   "lint-staged": {
     "*.{js,jsx,ts,tsx}": "eslint --fix"
-  },
-  "react-native-builder-bob": {
-    "source": "src",
-    "output": "lib",
-    "targets": [
-      "commonjs",
-      "module",
-      "typescript"
-    ]
   },
   "eslintIgnore": [
     "node_modules/",

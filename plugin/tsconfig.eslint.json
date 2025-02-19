@@ -1,0 +1,5 @@
+{
+  "compilerOptions": {
+  },
+  "include": ["./copy-plugin.ts"],
+}
