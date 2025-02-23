@@ -3,6 +3,7 @@ package com.rnmapbox.rnmbx.modules
 import com.facebook.react.bridge.*
 import com.rnmapbox.rnmbx.location.LocationManager
 import com.facebook.react.module.annotations.ReactModule
+import com.rnmapbox.rnmbx.NativeRNMBXLocationModuleSpec
 import com.rnmapbox.rnmbx.location.LocationManager.OnUserLocationChange
 import com.rnmapbox.rnmbx.events.LocationEvent
 import com.rnmapbox.rnmbx.events.EventEmitter
@@ -16,7 +17,7 @@ data class LocationEventThrottle(var waitBetweenEvents: Double? = null, var last
 
 @ReactModule(name = RNMBXLocationModule.REACT_CLASS)
 class RNMBXLocationModule(reactContext: ReactApplicationContext) :
-    ReactContextBaseJavaModule(reactContext) {
+    NativeRNMBXLocationModuleSpec(reactContext) {
     private var isEnabled = false
     private var mMinDisplacement = 0f
     private val locationManager: LocationManager? = getInstance(reactContext)
@@ -57,8 +58,12 @@ class RNMBXLocationModule(reactContext: ReactApplicationContext) :
             mLastLocation = location
             if (changed && (location != null) && shouldSendLocationEvent()) {
                 val locationEvent = LocationEvent(location)
+
+                emitOnLocationUpdate(locationEvent.toJSON())
+                /*
                 val emitter = EventEmitter.getModuleEmitter(reactApplicationContext)
                 emitter?.emit(LOCATION_UPDATE, locationEvent.payload)
+                */
             }
         }
     }
@@ -72,15 +77,16 @@ class RNMBXLocationModule(reactContext: ReactApplicationContext) :
     }
 
     @ReactMethod
-    fun start(minDisplacement: Float) {
+    override fun start(minDisplacement: Double) {
         isEnabled = true
-        mMinDisplacement = minDisplacement
+        mMinDisplacement = minDisplacement.toFloat()
         locationManager?.startCounted()
         startLocationManager()
     }
 
     @ReactMethod
-    fun setMinDisplacement(minDisplacement: Float) {
+    override fun setMinDisplacement(value: Double) {
+        val minDisplacement = value.toFloat()
         if (mMinDisplacement == minDisplacement) return
         mMinDisplacement = minDisplacement
         if (isEnabled) {
@@ -91,17 +97,17 @@ class RNMBXLocationModule(reactContext: ReactApplicationContext) :
     }
 
     @ReactMethod
-    fun setRequestsAlwaysUse(requestsAlwaysUse: Boolean) {
+    override fun setRequestsAlwaysUse(requestsAlwaysUse: Boolean) {
         // IOS only. Ignored on Android.
     }
 
     @ReactMethod
-    fun stop() {
+    override fun stop() {
         stopLocationManager()
     }
 
     @ReactMethod
-    fun getLastKnownLocation(promise: Promise) {
+    override fun getLastKnownLocation(promise: Promise) {
         locationManager!!.getLastKnownLocation(
             object : LocationEngineCallback {
                 override fun onSuccess(result: LocationEngineResult) {
@@ -119,6 +125,10 @@ class RNMBXLocationModule(reactContext: ReactApplicationContext) :
                 }
             }
         )
+    }
+
+    override fun simulateHeading(changesPerSecond: Double, increment: Double) {
+        // ios only
     }
 
     @ReactMethod
@@ -150,10 +160,11 @@ class RNMBXLocationModule(reactContext: ReactApplicationContext) :
 
     // region Location event throttle
     @ReactMethod
-    fun setLocationEventThrottle(throttleValue: Double) {
+    override fun setLocationEventThrottle(throttleValue: Double) {
         if (throttleValue > 0) {
             locationEventThrottle.waitBetweenEvents = throttleValue;
         } else {
+
             locationEventThrottle.waitBetweenEvents = null
         }
     }
