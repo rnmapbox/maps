@@ -5,13 +5,18 @@ import {
   NativeEventSubscription,
   EmitterSubscription,
   type AppStateStatus,
-} from 'react-native';
+  Platform,
+  EventSubscription,
+} from 'react-native'
 
-const MapboxGL = NativeModules.RNMBXModule;
-const MapboxGLLocationManager = NativeModules.RNMBXLocationModule;
+import NativeRNMBXLocationModule from '../../specs/NativeRNMBXLocationModule'
+
+const MapboxGL = NativeModules.RNMBXModule
+const MapboxGLLocationManager: typeof NativeRNMBXLocationModule = Platform.select({ios: NativeModules.RNMBXLocationModule, android:  NativeRNMBXLocationModule})
 
 export const LocationModuleEventEmitter = new NativeEventEmitter(
-  MapboxGLLocationManager,
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  MapboxGLLocationManager as any,
 );
 
 /**
@@ -74,7 +79,7 @@ export class LocationManager {
   _lastKnownLocation: Location | null;
   _isListening: boolean;
   _requestsAlwaysUse: boolean;
-  subscription: EmitterSubscription | null;
+  subscription: EmitterSubscription | EventSubscription | null;
   _appStateListener: NativeEventSubscription;
   _minDisplacement?: number;
 
@@ -167,10 +172,16 @@ export class LocationManager {
     if (!this._isListening) {
       MapboxGLLocationManager.start(validDisplacement);
 
-      this.subscription = LocationModuleEventEmitter.addListener(
-        MapboxGL.LocationCallbackName.Update,
-        this._onUpdate,
-      );
+      if (Platform.OS === 'ios') {
+        this.subscription = LocationModuleEventEmitter.addListener(
+          MapboxGL.LocationCallbackName.Update,
+          this._onUpdate,
+        );
+      } else {
+        this.subscription = MapboxGLLocationManager.onLocationUpdate((location) => {
+          this._onUpdate(location.payload);
+        });
+      }
 
       this._isListening = true;
     }
