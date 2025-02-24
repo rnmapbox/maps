@@ -103,6 +103,9 @@ public class RNMBXMapViewManagerDelegate<T extends View, U extends BaseViewManag
       case "mapViewImpl":
         mViewManager.setMapViewImpl(view, new DynamicFromObject(value));
         break;
+      case "preferredFramesPerSecond":
+        mViewManager.setPreferredFramesPerSecond(view, new DynamicFromObject(value));
+        break;
       default:
         super.setProperty(view, propName, value);
     }

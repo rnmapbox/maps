@@ -79,6 +79,7 @@ export interface NativeProps extends ViewProps {
   onCameraChanged?: DirectEventHandler<OnCameraChangedEventType>;
 
   mapViewImpl?: OptionalProp<string>;
+  preferredFramesPerSecond?: OptionalProp<Int32>;
 }
 
 export default codegenNativeComponent<NativeProps>(
