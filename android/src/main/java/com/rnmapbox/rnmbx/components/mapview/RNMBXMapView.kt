@@ -34,12 +34,14 @@ import com.mapbox.maps.extension.style.layers.properties.generated.ProjectionNam
 import com.mapbox.maps.extension.style.layers.properties.generated.Visibility
 import com.mapbox.maps.extension.style.projection.generated.Projection
 import com.mapbox.maps.extension.style.projection.generated.setProjection
+import com.mapbox.maps.logE
 import com.mapbox.maps.plugin.attribution.attribution
 import com.mapbox.maps.plugin.compass.compass
 import com.mapbox.maps.plugin.delegates.listeners.*
 import com.mapbox.maps.plugin.gestures.*
 import com.mapbox.maps.plugin.logo.logo
 import com.mapbox.maps.plugin.scalebar.scalebar
+import com.mapbox.maps.toCameraOptions
 import com.mapbox.maps.viewannotation.ViewAnnotationManager
 import com.rnmapbox.rnmbx.R
 import com.rnmapbox.rnmbx.components.AbstractMapFeature
@@ -47,7 +49,9 @@ import com.rnmapbox.rnmbx.components.RemovalReason
 import com.rnmapbox.rnmbx.components.annotation.RNMBXMarkerView
 import com.rnmapbox.rnmbx.components.annotation.RNMBXMarkerViewManager
 import com.rnmapbox.rnmbx.components.annotation.RNMBXPointAnnotation
+import com.rnmapbox.rnmbx.components.annotation.RNMBXPointAnnotationCoordinator
 import com.rnmapbox.rnmbx.components.camera.RNMBXCamera
+import com.rnmapbox.rnmbx.components.images.ImageManager
 import com.rnmapbox.rnmbx.components.images.RNMBXImages
 import com.rnmapbox.rnmbx.components.location.LocationComponentManager
 import com.rnmapbox.rnmbx.components.location.RNMBXNativeUserLocation
@@ -64,17 +68,11 @@ import com.rnmapbox.rnmbx.events.MapClickEvent
 import com.rnmapbox.rnmbx.events.constants.EventTypes
 import com.rnmapbox.rnmbx.utils.*
 import com.rnmapbox.rnmbx.utils.extensions.toReadableArray
-import java.util.*
-
-import com.rnmapbox.rnmbx.components.annotation.RNMBXPointAnnotationCoordinator
-import com.rnmapbox.rnmbx.components.images.ImageManager
-
 import com.rnmapbox.rnmbx.v11compat.event.*
-import com.rnmapbox.rnmbx.v11compat.feature.*
-import com.rnmapbox.rnmbx.v11compat.mapboxmap.*
 import com.rnmapbox.rnmbx.v11compat.ornamentsettings.*
-import org.json.JSONException
-import org.json.JSONObject
+import java.util.*
+import org.json.*
+
 
 fun <T> MutableList<T>.removeIf21(predicate: (T) -> Boolean): Boolean {
     var removed = false
@@ -1095,6 +1093,50 @@ open class RNMBXMapView(private val mContext: Context, var mManager: RNMBXMapVie
                 response.success { it.putBoolean("data", true) }
             }
         }
+    }
+
+    fun setFeatureState(
+      featureId: String,
+      state: HashMap<String, Value>,
+      sourceId: String,
+      sourceLayerId: String?,
+      response: CommandResponse
+    ) {
+        mapView.getMapboxMap().setFeatureState(sourceId, sourceLayerId, featureId, Value.valueOf(state))
+        response.success { }
+    }
+
+    fun getFeatureState(
+      featureId: String,
+      sourceId: String,
+      sourceLayerId: String?,
+      response: CommandResponse
+    ) {
+        mapView.getMapboxMap().getFeatureState(sourceId, sourceLayerId, featureId) { expected ->
+            if (expected.isValue) {
+                response.success {
+                    val state = expected.value!!.contents
+                    if (state is Map<*,*>) {
+                        it.putMap("featureState", writableMapOf(*state.map { it.key to it.value}.toTypedArray()))
+                    } else {
+                        it.putMap("featureState", Arguments.createMap())
+                    }
+                }
+            } else {
+                response.error(expected.error!!.toString())
+            }
+        }
+    }
+
+    fun removeFeatureState(
+      featureId: String,
+      stateKey: String?,
+      sourceId: String,
+      sourceLayerId: String?,
+      response: CommandResponse
+    ) {
+        mapView.getMapboxMap().removeFeatureState(sourceId, sourceLayerId, featureId, stateKey)
+        response.success { }
     }
 
     fun match(layer: Layer, sourceId:String, sourceLayerId: String?) : Boolean {

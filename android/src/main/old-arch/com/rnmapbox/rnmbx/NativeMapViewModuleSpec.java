@@ -19,6 +19,7 @@ import com.facebook.react.bridge.ReactContextBaseJavaModule;
 import com.facebook.react.bridge.ReactMethod;
 import com.facebook.react.bridge.ReactModuleWithSpec;
 import com.facebook.react.bridge.ReadableArray;
+import com.facebook.react.bridge.ReadableMap;
 import com.facebook.react.turbomodule.core.interfaces.TurboModule;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -82,6 +83,18 @@ public abstract class NativeMapViewModuleSpec extends ReactContextBaseJavaModule
   @ReactMethod
   @DoNotStrip
   public abstract void clearData(@Nullable Double viewRef, Promise promise);
+
+  @ReactMethod
+  @DoNotStrip
+  public abstract void setFeatureState(@Nullable Double viewRef, String featureId, ReadableMap state, String sourceId, @Nullable String sourceLayerId, Promise promise);
+
+  @ReactMethod
+  @DoNotStrip
+  public abstract void getFeatureState(@Nullable Double viewRef, String featureId, String sourceId, @Nullable String sourceLayerId, Promise promise);
+
+  @ReactMethod
+  @DoNotStrip
+  public abstract void removeFeatureState(@Nullable Double viewRef, String featureId, @Nullable String stateKey, String sourceId, @Nullable String sourceLayerId, Promise promise);
 
   @ReactMethod
   @DoNotStrip
