@@ -55,4 +55,9 @@ class RNMBXStyleImportManager(context: ReactApplicationContext) :
             view.config = value.asMap().toValueHashMap()
         }
     }
+
+    @ReactProp(name = "merge")
+    override fun setMerge(view: RNMBXStyleImport, value: Boolean) {
+        view.merge = value
+    }
 }
