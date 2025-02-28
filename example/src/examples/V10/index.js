@@ -5,6 +5,7 @@ export { default as Markers } from './Markers';
 export { default as QueryTerrainElevation } from './QueryTerrainElevation';
 export { default as TerrainSkyAtmosphere } from './TerrainSkyAtmosphere';
 export { default as SimpleModelLayer } from './SimpleModelLayer';
+export { default as FeatureState } from './FeatureState';
 
 export const metadata = {
   title: 'V10',

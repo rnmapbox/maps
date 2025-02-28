@@ -162,6 +162,9 @@ NativeModules.RNMBXMapViewModule = {
   setHandledMapChangedEvents: jest.fn(),
   clearData: jest.fn(),
   querySourceFeatures: jest.fn(),
+  setFeatureState: jest.fn(),
+  getFeatureState: jest.fn(),
+  removeFeatureState: jest.fn(),
 };
 
 NativeModules.RNMBXShapeSourceModule = {

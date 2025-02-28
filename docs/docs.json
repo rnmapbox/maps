@@ -3744,6 +3744,172 @@
         "examples": [
           "\nawait this._map.setSourceVisibility(false, 'composite', 'building')\n\n"
         ]
+      },
+      {
+        "name": "setFeatureState",
+        "docblock": "Updates the state map of a feature within a style source.\n\nUpdates entries in the state map of a given feature within a style source.\nOnly entries listed in the `state` will be updated.\nAn entry in the feature state map that is not listed in `state` will retain its previous value.\n\n@param {string} featureId Identifier of the feature whose state should be updated.\n@param {[k: string]: NativeArg} state Map of entries to update with their respective new values.\n@param {string} sourceId Style source identifier.\n@param {string | null} sourceLayerId Style source layer identifier (for multi-layer sources such as vector sources).",
+        "modifiers": [
+          "async"
+        ],
+        "params": [
+          {
+            "name": "featureId",
+            "description": "Identifier of the feature whose state should be updated.",
+            "type": {
+              "name": "string"
+            },
+            "optional": false
+          },
+          {
+            "name": "state",
+            "optional": false,
+            "type": {
+              "name": "{[k:string]:NativeArg}"
+            }
+          },
+          {
+            "name": "sourceId",
+            "optional": false,
+            "type": {
+              "name": "string"
+            }
+          },
+          {
+            "name": "sourceLayerId",
+            "optional": true,
+            "type": {
+              "name": null
+            }
+          }
+        ],
+        "returns": {
+          "type": {
+            "name": "Promise",
+            "elements": [
+              {
+                "name": "void"
+              }
+            ],
+            "raw": "Promise<void>"
+          }
+        },
+        "description": "Updates the state map of a feature within a style source.\n\nUpdates entries in the state map of a given feature within a style source.\nOnly entries listed in the `state` will be updated.\nAn entry in the feature state map that is not listed in `state` will retain its previous value.",
+        "examples": []
+      },
+      {
+        "name": "getFeatureState",
+        "docblock": "Returns the state map of a feature within a style source.\n\n@param {string} featureId Identifier of the feature whose state should be queried.\n@param {string} sourceId Style source identifier.\n@param {string | null} sourceLayerId Style source layer identifier (for multi-layer sources such as vector sources).",
+        "modifiers": [
+          "async"
+        ],
+        "params": [
+          {
+            "name": "featureId",
+            "description": "Identifier of the feature whose state should be queried.",
+            "type": {
+              "name": "string"
+            },
+            "optional": false
+          },
+          {
+            "name": "sourceId",
+            "description": "Style source identifier.",
+            "type": {
+              "name": "string"
+            },
+            "optional": false
+          },
+          {
+            "name": "sourceLayerId",
+            "description": "Style source layer identifier (for multi-layer sources such as vector sources).",
+            "type": {
+              "name": "string"
+            },
+            "optional": true
+          }
+        ],
+        "returns": {
+          "type": {
+            "name": "Promise",
+            "elements": [
+              {
+                "name": "Readonly",
+                "elements": [
+                  {
+                    "name": "Record",
+                    "elements": [
+                      {
+                        "name": "string"
+                      },
+                      {
+                        "name": "unknown"
+                      }
+                    ],
+                    "raw": "Record<string, unknown>"
+                  }
+                ],
+                "raw": "Readonly<Record<string, unknown>>"
+              }
+            ],
+            "raw": "Promise<Readonly<Record<string, unknown>>>"
+          }
+        },
+        "description": "Returns the state map of a feature within a style source.",
+        "examples": []
+      },
+      {
+        "name": "removeFeatureState",
+        "docblock": "Removes entries from a feature state object.\n\nRemoves a specified property or all properties from a feature’s state object,\ndepending on the value of `stateKey`.\n\n@param {string} featureId Identifier of the feature whose state should be removed.\n@param {string | null} stateKey The name of the property to remove. If `null`, all feature’s state object properties are removed.\n@param {string} sourceId Style source identifier.\n@param {string | null} sourceLayerId Style source layer identifier (for multi-layer sources such as vector sources).",
+        "modifiers": [
+          "async"
+        ],
+        "params": [
+          {
+            "name": "featureId",
+            "description": "Identifier of the feature whose state should be removed.",
+            "type": {
+              "name": "string"
+            },
+            "optional": false
+          },
+          {
+            "name": "stateKey",
+            "description": "The name of the property to remove. If `null`, all feature’s state object properties are removed.",
+            "type": {
+              "name": "string \\| null"
+            },
+            "optional": false
+          },
+          {
+            "name": "sourceId",
+            "description": "Style source identifier.",
+            "type": {
+              "name": "string"
+            },
+            "optional": false
+          },
+          {
+            "name": "sourceLayerId",
+            "description": "Style source layer identifier (for multi-layer sources such as vector sources).",
+            "type": {
+              "name": "string"
+            },
+            "optional": true
+          }
+        ],
+        "returns": {
+          "type": {
+            "name": "Promise",
+            "elements": [
+              {
+                "name": "void"
+              }
+            ],
+            "raw": "Promise<void>"
+          }
+        },
+        "description": "Removes entries from a feature state object.\n\nRemoves a specified property or all properties from a feature’s state object,\ndepending on the value of `stateKey`.",
+        "examples": []
       }
     ],
     "props": [
