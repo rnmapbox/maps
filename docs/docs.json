@@ -5905,6 +5905,29 @@
         }
       },
       {
+        "name": "symbolZOffset",
+        "type": "number",
+        "values": [],
+        "units": "meters",
+        "default": 0,
+        "description": "Specifies an uniform elevation from the ground, in meters.",
+        "requires": [],
+        "disabledBy": [],
+        "allowedFunctionTypes": [],
+        "expression": {
+          "interpolated": true,
+          "parameters": [ 
+            "zoom",
+            "feature"
+          ]
+        },
+        "mbx": {
+          "fullName": "paint-symbol-symbol-z-offset",
+          "name": "symbol-z-offset",
+          "namespace": "paint"
+        }
+      },
+      {
         "name": "symbolZOrder",
         "type": "enum",
         "values": [

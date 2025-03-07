@@ -1848,6 +1848,33 @@
       },
       "property-type": "data-driven"
     },
+    "symbol-z-offset": {
+      "type": "number",
+      "default": 0,
+      "minimum": 0,
+      "units": "meters",
+      "doc": "Specifies an uniform elevation from the ground, in meters.",
+      "sdk-support": {
+        "basic functionality": {
+          "js": "3.7.0",
+          "android": "11.7.0",
+          "ios": "11.7.0"
+        },
+        "data-driven styling": {
+          "js": "3.7.0",
+          "android": "11.7.0",
+          "ios": "11.7.0"
+        }
+      },
+      "expression": {
+        "interpolated": true,
+        "parameters": [
+          "zoom",
+          "feature"
+        ]
+      },
+      "property-type": "data-driven"
+    },
     "symbol-z-order": {
       "type": "enum",
       "values": {

@@ -690,6 +690,10 @@ export interface SymbolLayerStyleProps {
    */
   symbolSortKey?: Value<number, ['zoom', 'feature']>;
   /**
+   * Specifies an uniform elevation from the ground, in meters.
+   */
+  symbolZOffset?: Value<number, ['zoom', 'feature']>;
+  /**
    * Determines whether overlapping symbols in the same layer are rendered in the order that they appear in the data source or by their yPosition relative to the viewport. To control the order and prioritization of symbols otherwise, use `symbolSortKey`.
    */
   symbolZOrder?: Value<

@@ -194,6 +194,8 @@ object RNMBXStyleFactory {
                 setSymbolAvoidEdges(layer, styleValue)
               "symbolSortKey" ->
                 setSymbolSortKey(layer, styleValue)
+              "symbolZOffset" ->
+                setSymbolZOffset(layer, styleValue)
               "symbolZOrder" ->
                 setSymbolZOrder(layer, styleValue)
               "iconAllowOverlap" ->
@@ -1555,6 +1557,24 @@ object RNMBXStyleFactory {
             layer.symbolSortKey(value)
           } else {
             Logger.e("RNMBXSymbol", "value for symbolSortKey is null")
+          }
+      }
+    }
+
+    fun setSymbolZOffset(layer: SymbolLayer, styleValue: RNMBXStyleValue ) {
+      if (styleValue.isExpression()) {
+        val expression = styleValue.getExpression()
+        if (expression != null) {
+          layer.symbolZOffset(expression)
+        } else {
+          Logger.e("RNMBXSymbol", "Expression for symbolZOffset is null")
+        }
+      } else {
+          val value = styleValue.getDouble(VALUE_KEY)
+          if (value != null) {
+            layer.symbolZOffset(value)
+          } else {
+            Logger.e("RNMBXSymbol", "value for symbolZOffset is null")
           }
       }
     }
