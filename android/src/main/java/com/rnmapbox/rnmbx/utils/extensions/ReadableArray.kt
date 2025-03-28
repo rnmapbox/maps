@@ -46,8 +46,8 @@ fun ReadableArray.toJsonArray() : JsonArray {
     val result = JsonArray(size())
     for (i in 0 until size()) {
         when (getType(i)) {
-            ReadableType.Map -> result.add(getMap(i).toJsonObject())
-            ReadableType.Array -> result.add(getArray(i).toJsonArray())
+            ReadableType.Map -> result.add(getMap(i)?.toJsonObject())
+            ReadableType.Array -> result.add(getArray(i)?.toJsonArray())
             ReadableType.Null -> result.add(null as JsonElement?)
             ReadableType.Number -> result.add(getDouble(i))
             ReadableType.String -> result.add(getString(i))

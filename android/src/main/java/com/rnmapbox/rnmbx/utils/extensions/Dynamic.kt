@@ -33,15 +33,18 @@ fun ReadableArray.toValue(): Value {
     var result = ArrayList<Value>(size())
 
     for (i in 0 until size()) {
-        result.add(
         when (getType(i)) {
             ReadableType.Null -> Value.nullValue()
             ReadableType.Boolean -> Value.valueOf(getBoolean(i))
             ReadableType.Number -> Value.valueOf(getDouble(i))
-            ReadableType.String -> Value.valueOf(getString(i))
-            ReadableType.Array -> getArray(i).toValue()
-            ReadableType.Map -> getMap(i).toValue()
-        })
+            ReadableType.String -> getString(i)?.let { Value.valueOf(it) }
+            ReadableType.Array -> getArray(i)?.toValue()
+            ReadableType.Map -> getMap(i)?.toValue()
+        }?.let {
+            result.add(
+                it
+            )
+        }
     }
     return Value.valueOf(result)
 }
