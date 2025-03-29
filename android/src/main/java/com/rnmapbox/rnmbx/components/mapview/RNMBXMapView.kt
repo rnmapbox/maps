@@ -15,6 +15,7 @@ import android.widget.FrameLayout
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.LifecycleRegistry
+import androidx.lifecycle.setViewTreeLifecycleOwner
 import com.facebook.react.bridge.*
 import com.mapbox.android.gestures.*
 import com.mapbox.bindgen.Value
@@ -135,6 +136,7 @@ class RNMBXLifeCycle {
                     get() = lifecycleRegistry
 
             }
+            view.setViewTreeLifecycleOwner(lifecycleOwner)
         }
         lifecycleOwner?.handleLifecycleEvent(Lifecycle.Event.ON_START)
     }
