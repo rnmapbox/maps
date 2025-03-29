@@ -48,7 +48,11 @@ interface Props {
   minZoomLevel?: number;
 
   /**
-   * An unsigned integer that specifies the maximum zoom level at which to display tiles from the source.
+   *
+   * An unsigned integer that specifies the maximum zoom level for which tiles
+   * are available, as in the TileJSON spec. Data from tiles at the maxzoom are
+   * used when displaying the map at higher zoom levels.
+   *
    * The value should be between 0 and 22, inclusive, and less than
    * minZoomLevel, if specified. The default value for this option is 22.
    */
