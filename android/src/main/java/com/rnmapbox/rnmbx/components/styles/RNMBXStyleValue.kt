@@ -84,6 +84,8 @@ class RNMBXStyleValue(config: ReadableMap) {
             val item = arr.getMap(i)
             if (item != null) {
                 result.add(item.getDouble("value"))
+            } else {
+                Logger.e("RNMBXStyleValue", "getFloatArray: null value for item: $i")
             }
         }
         return result

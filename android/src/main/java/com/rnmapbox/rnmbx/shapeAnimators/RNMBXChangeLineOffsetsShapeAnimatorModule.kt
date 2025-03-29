@@ -214,6 +214,8 @@ private fun buildLineString(_coordinates: ReadableArray): LineString {
         val coord = arr?.let { Point.fromLngLat(arr.getDouble(0), it.getDouble(1)) }
         if(coord != null) {
             coordinates = coordinates.plus(coord)
+        } else {
+            Logger.e("RNMBXChangeLineOffsetsShapeAnimatorModule", "buildLineString: null coordinate for item: $i")
         }
     }
 
