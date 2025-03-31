@@ -12,6 +12,7 @@ import com.mapbox.turf.TurfMeasurement
 import com.mapbox.turf.TurfMisc
 import com.rnmapbox.rnmbx.NativeRNMBXChangeLineOffsetsShapeAnimatorModuleSpec
 import com.rnmapbox.rnmbx.utils.ViewRefTag
+import com.rnmapbox.rnmbx.utils.Logger
 
 class ChangeLineOffsetsShapeAnimator(tag: Tag, _lineString: LineString, startOffset: Double, endOffset: Double): ShapeAnimatorCommon(tag) {
     private var lineString = _lineString
