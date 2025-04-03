@@ -2,7 +2,7 @@ import type { Config } from 'jest';
 
 const config: Config = {
   verbose: true,
-  preset: '@testing-library/react-native',
+  preset: 'react-native',
   roots: ['__tests__/'],
   setupFilesAfterEnv: [
     './setup-jest.js',

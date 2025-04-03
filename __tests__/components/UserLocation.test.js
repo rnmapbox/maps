@@ -1,5 +1,5 @@
 import React from 'react';
-import { render, fireEvent } from '@testing-library/react-native';
+import { render, fireEvent, act } from '@testing-library/react-native';
 
 import UserLocation from '../../src/components/UserLocation';
 import { ShapeSource } from '../../src/components/ShapeSource';
@@ -39,6 +39,7 @@ describe('UserLocation', () => {
 
     test('renders with CircleLayers by default', async () => {
       const { UNSAFE_getAllByType } = await render(<UserLocation />);
+      await act(async () => {})
 
       const shapeSource = UNSAFE_getAllByType(ShapeSource);
       const circleLayer = UNSAFE_getAllByType(CircleLayer);
@@ -51,6 +52,7 @@ describe('UserLocation', () => {
       const { UNSAFE_queryByType } = await render(
         <UserLocation visible={false} />,
       );
+      await act(async () => {})
 
       const shapeSource = UNSAFE_queryByType(ShapeSource);
       const circleLayer = UNSAFE_queryByType(CircleLayer);
@@ -61,7 +63,6 @@ describe('UserLocation', () => {
 
     test('renders with CustomChild when provided', async () => {
       const circleLayerProps = {
-        key: 'testUserLocationCircle',
         id: 'testUserLocationCircle',
         style: {
           circleRadius: 5,
@@ -71,11 +72,11 @@ describe('UserLocation', () => {
         },
       };
 
-      const { UNSAFE_queryByType, UNSAFE_queryAllByType } = await render(
-        <UserLocation>
-          <CircleLayer {...circleLayerProps} />
-        </UserLocation>,
-      );
+      const { UNSAFE_queryByType, UNSAFE_queryAllByType } = await render(<UserLocation>
+        <CircleLayer key='testUserLocationCircle' {...circleLayerProps} />
+      </UserLocation>)
+      await act(async () => {
+      })
 
       const shapeSource = UNSAFE_queryByType(ShapeSource);
       const circleLayer = UNSAFE_queryAllByType(CircleLayer);

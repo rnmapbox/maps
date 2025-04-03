@@ -184,7 +184,7 @@ class RNMBXPackage : TurboReactPackage() {
                 false,  // needsEagerInit
                 true,  // hasConstants
                 false,  // isCxxModule
-                false // isTurboModule
+                isTurboModule // isTurboModule
             )
             moduleInfos[RNMBXOfflineModule.REACT_CLASS] = ReactModuleInfo(
                 RNMBXOfflineModule.REACT_CLASS,

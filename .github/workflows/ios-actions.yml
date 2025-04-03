@@ -9,7 +9,7 @@ on:
         type: string
       ref:
         required: false
-        type: string 
+        type: string
       NVMRC:
         required: true
         type: string
@@ -48,7 +48,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
         if: ${{ inputs.ref == '' }}
-      
+
       - name: Checkout fork
         uses: actions/checkout@v4
         if: ${{ inputs.ref != '' }}
@@ -133,7 +133,7 @@ jobs:
           SKIP_TESTS_NO_METAL: ${{ inputs.MAP_IMPL == 'mapbox' || inputs.MAP_IMPL == 'mapbox11' }}
 
       - name: Store Detox artifacts on test failure
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         if: failure()
         with:
           name: detox-artifacts
