@@ -49,6 +49,9 @@ public class RNMBXRasterSourceManagerDelegate<T extends View, U extends BaseView
       case "attribution":
         mViewManager.setAttribution(view, new DynamicFromObject(value));
         break;
+      case "sourceBounds":
+        mViewManager.setSourceBounds(view, new DynamicFromObject(value));
+        break;
       default:
         super.setProperty(view, propName, value);
     }

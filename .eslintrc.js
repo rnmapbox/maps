@@ -91,6 +91,7 @@ module.exports = {
           './tsconfig.json',
           './example/tsconfig.json',
           './scripts/tsconfig.json',
+          './plugin/tsconfig.eslint.json',
           './plugin/src/__tests__/tsconfig.eslint.json',
         ],
       },

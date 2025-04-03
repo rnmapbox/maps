@@ -14,6 +14,7 @@ export interface NativeProps extends ViewProps {
   tileSize: UnsafeMixed<Double>;
   tms: UnsafeMixed<boolean>;
   attribution: UnsafeMixed<string>;
+  sourceBounds: UnsafeMixed<Array<number>>;
 }
 
 export default codegenNativeComponent<NativeProps>(
