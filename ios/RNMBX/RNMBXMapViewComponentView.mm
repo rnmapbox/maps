@@ -67,13 +67,13 @@ using namespace facebook::react;
 {
     _eventDispatcher = [[RNMBXMapViewEventDispatcher alloc] initWithComponentView:self];
       _view =  [[RNMBXMapView alloc] initWithFrame:_frame eventDispatcher:_eventDispatcher];
-      
+
       // just need to pass something, it won't really be used on fabric, but it's used to create events (it won't impact sending them)
       _view.reactTag = @-1;
-      
+
       // capture weak self reference to prevent retain cycle
       __weak __typeof__(self) weakSelf = self;
-      
+
       [_view setReactOnPress:^(NSDictionary* event) {
           __typeof__(self) strongSelf = weakSelf;
 
@@ -190,6 +190,11 @@ using namespace facebook::react;
     
     RNMBX_REMAP_OPTIONAL_PROP_BOOL(pitchEnabled, reactPitchEnabled)
 
+    id preferredFramesPerSecond = RNMBXConvertFollyDynamicToId(newViewProps.preferredFramesPerSecond);
+    if (preferredFramesPerSecond != nil) {
+        _view.reactPreferredFramesPerSecond = [preferredFramesPerSecond integerValue];
+    }
+
     id projection = RNMBXConvertFollyDynamicToId(newViewProps.projection);
     if (projection != nil) {
         _view.reactProjection = projection;
@@ -199,7 +204,7 @@ using namespace facebook::react;
     if (localizeLabels != nil) {
         _view.reactLocalizeLabels = localizeLabels;
     }
-  
+
     RNMBX_OPTIONAL_PROP_BOOL(deselectAnnotationOnTap);
 
     id styleURL = RNMBXConvertFollyDynamicToId(newViewProps.styleURL);
