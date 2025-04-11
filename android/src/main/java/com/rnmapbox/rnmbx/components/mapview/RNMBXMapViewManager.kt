@@ -34,7 +34,7 @@ import java.util.HashMap
 
 fun ReadableArray.forEachString(action: (String) -> Unit) {
     for (i in 0 until size()) {
-        getString(i)?.let { action(it) }
+        getString(i)?.let { action(it) } ?: Logger.d("RNMBXMapViewManager", "Skipping null string at index $i")
     }
 }
 

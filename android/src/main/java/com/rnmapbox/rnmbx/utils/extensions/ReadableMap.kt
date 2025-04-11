@@ -25,7 +25,7 @@ fun ReadableMap.forEach(action: (String, Any) -> Unit) {
     val iterator = this.entryIterator
     while (iterator.hasNext()) {
         val next = iterator.next()
-        next.value?.let { action(next.key, it) }
+        next.value?.let { action(next.key, it) } ?: Logger.d("ReadableMap", "Skipping null value for key: ${next.key}")
     }
 }
 fun ReadableMap.getIfDouble(key: String): Double? {
