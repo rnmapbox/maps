@@ -19,6 +19,7 @@ import com.facebook.react.bridge.ReactContextBaseJavaModule;
 import com.facebook.react.bridge.ReactMethod;
 import com.facebook.react.bridge.ReactModuleWithSpec;
 import com.facebook.react.bridge.ReadableMap;
+import com.facebook.react.modules.core.DeviceEventManagerModule;
 import com.facebook.react.turbomodule.core.interfaces.TurboModule;
 import javax.annotation.Nonnull;
 
@@ -35,7 +36,14 @@ public abstract class NativeRNMBXLocationModuleSpec extends ReactContextBaseJava
   }
 
   protected final void emitOnLocationUpdate(ReadableMap value) {
-    mEventEmitterCallback.invoke("onLocationUpdate", value);
+    if (mEventEmitterCallback != null) {
+      mEventEmitterCallback.invoke("onLocationUpdate", value);
+    } else {
+      //Emmit event for old architecture
+      getReactApplicationContext()
+              .getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter.class)
+              .emit("onLocationUpdate", value);
+    }
   }
 
   @ReactMethod
