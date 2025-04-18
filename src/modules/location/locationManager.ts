@@ -171,8 +171,10 @@ export class LocationManager {
 
     if (!this._isListening) {
       MapboxGLLocationManager.start(validDisplacement);
+      //Determine if TurboModules (new architecture) are available.
+      const isTurbo: boolean = typeof MapboxGLLocationManager.onLocationUpdate === 'function';
 
-      if (Platform.OS === 'ios') {
+      if (Platform.OS === 'ios' || !isTurbo) {
         this.subscription = LocationModuleEventEmitter.addListener(
           MapboxGL.LocationCallbackName.Update,
           this._onUpdate,
