@@ -319,28 +319,25 @@ open class RNMBXCamera : RNMBXMapComponentBase {
         }
       }
       
-      var _camera = CameraOptions()
-      
       if let zoom = self.followZoomLevel as? CGFloat {
         if (zoom >= 0.0) {
-          _camera.zoom = zoom
           followOptions.zoom = zoom
         }
       }
       
       if let followPitch = self.followPitch as? CGFloat {
         if (followPitch >= 0.0) {
-          _camera.pitch = followPitch
           followOptions.pitch = followPitch
         }
       } else if let stopPitch = self.stop?["pitch"] as? CGFloat {
         if (stopPitch >= 0.0) {
-          _camera.pitch = stopPitch
           followOptions.pitch = stopPitch
         }
       } else {
         followOptions.pitch = nil
       }
+      
+      var _camera = CameraOptions()
       
       if let followHeading = self.followHeading as? CGFloat {
         if (followHeading >= 0.0) {
