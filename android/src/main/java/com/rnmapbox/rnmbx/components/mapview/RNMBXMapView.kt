@@ -236,6 +236,7 @@ open class RNMBXMapView(private val mContext: Context, var mManager: RNMBXMapVie
     private val mFeatures = mutableListOf<FeatureEntry>()
     private var mQueuedFeatures: MutableList<AbstractMapFeature>? = ArrayList()
     private val mCameraChangeTracker = CameraChangeTracker()
+    private var mPreferredFrameRate: Int? = null
     private lateinit var mMap: MapboxMap
 
     private lateinit var mMapView: MapView
@@ -650,6 +651,12 @@ open class RNMBXMapView(private val mContext: Context, var mManager: RNMBXMapVie
             mLocaleLayerIds = layerIds
         }
         changes.add(Property.LOCALIZE_LABELS)
+    }
+
+    fun setReactPreferredFramesPerSecond(preferredFramesPerSecond: Int) {
+        if (this::mMapView.isInitialized) {
+            mMapView.setMaximumFps(preferredFramesPerSecond)
+        }
     }
 
     fun setReactStyleURL(styleURL: String) {

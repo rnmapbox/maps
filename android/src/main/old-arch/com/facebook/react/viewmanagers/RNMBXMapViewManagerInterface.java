@@ -40,4 +40,5 @@ public interface RNMBXMapViewManagerInterface<T extends View> {
   void setAttributionViewPosition(T view, Dynamic value);
   void setCompassImage(T view, Dynamic value);
   void setMapViewImpl(T view, Dynamic value);
+  void setPreferredFramesPerSecond(T view, Dynamic value);
 }

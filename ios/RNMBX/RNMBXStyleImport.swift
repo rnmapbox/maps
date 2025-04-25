@@ -1,25 +1,25 @@
 @_spi(Experimental) import MapboxMaps
 
 @objc(RNMBXStyleImport)
-open class RNMBXStyleImport : UIView, RNMBXMapComponent {
+open class RNMBXStyleImport: UIView, RNMBXMapComponent {
   var mapView: MapView? = nil
-  
+
   // MARK: React properties
   @objc
-  var id: String? = nil;
-  
+  public var id: String? = nil
+
   @objc
-  var existing: Bool = false;
-  
+  public var existing: Bool = false
+
   @objc
-  var config: [String: Any]? {
+  public var config: [String: Any]? {
     didSet {
       if let mapView = mapView {
         apply(mapView: mapView)
       }
     }
   }
-  
+
   public func waitForStyleLoad() -> Bool {
     true
   }
@@ -37,12 +37,19 @@ open class RNMBXStyleImport : UIView, RNMBXMapComponent {
   func apply(mapView: MapView) {
     if let config = config, let id = id {
       #if RNMBX_11
-      logged("RNMBXStyleImport.setStyleImportConfigProperties id=\(id)") {
-        try mapView.mapboxMap.setStyleImportConfigProperties(for: id, configs: config)
-      }
+        logged("RNMBXStyleImport.setStyleImportConfigProperties id=\(id)") {
+          try mapView.mapboxMap.setStyleImportConfigProperties(for: id, configs: config)
+        }
       #else
-      Logger.error("RNMBXStyleImport.setStyleImportConfigProperties is only implemented on v11")
+        Logger.error("RNMBXStyleImport.setStyleImportConfigProperties is only implemented on v11")
       #endif
+    }
+  }
+
+  @objc
+  public override func didSetProps(_ props: [String]) {
+    if let mapView = mapView {
+      apply(mapView: mapView)
     }
   }
 }

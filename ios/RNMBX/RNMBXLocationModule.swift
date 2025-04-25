@@ -11,7 +11,7 @@ class RNMBXLocation: NSObject {
 
   var timestamp: Date? = nil
 
-  func toJSON() -> [String:Any] {
+  func toJSON() -> NSDictionary {
     return [
       "coords": [
         "longitude": location.coordinate.longitude,
@@ -512,8 +512,22 @@ class RNMBXLocationModule: RCTEventEmitter, LocationProviderRNMBXDelegate {
     }
   }
   
-  @objc func getLastKnownLocation() -> RNMBXLocation? {
-    return RNMBXLocation()
+  @objc func getLastKnownLocation() -> NSDictionary? {
+    let result = RNMBXLocation()
+    if let locationProvider = locationProvider as? LocationProviderRNMBX {
+      if let location = locationProvider.lastKnownLocation {
+        result.location = location
+        result.timestamp = location.timestamp
+      }
+      if let heading = locationProvider.lastKnownHeading {
+        result.heading = heading
+        if result.timestamp == nil ||
+            heading.timestamp.compare(result.timestamp!) == .orderedAscending {
+          result.timestamp = heading.timestamp
+        }
+      }
+    }
+    return result.toJSON()
   }
   
   @objc func setMinDisplacement(_ minDisplacement: CLLocationDistance) {
