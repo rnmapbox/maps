@@ -46,8 +46,8 @@ fun ReadableArray.toJsonArray() : JsonArray {
     val result = JsonArray(size())
     for (i in 0 until size()) {
         when (getType(i)) {
-            ReadableType.Map -> result.add(getMap(i)?.toJsonObject())
-            ReadableType.Array -> result.add(getArray(i)?.toJsonArray())
+            ReadableType.Map -> getMap(i)?.let { result.add(it.toJsonObject()) } ?: Logger.d("ReadableTypeMap", "Map at index $i is null")
+            ReadableType.Array -> getMap(i)?.let {result.add(it.toJsonArray())} ?: Logger.d("ReadableTypeArray", "Array at index $i is null")
             ReadableType.Null -> result.add(null as JsonElement?)
             ReadableType.Number -> result.add(getDouble(i))
             ReadableType.String -> result.add(getString(i))
