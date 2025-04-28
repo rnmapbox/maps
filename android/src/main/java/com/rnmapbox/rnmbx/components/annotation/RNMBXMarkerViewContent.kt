@@ -2,7 +2,6 @@ package com.rnmapbox.rnmbx.components.annotation
 
 import android.content.Context
 import android.view.View.MeasureSpec
-import com.facebook.react.uimanager.MeasureSpecAssertions
 import com.facebook.react.views.view.ReactViewGroup
 
 class RNMBXMarkerViewContent(context: Context): ReactViewGroup(context) {
