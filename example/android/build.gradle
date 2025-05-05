@@ -31,9 +31,9 @@ buildscript {
         buildToolsVersion = "35.0.0"
         minSdkVersion = 24
         compileSdkVersion = 35
-        targetSdkVersion = 34
-        ndkVersion = "26.1.10909125"
-        kotlinVersion = "1.9.25"
+        targetSdkVersion = 35
+        kotlinVersion = "2.0.21"
+        ndkVersion = "27.1.12297006"
     }
     repositories {
         google()
@@ -48,7 +48,10 @@ buildscript {
 
 allprojects {
     repositories {
-                maven {
+        google()
+        mavenCentral()
+
+        maven {
             url 'https://api.mapbox.com/downloads/v2/releases/maven'
             authentication {
                 basic(BasicAuthentication)
