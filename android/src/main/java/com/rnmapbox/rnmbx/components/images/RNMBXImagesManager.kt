@@ -6,7 +6,6 @@ import android.graphics.drawable.BitmapDrawable
 import android.graphics.drawable.Drawable
 import android.view.View
 import com.facebook.react.bridge.*
-import com.facebook.react.common.MapBuilder
 import com.facebook.react.uimanager.ThemedReactContext
 import com.facebook.react.uimanager.annotations.ReactProp
 import com.facebook.react.viewmanagers.RNMBXImagesManagerInterface
@@ -15,7 +14,6 @@ import com.mapbox.maps.ImageStretches
 import com.rnmapbox.rnmbx.components.AbstractEventEmitter
 import com.rnmapbox.rnmbx.events.constants.EventKeys
 import com.rnmapbox.rnmbx.events.constants.eventMapOf
-import com.rnmapbox.rnmbx.rncompat.dynamic.*
 import com.rnmapbox.rnmbx.utils.ImageEntry
 import com.rnmapbox.rnmbx.utils.Logger
 import com.rnmapbox.rnmbx.utils.ResourceUtils
@@ -249,10 +247,14 @@ class RNMBXImagesManager(private val mContext: ReactApplicationContext) :
                     Logger.e("RNMBXImages", "each element of strech should be an array but was: ${array.getDynamic(i)}")
                 } else {
                     val pair = array.getArray(i)
-                    if (pair.size() != 2 || pair.getType(0) != ReadableType.Number || pair.getType(1) != ReadableType.Number) {
-                        Logger.e("RNMBXImages", "each element of stretch should be pair of 2 integers but was ${pair}")
+                    if (pair != null) {
+                        if (pair.size() != 2 || pair.getType(0) != ReadableType.Number || pair.getType(1) != ReadableType.Number) {
+                            Logger.e("RNMBXImages", "each element of stretch should be pair of 2 integers but was ${pair}")
+                        } 
+                        result.add(ImageStretches(pair.getDouble(0).toFloat(), pair.getDouble(1).toFloat()))
+                    } else {
+                        Logger.e("RNMBXImages", "each element of stretch should be an array but was null")
                     }
-                    result.add(ImageStretches(pair.getDouble(0).toFloat(), pair.getDouble(1).toFloat()))
                 }
             }
             return result;
