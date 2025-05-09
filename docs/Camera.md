@@ -347,4 +347,34 @@ camera.zoomTo(16, 100);
 ```
 
 
-[Fit](../examples/Camera/Fit)
+[Fit](../examples/Camera/Fit)### easeTo()
+
+Ease the map camera to a given camera options and animation options
+
+#### arguments
+| Name | Type | Required | Description  |
+| ---- | :--: | :------: | :----------: |
+
+
+
+### moveBy()
+
+Move the map by a given screen coordinate with optional animation.
+
+#### arguments
+| Name | Type | Required | Description  |
+| ---- | :--: | :------: | :----------: |
+
+
+
+### scaleBy()
+
+Scale the map by with optional animation.
+
+#### arguments
+| Name | Type | Required | Description  |
+| ---- | :--: | :------: | :----------: |
+
+
+
+

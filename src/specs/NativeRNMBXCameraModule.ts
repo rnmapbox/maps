@@ -31,6 +31,28 @@ type ObjectOr<T> = Object;
 
 export interface Spec extends TurboModule {
   updateCameraStop(viewRef: ViewRef, stop: ObjectOr<Stop>): Promise<void>;
+  easeTo: (
+    viewRef: ViewRef,
+    x: number,
+    y: number,
+    animationDuration?: number,
+    scaleFactor?: number,
+  ) => Promise<void>;
+  moveBy: (
+    viewRef: ViewRef,
+    x: number,
+    y: number,
+    animationMode?: number,
+    animationDuration?: number,
+  ) => Promise<void>;
+  scaleBy: (
+    viewRef: ViewRef,
+    x: number,
+    y: number,
+    animationMode?: number,
+    animationDuration?: number,
+    scaleFactor?: number,
+  ) => Promise<void>;
 }
 
 export default TurboModuleRegistry.getEnforcing<Spec>('RNMBXCameraModule');

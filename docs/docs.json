@@ -625,6 +625,33 @@
         "examples": [
           "\ncamera.zoomTo(16);\ncamera.zoomTo(16, 100);\n\n"
         ]
+      },
+      {
+        "name": "easeTo",
+        "docblock": "Ease the map camera to a given camera options and animation options\n\n@param {number} x screen coordinate\n@param {number} y screen coordinate\n@param {number} animationDuration The transition duration\n@param {number} scaleFactor scale factor to apply on current camera zoom",
+        "modifiers": [],
+        "params": [],
+        "returns": null,
+        "description": "Ease the map camera to a given camera options and animation options",
+        "examples": []
+      },
+      {
+        "name": "moveBy",
+        "docblock": "Move the map by a given screen coordinate with optional animation.\n\n@param {number} x screen coordinate\n@param {number} y screen coordinate\n@param {NativeAnimationMode} animationMode mode used for the animation\n@param {number} animationDuration The transition duration\n@param {number} scaleFactor scale factor value > 0.0 and < 2.0 when 1.0 means no scaling, > 1.0 zoom in and < 1.0 zoom out",
+        "modifiers": [],
+        "params": [],
+        "returns": null,
+        "description": "Move the map by a given screen coordinate with optional animation.",
+        "examples": []
+      },
+      {
+        "name": "scaleBy",
+        "docblock": "Scale the map by with optional animation.\n@param {number} x screen coordinate\n@param {number} y screen coordinate\n@param {NativeAnimationMode} animationMode mode used for the animation\n@param {number} animationDuration The transition duration",
+        "modifiers": [],
+        "params": [],
+        "returns": null,
+        "description": "Scale the map by with optional animation.",
+        "examples": []
       }
     ],
     "props": [

@@ -100,6 +100,37 @@ export interface CameraRef {
   flyTo: (centerCoordinate: Position, animationDuration?: number) => void;
   moveTo: (centerCoordinate: Position, animationDuration?: number) => void;
   zoomTo: (zoomLevel: number, animationDuration?: number) => void;
+  easeTo: (props: {
+    x: number;
+    y: number;
+    animationDuration?: number;
+    scaleFactor?: number;
+  }) => void;
+  moveBy: (
+    props:
+      | { x: number; y: number }
+      | {
+          x: number;
+          y: number;
+          animationMode: 'easeTo' | 'linearTo';
+          animationDuration: number;
+        },
+  ) => void;
+  scaleBy: (
+    props:
+      | {
+          x: number;
+          y: number;
+          scaleFactor: number;
+        }
+      | {
+          x: number;
+          y: number;
+          scaleFactor: number;
+          animationMode: 'easeTo' | 'linearTo';
+          animationDuration: number;
+        },
+  ) => void;
 }
 
 export type CameraStop = {
@@ -520,6 +551,49 @@ export const Camera = memo(
       };
       const zoomTo = useCallback(_zoomTo, [setCamera]);
 
+      const easeTo: CameraRef['easeTo'] = useCallback(
+        (
+          easeProps,
+        ) => {
+          commands.call<void>('easeTo', [
+            easeProps.x,
+            easeProps.y,
+            easeProps.animationDuration,
+            easeProps.scaleFactor,
+          ]);
+        },
+        [commands],
+      );
+
+      const moveBy: CameraRef['moveBy'] = useCallback(
+        (
+          moveProps,
+        ) => {
+          commands.call<void>('moveBy', [
+            moveProps.x,
+            moveProps.y,
+            'animationMode' in moveProps ? nativeAnimationMode(moveProps.animationMode) : null,
+            'animationDuration' in moveProps ? moveProps.animationDuration : null,
+          ]);
+        },
+        [commands],
+      );
+
+      const scaleBy: CameraRef['scaleBy'] = useCallback(
+        (
+          scaleProps
+        ) => {
+          commands.call<void>('scaleBy', [
+            scaleProps.x,
+            scaleProps.y,
+            'animationMode' in scaleProps ? nativeAnimationMode(scaleProps.animationMode) : null,
+            'animationDuration' in scaleProps ? scaleProps.animationDuration : null,
+            scaleProps.scaleFactor,
+          ]);
+        },
+        [commands],
+      );
+
       useImperativeHandle(ref, () => ({
         /**
          * Sets any camera properties, with default fallbacks if unspecified.
@@ -580,6 +654,33 @@ export const Camera = memo(
          * @param {number} animationDuration The transition duration
          */
         zoomTo,
+        /**
+         * Ease the map camera to a given camera options and animation options
+         * 
+         * @param {number} x screen coordinate
+         * @param {number} y screen coordinate
+         * @param {number} animationDuration The transition duration
+         * @param {number} scaleFactor scale factor to apply on current camera zoom
+         */
+        easeTo,
+        /**
+         * Move the map by a given screen coordinate with optional animation.
+         * 
+         * @param {number} x screen coordinate
+         * @param {number} y screen coordinate
+         * @param {NativeAnimationMode} animationMode mode used for the animation
+         * @param {number} animationDuration The transition duration
+         * @param {number} scaleFactor scale factor value > 0.0 and < 2.0 when 1.0 means no scaling, > 1.0 zoom in and < 1.0 zoom out
+         */
+        moveBy,
+        /**
+         * Scale the map by with optional animation.
+         * @param {number} x screen coordinate
+         * @param {number} y screen coordinate
+         * @param {NativeAnimationMode} animationMode mode used for the animation
+         * @param {number} animationDuration The transition duration
+         */
+        scaleBy,
       }));
 
       return (

@@ -52,7 +52,7 @@ class Camera
       'centerCoordinate' | 'zoomLevel' | 'minZoomLevel' | 'maxZoomLevel'
     >
   >
-  implements Omit<CameraRef, 'setCamera'>
+  implements Omit<CameraRef, 'setCamera' | 'easeTo' | 'moveBy' | 'scaleBy'>
 {
   context!: ContextType<typeof MapContext>;
 
