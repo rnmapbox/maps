@@ -8,7 +8,6 @@ import com.facebook.react.bridge.ReadableMap
 import com.facebook.react.bridge.WritableMap
 import com.facebook.react.bridge.WritableNativeMap
 import com.mapbox.maps.ScreenCoordinate
-import com.mapbox.maps.extension.style.expressions.dsl.generated.zoom
 import com.mapbox.maps.plugin.animation.MapAnimationOptions
 import com.mapbox.maps.plugin.animation.easeTo
 import com.mapbox.maps.plugin.animation.moveBy
