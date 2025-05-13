@@ -11,8 +11,9 @@ package com.facebook.react.viewmanagers;
 
 import android.view.View;
 import com.facebook.react.bridge.Dynamic;
+import com.facebook.react.uimanager.ViewManagerWithGeneratedInterface;
 
-public interface RNMBXNativeUserLocationManagerInterface<T extends View> {
+public interface RNMBXNativeUserLocationManagerInterface<T extends View> extends ViewManagerWithGeneratedInterface {
   void setAndroidRenderMode(T view, Dynamic value);
   void setPuckBearing(T view, Dynamic value);
   void setPuckBearingEnabled(T view, Dynamic value);

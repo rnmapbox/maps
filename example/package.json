@@ -45,7 +45,7 @@
   "optionalDependencies": {
     "@expo/metro-runtime": "3.2.1",
     "@types/responselike": "1.0.0",
-    "expo": "^51.0.18",
+    "expo": "^51.0.38",
     "mapbox-gl": "^3.3.0",
     "react-dom": "19.0.0",
     "react-native-web": "~0.20.0"
