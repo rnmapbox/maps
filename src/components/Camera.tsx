@@ -564,8 +564,8 @@ export const Camera = memo(
           commands.call<void>('easeTo', [
             easeProps.x,
             easeProps.y,
-            easeProps.animationDuration,
-            easeProps.scaleFactor,
+            easeProps.animationDuration ?? 0,
+            easeProps.scaleFactor ?? 1.0,
           ]);
         },
         [commands],
@@ -578,8 +578,8 @@ export const Camera = memo(
           commands.call<void>('moveBy', [
             moveProps.x,
             moveProps.y,
-            'animationMode' in moveProps ? nativeAnimationMode(moveProps.animationMode) : null,
-            'animationDuration' in moveProps ? moveProps.animationDuration : null,
+            'animationMode' in moveProps ? nativeAnimationMode(moveProps.animationMode) : nativeAnimationMode('linearTo'),
+            'animationDuration' in moveProps ? moveProps.animationDuration : 0,
           ]);
         },
         [commands],
@@ -592,8 +592,8 @@ export const Camera = memo(
           commands.call<void>('scaleBy', [
             scaleProps.x,
             scaleProps.y,
-            'animationMode' in scaleProps ? nativeAnimationMode(scaleProps.animationMode) : null,
-            'animationDuration' in scaleProps ? scaleProps.animationDuration : null,
+            'animationMode' in scaleProps ? nativeAnimationMode(scaleProps.animationMode) : nativeAnimationMode('linearTo'),
+            'animationDuration' in scaleProps ? scaleProps.animationDuration : 0,
             scaleProps.scaleFactor,
           ]);
         },

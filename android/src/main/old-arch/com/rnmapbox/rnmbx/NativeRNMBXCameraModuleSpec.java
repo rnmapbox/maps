@@ -41,13 +41,13 @@ public abstract class NativeRNMBXCameraModuleSpec extends ReactContextBaseJavaMo
 
   @ReactMethod
   @DoNotStrip
-  public abstract void easeTo(@Nullable Double viewRef, double x, double y, @Nullable Double animationDuration, @Nullable Double scaleFactor, Promise promise);
+  public abstract void easeTo(@Nullable Double viewRef, double x, double y, double animationDuration, double scaleFactor, Promise promise);
 
   @ReactMethod
   @DoNotStrip
-  public abstract void moveBy(@Nullable Double viewRef, double x, double y, @Nullable Double animationMode, @Nullable Double animationDuration, Promise promise);
+  public abstract void moveBy(@Nullable Double viewRef, double x, double y, double animationMode, double animationDuration, Promise promise);
 
   @ReactMethod
   @DoNotStrip
-  public abstract void scaleBy(@Nullable Double viewRef, double x, double y, @Nullable Double animationMode, @Nullable Double animationDuration, @Nullable Double scaleFactor, Promise promise);
+  public abstract void scaleBy(@Nullable Double viewRef, double x, double y, double animationMode, double animationDuration, double scaleFactor, Promise promise);
 }

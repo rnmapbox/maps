@@ -58,16 +58,16 @@ class RNMBXCameraModule(context: ReactApplicationContext, val viewTagResolver: V
     }
 
     private fun getAnimationOptions(
-        animationMode: Double?,
-        animationDuration: Double?
+        animationMode: Double,
+        animationDuration: Double
     ): MapAnimationOptions {
         return MapAnimationOptions.Builder()
             .apply {
-                when (animationMode?.toInt()) {
+                when (animationMode.toInt()) {
                     CameraMode.LINEAR -> interpolator(LinearInterpolator())
                     CameraMode.EASE -> interpolator(AccelerateDecelerateInterpolator())
                 }
-                animationDuration?.let { duration ->
+                animationDuration.let { duration ->
                     duration(duration.toLong())
                 }
             }
@@ -78,8 +78,8 @@ class RNMBXCameraModule(context: ReactApplicationContext, val viewTagResolver: V
         viewRef: ViewRefTag?,
         x: Double,
         y: Double,
-        animationMode: Double?,
-        animationDuration: Double?,
+        animationMode: Double,
+        animationDuration: Double,
         promise: Promise
     ) {
         withViewportOnUIThread(viewRef, promise) {
@@ -96,8 +96,8 @@ class RNMBXCameraModule(context: ReactApplicationContext, val viewTagResolver: V
         viewRef: ViewRefTag?,
         x: Double,
         y: Double,
-        animationDuration: Double?,
-        scaleFactor: Double?,
+        animationDuration: Double,
+        scaleFactor: Double,
         promise: Promise
     ) {
         withViewportOnUIThread(viewRef, promise) {
@@ -124,9 +124,9 @@ class RNMBXCameraModule(context: ReactApplicationContext, val viewTagResolver: V
         viewRef: ViewRefTag?,
         x: Double,
         y: Double,
-        animationMode: Double?,
-        animationDuration: Double?,
-        scaleFactor: Double?,
+        animationMode: Double,
+        animationDuration: Double,
+        scaleFactor: Double,
         promise: Promise
     ) {
         withViewportOnUIThread(viewRef, promise) {

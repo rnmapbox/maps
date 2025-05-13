@@ -33,23 +33,23 @@ export interface Spec extends TurboModule {
     viewRef: ViewRef,
     x: number,
     y: number,
-    animationDuration?: number,
-    scaleFactor?: number,
+    animationDuration: number,
+    scaleFactor: number,
   ) => Promise<void>;
   moveBy: (
     viewRef: ViewRef,
     x: number,
     y: number,
-    animationMode?: number,
-    animationDuration?: number,
+    animationMode: number,
+    animationDuration: number,
   ) => Promise<void>;
   scaleBy: (
     viewRef: ViewRef,
     x: number,
     y: number,
-    animationMode?: number,
-    animationDuration?: number,
-    scaleFactor?: number,
+    animationMode: number,
+    animationDuration: number,
+    scaleFactor: number,
   ) => Promise<void>;
 }
 
