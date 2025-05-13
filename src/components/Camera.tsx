@@ -61,7 +61,13 @@ const nativeAnimationMode = (
 
 // Native module types.
 
-type NativeAnimationMode = 'flight' | 'ease' | 'linear' | 'none' | 'move';
+type FLIGHT = 1;
+type EASE = 2;
+type LINEAR = 3;
+type MOVE = 4;
+type NONE = 5;
+
+type NativeAnimationMode = FLIGHT | EASE | LINEAR | MOVE | NONE;
 
 interface NativeCameraProps extends CameraFollowConfig {
   testID?: string;

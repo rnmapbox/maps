@@ -15,7 +15,7 @@ interface NativeCameraStop {
   paddingTop?: number;
   paddingBottom?: number;
   duration?: number;
-  mode?: NativeAnimationMode;
+  mode?: number;
 }
 
 type Stop =
@@ -23,8 +23,6 @@ type Stop =
       stops: NativeCameraStop[];
     }
   | NativeCameraStop;
-
-type NativeAnimationMode = 'flight' | 'ease' | 'linear' | 'none' | 'move';
 
 // eslint-disable-next-line @typescript-eslint/ban-types, @typescript-eslint/no-unused-vars
 type ObjectOr<T> = Object;

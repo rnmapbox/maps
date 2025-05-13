@@ -22,8 +22,12 @@ public protocol RNMBXMapComponent: AnyObject {
   func waitForStyleLoad() -> Bool
 }
 
-enum CameraMode: String, CaseIterable {
-  case flight, ease, linear, none
+enum CameraMode: Int {
+  case flight = 1
+  case ease = 2
+  case linear = 3
+  case move = 4
+  case none = 5
 }
 
 enum UserTrackingMode: String {
@@ -477,7 +481,7 @@ open class RNMBXCamera : RNMBXMapComponentBase {
     }
     
     var mode: CameraMode = .flight
-    if let m = stop["mode"] as? String, let m = CameraMode(rawValue: m) {
+    if let m = stop["mode"] as? NSNumber, let m = CameraMode(rawValue: m.intValue) {
       mode = m
     }
 
@@ -554,17 +558,12 @@ open class RNMBXCamera : RNMBXMapComponentBase {
         
       let cameraOptions = CameraOptions(center: newCenter)
       let duration = animationDuration?.doubleValue ?? 0.0
-      let modeInt = animationMode?.intValue ?? 0
-      let animation = CameraMode.allCases[modeInt] ?? .ease
-        
-      switch animation {
-      case .ease:
-          mapView.camera.ease(to: cameraOptions, duration: duration, curve: .easeInOut, completion: { _ in resolve(nil) })
-      case .linear:
-          mapView.camera.ease(to: cameraOptions, duration: duration, curve: .linear, completion: { _ in resolve(nil) })
-      default:
-          reject("E_UNSUPPORTED_ANIMATION_MODE", "unsupported animation mode", nil)
+      var curve: UIView.AnimationCurve = .linear
+      if let m = animationMode?.intValue, let m = CameraMode(rawValue: m) {
+          curve = m == CameraMode.ease ? .easeInOut : .linear
       }
+        
+      mapView.camera.ease(to: cameraOptions, duration: duration, curve: curve, completion: { _ in resolve(nil) })
     }
   }
     
@@ -572,6 +571,7 @@ open class RNMBXCamera : RNMBXMapComponentBase {
     x: Double,
     y: Double,
     scaleFactor: NSNumber,
+    animationMode: NSNumber?,
     animationDuration: NSNumber?,
     resolve: @escaping RCTPromiseResolveBlock,
     reject: @escaping RCTPromiseRejectBlock
@@ -582,8 +582,12 @@ open class RNMBXCamera : RNMBXMapComponentBase {
       let anchor = CGPoint(x: x, y: y)
       let cameraOptions = CameraOptions(anchor: anchor, zoom: newZoom)
       let duration = animationDuration?.doubleValue ?? 0.0
+      var curve: UIView.AnimationCurve = .linear
+      if let m = animationMode?.intValue, let m = CameraMode(rawValue: m) {
+          curve = m == CameraMode.ease ? .easeInOut : .linear
+      }
 
-      mapView.camera.ease(to: cameraOptions, duration: duration, curve: .linear) { _ in
+      mapView.camera.ease(to: cameraOptions, duration: duration, curve: curve) { _ in
         resolve(nil)
       }
     }

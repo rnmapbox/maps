@@ -98,7 +98,7 @@ RCT_EXPORT_METHOD(moveBy:(NSNumber *)viewRef
                    resolve:(RCTPromiseResolveBlock)resolve
                    reject:(RCTPromiseRejectBlock)reject) {
          [self withCamera:viewRef block:^(RNMBXCamera *camera) {
-             [camera scaleByX:x y:y scaleFactor:scaleFactor animationDuration:animationDuration resolve:resolve reject:reject];
+             [camera scaleByX:x y:y scaleFactor:scaleFactor animationMode:animationMode animationDuration:animationDuration resolve:resolve reject:reject];
          } reject:reject methodName:@"scaleBy"];
  }
 
