@@ -666,7 +666,7 @@ export const Camera = memo(
         easeTo,
         /**
          * Move the map by a given screen coordinate offset with optional animation.
-         * Can be used to get the Android Auto (onScroll) or Carplay(mapTemplate didUpdatePanGestureWithTranslation) drag gesture applied.
+         * Can be used to get the Android Auto (onScroll) or Carplay(mapTemplate didUpdatePanGestureWithTranslation) pan gesture applied.
          * 
          * @param {number} x screen coordinate offset
          * @param {number} y screen coordinate offset
@@ -677,7 +677,7 @@ export const Camera = memo(
         moveBy,
         /**
          * Scale the map with optional animation.
-         * Can be used to get Android Auto pan gesture (onScale with scaleFactor > 0.0 and < 2.0) applied.
+         * Can be used to get Android Auto pinch gesture (onScale with scaleFactor > 0.0 and < 2.0) applied.
          * 
          * @param {number} x center screen coordinate
          * @param {number} y center screen coordinate
