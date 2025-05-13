@@ -528,6 +528,66 @@ open class RNMBXCamera : RNMBXMapComponentBase {
     map.mapView.viewport.removeStatusObserver(self)
     return super.removeFromMap(map, reason:reason)
   }
+    
+  @objc public func easeTo(x: Double, y: Double, animationDuration: NSNumber?, scaleFactor: NSNumber?, resolve: @escaping RCTPromiseResolveBlock, reject: @escaping RCTPromiseRejectBlock) {
+    withMapView { mapView in
+      let targetCoordinate = mapView.mapboxMap.coordinate(for: CGPoint(x: x, y: y))
+      var cameraOptions = CameraOptions(center: targetCoordinate)
+      if let scaleFactor = scaleFactor {
+        cameraOptions.zoom = CGFloat(scaleFactor.doubleValue)
+      }
+      let duration = animationDuration?.doubleValue ?? 0.0
+        
+      mapView.camera.ease(to: cameraOptions, duration: duration, curve: .easeInOut) { _ in
+        resolve(nil)
+      }
+    }
+  }
+
+  @objc public func moveBy(x: Double, y: Double, animationMode: NSNumber?, animationDuration: NSNumber?, resolve: @escaping RCTPromiseResolveBlock, reject: @escaping RCTPromiseRejectBlock) {
+    withMapView { mapView in
+      let currentCamera = mapView.cameraState
+      let centerPoint = mapView.mapboxMap.point(for: currentCamera.center)
+
+      let newPoint = CGPoint(x: centerPoint.x + x, y: centerPoint.y + y)
+      let newCenter = mapView.mapboxMap.coordinate(for: newPoint)
+        
+      let cameraOptions = CameraOptions(center: newCenter)
+      let duration = animationDuration?.doubleValue ?? 0.0
+      let modeInt = animationMode?.intValue ?? 0
+      let animation = CameraMode.allCases[modeInt] ?? .ease
+        
+      switch animation {
+      case .ease:
+          mapView.camera.ease(to: cameraOptions, duration: duration, curve: .easeInOut, completion: { _ in resolve(nil) })
+      case .linear:
+          mapView.camera.ease(to: cameraOptions, duration: duration, curve: .linear, completion: { _ in resolve(nil) })
+      default:
+          reject("E_UNSUPPORTED_ANIMATION_MODE", "unsupported animation mode", nil)
+      }
+    }
+  }
+    
+  @objc public func scaleBy(
+    x: Double,
+    y: Double,
+    scaleFactor: NSNumber,
+    animationDuration: NSNumber?,
+    resolve: @escaping RCTPromiseResolveBlock,
+    reject: @escaping RCTPromiseRejectBlock
+  ) {
+    withMapView { mapView in
+      let currentZoom = mapView.cameraState.zoom
+      let newZoom = currentZoom + log2(scaleFactor.doubleValue)
+      let anchor = CGPoint(x: x, y: y)
+      let cameraOptions = CameraOptions(anchor: anchor, zoom: newZoom)
+      let duration = animationDuration?.doubleValue ?? 0.0
+
+      mapView.camera.ease(to: cameraOptions, duration: duration, curve: .linear) { _ in
+        resolve(nil)
+      }
+    }
+  }
 }
 
 // MARK: - ViewportStatusObserver

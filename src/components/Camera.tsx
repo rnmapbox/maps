@@ -655,28 +655,33 @@ export const Camera = memo(
          */
         zoomTo,
         /**
-         * Ease the map camera to a given camera options and animation options
+         * Ease the map camera to given absolute screen coordinates and animation options.
+         * Can be used to get the Android Auto double tap gesture (onScale with scaleFactor == 2.0) applied.
          * 
-         * @param {number} x screen coordinate
-         * @param {number} y screen coordinate
+         * @param {number} x absolute screen coordinate
+         * @param {number} y absolute screen coordinate
          * @param {number} animationDuration The transition duration
          * @param {number} scaleFactor scale factor to apply on current camera zoom
          */
         easeTo,
         /**
-         * Move the map by a given screen coordinate with optional animation.
+         * Move the map by a given screen coordinate offset with optional animation.
+         * Can be used to get the Android Auto (onScroll) or Carplay(mapTemplate didUpdatePanGestureWithTranslation) drag gesture applied.
          * 
-         * @param {number} x screen coordinate
-         * @param {number} y screen coordinate
+         * @param {number} x screen coordinate offset
+         * @param {number} y screen coordinate offset
          * @param {NativeAnimationMode} animationMode mode used for the animation
          * @param {number} animationDuration The transition duration
          * @param {number} scaleFactor scale factor value > 0.0 and < 2.0 when 1.0 means no scaling, > 1.0 zoom in and < 1.0 zoom out
          */
         moveBy,
         /**
-         * Scale the map by with optional animation.
-         * @param {number} x screen coordinate
-         * @param {number} y screen coordinate
+         * Scale the map with optional animation.
+         * Can be used to get Android Auto pan gesture (onScale with scaleFactor > 0.0 and < 2.0) applied.
+         * 
+         * @param {number} x center screen coordinate
+         * @param {number} y center screen coordinate
+         * @param {number} scaleFactor scale factor value > 0.0 and < 2.0 when 1.0 means no scaling, > 1.0 zoom in and < 1.0 zoom out
          * @param {NativeAnimationMode} animationMode mode used for the animation
          * @param {number} animationDuration The transition duration
          */
