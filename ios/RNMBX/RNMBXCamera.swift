@@ -540,29 +540,34 @@ open class RNMBXCamera : RNMBXMapComponentBase {
       if let scaleFactor = scaleFactor {
         cameraOptions.zoom = CGFloat(scaleFactor.doubleValue)
       }
-      let duration = animationDuration?.doubleValue ?? 0.0
+      let duration = (animationDuration?.doubleValue ?? 500) / 1000
         
       mapView.camera.ease(to: cameraOptions, duration: duration, curve: .easeInOut) { _ in
         resolve(nil)
       }
     }
   }
-
+    
   @objc public func moveBy(x: Double, y: Double, animationMode: NSNumber?, animationDuration: NSNumber?, resolve: @escaping RCTPromiseResolveBlock, reject: @escaping RCTPromiseRejectBlock) {
     withMapView { mapView in
-      let currentCamera = mapView.cameraState
-      let centerPoint = mapView.mapboxMap.point(for: currentCamera.center)
+      let contentFrame = mapView.bounds.inset(by: mapView.safeAreaInsets)
+      let centerPoint = CGPoint(x: contentFrame.midX, y: contentFrame.midY)
+      let endCameraPoint = CGPoint(x: centerPoint.x + x, y: centerPoint.y + y)
+      let cameraOptions = mapView.mapboxMap.dragCameraOptions(from: centerPoint, to: endCameraPoint)
+      
+      let duration = (animationDuration?.doubleValue ?? 0.0) / 1000
 
-      let newPoint = CGPoint(x: centerPoint.x + x, y: centerPoint.y + y)
-      let newCenter = mapView.mapboxMap.coordinate(for: newPoint)
+      if (duration == 0.0) {
+        mapView.mapboxMap.setCamera(to: cameraOptions)
+        resolve(nil)
+        return
+      }
         
-      let cameraOptions = CameraOptions(center: newCenter)
-      let duration = animationDuration?.doubleValue ?? 0.0
       var curve: UIView.AnimationCurve = .linear
       if let m = animationMode?.intValue, let m = CameraMode(rawValue: m) {
           curve = m == CameraMode.ease ? .easeInOut : .linear
       }
-        
+
       mapView.camera.ease(to: cameraOptions, duration: duration, curve: curve, completion: { _ in resolve(nil) })
     }
   }
@@ -581,7 +586,14 @@ open class RNMBXCamera : RNMBXMapComponentBase {
       let newZoom = currentZoom + log2(scaleFactor.doubleValue)
       let anchor = CGPoint(x: x, y: y)
       let cameraOptions = CameraOptions(anchor: anchor, zoom: newZoom)
-      let duration = animationDuration?.doubleValue ?? 0.0
+      let duration = (animationDuration?.doubleValue ?? 0.0) / 1000
+        
+      if (duration == 0.0) {
+        mapView.mapboxMap.setCamera(to: cameraOptions)
+        resolve(nil)
+        return
+      }
+        
       var curve: UIView.AnimationCurve = .linear
       if let m = animationMode?.intValue, let m = CameraMode(rawValue: m) {
           curve = m == CameraMode.ease ? .easeInOut : .linear
