@@ -68,8 +68,8 @@ RCT_EXPORT_METHOD(updateCameraStop:(nonnull NSNumber *)viewRef
 RCT_EXPORT_METHOD(easeTo:(nonnull NSNumber *)viewRef
                   x:(double)x
                   y:(double)y
-                  animationDuration:(NSNumber *)animationDuration
-                  scaleFactor:(NSNumber *)scaleFactor
+                  animationDuration:(nonnull NSNumber *)animationDuration
+                  scaleFactor:(nonnull NSNumber *)scaleFactor
                   resolve:(RCTPromiseResolveBlock)resolve
                   reject:(RCTPromiseRejectBlock)reject) {
         [self withCamera:viewRef block:^(RNMBXCamera *camera) {
@@ -77,11 +77,11 @@ RCT_EXPORT_METHOD(easeTo:(nonnull NSNumber *)viewRef
         } reject:reject methodName:@"easeTo"];
 }
 
-RCT_EXPORT_METHOD(moveBy:(NSNumber *)viewRef
+RCT_EXPORT_METHOD(moveBy:(nonnull NSNumber *)viewRef
                   x:(double)x
                   y:(double)y
-                  animationMode:(NSNumber *)animationMode
-                  animationDuration:(NSNumber *)animationDuration
+                  animationMode:(nonnull NSNumber *)animationMode
+                  animationDuration:(nonnull NSNumber *)animationDuration
                   resolve:(RCTPromiseResolveBlock)resolve
                   reject:(RCTPromiseRejectBlock)reject) {
         [self withCamera:viewRef block:^(RNMBXCamera *camera) {
@@ -89,12 +89,12 @@ RCT_EXPORT_METHOD(moveBy:(NSNumber *)viewRef
         } reject:reject methodName:@"moveBy"];
 }
 
- RCT_EXPORT_METHOD(scaleBy:(NSNumber *)viewRef
+ RCT_EXPORT_METHOD(scaleBy:(nonnull NSNumber *)viewRef
                    x:(double)x
                    y:(double)y
-                   animationMode:(NSNumber *)animationMode
-                   animationDuration:(NSNumber *)animationDuration
-                   scaleFactor:(NSNumber *)scaleFactor
+                   animationMode:(nonnull NSNumber *)animationMode
+                   animationDuration:(nonnull NSNumber *)animationDuration
+                   scaleFactor:(nonnull NSNumber *)scaleFactor
                    resolve:(RCTPromiseResolveBlock)resolve
                    reject:(RCTPromiseRejectBlock)reject) {
          [self withCamera:viewRef block:^(RNMBXCamera *camera) {
