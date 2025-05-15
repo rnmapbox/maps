@@ -15,7 +15,7 @@ import android.widget.FrameLayout
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.LifecycleRegistry
-import androidx.lifecycle.ViewTreeLifecycleOwner
+import androidx.lifecycle.setViewTreeLifecycleOwner
 import com.facebook.react.bridge.*
 import com.mapbox.android.gestures.*
 import com.mapbox.bindgen.Value
@@ -76,6 +76,7 @@ import com.rnmapbox.rnmbx.v11compat.ornamentsettings.*
 import org.json.JSONException
 import org.json.JSONObject
 
+
 fun <T> MutableList<T>.removeIf21(predicate: (T) -> Boolean): Boolean {
     var removed = false
     val iterator = this.iterator()
@@ -131,11 +132,11 @@ class RNMBXLifeCycle {
                     }
                 }
 
-                override fun getLifecycle(): Lifecycle {
-                    return lifecycleRegistry
-                }
+                override val lifecycle: Lifecycle
+                    get() = lifecycleRegistry
+
             }
-            ViewTreeLifecycleOwner.set(view, lifecycleOwner);
+            view.setViewTreeLifecycleOwner(lifecycleOwner)
         }
         lifecycleOwner?.handleLifecycleEvent(Lifecycle.Event.ON_START)
     }

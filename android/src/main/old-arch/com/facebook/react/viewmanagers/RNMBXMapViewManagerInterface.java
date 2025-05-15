@@ -11,8 +11,9 @@ package com.facebook.react.viewmanagers;
 
 import android.view.View;
 import com.facebook.react.bridge.Dynamic;
+import com.facebook.react.uimanager.ViewManagerWithGeneratedInterface;
 
-public interface RNMBXMapViewManagerInterface<T extends View> {
+public interface RNMBXMapViewManagerInterface<T extends View> extends ViewManagerWithGeneratedInterface {
   void setAttributionEnabled(T view, Dynamic value);
   void setAttributionPosition(T view, Dynamic value);
   void setLogoEnabled(T view, Dynamic value);
