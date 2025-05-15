@@ -106,12 +106,6 @@ export interface CameraRef {
   flyTo: (centerCoordinate: Position, animationDuration?: number) => void;
   moveTo: (centerCoordinate: Position, animationDuration?: number) => void;
   zoomTo: (zoomLevel: number, animationDuration?: number) => void;
-  easeTo: (props: {
-    x: number;
-    y: number;
-    animationDuration?: number;
-    scaleFactor?: number;
-  }) => void;
   moveBy: (
     props:
       | { x: number; y: number }
@@ -557,20 +551,6 @@ export const Camera = memo(
       };
       const zoomTo = useCallback(_zoomTo, [setCamera]);
 
-      const easeTo: CameraRef['easeTo'] = useCallback(
-        (
-          easeProps,
-        ) => {
-          commands.call<void>('easeTo', [
-            easeProps.x,
-            easeProps.y,
-            easeProps.animationDuration ?? 0,
-            easeProps.scaleFactor ?? 1.0,
-          ]);
-        },
-        [commands],
-      );
-
       const moveBy: CameraRef['moveBy'] = useCallback(
         (
           moveProps,
@@ -660,16 +640,6 @@ export const Camera = memo(
          * @param {number} animationDuration The transition duration
          */
         zoomTo,
-        /**
-         * Ease the map camera to given absolute screen coordinates and animation options.
-         * Can be used to get the Android Auto double tap gesture (onScale with scaleFactor == 2.0) applied.
-         * 
-         * @param {number} x absolute screen coordinate
-         * @param {number} y absolute screen coordinate
-         * @param {number} animationDuration The transition duration
-         * @param {number} scaleFactor scale factor to apply on current camera zoom
-         */
-        easeTo,
         /**
          * Move the map by a given screen coordinate offset with optional animation.
          * Can be used to get the Android Auto (onScroll) or Carplay(mapTemplate didUpdatePanGestureWithTranslation) pan gesture applied.

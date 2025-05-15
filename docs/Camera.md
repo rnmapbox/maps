@@ -347,17 +347,7 @@ camera.zoomTo(16, 100);
 ```
 
 
-[Fit](../examples/Camera/Fit)### easeTo()
-
-Ease the map camera to given absolute screen coordinates and animation options.<br/>Can be used to get the Android Auto double tap gesture (onScale with scaleFactor == 2.0) applied.
-
-#### arguments
-| Name | Type | Required | Description  |
-| ---- | :--: | :------: | :----------: |
-
-
-
-### moveBy()
+[Fit](../examples/Camera/Fit)### moveBy()
 
 Move the map by a given screen coordinate offset with optional animation.<br/>Can be used to get the Android Auto (onScroll) or Carplay(mapTemplate didUpdatePanGestureWithTranslation) pan gesture applied.
 

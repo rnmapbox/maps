@@ -92,34 +92,6 @@ class RNMBXCameraModule(context: ReactApplicationContext, val viewTagResolver: V
         }
     }
 
-    override fun easeTo(
-        viewRef: ViewRefTag?,
-        x: Double,
-        y: Double,
-        animationDuration: Double,
-        scaleFactor: Double,
-        promise: Promise
-    ) {
-        withViewportOnUIThread(viewRef, promise) {
-            it.mapboxMap?.let { map ->
-                val cameraOptions =
-                    map.cameraState.toCameraOptions().toBuilder().apply {
-                        scaleFactor?.let { scale ->
-                            zoom(map.cameraState.zoom + scale)
-                        }
-                        center(map.coordinateForPixel(ScreenCoordinate(x, y)))
-                    }.build()
-
-                val animationOptions =
-                    getAnimationOptions(CameraMode.EASE.toDouble(), animationDuration)
-
-                map.easeTo(cameraOptions, animationOptions)
-
-                promise.resolve(null)
-            }
-        }
-    }
-
     override fun scaleBy(
         viewRef: ViewRefTag?,
         x: Double,

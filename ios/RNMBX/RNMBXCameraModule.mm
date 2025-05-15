@@ -65,18 +65,6 @@ RCT_EXPORT_METHOD(updateCameraStop:(nonnull NSNumber *)viewRef
     } reject:reject methodName:@"updateCameraStop"];
 }
 
-RCT_EXPORT_METHOD(easeTo:(nonnull NSNumber *)viewRef
-                  x:(double)x
-                  y:(double)y
-                  animationDuration:(nonnull NSNumber *)animationDuration
-                  scaleFactor:(nonnull NSNumber *)scaleFactor
-                  resolve:(RCTPromiseResolveBlock)resolve
-                  reject:(RCTPromiseRejectBlock)reject) {
-        [self withCamera:viewRef block:^(RNMBXCamera *camera) {
-            [camera easeToX:x y:y animationDuration:animationDuration scaleFactor:scaleFactor resolve:resolve reject:reject];
-        } reject:reject methodName:@"easeTo"];
-}
-
 RCT_EXPORT_METHOD(moveBy:(nonnull NSNumber *)viewRef
                   x:(double)x
                   y:(double)y

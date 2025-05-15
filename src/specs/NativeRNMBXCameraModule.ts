@@ -29,13 +29,6 @@ type ObjectOr<T> = Object;
 
 export interface Spec extends TurboModule {
   updateCameraStop(viewRef: ViewRef, stop: ObjectOr<Stop>): Promise<void>;
-  easeTo: (
-    viewRef: ViewRef,
-    x: number,
-    y: number,
-    animationDuration: number,
-    scaleFactor: number,
-  ) => Promise<void>;
   moveBy: (
     viewRef: ViewRef,
     x: number,

@@ -532,22 +532,7 @@ open class RNMBXCamera : RNMBXMapComponentBase {
     map.mapView.viewport.removeStatusObserver(self)
     return super.removeFromMap(map, reason:reason)
   }
-    
-  @objc public func easeTo(x: Double, y: Double, animationDuration: NSNumber?, scaleFactor: NSNumber?, resolve: @escaping RCTPromiseResolveBlock, reject: @escaping RCTPromiseRejectBlock) {
-    withMapView { mapView in
-      let targetCoordinate = mapView.mapboxMap.coordinate(for: CGPoint(x: x, y: y))
-      var cameraOptions = CameraOptions(center: targetCoordinate)
-      if let scaleFactor = scaleFactor {
-        cameraOptions.zoom = CGFloat(scaleFactor.doubleValue)
-      }
-      let duration = (animationDuration?.doubleValue ?? 500) / 1000
-        
-      mapView.camera.ease(to: cameraOptions, duration: duration, curve: .easeInOut) { _ in
-        resolve(nil)
-      }
-    }
-  }
-    
+
   @objc public func moveBy(x: Double, y: Double, animationMode: NSNumber?, animationDuration: NSNumber?, resolve: @escaping RCTPromiseResolveBlock, reject: @escaping RCTPromiseRejectBlock) {
     withMapView { mapView in
       let contentFrame = mapView.bounds.inset(by: mapView.safeAreaInsets)
