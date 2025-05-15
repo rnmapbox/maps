@@ -628,20 +628,20 @@
       },
       {
         "name": "moveBy",
-        "docblock": "Move the map by a given screen coordinate offset with optional animation.\nCan be used to get the Android Auto (onScroll) or Carplay(mapTemplate didUpdatePanGestureWithTranslation) pan gesture applied.\n\n@param {number} x screen coordinate offset\n@param {number} y screen coordinate offset\n@param {NativeAnimationMode} animationMode mode used for the animation\n@param {number} animationDuration The transition duration\n@param {number} scaleFactor scale factor value > 0.0 and < 2.0 when 1.0 means no scaling, > 1.0 zoom in and < 1.0 zoom out",
+        "docblock": "Move the map by a given screen coordinate offset with optional animation.\nCan be used to get the Android Auto (onScroll) or Carplay(mapTemplate didUpdatePanGestureWithTranslation) pan gesture applied, for these to work properly do not specify animationDuration.\n\n@param {number} x screen coordinate offset\n@param {number} y screen coordinate offset\n@param {NativeAnimationMode} animationMode mode used for the animation\n@param {number} animationDuration The transition duration\n@param {number} scaleFactor scale factor value > 0.0 and < 2.0 when 1.0 means no scaling, > 1.0 zoom in and < 1.0 zoom out",
         "modifiers": [],
         "params": [],
         "returns": null,
-        "description": "Move the map by a given screen coordinate offset with optional animation.\nCan be used to get the Android Auto (onScroll) or Carplay(mapTemplate didUpdatePanGestureWithTranslation) pan gesture applied.",
+        "description": "Move the map by a given screen coordinate offset with optional animation.\nCan be used to get the Android Auto (onScroll) or Carplay(mapTemplate didUpdatePanGestureWithTranslation) pan gesture applied, for these to work properly do not specify animationDuration.",
         "examples": []
       },
       {
         "name": "scaleBy",
-        "docblock": "Scale the map with optional animation.\nCan be used to get Android Auto pinch gesture (onScale with scaleFactor > 0.0 and < 2.0) applied.\n\n@param {number} x center screen coordinate\n@param {number} y center screen coordinate\n@param {number} scaleFactor scale factor value > 0.0 and < 2.0 when 1.0 means no scaling, > 1.0 zoom in and < 1.0 zoom out\n@param {NativeAnimationMode} animationMode mode used for the animation\n@param {number} animationDuration The transition duration",
+        "docblock": "Scale the map with optional animation.\nCan be used to get Android Auto pinch gesture (onScale with scaleFactor > 0.0 and < 2.0) or Android Auto double tap (onScale with scaleFactor == 2.0) applied.\n\n@param {number} x center screen coordinate\n@param {number} y center screen coordinate\n@param {number} scaleFactor scale factor value > 0.0 and < 2.0 when 1.0 means no scaling, > 1.0 zoom in and < 1.0 zoom out\n@param {NativeAnimationMode} animationMode mode used for the animation\n@param {number} animationDuration The transition duration",
         "modifiers": [],
         "params": [],
         "returns": null,
-        "description": "Scale the map with optional animation.\nCan be used to get Android Auto pinch gesture (onScale with scaleFactor > 0.0 and < 2.0) applied.",
+        "description": "Scale the map with optional animation.\nCan be used to get Android Auto pinch gesture (onScale with scaleFactor > 0.0 and < 2.0) or Android Auto double tap (onScale with scaleFactor == 2.0) applied.",
         "examples": []
       }
     ],

@@ -349,7 +349,7 @@ camera.zoomTo(16, 100);
 
 [Fit](../examples/Camera/Fit)### moveBy()
 
-Move the map by a given screen coordinate offset with optional animation.<br/>Can be used to get the Android Auto (onScroll) or Carplay(mapTemplate didUpdatePanGestureWithTranslation) pan gesture applied.
+Move the map by a given screen coordinate offset with optional animation.<br/>Can be used to get the Android Auto (onScroll) or Carplay(mapTemplate didUpdatePanGestureWithTranslation) pan gesture applied, for these to work properly do not specify animationDuration.
 
 #### arguments
 | Name | Type | Required | Description  |
@@ -359,7 +359,7 @@ Move the map by a given screen coordinate offset with optional animation.<br/>Ca
 
 ### scaleBy()
 
-Scale the map with optional animation.<br/>Can be used to get Android Auto pinch gesture (onScale with scaleFactor > 0.0 and < 2.0) applied.
+Scale the map with optional animation.<br/>Can be used to get Android Auto pinch gesture (onScale with scaleFactor > 0.0 and < 2.0) or Android Auto double tap (onScale with scaleFactor == 2.0) applied.
 
 #### arguments
 | Name | Type | Required | Description  |

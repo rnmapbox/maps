@@ -106,7 +106,7 @@ class RNMBXCameraModule(context: ReactApplicationContext, val viewTagResolver: V
                 val animationOptions =
                     getAnimationOptions(animationMode, animationDuration)
 
-                map.scaleBy(scaleFactor ?: 1.0, ScreenCoordinate(x, y), animationOptions)
+                map.scaleBy(scaleFactor, ScreenCoordinate(x, y), animationOptions)
 
                 promise.resolve(null)
             }
