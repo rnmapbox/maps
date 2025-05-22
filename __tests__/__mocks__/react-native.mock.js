@@ -16,17 +16,21 @@ jest.mock('react-native/Libraries/EventEmitter/NativeEventEmitter', () => {
   };
 });
 
+
 jest.mock('react-native/Libraries/Utilities/Platform', () => ({
-  OS: 'ios', // or 'android'
-  select: (x) => {
-    if (x.android) {
-      return x.android;
-    } else if (x.native) {
-      return x.native;
-    } else if (x.default) {
-      return x.default;
-    }
-  },
+  __esModule: true,
+  default: {
+    OS: 'ios', // or 'android'
+    select: (x) => {
+      if (x.android) {
+        return x.android;
+      } else if (x.native) {
+        return x.native;
+      } else if (x.default) {
+        return x.default;
+      }
+    },
+  }
 }));
 
 jest.mock('react-native/src/private/animated/NativeAnimatedHelper', () => ({
