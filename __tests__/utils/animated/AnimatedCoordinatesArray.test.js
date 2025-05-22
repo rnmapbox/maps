@@ -1,6 +1,7 @@
 import FakeTimers from '@sinonjs/fake-timers';
 import { Animated, Easing } from 'react-native';
 import TestRenderer from 'react-test-renderer';
+import { act } from '@testing-library/react-native';
 import React from 'react';
 
 import { AnimatedShape, AnimatedCoordinatesArray } from '../../../src/classes';
@@ -47,13 +48,15 @@ describe('AnimatedShapeSource', () => {
     ]);
 
     let shapeSourceRef;
-    // eslint-disable-next-line no-unused-vars
-    const testRenderer = TestRenderer.create(
-      <AnimatedShapeSource
-        shape={new AnimatedShape({ type: 'LineString', coordinates })}
-        ref={(ref) => (shapeSourceRef = ref)}
-      />,
-    );
+    act(() => {
+      // eslint-disable-next-line no-unused-vars
+      const testRenderer = TestRenderer.create(
+        <AnimatedShapeSource
+          shape={new AnimatedShape({ type: 'LineString', coordinates })}
+          ref={(ref) => (shapeSourceRef = ref)}
+        />,
+      );
+    });
     const setNativeProps = jest.fn();
     _nativeRef(shapeSourceRef).setNativeProps = setNativeProps;
 
@@ -96,13 +99,15 @@ describe('AnimatedShapeSource', () => {
     ]);
 
     let shapeSourceRef;
-    // eslint-disable-next-line no-unused-vars
-    const testRenderer = TestRenderer.create(
-      <AnimatedShapeSource
-        shape={new AnimatedShape({ type: 'LineString', coordinates })}
-        ref={(ref) => (shapeSourceRef = ref)}
-      />,
-    );
+    act(() => {
+      // eslint-disable-next-line no-unused-vars
+      const testRenderer = TestRenderer.create(
+        <AnimatedShapeSource
+          shape={new AnimatedShape({ type: 'LineString', coordinates })}
+          ref={(ref) => (shapeSourceRef = ref)}
+        />,
+      );
+    })
     const setNativeProps = jest.fn();
     _nativeRef(shapeSourceRef).setNativeProps = setNativeProps;
 
@@ -148,13 +153,15 @@ describe('AnimatedShapeSource', () => {
     ]);
 
     let shapeSourceRef;
-    // eslint-disable-next-line no-unused-vars
-    const testRenderer = TestRenderer.create(
-      <AnimatedShapeSource
-        shape={new AnimatedShape({ type: 'LineString', coordinates })}
-        ref={(ref) => (shapeSourceRef = ref)}
-      />,
-    );
+    act(() => {
+      // eslint-disable-next-line no-unused-vars
+      const testRenderer = TestRenderer.create(
+        <AnimatedShapeSource
+          shape={new AnimatedShape({ type: 'LineString', coordinates })}
+          ref={(ref) => (shapeSourceRef = ref)}
+        />,
+      );
+    })
     const setNativeProps = jest.fn();
     _nativeRef(shapeSourceRef).setNativeProps = setNativeProps;
 

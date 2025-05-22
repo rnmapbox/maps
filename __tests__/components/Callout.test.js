@@ -30,16 +30,16 @@ describe('Callout', () => {
         tipStyle: { height: 4 },
         textStyle: { height: 5 },
       };
-      const { UNSAFE_getByType, UNSAFE_getAllByType } = render(
+      const result = render(
         <Callout {...testProps} />,
       );
-
+      const { UNSAFE_getByType, UNSAFE_getAllByType } = result
       const callout = UNSAFE_getByType('RNMBXCallout');
       const views = UNSAFE_getAllByType(View);
       const text = UNSAFE_getByType(Text);
 
       const calloutWrapperTestStyle = callout.props.style[1].height;
-      const animatedViewTestStyle = views[0].props.style.height;
+      const animatedViewTestStyle = views[0].props.style[1].height;
       const wrapperViewTestStyle = views[1].props.style[1].height;
       const tipViewTestStyle = views[2].props.style[1].height;
       const textTestStyle = text.props.style[1].height;

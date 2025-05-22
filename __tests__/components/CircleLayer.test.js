@@ -5,12 +5,10 @@ import CircleLayer from '../../src/components/CircleLayer';
 
 describe('CircleLayer', () => {
   test('renders correctly with default props', () => {
-    const { UNSAFE_root: circleLayer } = render(
+    const { root: circleLayer } = render(
       <CircleLayer id="requiredCircleLayerID" />,
     );
-    const { props } = circleLayer;
-
-    expect(props.sourceID).toStrictEqual('DefaultSourceID');
+    expect(circleLayer).toHaveProp('sourceID', 'DefaultSourceID');
   });
 
   test('renders correctly with custom props', () => {

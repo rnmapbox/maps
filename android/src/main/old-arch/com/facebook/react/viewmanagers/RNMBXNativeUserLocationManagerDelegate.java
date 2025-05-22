@@ -12,10 +12,11 @@ package com.facebook.react.viewmanagers;
 import android.view.View;
 import androidx.annotation.Nullable;
 import com.facebook.react.bridge.DynamicFromObject;
+import com.facebook.react.uimanager.BaseViewManager;
 import com.facebook.react.uimanager.BaseViewManagerDelegate;
-import com.facebook.react.uimanager.BaseViewManagerInterface;
+import com.facebook.react.uimanager.LayoutShadowNode;
 
-public class RNMBXNativeUserLocationManagerDelegate<T extends View, U extends BaseViewManagerInterface<T> & RNMBXNativeUserLocationManagerInterface<T>> extends BaseViewManagerDelegate<T, U> {
+public class RNMBXNativeUserLocationManagerDelegate<T extends View, U extends BaseViewManager<T, ? extends LayoutShadowNode> & RNMBXNativeUserLocationManagerInterface<T>> extends BaseViewManagerDelegate<T, U> {
   public RNMBXNativeUserLocationManagerDelegate(U viewManager) {
     super(viewManager);
   }

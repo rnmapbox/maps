@@ -93,18 +93,20 @@ describe('UserLocation', () => {
 
       render(<UserLocation onUpdate={onUpdateCallback} />);
 
-      locationManager._onUpdate({
-        coords: {
-          accuracy: 9.977999687194824,
-          altitude: 44.64373779296875,
-          heading: 251.5358428955078,
-          latitude: 51.5462244,
-          longitude: 4.1036916,
-          speed: 0.08543474227190018,
-          course: 251.5358428955078,
-        },
-        timestamp: 1573730357879,
-      });
+      act(() => {
+        locationManager._onUpdate({
+          coords: {
+            accuracy: 9.977999687194824,
+            altitude: 44.64373779296875,
+            heading: 251.5358428955078,
+            latitude: 51.5462244,
+            longitude: 4.1036916,
+            speed: 0.08543474227190018,
+            course: 251.5358428955078,
+          },
+          timestamp: 1573730357879,
+        });
+      })
 
       expect(onUpdateCallback).toHaveBeenCalled();
     });
@@ -176,7 +178,9 @@ describe('UserLocation', () => {
 
         expect(ul.locationManagerRunning).toStrictEqual(false);
 
-        await ul.setLocationManager({ running: true });
+        await act(async () => {
+          await ul.setLocationManager({ running: true });
+        })
 
         expect(ul.locationManagerRunning).toStrictEqual(true);
         expect(locationManager.start).toHaveBeenCalledTimes(1);
@@ -192,11 +196,16 @@ describe('UserLocation', () => {
       test('called with "running" false', async () => {
         // start
         expect(ul.locationManagerRunning).toStrictEqual(false);
-        await ul.setLocationManager({ running: true });
+        await act(async () => {
+          await ul.setLocationManager({ running: true });
+        })
+
         expect(ul.locationManagerRunning).toStrictEqual(true);
 
         // stop
-        await ul.setLocationManager({ running: false });
+        await act(async () => {
+          await ul.setLocationManager({ running: false });
+        })
 
         expect(ul.locationManagerRunning).toStrictEqual(false);
         // only once from start
