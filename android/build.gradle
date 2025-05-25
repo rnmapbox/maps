@@ -77,6 +77,15 @@ android {
                     java.srcDirs += 'src/main/mapbox-v11-compat/v10'
                 }
                 java.srcDirs += 'src/main/rn-compat/rn75'
+                
+                // Add Android SDK compatibility source sets
+                def compileSdk = safeExtGet("compileSdkVersion", 28)
+                if (compileSdk >= 24) {
+                    java.srcDirs += 'src/main/android-compat/sdk24'
+                } else {
+                    java.srcDirs += 'src/main/android-compat/sdk21'
+                }
+                
                 if (safeExtGet("RNMapboxMapsUseV11", false)) {
                     logger.warn("RNMapboxMapsUseV11 is deprecated, just set RNMapboxMapsVersion to 11.*")
                 }
