@@ -78,12 +78,13 @@ android {
                 }
                 java.srcDirs += 'src/main/rn-compat/rn75'
                 
-                // Add Android SDK compatibility source sets
+                // Add lifecycle compatibility source sets
+                // SDK 35+ typically comes with Lifecycle 2.6+ which changed from getLifecycle() to lifecycle property
                 def compileSdk = safeExtGet("compileSdkVersion", 28)
-                if (compileSdk >= 24) {
-                    java.srcDirs += 'src/main/android-compat/sdk24'
+                if (compileSdk >= 35) {
+                    java.srcDirs += 'src/main/lifecycle-compat/v26'
                 } else {
-                    java.srcDirs += 'src/main/android-compat/sdk21'
+                    java.srcDirs += 'src/main/lifecycle-compat/v25'
                 }
                 
                 if (safeExtGet("RNMapboxMapsUseV11", false)) {
