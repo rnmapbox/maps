@@ -93,9 +93,9 @@ using namespace facebook::react;
     if (defaultStop != nil) {
         _view.defaultStop = defaultStop;
     }
-    id followUserLocation = RNMBXConvertFollyDynamicToId(newViewProps.followUserLocation);
-    if (followUserLocation != nil) {
-        _view.followUserLocation = followUserLocation;
+    id followUserLocationDynamic = RNMBXConvertFollyDynamicToId(newViewProps.followUserLocation);
+    if (followUserLocationDynamic != nil) {
+        _view.followUserLocation = [followUserLocationDynamic boolValue];
     }
     id followUserMode = RNMBXConvertFollyDynamicToId(newViewProps.followUserMode);
     if (followUserMode != nil) {
