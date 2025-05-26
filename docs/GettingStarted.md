@@ -2,19 +2,19 @@
 
 Congratulations, you successfully installed rnmapbox/maps! 🎉
 Where to go from here?
-You can head straight to [examples](/example) folder if you want to jump into the deep end.
+You can head straight to the [examples](/example) folder if you want to jump into the deep end.
 However, if you prefer an easier ramp-up, then make sure to stick around and check out the guides below.
 
 ## Installation
 
-Please follow our install guides for the platforms you're interested in (ios, android, expo): https://rnmapbox.github.io/docs/install
+Please follow our install guides for the platforms you're interested in (iOS, Android, Expo): https://rnmapbox.github.io/docs/install
 
-## Setting your accessToken
+## Setting your access token
 
-In order to work, mapbox requires you to create an accessToken and set it in your app.
-If you haven't created one yet, make sure to sign up for an account [here](https://www.mapbox.com/signup/)
-You can create and manage your access tokens on your [Mapbox Account page](https://www.mapbox.com/account/)
-Once you have your accessToken, set it like this
+In order to work, Mapbox requires you to create an access token and set it in your app.
+If you haven't created one yet, make sure to sign up for an account [here](https://console.mapbox.com/).
+You can create and manage your access tokens on your [Mapbox account page](https://console.mapbox.com/account/access-tokens/)
+Once you have your access token, set it like this:
 
 ```js
 import Mapbox from "@rnmapbox/maps";
@@ -34,18 +34,16 @@ import Mapbox from "@rnmapbox/maps";
 Mapbox.setConnected(true);
 ```
 
-## Disabling Telemetry
+## Disabling telemetry
 
-By default mapbox collects telemetry.
+By default Mapbox collects telemetry.
 If you would like to programmatically disable this within your app add the code below.
 
 ```js
-  componentDidMount() {
-    Mapbox.setTelemetryEnabled(false);
-  }
+  Mapbox.setTelemetryEnabled(false);
 ```
 
-For more information on mapbox and telemetry: [https://www.mapbox.com/telemetry](https://www.mapbox.com/telemetry)
+For more information on Mapbox and telemetry: [https://www.mapbox.com/telemetry](https://www.mapbox.com/telemetry)
 
 ## Show a map
 
@@ -74,10 +72,6 @@ const styles = StyleSheet.create({
 });
 
 export default class App extends Component {
-  componentDidMount() {
-    Mapbox.setTelemetryEnabled(false);
-  }
-
   render() {
     return (
       <View style={styles.page}>
