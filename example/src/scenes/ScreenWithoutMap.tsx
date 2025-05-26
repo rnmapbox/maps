@@ -1,5 +1,5 @@
 import type { NativeStackScreenProps } from '@react-navigation/native-stack';
-import React from 'react';
+import React, { JSX } from 'react';
 import { Button, Text, View, SafeAreaView } from 'react-native';
 
 type StackParamsList = {

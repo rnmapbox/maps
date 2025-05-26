@@ -6,6 +6,7 @@ import com.facebook.react.bridge.ReadableMap
 import com.facebook.react.bridge.ReadableType
 import com.mapbox.bindgen.Value
 import com.rnmapbox.rnmbx.rncompat.dynamic.*
+import com.rnmapbox.rnmbx.utils.Logger
 
 fun ReadableMap.toValueHashMap(): HashMap<String, Value> {
     var result = hashMapOf<String, Value>()
@@ -33,15 +34,18 @@ fun ReadableArray.toValue(): Value {
     var result = ArrayList<Value>(size())
 
     for (i in 0 until size()) {
-        result.add(
         when (getType(i)) {
             ReadableType.Null -> Value.nullValue()
             ReadableType.Boolean -> Value.valueOf(getBoolean(i))
             ReadableType.Number -> Value.valueOf(getDouble(i))
-            ReadableType.String -> Value.valueOf(getString(i))
-            ReadableType.Array -> getArray(i).toValue()
-            ReadableType.Map -> getMap(i).toValue()
-        })
+            ReadableType.String -> getString(i)?.let { Value.valueOf(it) } ?: Logger.d("ReadableArray", "Skipping null string at index $i")
+            ReadableType.Array -> getArray(i)?.toValue()
+            ReadableType.Map -> getMap(i)?.toValue()
+        }?.let {
+            result.add(
+                it as Value
+            )
+        }
     }
     return Value.valueOf(result)
 }

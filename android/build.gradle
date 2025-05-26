@@ -77,6 +77,16 @@ android {
                     java.srcDirs += 'src/main/mapbox-v11-compat/v10'
                 }
                 java.srcDirs += 'src/main/rn-compat/rn75'
+
+                // Add lifecycle compatibility source sets
+                // Apps targeting SDK 35+ typically use Lifecycle 2.6+ which changed from getLifecycle() to lifecycle property
+                def targetSdk = safeExtGet("targetSdkVersion", 28)
+                if (targetSdk >= 35) {
+                    java.srcDirs += 'src/main/lifecycle-compat/v26'
+                } else {
+                    java.srcDirs += 'src/main/lifecycle-compat/v25'
+                }
+
                 if (safeExtGet("RNMapboxMapsUseV11", false)) {
                     logger.warn("RNMapboxMapsUseV11 is deprecated, just set RNMapboxMapsVersion to 11.*")
                 }

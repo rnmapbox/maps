@@ -5,11 +5,10 @@ import HeatmapLayer from '../../src/components/HeatmapLayer';
 
 describe('HeatmapLayer', () => {
   test('renders correctly with default props', () => {
-    const { UNSAFE_root: heatmapLayer } = render(
+    const { root: heatmapLayer } = render(
       <HeatmapLayer id="requiredHeatmapLayerID" />,
     );
-    const { props } = heatmapLayer;
-    expect(props.sourceID).toStrictEqual('DefaultSourceID');
+    expect(heatmapLayer).toHaveProp('sourceID', 'DefaultSourceID');
   });
 
   test('renders correctly with custom props', () => {

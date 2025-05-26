@@ -34,13 +34,13 @@ import java.util.HashMap
 
 fun ReadableArray.forEachString(action: (String) -> Unit) {
     for (i in 0 until size()) {
-        action(getString(i))
+        getString(i)?.let { action(it) } ?: Logger.d("RNMBXMapViewManager", "Skipping null string at index $i")
     }
 }
 
 fun ReadableArray.asArrayString(): Array<String> {
     val result = Array<String>(size()) {
-        getString(it)
+        getString(it).toString()
     }
     return result
 }

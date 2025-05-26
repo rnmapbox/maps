@@ -11,8 +11,9 @@ package com.facebook.react.viewmanagers;
 
 import android.view.View;
 import com.facebook.react.bridge.Dynamic;
+import com.facebook.react.uimanager.ViewManagerWithGeneratedInterface;
 
-public interface RNMBXFillExtrusionLayerManagerInterface<T extends View> {
+public interface RNMBXFillExtrusionLayerManagerInterface<T extends View> extends ViewManagerWithGeneratedInterface {
   void setId(T view, Dynamic value);
   void setSourceID(T view, Dynamic value);
   void setExisting(T view, Dynamic value);

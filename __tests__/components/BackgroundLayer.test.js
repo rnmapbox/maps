@@ -5,13 +5,11 @@ import BackgroundLayer from '../../src/components/BackgroundLayer';
 
 describe('BackgroundLayer', () => {
   test('renders correctly with default props', () => {
-    const { UNSAFE_root: backgroundLayer } = render(
+    const { root: backgroundLayer } = render(
       <BackgroundLayer id="requiredBackgroundLayerID" />,
     );
 
-    const { props } = backgroundLayer;
-
-    expect(props.sourceID).toStrictEqual('DefaultSourceID');
+    expect(backgroundLayer).toHaveProp('sourceID', 'DefaultSourceID');
   });
 
   test('renders correctly with custom props', () => {
