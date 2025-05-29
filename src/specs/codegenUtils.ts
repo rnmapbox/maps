@@ -25,5 +25,5 @@ export type NativeCameraStop = {
   paddingTop?: Double;
   paddingBottom?: Double;
   duration?: Double;
-  mode?: string;
+  mode?: number;
 } | null;
