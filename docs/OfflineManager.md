@@ -15,7 +15,7 @@ The shared object maintains a canonical collection of offline packs.
 
 
 ## methods
-### createPack(options[, progressListener][, errorListener])
+### createPack(options, progressListener?, errorListener?)
 
 Creates and registers an offline pack that downloads the resources needed to use the given region offline.
 
@@ -42,7 +42,9 @@ await Mapbox.offlineManager.createPack({
 ```
 
 
-[Offline Example](../examples/Map/OfflineExample)### invalidatePack(name)
+[Offline Example](../examples/Map/OfflineExample)
+
+### invalidatePack(name)
 
 Invalidates the specified offline pack. This method checks that the tiles in the specified offline pack match those from the server. Local tiles that do not match the latest version on the server are updated.This is more efficient than deleting the offline pack and downloading it again. If the data stored locally matches that on the server, new data will not be downloaded.
 
