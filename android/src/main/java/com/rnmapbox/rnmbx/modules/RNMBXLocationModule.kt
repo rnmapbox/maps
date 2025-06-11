@@ -132,12 +132,12 @@ class RNMBXLocationModule(reactContext: ReactApplicationContext) :
     }
 
     @ReactMethod
-    fun addListener(eventName: String?) {
+    override fun addListener(eventName: String?) {
         // Required for rn built in EventEmitter Calls.
     }
 
     @ReactMethod
-    fun removeListeners(count: Int?) {
+    override fun removeListeners(count: Int?) {
         // Required for rn built in EventEmitter Calls.
     }
 
