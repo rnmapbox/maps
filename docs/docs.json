@@ -3726,6 +3726,42 @@
         "examples": [
           "\nawait this._map.setSourceVisibility(false, 'composite', 'building')\n\n"
         ]
+      },
+      {
+        "name": "setStyleLayerProperty",
+        "docblock": "Sets the value of a property for a specific layer referencing the specified `layerId`\n\n@example\nawait this._map.setStyleLayerProperty('my-layer', 'visibility', 'none')\n\n@param {String} layerId - layerId\n@param {String} propertyName - propertyName\n@param {String} propertyValue - propertyValue",
+        "modifiers": [],
+        "params": [
+          {
+            "name": "layerId",
+            "description": "layerId",
+            "type": {
+              "name": "string"
+            },
+            "optional": false
+          },
+          {
+            "name": "propertyName",
+            "description": "propertyName",
+            "type": {
+              "name": "string"
+            },
+            "optional": false
+          },
+          {
+            "name": "propertyValue",
+            "description": "propertyValue",
+            "type": {
+              "name": "string"
+            },
+            "optional": false
+          }
+        ],
+        "returns": null,
+        "description": "Sets the value of a property for a specific layer referencing the specified `layerId`",
+        "examples": [
+          "\nawait this._map.setStyleLayerProperty('my-layer', 'visibility', 'none')\n\n"
+        ]
       }
     ],
     "props": [
