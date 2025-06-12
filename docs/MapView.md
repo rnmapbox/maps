@@ -730,4 +730,22 @@ await this._map.setSourceVisibility(false, 'composite', 'building')
 ```
 
 
+### setStyleLayerProperty(layerId, propertyName, propertyValue)
+
+Sets the value of a property for a specific layer referencing the specified `layerId`
+
+#### arguments
+| Name | Type | Required | Description  |
+| ---- | :--: | :------: | :----------: |
+| `layerId` | `string` | `Yes` | layerId |
+| `propertyName` | `string` | `Yes` | propertyName |
+| `propertyValue` | `string` | `Yes` | propertyValue |
+
+
+
+```javascript
+await this._map.setStyleLayerProperty('my-layer', 'visibility', 'none')
+```
+
+
 

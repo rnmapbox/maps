@@ -1514,6 +1514,18 @@ extension RNMBXMapView {
   }
 }
 
+extension RNMBXMapView {
+    func setStyleLayerProperty(layerId: String, propertyName: String, propertyValue: Any) -> Void {
+        let style = self.mapboxMap.style
+        
+        do {
+            try style.setLayerProperty(for: layerId, property: propertyName, value: propertyValue)
+        } catch {
+            Logger.log(level: .error, message: "Cannot set property \(propertyName) on layer: \(layerId)")
+        }
+    }
+}
+
 class RNMBXPointAnnotationManager : AnnotationInteractionDelegate {
   weak var selected : RNMBXPointAnnotation? = nil
   private var draggedAnnotation: PointAnnotation?
