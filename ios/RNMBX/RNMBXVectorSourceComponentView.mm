@@ -40,7 +40,7 @@ using namespace facebook::react;
 - (void)prepareView
 {
     _view = [[RNMBXVectorSource alloc] init];
-      
+
     // capture weak self reference to prevent retain cycle
     __weak __typeof__(self) weakSelf = self;
 
@@ -124,13 +124,13 @@ using namespace facebook::react;
     }
     id hasPressListener = RNMBXConvertFollyDynamicToId(newProps.hasPressListener);
     if (hasPressListener != nil) {
-        _view.hasPressListener = hasPressListener;
+        _view.hasPressListener = [hasPressListener boolValue];
     }
     id hitbox = RNMBXConvertFollyDynamicToId(newProps.hitbox);
     if (hitbox != nil) {
         _view.hitbox = hitbox;
     }
-    
+
   [super updateProps:props oldProps:oldProps];
 }
 
