@@ -36,6 +36,35 @@ allprojects {
 }
 ```
 
+#### Maven Token with keychain
+
+For a more secure approach on an macOS device, consider leveraging apple's keychain android could use a gradle keychain reader function. And directly use that variable within top level android/build.gradle.
+
+```groovy
+def getPassword(String currentUser, String keyChain) {
+    def stdout = new ByteArrayOutputStream()
+    def stderr = new ByteArrayOutputStream()
+    exec {
+        commandLine 'security', '-q', 'find-generic-password', '-a', currentUser, '-s', keyChain, '-w'
+        standardOutput = stdout
+        errorOutput = stderr
+        ignoreExitValue true
+    }
+    //noinspection GroovyAssignabilityCheck
+    stdout.toString().trim()
+}
+
+def mapboxDownloadToken = getPassword("<app_name>","<app_name>_mapbox_download_secret")
+// Same config as the first part with this shared keychain secret used instead
+allprojects.repositories.maven {
+    ...(refer to mapbox setup)
+    credentials {
+    ...
+    password = mapboxDownloadToken
+    }
+}
+```
+
 ### Using non default mapbox version
 
 *Warning*: If you set a custom version, make sure you revisit, any time you update @rnmapbox/maps. Setting it to earlier version than what we exepect will likely result in a build error.
