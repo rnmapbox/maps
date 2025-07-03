@@ -61,7 +61,13 @@ const nativeAnimationMode = (
 
 // Native module types.
 
-type NativeAnimationMode = 'flight' | 'ease' | 'linear' | 'none' | 'move';
+type FLIGHT = 1;
+type EASE = 2;
+type LINEAR = 3;
+type MOVE = 4;
+type NONE = 5;
+
+type NativeAnimationMode = FLIGHT | EASE | LINEAR | MOVE | NONE;
 
 interface NativeCameraProps extends CameraFollowConfig {
   testID?: string;
@@ -100,6 +106,31 @@ export interface CameraRef {
   flyTo: (centerCoordinate: Position, animationDuration?: number) => void;
   moveTo: (centerCoordinate: Position, animationDuration?: number) => void;
   zoomTo: (zoomLevel: number, animationDuration?: number) => void;
+  moveBy: (
+    props:
+      | { x: number; y: number }
+      | {
+          x: number;
+          y: number;
+          animationMode: 'easeTo' | 'linearTo';
+          animationDuration: number;
+        },
+  ) => void;
+  scaleBy: (
+    props:
+      | {
+          x: number;
+          y: number;
+          scaleFactor: number;
+        }
+      | {
+          x: number;
+          y: number;
+          scaleFactor: number;
+          animationMode: 'easeTo' | 'linearTo';
+          animationDuration: number;
+        },
+  ) => void;
 }
 
 export type CameraStop = {
@@ -520,6 +551,35 @@ export const Camera = memo(
       };
       const zoomTo = useCallback(_zoomTo, [setCamera]);
 
+      const moveBy: CameraRef['moveBy'] = useCallback(
+        (
+          moveProps,
+        ) => {
+          commands.call<void>('moveBy', [
+            moveProps.x,
+            moveProps.y,
+            'animationMode' in moveProps ? nativeAnimationMode(moveProps.animationMode) : nativeAnimationMode('linearTo'),
+            'animationDuration' in moveProps ? moveProps.animationDuration : 0,
+          ]);
+        },
+        [commands],
+      );
+
+      const scaleBy: CameraRef['scaleBy'] = useCallback(
+        (
+          scaleProps
+        ) => {
+          commands.call<void>('scaleBy', [
+            scaleProps.x,
+            scaleProps.y,
+            'animationMode' in scaleProps ? nativeAnimationMode(scaleProps.animationMode) : nativeAnimationMode('linearTo'),
+            'animationDuration' in scaleProps ? scaleProps.animationDuration : 0,
+            scaleProps.scaleFactor,
+          ]);
+        },
+        [commands],
+      );
+
       useImperativeHandle(ref, () => ({
         /**
          * Sets any camera properties, with default fallbacks if unspecified.
@@ -580,6 +640,28 @@ export const Camera = memo(
          * @param {number} animationDuration The transition duration
          */
         zoomTo,
+        /**
+         * Move the map by a given screen coordinate offset with optional animation.
+         * Can be used to get the Android Auto (onScroll) or Carplay(mapTemplate didUpdatePanGestureWithTranslation) pan gesture applied, for these to work properly do not specify animationDuration.
+         * 
+         * @param {number} x screen coordinate offset
+         * @param {number} y screen coordinate offset
+         * @param {NativeAnimationMode} animationMode mode used for the animation
+         * @param {number} animationDuration The transition duration
+         * @param {number} scaleFactor scale factor value > 0.0 and < 2.0 when 1.0 means no scaling, > 1.0 zoom in and < 1.0 zoom out
+         */
+        moveBy,
+        /**
+         * Scale the map with optional animation.
+         * Can be used to get Android Auto pinch gesture (onScale with scaleFactor > 0.0 and < 2.0) or Android Auto double tap (onScale with scaleFactor == 2.0) applied.
+         * 
+         * @param {number} x center screen coordinate
+         * @param {number} y center screen coordinate
+         * @param {number} scaleFactor scale factor value > 0.0 and < 2.0 when 1.0 means no scaling, > 1.0 zoom in and < 1.0 zoom out
+         * @param {NativeAnimationMode} animationMode mode used for the animation
+         * @param {number} animationDuration The transition duration
+         */
+        scaleBy,
       }));
 
       return (
