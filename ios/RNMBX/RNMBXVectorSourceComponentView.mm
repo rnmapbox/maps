@@ -124,7 +124,7 @@ using namespace facebook::react;
     }
     id hasPressListener = RNMBXConvertFollyDynamicToId(newProps.hasPressListener);
     if (hasPressListener != nil) {
-        _view.hasPressListener = hasPressListener;
+        _view.hasPressListener = [hasPressListener boolValue];
     }
     id hitbox = RNMBXConvertFollyDynamicToId(newProps.hitbox);
     if (hitbox != nil) {
