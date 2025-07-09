@@ -59,11 +59,13 @@ class RNMBXLocationModule(reactContext: ReactApplicationContext) :
             if (changed && (location != null) && shouldSendLocationEvent()) {
                 val locationEvent = LocationEvent(location)
 
-                emitOnLocationUpdate(locationEvent.toJSON())
-                /*
-                val emitter = EventEmitter.getModuleEmitter(reactApplicationContext)
-                emitter?.emit(LOCATION_UPDATE, locationEvent.payload)
-                */
+                if(mEventEmitterCallback != null){
+                    emitOnLocationUpdate(locationEvent.toJSON())
+                }else {
+                    // Emmit event for old architecture
+                    val emitter = EventEmitter.getModuleEmitter(reactApplicationContext)
+                    emitter?.emit(LOCATION_UPDATE, locationEvent.payload)
+                }
             }
         }
     }
