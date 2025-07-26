@@ -9,7 +9,11 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.createHash = exports.createGeneratedHeaderComment = exports.removeGeneratedContents = exports.removeContents = exports.mergeContents = void 0;
+exports.mergeContents = mergeContents;
+exports.removeContents = removeContents;
+exports.removeGeneratedContents = removeGeneratedContents;
+exports.createGeneratedHeaderComment = createGeneratedHeaderComment;
+exports.createHash = createHash;
 /**
  * Get line indexes for the generated section of a file.
  *
@@ -49,7 +53,6 @@ function mergeContents({ src, newSrc, tag, anchor, offset, comment, }) {
     }
     return { contents: src, didClear: false, didMerge: false };
 }
-exports.mergeContents = mergeContents;
 function removeContents({ src, tag, }) {
     // Ensure the old generated contents are removed.
     const sanitizedTarget = removeGeneratedContents(src, tag);
@@ -59,7 +62,6 @@ function removeContents({ src, tag, }) {
         didClear: !!sanitizedTarget,
     };
 }
-exports.removeContents = removeContents;
 function addLines(content, find, offset, toAdd) {
     const lines = content.split('\n');
     let lineIndex = lines.findIndex((line) => line.match(find));
@@ -92,16 +94,13 @@ function removeGeneratedContents(src, tag) {
     }
     return null;
 }
-exports.removeGeneratedContents = removeGeneratedContents;
 function createGeneratedHeaderComment(contents, tag, comment) {
     const hashKey = createHash(contents);
     // Everything after the `${tag} ` is unversioned and can be freely modified without breaking changes.
     return `${comment} @generated begin ${tag} - expo prebuild (DO NOT MODIFY) ${hashKey}`;
 }
-exports.createGeneratedHeaderComment = createGeneratedHeaderComment;
 function createHash(src) {
     // this doesn't need to be secure, the shorter the better.
     const hash = crypto_1.default.createHash('sha1').update(src).digest('hex');
     return `sync-${hash}`;
 }
-exports.createHash = createHash;
