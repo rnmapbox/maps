@@ -1,7 +1,7 @@
 import ejs from 'ejs';
 import path from 'path';
 import fs from 'fs';
-import styleSpecJSON from '../../style-spec/v8.json' assert { type: 'json' };
+import styleSpecJSON from '../../style-spec/v8.json' with { type: 'json' };
 import * as url from 'url';
 
 import prettier from 'prettier';
