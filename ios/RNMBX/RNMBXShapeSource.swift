@@ -86,7 +86,7 @@ public class RNMBXShapeSource : RNMBXSource {
   @objc public var maxZoomLevel : NSNumber?
   @objc public var buffer : NSNumber?
   @objc public var tolerance : NSNumber?
-  @objc public var lineMetrics : NSNumber?
+  @objc public var lineMetrics : Bool = false
 
   override func sourceType() -> Source.Type {
     return GeoJSONSource.self
@@ -147,9 +147,7 @@ public class RNMBXShapeSource : RNMBXSource {
       result.tolerance = tolerance.doubleValue
     }
 
-    if let lineMetrics = lineMetrics {
-      result.lineMetrics = lineMetrics.boolValue
-    }
+    result.lineMetrics = lineMetrics
 
     return result
   }
