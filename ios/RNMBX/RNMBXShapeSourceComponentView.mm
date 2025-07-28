@@ -104,7 +104,7 @@ using namespace facebook::react;
   RNMBX_OPTIONAL_PROP_NSNumber(maxZoomLevel)
   RNMBX_OPTIONAL_PROP_NSNumber(buffer)
   RNMBX_OPTIONAL_PROP_NSNumber(tolerance)
-  RNMBX_OPTIONAL_PROP_NSNumber(lineMetrics)
+  RNMBX_OPTIONAL_PROP_BOOL(lineMetrics)
   RNMBX_OPTIONAL_PROP_BOOL(hasPressListener)
   RNMBX_OPTIONAL_PROP_NSDictionary(hitbox)
   
