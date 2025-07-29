@@ -21,7 +21,11 @@ fun ViewAnnotationOptions.Builder.height(value: Double): ViewAnnotationOptions.B
   return this.height(value.toInt())
 }
 
-fun com.mapbox.maps.ViewAnnotationOptions.Builder.allowOverlapWithPuck(value: Boolean): ViewAnnotationOptions.Builder {
+fun ViewAnnotationOptions.Builder.allowOverlapWithPuck(value: Boolean): ViewAnnotationOptions.Builder {
+  return this;
+}
+
+fun ViewAnnotationOptions.Builder.ignoreCameraPadding(value: Boolean): ViewAnnotationOptions.Builder {
   return this;
 }
 
