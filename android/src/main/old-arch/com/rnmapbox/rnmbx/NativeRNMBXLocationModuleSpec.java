@@ -65,4 +65,12 @@ public abstract class NativeRNMBXLocationModuleSpec extends ReactContextBaseJava
   @ReactMethod
   @DoNotStrip
   public abstract void setLocationEventThrottle(double throttle);
+
+  @ReactMethod
+  @DoNotStrip
+  public abstract void addListener(String eventName);
+
+  @ReactMethod
+  @DoNotStrip
+  public abstract void removeListeners(double count);
 }
