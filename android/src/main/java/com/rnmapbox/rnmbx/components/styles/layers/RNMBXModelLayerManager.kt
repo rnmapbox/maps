@@ -5,6 +5,7 @@ import com.facebook.react.uimanager.ThemedReactContext
 import com.facebook.react.uimanager.ViewGroupManager
 import com.facebook.react.uimanager.annotations.ReactProp
 import com.facebook.react.viewmanagers.RNMBXModelLayerManagerInterface
+import com.rnmapbox.rnmbx.utils.Logger
 
 
 class RNMBXModelLayerManager : ViewGroupManager<RNMBXModelLayer>(),
@@ -65,7 +66,12 @@ class RNMBXModelLayerManager : ViewGroupManager<RNMBXModelLayer>(),
 
     @ReactProp(name = "sourceLayerID")
     override fun setSourceLayerID(layer: RNMBXModelLayer, sourceLayerID: Dynamic) {
-        layer.setSourceLayerID(sourceLayerID.asString())
+        val id = sourceLayerID.asString()
+        if (id == null) {
+            Logger.e("RNMBXModelLayerManager", "sourceLayerID is null")
+            return
+        }
+        layer.setSourceLayerID(id)
     }
 
     @ReactProp(name = "filter")

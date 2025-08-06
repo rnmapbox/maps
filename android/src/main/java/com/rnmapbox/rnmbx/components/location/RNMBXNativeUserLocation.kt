@@ -163,7 +163,7 @@ class RNMBXNativeUserLocation(context: Context) : AbstractMapFeature(context), O
             if (pulsing.hasKey("color")) {
                 when (pulsing.getType("color")) {
                     ReadableType.Map ->
-                        location2.pulsingColor = ColorPropConverter.getColor(pulsing.getMap("color"), mContext)
+                        location2.pulsingColor = ColorPropConverter.getColor(pulsing.getMap("color"), mContext) ?: 0
                     ReadableType.Number ->
                         location2.pulsingColor = pulsing.getInt("color")
                     else ->

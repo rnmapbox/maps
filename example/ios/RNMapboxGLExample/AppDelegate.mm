@@ -32,7 +32,7 @@
 
 - (BOOL)bridgelessEnabled
 {
- return NO;
+  return YES;
 }
 
 @end

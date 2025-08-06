@@ -8,6 +8,7 @@ import com.facebook.react.uimanager.annotations.ReactProp
 import com.facebook.react.viewmanagers.RNMBXVectorSourceManagerInterface
 import com.rnmapbox.rnmbx.events.constants.EventKeys
 import com.rnmapbox.rnmbx.events.constants.eventMapOf
+import com.rnmapbox.rnmbx.utils.Logger
 import javax.annotation.Nonnull
 
 class RNMBXVectorSourceManager(reactApplicationContext: ReactApplicationContext) :
@@ -30,7 +31,12 @@ class RNMBXVectorSourceManager(reactApplicationContext: ReactApplicationContext)
 
     @ReactProp(name = "hitbox")
     override fun setHitbox(source: RNMBXVectorSource, map: Dynamic) {
-        source.setHitbox(map.asMap())
+        val mapValue = map.asMap()
+        if (mapValue == null) {
+            Logger.e("RNMBXVectorSourceManager", "hitbox map is null")
+            return
+        }
+        source.setHitbox(mapValue)
     }
 
     @ReactProp(name = "existing")
