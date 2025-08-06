@@ -186,7 +186,7 @@ class RNMBXMarkerView(context: Context?, private val mManager: RNMBXMarkerViewMa
             allowOverlapWithPuck(mAllowOverlapWithPuck)
             offsets(offset.dx, offset.dy)
             selected(mIsSelected)
-
+            ignoreCameraPadding(true)
         }
         return options
     }
