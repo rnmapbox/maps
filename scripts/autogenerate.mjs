@@ -22,11 +22,11 @@ async function generate() {
   let outputPaths = generateCodeWithEjs(layers);
 
   // autogenerate expo plugin
-  execSync('pnpm build:plugin', { stdio: 'inherit' });
+  execSync('yarn build:plugin', { stdio: 'inherit' });
   outputPaths.push('plugin/build');
 
   // autogenerate examples.json
-  execSync('pnpm build:examples.json', { stdio: 'inherit' });
+  execSync('yarn build:examples.json', { stdio: 'inherit' });
   outputPaths.push('docs/examples.json');
 
   // codepart generation
