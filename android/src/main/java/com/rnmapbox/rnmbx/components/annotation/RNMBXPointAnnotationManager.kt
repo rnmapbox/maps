@@ -14,6 +14,7 @@ import com.rnmapbox.rnmbx.events.constants.EventKeys
 import com.rnmapbox.rnmbx.events.constants.eventMapOf
 import com.rnmapbox.rnmbx.utils.GeoJSONUtils.toPointGeometry
 import com.rnmapbox.rnmbx.utils.ViewTagResolver
+import com.rnmapbox.rnmbx.utils.Logger
 
 class RNMBXPointAnnotationManager(reactApplicationContext: ReactApplicationContext, val viewTagResolver: ViewTagResolver) : AbstractEventEmitter<RNMBXPointAnnotation>(reactApplicationContext),
   RNMBXPointAnnotationManagerInterface<RNMBXPointAnnotation> {
@@ -69,7 +70,12 @@ class RNMBXPointAnnotationManager(reactApplicationContext: ReactApplicationConte
 
     @ReactProp(name = "anchor")
     override fun setAnchor(annotation: RNMBXPointAnnotation, map: Dynamic) {
-        annotation.setAnchor(map.asMap().getDouble("x").toFloat(), map.asMap().getDouble("y").toFloat())
+        val mapValue = map.asMap()
+        if (mapValue == null) {
+            Logger.e("RNMBXPointAnnotationManager", "anchor map is null")
+            return
+        }
+        annotation.setAnchor(mapValue.getDouble("x").toFloat(), mapValue.getDouble("y").toFloat())
     }
 
     @ReactProp(name = "draggable")

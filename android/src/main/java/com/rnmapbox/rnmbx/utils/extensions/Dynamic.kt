@@ -55,9 +55,33 @@ fun Dynamic.toValue(): Value {
         ReadableType.Null -> Value.nullValue()
         ReadableType.Boolean -> Value.valueOf(asBoolean())
         ReadableType.Number -> Value.valueOf(asDouble())
-        ReadableType.String -> Value.valueOf(asString())
-        ReadableType.Array -> asArray().toValue()
-        ReadableType.Map -> asMap().toValue()
+        ReadableType.String -> {
+            val stringValue = asString()
+            if (stringValue == null) {
+                Logger.e("Dynamic", "String value is null when converting to Value")
+                Value.nullValue()
+            } else {
+                Value.valueOf(stringValue)
+            }
+        }
+        ReadableType.Array -> {
+            val arrayValue = asArray()
+            if (arrayValue == null) {
+                Logger.e("Dynamic", "Array value is null when converting to Value")
+                Value.nullValue()
+            } else {
+                arrayValue.toValue()
+            }
+        }
+        ReadableType.Map -> {
+            val mapValue = asMap()
+            if (mapValue == null) {
+                Logger.e("Dynamic", "Map value is null when converting to Value")
+                Value.nullValue()
+            } else {
+                mapValue.toValue()
+            }
+        }
     }
 }
 

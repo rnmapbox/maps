@@ -52,7 +52,12 @@ class RNMBXStyleImportManager(context: ReactApplicationContext) :
         if (value.type != ReadableType.Map) {
             Logger.e(REACT_CLASS, "config expected Map but received: ${value.type}")
         } else {
-            view.config = value.asMap().toValueHashMap()
+            val mapValue = value.asMap()
+            if (mapValue == null) {
+                Logger.e(REACT_CLASS, "config map is null")
+                return
+            }
+            view.config = mapValue.toValueHashMap()
         }
     }
 }

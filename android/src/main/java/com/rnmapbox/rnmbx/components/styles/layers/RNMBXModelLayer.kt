@@ -27,7 +27,11 @@ class RNMBXModelLayer(context: Context?) : RNMBXLayer<ModelLayer?>(
         }
     }
 
-    fun setSourceLayerID(value: String) {
+    fun setSourceLayerID(value: String?) {
+        if (value == null) {
+            Logger.e("RNMBXModelLayer", "setSourceLayerID: sourceLayerID is null")
+            return
+        }
         mSourceLayerID = value
     }
 }

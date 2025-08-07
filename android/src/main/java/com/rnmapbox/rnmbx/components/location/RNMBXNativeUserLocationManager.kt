@@ -108,8 +108,14 @@ fun _convertToDoubleValueOrExpression(value: Dynamic?, name: String): Value? {
         return null
     }
     return when (value.type) {
-        ReadableType.Array ->
-            Expression.fromRaw(Gson().toJson(value.asArray().toJsonArray()))
+        ReadableType.Array -> {
+            val array = value.asArray()
+            if (array == null) {
+                Logger.e("RNMBXNativeUserLocationManager", "_convertToDoubleValueOrExpression: array is null for $name")
+                return null
+            }
+            Expression.fromRaw(Gson().toJson(array.toJsonArray()))
+        }
         ReadableType.Number ->
             Value.valueOf(value.asDouble())
         else -> {
