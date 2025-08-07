@@ -18,6 +18,7 @@ import com.rnmapbox.rnmbx.components.mapview.RNMBXMapView
 import com.rnmapbox.rnmbx.v11compat.annotation.*
 import com.rnmapbox.rnmbx.utils.LatLng
 import com.rnmapbox.rnmbx.utils.GeoJSONUtils.toGNPointGeometry
+import com.rnmapbox.rnmbx.utils.Logger
 
 class RNMBXMarkerViewManager(reactApplicationContext: ReactApplicationContext) :
     AbstractEventEmitter<RNMBXMarkerView>(reactApplicationContext),
@@ -39,12 +40,21 @@ class RNMBXMarkerViewManager(reactApplicationContext: ReactApplicationContext) :
     @ReactProp(name = "coordinate")
     override fun setCoordinate(markerView: RNMBXMarkerView, value: Dynamic) {
         val array = value.asArray()
+        if (array == null) {
+            Logger.e("RNMBXMarkerViewManager", "array in setCoordinate is null")
+            return
+        }
         markerView.setCoordinate(toGNPointGeometry(LatLng(array.getDouble(1), array.getDouble(0))))
     }
 
     @ReactProp(name = "anchor")
     override fun setAnchor(markerView: RNMBXMarkerView, map: Dynamic) {
-        markerView.setAnchor(map.asMap().getDouble("x").toFloat(), map.asMap().getDouble("y").toFloat())
+        val mapValue = map.asMap()
+        if (mapValue == null) {
+            Logger.e("RNMBXMarkerViewManager", "map in setAnchor is null")
+            return
+        }
+        markerView.setAnchor(mapValue.getDouble("x").toFloat(), mapValue.getDouble("y").toFloat())
     }
 
     @ReactProp(name = "allowOverlap")

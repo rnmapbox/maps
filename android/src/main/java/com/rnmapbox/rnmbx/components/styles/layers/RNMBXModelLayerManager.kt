@@ -5,6 +5,7 @@ import com.facebook.react.uimanager.ThemedReactContext
 import com.facebook.react.uimanager.ViewGroupManager
 import com.facebook.react.uimanager.annotations.ReactProp
 import com.facebook.react.viewmanagers.RNMBXModelLayerManagerInterface
+import com.rnmapbox.rnmbx.utils.Logger
 
 
 class RNMBXModelLayerManager : ViewGroupManager<RNMBXModelLayer>(),

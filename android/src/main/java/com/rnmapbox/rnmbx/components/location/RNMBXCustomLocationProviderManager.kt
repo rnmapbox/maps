@@ -24,6 +24,10 @@ class RNMBXCustomLocationProviderManager : ViewGroupManager<RNMBXCustomLocationP
     override fun setCoordinate(view: RNMBXCustomLocationProvider, value: Dynamic?) {
         if (value?.type == ReadableType.Array) {
             val array = value.asArray()
+            if (array == null) {
+                Logger.e(LOG_TAG, "coordinate array is null")
+                return
+            }
             if (array.size() == 2 && array.getType(0) == ReadableType.Number && array.getType(1) == ReadableType.Number) {
                 view.coordinate = Pair(array.getDouble(0), array.getDouble(1))
             } else {
