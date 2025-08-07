@@ -57,6 +57,10 @@ package-lock.json
 /example/package-lock.json
 /example/yarn.lock
 
+# pnpm
+pnpm-lock.yaml
+.pnpm-store/
+
 # Expo
 .expo
 example/dist

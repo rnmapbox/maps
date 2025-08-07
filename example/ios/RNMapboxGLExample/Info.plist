@@ -41,6 +41,8 @@
 	<string>Show current location on map</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string>Show current location on map</string>
+	<key>RCTNewArchEnabled</key>
+	<true/>
 	<key>UIAppFonts</key>
 	<array>
 		<string>AntDesign.ttf</string>
