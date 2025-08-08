@@ -167,7 +167,19 @@ dependencies {
     // Mapbox SDK
     customizableDependencies('RNMapboxMapsLibs') {
         if (safeExtGet("RNMapboxMapsImpl", defaultMapboxMapsImpl) == "mapbox") {
-            implementation "com.mapbox.maps:android:${safeExtGet("RNMapboxMapsVersion", defaultMapboxMapsVersion)}"
+            def targetSdk = safeExtGet("targetSdkVersion", 28)
+            def mapboxVersion = safeExtGet("RNMapboxMapsVersion", defaultMapboxMapsVersion)
+            
+            // Use NDK27 variant for Android 15+ (API 35+) to support 16KB page size
+            // Required by Google Play for apps targeting Android 15+ by November 1, 2025
+            // See: https://github.com/rnmapbox/maps/issues/3896
+            // Mapbox Docs: https://docs.mapbox.com/android/maps/guides/#ndk-27
+            if (targetSdk >= 35) {
+                implementation "com.mapbox.maps:android-ndk27:${mapboxVersion}"
+            } else {
+                implementation "com.mapbox.maps:android:${mapboxVersion}"
+            }
+            
             implementation 'com.mapbox.mapboxsdk:mapbox-sdk-turf:6.11.0'
             implementation 'androidx.asynclayoutinflater:asynclayoutinflater:1.0.0'
         } else {
