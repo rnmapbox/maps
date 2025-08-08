@@ -24,6 +24,8 @@ export interface Spec extends TurboModule {
   getLastKnownLocation(): Promise<LocationEvent['payload']>
   simulateHeading(changesPerSecond: number, increment: number): void
   setLocationEventThrottle(throttle: number): void
+  addListener(eventName: string): void;
+  removeListeners(count: number): void;
 
   readonly onLocationUpdate: EventEmitter<LocationEvent>
 }
