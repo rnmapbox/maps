@@ -78,13 +78,130 @@ android {
                 }
                 java.srcDirs += 'src/main/rn-compat/rn75'
 
+                // Adapted from react-native-screens for consistency
+                // https://github.com/software-mansion/react-native-screens/blob/main/android/build.gradle
+                def resolveReactNativeDirectory = {
+                    // 1. User-defined path
+                    def userDefinedRnDirPath = safeExtGet("REACT_NATIVE_NODE_MODULES_DIR", null)
+                    if (userDefinedRnDirPath != null) {
+                        return file(userDefinedRnDirPath)
+                    }
+                    
+                    // 2. Standard monorepo location
+                    def standardRnDirFile = file("$rootDir/../node_modules/react-native/")
+                    if (standardRnDirFile.exists()) {
+                        return standardRnDirFile
+                    }
+                    
+                    // 3. Legacy location
+                    def legacyRnDirFile = file("$projectDir/../node_modules/react-native/")
+                    if (legacyRnDirFile.exists()) {
+                        return legacyRnDirFile
+                    }
+                    
+                    // 4. Try Node resolution as fallback
+                    try {
+                        def maybeRnPackagePath = providers.exec {
+                            workingDir(rootDir)
+                            commandLine("node", "--print", "require.resolve('react-native/package.json')")
+                        }.standardOutput.asText.get().trim()
+                        
+                        if (maybeRnPackagePath != null && !maybeRnPackagePath.isBlank()) {
+                            def maybeRnPackageFile = file(maybeRnPackagePath)
+                            if (maybeRnPackageFile.exists()) {
+                                return maybeRnPackageFile.parentFile
+                            }
+                        }
+                    } catch (Exception e) {
+                        logger.debug("@rnmapbox/maps: Node resolution for react-native failed: ${e.message}")
+                    }
+                    
+                    return null
+                }
+                
+                def detectReactNativeVersion = {
+                    def rnDir = resolveReactNativeDirectory()
+                    if (rnDir == null) {
+                        return null
+                    }
+                    
+                    // Try gradle.properties first (like react-native-screens)
+                    def gradlePropertiesFile = file("$rnDir/ReactAndroid/gradle.properties")
+                    if (gradlePropertiesFile.exists()) {
+                        try {
+                            def reactProperties = new Properties()
+                            gradlePropertiesFile.withInputStream { reactProperties.load(it) }
+                            def version = reactProperties.getProperty("VERSION_NAME")
+                            if (version != null) {
+                                return version
+                            }
+                        } catch (Exception e) {
+                            logger.debug("@rnmapbox/maps: Failed to read gradle.properties: ${e.message}")
+                        }
+                    }
+                    
+                    // Fallback to package.json
+                    def packageJsonFile = file("$rnDir/package.json")
+                    if (packageJsonFile.exists()) {
+                        try {
+                            def packageJson = new groovy.json.JsonSlurper().parseText(packageJsonFile.text)
+                            return packageJson.version
+                        } catch (Exception e) {
+                            logger.debug("@rnmapbox/maps: Failed to read package.json: ${e.message}")
+                        }
+                    }
+                    
+                    return null
+                }
+                
                 // Add lifecycle compatibility source sets
-                // Apps targeting SDK 35+ typically use Lifecycle 2.6+ which changed from getLifecycle() to lifecycle property
-                def targetSdk = safeExtGet("targetSdkVersion", 28)
-                if (targetSdk >= 35) {
+                // Priority order:
+                // 1. User-defined override (RNMapboxMapsLifecycleCompat)
+                // 2. React Native version detection (0.78+ uses new API)
+                // 3. Conservative default (v25 for better compatibility)
+                
+                def lifecycleCompat = safeExtGet("RNMapboxMapsLifecycleCompat", null)
+                
+                if (lifecycleCompat == "v25" || lifecycleCompat == "old") {
+                    logger.info("@rnmapbox/maps: Using v25 lifecycle compatibility (ViewTreeLifecycleOwner.set) - user override")
+                    java.srcDirs += 'src/main/lifecycle-compat/v25'
+                } else if (lifecycleCompat == "v26" || lifecycleCompat == "new") {
+                    logger.info("@rnmapbox/maps: Using v26 lifecycle compatibility (setViewTreeLifecycleOwner) - user override")
                     java.srcDirs += 'src/main/lifecycle-compat/v26'
                 } else {
-                    java.srcDirs += 'src/main/lifecycle-compat/v25'
+                    // Auto-detect based on React Native version
+                    def rnVersion = null
+                    try {
+                        rnVersion = detectReactNativeVersion()
+                    } catch (Exception e) {
+                        logger.debug("@rnmapbox/maps: Failed to detect React Native version: ${e.message}")
+                    }
+                    
+                    if (rnVersion != null) {
+                        try {
+                            def versionParts = rnVersion.split("\\.")
+                            def majorVersion = versionParts[0].toInteger()
+                            def minorVersion = versionParts[1].toInteger()
+                            
+                            // React Native < 0.78 needs the old lifecycle API
+                            if (majorVersion == 0 && minorVersion < 78) {
+                                logger.info("@rnmapbox/maps: Detected React Native ${rnVersion} - using v25 lifecycle compatibility (old API)")
+                                java.srcDirs += 'src/main/lifecycle-compat/v25'
+                            } else {
+                                logger.info("@rnmapbox/maps: Detected React Native ${rnVersion} - using v26 lifecycle compatibility (new API)")
+                                java.srcDirs += 'src/main/lifecycle-compat/v26'
+                            }
+                        } catch (Exception e) {
+                            logger.warn("@rnmapbox/maps: Failed to parse React Native version '${rnVersion}', defaulting to v26 compatibility")
+                            java.srcDirs += 'src/main/lifecycle-compat/v26'
+                        }
+                    } else {
+                        // Cannot detect RN version, default to new API (v26) for future compatibility
+                        def targetSdk = safeExtGet("targetSdkVersion", 28)
+                        logger.info("@rnmapbox/maps: Unable to detect React Native version, using v26 lifecycle compatibility (new API, targetSdk=${targetSdk})")
+                        logger.info("@rnmapbox/maps: If you encounter issues with RN < 0.78, set RNMapboxMapsLifecycleCompat='v25' in your app's android/build.gradle ext block")
+                        java.srcDirs += 'src/main/lifecycle-compat/v26'
+                    }
                 }
 
                 if (safeExtGet("RNMapboxMapsUseV11", false)) {
