@@ -1,8 +1,7 @@
 // https://github.com/callstack/react-native-builder-bob/blob/main/packages/create-react-native-library/templates/expo-library/example/metro.config.js
 const path = require('path');
 
-// expo/metro-config doesn't support rn 0.80 yet
-const { getDefaultConfig } = require('@react-native/metro-config');
+const { getDefaultConfig } = require('@expo/metro-config');
 const exclusionList = require('metro-config/src/defaults/exclusionList');
 const escape = require('escape-string-regexp');
 
@@ -78,7 +77,7 @@ if (fixWebExportToUseWebSuffixForRNMBX) {
   };
 }
 
-const debugModuleResolution = false;
+const debugModuleResolution = true;
 if (debugModuleResolution) {
   config.maxWorkers = 1;
   config.resolver.resolveRequest = (context, moduleName, platform) => {
