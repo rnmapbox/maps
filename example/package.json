@@ -43,9 +43,9 @@
     "react-native-vector-icons": "10.2.0"
   },
   "optionalDependencies": {
-    "@expo/metro-runtime": "3.2.1",
+    "@expo/metro-runtime": "^6.0.0-canary-20250729-d8899ae",
     "@types/responselike": "1.0.0",
-    "expo": "^51.0.38",
+    "expo": "^54.0.0-canary-20250729-d8899ae",
     "mapbox-gl": "^3.12.0",
     "react-dom": "19.1.0",
     "react-native-web": "~0.20.0"

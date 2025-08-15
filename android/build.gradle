@@ -157,7 +157,7 @@ android {
                 // Add lifecycle compatibility source sets
                 // Priority order:
                 // 1. User-defined override (RNMapboxMapsLifecycleCompat)
-                // 2. React Native version detection (0.78+ uses new API)
+                // 2. React Native version detection (0.77+ uses new API)
                 // 3. Conservative default (v25 for better compatibility)
                 
                 def lifecycleCompat = safeExtGet("RNMapboxMapsLifecycleCompat", null)
@@ -183,8 +183,8 @@ android {
                             def majorVersion = versionParts[0].toInteger()
                             def minorVersion = versionParts[1].toInteger()
                             
-                            // React Native < 0.78 needs the old lifecycle API
-                            if (majorVersion == 0 && minorVersion < 78) {
+                            // React Native < 0.77 needs the old lifecycle API
+                            if (majorVersion == 0 && minorVersion < 77) {
                                 logger.info("@rnmapbox/maps: Detected React Native ${rnVersion} - using v25 lifecycle compatibility (old API)")
                                 java.srcDirs += 'src/main/lifecycle-compat/v25'
                             } else {

@@ -11,9 +11,7 @@ package com.facebook.react.viewmanagers;
 
 import android.view.View;
 import com.facebook.react.bridge.Dynamic;
-import com.facebook.react.uimanager.ViewManagerWithGeneratedInterface;
-
-public interface RNMBXMarkerViewManagerInterface<T extends View> extends ViewManagerWithGeneratedInterface {
+public interface RNMBXMarkerViewManagerInterface<T extends View> {
   void setCoordinate(T view, Dynamic value);
   void setAnchor(T view, Dynamic value);
   void setAllowOverlap(T view, Dynamic value);

@@ -10,8 +10,6 @@
 package com.facebook.react.viewmanagers;
 
 import android.view.View;
-import com.facebook.react.uimanager.ViewManagerWithGeneratedInterface;
-
-public interface RNMBXMarkerViewContentManagerInterface<T extends View> extends ViewManagerWithGeneratedInterface {
+public interface RNMBXMarkerViewContentManagerInterface<T extends View> {
   // No props
 }
