@@ -11,9 +11,7 @@ package com.facebook.react.viewmanagers;
 
 import android.view.View;
 import com.facebook.react.bridge.Dynamic;
-import com.facebook.react.uimanager.ViewManagerWithGeneratedInterface;
-
-public interface RNMBXModelLayerManagerInterface<T extends View> extends ViewManagerWithGeneratedInterface {
+public interface RNMBXModelLayerManagerInterface<T extends View> {
   void setSourceID(T view, Dynamic value);
   void setExisting(T view, Dynamic value);
   void setFilter(T view, Dynamic value);

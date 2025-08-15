@@ -11,9 +11,7 @@ package com.facebook.react.viewmanagers;
 
 import android.view.View;
 import com.facebook.react.bridge.Dynamic;
-import com.facebook.react.uimanager.ViewManagerWithGeneratedInterface;
-
-public interface RNMBXImageManagerInterface<T extends View> extends ViewManagerWithGeneratedInterface {
+public interface RNMBXImageManagerInterface<T extends View> {
   void setStretchX(T view, Dynamic value);
   void setStretchY(T view, Dynamic value);
   void setContent(T view, Dynamic value);
