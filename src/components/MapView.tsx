@@ -570,8 +570,36 @@ class MapView extends NativeBridgeComponent(
     this.logger.stop();
   }
 
-  UNSAFE_componentWillReceiveProps(nextProps: Props) {
-    this._setHandledMapChangedEvents(nextProps);
+  componentDidUpdate(prevProps: Props) {
+    // Check if any callback props have changed that would require updating handled events
+    const callbackProps: CallbablePropKeys[] = [
+      'onRegionWillChange',
+      'onRegionIsChanging', 
+      'onRegionDidChange',
+      'onUserLocationUpdate',
+      'onWillStartLoadingMap',
+      'onMapLoadingError',
+      'onDidFinishLoadingMap',
+      'onDidFailLoadingMap',
+      'onWillStartRenderingFrame',
+      'onDidFinishRenderingFrame',
+      'onDidFinishRenderingFrameFully',
+      'onWillStartRenderingMap',
+      'onDidFinishRenderingMap',
+      'onDidFinishRenderingMapFully',
+      'onDidFinishLoadingStyle',
+      'onMapIdle',
+      'onCameraChanged',
+    ];
+
+    // Check if any of the callback props have changed
+    const hasCallbackPropsChanged = callbackProps.some(
+      propName => prevProps[propName] !== this.props[propName]
+    );
+
+    if (hasCallbackPropsChanged) {
+      this._setHandledMapChangedEvents(this.props);
+    }
   }
 
   _setHandledMapChangedEvents(props: Props) {
