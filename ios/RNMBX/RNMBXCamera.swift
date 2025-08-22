@@ -44,16 +44,18 @@ struct CameraUpdateItem {
       if let center = camera.center {
         try center.validate()
       }
-
-      switch mode {
-      case .flight:
-        map.mapView.camera.fly(to: camera, duration: duration)
-      case .ease:
-        map.mapView.camera.ease(to: camera, duration: duration ?? 0, curve: .easeInOut, completion: nil)
-      case .linear:
-        map.mapView.camera.ease(to: camera, duration: duration ?? 0, curve: .linear, completion: nil)
-      default:
-        map.mapboxMap.setCamera(to: camera)
+      
+      map.withMapView { mapView in
+        switch mode {
+        case .flight:
+          mapView.camera.fly(to: camera, duration: duration)
+        case .ease:
+          mapView.camera.ease(to: camera, duration: duration ?? 0, curve: .easeInOut, completion: nil)
+        case .linear:
+          mapView.camera.ease(to: camera, duration: duration ?? 0, curve: .linear, completion: nil)
+        default:
+          mapView.mapboxMap.setCamera(to: camera)
+        }
       }
     }
   }
@@ -91,8 +93,10 @@ open class RNMBXMapComponentBase : UIView, RNMBXMapComponent {
   }
 
   func withMapView(_ callback: @escaping (_ mapView: MapView) -> Void) {
-    withRNMBXMapView { mapView in
-      callback(mapView.mapView)
+    withRNMBXMapView { map in
+      map.withMapView { mapView in
+        callback(mapView)
+      }
     }
   }
 
@@ -448,17 +452,33 @@ open class RNMBXCamera : RNMBXMapComponentBase {
       
       withMapView { map in
         #if RNMBX_11
-        let bounds = [sw, ne]
+        do {
+          let bounds: [CLLocationCoordinate2D] = [sw, ne]
+          camera = try map.mapboxMap.camera(
+            for: bounds,
+            camera: .init(cameraState: .init(
+              center: .init(),
+              padding: .zero,
+              zoom: zoom ?? 0,
+              bearing: heading ?? map.mapboxMap.cameraState.bearing,
+              pitch: pitch ?? map.mapboxMap.cameraState.pitch
+            )),
+            coordinatesPadding: padding,
+            maxZoom: nil,
+            offset: nil
+          )
+        } catch {
+          Logger.log(level: .error, message: "RNMBXCamera.toUpdateItem: Failed to build camera configuration: \(error)")
+        }
         #else
         let bounds = CoordinateBounds(southwest: sw, northeast: ne)
-        #endif
-
         camera = map.mapboxMap.camera(
           for: bounds,
           padding: padding,
           bearing: heading ?? map.mapboxMap.cameraState.bearing,
           pitch: pitch ?? map.mapboxMap.cameraState.pitch
         )
+        #endif
       }
     } else {
       camera = CameraOptions(
@@ -529,8 +549,8 @@ open class RNMBXCamera : RNMBXMapComponentBase {
       return false
     }
 
-    map.mapView.viewport.removeStatusObserver(self)
-    return super.removeFromMap(map, reason:reason)
+    map._mapView.viewport.removeStatusObserver(self)
+    return super.removeFromMap(map, reason: reason)
   }
 
   @objc public func moveBy(x: Double, y: Double, animationMode: NSNumber?, animationDuration: NSNumber?, resolve: @escaping RCTPromiseResolveBlock, reject: @escaping RCTPromiseRejectBlock) {
@@ -626,12 +646,12 @@ extension RNMBXCamera : ViewportStatusObserver {
         return "compass"
       case .course:
         return "course"
-      case .some(let bearing):
+      case .some(_):
         return "constant"
       case .none:
         return "normal"
       }
-    } else if let state = state as? OverviewViewportState {
+    } else if let _ = state as? OverviewViewportState {
       return "overview"
     } else {
       return "custom"
