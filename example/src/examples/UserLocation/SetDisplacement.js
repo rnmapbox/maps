@@ -1,6 +1,6 @@
 import React from 'react';
 import Mapbox, { MapView, UserLocation, Camera } from '@rnmapbox/maps';
-import { SafeAreaView } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import { ButtonGroup } from '@rneui/base';
 
 const DISPLACEMENT = [0, 5, 10];

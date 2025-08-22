@@ -10,7 +10,7 @@ export default class MovePointShapeAnimator implements ShapeAnimatorInterface {
 
   constructor(startCoordinate: Position) {
     const tag = ShapeAnimatorManager.nextTag();
-    NativeRNMBXMovePointShapeAnimatorModule.create(tag, [
+    NativeRNMBXMovePointShapeAnimatorModule.generate(tag, [
       startCoordinate[0],
       startCoordinate[1],
     ]);
