@@ -17,7 +17,7 @@ const bounds = {
 const { ne, sw } = bounds;
 const polygon = bboxPolygon([sw[0], sw[1], ne[0], ne[1]]);
 
-const RestrictMapBounds = (props) => (
+const RestrictMapBounds = props => (
   <>
     <MapboxGL.MapView
       style={sheet.matchParent}

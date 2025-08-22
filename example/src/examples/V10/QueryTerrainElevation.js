@@ -104,7 +104,10 @@ const QueryTerrainElevation = () => {
   }, []);
   return (
     <>
-      <Button title="Start" onPress={() => startAnimation(currentAnimatedRoute)} />
+      <Button
+        title="Start"
+        onPress={() => startAnimation(currentAnimatedRoute)}
+      />
       <MapView
         style={styles.mapView}
         styleURL={'mapbox://styles/mapbox/satellite-streets-v11'}

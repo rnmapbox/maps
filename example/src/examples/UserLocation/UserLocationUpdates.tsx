@@ -12,7 +12,7 @@ const UserLocationUpdates = () => {
     <>
       <MapboxGL.MapView style={styles.matchParent}>
         <MapboxGL.UserLocation
-          onUpdate={(newLocation) => setLocation(newLocation)}
+          onUpdate={newLocation => setLocation(newLocation)}
         />
         <MapboxGL.Camera followUserLocation followZoomLevel={16} />
       </MapboxGL.MapView>

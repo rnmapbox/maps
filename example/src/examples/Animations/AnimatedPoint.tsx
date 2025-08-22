@@ -80,7 +80,7 @@ const AnimatedPoint = memo(() => {
           <Slider
             {...sliderProps}
             value={durationState / maxDuration}
-            onSlidingComplete={(v) => {
+            onSlidingComplete={v => {
               duration.current = v * maxDuration;
               animator.moveTo({
                 coordinate: currentPosition.current,

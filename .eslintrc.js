@@ -122,6 +122,8 @@ module.exports = {
         'no-shadow': 'off',
         'import/named': 'off',
         'react-native/no-inline-styles': 0,
+        'no-unused-vars': 'off',
+        '@typescript-eslint/no-unused-vars': ['warn', { args: 'none' }],
         '@typescript-eslint/no-explicit-any': [
           'warn',
           { ignoreRestArgs: true },

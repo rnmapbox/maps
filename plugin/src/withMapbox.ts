@@ -185,7 +185,7 @@ const withCocoaPodsInstallerBlocks: ConfigPlugin<MapboxPlugProps> = (
 ) =>
   withDangerousMod(config, [
     'ios',
-    async (exportedConfig) => {
+    async exportedConfig => {
       const file = path.join(
         exportedConfig.modRequest.platformProjectRoot,
         'Podfile',
@@ -214,9 +214,9 @@ const withAndroidPropertiesDownloadToken: ConfigPlugin<MapboxPlugProps> = (
   const key = 'MAPBOX_DOWNLOADS_TOKEN';
 
   if (RNMapboxMapsDownloadToken) {
-    return withGradleProperties(config, (exportedConfig) => {
+    return withGradleProperties(config, exportedConfig => {
       exportedConfig.modResults = exportedConfig.modResults.filter(
-        (item) => !(item.type === 'property' && item.key === key),
+        item => !(item.type === 'property' && item.key === key),
       );
       exportedConfig.modResults.push({
         type: 'property',
@@ -244,13 +244,13 @@ const withAndroidPropertiesImpl2: ConfigPlugin<MapboxPlugProps> = (
   const keys = Object.keys(keyValues) as Keys[];
   const values = Object.values(keyValues);
 
-  if (values.filter((v) => v).length > 0) {
-    return withGradleProperties(config, (exportedConfig) => {
+  if (values.filter(v => v).length > 0) {
+    return withGradleProperties(config, exportedConfig => {
       exportedConfig.modResults = exportedConfig.modResults.filter(
-        (item) =>
+        item =>
           !(item.type === 'property' && (keys as string[]).includes(item.key)),
       );
-      keys.forEach((key) => {
+      keys.forEach(key => {
         const value = keyValues[key];
         if (value != null) {
           exportedConfig.modResults.push({
@@ -371,7 +371,7 @@ export const addMapboxMavenRepo = (src: string): string =>
     comment: '//',
   }).contents;
 
-const withAndroidAppGradle: ConfigPlugin<MapboxPlugProps> = (config) =>
+const withAndroidAppGradle: ConfigPlugin<MapboxPlugProps> = config =>
   withAppBuildGradle(config, ({ modResults, ...exportedConfig }) => {
     if (modResults.language !== 'groovy') {
       WarningAggregator.addWarningAndroid(
@@ -387,7 +387,7 @@ const withAndroidAppGradle: ConfigPlugin<MapboxPlugProps> = (config) =>
     return { modResults, ...exportedConfig };
   });
 
-const withAndroidProjectGradle: ConfigPlugin<MapboxPlugProps> = (config) =>
+const withAndroidProjectGradle: ConfigPlugin<MapboxPlugProps> = config =>
   withProjectBuildGradle(config, ({ modResults, ...exportedConfig }) => {
     if (modResults.language !== 'groovy') {
       WarningAggregator.addWarningAndroid(

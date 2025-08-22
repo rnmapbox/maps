@@ -140,35 +140,43 @@ if (['true', 1, '1'].includes(process.env.SKIP_TESTS_NO_METAL)) {
     /** @type Screenshots */
     const screenshots = {};
 
-    examples.forEach(({ groupName, metadata: groupMetadata, examples: exampleGroupExamples }) => {
-      describe(`${groupName}`, () => {
-        exampleGroupExamples.forEach(({ metadata, fullPath, name }) => {
-          if (metadata) {
-            it(`${name}`, async () => {
-              await setSampleLocation();
+    examples.forEach(
+      ({
+        groupName,
+        metadata: groupMetadata,
+        examples: exampleGroupExamples,
+      }) => {
+        describe(`${groupName}`, () => {
+          exampleGroupExamples.forEach(({ metadata, fullPath, name }) => {
+            if (metadata) {
+              it(`${name}`, async () => {
+                await setSampleLocation();
 
-              await expect(element(by.text(groupMetadata.title))).toBeVisible();
-              await element(by.text(groupMetadata.title)).tap();
+                await expect(
+                  element(by.text(groupMetadata.title)),
+                ).toBeVisible();
+                await element(by.text(groupMetadata.title)).tap();
 
-              await waitFor(element(by.text(metadata.title)))
-                .toBeVisible()
-                .whileElement(by.id('example-list'))
-                .scroll(50, 'down');
-              await element(by.text(metadata.title)).tap();
+                await waitFor(element(by.text(metadata.title)))
+                  .toBeVisible()
+                  .whileElement(by.id('example-list'))
+                  .scroll(50, 'down');
+                await element(by.text(metadata.title)).tap();
 
-              let shots = new ExampleScreenshots(
-                { testName: name, groupName },
-                screenshots,
-              );
+                let shots = new ExampleScreenshots(
+                  { testName: name, groupName },
+                  screenshots,
+                );
 
-              await wait(1000);
+                await wait(1000);
 
-              await shots.screenshot();
-            });
-          }
+                await shots.screenshot();
+              });
+            }
+          });
         });
-      });
-    });
+      },
+    );
 
     afterAll(async () => {
       console.log('Writing screenshots.json', screenshotsJSONPath);

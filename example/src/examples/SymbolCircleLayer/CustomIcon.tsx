@@ -63,7 +63,7 @@ const CustomIcon = memo(() => {
         <ShapeSource
           id="symbolLocationSource"
           hitbox={{ width: 20, height: 20 }}
-          onPress={(e) => onSourceLayerPress(e)}
+          onPress={e => onSourceLayerPress(e)}
           shape={stateFeatureCollection}
         >
           <SymbolLayer

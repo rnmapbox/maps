@@ -7,7 +7,7 @@ class JSDocNodeTree {
     if (!node || !Array.isArray(node.children)) {
       return [];
     }
-    return node.children.filter((child) => child.type === tag);
+    return node.children.filter(child => child.type === tag);
   }
 
   getName() {
@@ -42,7 +42,9 @@ class JSDocNodeTree {
 
     const methods = [];
     this._root.members.instance
-      .filter(field => field.kind === 'function' && !this._isPrivateMethod(field))
+      .filter(
+        field => field.kind === 'function' && !this._isPrivateMethod(field),
+      )
       .forEach(field => {
         const node = new JSDocNodeTree(field);
         methods.push({
@@ -82,7 +84,7 @@ class JSDocNodeTree {
     if (!this._hasArray(field, 'examples')) {
       return [];
     }
-    return field.examples.map((example) => example.description);
+    return field.examples.map(example => example.description);
   }
 
   getReturnValue(field) {

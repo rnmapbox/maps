@@ -28,7 +28,7 @@ class ChangeLayerColor extends React.Component {
     return (
       <>
         <MapView
-          ref={(c) => (this._map = c)}
+          ref={c => (this._map = c)}
           onPress={this.onPress}
           style={styles.mapView}
         >

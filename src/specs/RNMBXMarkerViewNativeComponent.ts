@@ -1,5 +1,5 @@
 import type { HostComponent, ViewProps } from 'react-native';
-import type  { Int32 } from 'react-native/Libraries/Types/CodegenTypes';
+import type { Int32 } from 'react-native/Libraries/Types/CodegenTypes';
 import { codegenNativeComponent } from 'react-native';
 
 import { Position } from '../types/Position';

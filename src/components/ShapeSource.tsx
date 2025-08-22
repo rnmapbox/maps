@@ -283,7 +283,7 @@ export class ShapeSource extends NativeBridgeComponent(
     newEvent = copyPropertiesAsDeprecated(
       event as unknown as Record<string, unknown>,
       newEvent,
-      (key) => {
+      key => {
         console.warn(
           `event.${key} is deprecated on ShapeSource#onPress, please use event.features`,
         );

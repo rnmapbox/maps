@@ -33,7 +33,7 @@ export class AnimatedShape extends AnimatedWithChildren {
 
   _walkShapeAndGetValues(value) {
     if (Array.isArray(value)) {
-      return value.map((i) => this._walkShapeAndGetValues(i));
+      return value.map(i => this._walkShapeAndGetValues(i));
     }
     if (value instanceof Animated.Node) {
       return value.__getValue();
@@ -55,7 +55,7 @@ export class AnimatedShape extends AnimatedWithChildren {
 
   _walkAndProcess(value, cb) {
     if (Array.isArray(value)) {
-      value.forEach((i) => this._walkAndProcess(i, cb));
+      value.forEach(i => this._walkAndProcess(i, cb));
     } else if (value instanceof Animated.Node) {
       cb(value);
     } else if (typeof value === 'object') {
@@ -66,11 +66,11 @@ export class AnimatedShape extends AnimatedWithChildren {
   }
 
   __attach() {
-    this._walkAndProcess(this.shape, (v) => v.__addChild(this));
+    this._walkAndProcess(this.shape, v => v.__addChild(this));
   }
 
   __detach() {
-    this._walkAndProcess(this.shape, (v) => v.__removeChild(this));
+    this._walkAndProcess(this.shape, v => v.__removeChild(this));
     super.__detach();
   }
 }

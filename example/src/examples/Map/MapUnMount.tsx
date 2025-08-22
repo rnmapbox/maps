@@ -19,7 +19,7 @@ const MapUnMount = () => {
   return (
     <>
       <Button
-        onPress={() => setIsMounted((mounted) => !mounted)}
+        onPress={() => setIsMounted(mounted => !mounted)}
         title={isMounted ? 'unmount MapView' : 'mount MapView'}
       />
       {isMounted ? (

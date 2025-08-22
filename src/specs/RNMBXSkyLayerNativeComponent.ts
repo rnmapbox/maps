@@ -12,7 +12,7 @@ export interface NativeProps extends ViewProps {
   sourceID?: OptionalProp<string>;
   existing?: OptionalProp<boolean>;
   filter: UnsafeMixed<Array<any>>; // eslint-disable-line @typescript-eslint/no-explicit-any
-  
+
   aboveLayerID?: OptionalProp<string>;
   belowLayerID?: OptionalProp<string>;
   layerIndex?: OptionalProp<Int32>;

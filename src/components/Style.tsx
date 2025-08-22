@@ -16,7 +16,7 @@ import ImageSource from './ImageSource';
 import { ShapeSource } from './ShapeSource';
 
 function toCamelCase(s: string): string {
-  return s.replace(/([-_][a-z])/gi, ($1) => {
+  return s.replace(/([-_][a-z])/gi, $1 => {
     return $1.toUpperCase().replace('-', '').replace('_', '');
   });
 }
@@ -30,7 +30,7 @@ function toCamelCaseKeys(oldObj?: { [key: string]: unknown }): {
     return {};
   }
   const newObj: { [key: string]: unknown } = {};
-  Object.keys(oldObj).forEach((key) => {
+  Object.keys(oldObj).forEach(key => {
     const value = oldObj[key];
     if (key.includes('-')) {
       newObj[toCamelCase(key)] = value;
@@ -167,7 +167,7 @@ function getImageSource(id: string, source: MapboxJSONSource) {
   return <ImageSource key={id} id={id} {...sourceProps} />;
 }
 
-type ShapeShourceShape = typeof ShapeSource.prototype.props['shape'];
+type ShapeShourceShape = (typeof ShapeSource.prototype.props)['shape'];
 
 function getShapeSource(id: string, source: MapboxJSONSource) {
   const sourceProps: {
@@ -322,7 +322,7 @@ const Style = (props: Props) => {
     if (!styleJson.layers) {
       return [];
     }
-    return styleJson.layers.map(asLayerComponent).filter((x) => !!x);
+    return styleJson.layers.map(asLayerComponent).filter(x => !!x);
   }, [styleJson.layers]);
 
   // Extract source components from json
@@ -332,8 +332,8 @@ const Style = (props: Props) => {
       return [];
     }
     return Object.keys(sources)
-      .map((id) => asSourceComponent(id, sources[id]))
-      .filter((x) => !!x);
+      .map(id => asSourceComponent(id, sources[id]))
+      .filter(x => !!x);
   }, [sources]);
 
   return (

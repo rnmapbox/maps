@@ -139,7 +139,7 @@ async function ignoreIssue(issueNumber, ignoreLabels) {
     issue_number: issueNumber,
     ...github.context.repo,
   });
-  const hasIgnoreLabel = labels.some((label) =>
+  const hasIgnoreLabel = labels.some(label =>
     ignoreLabels.includes(label.name),
   );
   return hasIgnoreLabel;
@@ -172,7 +172,7 @@ async function run() {
       filePath: isTypescript ? 'example.tsx' : 'example.jsx',
     });
 
-    const hasErrors = results.some((result) => result.errorCount > 0);
+    const hasErrors = results.some(result => result.errorCount > 0);
     const formatter = await eslint.loadFormatter('codeframe');
     const message = formatter.format(results);
     if (process.env.LINT_FILE) {
@@ -355,7 +355,7 @@ async function removeOldCommandFromPreviousRuns(
     ...context,
   });
   const oldComment = comments.find(
-    (comment) =>
+    comment =>
       comment.user.login === Config.botLogin && comment.body.startsWith(marker),
   );
   if (oldComment) {

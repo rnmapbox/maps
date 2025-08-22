@@ -70,7 +70,7 @@ const Markers = () => {
                   { backgroundColor: marker.color, padding: 4 * size },
                 ]}
                 onPress={() =>
-                  setSelectedIndex((index) => (index === i ? -1 : i))
+                  setSelectedIndex(index => (index === i ? -1 : i))
                 }
               >
                 <Text style={styles.markerText}>Marker {i + 1}</Text>
@@ -167,14 +167,14 @@ const Markers = () => {
             style={styles.button}
             title={'Decrease size'}
             onPress={() => {
-              setSize((s) => s - 1);
+              setSize(s => s - 1);
             }}
           />
           <Button
             style={styles.button}
             title={'Increase size'}
             onPress={() => {
-              setSize((s) => s + 1);
+              setSize(s => s + 1);
             }}
           />
         </View>

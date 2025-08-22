@@ -577,7 +577,7 @@ class MapView extends NativeBridgeComponent(
     const callbackProps = CallbablePropKeys;
 
     const hasCallbackPropsChanged = callbackProps.some(
-      (propName) => prevProps[propName] !== this.props[propName],
+      propName => prevProps[propName] !== this.props[propName],
     );
 
     if (hasCallbackPropsChanged) {

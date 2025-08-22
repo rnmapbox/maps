@@ -48,12 +48,12 @@ class SetHeading extends React.Component {
     return (
       <>
         <ButtonGroup
-          buttons={this._bearingOptions.map((i) => i.label)}
+          buttons={this._bearingOptions.map(i => i.label)}
           selectedIndex={this.state.selectedIndex}
-          onPress={(i) => this.onHeadingChange(i, this._bearingOptions[i].data)}
+          onPress={i => this.onHeadingChange(i, this._bearingOptions[i].data)}
         />
         <Mapbox.MapView
-          ref={(ref) => (this.map = ref)}
+          ref={ref => (this.map = ref)}
           style={styles.matchParent}
         >
           <Mapbox.Camera {...this.state} />

@@ -124,16 +124,16 @@ class MarkerView extends React.PureComponent<Props> {
         allowOverlap={this.props.allowOverlap}
         allowOverlapWithPuck={this.props.allowOverlapWithPuck}
         isSelected={this.props.isSelected}
-        onTouchEnd={(e) => {
+        onTouchEnd={e => {
           e.stopPropagation();
         }}
       >
         <RNMBXMakerViewContentCoponent
           style={{ flex: 0, alignSelf: 'flex-start' }}
-          onStartShouldSetResponder={(_event) => {
+          onStartShouldSetResponder={_event => {
             return true;
           }}
-          onTouchEnd={(e) => {
+          onTouchEnd={e => {
             e.stopPropagation();
           }}
         >

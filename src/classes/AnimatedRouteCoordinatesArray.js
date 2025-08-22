@@ -28,7 +28,7 @@ export class AnimatedRouteCoordinatesArray extends AnimatedCoordinatesArray {
   onInitialState(coordinatesArray, options = null) {
     const { end = { from: 0 } } = options ?? {};
     return {
-      fullRoute: coordinatesArray.map((coord) => [coord[0], coord[1]]),
+      fullRoute: coordinatesArray.map(coord => [coord[0], coord[1]]),
       end,
     };
   }
