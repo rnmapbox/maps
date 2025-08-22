@@ -126,14 +126,14 @@ Whether location icon is visible
 
 
 ## methods
-### setLocationManager({ running }: { running?: boolean })
+### setLocationManager(running)
 
 Whether to start or stop listening to the locationManager<br/><br/>Notice, that listening will start automatically when<br/>either `onUpdate` or `visible` are set
 
 #### arguments
 | Name | Type | Required | Description  |
 | ---- | :--: | :------: | :----------: |
-| `{ running }: { running?: boolean }` | `{running?:boolean}` | `Yes` | undefined |
+| `running` | `boolean` | `Yes` | sets the LocationManger running status |
 
 
 ### needsLocationManagerRunning()
