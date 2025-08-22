@@ -14,7 +14,7 @@ export default function MapAndNavigation({ navigation }) {
       <Button title="Modal" onPress={() => setModalVisible(true)} />
       <Button
         title="Toggle map"
-        onPress={() => setShowMap((showMap) => !showMap)}
+        onPress={() => setShowMap((wasShowingMap) => !wasShowingMap)}
       />
       <Button
         title="Navigate"

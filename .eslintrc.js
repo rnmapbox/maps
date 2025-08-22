@@ -79,6 +79,12 @@ module.exports = {
     'no-plusplus': ['error', { allowForLoopAfterthoughts: true }],
     'react-native/no-inline-styles': 0,
     '@typescript-eslint/no-explicit-any': ['error', { ignoreRestArgs: true }],
+    'jest/expect-expect': [
+      'warn',
+      {
+        'assertFunctionNames': ['expect', 'verifyFilterItem', 'verifyErrorFilterItem', 'verifyErrorThrown']
+      }
+    ]
   },
   ignorePatterns: ['**/rnmapbox.web.symlink', 'plugin/build/', 'example/dist'],
   overrides: [

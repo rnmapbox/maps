@@ -113,7 +113,7 @@ class ShapeSourceIcon extends React.Component {
           nativeAssetImages={['pin']}
           images={images}
           onImageMissing={(imageKey) => {
-            if (imageKey != 'pin-rn') {
+            if (imageKey !== 'pin-rn') {
               this.setState({
                 images: { ...this.state.images, [imageKey]: pinIcon },
               });
