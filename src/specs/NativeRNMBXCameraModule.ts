@@ -1,5 +1,5 @@
-import type { TurboModule } from 'react-native/Libraries/TurboModule/RCTExport';
-import { Int32 } from 'react-native/Libraries/Types/CodegenTypes';
+import type { TurboModule } from 'react-native';
+import type { Int32 } from 'react-native/Libraries/Types/CodegenTypes';
 import { TurboModuleRegistry } from 'react-native';
 
 type ViewRef = Int32 | null;

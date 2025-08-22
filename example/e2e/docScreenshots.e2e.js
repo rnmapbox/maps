@@ -140,9 +140,9 @@ if (['true', 1, '1'].includes(process.env.SKIP_TESTS_NO_METAL)) {
     /** @type Screenshots */
     const screenshots = {};
 
-    examples.forEach(({ groupName, metadata: groupMetadata, examples }) => {
+    examples.forEach(({ groupName, metadata: groupMetadata, examples: exampleGroupExamples }) => {
       describe(`${groupName}`, () => {
-        examples.forEach(({ metadata, fullPath, name }) => {
+        exampleGroupExamples.forEach(({ metadata, fullPath, name }) => {
           if (metadata) {
             it(`${name}`, async () => {
               await setSampleLocation();

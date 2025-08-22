@@ -2,6 +2,7 @@
   "extends": "../tsconfig.json",
   "compilerOptions": {
     "allowJs": true,
+    "noEmit": true,
     "resolveJsonModule": true,
     "baseUrl": ".",
     "paths": {

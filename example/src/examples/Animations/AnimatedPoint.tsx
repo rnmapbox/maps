@@ -28,7 +28,6 @@ const AnimatedPoint = memo(() => {
 
   const animator = useMemo(() => {
     return new __experimental.MovePointShapeAnimator(basePosition);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const contents = useMemo(() => {
