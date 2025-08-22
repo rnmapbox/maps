@@ -1,6 +1,6 @@
 import type { HostComponent, ViewProps } from 'react-native';
-import codegenNativeComponent from 'react-native/Libraries/Utilities/codegenNativeComponent';
-import { DirectEventHandler } from 'react-native/Libraries/Types/CodegenTypes';
+import { codegenNativeComponent } from 'react-native';
+import type { DirectEventHandler } from 'react-native/Libraries/Types/CodegenTypes';
 
 import type { UnsafeMixed } from './codegenUtils';
 
@@ -26,7 +26,7 @@ export interface NativeProps extends ViewProps {
   coordinate: UnsafeMixed<string>;
   draggable: UnsafeMixed<boolean>;
   id: UnsafeMixed<string>;
-  anchor: UnsafeMixed<any>;
+  anchor: UnsafeMixed;
 
   onMapboxPointAnnotationDeselected: DirectEventHandler<OnMapboxPointAnnotationDeselectedEventType>;
   onMapboxPointAnnotationDrag: DirectEventHandler<OnMapboxPointAnnotationDragEventType>;

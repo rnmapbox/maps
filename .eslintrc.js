@@ -78,6 +78,7 @@ module.exports = {
     'no-unused-expressions': ['error', { allowTaggedTemplates: true }],
     'no-plusplus': ['error', { allowForLoopAfterthoughts: true }],
     'react-native/no-inline-styles': 0,
+    '@typescript-eslint/no-explicit-any': ['error', { ignoreRestArgs: true }],
     // NOTE: @typescript-eslint rules are configured under the TS override below
     'jest/expect-expect': [
       'warn',

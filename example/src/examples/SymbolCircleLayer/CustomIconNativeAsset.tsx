@@ -8,6 +8,7 @@ import MapboxGL, {
   Images,
 } from '@rnmapbox/maps';
 import { featureCollection, feature, point } from '@turf/helpers';
+import { OnPressEvent } from '@rnmapbox/maps/lib/typescript/src/types/OnPressEvent';
 
 import Bubble from '../common/Bubble';
 import type { ExampleWithMetadata } from '../common/ExampleMetadata';
@@ -35,7 +36,7 @@ const CustomIconNativeAsset = memo(() => {
     );
   };
 
-  const onSourceLayerPress = (e: any) => {
+  const onSourceLayerPress = (e: OnPressEvent) => {
     console.log(
       'You pressed a layer here are your features:',
       e.features,

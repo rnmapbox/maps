@@ -39,7 +39,7 @@ const styles = {
 };
 
 const QueryTerrainElevation = () => {
-  let [animatedRoute, setAnimatedRoute] = useState(null);
+  let [currentAnimatedRoute, setCurrentAnimatedRoute] = useState(null);
   let [actPoint, setActPoint] = useState(null);
   let camera = useRef();
   let [altitude, setAltitude] = useState(null);
@@ -98,13 +98,13 @@ const QueryTerrainElevation = () => {
           from: length(lineString(pinRoute)),
         },
       });
-      setAnimatedRoute(animatedRoute);
+      setCurrentAnimatedRoute(animatedRoute);
       setActPoint(new AnimatedExtractCoordinateFromArray(animatedRoute, -1));
     })();
   }, []);
   return (
     <>
-      <Button title="Start" onPress={() => startAnimation(animatedRoute)} />
+      <Button title="Start" onPress={() => startAnimation(currentAnimatedRoute)} />
       <MapView
         style={styles.mapView}
         styleURL={'mapbox://styles/mapbox/satellite-streets-v11'}
@@ -144,13 +144,13 @@ const QueryTerrainElevation = () => {
           />
         </RasterDemSource>
 
-        {animatedRoute && (
+        {currentAnimatedRoute && (
           <Animated.ShapeSource
             id="animated-route"
             shape={
               new AnimatedShape({
                 type: 'LineString',
-                coordinates: animatedRoute,
+                coordinates: currentAnimatedRoute,
               })
             }
           >

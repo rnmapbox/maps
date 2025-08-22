@@ -1,6 +1,6 @@
 import type { HostComponent, ViewProps } from 'react-native';
-import codegenNativeComponent from 'react-native/Libraries/Utilities/codegenNativeComponent';
-import {
+import { codegenNativeComponent } from 'react-native';
+import type {
   BubblingEventHandler,
   DirectEventHandler,
   Int32,
@@ -34,19 +34,19 @@ type OnMapChangeEventType = { type: string; payload: string };
 
 export interface NativeProps extends ViewProps {
   attributionEnabled?: OptionalProp<boolean>;
-  attributionPosition?: UnsafeMixed<any>;
+  attributionPosition?: UnsafeMixed;
 
   logoEnabled?: OptionalProp<boolean>;
-  logoPosition?: UnsafeMixed<any>;
+  logoPosition?: UnsafeMixed;
 
   compassEnabled?: OptionalProp<boolean>;
   compassFadeWhenNorth?: OptionalProp<boolean>;
-  compassPosition?: UnsafeMixed<any>;
+  compassPosition?: UnsafeMixed;
   compassViewPosition?: OptionalProp<Int32>;
   compassViewMargins?: OptionalProp<Point>;
 
   scaleBarEnabled?: OptionalProp<boolean>;
-  scaleBarPosition?: UnsafeMixed<any>;
+  scaleBarPosition?: UnsafeMixed;
 
   zoomEnabled?: OptionalProp<boolean>;
   scrollEnabled?: OptionalProp<boolean>;
@@ -66,9 +66,9 @@ export interface NativeProps extends ViewProps {
 
   // Android only
   surfaceView?: OptionalProp<boolean>;
-  scaleBarViewMargins?: UnsafeMixed<any>;
-  attributionViewMargins?: UnsafeMixed<any>;
-  attributionViewPosition?: UnsafeMixed<any>;
+  scaleBarViewMargins?: UnsafeMixed;
+  attributionViewMargins?: UnsafeMixed;
+  attributionViewPosition?: UnsafeMixed;
 
   // iOS only
   compassImage?: OptionalProp<string>;

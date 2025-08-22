@@ -1,6 +1,5 @@
 import React from 'react';
 import {
-  Images,
   MapView,
   RasterLayer,
   RasterSource,

@@ -111,7 +111,7 @@ const MapHandlers = () => {
           zoomLevel={12}
           animationDuration={0}
         />
-        {features.map((f, i) => {
+        {features.map((f, _i) => {
           const id = JSON.stringify(
             (f as Feature<Polygon>).geometry.coordinates,
           );

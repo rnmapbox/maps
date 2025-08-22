@@ -288,7 +288,7 @@ type Props = {
  */
 const Style = (props: Props) => {
   const [fetchedJson, setFetchedJson] = useState({});
-  const json: MapboxJSON =
+  const styleJson: MapboxJSON =
     typeof props.json === 'object' ? props.json : fetchedJson;
 
   // Fetch style when props.json is a URL
@@ -319,14 +319,14 @@ const Style = (props: Props) => {
 
   // Extract layer components from json
   const layerComponents = useMemo(() => {
-    if (!json.layers) {
+    if (!styleJson.layers) {
       return [];
     }
-    return json.layers.map(asLayerComponent).filter((x) => !!x);
-  }, [json.layers]);
+    return styleJson.layers.map(asLayerComponent).filter((x) => !!x);
+  }, [styleJson.layers]);
 
   // Extract source components from json
-  const { sources } = json;
+  const { sources } = styleJson;
   const sourceComponents = useMemo(() => {
     if (!sources || !Object.keys(sources)) {
       return [];

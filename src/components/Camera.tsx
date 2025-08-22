@@ -342,7 +342,7 @@ export const Camera = memo(
 
           const paddingBottom =
             stop.padding?.paddingBottom ?? stop.bounds?.paddingBottom;
-          if (paddingBottom != undefined) {
+          if (paddingBottom !== undefined) {
             _nativeStop.paddingBottom = paddingBottom;
           }
 
