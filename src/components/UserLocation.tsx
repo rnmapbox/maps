@@ -162,9 +162,7 @@ class UserLocation extends React.Component<Props, UserLocationState> {
 
     locationManager.setMinDisplacement(this.props.minDisplacement || 0);
 
-    await this.setLocationManager({
-      running: this.needsLocationManagerRunning(),
-    });
+    await this.setLocationManager(this.needsLocationManagerRunning());
 
     if (this.props.renderMode === UserLocationRenderMode.Native) {
       return;
@@ -172,9 +170,7 @@ class UserLocation extends React.Component<Props, UserLocationState> {
   }
 
   async componentDidUpdate(prevProps: Props) {
-    await this.setLocationManager({
-      running: this.needsLocationManagerRunning(),
-    });
+    await this.setLocationManager(this.needsLocationManagerRunning());
 
     if (this.props.minDisplacement !== prevProps.minDisplacement) {
       locationManager.setMinDisplacement(this.props.minDisplacement || 0);
@@ -188,7 +184,7 @@ class UserLocation extends React.Component<Props, UserLocationState> {
 
   async componentWillUnmount() {
     this._isMounted = false;
-    await this.setLocationManager({ running: false });
+    await this.setLocationManager(false);
   }
 
   /**
@@ -198,10 +194,9 @@ class UserLocation extends React.Component<Props, UserLocationState> {
    * either `onUpdate` or `visible` are set
    *
    * @async
-   * @param {Object} running - Object with key `running` and `boolean` value
-   * @return {Promise<void>}
+   * @param {boolean} running - sets the LocationManger running status
    */
-  async setLocationManager({ running }: { running?: boolean }) {
+  async setLocationManager(running: boolean) {
     if (this.locationManagerRunning !== running) {
       this.locationManagerRunning = running;
       if (running) {
@@ -220,11 +215,10 @@ class UserLocation extends React.Component<Props, UserLocationState> {
    *
    * @return {boolean}
    */
-  needsLocationManagerRunning() {
+  needsLocationManagerRunning(): boolean {
     return (
       !!this.props.onUpdate ||
-      (this.props.renderMode === UserLocationRenderMode.Normal &&
-        this.props.visible)
+      (this.props.renderMode === UserLocationRenderMode.Normal && (this.props.visible ?? true))
     );
   }
 

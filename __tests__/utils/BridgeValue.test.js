@@ -167,6 +167,4 @@ describe('BridgeValue', () => {
       ],
     });
   });
-
-  it('should throw error', () => {});
 });
