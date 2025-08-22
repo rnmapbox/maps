@@ -445,24 +445,27 @@ type Props = ViewProps & {
   _nativeImpl?: NativeMapViewActual;
 };
 
-type CallbablePropKeys =
-  | 'onRegionWillChange'
-  | 'onRegionIsChanging'
-  | 'onRegionDidChange'
-  | 'onUserLocationUpdate'
-  | 'onWillStartLoadingMap'
-  | 'onMapLoadingError'
-  | 'onDidFinishLoadingMap'
-  | 'onDidFailLoadingMap'
-  | 'onWillStartRenderingFrame'
-  | 'onDidFinishRenderingFrame'
-  | 'onDidFinishRenderingFrameFully'
-  | 'onWillStartRenderingMap'
-  | 'onDidFinishRenderingMap'
-  | 'onDidFinishRenderingMapFully'
-  | 'onDidFinishLoadingStyle'
-  | 'onMapIdle'
-  | 'onCameraChanged';
+const CallbablePropKeys = [
+  'onRegionWillChange',
+  'onRegionIsChanging',
+  'onRegionDidChange',
+  'onUserLocationUpdate',
+  'onWillStartLoadingMap',
+  'onMapLoadingError',
+  'onDidFinishLoadingMap',
+  'onDidFailLoadingMap',
+  'onWillStartRenderingFrame',
+  'onDidFinishRenderingFrame',
+  'onDidFinishRenderingFrameFully',
+  'onWillStartRenderingMap',
+  'onDidFinishRenderingMap',
+  'onDidFinishRenderingMapFully',
+  'onDidFinishLoadingStyle',
+  'onMapIdle',
+  'onCameraChanged',
+] as const;
+
+type CallbablePropKeys = typeof CallbablePropKeys[number];
 
 type CallbablePropKeysWithoutOn = CallbablePropKeys extends `on${infer C}`
   ? C
@@ -572,25 +575,7 @@ class MapView extends NativeBridgeComponent(
 
   componentDidUpdate(prevProps: Props) {
     // Check if any callback props have changed that would require updating handled events
-    const callbackProps: CallbablePropKeys[] = [
-      'onRegionWillChange',
-      'onRegionIsChanging', 
-      'onRegionDidChange',
-      'onUserLocationUpdate',
-      'onWillStartLoadingMap',
-      'onMapLoadingError',
-      'onDidFinishLoadingMap',
-      'onDidFailLoadingMap',
-      'onWillStartRenderingFrame',
-      'onDidFinishRenderingFrame',
-      'onDidFinishRenderingFrameFully',
-      'onWillStartRenderingMap',
-      'onDidFinishRenderingMap',
-      'onDidFinishRenderingMapFully',
-      'onDidFinishLoadingStyle',
-      'onMapIdle',
-      'onCameraChanged',
-    ];
+    const callbackProps = CallbablePropKeys;
 
     // Check if any of the callback props have changed
     const hasCallbackPropsChanged = callbackProps.some(
