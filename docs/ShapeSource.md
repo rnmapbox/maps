@@ -227,7 +227,7 @@ const collection = await shapeSource.getClusterLeaves(clusterId, limit, offset);
 ```
 
 
-[Earthquakes](../examples/SymbolCircleLayer/Earthquakes)### getClusterChildren(feature)
+### getClusterChildren(feature)
 
 Returns the FeatureCollection from the cluster (on the next zoom level).
 

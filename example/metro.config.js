@@ -2,7 +2,7 @@
 const path = require('path');
 
 const { getDefaultConfig } = require('@expo/metro-config');
-const exclusionList = require('metro-config/src/defaults/exclusionList');
+const exclusionList = require('metro-config/private/defaults/exclusionList');
 const escape = require('escape-string-regexp');
 
 const root = path.resolve(__dirname, '..');

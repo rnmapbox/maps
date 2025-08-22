@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
-import { Button, Modal, Text, SafeAreaView } from 'react-native';
+import { Button, Modal, Text } from 'react-native';
 import { MapView, UserLocation, Camera } from '@rnmapbox/maps';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 /**
  * @param {ItempProps['navigation']} navigation
