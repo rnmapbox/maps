@@ -11,7 +11,8 @@ import MapboxGL, {
 import { FeatureCollection } from 'geojson';
 import moment from 'moment';
 import React, { useRef, useState } from 'react';
-import { FlatList, SafeAreaView } from 'react-native';
+import { FlatList } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 import earthQuakesJSON from '../../assets/earthquakes.json';
 import { SF_OFFICE_COORDINATE } from '../../utils';
