@@ -574,10 +574,8 @@ class MapView extends NativeBridgeComponent(
   }
 
   componentDidUpdate(prevProps: Props) {
-    // Check if any callback props have changed that would require updating handled events
     const callbackProps = CallbablePropKeys;
 
-    // Check if any of the callback props have changed
     const hasCallbackPropsChanged = callbackProps.some(
       propName => prevProps[propName] !== this.props[propName]
     );
