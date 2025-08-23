@@ -445,24 +445,27 @@ type Props = ViewProps & {
   _nativeImpl?: NativeMapViewActual;
 };
 
-type CallbablePropKeys =
-  | 'onRegionWillChange'
-  | 'onRegionIsChanging'
-  | 'onRegionDidChange'
-  | 'onUserLocationUpdate'
-  | 'onWillStartLoadingMap'
-  | 'onMapLoadingError'
-  | 'onDidFinishLoadingMap'
-  | 'onDidFailLoadingMap'
-  | 'onWillStartRenderingFrame'
-  | 'onDidFinishRenderingFrame'
-  | 'onDidFinishRenderingFrameFully'
-  | 'onWillStartRenderingMap'
-  | 'onDidFinishRenderingMap'
-  | 'onDidFinishRenderingMapFully'
-  | 'onDidFinishLoadingStyle'
-  | 'onMapIdle'
-  | 'onCameraChanged';
+const CallbablePropKeys = [
+  'onRegionWillChange',
+  'onRegionIsChanging',
+  'onRegionDidChange',
+  'onUserLocationUpdate',
+  'onWillStartLoadingMap',
+  'onMapLoadingError',
+  'onDidFinishLoadingMap',
+  'onDidFailLoadingMap',
+  'onWillStartRenderingFrame',
+  'onDidFinishRenderingFrame',
+  'onDidFinishRenderingFrameFully',
+  'onWillStartRenderingMap',
+  'onDidFinishRenderingMap',
+  'onDidFinishRenderingMapFully',
+  'onDidFinishLoadingStyle',
+  'onMapIdle',
+  'onCameraChanged',
+] as const;
+
+type CallbablePropKeys = typeof CallbablePropKeys[number];
 
 type CallbablePropKeysWithoutOn = CallbablePropKeys extends `on${infer C}`
   ? C
@@ -570,8 +573,16 @@ class MapView extends NativeBridgeComponent(
     this.logger.stop();
   }
 
-  UNSAFE_componentWillReceiveProps(nextProps: Props) {
-    this._setHandledMapChangedEvents(nextProps);
+  componentDidUpdate(prevProps: Props) {
+    const callbackProps = CallbablePropKeys;
+
+    const hasCallbackPropsChanged = callbackProps.some(
+      propName => prevProps[propName] !== this.props[propName]
+    );
+
+    if (hasCallbackPropsChanged) {
+      this._setHandledMapChangedEvents(this.props);
+    }
   }
 
   _setHandledMapChangedEvents(props: Props) {
