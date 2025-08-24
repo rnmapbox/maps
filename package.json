@@ -81,7 +81,7 @@
     "@turf/length": "6.5.0",
     "@turf/nearest-point-on-line": "6.5.0",
     "@types/geojson": "^7946.0.7",
-    "debounce": "^1.2.0"
+    "debounce": "^2.2.0"
   },
   "devDependencies": {
     "@babel/core": "^7.25.2",

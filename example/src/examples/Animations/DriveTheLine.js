@@ -10,7 +10,6 @@ import { directionsClient } from '../../MapboxClient';
 import sheet from '../../styles/sheet';
 import { SF_OFFICE_COORDINATE } from '../../utils';
 import BaseExamplePropTypes from '../common/BaseExamplePropTypes';
-import Page from '../common/Page';
 import PulseCircleLayer from '../common/PulseCircleLayer';
 
 const SF_ZOO_COORDINATE = [-122.505412, 37.737463];
@@ -191,7 +190,7 @@ class DriveTheLine extends React.Component {
 
   render() {
     return (
-      <Page {...this.props}>
+      <>
         <MapboxGL.MapView
           ref={(c) => (this._map = c)}
           style={sheet.matchParent}
@@ -220,7 +219,7 @@ class DriveTheLine extends React.Component {
         </MapboxGL.MapView>
 
         {this.renderActions()}
-      </Page>
+      </>
     );
   }
 }
