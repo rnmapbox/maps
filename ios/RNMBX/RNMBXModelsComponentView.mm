@@ -12,8 +12,8 @@
 
 #import "rnmapbox_maps-Swift.pre.h"
 
-#import "RCTFollyConvert.h"
 #import "RNMBXFabricPropConvert.h"
+#import "FollyImporter.h"
 
 
 // TODO: use generated RNMBXModelsEventEmitter, but need 0.73+ for dynamic support
