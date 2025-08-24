@@ -3,7 +3,6 @@ import { MapView, Camera } from '@rnmapbox/maps';
 
 import sheet from '../../styles/sheet';
 import BaseExamplePropTypes from '../common/BaseExamplePropTypes';
-import Page from '../common/Page';
 
 class CompassView extends React.Component {
   static propTypes = {
@@ -12,7 +11,7 @@ class CompassView extends React.Component {
 
   render() {
     return (
-      <Page {...this.props}>
+      <>
         <MapView
           style={sheet.matchParent}
           compassEnabled
@@ -21,7 +20,7 @@ class CompassView extends React.Component {
         >
           <Camera heading={21} />
         </MapView>
-      </Page>
+      </>
     );
   }
 }

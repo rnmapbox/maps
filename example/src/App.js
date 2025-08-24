@@ -11,6 +11,8 @@ import { IS_ANDROID } from './utils';
 import config from './utils/config';
 import { Group, Item } from './scenes/GroupAndItem';
 import { ScreenWithoutMap } from './scenes/ScreenWithoutMap';
+import MapInModal from './examples/Map/MapInModal';
+import EarthquakesDetailsModal from './examples/EarthquakesDetailsModal';
 
 LogBox.ignoreLogs([
   'Warning: isMounted(...) is deprecated',
@@ -37,6 +39,13 @@ function AppStackNavigator() {
       <Stack.Screen name="Group" component={Group} />
       <Stack.Screen name="Item" component={Item} />
       <Stack.Screen name="ScreenWithoutMap" component={ScreenWithoutMap} />
+      <Stack.Group
+        screenOptions={({ navigation: modalNavigation }) => ({
+          presentation: 'modal',
+        })}>
+        <Stack.Screen name="MapInModal" component={MapInModal} />
+        <Stack.Screen name="EarthquakesDetailsModal" component={EarthquakesDetailsModal} />
+       </Stack.Group>
     </Stack.Navigator>
   );
 }

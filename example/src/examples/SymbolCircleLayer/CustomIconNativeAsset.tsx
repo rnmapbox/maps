@@ -11,6 +11,7 @@ import { featureCollection, feature, point } from '@turf/helpers';
 
 import Bubble from '../common/Bubble';
 import type { ExampleWithMetadata } from '../common/ExampleMetadata';
+import { OnPressEvent } from '../../../../src/types/OnPressEvent';
 
 const styles = {
   icon: {
