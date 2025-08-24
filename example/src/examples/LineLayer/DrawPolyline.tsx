@@ -56,9 +56,6 @@ const CrosshairOverlay = ({
 }) => {
   const ref = useRef<View>(null);
 
-  if (ref.current != null) {
-    console.log('=> ref.current', ref.current != null);
-  }
   return (
     <View
       style={{

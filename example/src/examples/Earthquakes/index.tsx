@@ -1,4 +1,3 @@
-import { FAB, Icon, ListItem, Overlay } from '@rneui/base';
 import MapboxGL, {
   Camera,
   CircleLayer,
@@ -9,14 +8,13 @@ import MapboxGL, {
   SymbolLayerStyle,
 } from '@rnmapbox/maps';
 import { FeatureCollection } from 'geojson';
-import moment from 'moment';
-import React, { useRef, useState } from 'react';
-import { FlatList } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import React, { useRef } from 'react';
 
 import earthQuakesJSON from '../../assets/earthquakes.json';
 import { SF_OFFICE_COORDINATE } from '../../utils';
 import { ExampleWithMetadata } from '../common/ExampleMetadata';
+import Page from '../common/Page';
+import { BaseExampleProps } from '../common/BaseExamplePropTypes';
 
 const layerStyles: {
   singlePoint: CircleLayerStyle;
@@ -76,13 +74,6 @@ const layerStyles: {
 };
 
 const styles = {
-  fab: {
-    position: 'absolute',
-    top: 10,
-    right: 10,
-    elevation: 9999,
-    zIndex: 9999,
-  },
   matchParent: {
     flex: 1,
   },
@@ -94,52 +85,11 @@ const mag3 = ['all', ['>=', ['get', 'mag'], 3], ['<', ['get', 'mag'], 4]];
 const mag4 = ['all', ['>=', ['get', 'mag'], 4], ['<', ['get', 'mag'], 5]];
 const mag5 = ['>=', ['get', 'mag'], 5];
 
-const Earthquakes = () => {
+const Earthquakes: React.FC<BaseExampleProps> = ({navigation, onDismissExample}) => {
   const shapeSource = useRef<ShapeSource>(null);
-  const [selectedCluster, setSelectedCluster] = useState<FeatureCollection>();
 
   return (
-    <>
-      <Overlay isVisible={!!selectedCluster} fullScreen>
-        <SafeAreaView style={{ flex: 1 }}>
-          <FAB
-            onPress={() => {
-              setSelectedCluster(undefined);
-            }}
-            icon={<Icon name="close" />}
-            size="large"
-            style={styles.fab}
-          />
-          {selectedCluster && (
-            <FlatList
-              keyExtractor={({ properties: earthquakeInfo }) => {
-                return earthquakeInfo?.code;
-              }}
-              data={selectedCluster.features}
-              renderItem={({ item: { properties: earthquakeInfo } }) => {
-                const magnitude = `Magnitude: ${earthquakeInfo?.mag}`;
-                const place = `Place: ${earthquakeInfo?.place}`;
-                const code = `Code: ${earthquakeInfo?.code}`;
-                const time = `Time: ${moment(earthquakeInfo?.time).format(
-                  'MMMM Do YYYY, h:mm:ss a',
-                )}`;
-
-                return (
-                  <ListItem bottomDivider>
-                    <ListItem.Content>
-                      <ListItem.Title>{earthquakeInfo?.title}</ListItem.Title>
-                      <ListItem.Subtitle>{magnitude}</ListItem.Subtitle>
-                      <ListItem.Subtitle>{place}</ListItem.Subtitle>
-                      <ListItem.Subtitle>{code}</ListItem.Subtitle>
-                      <ListItem.Subtitle>{time}</ListItem.Subtitle>
-                    </ListItem.Content>
-                  </ListItem>
-                );
-              }}
-            />
-          )}
-        </SafeAreaView>
-      </Overlay>
+    <Page label='Earthquakes' onDismissExample={onDismissExample} navigation={navigation}>
       <MapView style={styles.matchParent} styleURL={MapboxGL.StyleURL.Dark}>
         <Camera
           defaultSettings={{
@@ -147,7 +97,6 @@ const Earthquakes = () => {
             zoomLevel: 6,
           }}
         />
-
         <ShapeSource
           id="earthquakes"
           onPress={async (pressedShape) => {
@@ -161,12 +110,14 @@ const Earthquakes = () => {
                   0,
                 );
 
-                setSelectedCluster(collection);
+                navigation.navigate('EarthquakesDetailsModal', {selectedCluster: collection});
               } catch {
                 if (!pressedShape.features[0].properties?.cluster) {
-                  setSelectedCluster({
-                    type: 'FeatureCollection',
-                    features: [pressedShape.features[0]],
+                  navigation.navigate('EarthquakesDetailsModal', {
+                    selectedCluster: {
+                      type: 'FeatureCollection',
+                      features: [pressedShape.features[0]],
+                    }
                   });
                 }
               }
@@ -216,7 +167,7 @@ const Earthquakes = () => {
           />
         </ShapeSource>
       </MapView>
-    </>
+    </Page>
   );
 };
 

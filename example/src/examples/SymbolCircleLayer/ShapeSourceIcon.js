@@ -7,7 +7,7 @@ import {
   SymbolLayer,
   ShapeSource,
 } from '@rnmapbox/maps';
-import { Text, View } from 'react-native';
+import { Text } from 'react-native';
 
 import exampleIcon from '../../assets/example.png';
 import pinIcon from '../../assets/pin.png';
@@ -121,23 +121,22 @@ class ShapeSourceIcon extends React.Component {
           }}
         >
           <Image name="pin-rn">
-            <View>
-              <View
-                style={{
-                  borderRadius: 10,
-                  backgroundColor: 'gray',
-                  padding: 8,
-                  margin: 16,
-                  width: 100,
-                  shadowOffset: { width: 0, height: 8 },
-                  shadowOpacity: 0.2,
-                }}
-              >
-                <Text style={{ fontWeight: 'bold', color: 'white' }}>
-                  RN Pin 3
-                </Text>
-              </View>
-            </View>
+            <Text
+              style={{
+                fontWeight: 'bold',
+                textAlign: 'center',
+                color: 'white',
+                borderRadius: 10,
+                backgroundColor: 'gray',
+                padding: 8,
+                margin: 16,
+                width: 100,
+                shadowOffset: { width: 0, height: 8 },
+                shadowOpacity: 0.2,
+              }}
+            >
+              RN Pin 3
+            </Text>
           </Image>
         </Images>
         <ShapeSource id="exampleShapeSource" shape={featureCollection}>

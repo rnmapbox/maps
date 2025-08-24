@@ -5,7 +5,6 @@ import MapboxGL from '@rnmapbox/maps';
 import sheet from '../../styles/sheet';
 import colors from '../../styles/colors';
 import BaseExamplePropTypes from '../common/BaseExamplePropTypes';
-import Page from '../common/Page';
 
 const styles = StyleSheet.create({
   button: {
@@ -50,7 +49,7 @@ class TakeSnapshotWithMap extends React.Component {
 
   render() {
     return (
-      <Page {...this.props}>
+      <>
         <View style={styles.mapContainer}>
           <MapboxGL.MapView ref={(ref) => (this.map = ref)} style={styles.map}>
             <MapboxGL.Camera
@@ -83,7 +82,7 @@ class TakeSnapshotWithMap extends React.Component {
             <Text style={styles.buttonText}>Take snapshot</Text>
           </View>
         </TouchableOpacity>
-      </Page>
+      </>
     );
   }
 }

@@ -15,7 +15,6 @@ import { point, lineString } from '@turf/helpers';
 
 import sheet from '../../styles/sheet';
 import BaseExamplePropTypes from '../common/BaseExamplePropTypes';
-import Page from '../common/Page';
 import Bubble from '../common/Bubble';
 
 const blon = -73.99155;
@@ -215,7 +214,7 @@ class AnimatedLine extends React.Component {
 
   render() {
     return (
-      <Page {...this.props}>
+      <>
         <MapView
           ref={(c) => (this._map = c)}
           onPress={this.onPress}
@@ -282,7 +281,7 @@ class AnimatedLine extends React.Component {
             onPress={() => this.startAnimateRoute()}
           />
         </Bubble>
-      </Page>
+      </>
     );
   }
 }

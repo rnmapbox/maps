@@ -1,18 +1,16 @@
 import React, { useState } from 'react';
-import { Button, Modal, Text } from 'react-native';
+import { Button} from 'react-native';
 import { MapView, UserLocation, Camera } from '@rnmapbox/maps';
-import { SafeAreaView } from 'react-native-safe-area-context';
 
 /**
  * @param {ItempProps['navigation']} navigation
  */
 export default function MapAndNavigation({ navigation }) {
-  const [modalVisible, setModalVisible] = useState(false);
   const [showMap, setShowMap] = useState(false);
 
   return (
     <>
-      <Button title="Modal" onPress={() => setModalVisible(true)} />
+      <Button title="Modal" onPress={() => navigation.navigate('MapInModal')} />
       <Button
         title="Toggle map"
         onPress={() => setShowMap((showMap) => !showMap)}
@@ -21,25 +19,6 @@ export default function MapAndNavigation({ navigation }) {
         title="Navigate"
         onPress={() => navigation.navigate('ScreenWithoutMap')}
       />
-      <Modal
-        animationType="slide"
-        transparent={false}
-        visible={modalVisible}
-        onRequestClose={() => {
-          setModalVisible(false);
-        }}
-      >
-        <SafeAreaView style={{ flex: 1 }}>
-          <Text>this is a modal</Text>
-          <Button
-            title="close"
-            onPress={() => {
-              setModalVisible(false);
-            }}
-          />
-          <MapView style={{ flex: 1 }} />
-        </SafeAreaView>
-      </Modal>
       {showMap && (
         <MapView style={{ flex: 1 }}>
           <Camera
