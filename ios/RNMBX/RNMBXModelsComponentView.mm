@@ -12,7 +12,6 @@
 
 #import "rnmapbox_maps-Swift.pre.h"
 
-#import "RCTFollyConvert.h"
 #import "RNMBXFabricPropConvert.h"
 
 
