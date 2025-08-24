@@ -11,9 +11,7 @@
 #import <react/renderer/components/rnmapbox_maps_specs/RCTComponentViewHelpers.h>
 
 #import "rnmapbox_maps-Swift.pre.h"
-
-#import "RCTFollyConvert.h"
-
+#import "RNMBXFabricHelpers.h"
 
 // TODO: use generated RNMBXViewportEventEmitter, but need 0.73+ for dynamic support
 class RNMBXViewportEventEmitter : public facebook::react::ViewEventEmitter {
@@ -86,7 +84,7 @@ NSNumber* convertDynamicToOptional_boolean(const folly::dynamic &dyn, NSString* 
     
     if (strongSelf != nullptr && strongSelf->_eventEmitter != nullptr) {
       auto type = std::string([[event objectForKey:@"type"] UTF8String]);
-      auto payload = convertIdToFollyDynamic([event objectForKey:@"payload"]);
+      auto payload = RNMBXConvertIdToFollyDynamic([event objectForKey:@"payload"]);
       ::RNMBXViewportEventEmitter::OnStatusChanged event = {type, payload};
       std::reinterpret_pointer_cast<const ::RNMBXViewportEventEmitter>(strongSelf->_eventEmitter)->onStatusChanged(event);
     }
