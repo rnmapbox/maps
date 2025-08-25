@@ -554,7 +554,7 @@ class MapView extends NativeBridgeComponent(
     this._onDebouncedRegionWillChange = debounce(
       this._onRegionWillChange.bind(this),
       props.regionWillChangeDebounceTime,
-      true
+      { immediate: true }
     );
 
     this._onDebouncedRegionDidChange = debounce(
