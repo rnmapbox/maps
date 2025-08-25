@@ -563,10 +563,6 @@ class MapView extends NativeBridgeComponent(
     );
   }
 
-  componentDidMount() {
-    this._setHandledMapChangedEvents(this.props);
-  }
-
   componentWillUnmount() {
     this._onDebouncedRegionWillChange.clear();
     this._onDebouncedRegionDidChange.clear();
@@ -1084,6 +1080,10 @@ class MapView extends NativeBridgeComponent(
     const func = this.props[propName] as (payload: object) => void;
     if (func && isFunction(func)) {
       func(payload);
+    }
+
+    if (propName === 'onDidFinishLoadingMap') {
+      this._setHandledMapChangedEvents(this.props);
     }
   }
 
