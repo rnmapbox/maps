@@ -1,5 +1,5 @@
 /**
- * Dumps examples.json to docs/examples.json from metadata in the examples in the example direcrory
+ * Dumps examples.json to docs/examples.json from metadata in the examples in the example directory
  */
 import path from 'path';
 import fs from 'fs';
@@ -55,7 +55,7 @@ function getExampleFullPath(
       relPath: `${relPathBase}.${ext}`,
       fullPath: path.join(relExamplesPath, `${relPathBase}.${ext}`),
     }))
-    .filter(({ relPath, fullPath }) =>
+    .filter(({ relPath: _relPath, fullPath }) =>
       fs.existsSync(path.join(mapsRootPath, fullPath)),
     );
   if (existingExamplePaths.length === 0) {

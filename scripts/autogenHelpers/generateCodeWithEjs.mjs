@@ -1,10 +1,11 @@
-import ejs from 'ejs';
 import path from 'path';
 import fs from 'fs';
-import styleSpecJSON from '../../style-spec/v8.json' with { type: 'json' };
 import * as url from 'url';
 
+import ejs from 'ejs';
 import prettier from 'prettier';
+
+import styleSpecJSON from '../../style-spec/v8.json' with { type: 'json' };
 import prettierrc from '../../.prettierrc.js';
 
 const __dirname = url.fileURLToPath(new URL('.', import.meta.url));
@@ -16,7 +17,7 @@ function readIosVersion() {
   const lines = fs.readFileSync(podspecPath, 'utf8').split('\n');
   const mapboxLineRegex =
     /^\s*rnMapboxMapsDefaultMapboxVersion\s*=\s*'~>\s+(\d+\.\d+)(\.\d+)?'$/;
-  const mapboxLine = lines.filter((i) => mapboxLineRegex.exec(i))[0];
+  const [mapboxLine] = lines.filter((i) => mapboxLineRegex.exec(i));
 
   return {
     v10: `${mapboxLineRegex.exec(mapboxLine)[1]}.0`,
@@ -29,7 +30,7 @@ function readAndroidVersion() {
   const lines = fs.readFileSync(buildGradlePath, 'utf8').split('\n');
   const mapboxV10LineRegex =
     /^\s*def\s+defaultMapboxMapsVersion\s+=\s+"(\d+\.\d+\.\d+)"$/;
-  const mapboxV10Line = lines.filter((i) => mapboxV10LineRegex.exec(i))[0];
+  const [mapboxV10Line] = lines.filter((i) => mapboxV10LineRegex.exec(i));
   return {
     v10: mapboxV10LineRegex.exec(mapboxV10Line)[1],
     v11: '11.0.0',
@@ -452,7 +453,7 @@ export function getLayers() {
   return layers;
 }
 
-export default function generateCodeWithEjs(layers) {
+export default async function generateCodeWithEjs(layers) {
   const templateMappings = [
     /*{
       input: path.join(TMPL_PATH, 'index.d.ts.ejs'),
@@ -482,7 +483,7 @@ export default function generateCodeWithEjs(layers) {
   const outputPaths = templateMappings.map((m) => m.output);
 
   // autogenerate code
-  templateMappings.forEach(({ input, output, only }) => {
+  for (const { input, output, only } of templateMappings) {
     const filename = output.split('/').pop();
     console.log(`Generating ${filename}`);
     const tmpl = ejs.compile(fs.readFileSync(input, 'utf8'), { strict: true });
@@ -501,27 +502,33 @@ export default function generateCodeWithEjs(layers) {
       return result;
     }
     /**
-     * @param {string[]} only 
+     * @param {string[]} onlyTargets 
      */
-    function filterOnly(layers, only) {
-      if (only != null) {
-        let result = layers
-          .filter((e) => only.find((v) => e.support[v]))
-          .map((e) => ({ ...e, properties: concatuniq(only.map(o => e.props[o] || [])) }));
+    function filterOnly(allLayers, onlyTargets) {
+      if (onlyTargets != null) {
+        let result = allLayers
+          .filter((e) => onlyTargets.find((v) => e.support[v]))
+          .map((e) => ({ ...e, properties: concatuniq(onlyTargets.map(o => e.props[o] || [])) }));
         return result;
       } else {
-        return layers;
+        return allLayers;
       }
     }
 
     let results = tmpl({ layers: filterOnly(layers, only) });
     if (filename.endsWith('ts')) {
-      results = prettier.format(results, {
-        ...prettierrc,
-        filepath: filename,
-      });
+      try {
+        const formatted = await prettier.format(results, {
+          ...prettierrc,
+          filepath: filename,
+        });
+        fs.writeFileSync(output, formatted);
+      } catch (error) {
+        console.error(`An error occurred when formatting with prettier file ${filename}`, error);
+        // Fallback: write unformatted results to avoid missing files
+        fs.writeFileSync(output, results);
+      }
     }
-    fs.writeFileSync(output, results);
-  });
+  }
   return outputPaths;
 }

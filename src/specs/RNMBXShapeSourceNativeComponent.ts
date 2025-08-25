@@ -1,6 +1,6 @@
 import type { HostComponent, ViewProps } from 'react-native';
-import codegenNativeComponent from 'react-native/Libraries/Utilities/codegenNativeComponent';
-import {
+import { codegenNativeComponent } from 'react-native';
+import type {
   DirectEventHandler,
   Double,
   Int32,
@@ -18,13 +18,13 @@ export interface NativeProps extends ViewProps {
   cluster: UnsafeMixed<Int32>;
   clusterRadius: UnsafeMixed<Double>;
   clusterMaxZoomLevel: UnsafeMixed<Double>;
-  clusterProperties: UnsafeMixed<any>;
+  clusterProperties: UnsafeMixed;
   maxZoomLevel: UnsafeMixed<Double>;
   buffer: UnsafeMixed<Double>;
   tolerance: UnsafeMixed<Double>;
   lineMetrics: UnsafeMixed<boolean>;
   hasPressListener: UnsafeMixed<boolean>;
-  hitbox: UnsafeMixed<any>;
+  hitbox: UnsafeMixed;
   onMapboxShapeSourcePress: DirectEventHandler<OnMapboxShapeSourcePressEventType>;
 }
 
