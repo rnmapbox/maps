@@ -31,7 +31,13 @@ jobs:
           path: maps-docs
       - uses: actions/setup-node@v4
         with:
-          node-version: 18
+          node-version: 20.16.0
+          cache: yarn
+      - name: Show Node & Yarn versions
+        run: |
+          node -v
+          corepack --version || true
+          yarn -v
       - uses: oven-sh/setup-bun@v1
         with:
           bun-version: latest
