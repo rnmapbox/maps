@@ -12,7 +12,7 @@
 
 #import "rnmapbox_maps-Swift.pre.h"
 
-#import "RCTFollyConvert.h"
+#import "RNMBXFollyConvert.h"
 
 
 // TODO: use generated RNMBXViewportEventEmitter, but need 0.73+ for dynamic support
