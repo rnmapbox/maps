@@ -6,7 +6,7 @@ import {
   type CameraPadding,
 } from '@rnmapbox/maps';
 import { ButtonGroup } from '@rneui/base';
-import { SafeAreaView } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { ExampleWithMetadata } from '../common/ExampleMetadata'; // exclude-from-example-doc
 

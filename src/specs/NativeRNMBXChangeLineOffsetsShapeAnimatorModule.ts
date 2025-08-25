@@ -8,7 +8,7 @@ import { Position } from '@turf/helpers';
 type AnimatorTag = Int32;
 
 export interface Spec extends TurboModule {
-  create(
+  generate(
     tag: AnimatorTag,
     coordinates: Position[],
     startOffset: Double,

@@ -8,5 +8,6 @@
       "@rnmapbox/maps": ["../src"],
     }
   },
-  "include": ["global.d.ts", "index.js", "./__tests__/dumpExamplesJson.ts", "jest.config.ts", "jest.setup.ts"]
+  "include": ["global.d.ts", "index.js", "./__tests__/dumpExamplesJson.ts", "jest.config.ts", "jest.setup.ts", "**/*.ts", "**/*.tsx"],
+  "exclude": ["**/node_modules", "**/Pods"]
 }

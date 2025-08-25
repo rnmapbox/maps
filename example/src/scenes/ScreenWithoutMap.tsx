@@ -1,6 +1,7 @@
 import type { NativeStackScreenProps } from '@react-navigation/native-stack';
 import React, { JSX } from 'react';
-import { Button, Text, View, SafeAreaView } from 'react-native';
+import { Button, Text, View } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 type StackParamsList = {
   ScreenWithoutMap: Record<string, never>;

@@ -10,7 +10,9 @@ import {
 } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import type { BaseExampleProps } from 'src/examples/common/BaseExamplePropTypes';
+import { FeatureCollection } from 'geojson';
 
+import Earthquakes from '../examples/Earthquakes';
 import MapHeader from '../examples/common/MapHeader';
 import Page, { PageProps } from '../examples/common/Page';
 import sheet from '../styles/sheet';
@@ -184,10 +186,14 @@ class ExampleItem implements ExampleNode {
 type RootStackParamList = {
   Group: { path: string[] };
   Item: { path: string[] };
+  Earthquakes: { path: string[] };
+  EarthquakesDetailsModal: { selectedCluster: FeatureCollection };
 };
 
 type GroupProps = NativeStackScreenProps<RootStackParamList, 'Group'>;
 export type ItemProps = NativeStackScreenProps<RootStackParamList, 'Item'>;
+export type EarthquakesProps = NativeStackScreenProps<RootStackParamList, 'Earthquakes'>;
+export type EarthquakesDetailsProps = NativeStackScreenProps<RootStackParamList, 'EarthquakesDetailsModal'>;
 
 class ExampleGroup implements ExampleNode {
   label: string;
@@ -294,6 +300,7 @@ const Examples = new ExampleGroup('React Native Mapbox', [
   exampleGroup(Camera),
   exampleGroup(UserLocation),
   exampleGroup(SymbolCircleLayer),
+  new ExampleItem('Earthquakes', Earthquakes),
   exampleGroup(FillRasterLayer),
   exampleGroup(LineLayer),
   exampleGroup(Annotations),

@@ -154,7 +154,7 @@ class RNMBXChangeLineOffsetsShapeAnimatorModule(
         const val NAME = "RNMBXChangeLineOffsetsShapeAnimatorModule"
     }
 
-    override fun create(
+    override fun generate(
         tag: ViewRefTag,
         coordinates: ReadableArray,
         startOffset: Double,
