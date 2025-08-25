@@ -13,6 +13,19 @@ import {
   javaOldArchDir,
 } from './codegen-old-arch.js';
 
+// --- sanitize npm env to avoid "Unknown env config" warnings on stderr ---
+process.env.NPM_CONFIG_LOGLEVEL = process.env.NPM_CONFIG_LOGLEVEL || 'silent';
+
+[
+  'npm_config_version_git_tag',
+  'npm_config_argv',
+  'npm_config_version_commit_hooks',
+  'npm_config_version_git_message',
+  'npm_config_version_tag_prefix',
+].forEach((k) => {
+  if (k in process.env) delete process.env[k];
+});
+
 // process style spec json into json
 
 const __dirname = url.fileURLToPath(new URL('.', import.meta.url));
