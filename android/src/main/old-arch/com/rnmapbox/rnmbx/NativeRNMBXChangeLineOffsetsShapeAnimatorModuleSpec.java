@@ -36,7 +36,7 @@ public abstract class NativeRNMBXChangeLineOffsetsShapeAnimatorModuleSpec extend
 
   @ReactMethod
   @DoNotStrip
-  public abstract void create(double tag, ReadableArray coordinates, double startOffset, double endOffset, Promise promise);
+  public abstract void generate(double tag, ReadableArray coordinates, double startOffset, double endOffset, Promise promise);
 
   @ReactMethod
   @DoNotStrip
