@@ -17,7 +17,7 @@ export default class ChangeLineOffsetsShapeAnimator
     endOffset: number;
   }) {
     const tag = ShapeAnimatorManager.nextTag();
-    NativeRNMBXChangeLineOffsetsShapeAnimatorModule.create(
+    NativeRNMBXChangeLineOffsetsShapeAnimatorModule.generate(
       tag,
       args.coordinates,
       args.startOffset,
