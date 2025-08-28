@@ -78,7 +78,7 @@ extension MovePointShapeAnimator {
   }
     
   @objc
-  public static func create(tag: NSNumber, startCoordinate: NSArray) -> MovePointShapeAnimator? {
+  public static func generate(tag: NSNumber, startCoordinate: NSArray) -> MovePointShapeAnimator? {
     guard let lng = startCoordinate[0] as? NSNumber, let lat = startCoordinate[1] as? NSNumber else {
       return nil
     }
