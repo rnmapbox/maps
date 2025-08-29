@@ -10,7 +10,7 @@ extension QueriedSourceFeature {
 open class RNMBXMapViewManager: RCTViewManager {
     @objc
     override public static func requiresMainQueueSetup() -> Bool {
-        return true
+        return false
     }
   
     func defaultFrame() -> CGRect {

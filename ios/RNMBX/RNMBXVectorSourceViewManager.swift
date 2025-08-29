@@ -2,7 +2,7 @@
 class RNMBXVectorSourceViewManager: RCTViewManager {
   @objc
   override static func requiresMainQueueSetup() -> Bool {
-    return true
+    return false
   }
  
   @objc override func view() -> UIView {

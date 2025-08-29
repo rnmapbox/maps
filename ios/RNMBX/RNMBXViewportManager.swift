@@ -2,7 +2,7 @@
 public class RNMBXViewportManager : RCTViewManager {
   @objc
   public override static func requiresMainQueueSetup() -> Bool {
-    return true
+    return false
   }
 
   public override func view() -> UIView! {

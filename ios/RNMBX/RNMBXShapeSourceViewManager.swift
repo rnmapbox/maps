@@ -2,7 +2,7 @@
 public class RNMBXShapeSourceViewManager: RCTViewManager {
   @objc
   override public static func requiresMainQueueSetup() -> Bool {
-    return true
+    return false
   }
 
   @objc override public func view() -> UIView {

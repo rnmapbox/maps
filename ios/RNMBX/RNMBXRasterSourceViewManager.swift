@@ -5,7 +5,7 @@ import MapboxMaps
 class RNMBXRasterSourceViewManager : RCTViewManager {
   @objc
   override static func requiresMainQueueSetup() -> Bool {
-    return true
+    return false
   }
   
   override func view() -> UIView! {

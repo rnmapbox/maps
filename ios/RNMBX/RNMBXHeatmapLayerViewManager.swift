@@ -2,7 +2,7 @@
 class RNMBXHeatmapLayerViewManager: RCTViewManager {
     @objc
     override static func requiresMainQueueSetup() -> Bool {
-        return true
+        return false
     }
   
     override func view() -> UIView! {
