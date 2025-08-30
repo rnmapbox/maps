@@ -4628,10 +4628,10 @@ doctrine@^3.0.0:
   dependencies:
     esutils "^2.0.2"
 
-documentation@14.0.0:
-  version "14.0.0"
-  resolved "https://registry.yarnpkg.com/documentation/-/documentation-14.0.0.tgz#ca85705518214cab84b693f1bdd23389d7a84e2f"
-  integrity sha512-4AwFzdiseEdtqR0KKLrruIQ5fvh7n5epg47P0ZyOidA5Fes5am+6xjqkDECHPwcv4pxJ6zITaHwzCoGblP0+JQ==
+documentation@14.0.3:
+  version "14.0.3"
+  resolved "https://registry.yarnpkg.com/documentation/-/documentation-14.0.3.tgz#738998d0560193c35b2451b9706a924dc9fa9ec9"
+  integrity sha512-B7cAviVKN9Rw7Ofd+9grhVuxiHwly6Ieh+d/ceMw8UdBOv/irkuwnDEJP8tq0wgdLJDUVuIkovV+AX9mTrZFxg==
   dependencies:
     "@babel/core" "^7.18.10"
     "@babel/generator" "^7.18.10"
@@ -4642,7 +4642,7 @@ documentation@14.0.0:
     chokidar "^3.5.3"
     diff "^5.1.0"
     doctrine-temporary-fork "2.1.0"
-    git-url-parse "^12.0.0"
+    git-url-parse "^13.1.0"
     github-slugger "1.4.0"
     glob "^8.0.3"
     globals-docs "^2.4.1"
@@ -5955,20 +5955,20 @@ getenv@^1.0.0:
   resolved "https://registry.yarnpkg.com/getenv/-/getenv-1.0.0.tgz#874f2e7544fbca53c7a4738f37de8605c3fcfc31"
   integrity sha512-7yetJWqbS9sbn0vIfliPsFgoXMKn/YMF+Wuiog97x+urnSRRRZ7xB+uVkwGKzRgq9CDFfMQnE9ruL5DHv9c6Xg==
 
-git-up@^6.0.0:
-  version "6.0.0"
-  resolved "https://registry.yarnpkg.com/git-up/-/git-up-6.0.0.tgz#dbd6e4eee270338be847a0601e6d0763c90b74db"
-  integrity sha512-6RUFSNd1c/D0xtGnyWN2sxza2bZtZ/EmI9448n6rCZruFwV/ezeEn2fJP7XnUQGwf0RAtd/mmUCbtH6JPYA2SA==
+git-up@^7.0.0:
+  version "7.0.0"
+  resolved "https://registry.yarnpkg.com/git-up/-/git-up-7.0.0.tgz#bace30786e36f56ea341b6f69adfd83286337467"
+  integrity sha512-ONdIrbBCFusq1Oy0sC71F5azx8bVkvtZtMJAsv+a6lz5YAmbNnLD6HAB4gptHZVLPR8S2/kVN6Gab7lryq5+lQ==
   dependencies:
     is-ssh "^1.4.0"
-    parse-url "^7.0.2"
+    parse-url "^8.1.0"
 
-git-url-parse@^12.0.0:
-  version "12.0.0"
-  resolved "https://registry.yarnpkg.com/git-url-parse/-/git-url-parse-12.0.0.tgz#4ba70bc1e99138321c57e3765aaf7428e5abb793"
-  integrity sha512-I6LMWsxV87vysX1WfsoglXsXg6GjQRKq7+Dgiseo+h0skmp5Hp2rzmcEIRQot9CPA+uzU7x1x7jZdqvTFGnB+Q==
+git-url-parse@^13.1.0:
+  version "13.1.1"
+  resolved "https://registry.yarnpkg.com/git-url-parse/-/git-url-parse-13.1.1.tgz#664bddf0857c6a75b3c1f0ae6239abb08a1486d4"
+  integrity sha512-PCFJyeSSdtnbfhSNRw9Wk96dDCNx+sogTe4YNXeXSJxt7xz5hvXekuRn9JX7m+Mf4OscCu8h+mtAl3+h5Fo8lQ==
   dependencies:
-    git-up "^6.0.0"
+    git-up "^7.0.0"
 
 github-slugger@1.4.0:
   version "1.4.0"
@@ -9324,11 +9324,6 @@ normalize-path@^3.0.0, normalize-path@~3.0.0:
   resolved "https://registry.yarnpkg.com/normalize-path/-/normalize-path-3.0.0.tgz#0dcd69ff23a1c9b11fd0978316644a0388216a65"
   integrity sha512-6eZs5Ls3WtCisHWp9S2GUy8dqkpGi4BVSz3GaqiE6ezub0512ESztXUwUB6C6IKbQkY2Pnb/mD4WYojCRwcwLA==
 
-normalize-url@^6.1.0:
-  version "6.1.0"
-  resolved "https://registry.yarnpkg.com/normalize-url/-/normalize-url-6.1.0.tgz#40d0885b535deffe3f3147bec877d05fe4c5668a"
-  integrity sha512-DlL+XwOy3NxAQ8xuC0okPgK46iuVNAK01YN7RueYBqqFeGsBjV9XmCAzAdgt+667bCl5kPh9EqKKDwnaPG1I7A==
-
 npm-package-arg@^11.0.0:
   version "11.0.3"
   resolved "https://registry.yarnpkg.com/npm-package-arg/-/npm-package-arg-11.0.3.tgz#dae0c21199a99feca39ee4bfb074df3adac87e2d"
@@ -9667,10 +9662,10 @@ parse-json@^5.2.0:
     json-parse-even-better-errors "^2.3.0"
     lines-and-columns "^1.1.6"
 
-parse-path@^5.0.0:
-  version "5.0.0"
-  resolved "https://registry.yarnpkg.com/parse-path/-/parse-path-5.0.0.tgz#f933152f3c6d34f4cf36cfc3d07b138ac113649d"
-  integrity sha512-qOpH55/+ZJ4jUu/oLO+ifUKjFPNZGfnPJtzvGzKN/4oLMil5m9OH4VpOj6++9/ytJcfks4kzH2hhi87GL/OU9A==
+parse-path@^7.0.0:
+  version "7.1.0"
+  resolved "https://registry.yarnpkg.com/parse-path/-/parse-path-7.1.0.tgz#41fb513cb122831807a4c7b29c8727947a09d8c6"
+  integrity sha512-EuCycjZtfPcjWk7KTksnJ5xPMvWGA/6i4zrLYhRG0hGvC3GPU/jGUj3Cy+ZR0v30duV3e23R95T1lE2+lsndSw==
   dependencies:
     protocols "^2.0.0"
 
@@ -9681,15 +9676,12 @@ parse-png@^2.1.0:
   dependencies:
     pngjs "^3.3.0"
 
-parse-url@^7.0.2:
-  version "7.0.2"
-  resolved "https://registry.yarnpkg.com/parse-url/-/parse-url-7.0.2.tgz#d21232417199b8d371c6aec0cedf1406fd6393f0"
-  integrity sha512-PqO4Z0eCiQ08Wj6QQmrmp5YTTxpYfONdOEamrtvK63AmzXpcavIVQubGHxOEwiIoDZFb8uDOoQFS0NCcjqIYQg==
+parse-url@^8.1.0:
+  version "8.1.0"
+  resolved "https://registry.yarnpkg.com/parse-url/-/parse-url-8.1.0.tgz#972e0827ed4b57fc85f0ea6b0d839f0d8a57a57d"
+  integrity sha512-xDvOoLU5XRrcOZvnI6b8zA6n9O9ejNk/GExuz1yBuWUGn9KA97GI6HTs6u02wKara1CeVmZhH+0TZFdWScR89w==
   dependencies:
-    is-ssh "^1.4.0"
-    normalize-url "^6.1.0"
-    parse-path "^5.0.0"
-    protocols "^2.0.1"
+    parse-path "^7.0.0"
 
 parse5@^6.0.0:
   version "6.0.1"
