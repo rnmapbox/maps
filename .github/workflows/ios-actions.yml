@@ -23,6 +23,11 @@ on:
         default: false
         required: false
         type: boolean
+      XCODE_VERSION:
+        description: "Xcode version to use (e.g., 15.4, 16.1)"
+        default: '16.1'
+        required: false
+        type: string
     secrets:
       MAPBOX_ACCESS_TOKEN:
         required: true
@@ -36,7 +41,7 @@ on:
 jobs:
   build:
     name: iOS Example Build ${{ inputs.NEW_ARCH && 'Fabric' || 'Paper' }} ${{ inputs.MAP_IMPL }}
-    runs-on: macos-13
+    runs-on: macos-15
     timeout-minutes: 55
     environment: ${{ inputs.env_name }}
 
@@ -69,6 +74,11 @@ jobs:
         if: "${{ env.MAPBOX_DOWNLOAD_TOKEN != '' }}"
         env:
           MAPBOX_DOWNLOAD_TOKEN: ${{ secrets.MAPBOX_DOWNLOAD_TOKEN || secrets.ENV_MAPBOX_DOWNLOAD_TOKEN }}
+
+      - name: Select Xcode ${{ inputs.XCODE_VERSION }}
+        uses: maxim-lobanov/setup-xcode@v1
+        with:
+          xcode-version: ${{ inputs.XCODE_VERSION }}
 
       - name: Setup node ${{ inputs.NVMRC }}
         uses: actions/setup-node@v3.5.1

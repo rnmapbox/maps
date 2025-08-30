@@ -1,7 +1,8 @@
 import React from 'react';
-import { render, fireEvent, act } from '@testing-library/react-native';
+import { render, fireEvent, act, waitFor } from '@testing-library/react-native';
 
 import UserLocation from '../../src/components/UserLocation';
+import Annotation from '../../src/components/Annotation';
 import { ShapeSource } from '../../src/components/ShapeSource';
 import CircleLayer from '../../src/components/CircleLayer';
 import locationManager from '../../src/modules/location/locationManager';
@@ -20,7 +21,7 @@ const position = {
 };
 
 describe('UserLocation', () => {
-  describe('render', () => {
+  describe('renderUL', () => {
     jest.spyOn(locationManager, 'start').mockImplementation(jest.fn());
     jest
       .spyOn(locationManager, 'getLastKnownLocation')
@@ -38,8 +39,10 @@ describe('UserLocation', () => {
     });
 
     test('renders with CircleLayers by default', async () => {
-      const { UNSAFE_getAllByType } = await render(<UserLocation />);
-      await act(async () => {})
+      const { UNSAFE_getAllByType, UNSAFE_queryByType } = render(<UserLocation />);
+      await waitFor(() => {
+        expect(() => UNSAFE_queryByType(UserLocation)).not.toThrow();
+      });
 
       const shapeSource = UNSAFE_getAllByType(ShapeSource);
       const circleLayer = UNSAFE_getAllByType(CircleLayer);
@@ -52,7 +55,9 @@ describe('UserLocation', () => {
       const { UNSAFE_queryByType } = await render(
         <UserLocation visible={false} />,
       );
-      await act(async () => {})
+      await waitFor(() => {
+        expect(() => UNSAFE_queryByType(UserLocation)).not.toThrow();
+      });
 
       const shapeSource = UNSAFE_queryByType(ShapeSource);
       const circleLayer = UNSAFE_queryByType(CircleLayer);
@@ -72,11 +77,14 @@ describe('UserLocation', () => {
         },
       };
 
-      const { UNSAFE_queryByType, UNSAFE_queryAllByType } = await render(<UserLocation>
-        <CircleLayer key='testUserLocationCircle' {...circleLayerProps} />
-      </UserLocation>)
-      await act(async () => {
-      })
+      const { UNSAFE_queryByType, UNSAFE_queryAllByType } = render(
+        <UserLocation>
+          <CircleLayer key='testUserLocationCircle' {...circleLayerProps} />
+        </UserLocation>
+      )
+      await waitFor(() => {
+        expect(() => UNSAFE_queryByType(UserLocation)).not.toThrow();
+      });
 
       const shapeSource = UNSAFE_queryByType(ShapeSource);
       const circleLayer = UNSAFE_queryAllByType(CircleLayer);
@@ -88,10 +96,14 @@ describe('UserLocation', () => {
       expect(circleLayer[0].props.style).toEqual(circleLayerProps.style);
     });
 
-    test('calls onUpdate callback when new location is received', () => {
+    test('calls onUpdate callback when new location is received', async () => {
       const onUpdateCallback = jest.fn();
 
-      render(<UserLocation onUpdate={onUpdateCallback} />);
+      const { UNSAFE_getByType } = render(<UserLocation onUpdate={onUpdateCallback} />);
+
+      await waitFor(() => {
+        expect(() => UNSAFE_getByType(UserLocation)).not.toThrow();
+      });
 
       act(() => {
         locationManager._onUpdate({
@@ -111,16 +123,49 @@ describe('UserLocation', () => {
       expect(onUpdateCallback).toHaveBeenCalled();
     });
 
-    test('calls onPress callback when location icon is pressed', () => {
+    test('calls onPress callback when location icon is pressed', async () => {
       const onPressCallback = jest.fn();
 
-      const { UNSAFE_queryByType } = render(
+      const { UNSAFE_getByType } = render(
         <UserLocation onPress={onPressCallback} />,
       );
 
-      const shapeSource = UNSAFE_queryByType(ShapeSource);
-      fireEvent(shapeSource, 'onPress');
-      fireEvent(shapeSource, 'onPress');
+      await waitFor(() => {
+        expect(() => UNSAFE_getByType(UserLocation)).not.toThrow();
+      });
+      const ul = UNSAFE_getByType(UserLocation);
+      fireEvent(ul, 'onPress');
+      fireEvent(ul, 'onPress');
+      expect(onPressCallback).toHaveBeenCalledTimes(2);
+    });
+
+    test('calls onPress callback when location icon is pressed and locations hav been received', async () => {
+      const onPressCallback = jest.fn();
+
+      const { rerender, UNSAFE_queryByType } = render(
+        <UserLocation onPress={onPressCallback} visible={false} />,
+      );
+
+      await waitFor(() => {
+        expect(() => UNSAFE_queryByType(UserLocation)).not.toThrow();
+      });
+      const ul = UNSAFE_queryByType(UserLocation);
+
+      const lastKnownLocation = [4.1036916, 51.5462244];
+      locationManager._lastKnownLocation = lastKnownLocation
+
+      expect(locationManager.start).toHaveBeenCalledTimes(0);
+      expect(locationManager._isListening).toStrictEqual(false);
+
+      await act(async () => {
+        rerender(<UserLocation onPress={onPressCallback} visible={true} />);
+      });
+      expect(locationManager.start).toHaveBeenCalledTimes(1);
+      expect(ul.instance.locationManagerRunning).toStrictEqual(true);
+
+      const annotation = UNSAFE_queryByType(Annotation);
+      fireEvent(annotation, 'onPress');
+      fireEvent(annotation, 'onPress');
       expect(onPressCallback).toHaveBeenCalledTimes(2);
     });
 
@@ -170,11 +215,11 @@ describe('UserLocation', () => {
       expect(ul.locationManagerRunning).toStrictEqual(false);
     });
 
-    // TODO: replace object { running: boolean } argument with simple boolean
     describe('#setLocationManager', () => {
       test('called with "running" true', async () => {
         const lastKnownLocation = [4.1036916, 51.5462244];
         const heading = 251.5358428955078;
+        locationManager._lastKnownLocation = lastKnownLocation
 
         expect(ul.locationManagerRunning).toStrictEqual(false);
 

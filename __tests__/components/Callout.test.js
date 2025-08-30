@@ -1,5 +1,6 @@
 import React from 'react';
 import { render } from '@testing-library/react-native';
+import type { ReactTestInstance } from 'react-test-renderer';
 import { Text, View } from 'react-native';
 
 import Callout from '../../src/components/Callout';
@@ -37,16 +38,22 @@ describe('Callout', () => {
       const callout = UNSAFE_getByType('RNMBXCallout');
       const views = UNSAFE_getAllByType(View);
       const text = UNSAFE_getByType(Text);
+      
+      function getStyleHeightForViewWithProps(props: { [propName: string]: any }): ReactTestInstance {
+        if (Array.isArray(props.style)) {
+          return props.style[1].height;
+        }
+        // Animated views returned from Callouts have the style being an object, whilst other views have an array of style objects instead
+        return props.style.height;
+      }
 
-      const calloutWrapperTestStyle = callout.props.style[1].height;
-      const animatedViewTestStyle = views[0].props.style[1].height;
-      const wrapperViewTestStyle = views[1].props.style[1].height;
-      const tipViewTestStyle = views[2].props.style[1].height;
-      const textTestStyle = text.props.style[1].height;
+      const calloutWrapperTestStyle = getStyleHeightForViewWithProps(callout.props);
+      const animatedViewTestStyle = getStyleHeightForViewWithProps(views[0].props);
+      const wrapperViewTestStyle = getStyleHeightForViewWithProps(views[1].props);
+      const tipViewTestStyle = getStyleHeightForViewWithProps(views[2].props);
+      const textTestStyle = getStyleHeightForViewWithProps(text.props);
 
-      expect(calloutWrapperTestStyle).toStrictEqual(
-        testProps.containerStyle.height,
-      );
+      expect(calloutWrapperTestStyle).toStrictEqual(testProps.containerStyle.height);
       expect(animatedViewTestStyle).toStrictEqual(testProps.style.height);
       expect(wrapperViewTestStyle).toStrictEqual(testProps.contentStyle.height);
       expect(tipViewTestStyle).toStrictEqual(testProps.tipStyle.height);
