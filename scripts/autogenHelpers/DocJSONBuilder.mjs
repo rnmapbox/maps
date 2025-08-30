@@ -1,10 +1,10 @@
 import fs from 'fs';
 import path from 'path';
-import { exec } from 'child_process';
 import * as url from 'url';
 
 import dir from 'node-dir';
 import { parse, utils } from 'react-docgen';
+import * as documentation from 'documentation';
 
 import JSDocNodeTree from './JSDocNodeTree.js';
 import { pascelCase } from './globals.mjs';
@@ -420,15 +420,8 @@ class DocJSONBuilder {
 
   generateModulesTask(results, filePath) {
     return new Promise((resolve, reject) => {
-      exec(
-        `npx documentation build ${MODULES_PATH} -f json`,
-        (err, stdout, stderr) => {
-          if (err || stderr) {
-            reject(err || stderr);
-            return;
-          }
-
-          const modules = JSON.parse(stdout);
+      documentation.build([filePath], {})
+        .then(modules => {
           for (const module of modules) {
             const node = new JSDocNodeTree(module);
             const name = `${module.name
@@ -450,8 +443,11 @@ class DocJSONBuilder {
           }
 
           resolve();
-        },
-      );
+        })
+        .catch(err => {
+          console.log(`documentation.build failed for ${filePath}`);
+          reject(err);
+        });
     });
   }
 
