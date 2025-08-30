@@ -137,3 +137,6 @@ scripts/github-bot/*.env
 BOT_SETUP.md
 **/bot-credentials.json
 **/*-token.txt
+
+# typescript
+**/tsconfig.tsbuildinfo
