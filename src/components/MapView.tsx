@@ -9,7 +9,7 @@ import {
   HostComponent,
   LayoutChangeEvent,
 } from 'react-native';
-import { debounce } from 'debounce';
+import debounce from 'debounce';
 
 import NativeMapView, {
   type NativeMapViewActual,
@@ -554,7 +554,7 @@ class MapView extends NativeBridgeComponent(
     this._onDebouncedRegionWillChange = debounce(
       this._onRegionWillChange.bind(this),
       props.regionWillChangeDebounceTime,
-      true,
+      { immediate: true }
     );
 
     this._onDebouncedRegionDidChange = debounce(
@@ -1080,7 +1080,7 @@ class MapView extends NativeBridgeComponent(
     });
   }
 
-  _handleOnChange<T>(propName: CallbablePropKeys, payload: object) {
+  _handleOnChange(propName: CallbablePropKeys, payload: object) {
     const func = this.props[propName] as (payload: object) => void;
     if (func && isFunction(func)) {
       func(payload);

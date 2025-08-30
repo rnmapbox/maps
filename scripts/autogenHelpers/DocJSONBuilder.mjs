@@ -1,16 +1,15 @@
 import fs from 'fs';
 import path from 'path';
-import { exec } from 'child_process';
 import * as url from 'url';
 
 import dir from 'node-dir';
 import { parse, utils } from 'react-docgen';
+import * as documentation from 'documentation';
 
+import JSDocNodeTree from './JSDocNodeTree.js';
 import { pascelCase } from './globals.mjs';
 
 const { parseJsDoc } = utils;
-
-import JSDocNodeTree from './JSDocNodeTree.js';
 
 const __dirname = url.fileURLToPath(new URL('.', import.meta.url));
 
@@ -196,7 +195,7 @@ class DocJSONBuilder {
       if (tsTypeIsFunction(tsType)) {
         let { signature } = tsType;
         return `(${signature.arguments
-          .map(({ name, type }) => `${name}:${tsTypeDump(type)}`)
+          .map(({ name: argumentName, type }) => `${argumentName}:${tsTypeDump(type)}`)
           .join(', ')}) => ${tsTypeDump(signature.return)}`;
       } else if (tsTypeIsObject(tsType)) {
         let { signature } = tsType;
@@ -253,8 +252,8 @@ class DocJSONBuilder {
     function formatMethodJSDocToMD(description) {
       let result = description
         .replaceAll('@deprecated', '**DEPRECATED**')
-        .replaceAll(/@param\s+\{(.+)\}\s+(\S+)/g, (m, type, name) => {
-          return `- \`${name}\`: \`${type}\` `;
+        .replaceAll(/@param\s+\{(.+)\}\s+(\S+)/g, (m, type, paramName) => {
+          return `- \`${paramName}\`: \`${type}\` `;
         });
       return result;
     }
@@ -350,10 +349,7 @@ class DocJSONBuilder {
     for (const method of component.methods) {
       if (this.isPrivateMethod(method.name)) {
         privateMethods.push(method.name);
-        continue;
-      }
-
-      if (method.docblock) {
+      } else if (method.docblock) {
         const examples = method.docblock
           .split('@')
           .filter((block) => block.startsWith('example'));
@@ -424,15 +420,8 @@ class DocJSONBuilder {
 
   generateModulesTask(results, filePath) {
     return new Promise((resolve, reject) => {
-      exec(
-        `npx documentation build ${MODULES_PATH} -f json`,
-        (err, stdout, stderr) => {
-          if (err || stderr) {
-            reject(err || stderr);
-            return;
-          }
-
-          const modules = JSON.parse(stdout);
+      documentation.build([filePath], {})
+        .then(modules => {
           for (const module of modules) {
             const node = new JSDocNodeTree(module);
             const name = `${module.name
@@ -454,8 +443,11 @@ class DocJSONBuilder {
           }
 
           resolve();
-        },
-      );
+        })
+        .catch(err => {
+          console.log(`documentation.build failed for ${filePath}`);
+          reject(err);
+        });
     });
   }
 

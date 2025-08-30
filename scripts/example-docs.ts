@@ -29,9 +29,9 @@ const screenshots: Screenshots = JSON.parse(
 
 const destdir = path.join(docSiteRootPath, 'docs/examples');
 
-examples.forEach(({ groupName, examples, metadata }) => {
+examples.forEach(({ groupName, examples: exampleGroupExamples, metadata: _exampleGroupMetadata }) => {
   const destGroupDir = path.join(destdir, groupName);
-  examples.forEach(({ metadata, fullPath, relPath, name }) => {
+  exampleGroupExamples.forEach(({ metadata, fullPath, relPath, name }: Example) => {
     if (!metadata) {
       return;
     }
@@ -50,7 +50,7 @@ examples.forEach(({ groupName, examples, metadata }) => {
 
     const mdPath = path.join(destGroupDir, `${name}.md`);
 
-    const basename = path.basename(name);
+    // const basename = path.basename(name);
 
     if (screenshots[groupName] == null) {
       console.log(` => error: "${groupName}" is not in screenshots.json`);
