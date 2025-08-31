@@ -12,6 +12,7 @@ import {
   generateCodegenJavaOldArch,
   javaOldArchDir,
 } from './codegen-old-arch.js';
+import { updatePackageJsonWithIOSComponents } from './autogenHelpers/generateIOSComponents.mjs';
 
 // process style spec json into json
 
@@ -86,6 +87,12 @@ async function generate() {
   const markdownBuilder = new MarkdownBuilder();
   await docBuilder.generate(docsJsonPath);
   await markdownBuilder.generate(docsJsonPath, docsRoot);
+
+  // autogenerate iOS components configuration
+  const updatedComponents = updatePackageJsonWithIOSComponents();
+  if (updatedComponents.length > 0) {
+    outputPaths.push('package.json');
+  }
 
   // rn new arch codegen
   await generateCodegenJavaOldArch();
