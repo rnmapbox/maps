@@ -122,7 +122,9 @@ jobs:
           brew install xcbeautify
 
       - name: Build for detox
-        run: set -o pipefail && NSUnbufferedIO=YES  yarn detox build --configuration ios.debug.ci 2>&1
+        run: |
+          xcodebuild -version
+          set -o pipefail && NSUnbufferedIO=YES  yarn detox build --configuration ios.debug.ci 2>&1
 
       - name: Test with detox
         if: inputs.NEW_ARCH != 1
