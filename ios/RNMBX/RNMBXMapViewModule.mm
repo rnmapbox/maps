@@ -133,6 +133,17 @@ RCT_EXPORT_METHOD(setSourceVisibility:(nonnull NSNumber*)viewRef visible:(BOOL)v
     } reject:reject methodName:@"setSourceVisibility"];
 }
 
+RCT_EXPORT_METHOD(setStyleLayerProperty:(nonnull NSNumber*)viewRef
+               layerId:(NSString *)layerId
+               propertyName:(NSString *)propertyName
+               propertyValue:(id)propertyValue
+               resolve:(RCTPromiseResolveBlock)resolve
+               reject:(RCTPromiseRejectBlock)reject) {
+    [self withMapView:viewRef block:^(RNMBXMapView *view) {
+        [RNMBXMapViewManager setStyleLayerProperty:view layerId:layerId propertyName:propertyName propertyValue:propertyValue resolver:resolve rejecter:reject];
+    } reject:reject methodName:@"setStyleLayerProperty"];
+}
+
 RCT_EXPORT_METHOD(querySourceFeatures:(nonnull NSNumber*)viewRef sourceId:(NSString*)sourceId withFilter:(NSArray<id>*)withFilter withSourceLayerIDs:(NSArray<NSString*>*)withSourceLayerIDs resolve:(RCTPromiseResolveBlock)resolve reject:(RCTPromiseRejectBlock)reject) {
     [self withMapView:viewRef block:^(RNMBXMapView *view) {
         [RNMBXMapViewManager querySourceFeatures:view withSourceId:sourceId withFilter:withFilter withSourceLayerIds:withSourceLayerIDs resolver:resolve rejecter:reject];

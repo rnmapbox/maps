@@ -55,6 +55,16 @@ extension RNMBXMapViewManager {
           view.setSourceVisibility(visible, sourceId: sourceId, sourceLayerId:sourceLayerId)
           resolver(nil)
     }
+
+    @objc public static func setStyleLayerProperty(_ view: RNMBXMapView,
+                                      layerId: String,
+                                      propertyName: String,
+                                      propertyValue: String,
+                                      resolver: @escaping RCTPromiseResolveBlock,
+                                      rejecter: @escaping RCTPromiseRejectBlock) -> Void {
+          view.setStyleLayerProperty(layerId: layerId, propertyName: propertyName, propertyValue: propertyValue)
+          resolver(nil)
+    }
     
     @objc public static func getCenter(_ view: RNMBXMapView, resolver: @escaping RCTPromiseResolveBlock, rejecter: @escaping RCTPromiseRejectBlock) {
       view.withMapboxMap { map in
