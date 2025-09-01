@@ -125,6 +125,25 @@ jobs:
           brew install applesimutils
           brew install xcbeautify
 
+      - name: Setup xcodesorg/made/xcodes
+        run: |
+          brew install xcodes
+          brew install aria2
+
+      - name: Check and Download iOS Runtime
+        id: check-runtime
+        run: |
+          echo "Runtimes before download"
+          available_runtimes="$(xcrun simctl list runtimes)"
+          echo "$available_runtimes"
+
+          if echo "$available_runtimes" | grep -q "^iOS 18.4"; then
+            echo "iOS 18.4 runtime is already installed"
+          else
+            echo "iOS 18.4 runtime is not installed"
+            sudo xcodes runtimes install "iOS 18.4"
+          fi
+
       - name: Build for detox
         run: |
           xcodebuild -version
