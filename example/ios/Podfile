@@ -82,34 +82,20 @@ target 'RNMapboxGLExample' do
     end
   end
 
-  if !ENV['CI']
-    post_install do |installer|
-      # See https://github.com/rnmapbox/maps/pull/2878
-      installer.pods_project.targets.each do |target|
-        target.build_configurations.each do |config|
-          config.build_settings["ONLY_ACTIVE_ARCH"] = "NO"
-        end
+  post_install do |installer|
+    # See https://github.com/rnmapbox/maps/pull/2878
+    installer.pods_project.targets.each do |target|
+      target.build_configurations.each do |config|
+        config.build_settings["ONLY_ACTIVE_ARCH"] = "NO"
       end
-      react_native_post_install(
-        installer,
-        # Set `mac_catalyst_enabled` to `true` in order to apply patches
-        # necessary for Mac Catalyst builds
-        :mac_catalyst_enabled => false,
-        # :ccache_enabled => true
-      )
-      $RNMapboxMaps.post_install(installer)
     end
-  else
-    # CI configuration
-    post_install do |installer|
-      # https://github.com/facebook/react-native/blob/main/packages/react-native/scripts/react_native_pods.rb#L197-L202
-      react_native_post_install(
-        installer,
-        config[:reactNativePath],
-        :mac_catalyst_enabled => false
-      )
-      disable_optimizations_in_release(installer)
-      $RNMapboxMaps.post_install(installer)
-    end
+    react_native_post_install(
+      installer,
+      # Set `mac_catalyst_enabled` to `true` in order to apply patches
+      # necessary for Mac Catalyst builds
+      :mac_catalyst_enabled => false,
+      # :ccache_enabled => true
+    )
+    $RNMapboxMaps.post_install(installer)
   end
 end
