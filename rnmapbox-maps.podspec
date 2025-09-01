@@ -24,7 +24,16 @@ rnMapboxMapsDefaultMapboxVersion = '~> 10.19.0'
 
 rnMapboxMapsDefaultImpl = 'mapbox'
 
-new_arch_enabled = ENV['RCT_NEW_ARCH_ENABLED'] == '1'
+$RNMapboxMaps = Object.new
+def $RNMapboxMaps.compute_new_arch_enabled
+  if defined?(NewArchitectureHelper) && NewArchitectureHelper.respond_to?(:new_arch_enabled)
+    NewArchitectureHelper.new_arch_enabled
+  else
+    ENV['RCT_NEW_ARCH_ENABLED'] == '1'
+  end
+end
+
+new_arch_enabled = $RNMapboxMaps.compute_new_arch_enabled
 
 # DEPRECATIONS
 
@@ -81,9 +90,6 @@ end
 if $MapboxImplVersion =~ /(~>|>=|=|>)?\S*11\./
   $RNMapboxMapsUseV11 = true
 end
-
-
-$RNMapboxMaps = Object.new
 
 def $RNMapboxMaps._check_no_mapbox_spm(project)
   pkg_class = Xcodeproj::Project::Object::XCRemoteSwiftPackageReference
