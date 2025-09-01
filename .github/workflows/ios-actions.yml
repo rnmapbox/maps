@@ -75,6 +75,10 @@ jobs:
         with:
           node-version: ${{ inputs.NVMRC }}
 
+      - uses: maxim-lobanov/setup-xcode@v1
+        with:
+          xcode-version: 16.2
+
       - name: Cache node_modules
         uses: actions/cache@v3
         id: yarn-cache
