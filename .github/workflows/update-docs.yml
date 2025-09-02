@@ -31,7 +31,7 @@ jobs:
           path: maps-docs
       - uses: actions/setup-node@v4
         with:
-          node-version: 20.16.0
+          node-version: 20.19.4
       - uses: oven-sh/setup-bun@v1
         with:
           bun-version: latest
