@@ -1,3 +1,4 @@
+#if !RCT_NEW_ARCH_ENABLED
 @objc(RNMBXCircleLayerViewManager)
 class RNMBXCircleLayerViewManager: RCTViewManager {
     @objc
@@ -11,3 +12,4 @@ class RNMBXCircleLayerViewManager: RCTViewManager {
       return layer
     }
 }
+#endif

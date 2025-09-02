@@ -1,3 +1,5 @@
+#if !RCT_NEW_ARCH_ENABLED
+
 #import "React/RCTBridgeModule.h"
 #import <React/RCTViewManager.h>
 #import <Foundation/Foundation.h>
@@ -22,3 +24,4 @@ RCT_EXPORT_VIEW_PROPERTY(onUserTrackingModeChange, RCTBubblingEventBlock)
 RCT_EXPORT_VIEW_PROPERTY(stop, NSDictionary)
 
 @end
+#endif

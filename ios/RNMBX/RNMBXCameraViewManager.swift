@@ -1,14 +1,16 @@
-import Foundation
-import MapboxMaps
+#if !RCT_NEW_ARCH_ENABLED
+  import Foundation
+  import MapboxMaps
 
-@objc(RNMBXCameraViewManager)
-class RNMBXCameraViewManager  : RCTViewManager {
+  @objc(RNMBXCameraViewManager)
+  class RNMBXCameraViewManager: RCTViewManager {
     @objc
     override static func requiresMainQueueSetup() -> Bool {
-        return false
+      return false
     }
-    
+
     override func view() -> UIView! {
-        return RNMBXCamera()
+      return RNMBXCamera()
     }
-}
+  }
+#endif

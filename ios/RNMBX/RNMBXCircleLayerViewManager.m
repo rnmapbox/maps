@@ -1,3 +1,4 @@
+#if !RCT_NEW_ARCH_ENABLED
 #import <React/RCTBridgeModule.h>
 #import <React/RCTViewManager.h>
 
@@ -10,3 +11,4 @@ RCT_EXPORT_VIEW_PROPERTY(sourceLayerID, NSString)
 #include "CommonLayerProperties.H"
 
 @end
+#endif

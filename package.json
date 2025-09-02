@@ -137,6 +137,136 @@
     "jsSrcsDir": "src/specs",
     "android": {
       "javaPackageName": "com.rnmapbox.rnmbx"
+    },
+    "ios": {
+      "components": {
+        "RNMBXAtmosphere": {
+          "className": "RNMBXAtmosphereComponentView"
+        },
+        "RNMBXBackgroundLayer": {
+          "className": "RNMBXBackgroundLayerComponentView"
+        },
+        "RNMBXCallout": {
+          "className": "RNMBXCalloutComponentView"
+        },
+        "RNMBXCamera": {
+          "className": "RNMBXCameraComponentView"
+        },
+        "RNMBXCircleLayer": {
+          "className": "RNMBXCircleLayerComponentView"
+        },
+        "RNMBXCustomLocationProvider": {
+          "className": "RNMBXCustomLocationProviderComponentView"
+        },
+        "RNMBXFillExtrusionLayer": {
+          "className": "RNMBXFillExtrusionLayerComponentView"
+        },
+        "RNMBXFillLayer": {
+          "className": "RNMBXFillLayerComponentView"
+        },
+        "RNMBXHeatmapLayer": {
+          "className": "RNMBXHeatmapLayerComponentView"
+        },
+        "RNMBXImage": {
+          "className": "RNMBXImageComponentView"
+        },
+        "RNMBXImageSource": {
+          "className": "RNMBXImageSourceComponentView"
+        },
+        "RNMBXImages": {
+          "className": "RNMBXImagesComponentView"
+        },
+        "RNMBXLight": {
+          "className": "RNMBXLightComponentView"
+        },
+        "RNMBXLineLayer": {
+          "className": "RNMBXLineLayerComponentView"
+        },
+        "RNMBXMapView": {
+          "className": "RNMBXMapViewComponentView"
+        },
+        "RNMBXMarkerViewContent": {
+          "className": "RNMBXMarkerViewContentComponentView"
+        },
+        "RNMBXMarkerView": {
+          "className": "RNMBXMarkerViewComponentView"
+        },
+        "RNMBXModelLayer": {
+          "className": "RNMBXModelLayerComponentView"
+        },
+        "RNMBXModels": {
+          "className": "RNMBXModelsComponentView"
+        },
+        "RNMBXNativeUserLocation": {
+          "className": "RNMBXNativeUserLocationComponentView"
+        },
+        "RNMBXPointAnnotation": {
+          "className": "RNMBXPointAnnotationComponentView"
+        },
+        "RNMBXRasterDemSource": {
+          "className": "RNMBXRasterDemSourceComponentView"
+        },
+        "RNMBXRasterLayer": {
+          "className": "RNMBXRasterLayerComponentView"
+        },
+        "RNMBXRasterSource": {
+          "className": "RNMBXRasterSourceComponentView"
+        },
+        "RNMBXShapeSource": {
+          "className": "RNMBXShapeSourceComponentView"
+        },
+        "RNMBXSkyLayer": {
+          "className": "RNMBXSkyLayerComponentView"
+        },
+        "RNMBXStyleImport": {
+          "className": "RNMBXStyleImportComponentView"
+        },
+        "RNMBXSymbolLayer": {
+          "className": "RNMBXSymbolLayerComponentView"
+        },
+        "RNMBXTerrain": {
+          "className": "RNMBXTerrainComponentView"
+        },
+        "RNMBXVectorSource": {
+          "className": "RNMBXVectorSourceComponentView"
+        },
+        "RNMBXViewport": {
+          "className": "RNMBXViewportComponentView"
+        }
+      },
+      "componentsProvider": {
+        "RNMBXAtmosphere": "RNMBXAtmosphereComponentView",
+        "RNMBXBackgroundLayer": "RNMBXBackgroundLayerComponentView",
+        "RNMBXCallout": "RNMBXCalloutComponentView",
+        "RNMBXCamera": "RNMBXCameraComponentView",
+        "RNMBXCircleLayer": "RNMBXCircleLayerComponentView",
+        "RNMBXCustomLocationProvider": "RNMBXCustomLocationProviderComponentView",
+        "RNMBXFillExtrusionLayer": "RNMBXFillExtrusionLayerComponentView",
+        "RNMBXFillLayer": "RNMBXFillLayerComponentView",
+        "RNMBXHeatmapLayer": "RNMBXHeatmapLayerComponentView",
+        "RNMBXImage": "RNMBXImageComponentView",
+        "RNMBXImageSource": "RNMBXImageSourceComponentView",
+        "RNMBXImages": "RNMBXImagesComponentView",
+        "RNMBXLight": "RNMBXLightComponentView",
+        "RNMBXLineLayer": "RNMBXLineLayerComponentView",
+        "RNMBXMapView": "RNMBXMapViewComponentView",
+        "RNMBXMarkerViewContent": "RNMBXMarkerViewContentComponentView",
+        "RNMBXMarkerView": "RNMBXMarkerViewComponentView",
+        "RNMBXModelLayer": "RNMBXModelLayerComponentView",
+        "RNMBXModels": "RNMBXModelsComponentView",
+        "RNMBXNativeUserLocation": "RNMBXNativeUserLocationComponentView",
+        "RNMBXPointAnnotation": "RNMBXPointAnnotationComponentView",
+        "RNMBXRasterDemSource": "RNMBXRasterDemSourceComponentView",
+        "RNMBXRasterLayer": "RNMBXRasterLayerComponentView",
+        "RNMBXRasterSource": "RNMBXRasterSourceComponentView",
+        "RNMBXShapeSource": "RNMBXShapeSourceComponentView",
+        "RNMBXSkyLayer": "RNMBXSkyLayerComponentView",
+        "RNMBXStyleImport": "RNMBXStyleImportComponentView",
+        "RNMBXSymbolLayer": "RNMBXSymbolLayerComponentView",
+        "RNMBXTerrain": "RNMBXTerrainComponentView",
+        "RNMBXVectorSource": "RNMBXVectorSourceComponentView",
+        "RNMBXViewport": "RNMBXViewportComponentView"
+      }
     }
   },
   "lint-staged": {

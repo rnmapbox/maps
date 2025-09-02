@@ -32,7 +32,7 @@ using namespace facebook::react;
   if (self = [super initWithFrame:frame]) {
     static const auto defaultProps = std::make_shared<const RNMBXCircleLayerProps>();
     _props = defaultProps;
-      [self prepareView];
+    [self prepareView];
   }
 
   return self;
