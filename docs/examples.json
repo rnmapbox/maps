@@ -55,6 +55,23 @@
       },
       {
         "metadata": {
+          "title": "Earthquakes",
+          "tags": [
+            "ShapeSource",
+            "SymbolLayer",
+            "ShapeSource#getClusterLeaves",
+            "CircleLayer",
+            "CircleLayer#clusterProperties",
+            "expressions"
+          ],
+          "docs": "\nRenders earthqueke with clustering.\n\nClick a cluster to show list of contents in the cluster `getClusterLeaves`.\n"
+        },
+        "fullPath": "example/src/examples/SymbolCircleLayer/Earthquakes.tsx",
+        "relPath": "SymbolCircleLayer/Earthquakes.tsx",
+        "name": "Earthquakes"
+      },
+      {
+        "metadata": {
           "title": "Scaleable images",
           "tags": [
             "Images",
