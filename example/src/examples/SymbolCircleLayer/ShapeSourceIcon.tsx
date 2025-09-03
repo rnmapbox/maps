@@ -7,12 +7,18 @@ import {
   SymbolLayer,
   ShapeSource,
 } from '@rnmapbox/maps';
-import { Text } from 'react-native';
+import { StyleProp, Text, ViewStyle } from 'react-native';
+import { FeatureCollection } from 'geojson';
 
 import exampleIcon from '../../assets/example.png';
 import pinIcon from '../../assets/pin.png';
+import { SymbolLayerStyleProps } from '../../../../src/utils/MapboxStyles';
+import { ExampleWithMetadata } from '../common/ExampleMetadata';
 
-const styles = {
+const styles: {
+  icon: SymbolLayerStyleProps;
+  matchParent: StyleProp<ViewStyle>;
+} = {
   icon: {
     iconImage: ['get', 'icon'],
 
@@ -30,7 +36,7 @@ const styles = {
   matchParent: { flex: 1 },
 };
 
-const featureCollection = {
+const featureCollection: FeatureCollection = {
   type: 'FeatureCollection',
   features: [
     {
@@ -113,7 +119,7 @@ class ShapeSourceIcon extends React.Component {
           nativeAssetImages={['pin']}
           images={images}
           onImageMissing={(imageKey) => {
-            if (imageKey != 'pin-rn') {
+            if (imageKey !== 'pin-rn') {
               this.setState({
                 images: { ...this.state.images, [imageKey]: pinIcon },
               });
@@ -150,8 +156,7 @@ class ShapeSourceIcon extends React.Component {
 export default ShapeSourceIcon;
 
 /* end-example-doc */
-/** @type {import('../common/ExampleMetadata').ExampleMetadata} */
-const metadata = {
+const metadata: ExampleWithMetadata['metadata'] = {
   title: 'Shape Source Icons',
   tags: [
     'ShapeSource',
@@ -171,4 +176,4 @@ Render icons with various methods.
 `,
 };
 
-ShapeSourceIcon.metadata = metadata;
+(ShapeSourceIcon as unknown as ExampleWithMetadata).metadata = metadata;

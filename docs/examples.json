@@ -124,8 +124,8 @@
           ],
           "docs": "\nRender icons with various methods.\n\n* pin-rn: Rendered with a React Native View\n* pin: Rendered with a native asset image\n* pin3: Resolved as a result of onImageMissing\n* example: Rendered with a js asset image (require)\n\n"
         },
-        "fullPath": "example/src/examples/SymbolCircleLayer/ShapeSourceIcon.js",
-        "relPath": "SymbolCircleLayer/ShapeSourceIcon.js",
+        "fullPath": "example/src/examples/SymbolCircleLayer/ShapeSourceIcon.tsx",
+        "relPath": "SymbolCircleLayer/ShapeSourceIcon.tsx",
         "name": "ShapeSourceIcon"
       }
     ]
