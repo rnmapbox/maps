@@ -1,5 +1,32 @@
 [
   {
+    "groupName": "CacheManagement",
+    "metadata": {
+      "title": "CacheManagement"
+    },
+    "examples": [
+      {
+        "metadata": {
+          "title": "CacheManagement",
+          "tags": [
+            "Cache",
+            "Cache Management",
+            "Offline Manager",
+            "Offline Packs",
+            "Validate Cache",
+            "Invalidate Cache",
+            "Get Cache Size",
+            "Set Max Cache Size"
+          ],
+          "docs": "\nManages map cache.\n\nUses the offline manager to manage the cache and the local storage in general. Shows how to invalidate cache to remove outdated tiles, how to clear the entire local storage from tiles and offline packs and to visualize the local storage usage amount.\n"
+        },
+        "fullPath": "example/src/examples/CacheManagement/CacheManagement.tsx",
+        "relPath": "CacheManagement/CacheManagement.tsx",
+        "name": "CacheManagement"
+      }
+    ]
+  },
+  {
     "groupName": "SymbolCircleLayer",
     "metadata": {
       "title": "Symbol/CircleLayer"

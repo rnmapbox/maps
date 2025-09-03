@@ -4,6 +4,7 @@
 import path from 'path';
 import fs from 'fs';
 
+import * as CacheManagement from '../src/examples/CacheManagement';
 import * as SymbolCircleLayer from '../src/examples/SymbolCircleLayer';
 import * as UserLocation from '../src/examples/UserLocation';
 import * as Map from '../src/examples/Map';
@@ -30,6 +31,7 @@ jest.mock('../src/assets/sportcar.glb', () => null, {
 });
 
 const allTests = {
+  CacheManagement,
   SymbolCircleLayer,
   UserLocation,
   Map,
@@ -51,11 +53,11 @@ function getExampleFullPath(
   const relPathBase = path.join(groupName, testName);
 
   const existingExamplePaths = extensions
-    .map((ext) => ({
+    .map(ext => ({
       relPath: `${relPathBase}.${ext}`,
       fullPath: path.join(relExamplesPath, `${relPathBase}.${ext}`),
     }))
-    .filter(({ relPath, fullPath }) =>
+    .filter(({ relPath: _relPath, fullPath }) =>
       fs.existsSync(path.join(mapsRootPath, fullPath)),
     );
   if (existingExamplePaths.length === 0) {
@@ -81,7 +83,7 @@ type AllTestKeys = keyof typeof allTests;
 
 const allTestKeys = Object.keys(allTests) as AllTestKeys[];
 
-allTestKeys.forEach((groupName) => {
+allTestKeys.forEach(groupName => {
   const { metadata, ...tests } = allTests[groupName];
   const examples: Example[] = [];
   Object.entries(tests).forEach(([testName, test]) => {

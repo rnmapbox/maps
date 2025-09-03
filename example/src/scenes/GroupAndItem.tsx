@@ -35,7 +35,8 @@ import * as Web from '../examples/Web';
 // MISC
 import BugReportExample from '../examples/BugReportExample';
 import BugReportExampleTS from '../examples/BugReportExampleTS';
-import CacheManagement from '../examples/CacheManagement';
+// Cache Management
+import * as CacheManagement from '../examples/CacheManagement';
 // V10
 import * as V10 from '../examples/V10';
 /*
@@ -298,7 +299,7 @@ const Examples = new ExampleGroup('React Native Mapbox', [
   exampleGroup(Annotations),
   exampleGroup(Animations),
   exampleGroup(Web),
-  new ExampleItem('Cache management', CacheManagement),
+  exampleGroup(CacheManagement),
 ]);
 
 function ExampleGroupComponent({
