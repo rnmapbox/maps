@@ -95,10 +95,13 @@ const modalStyles = {
     right: 10,
     elevation: 9999,
     zIndex: 9999,
-  }
+  },
 } as const;
 
-export const EarthquakesDetailsModal: React.FC<{ selectedCluster?: FeatureCollection, dismiss: () => void }> = ({selectedCluster, dismiss}) => (
+export const EarthquakesDetailsModal: React.FC<{
+  selectedCluster?: FeatureCollection;
+  dismiss: () => void;
+}> = ({ selectedCluster, dismiss }) => (
   <SafeAreaView style={{ flex: 1 }}>
     <FAB
       onPress={dismiss}
@@ -153,7 +156,7 @@ const Earthquakes: React.FC<Partial<BaseExampleProps>> = () => {
         />
         <ShapeSource
           id="earthquakes"
-          onPress={async (pressedShape) => {
+          onPress={async pressedShape => {
             if (shapeSource.current) {
               try {
                 const [cluster] = pressedShape.features;
@@ -168,9 +171,9 @@ const Earthquakes: React.FC<Partial<BaseExampleProps>> = () => {
               } catch {
                 if (!pressedShape.features[0].properties?.cluster) {
                   setSelectedCluster({
-                      type: 'FeatureCollection',
-                      features: [pressedShape.features[0]],
-                    });
+                    type: 'FeatureCollection',
+                    features: [pressedShape.features[0]],
+                  });
                 }
               }
             }

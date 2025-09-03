@@ -206,7 +206,7 @@ class ExampleGroup implements ExampleNode {
 
   setParent(parent: string[]) {
     this.path = [...parent, this.label];
-    this.items.forEach((i) => i.setParent(this.path));
+    this.items.forEach(i => i.setParent(this.path));
   }
 
   find(path: string[]): ExampleNode | undefined {
@@ -233,16 +233,15 @@ class ExampleGroup implements ExampleNode {
   updateIfNeeded(_updated: () => void): void {}
 }
 
-const PageWrapper = (Component: ItemComponent) => (props: BaseExampleProps) =>
-  (
-    <Page
-      label={props.label}
-      onDismissExample={props.onDismissExample}
-      navigation={props.navigation}
-    >
-      <Component {...props} />
-    </Page>
-  );
+const PageWrapper = (Component: ItemComponent) => (props: BaseExampleProps) => (
+  <Page
+    label={props.label}
+    onDismissExample={props.onDismissExample}
+    navigation={props.navigation}
+  >
+    <Component {...props} />
+  </Page>
+);
 
 function example(
   Component: ItemComponent & {
@@ -278,12 +277,11 @@ function exampleGroup(
 
 const BugReportPage =
   (Klass: React.ComponentType<PageProps>) =>
-  ({ ...props }: PageProps) =>
-    (
-      <Page {...props}>
-        <Klass {...props} />
-      </Page>
-    );
+  ({ ...props }: PageProps) => (
+    <Page {...props}>
+      <Klass {...props} />
+    </Page>
+  );
 
 const Examples = new ExampleGroup('React Native Mapbox', [
   new MostRecentExampleItem(),
@@ -346,7 +344,7 @@ function ExampleGroupComponent({
   const forceUpdate = useCallback(() => updateState({}), []);
 
   useEffect(() => {
-    items.forEach((item) => {
+    items.forEach(item => {
       item.updateIfNeeded(forceUpdate);
     });
   }, [items, forceUpdate]);
@@ -359,7 +357,7 @@ function ExampleGroupComponent({
           testID="example-list"
           style={styles.exampleList}
           data={items}
-          keyExtractor={(item) => item.label}
+          keyExtractor={item => item.label}
           renderItem={renderItem}
         />
       </View>

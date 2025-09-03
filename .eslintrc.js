@@ -1,6 +1,12 @@
 module.exports = {
   root: true,
   parser: '@babel/eslint-parser',
+  parserOptions: {
+    ecmaFeatures: { jsx: true },
+    ecmaVersion: 2021,
+    sourceType: 'module',
+    requireConfigFile: false,
+  },
   plugins: ['react', 'react-native', 'import'],
   env: {
     jest: true,
@@ -12,16 +18,10 @@ module.exports = {
     },
     'import/resolver': {
       node: {
-        extensions: ['.js', '.jsx'],
+        extensions: ['.js', '.jsx', '.ts', '.tsx'],
       },
     },
     'import/ignore': ['react-native'],
-    parserOptions: {
-      ecmaFeatures: {
-        jsx: true,
-        modules: true,
-      },
-    },
   },
   globals: {
     fetch: true,
@@ -40,7 +40,7 @@ module.exports = {
     'plugin:react/recommended',
     'plugin:jest/recommended',
     '@react-native',
-    'prettier',
+    'plugin:prettier/recommended',
   ],
   rules: {
     'react/no-deprecated': 'warn',
@@ -78,14 +78,26 @@ module.exports = {
     'no-unused-expressions': ['error', { allowTaggedTemplates: true }],
     'no-plusplus': ['error', { allowForLoopAfterthoughts: true }],
     'react-native/no-inline-styles': 0,
-    '@typescript-eslint/no-explicit-any': ['error', { ignoreRestArgs: true }],
+    // NOTE: @typescript-eslint rules are configured under the TS override below
+    'jest/expect-expect': [
+      'warn',
+      {
+        assertFunctionNames: [
+          'expect',
+          'verifyFilterItem',
+          'verifyErrorFilterItem',
+          'verifyErrorThrown',
+        ],
+      },
+    ],
+    'prettier/prettier': 'warn',
   },
   ignorePatterns: ['**/rnmapbox.web.symlink', 'plugin/build/', 'example/dist'],
   overrides: [
     {
       // Match TypeScript Files
       files: ['**/*.{ts,tsx}'],
-
+      parser: '@typescript-eslint/parser',
       parserOptions: {
         project: [
           './tsconfig.json',
@@ -94,6 +106,8 @@ module.exports = {
           './plugin/tsconfig.eslint.json',
           './plugin/src/__tests__/tsconfig.eslint.json',
         ],
+        tsconfigRootDir: __dirname,
+        sourceType: 'module',
       },
       plugins: ['@typescript-eslint'],
       extends: [
@@ -101,12 +115,17 @@ module.exports = {
         'plugin:react/recommended',
         '@react-native',
         'plugin:@typescript-eslint/recommended',
-        'prettier',
+        'plugin:prettier/recommended', // keep last
       ],
       rules: {
         'no-shadow': 'off',
         'import/named': 'off',
         'react-native/no-inline-styles': 0,
+        '@typescript-eslint/no-explicit-any': [
+          'warn',
+          { ignoreRestArgs: true },
+        ],
+        'prettier/prettier': 'warn',
       },
     },
   ],

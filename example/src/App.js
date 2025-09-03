@@ -41,9 +41,10 @@ function AppStackNavigator() {
       <Stack.Group
         screenOptions={({ navigation: modalNavigation }) => ({
           presentation: 'modal',
-        })}>
+        })}
+      >
         <Stack.Screen name="MapInModal" component={MapInModal} />
-       </Stack.Group>
+      </Stack.Group>
     </Stack.Navigator>
   );
 }

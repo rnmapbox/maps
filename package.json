@@ -113,6 +113,7 @@
     "eslint-plugin-ft-flow": "^2.0.3",
     "eslint-plugin-import": "2.25.3",
     "eslint-plugin-jest": "^27.0.1",
+    "eslint-plugin-prettier": "^5.5.4",
     "expo": "^54.0.0-canary-20250729-d8899ae",
     "expo-module-scripts": "^5.0.1",
     "husky": "^8.0.1",

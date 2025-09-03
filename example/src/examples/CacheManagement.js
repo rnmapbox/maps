@@ -78,9 +78,9 @@ class CacheManagement extends React.Component {
     Alert.alert(`Max cache size successfully set to ${newMaxSize} bytes`);
   };
 
-  validateCacheInputValue = (value) => !isNaN(parseInt(value, 10));
+  validateCacheInputValue = value => !isNaN(parseInt(value, 10));
 
-  onChangeCacheSize = (cacheSize) => this.setState({ cacheSize });
+  onChangeCacheSize = cacheSize => this.setState({ cacheSize });
 
   render() {
     const validSizeValue = this.validateCacheInputValue(this.state.cacheSize);
