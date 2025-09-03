@@ -5,12 +5,16 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { ParamListBase } from '@react-navigation/native';
 
-const MapInModal: React.FC<{navigation: NativeStackNavigationProp<ParamListBase, string, undefined>}> = ({navigation}) => (
+type MapInModalProps = {
+  navigation?: NativeStackNavigationProp<ParamListBase, string, undefined>
+  dismiss?: () => void;
+}
+const MapInModal: React.FC<MapInModalProps> = ({navigation, dismiss}) => (
   <SafeAreaView style={{ flex: 1 }}>
-    <Text style={{ paddingHorizontal: 20 }}>this is a modal</Text>
+    <Text style={{ paddingHorizontal: 20, textAlign: 'center' }}>this is a modal</Text>
     <Button
       title="close"
-      onPress={navigation.goBack}
+      onPress={navigation?.goBack ?? dismiss}
     />
     <MapView style={{ flex: 1 }} />
   </SafeAreaView>
