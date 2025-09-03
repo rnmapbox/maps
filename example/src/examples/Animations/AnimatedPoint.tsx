@@ -143,10 +143,8 @@ export default AnimatedPoint;
 
 /** @type ExampleWithMetadata['metadata'] */
 const metadata = {
-  title: 'Animaated point',
+  title: 'Animated point',
   tags: [],
-  docs: `
-Animated Point (Native Animator)
-`,
+  docs: `Animated Point (Native Animator)`,
 };
 (AnimatedPoint as unknown as ExampleWithMetadata).metadata = metadata;

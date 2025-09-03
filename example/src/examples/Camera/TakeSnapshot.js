@@ -10,7 +10,6 @@ import {
 } from 'react-native';
 
 import BaseExamplePropTypes from '../common/BaseExamplePropTypes';
-import Page from '../common/Page';
 
 const styles = StyleSheet.create({
   container: {
@@ -79,7 +78,7 @@ class TakeSnapshot extends React.Component {
       );
     }
 
-    return <Page {...this.props}>{childView}</Page>;
+    return childView;
   }
 }
 

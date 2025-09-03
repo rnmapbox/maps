@@ -7,7 +7,8 @@ import {
   UserLocationRenderMode as UserLocationRenderModeType,
   UserTrackingMode,
 } from '@rnmapbox/maps';
-import { Button, Platform, SafeAreaView, View } from 'react-native';
+import { Button, Platform, View } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import { ButtonGroup, Text } from '@rneui/base';
 
 import { DEFAULT_CENTER_COORDINATE } from '../../utils';

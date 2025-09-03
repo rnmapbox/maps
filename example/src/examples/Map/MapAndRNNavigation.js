@@ -1,44 +1,28 @@
 import React, { useState } from 'react';
-import { Button, Modal, Text, SafeAreaView } from 'react-native';
+import { Button, Modal} from 'react-native';
 import { MapView, UserLocation, Camera } from '@rnmapbox/maps';
+
+import MapInModal from './MapInModal';
 
 /**
  * @param {ItempProps['navigation']} navigation
  */
 export default function MapAndNavigation({ navigation }) {
-  const [modalVisible, setModalVisible] = useState(false);
   const [showMap, setShowMap] = useState(false);
+  const [modalVisible, setModalVisible] = useState(false);
 
   return (
     <>
       <Button title="Modal" onPress={() => setModalVisible(true)} />
+      <Button title="Modal (with React Navigation)" onPress={() => navigation.navigate('MapInModal')} />
       <Button
         title="Toggle map"
-        onPress={() => setShowMap((showMap) => !showMap)}
+        onPress={() => setShowMap((wasShowingMap) => !wasShowingMap)}
       />
       <Button
         title="Navigate"
         onPress={() => navigation.navigate('ScreenWithoutMap')}
       />
-      <Modal
-        animationType="slide"
-        transparent={false}
-        visible={modalVisible}
-        onRequestClose={() => {
-          setModalVisible(false);
-        }}
-      >
-        <SafeAreaView style={{ flex: 1 }}>
-          <Text>this is a modal</Text>
-          <Button
-            title="close"
-            onPress={() => {
-              setModalVisible(false);
-            }}
-          />
-          <MapView style={{ flex: 1 }} />
-        </SafeAreaView>
-      </Modal>
       {showMap && (
         <MapView style={{ flex: 1 }}>
           <Camera
@@ -54,6 +38,14 @@ export default function MapAndNavigation({ navigation }) {
           />
         </MapView>
       )}
+      <Modal
+        visible={modalVisible}
+        animationType="slide"
+        presentationStyle="formSheet"
+        onRequestClose={() => setModalVisible(false)}
+      >
+        <MapInModal dismiss={() => setModalVisible(false)}/>
+      </Modal>
     </>
   );
 }

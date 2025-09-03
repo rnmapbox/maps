@@ -36,8 +36,8 @@ RCT_EXPORT_MODULE();
   return RCTGetUIManagerQueue();
 }
 
-RCT_EXPORT_METHOD(create:(nonnull NSNumber*)tag startCoordinate: (nonnull NSArray*)startCoordinate resolve:(RCTPromiseResolveBlock)resolve reject:(RCTPromiseRejectBlock)reject) {
-  resolve([[MovePointShapeAnimator createWithTag:tag startCoordinate:startCoordinate] getTag]);
+RCT_EXPORT_METHOD(generate:(nonnull NSNumber*)tag startCoordinate: (nonnull NSArray*)startCoordinate resolve:(RCTPromiseResolveBlock)resolve reject:(RCTPromiseRejectBlock)reject) {
+  resolve([[MovePointShapeAnimator generateWithTag:tag startCoordinate:startCoordinate] getTag]);
 }
 
 RCT_EXPORT_METHOD(moveTo:(nonnull NSNumber*)tag coordinate: (nonnull NSArray*)coordinate durationMs: (nonnull NSNumber*)durationMs resolve:(RCTPromiseResolveBlock)resolve reject:(RCTPromiseRejectBlock)reject) {

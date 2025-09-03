@@ -175,7 +175,7 @@ class Images extends React.PureComponent<Props> {
 
   _onImageMissing(event: React.SyntheticEvent<Element, RNMBEvent>) {
     if (this.props.onImageMissing) {
-      this.props.onImageMissing(event.nativeEvent.payload.imageKey);
+      this.props.onImageMissing(event.nativeEvent.payload?.imageKey);
     }
   }
 

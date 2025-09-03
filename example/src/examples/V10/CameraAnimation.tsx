@@ -11,7 +11,8 @@ import {
 import bbox from '@turf/bbox';
 import { Feature, Point, Position } from 'geojson';
 import React, { useCallback, useMemo, useState } from 'react';
-import { Button, SafeAreaView, StyleSheet, View } from 'react-native';
+import { Button, StyleSheet, View } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 import colors from '../../styles/colors';
 import { ExampleWithMetadata } from '../common/ExampleMetadata'; // exclude-from-doc
