@@ -94,45 +94,43 @@ const CacheManagement: React.FC<Partial<BaseExampleProps>> = () => {
         <Camera zoomLevel={16} centerCoordinate={DEFAULT_CENTER_COORDINATE} />
       </MapView>
 
-      <View>
-        <View style={styles.controlsContainer}>
-          <View style={styles.control}>
-            <TouchableOpacity
-              onPress={invalidateAmbientCache}
-              style={styles.button}
-            >
-              <Text style={styles.buttonTxt}>Invalidate cache</Text>
-            </TouchableOpacity>
-          </View>
+      <View style={styles.controlsContainer}>
+        <View style={styles.control}>
+          <TouchableOpacity
+            onPress={invalidateAmbientCache}
+            style={styles.button}
+          >
+            <Text style={styles.buttonTxt}>Invalidate cache</Text>
+          </TouchableOpacity>
+        </View>
 
-          <View style={styles.control}>
-            <TouchableOpacity onPress={resetDatabase} style={styles.button}>
-              <Text style={styles.buttonTxt}>Reset database</Text>
-            </TouchableOpacity>
-          </View>
+        <View style={styles.control}>
+          <TouchableOpacity onPress={resetDatabase} style={styles.button}>
+            <Text style={styles.buttonTxt}>Reset database</Text>
+          </TouchableOpacity>
+        </View>
 
-          <View style={styles.control}>
-            <TextInput
-              onChangeText={onChangeCacheSize}
-              value={cacheSize}
-              placeholder="New max"
-              keyboardType="numeric"
-              style={styles.textInput}
-            />
-            <TouchableOpacity
-              onPress={setMaximumAmbientCacheSize}
-              style={buttonStyles}
-              disabled={!validSizeValue}
-            >
-              <Text style={styles.buttonTxt}>Set ambient max cache</Text>
-            </TouchableOpacity>
-          </View>
+        <View style={styles.control}>
+          <TextInput
+            onChangeText={onChangeCacheSize}
+            value={cacheSize}
+            placeholder="New max"
+            keyboardType="numeric"
+            style={styles.textInput}
+          />
+          <TouchableOpacity
+            onPress={setMaximumAmbientCacheSize}
+            style={buttonStyles}
+            disabled={!validSizeValue}
+          >
+            <Text style={styles.buttonTxt}>Set ambient max cache</Text>
+          </TouchableOpacity>
+        </View>
 
-          <View style={styles.control}>
-            <TouchableOpacity onPress={clearAmbientCache} style={styles.button}>
-              <Text style={styles.buttonTxt}>Clear ambient cache</Text>
-            </TouchableOpacity>
-          </View>
+        <View style={styles.control}>
+          <TouchableOpacity onPress={clearAmbientCache} style={styles.button}>
+            <Text style={styles.buttonTxt}>Clear ambient cache</Text>
+          </TouchableOpacity>
         </View>
       </View>
     </>
