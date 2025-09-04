@@ -12,11 +12,14 @@ public class RNMBXShapeSource : RNMBXSource {
 
         switch result {
           case .success(let obj):
-            self.doUpdate { (style) in
+          self.map?.withMapboxMap { [weak self] _mapboxMap in
+            guard let self = self else { return }
+            self.doUpdate(_mapboxMap: _mapboxMap) { (style) in
               logged(LOG_TAG, "setUrl") {
                 try style.updateGeoJSONSource(withId: self.id, geoJSON: obj)
               }
             }
+          }
           case .failure(let error):
             Logger.log(level: .error, message: "Update url failed", error: error)
         }
@@ -45,9 +48,12 @@ public class RNMBXShapeSource : RNMBXSource {
           let obj : GeoJSONObject = try parse(shape)
           shapeObject = obj
           
-          doUpdate { (style) in
-            logged(LOG_TAG, "setShape") {
-              try style.updateGeoJSONSource(withId: id, geoJSON: obj)
+          self.map?.withMapboxMap { [weak self] _mapboxMap in
+            guard let self = self else { return }
+            self.doUpdate(_mapboxMap: _mapboxMap) { (style) in
+              logged(LOG_TAG, "setShape") {
+                try style.updateGeoJSONSource(withId: self.id, geoJSON: obj)
+              }
             }
           }
         }
@@ -72,9 +78,12 @@ public class RNMBXShapeSource : RNMBXSource {
     didSet {
       logged(LOG_TAG, "clusterMaxZoomLevel") {
         if let number = clusterMaxZoomLevel?.doubleValue {
-          doUpdate { (style) in
-            logged(LOG_TAG, "clusterMaxZoomLevel") {
-              try style.setSourceProperty(for: id, property: "clusterMaxZoom", value: number)
+          self.map?.withMapboxMap { [weak self] _mapboxMap in
+            guard let self = self else { return }
+            self.doUpdate(_mapboxMap: _mapboxMap) { (style) in
+              logged(LOG_TAG, "clusterMaxZoomLevel") {
+                try style.setSourceProperty(for: self.id, property: "clusterMaxZoom", value: number)
+              }
             }
           }
         }
@@ -152,20 +161,23 @@ public class RNMBXShapeSource : RNMBXSource {
     return result
   }
 
-  func doUpdate(_ update:(Style) -> Void) {
+  func doUpdate(_mapboxMap: MapboxMap, _ update:(Style) -> Void) {
     guard let map = self.map,
           let _ = self.source,
-          map.mapboxMap.style.sourceExists(withId: id) else {
+          _mapboxMap.style.sourceExists(withId: id) else {
       return
     }
 
-    let style = map.mapboxMap.style
+    let style = _mapboxMap.style
     update(style)
   }
 
   func updateSource(property: String, value: Any) {
-    doUpdate { style in
-      try! style.setSourceProperty(for: id, property: property, value: value)
+    self.map?.withMapboxMap { [weak self] _mapboxMap in
+      guard let self = self else { return }
+      self.doUpdate(_mapboxMap: _mapboxMap) { style in
+        try! style.setSourceProperty(for: self.id, property: property, value: value)
+      }
     }
   }
   
@@ -350,27 +362,24 @@ extension RNMBXShapeSource
     _ featureJSON: String,
     completion: @escaping (Result<Int, Error>) -> Void)
   {
-    guard let mapView = map?.mapView else {
-      completion(.failure(RNMBXError.failed("getClusterExpansionZoom: no mapView")))
-      return
-    }
+    self.map?.withMapView { _mapView in
+      logged(LOG_TAG, "getClusterExpansionZoom", rejecter: { (_,_,error) in
+        completion(.failure(error!))
+      }) {
+        let cluster : Feature = try self.parse(featureJSON);
 
-    logged(LOG_TAG, "getClusterExpansionZoom", rejecter: { (_,_,error) in
-      completion(.failure(error!))
-    }) {
-      let cluster : Feature = try parse(featureJSON);
+        _mapView.mapboxMap.getGeoJsonClusterExpansionZoom(forSourceId: self.id, feature: cluster) { result in
+          switch result {
+          case .success(let features):
+            guard let value = features.value as? NSNumber else {
+              completion(.failure(RNMBXError.failed("getClusterExpansionZoom: not a number")))
+              return
+            }
 
-      mapView.mapboxMap.getGeoJsonClusterExpansionZoom(forSourceId: self.id, feature: cluster) { result in
-        switch result {
-        case .success(let features):
-          guard let value = features.value as? NSNumber else {
-            completion(.failure(RNMBXError.failed("getClusterExpansionZoom: not a number")))
-            return
+            completion(.success(value.intValue))
+          case .failure(let error):
+            completion(.failure(error))
           }
-
-          completion(.success(value.intValue))
-        case .failure(let error):
-          completion(.failure(error))
         }
       }
     }
@@ -381,44 +390,38 @@ extension RNMBXShapeSource
                               offset: uint,
                               completion: @escaping (Result<FeatureExtensionValue, Error>) -> Void)
   {
-    guard let mapView = map?.mapView else {
-      completion(.failure(RNMBXError.failed("getClusterLeaves: no mapView")))
-      return
-    }
-
-    logged(LOG_TAG, "getClusterLeaves", rejecter: { (_,_,error) in
-      completion(.failure(error!))
-    }) {
-      let cluster : Feature = try parse(featureJSON);
-      mapView.mapboxMap.getGeoJsonClusterLeaves(forSourceId: self.id, feature: cluster, limit: UInt64(number), offset: UInt64(offset)) {
-        result in
-        switch result {
-        case .success(let features):
-          completion(.success(features))
-        case .failure(let error):
-          completion(.failure(error))
+    self.map?.withMapView { _mapView in
+      logged(LOG_TAG, "getClusterLeaves", rejecter: { (_,_,error) in
+        completion(.failure(error!))
+      }) {
+        let cluster : Feature = try self.parse(featureJSON);
+        _mapView.mapboxMap.getGeoJsonClusterLeaves(forSourceId: self.id, feature: cluster, limit: UInt64(number), offset: UInt64(offset)) {
+          result in
+          switch result {
+          case .success(let features):
+            completion(.success(features))
+          case .failure(let error):
+            completion(.failure(error))
+          }
         }
       }
     }
   }
 
   func getClusterChildren(_ featureJSON: String, completion: @escaping (Result<FeatureExtensionValue, Error>) -> Void) {
-    guard let mapView = map?.mapView else {
-      completion(.failure(RNMBXError.failed("getClusterChildren: no mapView")))
-      return
-    }
-
-    logged(LOG_TAG, "getClusterChildren", rejecter: { (_,_,error) in
-      completion(.failure(error!))
-    }) {
-      let cluster : Feature = try parse(featureJSON);
-      mapView.mapboxMap.getGeoJsonClusterChildren(forSourceId: self.id, feature: cluster) {
-        result in
-        switch result {
-        case .success(let features):
-          completion(.success(features))
-        case .failure(let error):
-          completion(.failure(error))
+    self.map?.withMapView { _mapView in
+      logged(LOG_TAG, "getClusterChildren", rejecter: { (_,_,error) in
+        completion(.failure(error!))
+      }) {
+        let cluster : Feature = try self.parse(featureJSON);
+        _mapView.mapboxMap.getGeoJsonClusterChildren(forSourceId: self.id, feature: cluster) {
+          result in
+          switch result {
+          case .success(let features):
+            completion(.success(features))
+          case .failure(let error):
+            completion(.failure(error))
+          }
         }
       }
     }
@@ -429,10 +432,13 @@ extension RNMBXShapeSource
 
 extension RNMBXShapeSource: ShapeAnimationConsumer {
   func shapeUpdated(shape: Turf.GeoJSONObject) {
-    shapeObject = shape
-    doUpdate { (style) in
-      logged("RCTMGLShapeSource.setShape") {
-        try style.updateGeoJSONSource(withId: id, geoJSON: shape)
+    self.map?.withMapboxMap { [weak self] _mapboxMap in
+      guard let self = self else { return }
+      self.shapeObject = shape
+      self.doUpdate(_mapboxMap: _mapboxMap) { (style) in
+        logged("RCTMGLShapeSource.setShape") {
+          try style.updateGeoJSONSource(withId: self.id, geoJSON: shape)
+        }
       }
     }
   }

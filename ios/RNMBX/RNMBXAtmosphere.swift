@@ -24,12 +24,11 @@ public class RNMBXAtmosphere : RNMBXSingletonLayer, RNMBXMapComponent, RNMBXSour
   public func removeFromMap(_ map: RNMBXMapView, reason _: RemovalReason) -> Bool {
     self.map = nil
     
-    guard let mapboxMap = map.mapboxMap else {
-      return false
+    map.withMapboxMap { [weak self] _mapboxMap in
+      guard let self = self else { return }
+      let style = _mapboxMap.style
+      self.removeFromMap(map, style: style)
     }
-    
-    let style = mapboxMap.style
-    removeFromMap(map, style: style)
     return true
   }
   
