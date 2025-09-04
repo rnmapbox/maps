@@ -56,7 +56,7 @@ export class NativeCommands<Spec extends object> {
     if (this.nativeRef) {
       return this._call(name, this.nativeRef, args);
     } else {
-      return new Promise((resolve) => {
+      return new Promise(resolve => {
         this.preRefMethodQueue.push({
           method: { name, args },
           resolver: resolve as (args: unknown) => void,

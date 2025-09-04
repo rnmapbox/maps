@@ -33,7 +33,7 @@ const OfflineExample = () => {
         <TextInput
           value={packName}
           autoFocus={true}
-          onChangeText={(text) => setPackName(text)}
+          onChangeText={text => setPackName(text)}
           onBlur={() => setShowEditTitle(false)}
         />
       )}
@@ -42,7 +42,7 @@ const OfflineExample = () => {
         onPress={async () => {
           const packs = await offlineManager.getPacks();
           console.log('=> packs:', packs);
-          packs.forEach((pack) => {
+          packs.forEach(pack => {
             console.log(
               'pack:',
               pack,

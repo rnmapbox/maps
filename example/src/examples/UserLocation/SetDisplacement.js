@@ -18,7 +18,7 @@ class SetDisplacement extends React.Component {
     Mapbox.locationManager.stop();
   }
 
-  onDisplacementChange = (index) => {
+  onDisplacementChange = index => {
     this.setState({ minDisplacement: DISPLACEMENT[index] });
   };
 
@@ -35,7 +35,7 @@ class SetDisplacement extends React.Component {
           <UserLocation minDisplacement={this.state.minDisplacement} />
         </MapView>
         <ButtonGroup
-          buttons={DISPLACEMENT.map((i) => `${i} meters`)}
+          buttons={DISPLACEMENT.map(i => `${i} meters`)}
           selectedIndex={DISPLACEMENT.indexOf(this.state.minDisplacement)}
           onPress={this.onDisplacementChange}
         />

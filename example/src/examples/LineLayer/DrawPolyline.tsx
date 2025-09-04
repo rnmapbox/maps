@@ -74,7 +74,7 @@ const CrosshairOverlay = ({
         size={20}
         w={1.0}
         ref={ref}
-        onLayout={(e) => {
+        onLayout={e => {
           const { x, y, width, height } = e.nativeEvent.layout;
           onCenter([x + width / 2.0, y + height / 2.0]);
         }}
@@ -156,10 +156,9 @@ const DrawPolyline = () => {
         <MapView
           ref={map}
           style={{ flex: 1 }}
-          onCameraChanged={async (e) => {
-            const crosshairCoords = await map.current?.getCoordinateFromView(
-              crosshairPos,
-            );
+          onCameraChanged={async e => {
+            const crosshairCoords =
+              await map.current?.getCoordinateFromView(crosshairPos);
             console.log(
               'Crosshair coords: ',
               crosshairCoords,
@@ -180,7 +179,7 @@ const DrawPolyline = () => {
             }}
           />
         </MapView>
-        <CrosshairOverlay onCenter={(c) => setCrosshairPos(c)} />
+        <CrosshairOverlay onCenter={c => setCrosshairPos(c)} />
       </View>
     </View>
   );

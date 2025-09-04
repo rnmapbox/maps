@@ -57,7 +57,7 @@ class Fit extends React.Component {
   }
 
   componentDidUpdate(prevProps, prevState) {
-    const changed = (stateKey) => {
+    const changed = stateKey => {
       // Checking if final state is `undefined` prevents another round of zeroing out in
       // second `componentDidUpdate` call.
       return (
@@ -103,7 +103,7 @@ class Fit extends React.Component {
             paddingVertical: 10,
           }}
         >
-          {buttons.map((button) => (
+          {buttons.map(button => (
             <TouchableOpacity
               key={button.title}
               style={{
@@ -176,7 +176,7 @@ class Fit extends React.Component {
       ['Town (center)', 'townCenter'],
       ['Town (bounds)', 'townBounds'],
       ['undef', undefined],
-    ].map((o) => {
+    ].map(o => {
       return {
         title: `${o[0]}`,
         selected: locationType === o[1],
@@ -184,17 +184,15 @@ class Fit extends React.Component {
       };
     });
 
-    const zoomConfigButtons = [14, 15, 16, 17, 18, 19, 20, undefined].map(
-      (n) => {
-        return {
-          title: n ? `${n}` : 'undef',
-          selected: zoomLevel === n,
-          onPress: () => this.setState({ zoomLevel: n }),
-        };
-      },
-    );
+    const zoomConfigButtons = [14, 15, 16, 17, 18, 19, 20, undefined].map(n => {
+      return {
+        title: n ? `${n}` : 'undef',
+        selected: zoomLevel === n,
+        onPress: () => this.setState({ zoomLevel: n }),
+      };
+    });
 
-    const zoomToButtons = [14, 15, 16, 17, 18, 19, 20].map((n) => {
+    const zoomToButtons = [14, 15, 16, 17, 18, 19, 20].map(n => {
       return {
         title: `${n}`,
         selected: cachedZoomLevel === n,
@@ -212,7 +210,7 @@ class Fit extends React.Component {
           style={sheet.matchParent}
         >
           <Mapbox.Camera
-            ref={(ref) => (this.camera = ref)}
+            ref={ref => (this.camera = ref)}
             {...this.cameraProps()}
           />
           <View style={{ flex: 1, ...padding }}>

@@ -70,7 +70,7 @@ const styles = {
   },
 };
 
-const PointAnnotationAnchors = (props) => {
+const PointAnnotationAnchors = props => {
   return (
     <Mapbox.MapView style={styles.matchParent}>
       <Mapbox.Camera defaultSettings={defaultCamera} />

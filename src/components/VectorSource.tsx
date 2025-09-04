@@ -127,7 +127,7 @@ class VectorSource extends AbstractSource<Props, NativeProps> {
     newEvent = copyPropertiesAsDeprecated(
       event,
       newEvent,
-      (key) => {
+      key => {
         console.warn(
           `event.${key} is deprecated on VectorSource#onPress, please use event.features`,
         );

@@ -10,7 +10,7 @@ const styles = { matchParent: { flex: 1 } };
 class SetTintColor extends React.Component {
   state = { tintColor: COLOR[0] };
 
-  onTintColorChange = (index) => {
+  onTintColorChange = index => {
     this.setState({ tintColor: COLOR[index] });
   };
 
@@ -28,7 +28,7 @@ class SetTintColor extends React.Component {
         </MapView>
         <ButtonGroup
           onPress={this.onTintColorChange}
-          buttons={OPTIONS.map((i) => i.label)}
+          buttons={OPTIONS.map(i => i.label)}
           selectedIndex={COLOR.indexOf(this.state.tintColor)}
         />
       </SafeAreaView>

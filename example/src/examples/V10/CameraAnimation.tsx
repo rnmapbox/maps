@@ -63,7 +63,7 @@ const CameraAnimation = () => {
       };
       const _coordinates = Array(10)
         .fill(0)
-        .map((_) => {
+        .map(_ => {
           return {
             latitude: _centerCoordinate.latitude + rand(),
             longitude: _centerCoordinate.longitude + rand(),
@@ -81,7 +81,7 @@ const CameraAnimation = () => {
   }, []);
 
   const features = useMemo((): Feature<Point>[] => {
-    return coordinates.map((p) => {
+    return coordinates.map(p => {
       const feature: Feature<Point> = {
         type: 'Feature',
         geometry: {
@@ -175,7 +175,7 @@ const CameraAnimation = () => {
           disabled={disabled}
           minimumValue={1}
           maximumValue={20}
-          onSlidingComplete={(_value) => {
+          onSlidingComplete={_value => {
             setZoom(Math.round(_value));
           }}
         />
@@ -196,7 +196,7 @@ const CameraAnimation = () => {
             value={value}
             minimumValue={0}
             maximumValue={500}
-            onSlidingComplete={(_value) => setValue(_value)}
+            onSlidingComplete={_value => setValue(_value)}
           />
         </View>
       );
@@ -223,7 +223,7 @@ const CameraAnimation = () => {
             value={value}
             minimumValue={-1}
             maximumValue={20}
-            onSlidingComplete={(_value) => {
+            onSlidingComplete={_value => {
               if (_value < 0) {
                 setValue(undefined);
               } else {
@@ -255,7 +255,7 @@ const CameraAnimation = () => {
           animationMode={easing}
         />
 
-        {features.map((feature) => {
+        {features.map(feature => {
           const id = JSON.stringify(feature.geometry);
           return (
             <ShapeSource key={id} id={`source-${id}`} shape={feature}>

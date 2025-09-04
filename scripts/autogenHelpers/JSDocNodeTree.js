@@ -7,7 +7,7 @@ class JSDocNodeTree {
     if (!node || !Array.isArray(node.children)) {
       return [];
     }
-    return node.children.filter((child) => child.type === tag);
+    return node.children.filter(child => child.type === tag);
   }
 
   getName() {
@@ -41,20 +41,20 @@ class JSDocNodeTree {
     }
 
     const methods = [];
-    for (let field of this._root.members.instance) {
-      if (field.kind !== 'function' || this._isPrivateMethod(field)) {
-        continue;
-      }
-
-      const node = new JSDocNodeTree(field);
-      methods.push({
-        name: field.name,
-        description: node.getText(),
-        params: this.getMethodParams(field),
-        examples: this.getExamples(field),
-        returns: this.getReturnValue(field),
+    this._root.members.instance
+      .filter(
+        field => field.kind === 'function' && !this._isPrivateMethod(field),
+      )
+      .forEach(field => {
+        const node = new JSDocNodeTree(field);
+        methods.push({
+          name: field.name,
+          description: node.getText(),
+          params: this.getMethodParams(field),
+          examples: this.getExamples(field),
+          returns: this.getReturnValue(field),
+        });
       });
-    }
 
     return methods;
   }
@@ -65,19 +65,17 @@ class JSDocNodeTree {
     }
 
     const methodParams = [];
-    for (let param of field.params) {
-      if (param.title !== 'param') {
-        continue;
-      }
-
-      const node = new JSDocNodeTree(param);
-      methodParams.push({
-        name: param.name,
-        description: node.getText(),
-        type: { name: this.getType(param.type) },
-        optional: param.type.type === 'OptionalType',
+    field.params
+      .filter(param => param.title === 'param')
+      .forEach(param => {
+        const node = new JSDocNodeTree(param);
+        methodParams.push({
+          name: param.name,
+          description: node.getText(),
+          type: { name: this.getType(param.type) },
+          optional: param.type.type === 'OptionalType',
+        });
       });
-    }
 
     return methodParams;
   }
@@ -86,7 +84,7 @@ class JSDocNodeTree {
     if (!this._hasArray(field, 'examples')) {
       return [];
     }
-    return field.examples.map((example) => example.description);
+    return field.examples.map(example => example.description);
   }
 
   getReturnValue(field) {
@@ -94,7 +92,7 @@ class JSDocNodeTree {
       return null;
     }
 
-    const returnNode = field.returns[0];
+    const [returnNode] = field.returns;
     const descriptionNode = new JSDocNodeTree(returnNode);
 
     return {

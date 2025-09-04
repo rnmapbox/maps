@@ -6,11 +6,10 @@ import dir from 'node-dir';
 import { parse, utils } from 'react-docgen';
 import * as documentation from 'documentation';
 
+import JSDocNodeTree from './JSDocNodeTree.js';
 import { pascelCase } from './globals.mjs';
 
 const { parseJsDoc } = utils;
-
-import JSDocNodeTree from './JSDocNodeTree.js';
 
 const __dirname = url.fileURLToPath(new URL('.', import.meta.url));
 
@@ -196,7 +195,7 @@ class DocJSONBuilder {
       if (tsTypeIsFunction(tsType)) {
         let { signature } = tsType;
         return `(${signature.arguments
-          .map(({ name, type }) => `${name}:${tsTypeDump(type)}`)
+          .map(({ name: argumentName, type }) => `${argumentName}:${tsTypeDump(type)}`)
           .join(', ')}) => ${tsTypeDump(signature.return)}`;
       } else if (tsTypeIsObject(tsType)) {
         let { signature } = tsType;
@@ -253,8 +252,8 @@ class DocJSONBuilder {
     function formatMethodJSDocToMD(description) {
       let result = description
         .replaceAll('@deprecated', '**DEPRECATED**')
-        .replaceAll(/@param\s+\{(.+)\}\s+(\S+)/g, (m, type, name) => {
-          return `- \`${name}\`: \`${type}\` `;
+        .replaceAll(/@param\s+\{(.+)\}\s+(\S+)/g, (m, type, paramName) => {
+          return `- \`${paramName}\`: \`${type}\` `;
         });
       return result;
     }
@@ -350,10 +349,7 @@ class DocJSONBuilder {
     for (const method of component.methods) {
       if (this.isPrivateMethod(method.name)) {
         privateMethods.push(method.name);
-        continue;
-      }
-
-      if (method.docblock) {
+      } else if (method.docblock) {
         const examples = method.docblock
           .split('@')
           .filter((block) => block.startsWith('example'));

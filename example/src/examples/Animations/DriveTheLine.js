@@ -70,9 +70,7 @@ class DriveTheLine extends React.Component {
 
   onStart() {
     const routeSimulator = new RouteSimulator(this.state.route);
-    routeSimulator.addListener((currentPoint) =>
-      this.setState({ currentPoint }),
-    );
+    routeSimulator.addListener(currentPoint => this.setState({ currentPoint }));
     routeSimulator.start();
     this.setState({ routeSimulator });
   }
@@ -192,7 +190,7 @@ class DriveTheLine extends React.Component {
     return (
       <>
         <MapboxGL.MapView
-          ref={(c) => (this._map = c)}
+          ref={c => (this._map = c)}
           style={sheet.matchParent}
           styleURL={MapboxGL.StyleURL.Dark}
         >

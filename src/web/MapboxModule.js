@@ -8,7 +8,7 @@ const MapboxModule = {
     Satellite: 'mapbox://styles/mapbox/satellite-v9',
   },
 
-  setAccessToken: (token) => {
+  setAccessToken: token => {
     mapboxgl.accessToken = token;
   },
 };

@@ -152,7 +152,7 @@ class Images extends React.PureComponent<Props> {
     const { children } = this.props;
     if (children) {
       const childrenWithWrongType = React.Children.toArray(children).find(
-        (child) => !isChildAnImage(child),
+        child => !isChildAnImage(child),
       );
       if (childrenWithWrongType) {
         console.error(

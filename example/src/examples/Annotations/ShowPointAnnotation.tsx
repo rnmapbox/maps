@@ -53,16 +53,16 @@ const AnnotationWithRemoteImage = ({
       coordinate={coordinate}
       title={title}
       draggable
-      onSelected={(feature) =>
+      onSelected={feature =>
         console.log('onSelected:', feature.id, feature.geometry.coordinates)
       }
-      onDrag={(feature) =>
+      onDrag={feature =>
         console.log('onDrag:', feature.id, feature.geometry.coordinates)
       }
-      onDragStart={(feature) =>
+      onDragStart={feature =>
         console.log('onDragStart:', feature.id, feature.geometry.coordinates)
       }
-      onDragEnd={(feature) =>
+      onDragEnd={feature =>
         console.log('onDragEnd:', feature.id, feature.geometry.coordinates)
       }
       ref={pointAnnotation}
@@ -131,8 +131,8 @@ const ShowPointAnnotation = () => {
   return (
     <>
       <MapView
-        onPress={(feature) => {
-          setCoordinates((prevState) => [
+        onPress={feature => {
+          setCoordinates(prevState => [
             ...prevState,
             (feature.geometry as Point).coordinates,
           ]);
@@ -182,8 +182,8 @@ const ShowPointAnnotation = () => {
         <Button
           onPress={() =>
             setLayerRendering(
-              (prevState) =>
-                (({ above: 'below', below: 'above' } as const)[prevState]),
+              prevState =>
+                (({ above: 'below', below: 'above' }) as const)[prevState],
             )
           }
         >

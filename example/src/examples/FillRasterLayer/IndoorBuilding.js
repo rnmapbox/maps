@@ -45,10 +45,7 @@ class IndoorBuilding extends React.Component {
   render() {
     return (
       <>
-        <Mapbox.MapView
-          ref={(ref) => (this.map = ref)}
-          style={sheet.matchParent}
-        >
+        <Mapbox.MapView ref={ref => (this.map = ref)} style={sheet.matchParent}>
           <Mapbox.Camera
             zoomLevel={16}
             pitch={40}

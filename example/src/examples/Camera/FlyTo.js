@@ -75,9 +75,9 @@ class FlyTo extends React.Component {
     return (
       <>
         <ButtonGroup
-          buttons={this._flyToOptions.map((i) => i.label)}
+          buttons={this._flyToOptions.map(i => i.label)}
           selectedIndex={this.state.selectedIndex}
-          onPress={(i) => this.onFlyToPress(i)}
+          onPress={i => this.onFlyToPress(i)}
         />
         <Mapbox.MapView style={styles.matchParent}>
           <Mapbox.Camera

@@ -28,7 +28,6 @@ const AnimatedPoint = memo(() => {
 
   const animator = useMemo(() => {
     return new __experimental.MovePointShapeAnimator(basePosition);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const contents = useMemo(() => {
@@ -81,7 +80,7 @@ const AnimatedPoint = memo(() => {
           <Slider
             {...sliderProps}
             value={durationState / maxDuration}
-            onSlidingComplete={(v) => {
+            onSlidingComplete={v => {
               duration.current = v * maxDuration;
               animator.moveTo({
                 coordinate: currentPosition.current,

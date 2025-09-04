@@ -20,7 +20,7 @@ function _resolveAssets(models: Props['models']): {
   [key: string]: Asset;
 } {
   const resolvedModels: { [key: string]: Asset } = {};
-  Object.keys(models).forEach((key) => {
+  Object.keys(models).forEach(key => {
     const model = models[key];
     if (typeof model === 'string') {
       resolvedModels[key] = { url: model };

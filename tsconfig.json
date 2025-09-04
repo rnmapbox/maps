@@ -17,7 +17,7 @@
     "noImplicitReturns": true,
     "paths": {
       "@rnmapbox/maps": ["../src"],
-      "react-native": ["./node_modules/react-native"],
+      "react-native": ["./node_modules/react-native"]
     }
   },
   "include": [
@@ -27,5 +27,5 @@
   ],
   "exclude": [
     "**/*.codepart.tsx"
-  ],
+  ]
 }
