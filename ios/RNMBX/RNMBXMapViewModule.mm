@@ -8,6 +8,7 @@
 #endif // RCT_NEW_ARCH_ENABLED
 
 #import "rnmapbox_maps-Swift.pre.h"
+#import "RNMBXViewResolver.h"
 
 @implementation RNMBXMapViewModule
 
@@ -27,25 +28,15 @@ RCT_EXPORT_MODULE();
 
 - (void)withMapView:(nonnull NSNumber*)viewRef block:(void (^)(RNMBXMapView *))block reject:(RCTPromiseRejectBlock)reject methodName:(NSString *)methodName
 {
-//    void (^upperBlock)(void) = ^{
-#ifdef RCT_NEW_ARCH_ENABLED
-    [self.viewRegistry_DEPRECATED addUIBlock:^(RCTViewRegistry *viewRegistry) {
-        RNMBXMapViewComponentView *componentView = [self.viewRegistry_DEPRECATED viewForReactTag:viewRef];
-        RNMBXMapView *view = componentView.contentView;
-        
-#else
-    [self.bridge.uiManager
-     addUIBlock:^(RCTUIManager *uiManager, NSDictionary<NSNumber *, UIView *> *viewRegistry) {
-        RNMBXMapView *view = [uiManager viewForReactTag:viewRef];
-#endif // RCT_NEW_ARCH_ENABLED
-        if (view != nil) {
-           block(view);
-        } else {
-            reject(methodName, [NSString stringWithFormat:@"Unknown reactTag: %@", viewRef], nil);
-        }
-    }];
+    [RNMBXViewResolver withViewRef:viewRef
+                    delegate:self
+                    expectedClass:[RNMBXMapView class]
+                    block:^(UIView *view) {
+                        block((RNMBXMapView *)view);
+                    }
+                    reject:reject
+                    methodName:methodName];
 }
-
 
 RCT_EXPORT_METHOD(takeSnap:(nonnull NSNumber*)viewRef writeToDisk:(BOOL)writeToDisk resolve:(RCTPromiseResolveBlock)resolve reject:(RCTPromiseRejectBlock)reject)
 {
@@ -72,7 +63,7 @@ RCT_EXPORT_METHOD(getCoordinateFromView:(nonnull NSNumber*)viewRef atPoint:(NSAr
     [self withMapView:viewRef block:^(RNMBXMapView *view) {
         NSNumber* a = [atPoint objectAtIndex:0];
         NSNumber* b = [atPoint objectAtIndex:1];
-        
+
         [RNMBXMapViewManager getCoordinateFromView:view atPoint:CGPointMake(a.floatValue, b.floatValue) resolver:resolve rejecter:reject];
     } reject:reject methodName:@"getCoordinateFromView"];
 }
