@@ -155,10 +155,10 @@ public class RNMBXPointAnnotation : RNMBXInteractiveElement {
     return image
   }
   
-  func makeEvent(isSelect: Bool, deselectAnnotationOnMapTap: Bool = false) -> RNMBXEvent {
+  func makeEvent(isSelect: Bool, _mapboxMap: MapboxMap, deselectAnnotationOnMapTap: Bool = false) -> RNMBXEvent {
     let position = superview?.convert(layer.position, to: nil)
-    let location = map?.mapboxMap.coordinate(for: position!)
-    var geojson = Feature(geometry: .point(Point(location!)))
+    let location = _mapboxMap.coordinate(for: position!)
+    var geojson = Feature(geometry: .point(Point(location)))
     geojson.identifier = .string(id)
     var properties : [String: JSONValue?] = [
       "screenPointX": .number(Double(position!.x)),
@@ -173,19 +173,25 @@ public class RNMBXPointAnnotation : RNMBXInteractiveElement {
   }
   
   func doSelect() {
-    let event = makeEvent(isSelect: true)
-    if let onSelected = onSelected {
-      onSelected(event.toJSON())
+    self.map?.withMapboxMap { [weak self] _mapboxMap in
+      guard let self = self else { return }
+      let event = self.makeEvent(isSelect: true, _mapboxMap: _mapboxMap)
+      if let onSelected = self.onSelected {
+        onSelected(event.toJSON())
+      }
+      self.onSelect()
     }
-    onSelect()
   }
   
   func doDeselect(deselectAnnotationOnMapTap: Bool = false) {
-    let event = makeEvent(isSelect: false, deselectAnnotationOnMapTap: deselectAnnotationOnMapTap)
-    if let onDeselected = onDeselected {
-      onDeselected(event.toJSON())
+    self.map?.withMapboxMap { [weak self] _mapboxMap in
+      guard let self = self else { return }
+      let event = self.makeEvent(isSelect: false, _mapboxMap: _mapboxMap, deselectAnnotationOnMapTap: deselectAnnotationOnMapTap)
+      if let onDeselected = self.onDeselected {
+        onDeselected(event.toJSON())
+      }
+      self.onDeselect()
     }
-    onDeselect()
   }
   
   func onSelect() {
@@ -200,13 +206,17 @@ public class RNMBXPointAnnotation : RNMBXInteractiveElement {
       if let size = image?.size {
         calloutPtAnnotation.iconOffset = [0, -size.height]
       }
-      self.map?.calloutAnnotationManager.annotations.append(calloutPtAnnotation)
+      self.map?.withMapView { _mapView in
+        self.map?.getCalloutAnnotationManager(_mapView: _mapView).annotations.append(calloutPtAnnotation)
+      }
     }
   }
   
   func onDeselect() {
-    self.map?.calloutAnnotationManager.annotations.removeAll {
-      $0.id == calloutId
+    self.map?.withMapView { _mapView in
+      self.map?.getCalloutAnnotationManager(_mapView: _mapView).annotations.removeAll {
+        $0.id == self.calloutId
+      }
     }
   }
   
@@ -253,7 +263,9 @@ public class RNMBXPointAnnotation : RNMBXInteractiveElement {
   public override func addToMap(_ map: RNMBXMapView, style: Style) {
     super.addToMap(map, style: style)
     self.map = map
-    addIfPossible()
+    self.map?.withMapView { _mapView in
+      self.addIfPossible(_mapView: _mapView)
+    }
   }
 
   public override func removeFromMap(_ map: RNMBXMapView, reason: RemovalReason) -> Bool {
@@ -273,18 +285,20 @@ public class RNMBXPointAnnotation : RNMBXInteractiveElement {
 
 extension RNMBXPointAnnotation {
   func removeIfAdded() {
-    if added, let pointAnnotationManager = map?.pointAnnotationManager {
-      pointAnnotationManager.remove(annotation)
-      added = false
+    self.map?.withMapView { _mapView in
+      if self.added, let pointAnnotationManager = self.map?.getPointAnnotationManager(_mapView: _mapView) {
+        pointAnnotationManager.remove(self.annotation)
+        self.added = false
+      }
     }
   }
   
   @discardableResult
-  func addIfPossible() -> Bool {
+  func addIfPossible(_mapView: MapView) -> Bool {
     if !added
         && annotation.point.coordinates.isValid()
         && (logged("PointAnnotation: missing id attribute") { return id }) != nil,
-        let pointAnnotationManager = map?.pointAnnotationManager {
+       let pointAnnotationManager = map?.getPointAnnotationManager(_mapView: _mapView) {
       pointAnnotationManager.add(annotation, self)
       added = true
       return true
@@ -294,11 +308,13 @@ extension RNMBXPointAnnotation {
   
   func update(callback: (_ annotation: inout PointAnnotation) -> Void) {
     callback(&annotation)
-    if let pointAnnotationManager = map?.pointAnnotationManager {
-      if added {
-        pointAnnotationManager.update(annotation)
-      } else if !added {
-        addIfPossible()
+    self.map?.withMapView { _mapView in
+      if let pointAnnotationManager = self.map?.getPointAnnotationManager(_mapView: _mapView) {
+        if self.added {
+          pointAnnotationManager.update(self.annotation)
+        } else if !self.added {
+          self.addIfPossible(_mapView: _mapView)
+        }
       }
     }
   }
