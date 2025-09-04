@@ -259,7 +259,8 @@ Pod::Spec.new do |s|
     case $RNMapboxMapsImpl
     when 'mapbox'
       sp.source_files = "ios/RNMBX/**/*.{h,m,mm,swift}"
-      sp.private_header_files = 'ios/RNMBX/RNMBXFabricHelpers.h', 'ios/RNMBX/RNMBXFabricPropConvert.h', 'ios/RNMBX/rnmapbox_maps-Swift.pre.h', 'ios/RNMBX/Utils/RNMBXFollyConvert.h'
+      sp.private_header_files = 'ios/RNMBX/RNMBXFabricHelpers.h', 'ios/RNMBX/RNMBXFabricPropConvert.h', 'ios/RNMBX/rnmapbox_maps-Swift.pre.h', 'ios/RNMBX/Utils/RNMBXFollyConvert.h', 'ios/RNMBX/Utils/RNMBXViewResolver.h'
+
       if new_arch_enabled
         sp.pod_target_xcconfig = { 'DEFINES_MODULE' => 'YES' }
         install_modules_dependencies(sp)
