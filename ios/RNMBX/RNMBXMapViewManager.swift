@@ -144,6 +144,95 @@ extension RNMBXMapViewManager {
     }
   }
 
+
+    @objc public static func setFeatureState(
+      _ view: RNMBXMapView,
+      featureId: String,
+      state: [String : Any],
+      sourceId: String,
+      sourceLayerId: String?,
+      resolver: @escaping RCTPromiseResolveBlock,
+      rejecter: @escaping RCTPromiseRejectBlock) {
+        view.withMapboxMap { map in
+          #if RNMBX_11
+          map.setFeatureState(
+            sourceId: sourceId,
+            sourceLayerId: sourceLayerId,
+            featureId: featureId,
+            state: state
+          ) { result in
+            switch result {
+              case .success: resolver(nil)
+              case .failure(let error): rejecter("setFeatureState", "failed to set feature state", error)
+            }
+          }
+          #else
+          map.setFeatureState(
+            sourceId: sourceId,
+            sourceLayerId: sourceLayerId,
+            featureId: featureId,
+            state: state
+          )
+          resolver(nil)
+          #endif
+        }
+    }
+
+    @objc public static func getFeatureState(
+      _ view: RNMBXMapView,
+      featureId: String,
+      sourceId: String,
+      sourceLayerId: String?,
+      resolver: @escaping RCTPromiseResolveBlock,
+      rejecter: @escaping RCTPromiseRejectBlock) {
+        view.withMapboxMap { map in 
+          map.getFeatureState(
+            sourceId: sourceId,
+            sourceLayerId: sourceLayerId,
+            featureId: featureId
+          ) { result in
+            switch (result) {
+              case .success(let featureState):
+                resolver(["featureState": featureState])
+              case .failure(let error):
+                rejecter("getFeatureState", "failed to get feature state", error)
+            }
+          }
+        }
+    }
+
+    @objc public static func removeFeatureState(
+      _ view: RNMBXMapView,
+      featureId: String,
+      stateKey: String?,
+      sourceId: String,
+      sourceLayerId: String?,
+      resolver: @escaping RCTPromiseResolveBlock,
+      rejecter: @escaping RCTPromiseRejectBlock) {
+        view.withMapboxMap { map in
+          #if RNMBX_11
+          map.removeFeatureState(
+            sourceId: sourceId,
+            sourceLayerId: sourceLayerId,
+            featureId: featureId,
+            stateKey: stateKey
+          ) { result in
+            switch result {
+              case .success: resolver(nil)
+              case .failure(let error): rejecter("removeFeatureState", "failed to remove feature state", error)
+            }
+          }
+          #else
+          map.removeFeatureState(
+            sourceId: sourceId,
+            sourceLayerId: sourceLayerId,
+            featureId: featureId,
+            stateKey: stateKey
+          )
+          resolver(nil)
+          #endif
+        }
+    }
 }
 
 // MARK: - queryRenderedFeatures

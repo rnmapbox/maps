@@ -477,6 +477,21 @@
       },
       {
         "metadata": {
+          "title": "Feature State",
+          "tags": [
+            "MapView",
+            "MapView#setFeatureState",
+            "MapView#getFeatureState",
+            "MapView#removeFeatureState"
+          ],
+          "docs": "\nDemonstrates modifying the feature state.\n"
+        },
+        "fullPath": "example/src/examples/V10/FeatureState.tsx",
+        "relPath": "V10/FeatureState.tsx",
+        "name": "FeatureState"
+      },
+      {
+        "metadata": {
           "title": "Globe Projection",
           "tags": [
             "MapView#projection"
