@@ -154,6 +154,19 @@ extension RNMBXMapViewManager {
       resolver: @escaping RCTPromiseResolveBlock,
       rejecter: @escaping RCTPromiseRejectBlock) {
         view.withMapboxMap { map in
+          #if RNMBX_11
+          map.setFeatureState(
+            sourceId: sourceId,
+            sourceLayerId: sourceLayerId,
+            featureId: featureId,
+            state: state
+          ) { result in
+            switch result {
+              case .success: resolver(nil)
+              case .failure(let error): rejecter("setFeatureState", "failed to set feature state", error)
+            }
+          }
+          #else
           map.setFeatureState(
             sourceId: sourceId,
             sourceLayerId: sourceLayerId,
@@ -161,6 +174,7 @@ extension RNMBXMapViewManager {
             state: state
           )
           resolver(nil)
+          #endif
         }
     }
 
@@ -196,6 +210,19 @@ extension RNMBXMapViewManager {
       resolver: @escaping RCTPromiseResolveBlock,
       rejecter: @escaping RCTPromiseRejectBlock) {
         view.withMapboxMap { map in
+          #if RNMBX_11
+          map.removeFeatureState(
+            sourceId: sourceId,
+            sourceLayerId: sourceLayerId,
+            featureId: featureId,
+            stateKey: stateKey
+          ) { result in
+            switch result {
+              case .success: resolver(nil)
+              case .failure(let error): rejecter("removeFeatureState", "failed to remove feature state", error)
+            }
+          }
+          #else
           map.removeFeatureState(
             sourceId: sourceId,
             sourceLayerId: sourceLayerId,
@@ -203,6 +230,7 @@ extension RNMBXMapViewManager {
             stateKey: stateKey
           )
           resolver(nil)
+          #endif
         }
     }
 }

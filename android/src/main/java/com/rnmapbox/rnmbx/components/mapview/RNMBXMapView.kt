@@ -1035,8 +1035,18 @@ open class RNMBXMapView(private val mContext: Context, var mManager: RNMBXMapVie
       sourceLayerId: String?,
       response: CommandResponse
     ) {
-        mapView.getMapboxMap().setFeatureState(sourceId, sourceLayerId, featureId, Value.valueOf(state))
-        response.success { }
+        mapView.getMapboxMap().setFeatureStateCompat(
+            sourceId,
+            sourceLayerId,
+            featureId,
+            Value.valueOf(state)
+        ) { expected ->
+            if (expected.isError()) {
+                response.error(expected.error!!.toString())
+            } else {
+                response.success { }
+            }
+        }
     }
 
     fun getFeatureState(
@@ -1068,8 +1078,18 @@ open class RNMBXMapView(private val mContext: Context, var mManager: RNMBXMapVie
       sourceLayerId: String?,
       response: CommandResponse
     ) {
-        mapView.getMapboxMap().removeFeatureState(sourceId, sourceLayerId, featureId, stateKey)
-        response.success { }
+        mapView.getMapboxMap().removeFeatureStateCompat(
+            sourceId,
+            sourceLayerId,
+            featureId,
+            stateKey
+        ) { expected ->
+            if (expected.isError()) {
+                response.error(expected.error?.toString() ?: "Unknown error")
+            } else {
+                response.success { }
+            }
+        }
     }
 
     fun match(layer: Layer, sourceId:String, sourceLayerId: String?) : Boolean {
