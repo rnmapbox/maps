@@ -65,6 +65,7 @@ import java.util.*
 
 import com.rnmapbox.rnmbx.components.annotation.RNMBXPointAnnotationCoordinator
 import com.rnmapbox.rnmbx.components.images.ImageManager
+import com.rnmapbox.rnmbx.utils.extensions.toStringKeyPairs
 
 import com.rnmapbox.rnmbx.v11compat.event.*
 import com.rnmapbox.rnmbx.v11compat.feature.*
@@ -1023,6 +1024,70 @@ open class RNMBXMapView(private val mContext: Context, var mManager: RNMBXMapVie
                 response.error(expected.error!!.toString())
             } else {
                 response.success { it.putBoolean("data", true) }
+            }
+        }
+    }
+
+    fun setFeatureState(
+      featureId: String,
+      state: HashMap<String, Value>,
+      sourceId: String,
+      sourceLayerId: String?,
+      response: CommandResponse
+    ) {
+        mapView.getMapboxMap().setFeatureStateCompat(
+            sourceId,
+            sourceLayerId,
+            featureId,
+            Value.valueOf(state)
+        ) { expected ->
+            if (expected.isError()) {
+                response.error(expected.error!!.toString())
+            } else {
+                response.success { }
+            }
+        }
+    }
+
+    fun getFeatureState(
+      featureId: String,
+      sourceId: String,
+      sourceLayerId: String?,
+      response: CommandResponse
+    ) {
+        mapView.getMapboxMap().getFeatureState(sourceId, sourceLayerId, featureId) { expected ->
+            if (expected.isValue) {
+                response.success {
+                    val state = expected.value?.contents;
+                    if (state is Map<*,*>) {
+                        it.putMap("featureState", writableMapOf(*state.toStringKeyPairs()))
+                    } else {
+                        it.putMap("featureState", Arguments.createMap())
+                    }
+                }
+            } else {
+                response.error(expected.error ?: "Unknown error")
+            }
+        }
+    }
+
+    fun removeFeatureState(
+      featureId: String,
+      stateKey: String?,
+      sourceId: String,
+      sourceLayerId: String?,
+      response: CommandResponse
+    ) {
+        mapView.getMapboxMap().removeFeatureStateCompat(
+            sourceId,
+            sourceLayerId,
+            featureId,
+            stateKey
+        ) { expected ->
+            if (expected.isError()) {
+                response.error(expected.error?.toString() ?: "Unknown error")
+            } else {
+                response.success { }
             }
         }
     }

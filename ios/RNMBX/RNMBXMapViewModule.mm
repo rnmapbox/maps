@@ -124,6 +124,24 @@ RCT_EXPORT_METHOD(setSourceVisibility:(nonnull NSNumber*)viewRef visible:(BOOL)v
     } reject:reject methodName:@"setSourceVisibility"];
 }
 
+RCT_EXPORT_METHOD(setFeatureState:(nonnull NSNumber*)viewRef featureId:(nonnull NSString *)featureId state:(nonnull NSDictionary<NSString*,id> *)state sourceId:(NSString *)sourceId sourceLayerId:(NSString *)sourceLayerId resolve:(RCTPromiseResolveBlock)resolve reject:(RCTPromiseRejectBlock)reject) {
+    [self withMapView:viewRef block:^(RNMBXMapView *view) {
+        [RNMBXMapViewManager setFeatureState:view featureId:featureId state:state sourceId:sourceId sourceLayerId:sourceLayerId resolver:resolve rejecter:reject];
+    } reject:reject methodName:@"setFeatureState"];
+}
+
+RCT_EXPORT_METHOD(getFeatureState:(nonnull NSNumber*)viewRef featureId:(nonnull NSString *)featureId sourceId:(nonnull NSString *)sourceId sourceLayerId:(NSString *)sourceLayerId resolve:(RCTPromiseResolveBlock)resolve reject:(RCTPromiseRejectBlock)reject) {
+    [self withMapView:viewRef block:^(RNMBXMapView *view) {
+        [RNMBXMapViewManager getFeatureState:view featureId:featureId sourceId:sourceId sourceLayerId:sourceLayerId resolver:resolve rejecter:reject];
+    } reject:reject methodName:@"getFeatureState"];
+}
+
+RCT_EXPORT_METHOD(removeFeatureState:(nonnull NSNumber*)viewRef featureId:(nonnull NSString *)featureId stateKey:(NSString*)stateKey sourceId:(NSString *)sourceId sourceLayerId:(NSString *)sourceLayerId resolve:(RCTPromiseResolveBlock)resolve reject:(RCTPromiseRejectBlock)reject) {
+    [self withMapView:viewRef block:^(RNMBXMapView *view) {
+        [RNMBXMapViewManager removeFeatureState:view featureId:featureId stateKey:stateKey sourceId:sourceId sourceLayerId:sourceLayerId resolver:resolve rejecter:reject];
+    } reject:reject methodName:@"removeFeatureState"];
+}
+
 RCT_EXPORT_METHOD(querySourceFeatures:(nonnull NSNumber*)viewRef sourceId:(NSString*)sourceId withFilter:(NSArray<id>*)withFilter withSourceLayerIDs:(NSArray<NSString*>*)withSourceLayerIDs resolve:(RCTPromiseResolveBlock)resolve reject:(RCTPromiseRejectBlock)reject) {
     [self withMapView:viewRef block:^(RNMBXMapView *view) {
         [RNMBXMapViewManager querySourceFeatures:view withSourceId:sourceId withFilter:withFilter withSourceLayerIds:withSourceLayerIDs resolver:resolve rejecter:reject];
