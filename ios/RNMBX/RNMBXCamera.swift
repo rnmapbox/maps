@@ -40,20 +40,22 @@ struct CameraUpdateItem {
   var duration: TimeInterval?
   
   func execute(map: RNMBXMapView, cameraAnimator: inout BasicCameraAnimator?) {
-    logged("CameraUpdateItem.execute") {
-      if let center = camera.center {
-        try center.validate()
-      }
+    map.withMapView { _mapView in
+      logged("CameraUpdateItem.execute") {
+        if let center = camera.center {
+          try center.validate()
+        }
 
-      switch mode {
-      case .flight:
-        map.mapView.camera.fly(to: camera, duration: duration)
-      case .ease:
-        map.mapView.camera.ease(to: camera, duration: duration ?? 0, curve: .easeInOut, completion: nil)
-      case .linear:
-        map.mapView.camera.ease(to: camera, duration: duration ?? 0, curve: .linear, completion: nil)
-      default:
-        map.mapboxMap.setCamera(to: camera)
+        switch mode {
+        case .flight:
+          _mapView.camera.fly(to: camera, duration: duration)
+        case .ease:
+          _mapView.camera.ease(to: camera, duration: duration ?? 0, curve: .easeInOut, completion: nil)
+        case .linear:
+          _mapView.camera.ease(to: camera, duration: duration ?? 0, curve: .linear, completion: nil)
+        default:
+          _mapView.mapboxMap.setCamera(to: camera)
+        }
       }
     }
   }
@@ -92,7 +94,9 @@ open class RNMBXMapComponentBase : UIView, RNMBXMapComponent {
 
   func withMapView(_ callback: @escaping (_ mapView: MapView) -> Void) {
     withRNMBXMapView { mapView in
-      callback(mapView.mapView)
+      mapView.withMapView { _mapView in
+        callback(_mapView)
+      }
     }
   }
 
@@ -529,7 +533,9 @@ open class RNMBXCamera : RNMBXMapComponentBase {
       return false
     }
 
-    map.mapView.viewport.removeStatusObserver(self)
+    map.withMapView { _mapView in
+      _mapView.viewport.removeStatusObserver(self)
+    }
     return super.removeFromMap(map, reason:reason)
   }
 
