@@ -1,6 +1,6 @@
 import type { HostComponent, ViewProps } from 'react-native';
-import codegenNativeComponent from 'react-native/Libraries/Utilities/codegenNativeComponent';
-import {
+import { codegenNativeComponent } from 'react-native';
+import type {
   DirectEventHandler,
   Double,
 } from 'react-native/Libraries/Types/CodegenTypes';
@@ -19,7 +19,7 @@ export interface NativeProps extends ViewProps {
   minZoomLevel: UnsafeMixed<Double>;
   tms: UnsafeMixed<boolean>;
   hasPressListener: UnsafeMixed<boolean>;
-  hitbox: UnsafeMixed<any>;
+  hitbox: UnsafeMixed;
   onMapboxVectorSourcePress: DirectEventHandler<OnMapboxVectorSourcePressEventType>;
 }
 

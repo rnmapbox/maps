@@ -32,7 +32,7 @@ const styles = { matchParent: { flex: 1 } };
 function humanize(name: string): string {
   const words = name.match(/[A-Za-z][a-z]*/g) || [];
 
-  return words.map((i) => i.charAt(0).toUpperCase() + i.substring(1)).join(' ');
+  return words.map(i => i.charAt(0).toUpperCase() + i.substring(1)).join(' ');
 }
 
 enum ExampleRenderMode {
@@ -69,7 +69,7 @@ const UserLocationRenderMode = () => {
               ? 'Don`t follow User Location'
               : 'Follow user location'
           }
-          onPress={() => setFollowUserLocation((prevState) => !prevState)}
+          onPress={() => setFollowUserLocation(prevState => !prevState)}
         />
         <Button
           title={
@@ -77,9 +77,7 @@ const UserLocationRenderMode = () => {
               ? 'Hide user heading indicator'
               : 'Show user heading indicator'
           }
-          onPress={() =>
-            setShowsUserHeadingIndicator((prevState) => !prevState)
-          }
+          onPress={() => setShowsUserHeadingIndicator(prevState => !prevState)}
         />
 
         <SettingsGroup label="Follow User Mode">
@@ -88,7 +86,7 @@ const UserLocationRenderMode = () => {
             selectedIndex={Object.values(UserTrackingMode).indexOf(
               followUserMode,
             )}
-            onPress={(index) => {
+            onPress={index => {
               setFollowUserMode(Object.values(UserTrackingMode)[index]);
             }}
           />
@@ -100,7 +98,7 @@ const UserLocationRenderMode = () => {
               disabled={renderMode !== ExampleRenderMode.Native}
               buttons={ANDROID_RENDER_MODES}
               selectedIndex={ANDROID_RENDER_MODES.indexOf(androidRenderMode)}
-              onPress={(index) => {
+              onPress={index => {
                 setAndroidRenderMode(ANDROID_RENDER_MODES[index]);
               }}
             />
@@ -117,7 +115,7 @@ const UserLocationRenderMode = () => {
           followUserLocation={followUserLocation}
           followUserMode={followUserMode}
           followZoomLevel={18}
-          onUserTrackingModeChange={(event) => {
+          onUserTrackingModeChange={event => {
             if (!event.nativeEvent.payload.followUserLocation) {
               setFollowUserLocation(false);
             }
@@ -152,7 +150,7 @@ const UserLocationRenderMode = () => {
       <ButtonGroup
         buttons={Object.values(ExampleRenderMode).map(humanize)}
         selectedIndex={Object.values(ExampleRenderMode).indexOf(renderMode)}
-        onPress={(index) => {
+        onPress={index => {
           setRenderMode(Object.values(ExampleRenderMode)[index]);
         }}
       />

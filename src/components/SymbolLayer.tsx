@@ -113,7 +113,7 @@ export class SymbolLayer extends AbstractLayer<Props, NativeTypeProps> {
       return isSnapshot;
     }
 
-    React.Children.forEach(this.baseProps.children, (child) => {
+    React.Children.forEach(this.baseProps.children, child => {
       if (child?.type === View) {
         isSnapshot = true;
       }

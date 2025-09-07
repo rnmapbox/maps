@@ -16,7 +16,7 @@ import ImageSource from './ImageSource';
 import { ShapeSource } from './ShapeSource';
 
 function toCamelCase(s: string): string {
-  return s.replace(/([-_][a-z])/gi, ($1) => {
+  return s.replace(/([-_][a-z])/gi, $1 => {
     return $1.toUpperCase().replace('-', '').replace('_', '');
   });
 }
@@ -30,7 +30,7 @@ function toCamelCaseKeys(oldObj?: { [key: string]: unknown }): {
     return {};
   }
   const newObj: { [key: string]: unknown } = {};
-  Object.keys(oldObj).forEach((key) => {
+  Object.keys(oldObj).forEach(key => {
     const value = oldObj[key];
     if (key.includes('-')) {
       newObj[toCamelCase(key)] = value;
@@ -167,7 +167,7 @@ function getImageSource(id: string, source: MapboxJSONSource) {
   return <ImageSource key={id} id={id} {...sourceProps} />;
 }
 
-type ShapeShourceShape = typeof ShapeSource.prototype.props['shape'];
+type ShapeShourceShape = (typeof ShapeSource.prototype.props)['shape'];
 
 function getShapeSource(id: string, source: MapboxJSONSource) {
   const sourceProps: {
@@ -288,7 +288,7 @@ type Props = {
  */
 const Style = (props: Props) => {
   const [fetchedJson, setFetchedJson] = useState({});
-  const json: MapboxJSON =
+  const styleJson: MapboxJSON =
     typeof props.json === 'object' ? props.json : fetchedJson;
 
   // Fetch style when props.json is a URL
@@ -319,21 +319,21 @@ const Style = (props: Props) => {
 
   // Extract layer components from json
   const layerComponents = useMemo(() => {
-    if (!json.layers) {
+    if (!styleJson.layers) {
       return [];
     }
-    return json.layers.map(asLayerComponent).filter((x) => !!x);
-  }, [json.layers]);
+    return styleJson.layers.map(asLayerComponent).filter(x => !!x);
+  }, [styleJson.layers]);
 
   // Extract source components from json
-  const { sources } = json;
+  const { sources } = styleJson;
   const sourceComponents = useMemo(() => {
     if (!sources || !Object.keys(sources)) {
       return [];
     }
     return Object.keys(sources)
-      .map((id) => asSourceComponent(id, sources[id]))
-      .filter((x) => !!x);
+      .map(id => asSourceComponent(id, sources[id]))
+      .filter(x => !!x);
   }, [sources]);
 
   return (

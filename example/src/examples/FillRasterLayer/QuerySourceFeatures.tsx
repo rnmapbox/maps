@@ -35,7 +35,7 @@ const QuerySourceFeatures = () => {
     try {
       const res = await map.current?.querySourceFeatures(
         vectorSourceUnderTest.id,
-        ['any', ...countiesOfInterest.map((c) => ['==', ['get', 'COUNTY'], c])],
+        ['any', ...countiesOfInterest.map(c => ['==', ['get', 'COUNTY'], c])],
         ['original'],
       );
 
@@ -55,7 +55,7 @@ const QuerySourceFeatures = () => {
       setMessage(
         `[SUCCESS] querySourceFeatures retrieved ${featuresCount} features ` +
           `and includes: \n- ${res.features
-            .map((f) => f.properties?.COUNTY)
+            .map(f => f.properties?.COUNTY)
             .join('\n- ')}`,
       );
     } catch (err) {

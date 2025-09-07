@@ -1,9 +1,7 @@
-import type { TurboModule } from 'react-native/Libraries/TurboModule/RCTExport';
-import { Int32, Double } from 'react-native/Libraries/Types/CodegenTypes';
+import type { TurboModule } from 'react-native';
+import type { Int32, Double } from 'react-native/Libraries/Types/CodegenTypes';
 import { TurboModuleRegistry } from 'react-native';
 import { Position } from '@turf/helpers';
-
-//import type { UnsafeMixed } from './codegenUtils';
 
 type AnimatorTag = Int32;
 

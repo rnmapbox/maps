@@ -42,7 +42,7 @@ const ShowMarkerView = () => {
 
   const onPressMap = (e: GeoJSON.Feature) => {
     const geometry = e.geometry as GeoJSON.Point;
-    setPointList((pl) => [...pl, geometry.coordinates]);
+    setPointList(pl => [...pl, geometry.coordinates]);
   };
 
   return (
@@ -53,7 +53,7 @@ const ShowMarkerView = () => {
             ? 'allowOverlapWithPuck true'
             : 'allowOverlapWithPuck false'
         }
-        onPress={() => setAllowOverlapWithPuck((prev) => !prev)}
+        onPress={() => setAllowOverlapWithPuck(prev => !prev)}
       />
       <Mapbox.MapView onPress={onPressMap} style={styles.matchParent}>
         <Mapbox.Camera

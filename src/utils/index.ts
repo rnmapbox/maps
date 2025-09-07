@@ -77,7 +77,7 @@ export function cloneReactChildrenWithProps(
     return null;
   }
 
-  let foundChildren: typeof children[] | null = null;
+  let foundChildren: (typeof children)[] | null = null;
 
   if (!Array.isArray(children)) {
     foundChildren = [children];
@@ -85,8 +85,8 @@ export function cloneReactChildrenWithProps(
     foundChildren = children;
   }
 
-  const filteredChildren = foundChildren.filter((child) => !!child); // filter out falsy children, since some can be null
-  return React.Children.map(filteredChildren, (child) => {
+  const filteredChildren = foundChildren.filter(child => !!child); // filter out falsy children, since some can be null
+  return React.Children.map(filteredChildren, child => {
     if (!React.isValidElement(child)) {
       return child;
     }

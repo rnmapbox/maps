@@ -13,13 +13,13 @@ let oldNodeEnv = null;
 beforeAll(() => {
   clock = FakeTimers.install();
   clock._requestedAnimationFrames = [];
-  clock.requestAnimationFrame = (callback) => {
+  clock.requestAnimationFrame = callback => {
     clock._requestedAnimationFrames.push(callback);
   };
   clock.fireRequestAnimationFrames = () => {
     const oldRAF = clock._requestedAnimationFrames;
     clock._requestedAnimationFrames = [];
-    oldRAF.forEach((cb) => cb(Date.now()));
+    oldRAF.forEach(cb => cb(Date.now()));
   };
 
   // animated will not call nativeProps in test mode
@@ -53,7 +53,7 @@ describe('AnimatedShapeSource', () => {
       const testRenderer = TestRenderer.create(
         <AnimatedShapeSource
           shape={new AnimatedShape({ type: 'LineString', coordinates })}
-          ref={(ref) => (shapeSourceRef = ref)}
+          ref={ref => (shapeSourceRef = ref)}
         />,
       );
     });
@@ -104,10 +104,10 @@ describe('AnimatedShapeSource', () => {
       const testRenderer = TestRenderer.create(
         <AnimatedShapeSource
           shape={new AnimatedShape({ type: 'LineString', coordinates })}
-          ref={(ref) => (shapeSourceRef = ref)}
+          ref={ref => (shapeSourceRef = ref)}
         />,
       );
-    })
+    });
     const setNativeProps = jest.fn();
     _nativeRef(shapeSourceRef).setNativeProps = setNativeProps;
 
@@ -158,10 +158,10 @@ describe('AnimatedShapeSource', () => {
       const testRenderer = TestRenderer.create(
         <AnimatedShapeSource
           shape={new AnimatedShape({ type: 'LineString', coordinates })}
-          ref={(ref) => (shapeSourceRef = ref)}
+          ref={ref => (shapeSourceRef = ref)}
         />,
       );
-    })
+    });
     const setNativeProps = jest.fn();
     _nativeRef(shapeSourceRef).setNativeProps = setNativeProps;
 

@@ -36,7 +36,7 @@ const UserLocationPadding = () => {
       <ButtonGroup
         buttons={Object.values(Alignment)}
         selectedIndex={Object.values(Alignment).indexOf(alignment)}
-        onPress={(index) => setAlignment(Object.values(Alignment)[index])}
+        onPress={index => setAlignment(Object.values(Alignment)[index])}
       />
     </SafeAreaView>
   );

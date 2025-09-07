@@ -18,7 +18,7 @@ class SetUserTrackingModes extends React.Component {
     super(props);
 
     this._trackingOptions = Object.keys(Mapbox.UserTrackingModes)
-      .map((key) => {
+      .map(key => {
         return {
           label: key,
           data: Mapbox.UserTrackingModes[key],
@@ -87,9 +87,9 @@ class SetUserTrackingModes extends React.Component {
       <>
         <ScrollView horizontal style={{ maxHeight: 64 }}>
           <ButtonGroup
-            buttons={this._trackingOptions.map((i) => i.label)}
+            buttons={this._trackingOptions.map(i => i.label)}
             selectedIndex={this.state.selectedIndex}
-            onPress={(i) =>
+            onPress={i =>
               this.onTrackingChange(i, this._trackingOptions[i].data)
             }
           />

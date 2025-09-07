@@ -10,14 +10,7 @@ const bounds1 = {
   sw: [-74.143727, 40.772177],
 };
 
-const paddingZero = {
-  paddingTop: 0,
-  paddingRight: 0,
-  paddingBottom: 0,
-  paddingLeft: 0,
-};
-
-const toFeature = (position) => {
+const toFeature = position => {
   return {
     type: 'Feature',
     geometry: {
@@ -28,7 +21,7 @@ const toFeature = (position) => {
   };
 };
 
-const toFeatureCollection = (bounds) => {
+const toFeatureCollection = bounds => {
   return {
     type: 'FeatureCollection',
     features: [toFeature(bounds.ne), toFeature(bounds.sw)],

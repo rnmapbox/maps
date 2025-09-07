@@ -4,7 +4,7 @@ import { NativeModules } from 'react-native';
 
 function keyMirror(keys) {
   const obj = {};
-  keys.forEach((key) => (obj[key] = key));
+  keys.forEach(key => (obj[key] = key));
   return obj;
 }
 
@@ -103,7 +103,7 @@ NativeModules.RNMBXModule = {
 };
 
 NativeModules.RNMBXOfflineModule = nativeModule({
-  createPack: (packOptions) => {
+  createPack: packOptions => {
     return Promise.resolve({
       bounds: packOptions.bounds,
       metadata: JSON.stringify({ name: packOptions.name }),
@@ -121,7 +121,7 @@ NativeModules.RNMBXOfflineModule = nativeModule({
 });
 
 NativeModules.RNMBXOfflineModuleLegacy = {
-  createPack: (packOptions) => {
+  createPack: packOptions => {
     return Promise.resolve({
       bounds: packOptions.bounds,
       metadata: JSON.stringify({ name: packOptions.name }),

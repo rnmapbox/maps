@@ -1,5 +1,5 @@
 /**
- * Dumps examples.json to docs/examples.json from metadata in the examples in the example direcrory
+ * Dumps examples.json to docs/examples.json from metadata in the examples in the example directory
  */
 import path from 'path';
 import fs from 'fs';

@@ -1,6 +1,6 @@
 import type { HostComponent, ViewProps } from 'react-native';
-import codegenNativeComponent from 'react-native/Libraries/Utilities/codegenNativeComponent';
-import { Double, Int32 } from 'react-native/Libraries/Types/CodegenTypes';
+import { codegenNativeComponent } from 'react-native';
+import type { Double, Int32 } from 'react-native/Libraries/Types/CodegenTypes';
 
 import { FilterExpression } from '../utils/MapboxStyles';
 
@@ -29,7 +29,7 @@ type CommonProps = {
 
 export interface NativeProps extends ViewProps, CommonProps {
   id?: OptionalProp<string>;
-  reactStyle: UnsafeMixed<any>;
+  reactStyle: UnsafeMixed;
 }
 
 export default codegenNativeComponent<NativeProps>(

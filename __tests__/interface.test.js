@@ -115,6 +115,6 @@ describe('Public Interface', () => {
 
       '__experimental',
     ];
-    actualKeys.forEach((key) => expect(expectedKeys).toContain(key));
+    actualKeys.forEach(key => expect(expectedKeys).toContain(key));
   });
 });

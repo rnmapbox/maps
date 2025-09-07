@@ -77,7 +77,7 @@ const MapHandlers = () => {
     if (_feature.properties) {
       _feature.properties.kind = kind;
     }
-    setFeatures((prev) => [...prev, _feature]);
+    setFeatures(prev => [...prev, _feature]);
   };
 
   const displayCoord = (position: Position) => {
@@ -97,11 +97,11 @@ const MapHandlers = () => {
         onLongPress={(_feature: Feature<Geometry, GeoJsonProperties>) => {
           addFeature(_feature, 'longPress');
         }}
-        onCameraChanged={(_state) => {
+        onCameraChanged={_state => {
           setLastCallback('onCameraChanged');
           setMapState(_state);
         }}
-        onMapIdle={(_state) => {
+        onMapIdle={_state => {
           setLastCallback('onMapIdle');
           setMapState(_state);
         }}
@@ -111,7 +111,7 @@ const MapHandlers = () => {
           zoomLevel={12}
           animationDuration={0}
         />
-        {features.map((f, i) => {
+        {features.map((f, _i) => {
           const id = JSON.stringify(
             (f as Feature<Polygon>).geometry.coordinates,
           );

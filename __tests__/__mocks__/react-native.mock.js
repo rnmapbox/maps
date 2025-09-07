@@ -4,7 +4,6 @@ jest.mock('react-native/Libraries/Image/resolveAssetSource', () => {
 
 jest.mock('../../src/assets/heading.png', () => 'heading.png');
 
-
 jest.mock('react-native/Libraries/EventEmitter/NativeEventEmitter', () => {
   function MockEventEmitter() {}
   MockEventEmitter.prototype.addListener = jest.fn(() => ({
@@ -16,12 +15,11 @@ jest.mock('react-native/Libraries/EventEmitter/NativeEventEmitter', () => {
   };
 });
 
-
 jest.mock('react-native/Libraries/Utilities/Platform', () => ({
   __esModule: true,
   default: {
     OS: 'ios', // or 'android'
-    select: (x) => {
+    select: x => {
       if (x.android) {
         return x.android;
       } else if (x.native) {
@@ -30,7 +28,7 @@ jest.mock('react-native/Libraries/Utilities/Platform', () => ({
         return x.default;
       }
     },
-  }
+  },
 }));
 
 jest.mock('react-native/src/private/animated/NativeAnimatedHelper', () => ({
@@ -40,4 +38,3 @@ jest.mock('react-native/src/private/animated/NativeAnimatedHelper', () => ({
   },
   shouldUseNativeDriver: jest.fn(),
 }));
-

@@ -17,7 +17,7 @@ class AbstractSource<
 
   setNativeRef: (
     instance: React.Component<NativePropsType> & Readonly<NativeMethods>,
-  ) => void = (instance) => {
+  ) => void = instance => {
     this._nativeRef = instance;
   };
 }

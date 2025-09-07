@@ -11,7 +11,7 @@ const styles = {
   bubble: { marginBottom: 100 },
 };
 
-const isValidCoordinate = (geometry) => {
+const isValidCoordinate = geometry => {
   if (!geometry) {
     return false;
   }
@@ -101,10 +101,10 @@ class ShowRegionDidChange extends React.Component {
     const { geometry, properties } = this.state.regionFeature;
 
     const neCoord = properties.visibleBounds[0]
-      .map((n) => n.toPrecision(6))
+      .map(n => n.toPrecision(6))
       .join(', ');
     const swCoord = properties.visibleBounds[1]
-      .map((n) => n.toPrecision(6))
+      .map(n => n.toPrecision(6))
       .join(', ');
 
     return (
@@ -129,15 +129,15 @@ class ShowRegionDidChange extends React.Component {
     return (
       <>
         <ButtonGroup
-          buttons={this._tabOptions.map((i) => i.label)}
+          buttons={this._tabOptions.map(i => i.label)}
           selectedIndex={this.state.selectedIndex}
-          onPress={(index) => {
+          onPress={index => {
             this.setState({ selectedIndex: index });
             this.onOptionPress(index, this._tabOptions[index].data);
           }}
         />
         <MapView
-          ref={(c) => (this.map = c)}
+          ref={c => (this.map = c)}
           style={sheet.matchParent}
           onRegionWillChange={this.onRegionWillChange}
           onRegionIsChanging={this.onRegionIsChanging}

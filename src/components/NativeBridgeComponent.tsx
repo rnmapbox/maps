@@ -52,7 +52,7 @@ const NativeBridgeComponent = <
       args: NativeArg[] = [],
     ): Promise<ReturnType> {
       if (!nativeRef) {
-        return new Promise<ReturnType>((resolve) => {
+        return new Promise<ReturnType>(resolve => {
           this._preRefMapMethodQueue.push({
             method: { name: methodName, args },
             resolver: resolve as (args: NativeArg) => void,

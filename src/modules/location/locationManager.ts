@@ -7,12 +7,16 @@ import {
   type AppStateStatus,
   Platform,
   EventSubscription,
-} from 'react-native'
+} from 'react-native';
 
-import NativeRNMBXLocationModule from '../../specs/NativeRNMBXLocationModule'
+import NativeRNMBXLocationModule from '../../specs/NativeRNMBXLocationModule';
 
-const MapboxGL = NativeModules.RNMBXModule
-const MapboxGLLocationManager: typeof NativeRNMBXLocationModule = Platform.select({ios: NativeModules.RNMBXLocationModule, android:  NativeRNMBXLocationModule})
+const MapboxGL = NativeModules.RNMBXModule;
+const MapboxGLLocationManager: typeof NativeRNMBXLocationModule =
+  Platform.select({
+    ios: NativeModules.RNMBXLocationModule,
+    android: NativeRNMBXLocationModule,
+  });
 
 export const LocationModuleEventEmitter = new NativeEventEmitter(
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -134,7 +138,7 @@ export class LocationManager {
   }
 
   removeListener(listener: (location: Location) => void) {
-    this._listeners = this._listeners.filter((l) => l !== listener);
+    this._listeners = this._listeners.filter(l => l !== listener);
     if (this._listeners.length === 0) {
       this.stop();
     }
@@ -172,7 +176,8 @@ export class LocationManager {
     if (!this._isListening) {
       MapboxGLLocationManager.start(validDisplacement);
       //Determine if TurboModules (new architecture) are available.
-      const isTurbo: boolean = typeof MapboxGLLocationManager.onLocationUpdate === 'function';
+      const isTurbo: boolean =
+        typeof MapboxGLLocationManager.onLocationUpdate === 'function';
 
       if (Platform.OS === 'ios' || !isTurbo) {
         this.subscription = LocationModuleEventEmitter.addListener(
@@ -180,9 +185,11 @@ export class LocationManager {
           this._onUpdate,
         );
       } else {
-        this.subscription = MapboxGLLocationManager.onLocationUpdate((location) => {
-          this._onUpdate(location.payload);
-        });
+        this.subscription = MapboxGLLocationManager.onLocationUpdate(
+          location => {
+            this._onUpdate(location.payload);
+          },
+        );
       }
 
       this._isListening = true;
@@ -212,7 +219,7 @@ export class LocationManager {
   _onUpdate(location: Location) {
     this._lastKnownLocation = location;
 
-    this._listeners.forEach((l) => l(location));
+    this._listeners.forEach(l => l(location));
   }
 
   /**
