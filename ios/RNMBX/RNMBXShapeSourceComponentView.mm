@@ -96,6 +96,7 @@ using namespace facebook::react;
 
   RNMBX_OPTIONAL_PROP_NSString(id)
   RNMBX_OPTIONAL_PROP_BOOL(existing)
+  RNMBX_OPTIONAL_PROP_NSString(url)
   RNMBX_OPTIONAL_PROP_NSString(shape)
   RNMBX_OPTIONAL_PROP_NSNumber(cluster)
   RNMBX_OPTIONAL_PROP_NSNumber(clusterRadius)
