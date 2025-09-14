@@ -26,12 +26,9 @@ export class AnimatedRouteCoordinatesArray extends AnimatedCoordinatesArray {
    * @returns {object} - the state object
    */
   onInitialState(coordinatesArray, options = null) {
-    let end = { from: 0 };
-    if (options && options.end) {
-      end = options.end;
-    }
+    const { end = { from: 0 } } = options ?? {};
     return {
-      fullRoute: coordinatesArray.map((coord) => [coord[0], coord[1]]),
+      fullRoute: coordinatesArray.map(coord => [coord[0], coord[1]]),
       end,
     };
   }

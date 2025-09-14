@@ -465,7 +465,7 @@ const CallbablePropKeys = [
   'onCameraChanged',
 ] as const;
 
-type CallbablePropKeys = typeof CallbablePropKeys[number];
+type CallbablePropKeys = (typeof CallbablePropKeys)[number];
 
 type CallbablePropKeysWithoutOn = CallbablePropKeys extends `on${infer C}`
   ? C
@@ -577,7 +577,7 @@ class MapView extends NativeBridgeComponent(
     const callbackProps = CallbablePropKeys;
 
     const hasCallbackPropsChanged = callbackProps.some(
-      propName => prevProps[propName] !== this.props[propName]
+      propName => prevProps[propName] !== this.props[propName],
     );
 
     if (hasCallbackPropsChanged) {
@@ -1170,7 +1170,7 @@ class MapView extends NativeBridgeComponent(
     });
   }
 
-  _handleOnChange<T>(propName: CallbablePropKeys, payload: object) {
+  _handleOnChange(propName: CallbablePropKeys, payload: object) {
     const func = this.props[propName] as (payload: object) => void;
     if (func && isFunction(func)) {
       func(payload);

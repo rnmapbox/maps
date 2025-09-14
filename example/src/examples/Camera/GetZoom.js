@@ -29,7 +29,7 @@ class GetZoom extends React.Component {
       <>
         <MapboxGL.MapView
           onRegionDidChange={this.onRegionDidChange}
-          ref={(c) => (this._map = c)}
+          ref={c => (this._map = c)}
           onPress={this.onPress}
           style={styles.mapView}
         >

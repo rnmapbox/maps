@@ -22,8 +22,8 @@ exports.createHash = createHash;
 const crypto_1 = __importDefault(require("crypto"));
 function getGeneratedSectionIndexes(src, tag) {
     const contents = src.split('\n');
-    const start = contents.findIndex((line) => line.includes(`@generated begin ${tag}`));
-    const end = contents.findIndex((line) => line.includes(`@generated end ${tag}`));
+    const start = contents.findIndex(line => line.includes(`@generated begin ${tag}`));
+    const end = contents.findIndex(line => line.includes(`@generated end ${tag}`));
     return { contents, start, end };
 }
 /**
@@ -64,7 +64,7 @@ function removeContents({ src, tag, }) {
 }
 function addLines(content, find, offset, toAdd) {
     const lines = content.split('\n');
-    let lineIndex = lines.findIndex((line) => line.match(find));
+    let lineIndex = lines.findIndex(line => line.match(find));
     if (lineIndex < 0) {
         const error = new Error(`Failed to match "${find}" in contents:\n${content}`);
         // eslint-disable-next-line @typescript-eslint/ban-ts-comment

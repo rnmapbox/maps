@@ -1,6 +1,6 @@
 import type { HostComponent, ViewProps } from 'react-native';
-import codegenNativeComponent from 'react-native/Libraries/Utilities/codegenNativeComponent';
-import {
+import { codegenNativeComponent } from 'react-native';
+import type {
   DirectEventHandler,
   Double,
   Int32,
@@ -31,7 +31,7 @@ export interface NativeProps extends ViewProps {
   followZoomLevel?: OptionalProp<Double>;
   followPitch?: OptionalProp<Double>;
   followHeading?: OptionalProp<Double>;
-  followPadding?: UnsafeMixed<any>;
+  followPadding?: UnsafeMixed;
 
   zoomLevel?: OptionalProp<Double>;
   maxZoomLevel?: OptionalProp<Double>;

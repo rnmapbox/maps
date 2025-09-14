@@ -1,6 +1,6 @@
 import type { HostComponent, ViewProps } from 'react-native';
-import { Double } from 'react-native/Libraries/Types/CodegenTypes';
-import codegenNativeComponent from 'react-native/Libraries/Utilities/codegenNativeComponent';
+import type { Double } from 'react-native/Libraries/Types/CodegenTypes';
+import { codegenNativeComponent } from 'react-native';
 
 import { UnsafeMixed } from './codegenUtils';
 

@@ -81,7 +81,7 @@ const Ornaments = () => {
   >(undefined);
 
   const handlePressVisibility = (ornamentType: OrnamentType): void => {
-    setVisibility((prevState) => {
+    setVisibility(prevState => {
       let newValue;
 
       if (prevState[ornamentType] === undefined) {
@@ -97,7 +97,7 @@ const Ornaments = () => {
   };
 
   const handlePressPosition = (ornamentType: OrnamentType): void => {
-    setPosition((prevState) => {
+    setPosition(prevState => {
       let newValue;
 
       if (prevState[ornamentType] === OrnamentPosition.TopLeft) {

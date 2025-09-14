@@ -74,7 +74,7 @@ const AnimatedLineOffsets = memo(() => {
   }, []);
 
   const buildRandomizedLine = useCallback(() => {
-    return baseCoordinates.map((c) => {
+    return baseCoordinates.map(c => {
       return [c[0] + randNorm() * 0.001, c[1] + randNorm() * 0.001];
     });
   }, []);
@@ -139,7 +139,7 @@ const AnimatedLineOffsets = memo(() => {
           <Slider
             {...sliderProps}
             value={startOffsetState / lineLength}
-            onSlidingComplete={(v) => {
+            onSlidingComplete={v => {
               startOffset.current = v * lineLength;
               animator.setStartOffset({
                 offset: startOffset.current,
@@ -160,7 +160,7 @@ const AnimatedLineOffsets = memo(() => {
           <Slider
             {...sliderProps}
             value={endOffsetState / lineLength}
-            onSlidingComplete={(v) => {
+            onSlidingComplete={v => {
               endOffset.current = v * lineLength;
               animator.setEndOffset({
                 offset: endOffset.current,
@@ -181,7 +181,7 @@ const AnimatedLineOffsets = memo(() => {
           <Slider
             {...sliderProps}
             value={durationState / maxDuration}
-            onSlidingComplete={(v) => {
+            onSlidingComplete={v => {
               duration.current = v * maxDuration;
               animator.setStartOffset({
                 offset: startOffset.current,

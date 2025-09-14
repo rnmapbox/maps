@@ -78,6 +78,7 @@ module.exports = {
     'no-unused-expressions': ['error', { allowTaggedTemplates: true }],
     'no-plusplus': ['error', { allowForLoopAfterthoughts: true }],
     'react-native/no-inline-styles': 0,
+    '@typescript-eslint/no-explicit-any': ['error', { ignoreRestArgs: true }],
     // NOTE: @typescript-eslint rules are configured under the TS override below
     'jest/expect-expect': [
       'warn',
@@ -121,6 +122,8 @@ module.exports = {
         'no-shadow': 'off',
         'import/named': 'off',
         'react-native/no-inline-styles': 0,
+        'no-unused-vars': 'off',
+        '@typescript-eslint/no-unused-vars': ['warn', { args: 'none' }],
         '@typescript-eslint/no-explicit-any': [
           'warn',
           { ignoreRestArgs: true },

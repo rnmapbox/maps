@@ -62,7 +62,7 @@ describe('SnapshotOptions', () => {
     };
 
     const geoJSONBounds = JSON.stringify(
-      makeFeatureCollection(expectedOptions.bounds.map((c) => makePoint(c))),
+      makeFeatureCollection(expectedOptions.bounds.map(c => makePoint(c))),
     );
 
     const options = new SnapshotOptions(expectedOptions);

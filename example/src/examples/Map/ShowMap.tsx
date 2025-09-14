@@ -9,7 +9,7 @@ import { ExampleWithMetadata } from '../common/ExampleMetadata'; // exclude-from
 
 const ShowMap = () => {
   const _mapOptions = Object.keys(Mapbox.StyleURL)
-    .map((key) => {
+    .map(key => {
       return {
         label: key,
         data: (Mapbox.StyleURL as any)[key], // bad any, because enums
@@ -38,11 +38,9 @@ const ShowMap = () => {
   return (
     <>
       <ButtonGroup
-        buttons={_mapOptions.map((i) => i.label)}
-        selectedIndex={_mapOptions.findIndex(
-          (i) => i.data === styleURL.styleURL,
-        )}
-        onPress={(index) => onMapChange(index, _mapOptions[index].data)}
+        buttons={_mapOptions.map(i => i.label)}
+        selectedIndex={_mapOptions.findIndex(i => i.data === styleURL.styleURL)}
+        onPress={index => onMapChange(index, _mapOptions[index].data)}
       />
       <Mapbox.MapView
         styleURL={styleURL.styleURL}

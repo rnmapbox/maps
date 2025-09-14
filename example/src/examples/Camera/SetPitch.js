@@ -41,9 +41,9 @@ class SetPitch extends React.Component {
     return (
       <>
         <ButtonGroup
-          buttons={this._pitchOptions.map((i) => i.label)}
+          buttons={this._pitchOptions.map(i => i.label)}
           selectedIndex={this.state.selectedIndex}
-          onPress={(i) => this.onUpdatePitch(i, this._pitchOptions[i].data)}
+          onPress={i => this.onUpdatePitch(i, this._pitchOptions[i].data)}
         />
         <MapboxGL.MapView style={styles.matchParent}>
           <MapboxGL.Camera {...this.state} followUserLocation />

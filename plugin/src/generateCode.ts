@@ -17,10 +17,10 @@ function getGeneratedSectionIndexes(
   tag: string,
 ): { contents: string[]; start: number; end: number } {
   const contents = src.split('\n');
-  const start = contents.findIndex((line) =>
+  const start = contents.findIndex(line =>
     line.includes(`@generated begin ${tag}`),
   );
-  const end = contents.findIndex((line) =>
+  const end = contents.findIndex(line =>
     line.includes(`@generated end ${tag}`),
   );
 
@@ -99,7 +99,7 @@ function addLines(
 ) {
   const lines = content.split('\n');
 
-  let lineIndex = lines.findIndex((line) => line.match(find));
+  let lineIndex = lines.findIndex(line => line.match(find));
   if (lineIndex < 0) {
     const error = new Error(
       `Failed to match "${find}" in contents:\n${content}`,
