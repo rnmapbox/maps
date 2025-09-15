@@ -472,10 +472,12 @@ open class RNMBXMapView: UIView, RCTInvalidating {
 
   func applyPreferredFramesPerSecond() {
     if let value = preferredFramesPerSecond {
-      if #available(iOS 15.0, *) {
-        self.mapView.preferredFrameRateRange = CAFrameRateRange(minimum: 1, maximum: Float(value))
-      } else {
-        self.mapView.preferredFramesPerSecond = value
+      withMapView { _mapView in
+        if #available(iOS 15.0, *) {
+          _mapView.preferredFrameRateRange = CAFrameRateRange(minimum: 1, maximum: Float(value))
+        } else {
+          _mapView.preferredFramesPerSecond = value
+        }
       }
     }
   }
@@ -977,21 +979,25 @@ open class RNMBXMapView: UIView, RCTInvalidating {
 extension RNMBXMapView {
   #if RNMBX_11
   private func onEvery<T>(event: MapEventType<T>, handler: @escaping (RNMBXMapView, T) -> Void) {
-    let signal = event.method(self.mapView.mapboxMap)
-    signal.observe { [weak self] (mapEvent) in
-      guard let self = self else { return }
+    withMapView { _mapView in
+      let signal = event.method(_mapView.mapboxMap)
+      signal.observe { [weak self] (mapEvent) in
+        guard let self = self else { return }
 
-      handler(self, mapEvent)
-    }.store(in: &cancelables)
+        handler(self, mapEvent)
+      }.store(in: &cancelables)
+    }
   }
 
   private func onNext<T>(event: MapEventType<T>, handler: @escaping (RNMBXMapView, T) -> Void) {
-    let signal = event.method(self.mapView.mapboxMap)
-    signal.observeNext { [weak self] (mapEvent) in
-      guard let self = self else { return }
+    withMapView { _mapView in
+      let signal = event.method(_mapView.mapboxMap)
+      signal.observeNext { [weak self] (mapEvent) in
+        guard let self = self else { return }
 
-      handler(self, mapEvent)
-    }.store(in: &cancelables)
+        handler(self, mapEvent)
+      }.store(in: &cancelables)
+    }
   }
   #else
   private func onEvery<Payload>(event: MapEvents.Event<Payload>, handler: @escaping  (RNMBXMapView, MapEvent<Payload>) -> Void) {
@@ -1755,65 +1761,67 @@ class RNMBXPointAnnotationManager : AnnotationInteractionDelegate {
       return
     }
     let options = RenderedQueryOptions(layerIds: [layerId], filter: nil)
-    guard let targetPoint = self.mapView?.mapboxMap.coordinate(for: sender.location(in: sender.view)) else {
-      return
-    }
-      switch sender.state {
-        case .began:
-        mapFeatureQueryable.queryRenderedFeatures(
-          with: sender.location(in: sender.view),
-            options: options) { [weak self] (result) in
+    withMapView { _mapView in
+      guard let targetPoint = _mapView.mapboxMap.coordinate(for: sender.location(in: sender.view)) else {
+        return
+      }
+        switch sender.state {
+          case .began:
+          mapFeatureQueryable.queryRenderedFeatures(
+            with: sender.location(in: sender.view),
+              options: options) { [weak self] (result) in
 
-              guard let self = self else { return }
-              switch result {
-                case .success(let queriedFeatures):
-                  // Get the identifiers of all the queried features
-                  let queriedFeatureIds: [String] = queriedFeatures.compactMap {
-                      guard case let .string(featureId) = $0.feature.identifier else {
-                          return nil
-                      }
-                      return featureId
-                  }
+                guard let self = self else { return }
+                switch result {
+                  case .success(let queriedFeatures):
+                    // Get the identifiers of all the queried features
+                    let queriedFeatureIds: [String] = queriedFeatures.compactMap {
+                        guard case let .string(featureId) = $0.feature.identifier else {
+                            return nil
+                        }
+                        return featureId
+                    }
 
-                  // Find if any `queriedFeatureIds` match an annotation's `id`
-                let draggedAnnotations = self.manager.annotations.filter { queriedFeatureIds.contains($0.id) }
-                let enabledAnnotations = draggedAnnotations.filter { self.lookup($0)?.draggable ?? false }
-                  // If `tappedAnnotations` is not empty, call delegate
-                  if !enabledAnnotations.isEmpty {
-                    self.draggedAnnotation = enabledAnnotations.first!
-                    self.onDragHandler(self.manager, didDetectDraggedAnnotations: enabledAnnotations, dragState: .began, targetPoint: targetPoint)
-                  } else {
+                    // Find if any `queriedFeatureIds` match an annotation's `id`
+                  let draggedAnnotations = self.manager.annotations.filter { queriedFeatureIds.contains($0.id) }
+                  let enabledAnnotations = draggedAnnotations.filter { self.lookup($0)?.draggable ?? false }
+                    // If `tappedAnnotations` is not empty, call delegate
+                    if !enabledAnnotations.isEmpty {
+                      self.draggedAnnotation = enabledAnnotations.first!
+                      self.onDragHandler(self.manager, didDetectDraggedAnnotations: enabledAnnotations, dragState: .began, targetPoint: targetPoint)
+                    } else {
+                      noAnnotationFound(sender)
+                    }
+                  case .failure(let error):
                     noAnnotationFound(sender)
+                    Logger.log(level:.warn, message:"Failed to query map for annotations due to error: \(error)")
                   }
-                case .failure(let error):
-                  noAnnotationFound(sender)
-                  Logger.log(level:.warn, message:"Failed to query map for annotations due to error: \(error)")
                 }
-              }
 
-      case .changed:
-          guard var annotation = self.draggedAnnotation else {
+        case .changed:
+            guard var annotation = self.draggedAnnotation else {
+                return
+            }
+
+            self.onDragHandler(self.manager, didDetectDraggedAnnotations: [annotation], dragState: .changed, targetPoint: targetPoint)
+
+            let idx = self.manager.annotations.firstIndex { an in return an.id == annotation.id }
+            if let idx = idx {
+              self.manager.annotations[idx].point = Point(targetPoint)
+            }
+        case .cancelled, .ended:
+          guard let annotation = self.draggedAnnotation else {
               return
           }
-
-          self.onDragHandler(self.manager, didDetectDraggedAnnotations: [annotation], dragState: .changed, targetPoint: targetPoint)
-
-          let idx = self.manager.annotations.firstIndex { an in return an.id == annotation.id }
-          if let idx = idx {
-            self.manager.annotations[idx].point = Point(targetPoint)
-          }
-      case .cancelled, .ended:
-        guard let annotation = self.draggedAnnotation else {
+          // Optionally notify some other delegate to tell them the drag finished.
+          self.onDragHandler(self.manager, didDetectDraggedAnnotations: [annotation], dragState: .ended, targetPoint: targetPoint)
+          // Reset our global var containing the annotation currently being dragged
+          self.draggedAnnotation = nil
+          return
+        default:
             return
         }
-        // Optionally notify some other delegate to tell them the drag finished.
-        self.onDragHandler(self.manager, didDetectDraggedAnnotations: [annotation], dragState: .ended, targetPoint: targetPoint)
-        // Reset our global var containing the annotation currently being dragged
-        self.draggedAnnotation = nil
-        return
-      default:
-          return
-      }
+    }
   }
 
   func remove(_ annotation: PointAnnotation) {
