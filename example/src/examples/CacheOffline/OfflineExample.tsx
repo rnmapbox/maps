@@ -106,11 +106,7 @@ const OfflineExample = () => {
           const options = {
             name: packName,
             styleURL: STYLE_URL,
-            tilesets: [
-              'mapbox://mapbox.mapbox-streets-v8',
-              'mapbox://mapbox.mapbox-terrain-dem-v1',
-              'mapbox://mapbox.country-boundaries-v1',
-            ], // Any tilesets that should be included in the offline download
+            tilesets: [],
             bounds: [
               [bounds[0], bounds[1]],
               [bounds[2], bounds[3]],

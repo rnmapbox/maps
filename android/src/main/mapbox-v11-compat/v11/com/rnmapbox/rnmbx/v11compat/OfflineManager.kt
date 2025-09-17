@@ -17,27 +17,19 @@ fun getOfflineManager(tileStore: TileStore, getAccessToken: () -> String): Offli
 }
 
 fun getTilesetDescriptors(offlineManager: OfflineManager, styleURI: String, minZoom: Byte, maxZoom: Byte, stylePackOptions: StylePackLoadOptions, tilesets: List<String>): ArrayList<TilesetDescriptor>{
-  if (tilesets.isNotEmpty()) {
-    val descriptorOptions = TilesetDescriptorOptions.Builder()
+  val builder = TilesetDescriptorOptions.Builder()
       .styleURI(styleURI)
       .minZoom(minZoom)
       .maxZoom(maxZoom)
-//    TODO: When tilesets is passed in the mappack doesn't save -- not sure why
-//      .tilesets(tilesets)
+
+  if (tilesets.isNotEmpty()) {
+    builder.tilesets(tilesets)
+  }
+  val descriptorOptions = builder
       .stylePackOptions(stylePackOptions)
       .pixelRatio(2.0f)
       .build()
-    val descriptor = offlineManager.createTilesetDescriptor(descriptorOptions)
-    val descriptors = arrayListOf(descriptor)
-    return descriptors
-  }
-  val descriptorOptions = TilesetDescriptorOptions.Builder()
-    .styleURI(styleURI)
-    .minZoom(minZoom)
-    .maxZoom(maxZoom)
-    .stylePackOptions(stylePackOptions)
-    .pixelRatio(2.0f)
-    .build()
+
   val descriptor = offlineManager.createTilesetDescriptor(descriptorOptions)
   val descriptors = arrayListOf(descriptor)
   return descriptors

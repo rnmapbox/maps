@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button, View } from 'react-native';
+import { Button, View, Alert } from 'react-native';
 import { LinearProgress } from '@rneui/base';
 import {
   MapView,
@@ -28,6 +28,17 @@ const bounds: [number, number, number, number] = [
 function Menu({ cameraRef }: { cameraRef: React.RefObject<Camera | null> }) {
   const [progress, setProgress] = React.useState(0);
 
+  function formatError(err: unknown) {
+    if (!err) return 'Unknown error';
+    if (typeof err === 'string') return err;
+    if (err instanceof Error) return err.message;
+    try {
+      return JSON.stringify(err, null, 2);
+    } catch {
+      return String(err);
+    }
+  }
+
   return (
     <View>
       <Button
@@ -40,6 +51,7 @@ function Menu({ cameraRef }: { cameraRef: React.RefObject<Camera | null> }) {
               setProgress(0);
             }
           } catch (error) {
+            Alert.alert('Offline Error', formatError(error));
             console.error('Error deleting pack:', error);
           }
         }}
@@ -53,10 +65,7 @@ function Menu({ cameraRef }: { cameraRef: React.RefObject<Camera | null> }) {
                 {
                   name: packName,
                   styleURL: STYLE_URL,
-                  tilesets: [
-                    'mapbox://mapbox.terrain-rgb',
-                    'mapbox://mapbox.country-boundaries-v1',
-                  ],
+                  tilesets: ['mapbox://mapbox.country-boundaries-v1'],
                   bounds: [
                     [bounds[0], bounds[1]],
                     [bounds[2], bounds[3]],
@@ -72,10 +81,14 @@ function Menu({ cameraRef }: { cameraRef: React.RefObject<Camera | null> }) {
                 },
                 (pack, error) => {
                   setProgress(0);
+                  if (error) {
+                    Alert.alert('Offline Error', formatError(error));
+                  }
                   console.log('=> callback pack:', pack, 'error:', error);
                 },
               );
             } catch (error) {
+              Alert.alert('Offline Error', formatError(error));
               console.error('#Error creating pack:', error);
             }
           })();
@@ -119,14 +132,6 @@ export default function OfflineTilesets() {
             pitch: 76,
           }}
         />
-        <RasterDemSource
-          id="mapbox-dem"
-          url="mapbox://mapbox.terrain-rgb"
-          tileSize={512}
-          maxZoomLevel={14}
-        >
-          <Terrain style={{ exaggeration: 1.5 }} />
-        </RasterDemSource>
         {/* Bounds visualization */}
         <ShapeSource
           id="bounds-source"
