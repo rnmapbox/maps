@@ -1,5 +1,5 @@
 import React, { useState, useCallback } from 'react';
-import MapboxGL, { MapView, Camera } from '@rnmapbox/maps';
+import Mapbox, { MapView, Camera } from '@rnmapbox/maps';
 import {
   Alert,
   StyleSheet,
@@ -53,23 +53,23 @@ const CacheManagement: React.FC<Partial<BaseExampleProps>> = () => {
   const [cacheSize, setCacheSize] = useState('');
 
   const invalidateAmbientCache = useCallback(async () => {
-    await MapboxGL.offlineManager.invalidateAmbientCache();
+    await Mapbox.offlineManager.invalidateAmbientCache();
     Alert.alert('Ambient cache successfully invalidated');
   }, []);
 
   const resetDatabase = useCallback(async () => {
-    await MapboxGL.offlineManager.resetDatabase();
+    await Mapbox.offlineManager.resetDatabase();
     Alert.alert('Database successfully reset');
   }, []);
 
   const clearAmbientCache = useCallback(async () => {
-    await MapboxGL.offlineManager.clearAmbientCache();
+    await Mapbox.offlineManager.clearAmbientCache();
     Alert.alert('Ambient cache successfully cleared');
   }, []);
 
   const setMaximumAmbientCacheSize = useCallback(async () => {
     const newMaxSize = parseInt(cacheSize, 10);
-    await MapboxGL.offlineManager.setMaximumAmbientCacheSize(newMaxSize);
+    await Mapbox.offlineManager.setMaximumAmbientCacheSize(newMaxSize);
     Alert.alert(`Max cache size successfully set to ${newMaxSize} bytes`);
   }, [cacheSize]);
 
