@@ -4,8 +4,6 @@ import { LinearProgress } from '@rneui/base';
 import {
   MapView,
   Camera,
-  RasterDemSource,
-  Terrain,
   ShapeSource,
   LineLayer,
   offlineManager,
