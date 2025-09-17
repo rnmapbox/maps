@@ -17,21 +17,24 @@ fun getOfflineManager(tileStore: TileStore, getAccessToken: () -> String): Offli
 }
 
 fun getTilesetDescriptors(offlineManager: OfflineManager, styleURI: String, minZoom: Byte, maxZoom: Byte, stylePackOptions: StylePackLoadOptions, tilesets: List<String>): ArrayList<TilesetDescriptor>{
-  val builder = TilesetDescriptorOptions.Builder()
-      .styleURI(styleURI)
-      .minZoom(minZoom)
-      .maxZoom(maxZoom)
-
-  if (tilesets.isNotEmpty()) {
-    builder.tilesets(tilesets)
-  }
-  val descriptorOptions = builder
-      .stylePackOptions(stylePackOptions)
-      .pixelRatio(2.0f)
-      .build()
-
+  val descriptorOptions = TilesetDescriptorOptions.Builder()
+    .styleURI(styleURI)
+    .minZoom(minZoom)
+    .maxZoom(maxZoom)
+    .stylePackOptions(stylePackOptions)
+    .pixelRatio(2.0f)
+    .build()
   val descriptor = offlineManager.createTilesetDescriptor(descriptorOptions)
   val descriptors = arrayListOf(descriptor)
+  if (tilesets.isNotEmpty()) {
+    val tilesetDescriptorOptions = TilesetDescriptorOptions.Builder().styleURI(styleURI)
+    .tilesets(tilesets)
+    .minZoom(minZoom)
+    .maxZoom(maxZoom)
+    .build()
+    val tilesetDescriptor = offlineManager.createTilesetDescriptor(tilesetDescriptorOptions)
+    descriptors.add(tilesetDescriptor)
+  }
   return descriptors
 }
 

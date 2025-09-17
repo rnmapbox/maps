@@ -33,14 +33,14 @@ fun getTilesetDescriptors(offlineManager: OfflineManager, styleURI: String, minZ
     .pixelRatio(2.0f)
     .build()
   val descriptor = offlineManager.createTilesetDescriptor(descriptorOptions)
-  val tilesetDescriptorOptions = TilesetDescriptorOptionsForTilesets.Builder()
+  val descriptors = arrayListOf(descriptor)
+  if (tilesets.isNotEmpty()) {
+    val tilesetDescriptorOptions = TilesetDescriptorOptionsForTilesets.Builder()
     .tilesets(tilesets)
     .minZoom(minZoom)
     .maxZoom(maxZoom)
     .build()
-  val tilesetDescriptor = offlineManager.createTilesetDescriptor(tilesetDescriptorOptions)
-  val descriptors = arrayListOf(descriptor)
-  if (tilesets.isNotEmpty()) {
+    val tilesetDescriptor = offlineManager.createTilesetDescriptor(tilesetDescriptorOptions)
     descriptors.add(tilesetDescriptor)
   }
   return descriptors
