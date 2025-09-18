@@ -106,6 +106,7 @@ const OfflineExample = () => {
           const options = {
             name: packName,
             styleURL: STYLE_URL,
+            tilesets: [],
             bounds: [
               [bounds[0], bounds[1]],
               [bounds[2], bounds[3]],

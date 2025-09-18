@@ -84,7 +84,7 @@ else
 end
 
 if $RNMapboxMapsUseV11 != nil
-  warn "WARNING: $RNMapboxMapsUseV11 is deprecated just set $RNMapboxMapsVersion to '= 11.13.4"
+  warn "WARNING: $RNMapboxMapsUseV11 is deprecated just set $RNMapboxMapsVersion to '= 11.15.0"
 end
 
 if $MapboxImplVersion =~ /(~>|>=|=|>)?\S*11\./

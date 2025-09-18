@@ -36,7 +36,7 @@ import * as Web from '../examples/Web';
 import BugReportExample from '../examples/BugReportExample';
 import BugReportExampleTS from '../examples/BugReportExampleTS';
 // Cache Management
-import * as CacheManagement from '../examples/CacheManagement';
+import * as CacheOffline from '../examples/CacheOffline';
 // V10
 import * as V10 from '../examples/V10';
 /*
@@ -179,7 +179,7 @@ class ExampleItem implements ExampleNode {
   }
 
   // eslint-disable-next-line @typescript-eslint/no-empty-function
-  updateIfNeeded(_updated: () => void): void {}
+  updateIfNeeded(_updated: () => void): void { }
 }
 
 type RootStackParamList = {
@@ -231,7 +231,7 @@ class ExampleGroup implements ExampleNode {
   }
 
   // eslint-disable-next-line @typescript-eslint/no-empty-function
-  updateIfNeeded(_updated: () => void): void {}
+  updateIfNeeded(_updated: () => void): void { }
 }
 
 const PageWrapper = (Component: ItemComponent) => (props: BaseExampleProps) => (
@@ -278,11 +278,11 @@ function exampleGroup(
 
 const BugReportPage =
   (Klass: React.ComponentType<PageProps>) =>
-  ({ ...props }: PageProps) => (
-    <Page {...props}>
-      <Klass {...props} />
-    </Page>
-  );
+    ({ ...props }: PageProps) => (
+      <Page {...props}>
+        <Klass {...props} />
+      </Page>
+    );
 
 const Examples = new ExampleGroup('React Native Mapbox', [
   new MostRecentExampleItem(),
@@ -299,7 +299,7 @@ const Examples = new ExampleGroup('React Native Mapbox', [
   exampleGroup(Annotations),
   exampleGroup(Animations),
   exampleGroup(Web),
-  exampleGroup(CacheManagement),
+  exampleGroup(CacheOffline),
 ]);
 
 function ExampleGroupComponent({
@@ -335,10 +335,10 @@ function ExampleGroupComponent({
 
   const back = showBack
     ? {
-        onBack: () => {
-          navigation.goBack();
-        },
-      }
+      onBack: () => {
+        navigation.goBack();
+      },
+    }
     : {};
 
   const [, updateState] = useState<object>();
