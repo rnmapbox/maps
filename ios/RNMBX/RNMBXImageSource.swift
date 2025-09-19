@@ -7,8 +7,11 @@ public class RNMBXImageSource : RNMBXSource {
     didSet {
       if var source = source as? ImageSource {
         source.url = url
-        self.doUpdate { (style) in
-          try! style.setSourceProperty(for: id, property: "url", value: url)
+        self.map?.withMapboxMap { [weak self] _mapboxMap in
+          guard let self = self else { return }
+          self.doUpdate(_mapboxMap: _mapboxMap) { (style) in
+            try! style.setSourceProperty(for: self.id, property: "url", value: source.url)
+          }
         }
       }
     }
@@ -22,8 +25,11 @@ public class RNMBXImageSource : RNMBXSource {
         } else {
           source.coordinates = nil
         }
-        self.doUpdate { (style) in
-          try! style.setSourceProperty(for: id, property: "coordinates", value: source.coordinates)
+        self.map?.withMapboxMap { [weak self] _mapboxMap in
+          guard let self = self else { return }
+          self.doUpdate(_mapboxMap: _mapboxMap) { (style) in
+            try! style.setSourceProperty(for: self.id, property: "coordinates", value: source.coordinates)
+          }
         }
       }
     }
@@ -51,14 +57,14 @@ public class RNMBXImageSource : RNMBXSource {
     return result
   }
   
-  func doUpdate(_ update:(Style) -> Void) {
+  func doUpdate(_mapboxMap: MapboxMap, _ update:(Style) -> Void) {
     guard let map = self.map,
           let _ = self.source,
-          map.mapboxMap.style.sourceExists(withId: id) else {
+          _mapboxMap.style.sourceExists(withId: id) else {
       return
     }
     
-    let style = map.mapboxMap.style
+    let style = _mapboxMap.style
     update(style)
   }
   

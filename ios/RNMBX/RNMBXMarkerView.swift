@@ -74,8 +74,8 @@ public class RNMBXMarkerView: UIView, RNMBXMapComponent {
 
   // MARK: - Derived variables
   
-  var annotationManager: ViewAnnotationManager? {
-    self.map?.mapView?.viewAnnotations
+  func getAnnotationManager(_mapView: MapView) -> ViewAnnotationManager {
+    _mapView.viewAnnotations
   }
 
   var point: Point? {
@@ -166,45 +166,52 @@ public class RNMBXMarkerView: UIView, RNMBXMapComponent {
   
   /// Because the necessary data to add an annotation arrives from different sources at unpredictable times, we let the arrival of each value trigger an attempt to add the annotation, which we only do if all of the data exists, and the annotation not been added already.
   private func add() {
-    if didAddToMap {
-      return
-    }
+    self.map?.withMapView { _mapView in
+      let annotationManager = self.getAnnotationManager(_mapView: _mapView)
     
-    guard let annotationManager = annotationManager, let _ = point else {
-      return
-    }
+      if self.didAddToMap {
+        return
+      }
 
-    do {
-      let options = getOptions()
-      try annotationManager.add(annotationView, id: id, options: options)
-      didAddToMap = true
-    } catch {
-      Logger.log(level: .error, message: "[MarkerView] Error adding annotation", error: error)
+      guard let _ = self.point else {
+        return
+      }
+
+      do {
+        let options = self.getOptions()
+        try annotationManager.add(self.annotationView, id: self.id, options: options)
+        self.didAddToMap = true
+      } catch {
+        Logger.log(level: .error, message: "[MarkerView] Error adding annotation", error: error)
+      }
     }
   }
 
   private func update() {
-    if !didAddToMap {
-      return
-    }
+    self.map?.withMapView { _mapView in
+      let annotationManager = self.getAnnotationManager(_mapView: _mapView)
     
-    guard let annotationManager = annotationManager else {
-      return
-    }
+      if !self.didAddToMap {
+        return
+      }
     
-    do {
-      let options = getOptions()
-      try annotationManager.update(annotationView, options: options)
-    } catch {
-      Logger.log(level: .error, message: "[MarkerView] Error updating annotation", error: error)
+      do {
+        let options = self.getOptions()
+        try annotationManager.update(self.annotationView, options: options)
+      } catch {
+        Logger.log(level: .error, message: "[MarkerView] Error updating annotation", error: error)
+      }
     }
   }
   
   private func remove() {
-    annotationManager?.remove(annotationView)
-    annotationView.remove(marker: self)
-    self._annotationView = nil
-    didAddToMap = false
+    self.map?.withMapView { _mapView in
+      let annotationManager = self.getAnnotationManager(_mapView: _mapView)
+      annotationManager.remove(self.annotationView)
+      self.annotationView.remove(marker: self)
+      self._annotationView = nil
+      self.didAddToMap = false
+    }
   }
   
   // MARK: - Helper functions

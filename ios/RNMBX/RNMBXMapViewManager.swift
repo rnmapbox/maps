@@ -50,11 +50,14 @@ extension RNMBXMapViewManager {
     resolver: @escaping RCTPromiseResolveBlock,
     rejecter: @escaping RCTPromiseRejectBlock
   ) {
-    let result = view.queryTerrainElevation(coordinates: coordinates)
-    if let result = result {
-      resolver(["data": NSNumber(value: result)])
-    } else {
-      resolver(nil)
+    view.withMapboxMap { [weak view] _mapboxMap in
+      guard let view = view else { return }
+      let result = view.queryTerrainElevation(coordinates: coordinates, _mapboxMap: _mapboxMap)
+      if let result = result {
+        resolver(["data": NSNumber(value: result)])
+      } else {
+        resolver(nil)
+      }
     }
   }
 
@@ -282,34 +285,37 @@ extension RNMBXMapViewManager {
     resolver: @escaping RCTPromiseResolveBlock,
     rejecter: @escaping RCTPromiseRejectBlock
   ) {
-    let top = bbox.isEmpty ? 0.0 : CGFloat(bbox[0].floatValue)
-    let right = bbox.isEmpty ? 0.0 : CGFloat(bbox[1].floatValue)
-    let bottom = bbox.isEmpty ? 0.0 : CGFloat(bbox[2].floatValue)
-    let left = bbox.isEmpty ? 0.0 : CGFloat(bbox[3].floatValue)
-    let rect =
-      bbox.isEmpty
-      ? CGRect(x: 0.0, y: 0.0, width: map.bounds.size.width, height: map.bounds.size.height)
-      : CGRect(
-        x: [left, right].min()!, y: [top, bottom].min()!, width: abs(right - left),
-        height: abs(bottom - top))
-    logged("queryRenderedFeaturesInRect.option", rejecter: rejecter) {
-      let options = try RenderedQueryOptions(
-        layerIds: layerIDs?.isEmpty ?? true ? nil : layerIDs, filter: filter?.asExpression())
-      map.mapboxMap.queryRenderedFeatures(with: rect, options: options) { result in
-        switch result {
-        case .success(let features):
-          resolver([
-            "data": [
-              "type": "FeatureCollection",
-              "features": features.compactMap { queriedFeature in
-                logged("queryRenderedFeaturesInRect.queriedfeature.map") {
-                  try queriedFeature.feature.toJSON()
-                }
-              },
-            ]
-          ])
-        case .failure(let error):
-          rejecter("queryRenderedFeaturesInRect", "failed to query features", error)
+    map.withMapboxMap { [weak map] _mapboxMap in
+      guard let map = map else { return }
+      let top = bbox.isEmpty ? 0.0 : CGFloat(bbox[0].floatValue)
+      let right = bbox.isEmpty ? 0.0 : CGFloat(bbox[1].floatValue)
+      let bottom = bbox.isEmpty ? 0.0 : CGFloat(bbox[2].floatValue)
+      let left = bbox.isEmpty ? 0.0 : CGFloat(bbox[3].floatValue)
+      let rect =
+        bbox.isEmpty
+        ? CGRect(x: 0.0, y: 0.0, width: map.bounds.size.width, height: map.bounds.size.height)
+        : CGRect(
+          x: [left, right].min()!, y: [top, bottom].min()!, width: abs(right - left),
+          height: abs(bottom - top))
+      logged("queryRenderedFeaturesInRect.option", rejecter: rejecter) {
+        let options = try RenderedQueryOptions(
+          layerIds: layerIDs?.isEmpty ?? true ? nil : layerIDs, filter: filter?.asExpression())
+        _mapboxMap.queryRenderedFeatures(with: rect, options: options) { result in
+          switch result {
+          case .success(let features):
+            resolver([
+              "data": [
+                "type": "FeatureCollection",
+                "features": features.compactMap { queriedFeature in
+                  logged("queryRenderedFeaturesInRect.queriedfeature.map") {
+                    try queriedFeature.feature.toJSON()
+                  }
+                },
+              ]
+            ])
+          case .failure(let error):
+            rejecter("queryRenderedFeaturesInRect", "failed to query features", error)
+          }
         }
       }
     }
@@ -323,38 +329,42 @@ extension RNMBXMapViewManager {
     resolver: @escaping RCTPromiseResolveBlock,
     rejecter: @escaping RCTPromiseRejectBlock
   ) {
-    let sourceLayerIds = sourceLayerIds?.isEmpty ?? true ? nil : sourceLayerIds
-    logged("querySourceFeatures.option", rejecter: rejecter) {
-      let options = SourceQueryOptions(
-        sourceLayerIds: sourceLayerIds, filter: filter ?? Exp(arguments: []))
-      map.mapboxMap.querySourceFeatures(for: sourceId, options: options) { result in
-        switch result {
-        case .success(let features):
-          resolver([
-            "data": [
-              "type": "FeatureCollection",
-              "features": features.compactMap { queriedFeature in
-                logged("querySourceFeatures.queriedfeature.map") {
-                  try queriedFeature.feature.toJSON()
-                }
-              },
-            ] as [String: Any]
-          ])
-        case .failure(let error):
-          rejecter(
-            "querySourceFeatures",
-            "failed to query source features: \(error.localizedDescription)", error)
+    map.withMapboxMap { _mapboxMap in
+      let sourceLayerIds = sourceLayerIds?.isEmpty ?? true ? nil : sourceLayerIds
+      logged("querySourceFeatures.option", rejecter: rejecter) {
+        let options = SourceQueryOptions(
+          sourceLayerIds: sourceLayerIds, filter: filter ?? Exp(arguments: []))
+        _mapboxMap.querySourceFeatures(for: sourceId, options: options) { result in
+          switch result {
+          case .success(let features):
+            resolver([
+              "data": [
+                "type": "FeatureCollection",
+                "features": features.compactMap { queriedFeature in
+                  logged("querySourceFeatures.queriedfeature.map") {
+                    try queriedFeature.feature.toJSON()
+                  }
+                },
+              ] as [String: Any]
+            ])
+          case .failure(let error):
+            rejecter(
+              "querySourceFeatures",
+              "failed to query source features: \(error.localizedDescription)", error)
+          }
         }
       }
     }
   }
 
   static func clearData(_ view: RNMBXMapView, completion: @escaping (Error?) -> Void) {
-    #if RNMBX_11
-      MapboxMap.clearData(completion: completion)
-    #else
-      view.mapboxMap.clearData(completion: completion)
-    #endif
+    view.withMapboxMap { _mapboxMap in
+      #if RNMBX_11
+        MapboxMap.clearData(completion: completion)
+      #else
+        _mapboxMap.clearData(completion: completion)
+      #endif
+    }
   }
 
   @objc public static func clearData(
