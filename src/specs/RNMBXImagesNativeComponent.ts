@@ -4,7 +4,10 @@ import type { DirectEventHandler } from 'react-native/Libraries/Types/CodegenTyp
 
 import type { UnsafeMixed } from './codegenUtils';
 
-type OnImageMissingEventType = { type: string; payload: { imageKey: string } };
+type OnImageMissingEventType = {
+  type: string;
+  payloadRenamed: { imageKey: string };
+};
 
 export interface NativeProps extends ViewProps {
   images: UnsafeMixed<any>;

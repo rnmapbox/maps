@@ -47,15 +47,15 @@ using namespace facebook::react;
 
       // capture weak self reference to prevent retain cycle
       __weak __typeof__(self) weakSelf = self;
-      
+
       [_view setOnImageMissing:^(NSDictionary* event) {
           __typeof__(self) strongSelf = weakSelf;
 
           if (strongSelf != nullptr && strongSelf->_eventEmitter != nullptr) {
               std::string type = [event valueForKey:@"type"] == nil ? "" : std::string([[event valueForKey:@"type"] UTF8String]);
               std::string imageKey =  (![[event valueForKey:@"payload"] isKindOfClass:[NSDictionary class]] || ![[[event valueForKey:@"payload"] valueForKey:@"imageKey"] isKindOfClass:[NSString class]]) ? "" : std::string([((NSDictionary *)event[@"payload"])[@"imageKey"] UTF8String]);
-              facebook::react::RNMBXImagesEventEmitter::OnImageMissingPayload payload = {.imageKey = imageKey};
-              std::dynamic_pointer_cast<const facebook::react::RNMBXImagesEventEmitter>(strongSelf->_eventEmitter)->onImageMissing({type, payload});
+              facebook::react::RNMBXImagesEventEmitter::OnImageMissingPayloadRenamed payloadRenamed = {.imageKey = imageKey};
+              std::dynamic_pointer_cast<const facebook::react::RNMBXImagesEventEmitter>(strongSelf->_eventEmitter)->onImageMissing({type, payloadRenamed});
             }
       }];
     self.contentView = _view;
