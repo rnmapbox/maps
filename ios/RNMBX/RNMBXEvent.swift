@@ -11,7 +11,7 @@ class RNMBXEvent : NSObject, RNMBXEventProtocol {
     func toJSON() -> [String: Any?]
     {
         if let payload = payload {
-            return ["type": type, "payload": payload];
+            return ["type": type, "payload": payload, "payloadRenamed": payload];
         } else {
             return ["type": type]
         }

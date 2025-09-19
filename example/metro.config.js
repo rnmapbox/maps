@@ -37,7 +37,7 @@ const config = {
   resolver: {
     ...defaultConfig.resolver,
 
-    blockList: exclusionList(
+    blockList: exclusionList.default(
       modules.map(
         (m) =>
           new RegExp(`^${escape(path.join(root, 'node_modules', m))}\\/.*$`),
