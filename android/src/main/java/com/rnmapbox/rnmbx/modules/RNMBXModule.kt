@@ -25,6 +25,7 @@ import java.util.HashMap
 
 import com.rnmapbox.rnmbx.v11compat.resourceoption.*
 import com.rnmapbox.rnmbx.v11compat.mapboxmap.*
+import java.util.regex.PatternSyntaxException
 
 @ReactModule(name = RNMBXModule.REACT_CLASS)
 class RNMBXModule(private val mReactContext: ReactApplicationContext) : ReactContextBaseJavaModule(
@@ -166,7 +167,12 @@ class RNMBXModule(private val mReactContext: ReactApplicationContext) : ReactCon
 
     @ReactMethod
     fun addCustomHeader(headerName: String, headerValue: String, options: ReadableMap? = null) {
-        CustomHttpHeaders.addCustomHeader(headerName, headerValue, CustomHttpHeadersOptions(urlPattern = options?.getString("urlPattern")))
+        val urlRegexp = options?.getString("urlRegexp")
+        try {
+            CustomHttpHeaders.addCustomHeader(headerName, headerValue, CustomHttpHeadersOptions(urlRegexp = urlRegexp?.toRegex()))
+        } catch (e: PatternSyntaxException) {
+            Logger.e(CustomHttpHeaders.LOG_TAG, e.localizedMessage ?: "Error converting $urlRegexp to regex")
+        }
     }
 
     @ReactMethod

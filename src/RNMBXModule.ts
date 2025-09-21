@@ -31,7 +31,7 @@ interface RNMBXModule {
   addCustomHeader(
     headerName: string,
     headerValue: string,
-    options?: { urlPattern?: string },
+    options?: { urlRegexp?: string },
   ): void;
   setAccessToken(accessToken: string | null): Promise<string | null>;
   setWellKnownTileServer(tileServer: string): void;

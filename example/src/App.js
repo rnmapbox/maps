@@ -27,11 +27,11 @@ const styles = StyleSheet.create({
 
 Mapbox.addCustomHeader('Custom-Header', 'global-header-value');
 Mapbox.addCustomHeader('Mapbox-Api-Header-Value', 'api-header-value', {
-  urlPattern: '^https:\/\/api\.mapbox\.com\/(.*)$',
+  urlRegexp: '^https:\/\/api\.mapbox\.com\/(.*)$',
 });
 // This header will not be added to requests to api.mapbox.com
 Mapbox.addCustomHeader('Other-Api-Header-Value', 'other-api-header-value', {
-  urlPattern: '^https:\/\/api\.other\.com\/(.*)$',
+  urlRegexp: '^https:\/\/api\.other\.com\/(.*)$',
 });
 Mapbox.setAccessToken(config.get('accessToken'));
 

@@ -1,13 +1,13 @@
 package com.rnmapbox.rnmbx.modules
 
-import android.util.Log
+import com.rnmapbox.rnmbx.utils.Logger
 import com.mapbox.common.*
 
 import com.rnmapbox.rnmbx.v11compat.httpinterceptor.*
 import java.util.regex.Pattern
 import java.util.regex.PatternSyntaxException
 
-data class CustomHttpHeadersOptions(val urlPattern: String?)
+data class CustomHttpHeadersOptions(val urlRegexp: Regex?)
 
 data class CustomHttpHeadersMapValue(
     val headerValue: String,
@@ -35,20 +35,13 @@ object CustomHttpHeaders : HttpServiceBase() {
     fun getCustomRequestHeaders(customRequestHeaders: MutableMap<String, CustomHttpHeadersMapValue>, httpRequest: HttpRequest): HashMap<String, String> {
         val headers = hashMapOf<String, String>()
         for (entry in map.entries.iterator()) {
-            val options = entry.value.options
-            try {
-                val urlPatternRegex = options?.urlPattern?.toRegex()
-                if (urlPatternRegex != null) {
-                    if (urlPatternRegex.matches(httpRequest.url)) {
-                        headers[entry.key] = entry.value.headerValue
-                    }
-                }
-                else {
-                    // Apply header if no URL pattern is specified.
-                    headers[entry.key] = entry.value.headerValue
-                }
-            } catch (e: PatternSyntaxException) {
-                Log.w(LOG_TAG, e.localizedMessage ?: "Error converting ${options?.urlPattern} to regex")
+            val urlRegexp = entry.value.options?.urlRegexp
+            if (urlRegexp != null && urlRegexp.matches(httpRequest.url)) {
+                headers[entry.key] = entry.value.headerValue
+            }
+            else {
+                // Apply header if no URL pattern is specified.
+                headers[entry.key] = entry.value.headerValue
             }
         }
         return headers

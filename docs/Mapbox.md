@@ -42,7 +42,7 @@ gets the accessToken
 | ---- | :--: | :------: | :----------: |
 | `headerName` | `String` | `Yes` | name for customHeader |
 | `headerValue` | `String` | `Yes` | value for customHeader |
-| `options` | `{ urlPattern }` | `No` | optional configurations for customHeader |
+| `options` | `{ urlRegexp }` | `No` | optional configurations for customHeader |
 
 #### Description
 also see [CustomHttpHeaders](/docs/CustomHttpHeaders.md)

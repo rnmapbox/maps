@@ -1,7 +1,7 @@
 import MapboxMaps
 
 struct CustomHttpHeadersOptions {
-  var urlPattern: String?
+  var urlRegexp: NSRegularExpression?
 }
 
 struct CustomHttpHeadersMapValue {
@@ -55,21 +55,14 @@ class CustomHttpHeaders : HttpServiceInterceptorInterface {
     for (key, entry) in customHeaders {
       let options = entry.options
 
-      // Check if a URL pattern exists.
-      if let pattern = options.urlPattern {
+      if let pattern = options.urlRegexp {
         do {
-          let regex = try NSRegularExpression(pattern: pattern)
           let range = NSRange(location: 0, length: urlString.utf16.count)
-
-          if regex.firstMatch(in: urlString, options: [], range: range) != nil {
+          if pattern.firstMatch(in: urlString, options: [], range: range) != nil {
             headers[key] = entry.headerValue
           }
-        } catch {
-          // Handle a malformed regex pattern.
-          Logger.log(level: .error, message: "Invalid regex pattern: \(error.localizedDescription)")
         }
       } else {
-        // Apply header if no URL pattern is specified.
         headers[key] = entry.headerValue
       }
     }

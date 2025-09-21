@@ -27,7 +27,7 @@ You can add and remove headers at runtime.
 ### To add a header based on url
 
 ```javascript
-    MapboxGL.addCustomHeader('Authorization', '{auth header}', { urlPattern: '^https:\/\/api\.mapbox\.com\/(.*)$' });
+    MapboxGL.addCustomHeader('Authorization', '{auth header}', { urlRegexp: '^https:\/\/api\.mapbox\.com\/(.*)$' });
 ```
 
 ### Working example
