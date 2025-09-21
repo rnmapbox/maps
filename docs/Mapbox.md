@@ -35,13 +35,14 @@ Deprecard will be removed on next version
 gets the accessToken
 
 
-### addCustomHeader(headerName, headerValue)
+### addCustomHeader(headerName, headerValue, options?)
 
 #### arguments
 | Name | Type | Required | Description  |
 | ---- | :--: | :------: | :----------: |
 | `headerName` | `String` | `Yes` | name for customHeader |
 | `headerValue` | `String` | `Yes` | value for customHeader |
+| `options` | `{ urlPattern }` | `No` | optional configurations for customHeader |
 
 #### Description
 also see [CustomHttpHeaders](/docs/CustomHttpHeaders.md)
