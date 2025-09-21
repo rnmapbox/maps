@@ -58,7 +58,7 @@ boolean
 iOS only. A Boolean value indicating whether the user location annotation may display a permanent heading indicator.
 
 @platform ios
-@deprecated use `puckBearingEnabled={true} puckBrearing="heading"` instead
+@deprecated use `puckBearingEnabled={true} puckBearing="heading"` instead
 
 
   
