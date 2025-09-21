@@ -1,6 +1,7 @@
 package com.rnmapbox.rnmbx.modules
 
 import android.os.Handler
+import androidx.annotation.Nullable
 import com.facebook.react.bridge.Promise
 import com.mapbox.maps.extension.style.layers.properties.generated.LineJoin
 import com.facebook.react.module.annotations.ReactModule
@@ -12,6 +13,7 @@ import com.rnmapbox.rnmbx.modules.RNMBXOfflineModule
 import com.rnmapbox.rnmbx.modules.RNMBXLocationModule
 import com.facebook.react.bridge.ReactMethod
 import com.facebook.react.bridge.ReadableMap
+import com.facebook.react.bridge.buildReadableMap
 import com.facebook.react.common.MapBuilder
 import com.mapbox.bindgen.None
 import com.mapbox.common.*
@@ -166,12 +168,17 @@ class RNMBXModule(private val mReactContext: ReactApplicationContext) : ReactCon
     }
 
     @ReactMethod
-    fun addCustomHeader(headerName: String, headerValue: String, options: ReadableMap? = null) {
-        val urlRegexp = options?.getString("urlRegexp")
+    fun addCustomHeader(headerName: String, headerValue: String) {
+        addCustomHeaderWithOptions(headerName, headerValue)
+    }
+
+    @ReactMethod
+    fun addCustomHeaderWithOptions(headerName: String, headerValue: String, options: ReadableMap? = buildReadableMap { }) {
         try {
-            CustomHttpHeaders.addCustomHeader(headerName, headerValue, CustomHttpHeadersOptions(urlRegexp = urlRegexp?.toRegex()))
+            val urlRegexp = options?.getString("urlRegexp")?.toRegex()
+            CustomHttpHeaders.addCustomHeader(headerName, headerValue, CustomHttpHeadersOptions(urlRegexp = urlRegexp))
         } catch (e: PatternSyntaxException) {
-            Logger.e(CustomHttpHeaders.LOG_TAG, e.localizedMessage ?: "Error converting $urlRegexp to regex")
+            Logger.e(CustomHttpHeaders.LOG_TAG, e.localizedMessage ?: "Error converting ${options?.getString("urlRegexp")} to regex")
         }
     }
 

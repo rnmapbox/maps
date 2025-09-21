@@ -1,11 +1,7 @@
 package com.rnmapbox.rnmbx.modules
 
-import com.rnmapbox.rnmbx.utils.Logger
 import com.mapbox.common.*
-
 import com.rnmapbox.rnmbx.v11compat.httpinterceptor.*
-import java.util.regex.Pattern
-import java.util.regex.PatternSyntaxException
 
 data class CustomHttpHeadersOptions(val urlRegexp: Regex?)
 
@@ -36,11 +32,13 @@ object CustomHttpHeaders : HttpServiceBase() {
         val headers = hashMapOf<String, String>()
         for (entry in map.entries.iterator()) {
             val urlRegexp = entry.value.options?.urlRegexp
-            if (urlRegexp != null && urlRegexp.matches(httpRequest.url)) {
-                headers[entry.key] = entry.value.headerValue
+            if (urlRegexp != null) {
+                val destination = httpRequest.headers.getOrDefault("location", httpRequest.url)
+                if (urlRegexp.matches(destination)) {
+                    headers[entry.key] = entry.value.headerValue
+                }
             }
             else {
-                // Apply header if no URL pattern is specified.
                 headers[entry.key] = entry.value.headerValue
             }
         }
@@ -48,6 +46,7 @@ object CustomHttpHeaders : HttpServiceBase() {
     }
 
     override fun onRequest(request: HttpRequest): HttpRequest {
+        request.headers.remove("Authorization")
         request.headers.putAll(getCustomRequestHeaders(map, request))
         return request
     }

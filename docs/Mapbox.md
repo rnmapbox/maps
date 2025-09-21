@@ -35,7 +35,15 @@ Deprecard will be removed on next version
 gets the accessToken
 
 
-### addCustomHeader(headerName, headerValue, options?)
+### addCustomHeader(headerName, headerValue)
+
+#### arguments
+| Name | Type | Required | Description  |
+| ---- | :--: | :------: | :----------: |
+| `headerName` | `String` | `Yes` | name for customHeader |
+| `headerValue` | `String` | `Yes` | value for customHeader |
+
+### addCustomHeaderWithOptions(headerName, headerValue, options)
 
 #### arguments
 | Name | Type | Required | Description  |

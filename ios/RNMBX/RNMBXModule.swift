@@ -98,8 +98,12 @@ class RNMBXModule : NSObject {
       RNMBXModule.accessToken = token
       resolver(token)
   }
+  
+  @objc func addCustomHeader(_ headerName: String, forHeaderValue headerValue: String) {
+    addCustomHeaderWithOptions(headerName, forHeaderValue: headerValue, forOptions: nil)
+  }
 
-  @objc func addCustomHeader(_ headerName: String, forHeaderValue headerValue: String, forOptions options: NSDictionary?) {
+  @objc func addCustomHeaderWithOptions(_ headerName: String, forHeaderValue headerValue: String, forOptions options: NSDictionary?) {
     var urlRegexp: NSRegularExpression? = nil
     if let pattern = options?.value(forKey: "urlRegexp") as? String {
       do {
