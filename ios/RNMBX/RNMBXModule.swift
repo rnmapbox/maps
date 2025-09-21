@@ -99,8 +99,8 @@ class RNMBXModule : NSObject {
       resolver(token)
   }
 
-  @objc func addCustomHeader(_ headerName: String, forHeaderValue headerValue: String ) {
-    CustomHttpHeaders.shared.customHeaders[headerName] = headerValue
+  @objc func addCustomHeader(_ headerName: String, forHeaderValue headerValue: String, forOptions options: NSDictionary?) {
+    CustomHttpHeaders.shared.customHeaders[headerName] = CustomHttpHeadersMapValue(headerValue: headerValue, options: CustomHttpHeadersOptions(urlPattern: options?.value(forKey: "urlPattern") as? String))
   }
 
   @objc func removeCustomHeader(_ headerName: String) {

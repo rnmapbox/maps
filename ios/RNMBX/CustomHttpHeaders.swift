@@ -1,5 +1,14 @@
 import MapboxMaps
 
+struct CustomHttpHeadersOptions {
+  var urlPattern: String?
+}
+
+struct CustomHttpHeadersMapValue {
+  var headerValue: String
+  var options: CustomHttpHeadersOptions
+}
+
 class CustomHttpHeaders : HttpServiceInterceptorInterface {
   #if RNMBX_11
   func onRequest(for request: HttpRequest, continuation: @escaping HttpServiceInterceptorRequestContinuation) {
@@ -18,7 +27,7 @@ class CustomHttpHeaders : HttpServiceInterceptorInterface {
     return headers
   }()
 
-  var customHeaders : [String:String] = [:]
+  var customHeaders : [String:CustomHttpHeadersMapValue] = [:]
 
   func install() {
     #if RNMBX_11
@@ -38,19 +47,46 @@ class CustomHttpHeaders : HttpServiceInterceptorInterface {
   }
 
   // MARK: - HttpServiceInterceptorInterface
+  
+  func getCustomRequestHeaders(for request: HttpRequest, with customHeaders: [String: CustomHttpHeadersMapValue]) -> [String: String] {
+    var headers: [String: String] = [:]
+    let urlString = request.url
+
+    for (key, entry) in customHeaders {
+      let options = entry.options
+
+      // Check if a URL pattern exists.
+      if let pattern = options.urlPattern {
+        do {
+          let regex = try NSRegularExpression(pattern: pattern)
+          let range = NSRange(location: 0, length: urlString.utf16.count)
+
+          if regex.firstMatch(in: urlString, options: [], range: range) != nil {
+            headers[key] = entry.headerValue
+          }
+        } catch {
+          // Handle a malformed regex pattern.
+          Logger.log(level: .error, message: "Invalid regex pattern: \(error.localizedDescription)")
+        }
+      } else {
+        // Apply header if no URL pattern is specified.
+        headers[key] = entry.headerValue
+      }
+    }
+    return headers
+  }
+
 
   func onRequest(for request: HttpRequest) -> HttpRequest {
-    customHeaders.forEach {(key, value) in
-      request.headers[key] = value
-    }
+    let customHeaders = getCustomRequestHeaders(for: request, with: customHeaders)
+    request.headers.merge(customHeaders) { (_, new) in new }
     return request
   }
 
   #if !RNMBX_11
   func onDownload(forDownload download: DownloadOptions) -> DownloadOptions {
-    customHeaders.forEach {(key,value) in
-      download.request.headers[key] = value
-    }
+    let customHeaders = getCustomRequestHeaders(for: download.request, with: customHeaders)
+    download.request.headers.merge(customHeaders) { (_, new) in new }
     return download
   }
   #endif
