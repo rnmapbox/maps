@@ -50,10 +50,12 @@ class IndoorBuilding extends React.Component {
           style={sheet.matchParent}
         >
           <Mapbox.Camera
-            zoomLevel={16}
-            pitch={40}
-            heading={20}
-            centerCoordinate={[-87.61694, 41.86625]}
+            defaultSettings={{
+              centerCoordinate: [-87.61694, 41.86625],
+              zoomLevel: 16,
+              pitch: 40,
+              heading: 20,
+            }}
           />
 
           <Mapbox.Light style={{ position: [5, 90, this.state.sliderValue] }} />
