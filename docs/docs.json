@@ -1127,7 +1127,7 @@
         "type": "number",
         "values": [],
         "default": 0,
-        "description": "Amount to blur the circle. 1 blurs the circle such that only the centerpoint is full opacity.",
+        "description": "Amount to blur the circle. 1 blurs the circle such that only the centerpoint is full opacity. Setting a negative value renders the blur as an inner glow effect.",
         "requires": [],
         "disabledBy": [],
         "allowedFunctionTypes": [],
@@ -1515,6 +1515,26 @@
         }
       },
       {
+        "name": "fillExtrusionEdgeRadius",
+        "type": "number",
+        "values": [],
+        "minimum": 0,
+        "maximum": 1,
+        "default": 0,
+        "description": "Radius of a fill extrusion edge in meters. If not zero, rounds extrusion edges for a smoother appearance.",
+        "requires": [],
+        "disabledBy": [],
+        "allowedFunctionTypes": [],
+        "expression": {
+          "interpolated": false
+        },
+        "mbx": {
+          "fullName": "layout-fill-extrusion-fill-extrusion-edge-radius",
+          "name": "fill-extrusion-edge-radius",
+          "namespace": "layout"
+        }
+      },
+      {
         "name": "fillExtrusionOpacity",
         "type": "number",
         "values": [],
@@ -1718,6 +1738,55 @@
         "mbx": {
           "fullName": "paint-fill-extrusion-fill-extrusion-vertical-gradient",
           "name": "fill-extrusion-vertical-gradient",
+          "namespace": "paint"
+        }
+      },
+      {
+        "name": "fillExtrusionAmbientOcclusionIntensity",
+        "type": "number",
+        "values": [],
+        "minimum": 0,
+        "maximum": 1,
+        "default": 0,
+        "description": "Controls the intensity of shading near ground and concave angles between walls. Default value 0.0 disables ambient occlusion and values around 0.3 provide the most plausible results for buildings.",
+        "requires": [],
+        "disabledBy": [],
+        "allowedFunctionTypes": [],
+        "expression": {
+          "interpolated": true,
+          "parameters": [
+            "zoom"
+          ]
+        },
+        "transition": true,
+        "mbx": {
+          "fullName": "paint-fill-extrusion-fill-extrusion-ambient-occlusion-intensity",
+          "name": "fill-extrusion-ambient-occlusion-intensity",
+          "namespace": "paint"
+        }
+      },
+      {
+        "name": "fillExtrusionAmbientOcclusionRadius",
+        "type": "number",
+        "values": [],
+        "minimum": 0,
+        "default": 3,
+        "description": "Shades area near ground and concave angles between walls where the radius defines only vertical impact. Default value 3.0 corresponds to height of one floor and brings the most plausible results for buildings. This property works only with legacy light. When 3D lights are enabled `fillExtrusionAmbientOcclusionWallRadius` and `fillExtrusionAmbientOcclusionGroundRadius` are used instead.",
+        "requires": [
+          "fillExtrusionEdgeRadius"
+        ],
+        "disabledBy": [],
+        "allowedFunctionTypes": [],
+        "expression": {
+          "interpolated": true,
+          "parameters": [
+            "zoom"
+          ]
+        },
+        "transition": true,
+        "mbx": {
+          "fullName": "paint-fill-extrusion-fill-extrusion-ambient-occlusion-radius",
+          "name": "fill-extrusion-ambient-occlusion-radius",
           "namespace": "paint"
         }
       },
@@ -2797,6 +2866,10 @@
           {
             "value": "miter",
             "doc": "A join with a sharp, angled corner which is drawn with the outer sides beyond the endpoint of the path until they meet."
+          },
+          {
+            "value": "none",
+            "doc": "Line segments are not joined together, each one creates a separate line. Useful in combination with line-pattern. Line-cap property is not respected. Can't be used with data-driven styling."
           }
         ],
         "default": "miter",
@@ -3040,7 +3113,8 @@
             "zoom",
             "feature",
             "feature-state",
-            "measure-light"
+            "measure-light",
+            "line-progress"
           ]
         },
         "transition": true,
@@ -3217,7 +3291,7 @@
           0,
           0
         ],
-        "description": "The line part between [trimStart, trimEnd] will be marked as transparent to make a route vanishing effect. The line trimOff offset is based on the whole line range [0.0, 1.0].",
+        "description": "The line part between [trimStart, trimEnd] will be painted using `lineTrimColor,` which is transparent by default to produce a route vanishing effect. The line trimOff offset is based on the whole line range [0.0, 1.0].",
         "requires": [],
         "disabledBy": [],
         "allowedFunctionTypes": [],
@@ -6098,7 +6172,7 @@
           },
           {
             "value": "viewport-y",
-            "doc": "Sorts symbols by their y-position relative to the viewport if `icon-allow-overlap` or `text-allow-overlap` is set to `true` or `icon-ignore-placement` or `text-ignore-placement` is `false`."
+            "doc": "Sorts symbols by their y-position relative to the viewport if any of the following is set to `true`: `icon-allow-overlap`, `text-allow-overlap`, `icon-ignore-placement`, `text-ignore-placement`."
           },
           {
             "value": "source",

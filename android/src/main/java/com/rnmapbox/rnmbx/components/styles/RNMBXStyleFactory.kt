@@ -350,8 +350,6 @@ object RNMBXStyleFactory {
                         }
                     }
                 })
-                "iconImageCrossFadeTransition" ->
-                setIconImageCrossFadeTransition(layer, styleValue)
           }
         } catch (e: MapboxStyleException) {
           Logger.e(LOG_TAG, "Failed to update: $styleKey ${e.message}")
@@ -472,6 +470,8 @@ object RNMBXStyleFactory {
           when (styleKey) {
               "visibility" ->
                 setVisibility(layer, styleValue)
+              "fillExtrusionEdgeRadius" ->
+                setFillExtrusionEdgeRadius(layer, styleValue)
               "fillExtrusionOpacity" ->
                 setFillExtrusionOpacity(layer, styleValue)
                 "fillExtrusionOpacityTransition" ->
@@ -506,6 +506,14 @@ object RNMBXStyleFactory {
                 setFillExtrusionBaseTransition(layer, styleValue)
               "fillExtrusionVerticalGradient" ->
                 setFillExtrusionVerticalGradient(layer, styleValue)
+              "fillExtrusionAmbientOcclusionIntensity" ->
+                setFillExtrusionAmbientOcclusionIntensity(layer, styleValue)
+                "fillExtrusionAmbientOcclusionIntensityTransition" ->
+                setFillExtrusionAmbientOcclusionIntensityTransition(layer, styleValue)
+              "fillExtrusionAmbientOcclusionRadius" ->
+                setFillExtrusionAmbientOcclusionRadius(layer, styleValue)
+                "fillExtrusionAmbientOcclusionRadiusTransition" ->
+                setFillExtrusionAmbientOcclusionRadiusTransition(layer, styleValue)
               "fillExtrusionRoundedRoof" ->
                 setFillExtrusionRoundedRoof(layer, styleValue)
               "fillExtrusionAmbientOcclusionWallRadius" ->
@@ -546,6 +554,10 @@ object RNMBXStyleFactory {
                 setFillExtrusionVerticalScaleTransition(layer, styleValue)
               "fillExtrusionCutoffFadeRange" ->
                 setFillExtrusionCutoffFadeRange(layer, styleValue)
+              "fillExtrusionEmissiveStrength" ->
+                setFillExtrusionEmissiveStrength(layer, styleValue)
+                "fillExtrusionEmissiveStrengthTransition" ->
+                setFillExtrusionEmissiveStrengthTransition(layer, styleValue)
           }
         } catch (e: MapboxStyleException) {
           Logger.e(LOG_TAG, "Failed to update: $styleKey ${e.message}")
@@ -2614,14 +2626,6 @@ object RNMBXStyleFactory {
       }
     }
 
-
-    fun setIconImageCrossFadeTransition(layer: SymbolLayer, styleValue: RNMBXStyleValue) {
-      val transition = styleValue.transition
-      if (transition != null) {
-        layer.iconImageCrossFadeTransition(transition);
-      }
-    }
-
     fun setCircleSortKey(layer: CircleLayer, styleValue: RNMBXStyleValue ) {
       if (styleValue.isExpression()) {
         val expression = styleValue.getExpression()
@@ -3034,6 +3038,24 @@ object RNMBXStyleFactory {
         layer.visibility(Visibility.valueOf(styleValue.getEnumName()));
     }
 
+    fun setFillExtrusionEdgeRadius(layer: FillExtrusionLayer, styleValue: RNMBXStyleValue ) {
+      if (styleValue.isExpression()) {
+        val expression = styleValue.getExpression()
+        if (expression != null) {
+          layer.fillExtrusionEdgeRadius(expression)
+        } else {
+          Logger.e("RNMBXFillExtrusion", "Expression for fillExtrusionEdgeRadius is null")
+        }
+      } else {
+          val value = styleValue.getDouble(VALUE_KEY)
+          if (value != null) {
+            layer.fillExtrusionEdgeRadius(value)
+          } else {
+            Logger.e("RNMBXFillExtrusion", "value for fillExtrusionEdgeRadius is null")
+          }
+      }
+    }
+
     fun setFillExtrusionOpacity(layer: FillExtrusionLayer, styleValue: RNMBXStyleValue ) {
       if (styleValue.isExpression()) {
         val expression = styleValue.getExpression()
@@ -3219,6 +3241,58 @@ object RNMBXStyleFactory {
           } else {
             Logger.e("RNMBXFillExtrusion", "value for fillExtrusionVerticalGradient is null")
           }
+      }
+    }
+
+    fun setFillExtrusionAmbientOcclusionIntensity(layer: FillExtrusionLayer, styleValue: RNMBXStyleValue ) {
+      if (styleValue.isExpression()) {
+        val expression = styleValue.getExpression()
+        if (expression != null) {
+          layer.fillExtrusionAmbientOcclusionIntensity(expression)
+        } else {
+          Logger.e("RNMBXFillExtrusion", "Expression for fillExtrusionAmbientOcclusionIntensity is null")
+        }
+      } else {
+          val value = styleValue.getDouble(VALUE_KEY)
+          if (value != null) {
+            layer.fillExtrusionAmbientOcclusionIntensity(value)
+          } else {
+            Logger.e("RNMBXFillExtrusion", "value for fillExtrusionAmbientOcclusionIntensity is null")
+          }
+      }
+    }
+
+
+    fun setFillExtrusionAmbientOcclusionIntensityTransition(layer: FillExtrusionLayer, styleValue: RNMBXStyleValue) {
+      val transition = styleValue.transition
+      if (transition != null) {
+        layer.fillExtrusionAmbientOcclusionIntensityTransition(transition);
+      }
+    }
+
+    fun setFillExtrusionAmbientOcclusionRadius(layer: FillExtrusionLayer, styleValue: RNMBXStyleValue ) {
+      if (styleValue.isExpression()) {
+        val expression = styleValue.getExpression()
+        if (expression != null) {
+          layer.fillExtrusionAmbientOcclusionRadius(expression)
+        } else {
+          Logger.e("RNMBXFillExtrusion", "Expression for fillExtrusionAmbientOcclusionRadius is null")
+        }
+      } else {
+          val value = styleValue.getDouble(VALUE_KEY)
+          if (value != null) {
+            layer.fillExtrusionAmbientOcclusionRadius(value)
+          } else {
+            Logger.e("RNMBXFillExtrusion", "value for fillExtrusionAmbientOcclusionRadius is null")
+          }
+      }
+    }
+
+
+    fun setFillExtrusionAmbientOcclusionRadiusTransition(layer: FillExtrusionLayer, styleValue: RNMBXStyleValue) {
+      val transition = styleValue.transition
+      if (transition != null) {
+        layer.fillExtrusionAmbientOcclusionRadiusTransition(transition);
       }
     }
 
@@ -3489,6 +3563,32 @@ object RNMBXStyleFactory {
           } else {
             Logger.e("RNMBXFillExtrusion", "value for fillExtrusionCutoffFadeRange is null")
           }
+      }
+    }
+
+    fun setFillExtrusionEmissiveStrength(layer: FillExtrusionLayer, styleValue: RNMBXStyleValue ) {
+      if (styleValue.isExpression()) {
+        val expression = styleValue.getExpression()
+        if (expression != null) {
+          layer.fillExtrusionEmissiveStrength(expression)
+        } else {
+          Logger.e("RNMBXFillExtrusion", "Expression for fillExtrusionEmissiveStrength is null")
+        }
+      } else {
+          val value = styleValue.getDouble(VALUE_KEY)
+          if (value != null) {
+            layer.fillExtrusionEmissiveStrength(value)
+          } else {
+            Logger.e("RNMBXFillExtrusion", "value for fillExtrusionEmissiveStrength is null")
+          }
+      }
+    }
+
+
+    fun setFillExtrusionEmissiveStrengthTransition(layer: FillExtrusionLayer, styleValue: RNMBXStyleValue) {
+      val transition = styleValue.transition
+      if (transition != null) {
+        layer.fillExtrusionEmissiveStrengthTransition(transition);
       }
     }
 

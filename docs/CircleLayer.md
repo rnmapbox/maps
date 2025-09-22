@@ -284,7 +284,7 @@ Name: `circleBlur`
 Mapbox spec: [circle-blur](https://docs.mapbox.com/style-spec/reference/layers/#paint-circle-circle-blur)
 
 #### Description
-Amount to blur the circle. 1 blurs the circle such that only the centerpoint is full opacity.
+Amount to blur the circle. 1 blurs the circle such that only the centerpoint is full opacity. Setting a negative value renders the blur as an inner glow effect.
 
 #### Type
 `number`
