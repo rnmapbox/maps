@@ -2128,11 +2128,13 @@ func setFillExtrusionStyleLayerVisibility(_ layer: inout FillExtrusionLayer, sty
 
 func setFillExtrusionEdgeRadius(_ layer: inout FillExtrusionLayer, styleValue: RNMBXStyleValue)
 {
+      #if RNMBX_11
       
         
           layer.fillExtrusionEdgeRadius = styleValue.mglStyleValueNumber();
         
       
+      #endif
 }
 
 func setFillExtrusionOpacity(_ layer: inout FillExtrusionLayer, styleValue: RNMBXStyleValue)

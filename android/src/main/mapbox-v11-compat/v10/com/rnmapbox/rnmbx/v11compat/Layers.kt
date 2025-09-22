@@ -31,5 +31,5 @@ fun FillExtrusionLayer.fillExtrusionEmissiveStrength(
 fun FillExtrusionLayer.fillExtrusionEmissiveStrengthTransition(
     transition: StyleTransition
 ) {
-    // V11 onnly
+    // V11 only
 }
