@@ -1,6 +1,5 @@
-import type { HostComponent, ViewProps } from 'react-native';
-import codegenNativeComponent from 'react-native/Libraries/Utilities/codegenNativeComponent';
-import { Double, Int32 } from 'react-native/Libraries/Types/CodegenTypes';
+import type { HostComponent, ViewProps, CodegenTypes } from 'react-native';
+import { codegenNativeComponent } from 'react-native';
 
 import { FilterExpression } from '../utils/MapboxStyles';
 import { StyleValue } from '../utils/StyleValue';

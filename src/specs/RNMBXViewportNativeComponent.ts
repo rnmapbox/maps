@@ -1,6 +1,5 @@
-import type { HostComponent, ViewProps } from 'react-native';
-import codegenNativeComponent from 'react-native/Libraries/Utilities/codegenNativeComponent';
-import { DirectEventHandler } from 'react-native/Libraries/Types/CodegenTypes';
+import type { HostComponent, ViewProps, CodegenTypes } from 'react-native';
+import { codegenNativeComponent } from 'react-native';
 
 import type { UnsafeMixed } from './codegenUtils';
 
@@ -103,7 +102,7 @@ export type OnStatusChangedEventTypeReal = {
 export interface NativeProps extends ViewProps {
   transitionsToIdleUponUserInteraction?: OptionalProp<boolean>;
   hasStatusChanged: boolean;
-  onStatusChanged?: DirectEventHandler<OnStatusChangedEventType>;
+  onStatusChanged?: CodegenTypes.DirectEventHandler<OnStatusChangedEventType>;
 }
 
 export default codegenNativeComponent<NativeProps>(
@@ -112,6 +111,6 @@ export default codegenNativeComponent<NativeProps>(
 
 export type NativeViewportReal = HostComponent<
   Omit<NativeProps, 'onStatusChanged'> & {
-    onStatusChanged?: DirectEventHandler<OnStatusChangedEventTypeReal>;
+    onStatusChanged?: CodegenTypes.DirectEventHandler<OnStatusChangedEventTypeReal>;
   }
 >;

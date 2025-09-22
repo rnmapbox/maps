@@ -1,6 +1,5 @@
-import type { HostComponent, ViewProps } from 'react-native';
-import codegenNativeComponent from 'react-native/Libraries/Utilities/codegenNativeComponent';
-import { Double, Int32 } from 'react-native/Libraries/Types/CodegenTypes';
+import type { HostComponent, ViewProps, CodegenTypes } from 'react-native';
+import { codegenNativeComponent } from 'react-native';
 
 import type { UnsafeMixed } from './codegenUtils';
 
@@ -15,11 +14,11 @@ export interface NativeProps extends ViewProps {
 
   aboveLayerID?: OptionalProp<string>;
   belowLayerID?: OptionalProp<string>;
-  layerIndex?: OptionalProp<Int32>;
+  layerIndex?: OptionalProp<CodegenTypes.Int32>;
   reactStyle: UnsafeMixed<any>;
 
-  maxZoomLevel?: OptionalProp<Double>;
-  minZoomLevel?: OptionalProp<Double>;
+  maxZoomLevel?: OptionalProp<CodegenTypes.Double>;
+  minZoomLevel?: OptionalProp<CodegenTypes.Double>;
   sourceLayerID?: OptionalProp<string>;
 }
 

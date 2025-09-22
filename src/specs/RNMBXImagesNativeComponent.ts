@@ -1,6 +1,5 @@
-import type { HostComponent, ViewProps } from 'react-native';
-import codegenNativeComponent from 'react-native/Libraries/Utilities/codegenNativeComponent';
-import type { DirectEventHandler } from 'react-native/Libraries/Types/CodegenTypes';
+import type { HostComponent, ViewProps, CodegenTypes } from 'react-native';
+import { codegenNativeComponent } from 'react-native';
 
 import type { UnsafeMixed } from './codegenUtils';
 
@@ -13,7 +12,7 @@ export interface NativeProps extends ViewProps {
   images: UnsafeMixed<any>;
   nativeImages: UnsafeMixed<Array<any>>;
   hasOnImageMissing: UnsafeMixed<boolean>;
-  onImageMissing: DirectEventHandler<OnImageMissingEventType>;
+  onImageMissing: CodegenTypes.DirectEventHandler<OnImageMissingEventType>;
 }
 
 export default codegenNativeComponent<NativeProps>(
