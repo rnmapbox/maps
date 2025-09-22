@@ -58,7 +58,9 @@ jobs:
         run: |
           git config --global user.name "github-actions[bot]"
           git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git stash --include-untracked
           git pull --rebase origin main
+          git stash pop || true
           git log -1
           git add .
           git commit -m "Update docs from maps  rnmapbox/maps@${GITHUB_SHA::7}"
