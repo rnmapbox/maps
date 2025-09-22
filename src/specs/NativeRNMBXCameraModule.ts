@@ -1,9 +1,7 @@
-import type { TurboModule } from 'react-native/Libraries/TurboModule/RCTExport';
-// @ts-ignore - CI environment type resolution issue for CodegenTypes
-import { Int32 } from 'react-native/Libraries/Types/CodegenTypes';
+import type { TurboModule, CodegenTypes } from 'react-native';
 import { TurboModuleRegistry } from 'react-native';
 
-type ViewRef = Int32 | null;
+type ViewRef = CodegenTypes.Int32 | null;
 
 interface NativeCameraStop {
   centerCoordinate?: string;
@@ -25,8 +23,8 @@ type Stop =
     }
   | NativeCameraStop;
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-type ObjectOr<_T> = Object;
+// eslint-disable-next-line @typescript-eslint/ban-types, @typescript-eslint/no-unused-vars
+type ObjectOr<T> = Object;
 
 export interface Spec extends TurboModule {
   updateCameraStop(viewRef: ViewRef, stop: ObjectOr<Stop>): Promise<void>;

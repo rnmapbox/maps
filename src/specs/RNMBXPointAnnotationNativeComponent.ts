@@ -1,7 +1,5 @@
-import type { HostComponent, ViewProps } from 'react-native';
-import codegenNativeComponent from 'react-native/Libraries/Utilities/codegenNativeComponent';
-// @ts-ignore - CI environment type resolution issue for CodegenTypes
-import { DirectEventHandler } from 'react-native/Libraries/Types/CodegenTypes';
+import type { HostComponent, ViewProps, CodegenTypes } from 'react-native';
+import { codegenNativeComponent } from 'react-native';
 
 import type { UnsafeMixed } from './codegenUtils';
 
@@ -29,14 +27,13 @@ export interface NativeProps extends ViewProps {
   id: UnsafeMixed<string>;
   anchor: UnsafeMixed<any>;
 
-  onMapboxPointAnnotationDeselected: DirectEventHandler<OnMapboxPointAnnotationDeselectedEventType>;
-  onMapboxPointAnnotationDrag: DirectEventHandler<OnMapboxPointAnnotationDragEventType>;
-  onMapboxPointAnnotationDragEnd: DirectEventHandler<OnMapboxPointAnnotationDragEndEventType>;
-  onMapboxPointAnnotationDragStart: DirectEventHandler<OnMapboxPointAnnotationDragStartEventType>;
-  onMapboxPointAnnotationSelected: DirectEventHandler<OnMapboxPointAnnotationSelectedEventType>;
+  onMapboxPointAnnotationDeselected: CodegenTypes.DirectEventHandler<OnMapboxPointAnnotationDeselectedEventType>;
+  onMapboxPointAnnotationDrag: CodegenTypes.DirectEventHandler<OnMapboxPointAnnotationDragEventType>;
+  onMapboxPointAnnotationDragEnd: CodegenTypes.DirectEventHandler<OnMapboxPointAnnotationDragEndEventType>;
+  onMapboxPointAnnotationDragStart: CodegenTypes.DirectEventHandler<OnMapboxPointAnnotationDragStartEventType>;
+  onMapboxPointAnnotationSelected: CodegenTypes.DirectEventHandler<OnMapboxPointAnnotationSelectedEventType>;
 }
 
-// @ts-ignore-error - Codegen requires single cast but TypeScript prefers double cast
 export default codegenNativeComponent<NativeProps>(
   'RNMBXPointAnnotation',
 ) as HostComponent<NativeProps>;

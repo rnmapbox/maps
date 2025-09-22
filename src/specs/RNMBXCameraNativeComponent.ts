@@ -1,11 +1,5 @@
-import type { HostComponent, ViewProps } from 'react-native';
-import codegenNativeComponent from 'react-native/Libraries/Utilities/codegenNativeComponent';
-import {
-  DirectEventHandler,
-  Double,
-  Int32,
-  // @ts-ignore - CI environment type resolution issue for CodegenTypes
-} from 'react-native/Libraries/Types/CodegenTypes';
+import type { HostComponent, ViewProps, CodegenTypes } from 'react-native';
+import { codegenNativeComponent } from 'react-native';
 
 import type { NativeCameraStop, UnsafeMixed } from './codegenUtils';
 
@@ -22,27 +16,26 @@ type UserTrackingModeChangeEventType = {
 
 export interface NativeProps extends ViewProps {
   maxBounds?: UnsafeMixed<string | null>;
-  animationDuration?: OptionalProp<Double>;
+  animationDuration?: OptionalProp<CodegenTypes.Double>;
   animationMode?: OptionalProp<string>;
   defaultStop?: UnsafeMixed<NativeCameraStop>;
-  userTrackingMode?: OptionalProp<Int32>;
+  userTrackingMode?: OptionalProp<CodegenTypes.Int32>;
 
   followUserLocation?: OptionalProp<boolean>;
   followUserMode?: OptionalProp<string>;
-  followZoomLevel?: OptionalProp<Double>;
-  followPitch?: OptionalProp<Double>;
-  followHeading?: OptionalProp<Double>;
+  followZoomLevel?: OptionalProp<CodegenTypes.Double>;
+  followPitch?: OptionalProp<CodegenTypes.Double>;
+  followHeading?: OptionalProp<CodegenTypes.Double>;
   followPadding?: UnsafeMixed<any>;
 
-  zoomLevel?: OptionalProp<Double>;
-  maxZoomLevel?: OptionalProp<Double>;
-  minZoomLevel?: OptionalProp<Double>;
+  zoomLevel?: OptionalProp<CodegenTypes.Double>;
+  maxZoomLevel?: OptionalProp<CodegenTypes.Double>;
+  minZoomLevel?: OptionalProp<CodegenTypes.Double>;
   stop?: UnsafeMixed<NativeCameraStop>;
 
-  onUserTrackingModeChange?: DirectEventHandler<UserTrackingModeChangeEventType>;
+  onUserTrackingModeChange?: CodegenTypes.DirectEventHandler<UserTrackingModeChangeEventType>;
 }
 
-// @ts-ignore-error - Codegen requires single cast but TypeScript prefers double cast
 export default codegenNativeComponent<NativeProps>(
   'RNMBXCamera',
 ) as HostComponent<NativeProps>;

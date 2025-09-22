@@ -1,11 +1,5 @@
-import type { HostComponent, ViewProps } from 'react-native';
-import codegenNativeComponent from 'react-native/Libraries/Utilities/codegenNativeComponent';
-import {
-  DirectEventHandler,
-  Double,
-  Int32,
-  // @ts-ignore - CI environment type resolution issue for CodegenTypes
-} from 'react-native/Libraries/Types/CodegenTypes';
+import type { HostComponent, ViewProps, CodegenTypes } from 'react-native';
+import { codegenNativeComponent } from 'react-native';
 
 import type { UnsafeMixed } from './codegenUtils';
 
@@ -16,20 +10,19 @@ export interface NativeProps extends ViewProps {
   existing: UnsafeMixed<boolean>;
   url: UnsafeMixed<string>;
   shape: UnsafeMixed<string>;
-  cluster: UnsafeMixed<Int32>;
-  clusterRadius: UnsafeMixed<Double>;
-  clusterMaxZoomLevel: UnsafeMixed<Double>;
+  cluster: UnsafeMixed<CodegenTypes.Int32>;
+  clusterRadius: UnsafeMixed<CodegenTypes.Double>;
+  clusterMaxZoomLevel: UnsafeMixed<CodegenTypes.Double>;
   clusterProperties: UnsafeMixed<any>;
-  maxZoomLevel: UnsafeMixed<Double>;
-  buffer: UnsafeMixed<Double>;
-  tolerance: UnsafeMixed<Double>;
+  maxZoomLevel: UnsafeMixed<CodegenTypes.Double>;
+  buffer: UnsafeMixed<CodegenTypes.Double>;
+  tolerance: UnsafeMixed<CodegenTypes.Double>;
   lineMetrics: UnsafeMixed<boolean>;
   hasPressListener: UnsafeMixed<boolean>;
   hitbox: UnsafeMixed<any>;
-  onMapboxShapeSourcePress: DirectEventHandler<OnMapboxShapeSourcePressEventType>;
+  onMapboxShapeSourcePress: CodegenTypes.DirectEventHandler<OnMapboxShapeSourcePressEventType>;
 }
 
-// @ts-ignore-error - Codegen requires single cast but TypeScript prefers double cast
 export default codegenNativeComponent<NativeProps>(
   'RNMBXShapeSource',
 ) as HostComponent<NativeProps>;

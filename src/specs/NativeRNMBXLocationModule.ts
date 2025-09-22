@@ -1,6 +1,5 @@
-import { type TurboModule, TurboModuleRegistry } from 'react-native';
-// @ts-ignore - CI environment type resolution issue for CodegenTypes
-import type { EventEmitter } from 'react-native/Libraries/Types/CodegenTypes';
+import type { TurboModule, CodegenTypes } from 'react-native';
+import { TurboModuleRegistry } from 'react-native';
 
 type LocationEvent = {
   type: string; //"userlocationdupdated"
@@ -26,7 +25,7 @@ export interface Spec extends TurboModule {
   simulateHeading(changesPerSecond: number, increment: number): void;
   setLocationEventThrottle(throttle: number): void;
 
-  readonly onLocationUpdate: EventEmitter<LocationEvent>;
+  readonly onLocationUpdate: CodegenTypes.EventEmitter<LocationEvent>;
 }
 
 export default TurboModuleRegistry.getEnforcing<Spec>('RNMBXLocationModule');

@@ -1,18 +1,19 @@
-import type { TurboModule } from 'react-native/Libraries/TurboModule/RCTExport';
-// @ts-ignore - CI environment type resolution issue for CodegenTypes
-import { Int32, Double } from 'react-native/Libraries/Types/CodegenTypes';
+import type { TurboModule, CodegenTypes } from 'react-native';
 import { TurboModuleRegistry } from 'react-native';
 
 //import type { UnsafeMixed } from './codegenUtils';
 
-type AnimatorTag = Int32;
+type AnimatorTag = CodegenTypes.Int32;
 
 export interface Spec extends TurboModule {
-  generate(tag: AnimatorTag, coordinate: ReadonlyArray<Double>): Promise<void>;
+  generate(
+    tag: AnimatorTag,
+    coordinate: ReadonlyArray<CodegenTypes.Double>,
+  ): Promise<void>;
   moveTo(
     tag: AnimatorTag,
-    coordinate: ReadonlyArray<Double>,
-    duration: Double,
+    coordinate: ReadonlyArray<CodegenTypes.Double>,
+    duration: CodegenTypes.Double,
   ): Promise<void>;
 }
 

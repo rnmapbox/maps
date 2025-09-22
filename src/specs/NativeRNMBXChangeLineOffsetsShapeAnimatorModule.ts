@@ -1,20 +1,17 @@
-import type { TurboModule } from 'react-native/Libraries/TurboModule/RCTExport';
-// @ts-ignore - CI environment type resolution issue for CodegenTypes
-import { Int32, Double } from 'react-native/Libraries/Types/CodegenTypes';
+import type { TurboModule, CodegenTypes } from 'react-native';
 import { TurboModuleRegistry } from 'react-native';
-// @ts-expect-error - @turf packages have type resolution issues with package.json exports
 import { Position } from '@turf/helpers';
 
 //import type { UnsafeMixed } from './codegenUtils';
 
-type AnimatorTag = Int32;
+type AnimatorTag = CodegenTypes.Int32;
 
 export interface Spec extends TurboModule {
   generate(
     tag: AnimatorTag,
     coordinates: Position[],
-    startOffset: Double,
-    endOffset: Double,
+    startOffset: CodegenTypes.Double,
+    endOffset: CodegenTypes.Double,
   ): Promise<void>;
   setLineString(
     tag: AnimatorTag,
@@ -24,13 +21,13 @@ export interface Spec extends TurboModule {
   ): Promise<void>;
   setStartOffset(
     tag: AnimatorTag,
-    offset: Double,
-    duration: Double,
+    offset: CodegenTypes.Double,
+    duration: CodegenTypes.Double,
   ): Promise<void>;
   setEndOffset(
     tag: AnimatorTag,
-    offset: Double,
-    duration: Double,
+    offset: CodegenTypes.Double,
+    duration: CodegenTypes.Double,
   ): Promise<void>;
 }
 
