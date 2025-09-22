@@ -129,6 +129,7 @@ class MarkerView extends React.PureComponent<Props> {
         }}
       >
         <RNMBXMakerViewContentCoponent
+          collapsable={false}
           style={{ flex: 0, alignSelf: 'flex-start' }}
           onStartShouldSetResponder={(_event) => {
             return true;
