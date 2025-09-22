@@ -9,6 +9,8 @@ const { execSync } = require('child_process');
 
 const { device } = require('detox');
 
+const shouldRestartAppBetweenTests = true;
+
 const {
   examplesJSONPath,
   docScreenshotsPath,
@@ -38,6 +40,33 @@ if (false) {
           fullPath: 'example/src/examples/Map/SourceLayerVisibility.js',
           relPath: 'Map/SourceLayerVisibility.js',
           name: 'SourceLayerVisibility',
+        },
+      ],
+    },
+    {
+      groupName: 'CacheOffline',
+      metadata: {
+        title: 'Cache / Offline',
+      },
+      examples: [
+        {
+          metadata: {
+            title: 'CacheManagement',
+            tags: [
+              'Cache',
+              'Cache Management',
+              'Offline Manager',
+              'Offline Packs',
+              'Validate Cache',
+              'Invalidate Cache',
+              'Get Cache Size',
+              'Set Max Cache Size',
+            ],
+            docs: '\nManages map cache.\n\nUses the offline manager to manage the cache and the local storage in general. Shows how to invalidate cache to remove outdated tiles, how to clear the entire local storage from tiles and offline packs and to visualize the local storage usage amount.\n',
+          },
+          fullPath: 'example/src/examples/CacheOffline/CacheManagement.tsx',
+          relPath: 'CacheOffline/CacheManagement.tsx',
+          name: 'CacheManagement',
         },
       ],
     },
@@ -134,7 +163,15 @@ if (['true', 1, '1'].includes(process.env.SKIP_TESTS_NO_METAL)) {
       await device.launchApp({ permissions: { location: 'always' } });
     });
     beforeEach(async () => {
+      if (shouldRestartAppBetweenTests) {
+        await device.launchApp({ permissions: { location: 'always' } });
+      }
       await device.reloadReactNative();
+    });
+    afterEach(async () => {
+      if (shouldRestartAppBetweenTests) {
+        await device.terminateApp();
+      }
     });
 
     /** @type Screenshots */
@@ -145,6 +182,15 @@ if (['true', 1, '1'].includes(process.env.SKIP_TESTS_NO_METAL)) {
         examples.forEach(({ metadata, fullPath, name }) => {
           if (metadata) {
             it(`${name}`, async () => {
+              await device.setStatusBar({
+                time: '11:34',
+                batteryLevel: 1,
+                batteryState: 'charged',
+                dataNetwork: 'wifi',
+                wifiMode: 'active',
+                wifiBars: '3',
+                cellularMode: 'searching',
+              });
               await setSampleLocation();
 
               await expect(element(by.text(groupMetadata.title))).toBeVisible();

@@ -22,7 +22,7 @@ const styles = StyleSheet.create({
 });
 
 const AnnotationContent = ({ title }: { title: string }) => (
-  <View style={styles.touchableContainer}>
+  <View style={styles.touchableContainer} collapsable={false}>
     <Text>{title}</Text>
     <TouchableOpacity style={styles.touchable}>
       <Text style={styles.touchableText}>Btn</Text>
