@@ -58,6 +58,8 @@ jobs:
         run: |
           git config --global user.name "github-actions[bot]"
           git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git pull --rebase origin main
+          git log -1
           git add .
           git commit -m "Update docs from maps  rnmapbox/maps@${GITHUB_SHA::7}"
           git push origin main
