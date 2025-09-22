@@ -169,7 +169,7 @@ function getSupportedLayers(layerNames) {
 }
 
 /**
- * @param {string[]|null} only 
+ * @param {string[]|null} only
  */
 function getSupportedProperties(attributes, only) {
   return Object.keys(attributes).filter((attrName) =>
@@ -178,12 +178,12 @@ function getSupportedProperties(attributes, only) {
 }
 
 /**
- * 
- * @param {*} attributes 
- * @param {string} attrName 
- * @param {'paint' | 'layout' | null} type 
+ *
+ * @param {*} attributes
+ * @param {string} attrName
+ * @param {'paint' | 'layout' | null} type
  * @param {string} layerName
- * @returns 
+ * @returns
  */
 function buildProperties(attributes, attrName, type, layerName) {
   return {
@@ -220,6 +220,8 @@ function _fixPropSupport(support, attrName) {
   /* fill-extrusion-rounded-roof is not supported on v10 */
   if (attrName === 'fill-extrusion-rounded-roof') {
     support.basic.v10.android = false;
+    support.basic.v10.ios = false;
+  } else if (attrName === 'fill-extrusion-edge-radius') {
     support.basic.v10.ios = false;
   } else if (['model-id', 'model-scale', 'model-rotation'].includes(attrName)) {
     support.basic.v10.android = true;
@@ -300,7 +302,7 @@ const UnsupportedProperties = [
 ]
 
 /**
- * @param {string[]|undefined} only 
+ * @param {string[]|undefined} only
  */
 function isAttrSupported(name, attr, only) {
   if (UnsupportedProperties.includes(name)) {
@@ -416,7 +418,7 @@ export function getLayers() {
       });
     },
   );
-  
+
   // add light as a layer
   layers.push({
     name: 'light',
@@ -426,7 +428,7 @@ export function getLayers() {
     },
     support: { v10: true },
   });
-  
+
   // add atmosphere as a layer
   layers.push({
     name: 'atmosphere',
@@ -436,7 +438,7 @@ export function getLayers() {
     },
     support: { v10: true },
   });
-  
+
   // add terrain as a layer
   layers.push({
     name: 'terrain',
@@ -501,7 +503,7 @@ export default function generateCodeWithEjs(layers) {
       return result;
     }
     /**
-     * @param {string[]} only 
+     * @param {string[]} only
      */
     function filterOnly(layers, only) {
       if (only != null) {

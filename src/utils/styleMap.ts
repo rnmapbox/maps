@@ -141,7 +141,6 @@ const styleMap = {
   textEmissiveStrength: StyleTypes.Constant,
   textEmissiveStrengthTransition: StyleTypes.Transition,
   iconImageCrossFade: StyleTypes.Constant,
-  iconImageCrossFadeTransition: StyleTypes.Transition,
 
   circleSortKey: StyleTypes.Constant,
   circleRadius: StyleTypes.Constant,
@@ -175,6 +174,7 @@ const styleMap = {
   heatmapOpacity: StyleTypes.Constant,
   heatmapOpacityTransition: StyleTypes.Transition,
 
+  fillExtrusionEdgeRadius: StyleTypes.Constant,
   fillExtrusionOpacity: StyleTypes.Constant,
   fillExtrusionOpacityTransition: StyleTypes.Transition,
   fillExtrusionColor: StyleTypes.Color,
@@ -188,6 +188,10 @@ const styleMap = {
   fillExtrusionBase: StyleTypes.Constant,
   fillExtrusionBaseTransition: StyleTypes.Transition,
   fillExtrusionVerticalGradient: StyleTypes.Constant,
+  fillExtrusionAmbientOcclusionIntensity: StyleTypes.Constant,
+  fillExtrusionAmbientOcclusionIntensityTransition: StyleTypes.Transition,
+  fillExtrusionAmbientOcclusionRadius: StyleTypes.Constant,
+  fillExtrusionAmbientOcclusionRadiusTransition: StyleTypes.Transition,
   fillExtrusionRoundedRoof: StyleTypes.Constant,
   fillExtrusionAmbientOcclusionWallRadius: StyleTypes.Constant,
   fillExtrusionAmbientOcclusionWallRadiusTransition: StyleTypes.Transition,
@@ -209,6 +213,8 @@ const styleMap = {
   fillExtrusionVerticalScale: StyleTypes.Constant,
   fillExtrusionVerticalScaleTransition: StyleTypes.Transition,
   fillExtrusionCutoffFadeRange: StyleTypes.Constant,
+  fillExtrusionEmissiveStrength: StyleTypes.Constant,
+  fillExtrusionEmissiveStrengthTransition: StyleTypes.Transition,
 
   rasterOpacity: StyleTypes.Constant,
   rasterOpacityTransition: StyleTypes.Transition,
