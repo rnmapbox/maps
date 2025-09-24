@@ -23,8 +23,8 @@ type Stop =
     }
   | NativeCameraStop;
 
-// eslint-disable-next-line @typescript-eslint/ban-types, @typescript-eslint/no-unused-vars
-type ObjectOr<T> = Object;
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+type ObjectOr<_T> = Object;
 
 export interface Spec extends TurboModule {
   updateCameraStop(viewRef: ViewRef, stop: ObjectOr<Stop>): Promise<void>;

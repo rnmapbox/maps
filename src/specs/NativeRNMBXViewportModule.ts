@@ -15,8 +15,8 @@ type StateInfo =
       transition: string;
     };
 
-// eslint-disable-next-line @typescript-eslint/ban-types, @typescript-eslint/no-unused-vars
-type ObjectOr<T> = Object;
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+type ObjectOr<_T> = Object;
 
 type StateReal = { kind: 'followPuck' } /* | { kind: 'overview' } */;
 type State = ObjectOr<StateReal>;

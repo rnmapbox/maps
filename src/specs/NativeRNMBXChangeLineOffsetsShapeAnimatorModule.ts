@@ -1,5 +1,6 @@
 import type { TurboModule, CodegenTypes } from 'react-native';
 import { TurboModuleRegistry } from 'react-native';
+// @ts-expect-error - @turf packages have type resolution issues with package.json exports
 import { Position } from '@turf/helpers';
 
 //import type { UnsafeMixed } from './codegenUtils';
