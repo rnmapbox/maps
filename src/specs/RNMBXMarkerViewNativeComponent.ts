@@ -1,14 +1,13 @@
-import type { HostComponent, ViewProps } from 'react-native';
-import { Int32 } from 'react-native/Libraries/Types/CodegenTypes';
-import codegenNativeComponent from 'react-native/Libraries/Utilities/codegenNativeComponent';
+import type { HostComponent, ViewProps, CodegenTypes } from 'react-native';
+import { codegenNativeComponent } from 'react-native';
 
 import { Position } from '../types/Position';
 
 import { UnsafeMixed } from './codegenUtils';
 
 type Point = {
-  x: Int32;
-  y: Int32;
+  x: CodegenTypes.Int32;
+  y: CodegenTypes.Int32;
 };
 
 export interface NativeProps extends ViewProps {

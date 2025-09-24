@@ -1,10 +1,5 @@
-import type { HostComponent, ViewProps } from 'react-native';
-import codegenNativeComponent from 'react-native/Libraries/Utilities/codegenNativeComponent';
-import {
-  BubblingEventHandler,
-  DirectEventHandler,
-  Int32,
-} from 'react-native/Libraries/Types/CodegenTypes';
+import type { HostComponent, ViewProps, CodegenTypes } from 'react-native';
+import { codegenNativeComponent } from 'react-native';
 
 import type { Point, UnsafeMixed } from './codegenUtils';
 
@@ -42,7 +37,7 @@ export interface NativeProps extends ViewProps {
   compassEnabled?: OptionalProp<boolean>;
   compassFadeWhenNorth?: OptionalProp<boolean>;
   compassPosition?: UnsafeMixed<any>;
-  compassViewPosition?: OptionalProp<Int32>;
+  compassViewPosition?: OptionalProp<CodegenTypes.Int32>;
   compassViewMargins?: OptionalProp<Point>;
 
   scaleBarEnabled?: OptionalProp<boolean>;
@@ -73,13 +68,13 @@ export interface NativeProps extends ViewProps {
   // iOS only
   compassImage?: OptionalProp<string>;
 
-  onPress?: BubblingEventHandler<OnPressEventType>;
-  onLongPress?: DirectEventHandler<OnPressEventType>;
-  onMapChange?: DirectEventHandler<OnMapChangeEventType>;
-  onCameraChanged?: DirectEventHandler<OnCameraChangedEventType>;
+  onPress?: CodegenTypes.BubblingEventHandler<OnPressEventType>;
+  onLongPress?: CodegenTypes.DirectEventHandler<OnPressEventType>;
+  onMapChange?: CodegenTypes.DirectEventHandler<OnMapChangeEventType>;
+  onCameraChanged?: CodegenTypes.DirectEventHandler<OnCameraChangedEventType>;
 
   mapViewImpl?: OptionalProp<string>;
-  preferredFramesPerSecond?: OptionalProp<Int32>;
+  preferredFramesPerSecond?: OptionalProp<CodegenTypes.Int32>;
 }
 
 export default codegenNativeComponent<NativeProps>(
@@ -133,9 +128,9 @@ type OnMapChangeEventTypeActual = {
 
 export type NativeMapViewActual = HostComponent<
   Omit<NativeProps, 'onCameraChanged' | 'onLongPress' | 'onMapChange'> & {
-    onCameraChanged?: DirectEventHandler<OnCameraChangedEventTypeActual>;
-    onLongPress?: DirectEventHandler<OnPressEventTypeActual>;
-    onPress?: DirectEventHandler<OnPressEventTypeActual>;
-    onMapChange?: DirectEventHandler<OnMapChangeEventTypeActual>;
+    onCameraChanged?: CodegenTypes.DirectEventHandler<OnCameraChangedEventTypeActual>;
+    onLongPress?: CodegenTypes.DirectEventHandler<OnPressEventTypeActual>;
+    onPress?: CodegenTypes.DirectEventHandler<OnPressEventTypeActual>;
+    onMapChange?: CodegenTypes.DirectEventHandler<OnMapChangeEventTypeActual>;
   }
 >;
