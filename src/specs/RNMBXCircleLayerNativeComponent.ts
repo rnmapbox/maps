@@ -17,10 +17,10 @@ type CommonProps = {
 
   aboveLayerID?: OptionalProp<string>;
   belowLayerID?: OptionalProp<string>;
-  layerIndex?: OptionalProp<Int32>;
+  layerIndex?: OptionalProp<CodegenTypes.Int32>;
 
-  maxZoomLevel?: OptionalProp<Double>;
-  minZoomLevel?: OptionalProp<Double>;
+  maxZoomLevel?: OptionalProp<CodegenTypes.Double>;
+  minZoomLevel?: OptionalProp<CodegenTypes.Double>;
   sourceLayerID?: OptionalProp<string>;
   slot?: OptionalProp<Slot>;
 };
