@@ -99,8 +99,18 @@ class RNMBXModule : NSObject {
       resolver(token)
   }
 
-  @objc func addCustomHeader(_ headerName: String, forHeaderValue headerValue: String ) {
-    CustomHttpHeaders.shared.customHeaders[headerName] = headerValue
+  @objc func addCustomHeader(_ headerName: String, forHeaderValue headerValue: String, forOptions options: NSDictionary?) {
+    var urlRegexp: NSRegularExpression? = nil
+    if let pattern = options?.value(forKey: "urlRegexp") as? String {
+      do {
+        urlRegexp = try NSRegularExpression(pattern: pattern)
+      }
+      catch {
+        Logger.log(level: .error, message: "Invalid regex pattern: \(error.localizedDescription)")
+      }
+    }
+    
+    CustomHttpHeaders.shared.customHeaders[headerName] = CustomHttpHeadersMapValue(headerValue: headerValue, options: CustomHttpHeadersOptions(urlRegexp: urlRegexp))
   }
 
   @objc func removeCustomHeader(_ headerName: String) {

@@ -11,6 +11,7 @@ import com.rnmapbox.rnmbx.events.constants.EventTypes
 import com.rnmapbox.rnmbx.modules.RNMBXOfflineModule
 import com.rnmapbox.rnmbx.modules.RNMBXLocationModule
 import com.facebook.react.bridge.ReactMethod
+import com.facebook.react.bridge.ReadableMap
 import com.facebook.react.common.MapBuilder
 import com.mapbox.bindgen.None
 import com.mapbox.common.*
@@ -24,6 +25,7 @@ import java.util.HashMap
 
 import com.rnmapbox.rnmbx.v11compat.resourceoption.*
 import com.rnmapbox.rnmbx.v11compat.mapboxmap.*
+import java.util.regex.PatternSyntaxException
 
 @ReactModule(name = RNMBXModule.REACT_CLASS)
 class RNMBXModule(private val mReactContext: ReactApplicationContext) : ReactContextBaseJavaModule(
@@ -164,8 +166,13 @@ class RNMBXModule(private val mReactContext: ReactApplicationContext) : ReactCon
     }
 
     @ReactMethod
-    fun addCustomHeader(headerName: String, headerValue: String) {
-        CustomHttpHeaders.addCustomHeader(headerName, headerValue)
+    fun addCustomHeader(headerName: String, headerValue: String, options: ReadableMap? = null) {
+        val urlRegexp = options?.getString("urlRegexp")
+        try {
+            CustomHttpHeaders.addCustomHeader(headerName, headerValue, CustomHttpHeadersOptions(urlRegexp = urlRegexp?.toRegex()))
+        } catch (e: PatternSyntaxException) {
+            Logger.e(CustomHttpHeaders.LOG_TAG, e.localizedMessage ?: "Error converting $urlRegexp to regex")
+        }
     }
 
     @ReactMethod
