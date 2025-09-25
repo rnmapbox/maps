@@ -150,6 +150,7 @@ This is now deprecated, use Image component instead.
 * <a href="#symbolplacement">symbolPlacement</a><br/>
 * <a href="#symbolspacing">symbolSpacing</a><br/>
 * <a href="#symbolavoidedges">symbolAvoidEdges</a><br/>
+* <a href="#symbolzoffset">symbolZOffset</a><br/>
 * <a href="#symbolsortkey">symbolSortKey</a><br/>
 * <a href="#symbolzorder">symbolZOrder</a><br/>
 * <a href="#iconallowoverlap">iconAllowOverlap</a><br/>
