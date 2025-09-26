@@ -57,9 +57,20 @@ package-lock.json
 /example/package-lock.json
 /example/yarn.lock
 
+# Yarn
+.yarn/*
+!.yarn/patches
+!.yarn/plugins
+!.yarn/releases
+!.yarn/sdks
+!.yarn/versions
+
 # Expo
 .expo
 example/dist
+
+# Turborepo
+.turbo/
 
 # Test generated files
 /ReactAndroid/src/androidTest/assets/AndroidTestBundle.js

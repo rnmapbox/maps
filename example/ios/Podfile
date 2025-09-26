@@ -57,7 +57,7 @@ if INHIBIT_WARNING_BY_DEFAULT
   end
 end
 
-target 'RNMapboxGLExample' do
+target 'RNMapboxExample' do
   #pod 'rnmapbox-maps', :path => '../../', :inhibit_warnings => false
 
   config = use_native_modules!

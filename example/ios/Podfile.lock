@@ -2376,19 +2376,19 @@ PODS:
     - ReactCommon/turbomodule/core
     - SocketRocket
     - Yoga
-  - rnmapbox-maps (10.1.44):
-    - MapboxMaps (= 11.15.0)
+  - rnmapbox-maps (10.2.0-beta.1):
+    - MapboxMaps (~> 11.15.0)
     - React
     - React-Core
-    - rnmapbox-maps/DynamicLibrary (= 10.1.44)
+    - rnmapbox-maps/DynamicLibrary (= 10.2.0-beta.1)
     - Turf
-  - rnmapbox-maps/DynamicLibrary (10.1.44):
+  - rnmapbox-maps/DynamicLibrary (10.2.0-beta.1):
     - boost
     - DoubleConversion
     - fast_float
     - fmt
     - hermes-engine
-    - MapboxMaps (= 11.15.0)
+    - MapboxMaps (~> 11.15.0)
     - RCT-Folly
     - RCT-Folly/Fabric
     - RCTRequired
@@ -2408,7 +2408,7 @@ PODS:
     - SocketRocket
     - Turf
     - Yoga
-  - RNScreens (4.15.4):
+  - RNScreens (4.16.0):
     - boost
     - DoubleConversion
     - fast_float
@@ -2435,10 +2435,10 @@ PODS:
     - ReactCodegen
     - ReactCommon/turbomodule/bridging
     - ReactCommon/turbomodule/core
-    - RNScreens/common (= 4.15.4)
+    - RNScreens/common (= 4.16.0)
     - SocketRocket
     - Yoga
-  - RNScreens/common (4.15.4):
+  - RNScreens/common (4.16.0):
     - boost
     - DoubleConversion
     - fast_float
@@ -2818,13 +2818,13 @@ SPEC CHECKSUMS:
   ReactCodegen: 3baedb0c33f963250c866151b825a3c5194b12f1
   ReactCommon: e897f9a1b4afab370cfefaaf5fb3c80371bc3937
   RNCAsyncStorage: 302f2fac014fd450046c120567ca364632da682b
-  rnmapbox-maps: 501dfe6b1be7980e3423bace47609da6a831ff6d
-  RNScreens: 5c7f22b19ee2e900e5de2c578471aeb153d1e502
+  rnmapbox-maps: 52fa61f7507ba0c636bec75ac0360e83d224a9b1
+  RNScreens: 74985ca8e102294a60cec7513fa84c936fa0b20b
   RNVectorIcons: 6acc19c833be864e9c70894e101a587fe491150a
   SocketRocket: d4aabe649be1e368d1318fdf28a022d714d65748
   Turf: c9eb11a65d96af58cac523460fd40fec5061b081
   Yoga: fa23995c18b65978347b096d0836f4f5093df545
 
-PODFILE CHECKSUM: 914a478ba40674a11ae8cf3f264d6c55daf25e6a
+PODFILE CHECKSUM: eee6773e092eb44b298b4a54c048d855d5654a9f
 
 COCOAPODS: 1.16.2
