@@ -5897,6 +5897,7 @@ __metadata:
     fbjs: ^3.0.5
     glob-to-regexp: ^0.4.1
     jest: ^30.0.5
+    lodash.isequal: ^4.5.0
     mapbox-gl: ^3.14.0
     metro-config: ^0.83.2
     moment: ^2.30.1
@@ -13664,6 +13665,13 @@ __metadata:
   version: 4.1.2
   resolution: "lodash.escaperegexp@npm:4.1.2"
   checksum: 6d99452b1cfd6073175a9b741a9b09ece159eac463f86f02ea3bee2e2092923fce812c8d2bf446309cc52d1d61bf9af51c8118b0d7421388e6cead7bd3798f0f
+  languageName: node
+  linkType: hard
+
+"lodash.isequal@npm:^4.5.0":
+  version: 4.5.0
+  resolution: "lodash.isequal@npm:4.5.0"
+  checksum: da27515dc5230eb1140ba65ff8de3613649620e8656b19a6270afe4866b7bd461d9ba2ac8a48dcc57f7adac4ee80e1de9f965d89d4d81a0ad52bb3eec2609644
   languageName: node
   linkType: hard
 
