@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "RNMapboxGLExample",
-    "displayName": "RNMapboxGLExample",
+    "name": "RNMapboxExample",
+    "displayName": "RNMapboxExample",
     "web": {
       "bundler": "metro",
       "output": "single"

@@ -8,18 +8,18 @@ module.exports = {
   apps: {
     "ios": {
       type: "ios.app",
-      build: "xcodebuild -quiet -workspace ios/RNMapboxGLExample.xcworkspace -configuration Release -scheme RNMapboxGLExample -sdk iphonesimulator -derivedDataPath ios/build -destination 'platform=iOS Simulator,OS=16.4,name=iPhone SE (3rd generation)'",
-      binaryPath: "ios/build/Build/Products/Release-iphonesimulator/RNMapboxGLExample.app"
+      build: "xcodebuild -quiet -workspace ios/RNMapboxExample.xcworkspace -configuration Release -scheme RNMapboxExample -sdk iphonesimulator -derivedDataPath ios/build -destination 'platform=iOS Simulator,OS=16.4,name=iPhone SE (3rd generation)'",
+      binaryPath: "ios/build/Build/Products/Release-iphonesimulator/RNMapboxExample.app"
     },
     "ios.debug": {
       type: "ios.app",
-      build: "FORCE_BUNDLING=1 xcodebuild -quiet -workspace ios/RNMapboxGLExample.xcworkspace -configuration Debug -scheme RNMapboxGLExample DISABLE_MANUAL_TARGET_ORDER_BUILD_WARNING=1 GCC_PREPROCESSOR_DEFINITIONS='$GCC_PREPROCESSOR_DEFINITIONS DEBUG_RCT_BUNDLE=1' -sdk iphonesimulator -derivedDataPath ios/build -destination 'platform=iOS Simulator,OS=16.4,name=iPhone SE (3rd generation)'",
-      binaryPath: "ios/build/Build/Products/Debug-iphonesimulator/RNMapboxGLExample.app"
+      build: "FORCE_BUNDLING=1 xcodebuild -quiet -workspace ios/RNMapboxExample.xcworkspace -configuration Debug -scheme RNMapboxExample DISABLE_MANUAL_TARGET_ORDER_BUILD_WARNING=1 GCC_PREPROCESSOR_DEFINITIONS='$GCC_PREPROCESSOR_DEFINITIONS DEBUG_RCT_BUNDLE=1' -sdk iphonesimulator -derivedDataPath ios/build -destination 'platform=iOS Simulator,OS=16.4,name=iPhone SE (3rd generation)'",
+      binaryPath: "ios/build/Build/Products/Debug-iphonesimulator/RNMapboxExample.app"
     },
     "ios.debug.ci": {
       type: "ios.app",
-      build: "FORCE_BUNDLING=1 xcodebuild -quiet -workspace ios/RNMapboxGLExample.xcworkspace -configuration Debug -scheme RNMapboxGLExample DISABLE_MANUAL_TARGET_ORDER_BUILD_WARNING=1 GCC_PREPROCESSOR_DEFINITIONS='$GCC_PREPROCESSOR_DEFINITIONS DEBUG_RCT_BUNDLE=1' -sdk iphonesimulator -derivedDataPath ios/build -destination 'platform=iOS Simulator,OS=18.6,arch=arm64,name=iPhone SE (3rd generation)'",
-      binaryPath: "ios/build/Build/Products/Debug-iphonesimulator/RNMapboxGLExample.app"
+      build: "FORCE_BUNDLING=1 xcodebuild -quiet -workspace ios/RNMapboxExample.xcworkspace -configuration Debug -scheme RNMapboxExample DISABLE_MANUAL_TARGET_ORDER_BUILD_WARNING=1 GCC_PREPROCESSOR_DEFINITIONS='$GCC_PREPROCESSOR_DEFINITIONS DEBUG_RCT_BUNDLE=1' -sdk iphonesimulator -derivedDataPath ios/build -destination 'platform=iOS Simulator,OS=18.6,arch=arm64,name=iPhone SE (3rd generation)'",
+      binaryPath: "ios/build/Build/Products/Debug-iphonesimulator/RNMapboxExample.app"
     },
   },
   devices: {

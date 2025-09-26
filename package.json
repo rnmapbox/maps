@@ -1,7 +1,7 @@
 {
   "name": "@rnmapbox/maps",
   "description": "A Mapbox react native module for creating custom maps",
-  "version": "10.1.45",
+  "version": "10.2.0-beta.1",
   "publishConfig": {
     "access": "public"
   },
@@ -30,13 +30,22 @@
     "plugin",
     "app.plugin.js",
     "index.d.ts",
-    "rnmapbox-maps.podspec",
-    "ios",
-    "android",
     "setup-jest.js",
+    "android",
+    "ios",
+    "cpp",
+    "*.podspec",
+    "react-native.config.js",
+    "!ios/build",
+    "!android/build",
+    "!android/gradle",
+    "!android/gradlew",
+    "!android/gradlew.bat",
+    "!android/local.properties",
     "!**/__tests__",
     "!**/__fixtures__",
-    "!**/__mocks__"
+    "!**/__mocks__",
+    "!**/.*"
   ],
   "scripts": {
     "fetch:style:spec": ". ./scripts/download-style-spec.sh",
@@ -54,24 +63,6 @@
     "build": "yarn bob build",
     "prepare": "yarn bob build",
     "build:copy-plugin": "yarn ts-node plugin/copy-plugin.ts"
-  },
-  "peerDependencies": {
-    "expo": ">=47.0.0",
-    "mapbox-gl": "^2.9.0",
-    "react": ">=16.6.1",
-    "react-dom": ">= 17.0.0",
-    "react-native": ">=0.59.9"
-  },
-  "peerDependenciesMeta": {
-    "expo": {
-      "optional": true
-    },
-    "mapbox-gl": {
-      "optional": true
-    },
-    "react-dom": {
-      "optional": true
-    }
   },
   "dependencies": {
     "@turf/along": "6.5.0",
@@ -127,10 +118,33 @@
     "react-native": "0.80.2",
     "react-native-builder-bob": "^0.40.13",
     "react-test-renderer": "19.1.0",
+    "release-it": "^19.0.4",
     "to-fast-properties": "3.0.1",
     "ts-node": "10.9.2",
-    "typescript": "5.8.3"
+    "typescript": "5.9.2"
   },
+  "peerDependencies": {
+    "expo": ">=47.0.0",
+    "mapbox-gl": "^2.9.0",
+    "react": ">=16.6.1",
+    "react-dom": ">= 17.0.0",
+    "react-native": ">=0.59.9"
+  },
+  "peerDependenciesMeta": {
+    "expo": {
+      "optional": true
+    },
+    "mapbox-gl": {
+      "optional": true
+    },
+    "react-dom": {
+      "optional": true
+    }
+  },
+  "workspaces": [
+    "example"
+  ],
+  "packageManager": "yarn@3.6.1",
   "codegenConfig": {
     "name": "rnmapbox_maps_specs",
     "type": "all",

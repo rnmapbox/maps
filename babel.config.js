@@ -1,9 +1,12 @@
 module.exports = {
-  presets: ['@react-native/babel-preset'],
-  plugins: [['@babel/plugin-proposal-class-properties', { loose: true }]],
-  env: {
-    production: {
-      plugins: ['transform-remove-console'],
+  overrides: [
+    {
+      exclude: /\/node_modules\//,
+      presets: ['module:react-native-builder-bob/babel-preset'],
     },
-  },
+    {
+      include: /\/node_modules\//,
+      presets: ['module:@react-native/babel-preset'],
+    },
+  ],
 };
