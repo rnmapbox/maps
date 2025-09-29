@@ -1,9 +1,5 @@
-import type { HostComponent, ViewProps } from 'react-native';
-import codegenNativeComponent from 'react-native/Libraries/Utilities/codegenNativeComponent';
-import {
-  DirectEventHandler,
-  Double,
-} from 'react-native/Libraries/Types/CodegenTypes';
+import type { HostComponent, ViewProps, CodegenTypes } from 'react-native';
+import { codegenNativeComponent } from 'react-native';
 
 import type { UnsafeMixed } from './codegenUtils';
 
@@ -15,12 +11,12 @@ export interface NativeProps extends ViewProps {
   url: UnsafeMixed<string>;
   tileUrlTemplates: UnsafeMixed<Array<string>>;
   attribution: UnsafeMixed<string>;
-  maxZoomLevel: UnsafeMixed<Double>;
-  minZoomLevel: UnsafeMixed<Double>;
+  maxZoomLevel: UnsafeMixed<CodegenTypes.Double>;
+  minZoomLevel: UnsafeMixed<CodegenTypes.Double>;
   tms: UnsafeMixed<boolean>;
   hasPressListener: UnsafeMixed<boolean>;
   hitbox: UnsafeMixed<any>;
-  onMapboxVectorSourcePress: DirectEventHandler<OnMapboxVectorSourcePressEventType>;
+  onMapboxVectorSourcePress: CodegenTypes.DirectEventHandler<OnMapboxVectorSourcePressEventType>;
 }
 
 export default codegenNativeComponent<NativeProps>(

@@ -1,6 +1,5 @@
-import type { HostComponent, ViewProps } from 'react-native';
-import codegenNativeComponent from 'react-native/Libraries/Utilities/codegenNativeComponent';
-import { Double } from 'react-native/Libraries/Types/CodegenTypes';
+import type { HostComponent, ViewProps, CodegenTypes } from 'react-native';
+import { codegenNativeComponent } from 'react-native';
 
 import type { Position } from '../types/Position';
 
@@ -11,7 +10,7 @@ type OptionalProp<T> = UnsafeMixed<T>;
 
 export interface NativeProps extends ViewProps {
   coordinate?: OptionalProp<Position>;
-  heading?: OptionalProp<Double>;
+  heading?: OptionalProp<CodegenTypes.Double>;
 }
 
 export default codegenNativeComponent<NativeProps>(
