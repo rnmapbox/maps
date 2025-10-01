@@ -2,32 +2,32 @@
   "compilerOptions": {
     "rootDir": ".",
     "paths": {
-      "@rnmapbox/maps": ["./src/index"],
-      "react-native": ["./node_modules/react-native"],
+      "@rnmapbox/maps": ["./src/index"]
     },
-    "declaration": true,
-    "preserveSymlinks": true,
-    "target": "es6",
-    "module": "es6",
-    "allowJs": false,
-    "jsx": "react-native",
-    "skipLibCheck": true,
-    "allowSyntheticDefaultImports": true,
-    "moduleResolution": "node",
-    "lib": ["es2017", "dom"],
+    "allowUnreachableCode": false,
+    "allowUnusedLabels": false,
+    "customConditions": ["react-native-strict-api"],
     "esModuleInterop": true,
-    "strict": true,
     "forceConsistentCasingInFileNames": true,
-    "noUnusedLocals": true,
+    "jsx": "react-jsx",
+    "lib": ["ESNext"],
+    "module": "ESNext",
+    "moduleResolution": "bundler",
+    "noEmit": true,
+    "noFallthroughCasesInSwitch": true,
     "noImplicitReturns": true,
-
+    "noImplicitUseStrict": false,
+    "noStrictGenericChecks": false,
+    "noUncheckedIndexedAccess": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "resolveJsonModule": true,
+    "skipLibCheck": true,
+    "strict": true,
+    "target": "ESNext",
+    "verbatimModuleSyntax": true
   },
-  "include": [
-    "index.ts",
-    "jest.config.ts",
-    "src/**/*"
-  ],
   "exclude": [
-    "**/*.codepart.tsx"
-  ],
+    "**/*.codepart.ts"
+  ]
 }

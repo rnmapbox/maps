@@ -92,7 +92,7 @@ module.exports = {
     ],
     'prettier/prettier': 'warn',
   },
-  ignorePatterns: ['**/rnmapbox.web.symlink', 'plugin/build/', 'example/dist'],
+  ignorePatterns: ['**/rnmapbox.web.symlink', 'plugin/build/', 'example/dist', 'node_modules/', 'lib/'],
   overrides: [
     {
       // Match TypeScript Files

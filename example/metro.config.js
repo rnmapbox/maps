@@ -1,5 +1,11 @@
 const path = require('path');
-const { getDefaultConfig } = require('@react-native/metro-config');
+
+// Detect if we're running inside Expo
+const isExpo = !!process.env.EXPO_DEV_SERVER_ORIGIN;
+
+const { getDefaultConfig } = isExpo
+  ? require('@expo/metro-config')
+  : require('@react-native/metro-config');
 const { withMetroConfig } = require('react-native-monorepo-config');
 
 const root = path.resolve(__dirname, '..');
@@ -10,27 +16,15 @@ const root = path.resolve(__dirname, '..');
  *
  * @type {import('metro-config').MetroConfig}
  */
-const result = withMetroConfig(getDefaultConfig(__dirname), {
+const config = withMetroConfig(getDefaultConfig(__dirname), {
   root,
   dirname: __dirname,
 });
 
-const extraNodeModuleNames = []; //['@babel/runtime'];
-const extraNodeModules = extraNodeModuleNames.reduce((acc, name) => {
-  acc[name] = path.join(__dirname, 'node_modules', name);
-  return acc;
-}, {});
+config.resolver.unstable_enablePackageExports = true;
+if (config.resolver.assetExts == null) {
+  config.resolver.assetExts = [];
+}
+config.resolver.assetExts.push('gltf', 'glb', 'png');
 
-module.exports = {
-  ...result,
-  resolver: {
-    ...result.resolver,
-    extraNodeModules: {
-      ...result.resolver.extraNodeModules,
-      ...extraNodeModules,
-    },
-
-    assetExts: [...(result.resolver.assetExts ?? []), 'gltf', 'glb', 'png'],
-  },
-};
-
+module.exports = config;

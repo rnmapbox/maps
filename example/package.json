@@ -1,6 +1,6 @@
 {
-  "name": "RNMapboxExample",
-  "main": "expo/AppEntry.js",
+  "name": "@rnmapbox/maps-example",
+  "main": "index.js",
   "version": "1.0.0",
   "private": true,
   "scripts": {
@@ -43,12 +43,12 @@
     "react-native-vector-icons": "^10.3.0"
   },
   "optionalDependencies": {
-    "@expo/metro-runtime": "^6.1.0",
+    "@expo/metro-runtime": "~6.1.2",
     "@types/responselike": "1.0.3",
-    "expo": "^54.0.0",
+    "expo": "~54.0.10",
     "mapbox-gl": "^3.14.0",
     "react-dom": "19.1.0",
-    "react-native-web": "~0.20.0"
+    "react-native-web": "~0.21.0"
   },
   "devDependencies": {
     "@babel/core": "^7.28.3",
