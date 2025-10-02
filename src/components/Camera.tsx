@@ -342,7 +342,7 @@ export const Camera = memo(
 
           const paddingBottom =
             stop.padding?.paddingBottom ?? stop.bounds?.paddingBottom;
-          if (paddingBottom != undefined) {
+          if (paddingBottom !== undefined) {
             _nativeStop.paddingBottom = paddingBottom;
           }
 
@@ -552,13 +552,13 @@ export const Camera = memo(
       const zoomTo = useCallback(_zoomTo, [setCamera]);
 
       const moveBy: CameraRef['moveBy'] = useCallback(
-        (
-          moveProps,
-        ) => {
+        (moveProps) => {
           commands.call<void>('moveBy', [
             moveProps.x,
             moveProps.y,
-            'animationMode' in moveProps ? nativeAnimationMode(moveProps.animationMode) : nativeAnimationMode('linearTo'),
+            'animationMode' in moveProps
+              ? nativeAnimationMode(moveProps.animationMode)
+              : nativeAnimationMode('linearTo'),
             'animationDuration' in moveProps ? moveProps.animationDuration : 0,
           ]);
         },
@@ -566,14 +566,16 @@ export const Camera = memo(
       );
 
       const scaleBy: CameraRef['scaleBy'] = useCallback(
-        (
-          scaleProps
-        ) => {
+        (scaleProps) => {
           commands.call<void>('scaleBy', [
             scaleProps.x,
             scaleProps.y,
-            'animationMode' in scaleProps ? nativeAnimationMode(scaleProps.animationMode) : nativeAnimationMode('linearTo'),
-            'animationDuration' in scaleProps ? scaleProps.animationDuration : 0,
+            'animationMode' in scaleProps
+              ? nativeAnimationMode(scaleProps.animationMode)
+              : nativeAnimationMode('linearTo'),
+            'animationDuration' in scaleProps
+              ? scaleProps.animationDuration
+              : 0,
             scaleProps.scaleFactor,
           ]);
         },
@@ -643,7 +645,7 @@ export const Camera = memo(
         /**
          * Move the map by a given screen coordinate offset with optional animation.
          * Can be used to get the Android Auto (onScroll) or Carplay(mapTemplate didUpdatePanGestureWithTranslation) pan gesture applied, for these to work properly do not specify animationDuration.
-         * 
+         *
          * @param {number} x screen coordinate offset
          * @param {number} y screen coordinate offset
          * @param {NativeAnimationMode} animationMode mode used for the animation
@@ -654,7 +656,7 @@ export const Camera = memo(
         /**
          * Scale the map with optional animation.
          * Can be used to get Android Auto pinch gesture (onScale with scaleFactor > 0.0 and < 2.0) or Android Auto double tap (onScale with scaleFactor == 2.0) applied.
-         * 
+         *
          * @param {number} x center screen coordinate
          * @param {number} y center screen coordinate
          * @param {number} scaleFactor scale factor value > 0.0 and < 2.0 when 1.0 means no scaling, > 1.0 zoom in and < 1.0 zoom out

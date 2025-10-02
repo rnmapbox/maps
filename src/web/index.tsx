@@ -19,4 +19,7 @@ const Mapbox = {
 };
 
 export { Camera, Logger, MapView, MarkerView };
+
+export * from './MapboxModule';
+
 export default Mapbox;

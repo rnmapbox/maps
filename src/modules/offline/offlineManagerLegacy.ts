@@ -52,9 +52,8 @@ class OfflineManagerLegacy {
       );
     }
 
-    const nativeOfflinePack = await MapboxOfflineManager.createPack(
-      packOptions,
-    );
+    const nativeOfflinePack =
+      await MapboxOfflineManager.createPack(packOptions);
     this._offlinePacks[packOptions.name] = new OfflinePack(nativeOfflinePack);
   }
 

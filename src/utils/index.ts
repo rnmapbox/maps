@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import React, { ReactNode } from 'react';
 import {
   findNodeHandle,
@@ -77,7 +76,7 @@ export function cloneReactChildrenWithProps(
     return null;
   }
 
-  let foundChildren: typeof children[] | null = null;
+  let foundChildren: (typeof children)[] | null = null;
 
   if (!Array.isArray(children)) {
     foundChildren = [children];

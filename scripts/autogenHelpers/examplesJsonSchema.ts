@@ -16,7 +16,7 @@ export type Example = {
 export type ExampleGroup = {
   groupName: string;
   metadata: ExampleGroupMetadata;
-  examples: Example[];
+  examplesInGroup: Example[];
 };
 
 export type Examples = ExampleGroup[];

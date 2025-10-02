@@ -41,13 +41,13 @@ type TypedReactNode<T> = ReactElement<T> | Array<TypedReactNode<T>> | never;
 type NativeImage =
   | string
   | {
-    name: string;
-    sdf?: boolean;
-    stretchX?: [number, number][];
-    stretchY?: [number, number][];
-    content?: [number, number, number, number];
-    scale?: number;
-  };
+      name: string;
+      sdf?: boolean;
+      stretchX?: [number, number][];
+      stretchY?: [number, number][];
+      content?: [number, number, number, number];
+      scale?: number;
+    };
 
 export type ImageEntryData = {
   url?: string;
@@ -156,7 +156,8 @@ class Images extends React.PureComponent<Props> {
       );
       if (childrenWithWrongType) {
         console.error(
-          `Images component on accepts Image a children passed in: ${(childrenWithWrongType as any).type || 'n/a'
+          `Images component on accepts Image a children passed in: ${
+            (childrenWithWrongType as any).type || 'n/a'
           }`,
         );
       }
@@ -177,7 +178,7 @@ class Images extends React.PureComponent<Props> {
       let { payload } = event.nativeEvent;
       if (!payload) {
         // @ts-expect-error payload renamed to avoid conflict in codegen with RN
-        payload = event.nativeEvent.payloadRenamed
+        payload = event.nativeEvent.payloadRenamed;
       }
 
       this.props.onImageMissing(payload?.imageKey);

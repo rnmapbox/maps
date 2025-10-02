@@ -37,7 +37,6 @@ interface RNMBXModule {
   setConnected(connected: boolean): void;
 }
 
-// eslint-disable-next-line prefer-destructuring
 const RNMBXModule: RNMBXModule = NativeModules.RNMBXModule;
 if (NativeModules.RNMBXModule == null) {
   if ((global as { expo?: unknown }).expo != null) {

@@ -167,7 +167,7 @@ function getImageSource(id: string, source: MapboxJSONSource) {
   return <ImageSource key={id} id={id} {...sourceProps} />;
 }
 
-type ShapeShourceShape = typeof ShapeSource.prototype.props['shape'];
+type ShapeShourceShape = (typeof ShapeSource.prototype.props)['shape'];
 
 function getShapeSource(id: string, source: MapboxJSONSource) {
   const sourceProps: {
@@ -294,9 +294,9 @@ const Style = (props: Props) => {
   // Fetch style when props.json is a URL
   useEffect(() => {
     const abortController = new AbortController();
-    const fetchStyleJson = async (json: string) => {
+    const fetchStyleJson = async (styleJson: string) => {
       try {
-        const response = await fetch(json, {
+        const response = await fetch(styleJson, {
           signal: abortController.signal,
         });
         const responseJson = await response.json();
