@@ -7,7 +7,7 @@ on:
     - 'v10.0'
   pull_request:
 
-concurrency: 
+concurrency:
   group: ${{ github.head_ref || github.run_id }}
   cancel-in-progress: true
 
@@ -77,7 +77,7 @@ jobs:
     if: needs.has_mapbox_token.outputs.has-mapbox-token == 'true'
     secrets:
       MAPBOX_ACCESS_TOKEN: ${{ secrets.MAPBOX_ACCESS_TOKEN }}
-      MAPBOX_DOWNLOAD_TOKEN: ${{ secrets.MAPBOX_DOWNLOAD_TOKEN }} 
+      MAPBOX_DOWNLOAD_TOKEN: ${{ secrets.MAPBOX_DOWNLOAD_TOKEN }}
 
   publish:
     if: startsWith(github.ref, 'refs/tags/') && (github.event_name == 'push')
