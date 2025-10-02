@@ -31,15 +31,15 @@ describe('Callout', () => {
         tipStyle: { height: 4 },
         textStyle: { height: 5 },
       };
-      const result = render(
-        <Callout {...testProps} />,
-      );
-      const { UNSAFE_getByType, UNSAFE_getAllByType } = result
+      const result = render(<Callout {...testProps} />);
+      const { UNSAFE_getByType, UNSAFE_getAllByType } = result;
       const callout = UNSAFE_getByType('RNMBXCallout');
       const views = UNSAFE_getAllByType(View);
       const text = UNSAFE_getByType(Text);
-      
-      function getStyleHeightForViewWithProps(props: { [propName: string]: any }): ReactTestInstance {
+
+      function getStyleHeightForViewWithProps(props: {
+        [propName: string]: any;
+      }): ReactTestInstance {
         if (Array.isArray(props.style)) {
           return props.style[1].height;
         }
@@ -47,13 +47,21 @@ describe('Callout', () => {
         return props.style.height;
       }
 
-      const calloutWrapperTestStyle = getStyleHeightForViewWithProps(callout.props);
-      const animatedViewTestStyle = getStyleHeightForViewWithProps(views[0].props);
-      const wrapperViewTestStyle = getStyleHeightForViewWithProps(views[1].props);
+      const calloutWrapperTestStyle = getStyleHeightForViewWithProps(
+        callout.props,
+      );
+      const animatedViewTestStyle = getStyleHeightForViewWithProps(
+        views[0].props,
+      );
+      const wrapperViewTestStyle = getStyleHeightForViewWithProps(
+        views[1].props,
+      );
       const tipViewTestStyle = getStyleHeightForViewWithProps(views[2].props);
       const textTestStyle = getStyleHeightForViewWithProps(text.props);
 
-      expect(calloutWrapperTestStyle).toStrictEqual(testProps.containerStyle.height);
+      expect(calloutWrapperTestStyle).toStrictEqual(
+        testProps.containerStyle.height,
+      );
       expect(animatedViewTestStyle).toStrictEqual(testProps.style.height);
       expect(wrapperViewTestStyle).toStrictEqual(testProps.contentStyle.height);
       expect(tipViewTestStyle).toStrictEqual(testProps.tipStyle.height);

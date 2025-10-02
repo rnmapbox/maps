@@ -22,6 +22,8 @@ export default defineConfig([
       'react/react-in-jsx-scope': 'off',
       'react-native/no-inline-styles': 'off',
       'prettier/prettier': 'warn',
+      // TODO: Remove this rule disable eventually. Deep imports are needed for codegen specs.
+      '@react-native/no-deep-imports': 'off',
     },
   },
   // ES Module files (.mjs)
@@ -40,8 +42,10 @@ export default defineConfig([
       'temp-issue-3909/**',
       '.yarn/**',
       'plugin/build/**',
+      'ios/build/**',
       'example/ios/build/**',
       'example/dist/**',
+      'example2/**',
     ],
   },
 ]);

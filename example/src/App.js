@@ -27,6 +27,8 @@ const styles = StyleSheet.create({
 
 Mapbox.setAccessToken(config.get('accessToken'));
 
+console.log('### App.js - Mapbox:', Mapbox);
+
 const Stack = createNativeStackNavigator();
 
 function AppStackNavigator() {

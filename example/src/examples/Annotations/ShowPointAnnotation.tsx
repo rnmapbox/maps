@@ -183,7 +183,7 @@ const ShowPointAnnotation = () => {
           onPress={() =>
             setLayerRendering(
               (prevState) =>
-                (({ above: 'below', below: 'above' } as const)[prevState]),
+                (({ above: 'below', below: 'above' }) as const)[prevState],
             )
           }
         >

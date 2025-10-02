@@ -157,9 +157,8 @@ const DrawPolyline = () => {
           ref={map}
           style={{ flex: 1 }}
           onCameraChanged={async (e) => {
-            const crosshairCoords = await map.current?.getCoordinateFromView(
-              crosshairPos,
-            );
+            const crosshairCoords =
+              await map.current?.getCoordinateFromView(crosshairPos);
             console.log(
               'Crosshair coords: ',
               crosshairCoords,
@@ -200,11 +199,11 @@ const metadata = {
     'getCoordinateFromView',
     'Overlay',
   ],
-  docs: `This example shows a simple polyline editor. It uses \`onCameraChanged\` to get the center of the map and \`getCoordinateFromView\` 
+  docs: `This example shows a simple polyline editor. It uses \`onCameraChanged\` to get the center of the map and \`getCoordinateFromView\`
   to get the coordinates of the crosshair.
-  
+
   The crosshair is an overlay that is positioned using \`onLayout\` and \`getCoordinateFromView\`.
-  
+
   The \`ShapeSource\` is updated with the new coordinates and the \`LineLayer\` is updated with the new coordinates.`,
 };
 

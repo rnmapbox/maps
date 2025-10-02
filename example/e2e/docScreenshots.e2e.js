@@ -1,3 +1,5 @@
+/* global element, by, waitFor, describe, it, expect, beforeAll, afterAll, beforeEach, afterEach */
+
 /**
  * @file process the docs/examples.json file and take screenshots of each example and outputs it to <docRoot>/example-screenshots and <docRoot>/example-screenshots/screenshots.json
  */
@@ -98,7 +100,9 @@ async function wait(ms) {
     await waitFor(element(by.id('no-such-view')))
       .toBeVisible()
       .withTimeout(ms);
-  } catch (e) {}
+  } catch (_e) {
+    console.log('e', _e);
+  }
 }
 
 /**
@@ -177,44 +181,48 @@ if (['true', 1, '1'].includes(process.env.SKIP_TESTS_NO_METAL)) {
     /** @type Screenshots */
     const screenshots = {};
 
-    examples.forEach(({ groupName, metadata: groupMetadata, examples }) => {
-      describe(`${groupName}`, () => {
-        examples.forEach(({ metadata, fullPath, name }) => {
-          if (metadata) {
-            it(`${name}`, async () => {
-              await device.setStatusBar({
-                time: '11:34',
-                batteryLevel: 1,
-                batteryState: 'charged',
-                dataNetwork: 'wifi',
-                wifiMode: 'active',
-                wifiBars: '3',
-                cellularMode: 'searching',
+    examples.forEach(
+      ({ groupName, metadata: groupMetadata, examples: examplesInGroup }) => {
+        describe(`${groupName}`, () => {
+          examplesInGroup.forEach(({ metadata, fullPath: _fullPath, name }) => {
+            if (metadata) {
+              it(`${name}`, async () => {
+                await device.setStatusBar({
+                  time: '11:34',
+                  batteryLevel: 1,
+                  batteryState: 'charged',
+                  dataNetwork: 'wifi',
+                  wifiMode: 'active',
+                  wifiBars: '3',
+                  cellularMode: 'searching',
+                });
+                await setSampleLocation();
+
+                await expect(
+                  element(by.text(groupMetadata.title)),
+                ).toBeVisible();
+                await element(by.text(groupMetadata.title)).tap();
+
+                await waitFor(element(by.text(metadata.title)))
+                  .toBeVisible()
+                  .whileElement(by.id('example-list'))
+                  .scroll(50, 'down');
+                await element(by.text(metadata.title)).tap();
+
+                let shots = new ExampleScreenshots(
+                  { testName: name, groupName },
+                  screenshots,
+                );
+
+                await wait(1000);
+
+                await shots.screenshot();
               });
-              await setSampleLocation();
-
-              await expect(element(by.text(groupMetadata.title))).toBeVisible();
-              await element(by.text(groupMetadata.title)).tap();
-
-              await waitFor(element(by.text(metadata.title)))
-                .toBeVisible()
-                .whileElement(by.id('example-list'))
-                .scroll(50, 'down');
-              await element(by.text(metadata.title)).tap();
-
-              let shots = new ExampleScreenshots(
-                { testName: name, groupName },
-                screenshots,
-              );
-
-              await wait(1000);
-
-              await shots.screenshot();
-            });
-          }
+            }
+          });
         });
-      });
-    });
+      },
+    );
 
     afterAll(async () => {
       console.log('Writing screenshots.json', screenshotsJSONPath);

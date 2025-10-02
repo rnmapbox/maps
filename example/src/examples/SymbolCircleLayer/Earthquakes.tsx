@@ -156,7 +156,7 @@ const Earthquakes: React.FC<Partial<BaseExampleProps>> = () => {
         />
         <ShapeSource
           id="earthquakes"
-          onPress={async pressedShape => {
+          onPress={async (pressedShape) => {
             if (shapeSource.current) {
               try {
                 const [cluster] = pressedShape.features;

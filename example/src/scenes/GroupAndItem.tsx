@@ -178,8 +178,7 @@ class ExampleItem implements ExampleNode {
     return this.path;
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-empty-function
-  updateIfNeeded(_updated: () => void): void { }
+  updateIfNeeded(_updated: () => void): void {}
 }
 
 type RootStackParamList = {
@@ -207,7 +206,7 @@ class ExampleGroup implements ExampleNode {
 
   setParent(parent: string[]) {
     this.path = [...parent, this.label];
-    this.items.forEach(i => i.setParent(this.path));
+    this.items.forEach((i) => i.setParent(this.path));
   }
 
   find(path: string[]): ExampleNode | undefined {
@@ -230,8 +229,7 @@ class ExampleGroup implements ExampleNode {
     return this.path;
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-empty-function
-  updateIfNeeded(_updated: () => void): void { }
+  updateIfNeeded(_updated: () => void): void {}
 }
 
 const PageWrapper = (Component: ItemComponent) => (props: BaseExampleProps) => (
@@ -278,11 +276,11 @@ function exampleGroup(
 
 const BugReportPage =
   (Klass: React.ComponentType<PageProps>) =>
-    ({ ...props }: PageProps) => (
-      <Page {...props}>
-        <Klass {...props} />
-      </Page>
-    );
+  ({ ...props }: PageProps) => (
+    <Page {...props}>
+      <Klass {...props} />
+    </Page>
+  );
 
 const Examples = new ExampleGroup('React Native Mapbox', [
   new MostRecentExampleItem(),
@@ -335,17 +333,17 @@ function ExampleGroupComponent({
 
   const back = showBack
     ? {
-      onBack: () => {
-        navigation.goBack();
-      },
-    }
+        onBack: () => {
+          navigation.goBack();
+        },
+      }
     : {};
 
   const [, updateState] = useState<object>();
   const forceUpdate = useCallback(() => updateState({}), []);
 
   useEffect(() => {
-    items.forEach(item => {
+    items.forEach((item) => {
       item.updateIfNeeded(forceUpdate);
     });
   }, [items, forceUpdate]);
@@ -358,7 +356,7 @@ function ExampleGroupComponent({
           testID="example-list"
           style={styles.exampleList}
           data={items}
-          keyExtractor={item => item.label}
+          keyExtractor={(item) => item.label}
           renderItem={renderItem}
         />
       </View>

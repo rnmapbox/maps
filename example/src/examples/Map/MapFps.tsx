@@ -19,19 +19,19 @@ const MapFps = () => {
   return (
     <>
       <Button
-        onPress={() => setFrameRate((fps) => fps === 60 ? 10 : 60)}
+        onPress={() => setFrameRate((fps) => (fps === 60 ? 10 : 60))}
         title={frameRate === 60 ? '10 fps' : '60 fps'}
       />
-        <Mapbox.MapView
-          styleURL={Mapbox.StyleURL.Dark}
-          style={sheet.matchParent}
-          testID={'toggle-map-fps'}
-          preferredFramesPerSecond={frameRate}
-        >
-          <Mapbox.Camera followZoomLevel={12} followUserLocation />
+      <Mapbox.MapView
+        styleURL={Mapbox.StyleURL.Dark}
+        style={sheet.matchParent}
+        testID={'toggle-map-fps'}
+        preferredFramesPerSecond={frameRate}
+      >
+        <Mapbox.Camera followZoomLevel={12} followUserLocation />
 
-          <Mapbox.UserLocation />
-        </Mapbox.MapView>
+        <Mapbox.UserLocation />
+      </Mapbox.MapView>
     </>
   );
 };

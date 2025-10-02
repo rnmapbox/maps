@@ -37,8 +37,8 @@ type OrnamentButtonsProps = {
   ornamentType: OrnamentType;
   visibility: Record<OrnamentType, true | false | undefined>;
   position: Record<OrnamentType, OrnamentPosition>;
-  onPressVisibility: (ornamentType: OrnamentType) => void;
-  onPressPosition: (ornamentType: OrnamentType) => void;
+  onPressVisibility: (_ornamentType: OrnamentType) => void;
+  onPressPosition: (_ornamentType: OrnamentType) => void;
 };
 
 const OrnamentButtons = ({
