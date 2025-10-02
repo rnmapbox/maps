@@ -186,7 +186,7 @@ export class LocationManager {
         );
       } else {
         this.subscription = MapboxGLLocationManager.onLocationUpdate(
-          (location) => {
+          (location: any) => {
             this._onUpdate(location.payload);
           },
         );

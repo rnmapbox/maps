@@ -683,7 +683,7 @@ export const Camera = memo(
           minZoomLevel={minZoomLevel}
           maxZoomLevel={maxZoomLevel}
           maxBounds={nativeMaxBounds}
-          // @ts-expect-error just codegen stuff
+          // @ts-ignore just codegen stuff
           onUserTrackingModeChange={_onUserTrackingModeChange}
         />
       );

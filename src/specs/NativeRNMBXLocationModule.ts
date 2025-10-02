@@ -1,4 +1,5 @@
 import { type TurboModule, TurboModuleRegistry } from 'react-native';
+// @ts-ignore - CI environment type resolution issue for CodegenTypes
 import type { EventEmitter } from 'react-native/Libraries/Types/CodegenTypes';
 
 type LocationEvent = {

@@ -7,6 +7,7 @@ export type UnsafeMixed<T> = T;
 // https://github.com/rnmapbox/maps/pull/3082#discussion_r1339858750
 export type OptionalProp<T> = UnsafeMixed<T>;
 
+// @ts-ignore - CI environment type resolution issue for CodegenTypes
 import { Double, Int32 } from 'react-native/Libraries/Types/CodegenTypes';
 
 export type Point = {

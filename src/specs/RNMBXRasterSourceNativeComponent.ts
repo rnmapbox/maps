@@ -1,5 +1,6 @@
 import type { HostComponent, ViewProps } from 'react-native';
 import codegenNativeComponent from 'react-native/Libraries/Utilities/codegenNativeComponent';
+// @ts-ignore - CI environment type resolution issue for CodegenTypes
 import { Double } from 'react-native/Libraries/Types/CodegenTypes';
 
 import { UnsafeMixed } from './codegenUtils';

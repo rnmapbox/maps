@@ -215,7 +215,7 @@ export const Viewport = memo(
       <RNMBXViewport
         {...props}
         hasStatusChanged={props.onStatusChanged != null}
-        // @ts-expect-error TODO: DirectEventHandler type signature mismatch with React Native's event system
+        // @ts-ignore - DirectEventHandler type signature mismatch with React Native's event system
         // The handler function signature is correct but doesn't match the strict DirectEventHandler type
         onStatusChanged={onStatusChangedNative}
         ref={nativeViewport}
