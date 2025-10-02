@@ -30,4 +30,4 @@ export interface NativeProps extends ViewProps {
 
 export default codegenNativeComponent<NativeProps>(
   'RNMBXShapeSource',
-) as HostComponent<NativeProps>;
+) as unknown as HostComponent<NativeProps>;

@@ -3,7 +3,7 @@ import { Int32 } from 'react-native/Libraries/Types/CodegenTypes';
 import { TurboModuleRegistry } from 'react-native';
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-type ObjectOr<T> = Object;
+type ObjectOr<_T> = Object;
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 type StringOr<_T> = string;

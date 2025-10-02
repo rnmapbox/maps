@@ -3,11 +3,11 @@ import {
   Camera,
   CircleLayer,
   Logger,
-  MapState,
+  type MapState,
   MapView,
   ShapeSource,
 } from '@rnmapbox/maps';
-import {
+import type {
   Feature,
   GeoJsonProperties,
   Geometry,
@@ -15,12 +15,12 @@ import {
   Polygon,
   Position,
 } from 'geojson';
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import colors from '../../styles/colors';
-import { ExampleWithMetadata } from '../common/ExampleMetadata'; // exclude-from-doc
+import type { ExampleWithMetadata } from '../common/ExampleMetadata'; // exclude-from-doc
 
 Logger.setLogLevel('verbose');
 
@@ -84,7 +84,7 @@ const MapHandlers = () => {
     if (!position) {
       return '';
     }
-    return `${position[1].toFixed(3)}, ${position[0].toFixed(3)}`;
+    return `${position[1]!.toFixed(3)}, ${position[0]!.toFixed(3)}`;
   };
 
   return (

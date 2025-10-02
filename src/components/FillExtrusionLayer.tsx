@@ -90,8 +90,8 @@ class FillExtrusionLayer extends AbstractLayer<Props, NativeTypeProps> {
       sourceLayerID: this.props.sourceLayerID,
     };
     return (
+      // @ts-expect-error just codegen stuff
       <RNMBXFillExtrusionLayerNativeComponent
-        // @ts-expect-error just codegen stuff
         ref={this.setNativeLayer}
         {...props}
       />

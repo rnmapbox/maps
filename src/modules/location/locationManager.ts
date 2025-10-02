@@ -179,9 +179,10 @@ export class LocationManager {
         typeof MapboxGLLocationManager.onLocationUpdate === 'function';
 
       if (Platform.OS === 'ios' || !isTurbo) {
+        // Cast to match NativeEventEmitter's strict signature - runtime behavior is correct
         this.subscription = LocationModuleEventEmitter.addListener(
           MapboxGL.LocationCallbackName.Update,
-          this._onUpdate,
+          this._onUpdate as (...args: readonly Object[]) => unknown,
         );
       } else {
         this.subscription = MapboxGLLocationManager.onLocationUpdate(

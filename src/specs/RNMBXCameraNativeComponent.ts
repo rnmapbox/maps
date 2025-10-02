@@ -43,4 +43,4 @@ export interface NativeProps extends ViewProps {
 
 export default codegenNativeComponent<NativeProps>(
   'RNMBXCamera',
-) as HostComponent<NativeProps>;
+) as unknown as HostComponent<NativeProps>;

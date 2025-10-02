@@ -1,4 +1,3 @@
-import React, { ComponentProps } from 'react';
 import {
   Images,
   MapView,
@@ -7,6 +6,7 @@ import {
   Camera,
   CircleLayer,
 } from '@rnmapbox/maps';
+import { ComponentProps } from 'react';
 import { View, Image, Text, ImageSourcePropType } from 'react-native';
 
 const styles = {

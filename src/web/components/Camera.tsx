@@ -54,7 +54,9 @@ class Camera
   >
   implements Omit<CameraRef, 'setCamera' | 'moveBy' | 'scaleBy'>
 {
-  context!: ContextType<typeof MapContext>;
+  // TODO: Property override - web component needs context but it conflicts with React's built-in context
+  // Using 'declare' to properly type the override as suggested by TypeScript
+  declare context: ContextType<typeof MapContext>;
 
   static contextType = MapContext;
   static UserTrackingModes = [];

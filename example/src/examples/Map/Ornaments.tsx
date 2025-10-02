@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
 import { MapView, Camera, Images } from '@rnmapbox/maps';
-import { Button, StyleSheet, Text, ImageSourcePropType } from 'react-native';
+import { useState } from 'react';
+import { Button, ImageSourcePropType, StyleSheet, Text } from 'react-native';
 import { Divider } from '@rneui/base';
 
 import Bubble from '../common/Bubble';

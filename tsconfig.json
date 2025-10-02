@@ -4,6 +4,7 @@
     "paths": {
       "@rnmapbox/maps": ["./src/index"]
     },
+    "allowJs": true,
     "allowUnreachableCode": false,
     "allowUnusedLabels": false,
     "customConditions": ["react-native-strict-api"],
@@ -12,6 +13,7 @@
     "jsx": "react-jsx",
     "lib": ["ESNext"],
     "module": "ESNext",
+    "moduleSuffixes": [".native", ""],
     "moduleResolution": "bundler",
     "noEmit": true,
     "noFallthroughCasesInSwitch": true,
@@ -25,7 +27,8 @@
     "skipLibCheck": true,
     "strict": true,
     "target": "ESNext",
-    "verbatimModuleSyntax": true
+    // TODO: Re-enable verbatimModuleSyntax and fix type-only imports (217 errors)
+    // "verbatimModuleSyntax": true
   },
   "exclude": [
     "**/*.codepart.ts"

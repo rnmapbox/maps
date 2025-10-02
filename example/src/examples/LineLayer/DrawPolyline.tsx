@@ -1,11 +1,12 @@
 import { Camera, LineLayer, MapView, ShapeSource } from '@rnmapbox/maps';
 import { Button, View } from 'react-native';
-import React, {
+import {
   useState,
   useRef,
   ComponentProps,
   useMemo,
   forwardRef,
+  type ElementRef,
 } from 'react';
 
 type Position = [number, number];
@@ -15,7 +16,7 @@ type CrosshairProps = {
   w: number;
   onLayout: ComponentProps<typeof View>['onLayout'];
 };
-const Crosshair = forwardRef<View, CrosshairProps>(
+const Crosshair = forwardRef<ElementRef<typeof View>, CrosshairProps>(
   ({ size, w, onLayout }: CrosshairProps, ref) => (
     <View
       onLayout={onLayout}
@@ -54,7 +55,7 @@ const CrosshairOverlay = ({
 }: {
   onCenter: (x: [number, number]) => void;
 }) => {
-  const ref = useRef<View>(null);
+  const ref = useRef<ElementRef<typeof View>>(null);
 
   return (
     <View

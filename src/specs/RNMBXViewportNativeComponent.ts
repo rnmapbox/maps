@@ -108,7 +108,7 @@ export interface NativeProps extends ViewProps {
 
 export default codegenNativeComponent<NativeProps>(
   'RNMBXViewport',
-) as HostComponent<NativeProps>;
+) as unknown as HostComponent<NativeProps>;
 
 export type NativeViewportReal = HostComponent<
   Omit<NativeProps, 'onStatusChanged'> & {

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { Text } from 'react-native';
 import MapboxGL, { Location } from '@rnmapbox/maps';
 

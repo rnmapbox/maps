@@ -1,11 +1,11 @@
 import React from 'react';
 import { NativeModules } from 'react-native';
 
-import {
+import type {
   FilterExpression,
   HeatmapLayerStyleProps,
 } from '../utils/MapboxStyles';
-import { StyleValue } from '../utils/StyleValue';
+import type { StyleValue } from '../utils/StyleValue';
 import RNMBXHeatmapLayerNativeComponent from '../specs/RNMBXHeatmapLayerNativeComponent';
 
 import AbstractLayer from './AbstractLayer';

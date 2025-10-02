@@ -24,4 +24,4 @@ export interface NativeProps extends ViewProps {
 
 export default codegenNativeComponent<NativeProps>(
   'RNMBXBackgroundLayer',
-) as HostComponent<NativeProps>;
+) as unknown as HostComponent<NativeProps>;

@@ -1,4 +1,3 @@
-import React from 'react';
 import { NativeModules } from 'react-native';
 
 import { FilterExpression, ModelLayerStyleProps } from '../utils/MapboxStyles';

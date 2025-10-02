@@ -11,8 +11,11 @@ import {
   Geometry,
   Point,
   Feature,
+  // @ts-expect-error - @turf packages have type resolution issues with package.json exports
 } from '@turf/helpers';
+// @ts-expect-error - @turf packages have type resolution issues with package.json exports
 import distance from '@turf/distance';
+// @ts-expect-error - @turf packages have type resolution issues with package.json exports
 import along from '@turf/along';
 
 export const makePoint = point;

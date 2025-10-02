@@ -1,4 +1,4 @@
-import React, { memo } from 'react';
+import { memo } from 'react';
 import { processColor, type ColorValue } from 'react-native';
 
 import RNMBXNativeUserLocation, {

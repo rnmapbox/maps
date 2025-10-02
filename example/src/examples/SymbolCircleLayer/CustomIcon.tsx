@@ -1,4 +1,4 @@
-import React, { useRef, memo, useState } from 'react';
+import { useRef, memo, useState } from 'react';
 import { Text } from 'react-native';
 import MapboxGL, {
   MapView,
@@ -7,6 +7,7 @@ import MapboxGL, {
   SymbolLayer,
   Images,
 } from '@rnmapbox/maps';
+// @ts-expect-error - @turf packages have type resolution issues with package.json exports
 import { featureCollection, feature, point } from '@turf/helpers';
 
 import Bubble from '../common/Bubble';

@@ -476,14 +476,14 @@ export const Camera = memo(
         };
 
         if (typeof paddingConfig === 'object') {
-          if (paddingConfig.length === 2) {
+          if (validPaddingConfig2(paddingConfig)) {
             _padding = {
               paddingTop: paddingConfig[0],
               paddingBottom: paddingConfig[0],
               paddingLeft: paddingConfig[1],
               paddingRight: paddingConfig[1],
             };
-          } else if (paddingConfig.length === 4) {
+          } else if (validPaddingConfig4(paddingConfig)) {
             _padding = {
               paddingTop: paddingConfig[0],
               paddingBottom: paddingConfig[2],
@@ -669,7 +669,6 @@ export const Camera = memo(
       return (
         <RNMBXCamera
           testID={'Camera'}
-          // @ts-expect-error just codegen stuff
           ref={nativeCamera}
           stop={nativeStop}
           animationDuration={animationDuration}
@@ -691,6 +690,18 @@ export const Camera = memo(
     },
   ),
 );
+
+function validPaddingConfig2(
+  paddingConfig: number[],
+): paddingConfig is [number, number] {
+  return paddingConfig.length === 2;
+}
+
+function validPaddingConfig4(
+  paddingConfig: number[],
+): paddingConfig is [number, number, number, number] {
+  return paddingConfig.length === 4;
+}
 
 const RNMBXCamera = NativeCameraView;
 

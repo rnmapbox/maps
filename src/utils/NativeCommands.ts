@@ -1,4 +1,4 @@
-import { type NodeHandle, findNodeHandle } from 'react-native';
+import { findNodeHandle } from 'react-native';
 
 export type NativeArg =
   | string
@@ -72,7 +72,7 @@ export class NativeCommands<Spec extends object> {
     if (handle) {
       return (
         this.module[name] as (
-          arg0: NodeHandle,
+          arg0: number | null,
           ...args: NativeArg[]
         ) => Promise<T>
       )(handle, ...args);

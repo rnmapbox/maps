@@ -129,9 +129,9 @@ class Images extends React.PureComponent<Props> {
           console.error(
             `Use of ${ShapeSource.NATIVE_ASSETS_KEY} in Images#images is not supported use Images#nativeAssetImages`,
           );
-        } else if (_isUrlOrPath(value)) {
+        } else if (_isUrlOrPath(value!)) {
           images[imageName] = value;
-        } else if (isImageSourcePropType(value)) {
+        } else if (isImageSourcePropType(value!)) {
           const res = RNImage.resolveAssetSource(value);
           if (res && res.uri) {
             images[imageName] = res;
@@ -181,7 +181,7 @@ class Images extends React.PureComponent<Props> {
         payload = event.nativeEvent.payloadRenamed;
       }
 
-      this.props.onImageMissing(payload?.imageKey);
+      this.props.onImageMissing(payload?.imageKey!);
     }
   }
 

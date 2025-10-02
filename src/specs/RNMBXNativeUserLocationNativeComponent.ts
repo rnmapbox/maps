@@ -36,4 +36,4 @@ export interface NativeProps extends ViewProps {
 
 export default codegenNativeComponent<NativeProps>(
   'RNMBXNativeUserLocation',
-) as HostComponent<NativeProps>;
+) as unknown as HostComponent<NativeProps>;

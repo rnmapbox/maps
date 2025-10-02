@@ -1,9 +1,13 @@
-import React from 'react';
 import { render } from '@testing-library/react-native';
 import type { ReactTestInstance } from 'react-test-renderer';
 import { Text, View } from 'react-native';
+import type React from 'react';
 
 import Callout from '../../src/components/Callout';
+
+function getCompByName(name: string): React.ComponentType<any> {
+  return name as any as React.ComponentType<any>;
+}
 
 describe('Callout', () => {
   test('renders with custom title', () => {
@@ -15,8 +19,10 @@ describe('Callout', () => {
 
   describe('_renderDefaultCallout', () => {
     test('renders default children', () => {
-      const { UNSAFE_getByType, UNSAFE_getAllByType } = render(<Callout />);
-      const callout = UNSAFE_getByType('RNMBXCallout');
+      const { UNSAFE_getByType, UNSAFE_getAllByType } = render(
+        <Callout title="test" />,
+      );
+      const callout = UNSAFE_getByType(getCompByName('RNMBXCallout'));
 
       expect(callout).toBeDefined();
       expect(UNSAFE_getAllByType(Text).length).toBe(1);
@@ -31,9 +37,9 @@ describe('Callout', () => {
         tipStyle: { height: 4 },
         textStyle: { height: 5 },
       };
-      const result = render(<Callout {...testProps} />);
+      const result = render(<Callout title="test" {...testProps} />);
       const { UNSAFE_getByType, UNSAFE_getAllByType } = result;
-      const callout = UNSAFE_getByType('RNMBXCallout');
+      const callout = UNSAFE_getByType(getCompByName('RNMBXCallout'));
       const views = UNSAFE_getAllByType(View);
       const text = UNSAFE_getByType(Text);
 
@@ -51,12 +57,12 @@ describe('Callout', () => {
         callout.props,
       );
       const animatedViewTestStyle = getStyleHeightForViewWithProps(
-        views[0].props,
+        views[0]!.props,
       );
       const wrapperViewTestStyle = getStyleHeightForViewWithProps(
-        views[1].props,
+        views[1]!.props,
       );
-      const tipViewTestStyle = getStyleHeightForViewWithProps(views[2].props);
+      const tipViewTestStyle = getStyleHeightForViewWithProps(views[2]!.props);
       const textTestStyle = getStyleHeightForViewWithProps(text.props);
 
       expect(calloutWrapperTestStyle).toStrictEqual(
@@ -72,7 +78,7 @@ describe('Callout', () => {
   describe('_renderCustomCallout', () => {
     test('renders custom children', () => {
       const { getByTestId, UNSAFE_queryByType } = render(
-        <Callout>
+        <Callout title="test">
           <View testID="TestChild">{'Foo Bar'}</View>
         </Callout>,
       );
@@ -87,15 +93,15 @@ describe('Callout', () => {
         containerStyle: { width: 2 },
       };
       const { UNSAFE_getByType, UNSAFE_getAllByType } = render(
-        <Callout {...testProps}>
+        <Callout title="test" {...testProps}>
           <View>{'Foo Bar'}</View>
         </Callout>,
       );
-      const callout = UNSAFE_getByType('RNMBXCallout');
+      const callout = UNSAFE_getByType(getCompByName('RNMBXCallout'));
       const views = UNSAFE_getAllByType(View);
 
       const calloutWrapperTestStyle = callout.props.style[1].width;
-      const animatedViewTestStyle = views[0].props.style.width;
+      const animatedViewTestStyle = views[0]!.props.style.width;
 
       expect(calloutWrapperTestStyle).toStrictEqual(
         testProps.containerStyle.width,

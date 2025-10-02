@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import { useEffect } from 'react';
 import { Alert } from 'react-native';
 import Mapbox from '@rnmapbox/maps';
 

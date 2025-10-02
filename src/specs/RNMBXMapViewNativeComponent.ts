@@ -84,7 +84,7 @@ export interface NativeProps extends ViewProps {
 
 export default codegenNativeComponent<NativeProps>(
   'RNMBXMapView',
-) as HostComponent<NativeProps>;
+) as unknown as HostComponent<NativeProps>;
 
 // The actually types for callbacks are sometwhat different due to codegen limitations:
 

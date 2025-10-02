@@ -1,8 +1,8 @@
-import { Button, Divider, Text } from '@rneui/base';
+import { useCallback, useEffect, useState } from 'react';
+import { StyleSheet, Pressable, Text, View } from 'react-native';
+import { Button, Divider } from '@rneui/base';
 import { Camera, Logger, MapView, MarkerView } from '@rnmapbox/maps';
 import { Position } from 'geojson';
-import React, { useCallback, useEffect, useState } from 'react';
-import { Pressable, StyleSheet, View } from 'react-native';
 
 import { ExampleWithMetadata } from '../common/ExampleMetadata'; // exclude-from-doc
 
@@ -27,13 +27,13 @@ const Markers = () => {
   const [size, setSize] = useState(1);
 
   const randomizeCoordinatesAndColors = useCallback(() => {
-    const newMarkers = new Array(markerCount).fill(0).map((o, i) => {
+    const newMarkers = new Array(markerCount).fill(0).map((_o, i) => {
       return {
         coords: [
-          centerCoord[0] + (Math.random() - 0.5) * 0.008,
-          centerCoord[1] + (Math.random() - 0.5) * 0.008,
+          centerCoord[0]! + (Math.random() - 0.5) * 0.008,
+          centerCoord[1]! + (Math.random() - 0.5) * 0.008,
         ],
-        color: allColors[i % allColors.length],
+        color: allColors[i % allColors.length]!,
       };
     });
 
@@ -90,23 +90,25 @@ const Markers = () => {
         <Divider style={styles.divider} />
 
         <View>
-          {[
+          {(
             [
-              [0, 0],
-              [0.5, 0],
-              [1, 0],
-            ],
-            [
-              [0, 0.5],
-              [0.5, 0.5],
-              [1, 0.5],
-            ],
-            [
-              [0, 1],
-              [0.5, 1],
-              [1, 1],
-            ],
-          ].map((anchors, index) => {
+              [
+                [0, 0],
+                [0.5, 0],
+                [1, 0],
+              ],
+              [
+                [0, 0.5],
+                [0.5, 0.5],
+                [1, 0.5],
+              ],
+              [
+                [0, 1],
+                [0.5, 1],
+                [1, 1],
+              ],
+            ] as const
+          ).map((anchors, index) => {
             return (
               <View
                 key={index}

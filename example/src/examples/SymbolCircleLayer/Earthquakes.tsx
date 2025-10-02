@@ -162,17 +162,17 @@ const Earthquakes: React.FC<Partial<BaseExampleProps>> = () => {
                 const [cluster] = pressedShape.features;
 
                 const collection = await shapeSource.current.getClusterLeaves(
-                  cluster,
+                  cluster!,
                   999,
                   0,
                 );
 
                 setSelectedCluster(collection);
               } catch {
-                if (!pressedShape.features[0].properties?.cluster) {
+                if (!pressedShape.features[0]!.properties?.cluster) {
                   setSelectedCluster({
                     type: 'FeatureCollection',
-                    features: [pressedShape.features[0]],
+                    features: [pressedShape.features[0]!],
                   });
                 }
               }

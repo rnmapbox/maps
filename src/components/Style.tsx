@@ -332,7 +332,7 @@ const Style = (props: Props) => {
       return [];
     }
     return Object.keys(sources)
-      .map((id) => asSourceComponent(id, sources[id]))
+      .map((id) => asSourceComponent(id, sources[id]!))
       .filter((x) => !!x);
   }, [sources]);
 

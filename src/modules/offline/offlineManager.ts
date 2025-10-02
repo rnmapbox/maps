@@ -264,7 +264,7 @@ class OfflineManager {
   async getPacks(): Promise<OfflinePack[]> {
     await this._initialize(true);
     return Object.keys(this._offlinePacks).map(
-      (name) => this._offlinePacks[name],
+      (name) => this._offlinePacks[name]!,
     );
   }
 
@@ -348,7 +348,7 @@ class OfflineManager {
       if (totalProgressListeners === 0) {
         this.subscriptionProgress = OfflineModuleEventEmitter.addListener(
           RNMBXModule.OfflineCallbackName.Progress,
-          this._onProgress,
+          this._onProgress as (...args: readonly Object[]) => unknown,
         );
       }
       this._progressListeners[packName] = progressListener;
@@ -359,7 +359,7 @@ class OfflineManager {
       if (totalErrorListeners === 0) {
         this.subscriptionError = OfflineModuleEventEmitter.addListener(
           RNMBXModule.OfflineCallbackName.Error,
-          this._onError,
+          this._onError as (...args: readonly Object[]) => unknown,
         );
       }
       this._errorListeners[packName] = errorListener;
@@ -430,7 +430,7 @@ class OfflineManager {
     }
 
     const pack = this._offlinePacks[name];
-    this._progressListeners[name](pack, e.payload);
+    this._progressListeners[name]!(pack!, e.payload);
 
     // cleanup listeners now that they are no longer needed
     if (state === RNMBXModule.OfflinePackDownloadState.Complete) {
@@ -446,7 +446,7 @@ class OfflineManager {
     }
 
     const pack = this._offlinePacks[name];
-    this._errorListeners[name](pack, e.payload);
+    this._errorListeners[name]!(pack!, e.payload);
   }
 
   _hasListeners(

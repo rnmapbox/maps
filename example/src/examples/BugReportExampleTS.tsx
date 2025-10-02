@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import {
   Camera,
   CircleLayer,
@@ -7,7 +8,6 @@ import {
   SymbolLayer,
 } from '@rnmapbox/maps';
 import { FeatureCollection } from 'geojson';
-import React, { useState } from 'react';
 import { Button } from 'react-native';
 
 const styles = {

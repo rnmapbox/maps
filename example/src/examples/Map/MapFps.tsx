@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import Mapbox from '@rnmapbox/maps';
 import { Button } from '@rneui/base';
 

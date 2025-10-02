@@ -4490,6 +4490,7 @@ __metadata:
     "@types/mapbox-gl": ^3.4.1
     "@types/react": ^19.1.0
     "@types/react-dom": ^19.1.0
+    "@types/react-test-renderer": ^19.1.0
     babel-jest: ^29.7.0
     debounce: ^2.2.0
     documentation: 14.0.3

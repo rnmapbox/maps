@@ -5,4 +5,4 @@ export interface NativeProps extends ViewProps {}
 
 export default codegenNativeComponent<NativeProps>(
   'RNMBXMarkerViewContent',
-) as HostComponent<ViewProps>;
+) as unknown as HostComponent<NativeProps>;

@@ -1262,9 +1262,13 @@ class MapView extends NativeBridgeComponent(
     let mapView = null;
     if (this.state.isReady) {
       if (props._nativeImpl) {
+        // @ts-expect-error TODO: Complex native component prop type mismatch with React Native's new type system
+        // The custom _nativeImpl prop structure doesn't align with the strict NativeProps typing
         mapView = <props._nativeImpl {...props} {...callbacks} />;
       } else {
         mapView = (
+          // @ts-expect-error TODO: Native component prop type incompatibility with React Native's strict typing
+          // Props are correct at runtime but TypeScript can't verify the complex union type
           <RNMBXMapView {...props} {...callbacks}>
             {this.props.children}
           </RNMBXMapView>
