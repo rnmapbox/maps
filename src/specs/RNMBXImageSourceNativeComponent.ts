@@ -10,6 +10,7 @@ export interface NativeProps extends ViewProps {
   coordinates: UnsafeMixed<any>;
 }
 
+// @ts-expect-error - Codegen requires single cast but TypeScript prefers double cast
 export default codegenNativeComponent<NativeProps>(
   'RNMBXImageSource',
-) as unknown as HostComponent<NativeProps>;
+) as HostComponent<NativeProps>;

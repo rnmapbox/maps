@@ -15,6 +15,7 @@ export interface NativeProps extends ViewProps {
   heading?: OptionalProp<Double>;
 }
 
+// @ts-expect-error - Codegen requires single cast but TypeScript prefers double cast
 export default codegenNativeComponent<NativeProps>(
   'RNMBXCustomLocationProvider',
-) as unknown as HostComponent<NativeProps>;
+) as HostComponent<NativeProps>;

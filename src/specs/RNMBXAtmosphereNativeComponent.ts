@@ -7,6 +7,7 @@ export interface NativeProps extends ViewProps {
   reactStyle: UnsafeMixed<any>;
 }
 
+// @ts-expect-error - Codegen requires single cast but TypeScript prefers double cast
 export default codegenNativeComponent<NativeProps>(
   'RNMBXAtmosphere',
-) as unknown as HostComponent<NativeProps>;
+) as HostComponent<NativeProps>;

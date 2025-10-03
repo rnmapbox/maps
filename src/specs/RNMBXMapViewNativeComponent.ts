@@ -4,7 +4,6 @@ import {
   BubblingEventHandler,
   DirectEventHandler,
   Int32,
-  // @ts-ignore - CI environment type resolution issue for CodegenTypes
 } from 'react-native/Libraries/Types/CodegenTypes';
 
 import type { Point, UnsafeMixed } from './codegenUtils';
@@ -83,9 +82,10 @@ export interface NativeProps extends ViewProps {
   preferredFramesPerSecond?: OptionalProp<Int32>;
 }
 
+// @ts-expect-error - Codegen requires single cast but TypeScript prefers double cast
 export default codegenNativeComponent<NativeProps>(
   'RNMBXMapView',
-) as unknown as HostComponent<NativeProps>;
+) as HostComponent<NativeProps>;
 
 // The actually types for callbacks are sometwhat different due to codegen limitations:
 

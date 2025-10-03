@@ -107,9 +107,10 @@ export interface NativeProps extends ViewProps {
   onStatusChanged?: DirectEventHandler<OnStatusChangedEventType>;
 }
 
+// @ts-expect-error - Codegen requires single cast but TypeScript prefers double cast
 export default codegenNativeComponent<NativeProps>(
   'RNMBXViewport',
-) as unknown as HostComponent<NativeProps>;
+) as HostComponent<NativeProps>;
 
 export type NativeViewportReal = HostComponent<
   Omit<NativeProps, 'onStatusChanged'> & {

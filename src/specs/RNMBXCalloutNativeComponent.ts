@@ -3,6 +3,7 @@ import codegenNativeComponent from 'react-native/Libraries/Utilities/codegenNati
 
 export interface NativeProps extends ViewProps {}
 
+// @ts-expect-error - Codegen requires single cast but TypeScript prefers double cast
 export default codegenNativeComponent<NativeProps>(
   'RNMBXCallout',
-) as unknown as HostComponent<NativeProps>;
+) as HostComponent<NativeProps>;

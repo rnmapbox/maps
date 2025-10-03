@@ -254,7 +254,7 @@ class DocJSONBuilder {
       let result = description
         .replaceAll('@deprecated', '**DEPRECATED**')
         .replaceAll(/@param\s+\{(.+)\}\s+(\S+)/g, (m, type, _name) => {
-          return `- \`${name}\`: \`${type}\` `;
+          return `- \`${_name}\`: \`${type}\` `;
         });
       return result;
     }

@@ -104,7 +104,7 @@ allTestKeys.forEach((groupName) => {
   exampleGroups.push({
     groupName,
     metadata,
-    examplesInGroup: examples,
+    examples,
   });
 });
 

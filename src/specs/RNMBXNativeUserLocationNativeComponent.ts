@@ -34,6 +34,7 @@ export interface NativeProps extends ViewProps {
   pulsing?: UnsafeMixed<Pulsing>;
 }
 
+// @ts-expect-error - Codegen requires single cast but TypeScript prefers double cast
 export default codegenNativeComponent<NativeProps>(
   'RNMBXNativeUserLocation',
-) as unknown as HostComponent<NativeProps>;
+) as HostComponent<NativeProps>;

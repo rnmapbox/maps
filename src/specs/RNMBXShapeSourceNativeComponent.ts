@@ -4,7 +4,6 @@ import {
   DirectEventHandler,
   Double,
   Int32,
-  // @ts-ignore - CI environment type resolution issue for CodegenTypes
 } from 'react-native/Libraries/Types/CodegenTypes';
 
 import type { UnsafeMixed } from './codegenUtils';
@@ -29,6 +28,7 @@ export interface NativeProps extends ViewProps {
   onMapboxShapeSourcePress: DirectEventHandler<OnMapboxShapeSourcePressEventType>;
 }
 
+// @ts-expect-error - Codegen requires single cast but TypeScript prefers double cast
 export default codegenNativeComponent<NativeProps>(
   'RNMBXShapeSource',
-) as unknown as HostComponent<NativeProps>;
+) as HostComponent<NativeProps>;

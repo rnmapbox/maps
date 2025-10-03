@@ -20,6 +20,7 @@ export interface NativeProps extends ViewProps {
   isSelected: UnsafeMixed<boolean>;
 }
 
+// @ts-expect-error - Codegen requires single cast but TypeScript prefers double cast
 export default codegenNativeComponent<NativeProps>(
   'RNMBXMarkerView',
-) as unknown as HostComponent<NativeProps>;
+) as HostComponent<NativeProps>;
