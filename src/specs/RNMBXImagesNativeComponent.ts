@@ -17,7 +17,7 @@ export interface NativeProps extends ViewProps {
   onImageMissing: DirectEventHandler<OnImageMissingEventType>;
 }
 
-// @ts-expect-error - Codegen requires single cast but TypeScript prefers double cast
+// @ts-ignore-error - Codegen requires single cast but TypeScript prefers double cast
 export default codegenNativeComponent<NativeProps>(
   'RNMBXImages',
 ) as HostComponent<NativeProps>;

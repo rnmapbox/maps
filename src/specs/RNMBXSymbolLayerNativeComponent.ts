@@ -33,7 +33,7 @@ export interface NativeProps extends ViewProps, CommonProps {
   reactStyle: UnsafeMixed<any>;
 }
 
-// @ts-expect-error - Codegen requires single cast but TypeScript prefers double cast
+// @ts-ignore-error - Codegen requires single cast but TypeScript prefers double cast
 export default codegenNativeComponent<NativeProps>(
   'RNMBXSymbolLayer',
 ) as HostComponent<NativeProps>;

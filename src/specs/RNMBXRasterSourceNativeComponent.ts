@@ -18,7 +18,7 @@ export interface NativeProps extends ViewProps {
   sourceBounds: UnsafeMixed<Array<number>>;
 }
 
-// @ts-expect-error - Codegen requires single cast but TypeScript prefers double cast
+// @ts-ignore-error - Codegen requires single cast but TypeScript prefers double cast
 export default codegenNativeComponent<NativeProps>(
   'RNMBXRasterSource',
 ) as HostComponent<NativeProps>;

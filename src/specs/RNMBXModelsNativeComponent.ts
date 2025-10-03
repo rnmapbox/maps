@@ -13,7 +13,7 @@ export interface NativeProps extends ViewProps {
   models: UnsafeMixed<{ [key: string]: Asset }>;
 }
 
-// @ts-expect-error - Codegen requires single cast but TypeScript prefers double cast
+// @ts-ignore-error - Codegen requires single cast but TypeScript prefers double cast
 export default codegenNativeComponent<NativeProps>(
   'RNMBXModels',
 ) as HostComponent<NativeProps>;

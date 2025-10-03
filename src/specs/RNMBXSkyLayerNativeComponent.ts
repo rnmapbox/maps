@@ -23,7 +23,7 @@ export interface NativeProps extends ViewProps {
   minZoomLevel?: OptionalProp<Double>;
 }
 
-// @ts-expect-error - Codegen requires single cast but TypeScript prefers double cast
+// @ts-ignore-error - Codegen requires single cast but TypeScript prefers double cast
 export default codegenNativeComponent<NativeProps>(
   'RNMBXSkyLayer',
 ) as HostComponent<NativeProps>;

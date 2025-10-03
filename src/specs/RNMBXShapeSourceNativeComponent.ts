@@ -28,7 +28,7 @@ export interface NativeProps extends ViewProps {
   onMapboxShapeSourcePress: DirectEventHandler<OnMapboxShapeSourcePressEventType>;
 }
 
-// @ts-expect-error - Codegen requires single cast but TypeScript prefers double cast
+// @ts-ignore-error - Codegen requires single cast but TypeScript prefers double cast
 export default codegenNativeComponent<NativeProps>(
   'RNMBXShapeSource',
 ) as HostComponent<NativeProps>;

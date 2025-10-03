@@ -24,7 +24,7 @@ export interface NativeProps extends ViewProps {
   sourceLayerID?: OptionalProp<string>;
 }
 
-// @ts-expect-error - Codegen requires single cast but TypeScript prefers double cast
+// @ts-ignore-error - Codegen requires single cast but TypeScript prefers double cast
 export default codegenNativeComponent<NativeProps>(
   'RNMBXFillExtrusionLayer',
 ) as HostComponent<NativeProps>;
