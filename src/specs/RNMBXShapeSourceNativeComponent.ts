@@ -1,10 +1,10 @@
 import type { HostComponent, ViewProps } from 'react-native';
 import codegenNativeComponent from 'react-native/Libraries/Utilities/codegenNativeComponent';
-// @ts-ignore - CI environment type resolution issue for CodegenTypes
 import {
   DirectEventHandler,
   Double,
   Int32,
+  // @ts-ignore - CI environment type resolution issue for CodegenTypes
 } from 'react-native/Libraries/Types/CodegenTypes';
 
 import type { UnsafeMixed } from './codegenUtils';
