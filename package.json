@@ -112,8 +112,9 @@
     "react-docgen": "rnmapbox/react-docgen#rnmapbox-dist-react-docgen-v6",
     "react-native": "0.81.1",
     "react-native-builder-bob": "^0.40.13",
-    "react-test-renderer": "19.1.1",
+    "react-test-renderer": "19.1.0",
     "release-it": "^19.0.4",
+    "ts-node": "^10.9.2",
     "turbo": "^2.5.6",
     "typescript": "5.9.2"
   },
