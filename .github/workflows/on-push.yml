@@ -41,7 +41,7 @@ jobs:
         run: yarn type:check
 
       - name: Example/install
-        run: yarn install --ignore-scripts --network-timeout 1000000
+        run: yarn install --network-timeout 1000000
         working-directory: example
 
       - name: Example type check
