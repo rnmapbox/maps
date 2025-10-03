@@ -1,4 +1,3 @@
-import React from 'react';
 import { Image } from 'react-native';
 
 import NativeModels from '../specs/RNMBXModelsNativeComponent';
@@ -25,7 +24,7 @@ function _resolveAssets(models: Props['models']): {
     if (typeof model === 'string') {
       resolvedModels[key] = { url: model };
     } else {
-      const asset = Image.resolveAssetSource(model);
+      const asset = Image.resolveAssetSource(model!);
       if (!asset) {
         throw new Error(`Could not resolve model asset: ${model}`);
       }

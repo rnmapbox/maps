@@ -792,7 +792,7 @@
             "getCoordinateFromView",
             "Overlay"
           ],
-          "docs": "This example shows a simple polyline editor. It uses `onCameraChanged` to get the center of the map and `getCoordinateFromView` \n  to get the coordinates of the crosshair.\n  \n  The crosshair is an overlay that is positioned using `onLayout` and `getCoordinateFromView`.\n  \n  The `ShapeSource` is updated with the new coordinates and the `LineLayer` is updated with the new coordinates."
+          "docs": "This example shows a simple polyline editor. It uses `onCameraChanged` to get the center of the map and `getCoordinateFromView`\n  to get the coordinates of the crosshair.\n\n  The crosshair is an overlay that is positioned using `onLayout` and `getCoordinateFromView`.\n\n  The `ShapeSource` is updated with the new coordinates and the `LineLayer` is updated with the new coordinates."
         },
         "fullPath": "example/src/examples/LineLayer/DrawPolyline.tsx",
         "relPath": "LineLayer/DrawPolyline.tsx",

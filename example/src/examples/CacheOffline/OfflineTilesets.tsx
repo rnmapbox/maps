@@ -74,7 +74,7 @@ function Menu({ cameraRef }: { cameraRef: React.RefObject<Camera | null> }) {
                     whatIsThat: 'foo',
                   },
                 },
-                (region, status) => {
+                (_region, status) => {
                   setProgress(status?.percentage ?? 0);
                 },
                 (pack, error) => {

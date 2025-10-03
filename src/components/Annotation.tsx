@@ -130,6 +130,8 @@ class Annotation extends React.Component<Props, AnnotationState> {
       <Animated.ShapeSource
         id={this.props.id}
         onPress={this.onPress}
+        // @ts-expect-error TODO: WithAnimatedObject is not exported from React Native's new type structure
+        // Need to find the correct replacement type or use Animated.AnimatedComponent
         shape={this.state.shape as RNAnimated.WithAnimatedObject<Point>}
       >
         {children}

@@ -104,7 +104,6 @@ function addLines(
     const error = new Error(
       `Failed to match "${find}" in contents:\n${content}`,
     );
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore
     error.code = 'ERR_NO_MATCH';
     throw error;

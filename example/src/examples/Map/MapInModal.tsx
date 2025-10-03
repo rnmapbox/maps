@@ -6,16 +6,15 @@ import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { ParamListBase } from '@react-navigation/native';
 
 type MapInModalProps = {
-  navigation?: NativeStackNavigationProp<ParamListBase, string, undefined>
+  navigation?: NativeStackNavigationProp<ParamListBase, string, undefined>;
   dismiss?: () => void;
-}
-const MapInModal: React.FC<MapInModalProps> = ({navigation, dismiss}) => (
+};
+const MapInModal: React.FC<MapInModalProps> = ({ navigation, dismiss }) => (
   <SafeAreaView style={{ flex: 1 }}>
-    <Text style={{ paddingHorizontal: 20, textAlign: 'center' }}>this is a modal</Text>
-    <Button
-      title="close"
-      onPress={navigation?.goBack ?? dismiss}
-    />
+    <Text style={{ paddingHorizontal: 20, textAlign: 'center' }}>
+      this is a modal
+    </Text>
+    <Button title="close" onPress={navigation?.goBack ?? dismiss} />
     <MapView style={{ flex: 1 }} />
   </SafeAreaView>
 );

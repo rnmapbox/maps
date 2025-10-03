@@ -1,4 +1,4 @@
-import { Permission, PermissionsAndroid } from 'react-native';
+import { type Permission, PermissionsAndroid } from 'react-native';
 
 import { isAndroid } from './utils';
 

@@ -1,31 +1,36 @@
 {
   "compilerOptions": {
-    "declaration": true,
-    "preserveSymlinks": true,
-    "target": "es6",
-    "module": "es6",
-    "allowJs": false,
-    "jsx": "react-native",
-    "skipLibCheck": true,
-    "allowSyntheticDefaultImports": true,
-    "moduleResolution": "node",
-    "lib": ["es2017", "dom"],
-    "esModuleInterop": true,
-    "strict": true,
-    "forceConsistentCasingInFileNames": true,
-    "noUnusedLocals": true,
-    "noImplicitReturns": true,
+    "rootDir": ".",
     "paths": {
-      "@rnmapbox/maps": ["../src"],
-      "react-native": ["./node_modules/react-native"],
-    }
+      "@rnmapbox/maps": ["./src/index"]
+    },
+    "allowJs": true,
+    "allowUnreachableCode": false,
+    "allowUnusedLabels": false,
+    "customConditions": ["react-native-strict-api"],
+    "esModuleInterop": true,
+    "forceConsistentCasingInFileNames": true,
+    "jsx": "react-jsx",
+    "lib": ["ESNext"],
+    "module": "ESNext",
+    "moduleSuffixes": [".native", ""],
+    "moduleResolution": "bundler",
+    "noEmit": true,
+    "noFallthroughCasesInSwitch": true,
+    "noImplicitReturns": true,
+    "noImplicitUseStrict": false,
+    "noStrictGenericChecks": false,
+    "noUncheckedIndexedAccess": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "resolveJsonModule": true,
+    "skipLibCheck": true,
+    "strict": true,
+    "target": "ESNext",
+    // TODO: Re-enable verbatimModuleSyntax and fix type-only imports (217 errors)
+    // "verbatimModuleSyntax": true
   },
-  "include": [
-    "index.ts",
-    "jest.config.ts",
-    "src/**/*"
-  ],
   "exclude": [
-    "**/*.codepart.tsx"
-  ],
+    "**/*.codepart.ts"
+  ]
 }

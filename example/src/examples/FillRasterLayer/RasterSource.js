@@ -1,11 +1,5 @@
 import React from 'react';
-import {
-  Images,
-  MapView,
-  RasterLayer,
-  RasterSource,
-  Camera,
-} from '@rnmapbox/maps';
+import { MapView, RasterLayer, RasterSource, Camera } from '@rnmapbox/maps';
 
 const styles = {
   matchParent: { flex: 1 },

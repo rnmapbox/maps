@@ -465,7 +465,7 @@ const CallbablePropKeys = [
   'onCameraChanged',
 ] as const;
 
-type CallbablePropKeys = typeof CallbablePropKeys[number];
+type CallbablePropKeys = (typeof CallbablePropKeys)[number];
 
 type CallbablePropKeysWithoutOn = CallbablePropKeys extends `on${infer C}`
   ? C
@@ -577,7 +577,7 @@ class MapView extends NativeBridgeComponent(
     const callbackProps = CallbablePropKeys;
 
     const hasCallbackPropsChanged = callbackProps.some(
-      propName => prevProps[propName] !== this.props[propName]
+      (propName) => prevProps[propName] !== this.props[propName],
     );
 
     if (hasCallbackPropsChanged) {
@@ -831,7 +831,7 @@ class MapView extends NativeBridgeComponent(
   ): Promise<ReturnType> {
     return super._runNativeMethod<typeof RNMBXMapView, ReturnType>(
       methodName,
-      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+
       // @ts-ignore TODO: fix types
       this._nativeRef as HostComponent<NativeProps> | undefined,
       args,
@@ -1170,7 +1170,7 @@ class MapView extends NativeBridgeComponent(
     });
   }
 
-  _handleOnChange<T>(propName: CallbablePropKeys, payload: object) {
+  _handleOnChange(propName: CallbablePropKeys, payload: object) {
     const func = this.props[propName] as (payload: object) => void;
     if (func && isFunction(func)) {
       func(payload);
@@ -1262,9 +1262,13 @@ class MapView extends NativeBridgeComponent(
     let mapView = null;
     if (this.state.isReady) {
       if (props._nativeImpl) {
+        // @ts-ignore - Complex native component prop type mismatch with React Native's new type system
+        // The custom _nativeImpl prop structure doesn't align with the strict NativeProps typing
         mapView = <props._nativeImpl {...props} {...callbacks} />;
       } else {
         mapView = (
+          // @ts-ignore - Native component prop type incompatibility with React Native's strict typing
+          // Props are correct at runtime but TypeScript can't verify the complex union type
           <RNMBXMapView {...props} {...callbacks}>
             {this.props.children}
           </RNMBXMapView>

@@ -1,4 +1,5 @@
 // copied from `react-16-node-hanging-test-fix` module. Without it we get jest hangs.
+/* global jest */
 delete global.MessageChannel;
 import { NativeModules } from 'react-native';
 

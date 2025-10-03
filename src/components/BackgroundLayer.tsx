@@ -1,11 +1,11 @@
 import React from 'react';
 import { NativeModules } from 'react-native';
 
-import {
+import type {
   FilterExpression,
   BackgroundLayerStyleProps,
 } from '../utils/MapboxStyles';
-import { StyleValue } from '../utils/StyleValue';
+import type { StyleValue } from '../utils/StyleValue';
 import RNMBXBackgroundLayerNativeComponent from '../specs/RNMBXBackgroundLayerNativeComponent';
 
 import AbstractLayer from './AbstractLayer';
@@ -86,8 +86,8 @@ class BackgroundLayer extends AbstractLayer<Props, NativeTypeProps> {
       sourceLayerID: this.props.sourceLayerID,
     };
     return (
+      // @ts-expect-error just codegen stuff
       <RNMBXBackgroundLayerNativeComponent
-        // @ts-expect-error just codegen stuff
         ref={this.setNativeLayer}
         {...props}
       />

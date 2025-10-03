@@ -1,4 +1,4 @@
-import { CheckBox, Divider, Slider, Text } from '@rneui/base';
+import { CheckBox, Divider, Slider, Button } from '@rneui/base';
 import {
   Camera,
   CameraAnimationMode,
@@ -10,8 +10,8 @@ import {
 } from '@rnmapbox/maps';
 import bbox from '@turf/bbox';
 import { Feature, Point, Position } from 'geojson';
-import React, { useCallback, useMemo, useState } from 'react';
-import { Button, StyleSheet, View } from 'react-native';
+import { useCallback, useMemo, useState } from 'react';
+import { StyleSheet, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import colors from '../../styles/colors';
@@ -100,7 +100,7 @@ const CameraAnimation = () => {
   } => {
     if (coordinates.length === 1) {
       return {
-        centerCoordinate: toPosition(coordinates[0]),
+        centerCoordinate: toPosition(coordinates[0]!),
       };
     } else {
       const positions = coordinates.map(toPosition);
@@ -110,7 +110,8 @@ const CameraAnimation = () => {
           type: 'LineString',
           coordinates: positions,
         },
-      };
+        properties: {},
+      } as const;
       const _bbox = bbox(lineString);
       return {
         bounds: {

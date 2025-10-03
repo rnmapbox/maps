@@ -1,3 +1,5 @@
+/* global device, element, by, waitFor, describe, it, expect, beforeAll, afterEach */
+
 describe('Maps Example App', () => {
   beforeAll(async () => {
     await device.launchApp({ permissions: { location: 'always' } });

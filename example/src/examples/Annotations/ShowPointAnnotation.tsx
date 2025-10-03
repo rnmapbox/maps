@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react';
+import { useRef, useState } from 'react';
 import { View, Text, StyleSheet, Image } from 'react-native';
 import {
   Callout,
@@ -94,7 +94,7 @@ const ShowPointAnnotation = () => {
     const items = [];
 
     for (let i = 0; i < coordinates.length; i++) {
-      const coordinate = coordinates[i];
+      const coordinate = coordinates[i]!;
 
       const title = `Lon: ${coordinate[0]} Lat: ${coordinate[1]}`;
       const id = `pointAnnotation${i}`;
@@ -183,7 +183,7 @@ const ShowPointAnnotation = () => {
           onPress={() =>
             setLayerRendering(
               (prevState) =>
-                (({ above: 'below', below: 'above' } as const)[prevState]),
+                (({ above: 'below', below: 'above' }) as const)[prevState],
             )
           }
         >

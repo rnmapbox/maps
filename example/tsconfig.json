@@ -1,13 +1,6 @@
-{
-  "extends": "../tsconfig.json",
+ {
+  "extends": "../tsconfig",
   "compilerOptions": {
-    "allowJs": true,
-    "resolveJsonModule": true,
-    "baseUrl": ".",
-    "paths": {
-      "@rnmapbox/maps": ["../src"],
-    }
-  },
-  "include": ["global.d.ts", "index.js", "./__tests__/dumpExamplesJson.ts", "jest.config.ts", "jest.setup.ts", "**/*.ts", "**/*.tsx"],
-  "exclude": ["**/node_modules", "**/Pods"]
+    // Avoid expo-cli auto-generating a tsconfig
+  }
 }

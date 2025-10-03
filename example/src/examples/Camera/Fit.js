@@ -1,6 +1,6 @@
 import React from 'react';
 import { View, Text, ScrollView, TouchableOpacity } from 'react-native';
-import { isEqual } from 'lodash';
+import { isEqual } from 'lodash.isequal';
 import Mapbox from '@rnmapbox/maps';
 
 import sheet from '../../styles/sheet';

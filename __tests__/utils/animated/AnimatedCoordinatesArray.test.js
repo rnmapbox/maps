@@ -107,7 +107,7 @@ describe('AnimatedShapeSource', () => {
           ref={(ref) => (shapeSourceRef = ref)}
         />,
       );
-    })
+    });
     const setNativeProps = jest.fn();
     _nativeRef(shapeSourceRef).setNativeProps = setNativeProps;
 
@@ -161,7 +161,7 @@ describe('AnimatedShapeSource', () => {
           ref={(ref) => (shapeSourceRef = ref)}
         />,
       );
-    })
+    });
     const setNativeProps = jest.fn();
     _nativeRef(shapeSourceRef).setNativeProps = setNativeProps;
 

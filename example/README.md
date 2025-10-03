@@ -107,7 +107,7 @@ If you are using [`nvm`](https://github.com/nvm-sh/nvm), make sure you copy [ios
 If you run into
 
 ```
-Command failed: /usr/libexec/PlistBuddy -c Print:CFBundleIdentifier build/Build/Products/Debug-iphonesimulator/RNMapboxGLExample.app/Info.plist
+Command failed: /usr/libexec/PlistBuddy -c Print:CFBundleIdentifier build/Build/Products/Debug-iphonesimulator/RNMapboxExample.app/Info.plist
 Print: Entry, ":CFBundleIdentifier", Does Not Exist
 ```
 

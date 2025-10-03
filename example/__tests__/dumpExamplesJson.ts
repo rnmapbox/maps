@@ -68,7 +68,7 @@ function getExampleFullPath(
       )}.*`,
     );
   }
-  return existingExamplePaths[0];
+  return existingExamplePaths[0]!;
 }
 
 describe('dump-examples-json', () => {

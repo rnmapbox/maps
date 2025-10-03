@@ -18,7 +18,7 @@ const codepartReplaceRegex =
 const codepartReplaceEndRegex = /^\s*\/\/\s*@{codepart-replace-end}.*$/;
 
 /**
- * 
+ *
  * @param {string} codepartFilePath
  * @param {string[]} args
  * @returns {string}
@@ -29,7 +29,7 @@ function readCodePartEjs(codepartFilePath, args) {
 }
 
 /**
- * 
+ *
  * @param {string} codepartFilePath
  * @param {string[]} args
  * @returns {string}
