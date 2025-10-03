@@ -20,7 +20,7 @@ const __dirname = url.fileURLToPath(new URL('.', import.meta.url));
 
 async function generate() {
   let layers = getLayers();
-  let outputPaths = generateCodeWithEjs(layers);
+  let outputPaths = await generateCodeWithEjs(layers);
 
   // autogenerate expo plugin
   execSync('yarn build:plugin', { stdio: 'inherit' });

@@ -478,7 +478,7 @@ export function getLayers() {
   return layers;
 }
 
-export default function generateCodeWithEjs(layers) {
+export default async function generateCodeWithEjs(layers) {
   const templateMappings = [
     /*{
       input: path.join(TMPL_PATH, 'index.d.ts.ejs'),
@@ -508,7 +508,7 @@ export default function generateCodeWithEjs(layers) {
   const outputPaths = templateMappings.map((m) => m.output);
 
   // autogenerate code
-  templateMappings.forEach(({ input, output, only }) => {
+  for (const { input, output, only } of templateMappings) {
     const filename = output.split('/').pop();
     console.log(`Generating ${filename}`);
     const tmpl = ejs.compile(fs.readFileSync(input, 'utf8'), { strict: true });
@@ -546,12 +546,12 @@ export default function generateCodeWithEjs(layers) {
 
     let results = tmpl({ layers: filterOnly(layers, only) });
     if (filename.endsWith('ts')) {
-      results = prettier.format(results, {
+      results = await prettier.format(results, {
         ...prettierrc,
         filepath: filename,
       });
     }
     fs.writeFileSync(output, results);
-  });
+  }
   return outputPaths;
 }
