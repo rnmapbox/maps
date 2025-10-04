@@ -20,7 +20,7 @@ require 'json'
 package = JSON.parse(File.read(File.join(__dir__, 'package.json')))
 
 ## Warning: these lines are scanned by autogenerate.js
-rnMapboxMapsDefaultMapboxVersion = '~> 11.15.0'
+rnMapboxMapsDefaultMapboxVersion = '~> 11.15.2'
 
 rnMapboxMapsDefaultImpl = 'mapbox'
 
@@ -34,6 +34,12 @@ def $RNMapboxMaps.compute_new_arch_enabled
 end
 
 new_arch_enabled = $RNMapboxMaps.compute_new_arch_enabled
+
+unless new_arch_enabled
+  puts "⚠️ RNMapbox DEPRECATION WARNING: Old React Native Architecture (Paper/bridge) is deprecated and will not receive active support."
+  puts "⚠️ RNMapbox: Please upgrade to New Architecture (Fabric/TurboModules) for continued support and updates."
+  puts "⚠️ RNMapbox: For sponsor-only support for old architecture: https://github.com/sponsors/rnmapbox"
+end
 
 # DEPRECATIONS
 
@@ -89,6 +95,10 @@ end
 
 if $MapboxImplVersion =~ /(~>|>=|=|>)?\S*11\./
   $RNMapboxMapsUseV11 = true
+else
+  puts "⚠️ RNMapbox DEPRECATION WARNING: Mapbox v10.x is deprecated and will not receive active support."
+  puts "⚠️ RNMapbox: Please upgrade to Mapbox v11.x for continued support and updates."
+  puts "⚠️ RNMapbox: For sponsor-only support for v10.x: https://github.com/sponsors/rnmapbox"
 end
 
 def $RNMapboxMaps._check_no_mapbox_spm(project)
