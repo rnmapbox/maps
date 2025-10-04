@@ -50,7 +50,7 @@ const CustomIcon = memo(() => {
     <>
       <MapView
         style={{ flex: 1 }}
-        styleURL={MapboxGL.StyleURL.Light}
+        styleURL={<StyleURL.Light}
         onPress={onPress}
       >
         <Camera

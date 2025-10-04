@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Animated } from 'react-native';
-import MapboxGL from '@rnmapbox/maps';
+import { MapView, Camera, ShapeSource, FillLayer, CircleLayer, SymbolLayer, UserLocation, Animated as MapboxAnimated } from '@rnmapbox/maps';
 
 const styles = {
   innerCircle: {
@@ -122,26 +122,26 @@ class PulseCircleLayer extends React.Component {
     ];
 
     return (
-      <MapboxGL.Animated.ShapeSource
+      <<Animated.ShapeSource
         id="pulseCircleSource"
         shape={this.props.shape}
       >
-        <MapboxGL.Animated.CircleLayer
+        <<Animated.CircleLayer
           id="pulseOuterCircle"
           style={outerCircleStyle}
           aboveLayerID={this.props.aboveLayerID}
         />
-        <MapboxGL.Animated.CircleLayer
+        <<Animated.CircleLayer
           id="pulseInnerCircleCnt"
           style={innerCircleStyle}
           aboveLayerID="pulseOuterCircle"
         />
-        <MapboxGL.Animated.CircleLayer
+        <<Animated.CircleLayer
           id="pulseInnerCircle"
           style={innerCirclePulseStyle}
           aboveLayerID="pulseInnerCircleCnt"
         />
-      </MapboxGL.Animated.ShapeSource>
+      </<Animated.ShapeSource>
     );
   }
 }
