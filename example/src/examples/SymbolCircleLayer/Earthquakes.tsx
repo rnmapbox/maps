@@ -1,4 +1,4 @@
-import MapboxGL, {
+import {
   Camera,
   CircleLayer,
   CircleLayerStyle,
@@ -147,7 +147,7 @@ const Earthquakes: React.FC<Partial<BaseExampleProps>> = () => {
 
   return (
     <>
-      <MapView style={styles.matchParent} styleURL={MapboxGL.StyleURL.Dark}>
+      <MapView style={styles.matchParent} styleURL="mapbox://styles/mapbox/dark-v11">
         <Camera
           defaultSettings={{
             centerCoordinate: SF_OFFICE_COORDINATE,

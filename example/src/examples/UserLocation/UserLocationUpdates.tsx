@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Text } from 'react-native';
-import MapboxGL, { Location } from '@rnmapbox/maps';
+import { MapView, Camera, UserLocation, Location } from '@rnmapbox/maps';
 
 import Bubble from '../common/Bubble';
 import { ExampleWithMetadata } from '../common/ExampleMetadata'; // exclude-from-example-doc
@@ -10,12 +10,12 @@ const UserLocationUpdates = () => {
 
   return (
     <>
-      <MapboxGL.MapView style={styles.matchParent}>
-        <MapboxGL.UserLocation
+      <MapView style={styles.matchParent}>
+        <UserLocation
           onUpdate={(newLocation) => setLocation(newLocation)}
         />
-        <MapboxGL.Camera followUserLocation followZoomLevel={16} />
-      </MapboxGL.MapView>
+        <Camera followUserLocation followZoomLevel={16} />
+      </MapView>
 
       <Bubble>
         {location && (
