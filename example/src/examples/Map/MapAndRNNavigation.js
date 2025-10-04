@@ -55,7 +55,10 @@ export default function MapAndNavigation({ navigation }) {
 
 /* end-example-doc */
 
-/** @type ExampleWithMetadata['metadata'] */
+/**
+ * @typedef {import('../common/ExampleMetadata').ExampleWithMetadata} ExampleWithMetadata
+ * @type {ExampleWithMetadata['metadata']}
+ */
 const metadata = {
   title: 'Map and React Navigation',
   tags: ['MapView'],

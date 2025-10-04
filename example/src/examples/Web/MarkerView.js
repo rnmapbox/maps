@@ -1,4 +1,3 @@
-import React from 'react';
 import { View, Text } from 'react-native';
 import { MapView, Camera, MarkerView } from '@rnmapbox/maps';
 
@@ -19,7 +18,11 @@ export default MarkerViewExample;
 
 /* end-example-doc */
 
-/** @type ExampleWithMetadata['metadata'] */
+/**
+ * @typedef {import('../common/ExampleMetadata').ExampleWithMetadata} ExampleWithMetadata
+ */
+
+/** @type {ExampleWithMetadata['metadata']} */
 const metadata = {
   title: 'MarkerView',
   tags: ['MarkerView'],

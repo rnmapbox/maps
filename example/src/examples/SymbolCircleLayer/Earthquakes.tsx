@@ -1,4 +1,4 @@
-import MapboxGL, {
+import {
   Camera,
   CircleLayer,
   CircleLayerStyle,
@@ -6,6 +6,7 @@ import MapboxGL, {
   ShapeSource,
   SymbolLayer,
   SymbolLayerStyle,
+  StyleURL,
 } from '@rnmapbox/maps';
 import { FeatureCollection } from 'geojson';
 import React, { useRef, useState } from 'react';
@@ -147,7 +148,7 @@ const Earthquakes: React.FC<Partial<BaseExampleProps>> = () => {
 
   return (
     <>
-      <MapView style={styles.matchParent} styleURL={MapboxGL.StyleURL.Dark}>
+      <MapView style={styles.matchParent} styleURL={StyleURL.Dark}>
         <Camera
           defaultSettings={{
             centerCoordinate: SF_OFFICE_COORDINATE,

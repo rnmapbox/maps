@@ -46,7 +46,9 @@ class IndoorBuilding extends React.Component {
     return (
       <>
         <Mapbox.MapView
-          ref={(ref) => (this.map = ref)}
+          ref={(ref) => {
+            this.map = ref;
+          }}
           style={sheet.matchParent}
         >
           <Mapbox.Camera
@@ -92,7 +94,10 @@ export default IndoorBuilding;
 
 /* end-example-doc */
 
-/** @type ExampleWithMetadata['metadata'] */
+/**
+ * @typedef {import('../common/ExampleMetadata').ExampleWithMetadata} ExampleWithMetadata
+ * @type {ExampleWithMetadata['metadata']}
+ */
 const metadata = {
   title: 'Indoor Building Map',
   tags: [],

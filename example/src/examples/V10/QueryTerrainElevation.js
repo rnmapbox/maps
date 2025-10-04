@@ -28,6 +28,7 @@ const styles = {
     width: 0,
     height: 0,
     backgroundColor: 'transparent',
+    // @ts-ignore - borderStyle type issue
     borderStyle: 'solid',
     borderLeftWidth: size,
     borderRightWidth: size,
@@ -201,6 +202,7 @@ const QueryTerrainElevation = () => {
                 <Text>Altitude: {altitude} m</Text>
               </View>
               <View
+                // @ts-ignore - borderStyle type issue in dynamic styles
                 style={[styles.triangleStyle(12, 'white'), { marginTop: -1 }]}
               />
             </View>
@@ -215,7 +217,10 @@ export default QueryTerrainElevation;
 
 /* end-example-doc */
 
-/** @type ExampleWithMetadata['metadata'] */
+/**
+ * @typedef {import('../common/ExampleMetadata').ExampleWithMetadata} ExampleWithMetadata
+ * @type {ExampleWithMetadata['metadata']}
+ */
 const metadata = {
   title: 'Query Terrain Elevation',
   tags: [

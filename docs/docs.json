@@ -350,7 +350,7 @@
         "name": "sourceID",
         "required": false,
         "type": "string",
-        "default": "MapboxGL.StyleSource.DefaultSourceID",
+        "default": "Mapbox.StyleSource.DefaultSourceID",
         "description": "The source from which to obtain the data to style.\nIf the source has not yet been added to the current style, the behavior is undefined.\nInferred from parent source only if the layer is a direct child to it."
       },
       {
@@ -1420,7 +1420,7 @@
         "name": "sourceID",
         "required": false,
         "type": "string",
-        "default": "MapboxGL.StyleSource.DefaultSourceID",
+        "default": "Mapbox.StyleSource.DefaultSourceID",
         "description": "The source from which to obtain the data to style.\nIf the source has not yet been added to the current style, the behavior is undefined.\nInferred from parent source only if the layer is a direct child to it."
       },
       {
@@ -4856,7 +4856,7 @@
         "name": "id",
         "required": false,
         "type": "string",
-        "default": "MapboxGL.StyleSource.DefaultSourceID",
+        "default": "Mapbox.StyleSource.DefaultSourceID",
         "description": "A string that uniquely identifies the source."
       },
       {
@@ -5245,7 +5245,7 @@
         "name": "id",
         "required": false,
         "type": "string",
-        "default": "MapboxGL.StyleSource.DefaultSourceID",
+        "default": "Mapbox.StyleSource.DefaultSourceID",
         "description": "A string that uniquely identifies the source."
       },
       {
@@ -5448,7 +5448,7 @@
         "name": "id",
         "required": false,
         "type": "string",
-        "default": "MapboxGL.StyleSource.DefaultSourceID",
+        "default": "Mapbox.StyleSource.DefaultSourceID",
         "description": "A string that uniquely identifies the source."
       },
       {
@@ -7921,7 +7921,7 @@
         "name": "id",
         "required": false,
         "type": "string",
-        "default": "MapboxGL.StyleSource.DefaultSourceID",
+        "default": "Mapbox.StyleSource.DefaultSourceID",
         "description": "A string that uniquely identifies the source."
       },
       {

@@ -1,5 +1,5 @@
 import React from 'react';
-import MapboxGL from '@rnmapbox/maps';
+import { MapView, Camera, UserLocation, locationManager } from '@rnmapbox/maps';
 import { ButtonGroup } from '@rneui/base';
 
 const styles = {
@@ -26,11 +26,11 @@ class SetPitch extends React.Component {
   }
 
   componentDidMount() {
-    MapboxGL.locationManager.start();
+    locationManager.start();
   }
 
   componentWillUnmount() {
-    MapboxGL.locationManager.stop();
+    locationManager.stop();
   }
 
   onUpdatePitch(index, pitch) {
@@ -45,10 +45,10 @@ class SetPitch extends React.Component {
           selectedIndex={this.state.selectedIndex}
           onPress={(i) => this.onUpdatePitch(i, this._pitchOptions[i].data)}
         />
-        <MapboxGL.MapView style={styles.matchParent}>
-          <MapboxGL.Camera {...this.state} followUserLocation />
-          <MapboxGL.UserLocation />
-        </MapboxGL.MapView>
+        <MapView style={styles.matchParent}>
+          <Camera {...this.state} followUserLocation />
+          <UserLocation />
+        </MapView>
       </>
     );
   }

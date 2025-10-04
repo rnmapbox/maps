@@ -1,9 +1,17 @@
 import React from 'react';
 import { View, Text, ScrollView, TouchableOpacity } from 'react-native';
-import { isEqual } from 'lodash.isequal';
-import Mapbox from '@rnmapbox/maps';
+import isEqual from 'lodash.isequal';
+import { MapView, Camera, StyleURL, type CameraBounds } from '@rnmapbox/maps';
 
 import sheet from '../../styles/sheet';
+import { ExampleWithMetadata } from '../common/ExampleMetadata'; // exclude-from-doc
+
+// Assertion function to ensure camera is not null
+function assertCameraNotNull(camera: Camera | null): asserts camera is Camera {
+  if (!camera) {
+    throw new Error('Camera reference is null');
+  }
+}
 
 const buildPadding = ([top, right, bottom, left] = [0, 0, 0, 0]) => {
   return {
@@ -14,15 +22,15 @@ const buildPadding = ([top, right, bottom, left] = [0, 0, 0, 0]) => {
   };
 };
 
-const houseBounds = {
+const houseBounds: CameraBounds = {
   ne: [-74.135379, 40.795909],
   sw: [-74.135449, 40.795578],
-};
+} as const;
 
-const townBounds = {
+const townBounds: CameraBounds = {
   ne: [-74.12641, 40.797968],
   sw: [-74.143727, 40.772177],
-};
+} as const;
 
 const houseCenter = [
   (houseBounds.ne[0] + houseBounds.sw[0]) / 2,
@@ -37,27 +45,29 @@ const paddingZero = buildPadding();
 const paddingTop = buildPadding([200, 40, 40, 40]);
 const paddingBottom = buildPadding([40, 40, 200, 40]);
 
+type PropsType = {};
+
 class Fit extends React.Component {
-  constructor(props) {
+  camera: Camera | null = null;
+
+  state = {
+    locationType: 'houseCenter', // houseCenter | houseBounds | townCenter | townBounds
+    zoomLevel: 16, // number
+    followUserLocation: false,
+    padding: paddingZero,
+    animationDuration: 500,
+
+    // For updating the UI in this example.
+    cachedFlyTo: undefined, // house | town
+    cachedZoomLevel: undefined, // number
+  };
+
+  constructor(props: PropsType) {
     super(props);
-
-    this.state = {
-      locationType: 'houseCenter', // houseCenter | houseBounds | townCenter | townBounds
-      zoomLevel: 16, // number
-      followUserLocation: false,
-      padding: paddingZero,
-      animationDuration: 500,
-
-      // For updating the UI in this example.
-      cachedFlyTo: undefined, // house | town
-      cachedZoomLevel: undefined, // number
-    };
-
-    this.camera = null;
   }
 
-  componentDidUpdate(prevProps, prevState) {
-    const changed = (stateKey) => {
+  componentDidUpdate(_prevProps: PropsType, prevState: typeof this.state) {
+    const changed = (stateKey: keyof typeof this.state) => {
       // Checking if final state is `undefined` prevents another round of zeroing out in
       // second `componentDidUpdate` call.
       return (
@@ -90,7 +100,11 @@ class Fit extends React.Component {
     }
   }
 
-  renderSection = (title, buttons, fade = false) => {
+  renderSection(
+    title: string,
+    buttons: { title: string; selected: boolean; onPress: () => void }[],
+    fade = false,
+  ) {
     return (
       <View style={{ paddingBottom: 5, opacity: fade ? 0.5 : 1 }}>
         <Text>{title}</Text>
@@ -121,9 +135,9 @@ class Fit extends React.Component {
         </ScrollView>
       </View>
     );
-  };
+  }
 
-  cameraProps = () => {
+  cameraProps() {
     const {
       locationType,
       zoomLevel,
@@ -132,7 +146,14 @@ class Fit extends React.Component {
       animationDuration,
     } = this.state;
 
-    let p = {
+    let p: {
+      bounds?: CameraBounds;
+      centerCoordinate?: number[];
+      zoomLevel?: number;
+      followUserLocation: boolean;
+      padding: any;
+      animationDuration: number;
+    } = {
       bounds: undefined,
       centerCoordinate: undefined,
       zoomLevel: undefined,
@@ -156,7 +177,7 @@ class Fit extends React.Component {
     }
 
     return p;
-  };
+  }
 
   render() {
     const {
@@ -199,6 +220,7 @@ class Fit extends React.Component {
         title: `${n}`,
         selected: cachedZoomLevel === n,
         onPress: () => {
+          assertCameraNotNull(this.camera);
           this.camera.zoomTo(n, 1000);
           this.setState({ cachedZoomLevel: n });
         },
@@ -207,18 +229,17 @@ class Fit extends React.Component {
 
     return (
       <>
-        <Mapbox.MapView
-          styleURL={Mapbox.StyleURL.Satellite}
-          style={sheet.matchParent}
-        >
-          <Mapbox.Camera
-            ref={(ref) => (this.camera = ref)}
+        <MapView styleURL={StyleURL.Satellite} style={sheet.matchParent}>
+          <Camera
+            ref={(ref) => {
+              this.camera = ref;
+            }}
             {...this.cameraProps()}
           />
           <View style={{ flex: 1, ...padding }}>
             <View style={{ flex: 1, borderColor: 'white', borderWidth: 4 }} />
           </View>
-        </Mapbox.MapView>
+        </MapView>
 
         <ScrollView
           style={{
@@ -255,6 +276,7 @@ class Fit extends React.Component {
               title: 'House',
               selected: cachedFlyTo === 'house',
               onPress: () => {
+                assertCameraNotNull(this.camera);
                 this.camera.flyTo(houseCenter);
                 this.setState({ cachedFlyTo: 'house' });
               },
@@ -263,6 +285,7 @@ class Fit extends React.Component {
               title: 'Town',
               selected: cachedFlyTo === 'town',
               onPress: () => {
+                assertCameraNotNull(this.camera);
                 this.camera.flyTo(townCenter);
                 this.setState({ cachedFlyTo: 'town' });
               },
@@ -297,11 +320,9 @@ class Fit extends React.Component {
 export default Fit;
 /* end-example-doc */
 
-/** @type ExampleWithMetadata['metadata'] */
 const metadata = {
   title: 'Fit',
   tags: ['Camera', 'Camera#zoomTo'],
-  docs: `
-Change camera via imperative methods`,
+  docs: `Change camera via imperative methods`,
 };
-Fit.metadata = metadata;
+(Fit as unknown as ExampleWithMetadata).metadata = metadata;

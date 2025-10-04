@@ -40,7 +40,10 @@ export default SetTintColor;
 
 /* end-example-doc */
 
-/** @type ExampleWithMetadata['metadata'] */
+/**
+ * @typedef {import('../common/ExampleMetadata').ExampleWithMetadata} ExampleWithMetadata
+ * @type {ExampleWithMetadata['metadata']}
+ */
 const metadata = {
   title: 'Set Tint Color',
   tags: ['MapView#tintColor'],

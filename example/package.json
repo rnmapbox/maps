@@ -14,7 +14,8 @@
     "purge:ios": "rm -rf ios/Pods/* ios/build ~/Library/Caches/CocoaPods ~/Library/Developer/Xcode/DerivedData && pod cache clean --all",
     "purge:js": "rm -rf node_modules && yarn cache clean && watchman watch-del-all",
     "purge": "yarn purge:js && yarn purge:android && yarn purge:ios",
-    "type:check": "yarn tsc --version && yarn tsc --noEmit"
+    "type:check": "yarn tsc --version && yarn tsc --noEmit",
+    "type:check:example:todo": "yarn tsc --noEmit -p ./tsconfig.relaxed.json"
   },
   "dependencies": {
     "@mapbox/geo-viewport": "^0.5.0",
@@ -61,6 +62,7 @@
     "@react-native/eslint-config": "^0.81.1",
     "@react-native/metro-config": "^0.81.1",
     "@react-native/typescript-config": "^0.81.1",
+    "@types/lodash.isequal": "^4.5.8",
     "@types/prop-types": "^15.7.15",
     "@types/react": "^19.1.10",
     "@types/react-test-renderer": "^19.1.0",

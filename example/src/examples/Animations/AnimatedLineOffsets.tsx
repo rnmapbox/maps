@@ -11,10 +11,10 @@ import {
 import { Position } from 'geojson';
 import { Divider, Slider, Text } from '@rneui/base';
 import { SafeAreaView } from 'react-native-safe-area-context';
-// @ts-expect-error - @turf packages have type resolution issues with package.json exports
+// @ts-ignore - @turf packages have type resolution issues with package.json exports
 import { lineString } from '@turf/helpers';
 import bbox from '@turf/bbox';
-// @ts-expect-error - @turf packages have type resolution issues with package.json exports
+// @ts-ignore - @turf packages have type resolution issues with package.json exports
 import length from '@turf/length';
 
 import type { ExampleWithMetadata } from '../common/ExampleMetadata';
