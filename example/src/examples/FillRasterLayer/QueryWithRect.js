@@ -1,6 +1,6 @@
 import React from 'react';
 import { Text } from 'react-native';
-import MapboxGL from '@rnmapbox/maps';
+import { MapView, ShapeSource, FillLayer } from '@rnmapbox/maps';
 
 import sheet from '../../styles/sheet';
 import nycJSON from '../../assets/nyc_geojson.json';

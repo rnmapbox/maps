@@ -1,6 +1,6 @@
 import React from 'react';
 import { Text } from 'react-native';
-import MapboxGL from '@rnmapbox/maps';
+import { MapView, Camera } from '@rnmapbox/maps';
 
 import Bubble from '../common/Bubble';
 
@@ -27,17 +27,17 @@ class GetZoom extends React.Component {
   render() {
     return (
       <>
-        <MapboxGL.MapView
+        <MapView
           onRegionDidChange={this.onRegionDidChange}
           ref={(c) => (this._map = c)}
           onPress={this.onPress}
           style={styles.mapView}
         >
-          <MapboxGL.Camera
+          <Camera
             zoomLevel={9}
             centerCoordinate={[-73.970895, 40.723279]}
           />
-        </MapboxGL.MapView>
+        </MapView>
 
         <Bubble>
           <Text>Current zoom: {this.state.zoom}</Text>

@@ -1,5 +1,5 @@
 import React from 'react';
-import { snapshotManager } from '@rnmapbox/maps';
+import { snapshotManager, StyleURL } from '@rnmapbox/maps';
 import {
   View,
   Image,
@@ -49,7 +49,7 @@ class TakeSnapshot extends React.Component {
       zoomLevel: 12,
       pitch: 30,
       heading: 20,
-      styleURL: "mapbox://styles/mapbox/dark-v11",
+      styleURL: StyleURL.Dark,
       writeToDisk: true,
     });
 

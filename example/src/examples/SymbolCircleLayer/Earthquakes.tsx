@@ -6,6 +6,7 @@ import {
   ShapeSource,
   SymbolLayer,
   SymbolLayerStyle,
+  StyleURL,
 } from '@rnmapbox/maps';
 import { FeatureCollection } from 'geojson';
 import React, { useRef, useState } from 'react';
@@ -147,7 +148,7 @@ const Earthquakes: React.FC<Partial<BaseExampleProps>> = () => {
 
   return (
     <>
-      <MapView style={styles.matchParent} styleURL="mapbox://styles/mapbox/dark-v11">
+      <MapView style={styles.matchParent} styleURL={StyleURL.Dark}>
         <Camera
           defaultSettings={{
             centerCoordinate: SF_OFFICE_COORDINATE,
