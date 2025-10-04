@@ -101,8 +101,11 @@ export default SimpleModelLayer;
 
 /* end-example-doc */
 
-// @ts-ignore - ExampleWithMetadata type requires TypeScript
-/** @type ExampleWithMetadata['metadata'] */
+/**
+ * @typedef {import('../common/ExampleMetadata').ExampleWithMetadata} ExampleWithMetadata
+ */
+
+/** @type {ExampleWithMetadata['metadata']} */
 const metadata = {
   title: 'Simple Model Layer',
   tags: ['Models', 'ModelLayer'],
