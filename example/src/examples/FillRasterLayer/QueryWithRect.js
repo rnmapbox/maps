@@ -1,6 +1,12 @@
 import React from 'react';
 import { Text } from 'react-native';
-import { MapView, Camera, ShapeSource, FillLayer, StyleURL } from '@rnmapbox/maps';
+import {
+  MapView,
+  Camera,
+  ShapeSource,
+  FillLayer,
+  StyleURL,
+} from '@rnmapbox/maps';
 
 import sheet from '../../styles/sheet';
 import nycJSON from '../../assets/nyc_geojson.json';
@@ -82,25 +88,21 @@ class QueryWithRect extends React.Component {
     return (
       <>
         <MapView
-          ref={(c) => (this._map = c)}
+          ref={(c) => {
+            this._map = c;
+          }}
           onPress={this.onPress}
           style={sheet.matchParent}
           styleURL={StyleURL.Light}
         >
-          <Camera
-            zoomLevel={9}
-            centerCoordinate={[-73.970895, 40.723279]}
-          />
+          <Camera zoomLevel={9} centerCoordinate={[-73.970895, 40.723279]} />
 
           <ShapeSource id="nyc" shape={nycJSON}>
             <FillLayer id="nycFill" style={styles.neighborhoods} />
           </ShapeSource>
 
           {this.state.selectedGeoJSON ? (
-            <ShapeSource
-              id="selectedNYC"
-              shape={this.state.selectedGeoJSON}
-            >
+            <ShapeSource id="selectedNYC" shape={this.state.selectedGeoJSON}>
               <FillLayer
                 id="selectedNYCFill"
                 style={styles.selectedNeighborhoods}
@@ -121,7 +123,10 @@ export default QueryWithRect;
 
 /* end-example-doc */
 
-/** @type ExampleWithMetadata['metadata'] */
+/**
+ * @typedef {import('../common/ExampleMetadata').ExampleWithMetadata} ExampleWithMetadata
+ * @type {ExampleWithMetadata['metadata']}
+ */
 const metadata = {
   title: 'Query Features Bounding Box',
   tags: [],

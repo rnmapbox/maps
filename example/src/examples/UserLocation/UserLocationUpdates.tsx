@@ -11,9 +11,7 @@ const UserLocationUpdates = () => {
   return (
     <>
       <MapView style={styles.matchParent}>
-        <UserLocation
-          onUpdate={(newLocation) => setLocation(newLocation)}
-        />
+        <UserLocation onUpdate={(newLocation) => setLocation(newLocation)} />
         <Camera followUserLocation followZoomLevel={16} />
       </MapView>
 

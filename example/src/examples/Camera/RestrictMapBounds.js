@@ -1,5 +1,11 @@
 import React from 'react';
-import { MapView, Camera, ShapeSource, FillLayer, StyleURL } from '@rnmapbox/maps';
+import {
+  MapView,
+  Camera,
+  ShapeSource,
+  FillLayer,
+  StyleURL,
+} from '@rnmapbox/maps';
 import bboxPolygon from '@turf/bbox-polygon';
 
 import sheet from '../../styles/sheet';
@@ -19,10 +25,7 @@ const polygon = bboxPolygon([sw[0], sw[1], ne[0], ne[1]]);
 
 const RestrictMapBounds = (props) => (
   <>
-    <MapView
-      style={sheet.matchParent}
-      styleURL={StyleURL.SatelliteStreet}
-    >
+    <MapView style={sheet.matchParent} styleURL={StyleURL.SatelliteStreet}>
       <Camera
         maxBounds={bounds}
         zoomLevel={7}

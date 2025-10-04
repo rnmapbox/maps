@@ -201,7 +201,9 @@ class DriveTheLine extends React.Component {
     return (
       <>
         <MapView
-          ref={(c) => (this._map = c)}
+          ref={(c) => {
+            this._map = c;
+          }}
           style={sheet.matchParent}
           styleURL={StyleURL.Dark}
         >

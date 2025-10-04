@@ -107,7 +107,10 @@ class FlyTo extends React.Component {
 export default FlyTo;
 /* end-example-doc */
 
-/** @type ExampleWithMetadata['metadata'] */
+/**
+ * @typedef {import('../common/ExampleMetadata').ExampleWithMetadata} ExampleWithMetadata
+ * @type {ExampleWithMetadata['metadata']}
+ */
 const metadata = {
   title: 'FlyTo',
   tags: ['Camera'],

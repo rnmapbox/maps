@@ -219,9 +219,8 @@ export default QueryTerrainElevation;
 
 /**
  * @typedef {import('../common/ExampleMetadata').ExampleWithMetadata} ExampleWithMetadata
+ * @type {ExampleWithMetadata['metadata']}
  */
-
-/** @type {ExampleWithMetadata['metadata']} */
 const metadata = {
   title: 'Query Terrain Elevation',
   tags: [

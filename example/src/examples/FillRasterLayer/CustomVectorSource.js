@@ -65,7 +65,10 @@ export default CustomVectorSource;
 
 /* end-example-doc */
 
-/** @type ExampleWithMetadata['metadata'] */
+/**
+ * @typedef {import('../common/ExampleMetadata').ExampleWithMetadata} ExampleWithMetadata
+ * @type {ExampleWithMetadata['metadata']}
+ */
 const metadata = {
   title: 'Custom Vector Source',
   tags: ['VectorSource', 'VectorSource#features'],

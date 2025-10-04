@@ -2,9 +2,11 @@
   "extends": "../tsconfig",
   "compilerOptions": {
     // Avoid expo-cli auto-generating a tsconfig
-    "checkJs": true
+    "allowJs": true,
+    "checkJs": false,
   },
   "include": [
-    "src/**/*"
+    "src/**/*.ts",
+    "global.d.ts"
   ]
 }

@@ -8,7 +8,7 @@ import {
   Images,
   StyleURL,
 } from '@rnmapbox/maps';
-// @ts-expect-error - @turf packages have type resolution issues with package.json exports
+// @ts-ignore - @turf packages have type resolution issues with package.json exports
 import { featureCollection, feature, point } from '@turf/helpers';
 
 import Bubble from '../common/Bubble';
@@ -48,11 +48,7 @@ const CustomIconNativeAsset = memo(() => {
 
   return (
     <>
-      <MapView
-        style={{ flex: 1 }}
-        styleURL={StyleURL.Light}
-        onPress={onPress}
-      >
+      <MapView style={{ flex: 1 }} styleURL={StyleURL.Light} onPress={onPress}>
         <Camera
           ref={cameraRef}
           defaultSettings={{

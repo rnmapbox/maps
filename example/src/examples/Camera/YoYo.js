@@ -1,5 +1,11 @@
 import React from 'react';
-import { MapView, Camera, VectorSource, FillLayer, StyleURL } from '@rnmapbox/maps';
+import {
+  MapView,
+  Camera,
+  VectorSource,
+  FillLayer,
+  StyleURL,
+} from '@rnmapbox/maps';
 
 import sheet from '../../styles/sheet';
 import colors from '../../styles/colors';
@@ -61,7 +67,9 @@ class YoYo extends React.Component {
     return (
       <>
         <MapView
-          ref={(ref) => (this.map = ref)}
+          ref={(ref) => {
+            this.map = ref;
+          }}
           style={sheet.matchParent}
           styleURL={StyleURL.Dark}
         >

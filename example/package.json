@@ -14,7 +14,8 @@
     "purge:ios": "rm -rf ios/Pods/* ios/build ~/Library/Caches/CocoaPods ~/Library/Developer/Xcode/DerivedData && pod cache clean --all",
     "purge:js": "rm -rf node_modules && yarn cache clean && watchman watch-del-all",
     "purge": "yarn purge:js && yarn purge:android && yarn purge:ios",
-    "type:check": "yarn tsc --version && yarn tsc --noEmit"
+    "type:check": "yarn tsc --version && yarn tsc --noEmit",
+    "type:check:example:todo": "yarn tsc --noEmit -p ./tsconfig.relaxed.json"
   },
   "dependencies": {
     "@mapbox/geo-viewport": "^0.5.0",

@@ -7,6 +7,7 @@ import Bubble from '../common/Bubble';
 const styles = { matchParent: { flex: 1 } };
 
 class ShowClick extends React.Component {
+  /** @param {any} props */
   constructor(props) {
     super(props);
 
@@ -27,6 +28,7 @@ class ShowClick extends React.Component {
     );
   }
 
+  /** @param {any} event */
   onPress(event) {
     const { geometry, properties } = event;
 

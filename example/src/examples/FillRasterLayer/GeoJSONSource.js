@@ -1,5 +1,13 @@
 import React from 'react';
-import { MapView, Camera, ShapeSource, FillLayer, VectorSource, BackgroundLayer, StyleURL } from '@rnmapbox/maps';
+import {
+  MapView,
+  Camera,
+  ShapeSource,
+  FillLayer,
+  VectorSource,
+  BackgroundLayer,
+  StyleURL,
+} from '@rnmapbox/maps';
 
 import sheet from '../../styles/sheet';
 import gridPattern from '../../assets/grid_pattern.png';
@@ -26,27 +34,20 @@ class GeoJSONSource extends React.Component {
     return (
       <>
         <MapView
-          ref={(ref) => (this.map = ref)}
+          ref={(ref) => {
+            this.map = ref;
+          }}
           style={sheet.matchParent}
           styleURL={StyleURL.Dark}
         >
-          <Camera
-            zoomLevel={2}
-            centerCoordinate={[-35.15165038, 40.6235728]}
-          />
+          <Camera zoomLevel={2} centerCoordinate={[-35.15165038, 40.6235728]} />
 
           <VectorSource>
-            <BackgroundLayer
-              id="background"
-              style={layerStyles.background}
-            />
+            <BackgroundLayer id="background" style={layerStyles.background} />
           </VectorSource>
 
           <ShapeSource id="smileyFaceSource" shape={smileyFaceGeoJSON}>
-            <FillLayer
-              id="smileyFaceFill"
-              style={layerStyles.smileyFace}
-            />
+            <FillLayer id="smileyFaceFill" style={layerStyles.smileyFace} />
           </ShapeSource>
         </MapView>
       </>
@@ -58,7 +59,10 @@ export default GeoJSONSource;
 
 /* end-example-doc */
 
-/** @type ExampleWithMetadata['metadata'] */
+/**
+ * @typedef {import('../common/ExampleMetadata').ExampleWithMetadata} ExampleWithMetadata
+ * @type {ExampleWithMetadata['metadata']}
+ */
 const metadata = {
   title: 'GeoJSON Source',
   tags: [],

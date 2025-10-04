@@ -29,14 +29,13 @@ class GetZoom extends React.Component {
       <>
         <MapView
           onRegionDidChange={this.onRegionDidChange}
-          ref={(c) => (this._map = c)}
+          ref={(c) => {
+            this._map = c;
+          }}
           onPress={this.onPress}
           style={styles.mapView}
         >
-          <Camera
-            zoomLevel={9}
-            centerCoordinate={[-73.970895, 40.723279]}
-          />
+          <Camera zoomLevel={9} centerCoordinate={[-73.970895, 40.723279]} />
         </MapView>
 
         <Bubble>
@@ -50,7 +49,10 @@ class GetZoom extends React.Component {
 export default GetZoom;
 /* end-example-doc */
 
-/** @type ExampleWithMetadata['metadata'] */
+/**
+ * @typedef {import('../common/ExampleMetadata').ExampleWithMetadata} ExampleWithMetadata
+ * @type {ExampleWithMetadata['metadata']}
+ */
 const metadata = {
   title: 'GetZoom',
   tags: ['Camera', 'Camera#getZoom'],
