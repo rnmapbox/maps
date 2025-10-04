@@ -28,6 +28,7 @@ const styles = {
     width: 0,
     height: 0,
     backgroundColor: 'transparent',
+    // @ts-ignore - borderStyle type issue
     borderStyle: 'solid',
     borderLeftWidth: size,
     borderRightWidth: size,
@@ -215,6 +216,7 @@ export default QueryTerrainElevation;
 
 /* end-example-doc */
 
+// @ts-ignore - ExampleWithMetadata type requires TypeScript
 /** @type ExampleWithMetadata['metadata'] */
 const metadata = {
   title: 'Query Terrain Elevation',
