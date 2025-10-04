@@ -6,6 +6,7 @@ buildscript {
 
         if (System.getenv('CI_MAP_IMPL').equals('mapbox')) {
             RNMapboxMapsImpl = "mapbox"
+            RNMapboxMapsVersion = '10.19.0'
             kotlinVersion = '1.6.21'
         } else if (System.getenv('CI_MAP_IMPL').equals('mapbox11')) {
             # Using default v11 version from main library

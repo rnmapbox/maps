@@ -18,6 +18,7 @@ if ENV['CI_MAP_IMPL']
   case ENV['CI_MAP_IMPL']
   when 'mapbox'
     $RNMapboxMapsImpl = 'mapbox'
+    $RNMapboxMapsVersion = '10.19.0'
   when 'mapbox11'
     $RNMapboxMapsImpl = 'mapbox'
     # Using default v11 version from main library
