@@ -1,9 +1,13 @@
 import React from 'react';
-import Mapbox, {
+import {
   MapView,
   Camera,
   ShapeSource,
   CircleLayer,
+  LineLayer,
+  LineJoin,
+  Animated,
+  StyleURL,
 } from '@rnmapbox/maps';
 import { View, StyleSheet } from 'react-native';
 import { Button } from '@rneui/base';
@@ -46,7 +50,7 @@ const layerStyles = {
   },
   route: {
     lineColor: 'white',
-    lineCap: <LineJoin.Round,
+    lineCap: LineJoin.Round,
     lineWidth: 3,
     lineOpacity: 0.84,
   },
@@ -111,13 +115,13 @@ class DriveTheLine extends React.Component {
     }
 
     return (
-      <<ShapeSource id="routeSource" shape={this.state.route}>
-        <<LineLayer
+      <ShapeSource id="routeSource" shape={this.state.route}>
+        <LineLayer
           id="routeFill"
           style={layerStyles.route}
           belowLayerID="originInnerCircle"
         />
-      </<ShapeSource>
+      </ShapeSource>
     );
   }
 
@@ -150,13 +154,13 @@ class DriveTheLine extends React.Component {
 
     const lineString = makeLineString(coords);
     return (
-      <<Animated.ShapeSource id="progressSource" shape={lineString}>
-        <<Animated.LineLayer
+      <Animated.ShapeSource id="progressSource" shape={lineString}>
+        <Animated.LineLayer
           id="progressFill"
           style={layerStyles.progress}
           aboveLayerID="routeFill"
         />
-      </<Animated.ShapeSource>
+      </Animated.ShapeSource>
     );
   }
 
@@ -170,9 +174,9 @@ class DriveTheLine extends React.Component {
     const style = [layerStyles.origin, { circleColor: backgroundColor }];
 
     return (
-      <<ShapeSource id="origin" shape={point(SF_OFFICE_COORDINATE)}>
-        <<Animated.CircleLayer id="originInnerCircle" style={style} />
-      </<ShapeSource>
+      <ShapeSource id="origin" shape={point(SF_OFFICE_COORDINATE)}>
+        <Animated.CircleLayer id="originInnerCircle" style={style} />
+      </ShapeSource>
     );
   }
 
@@ -199,7 +203,7 @@ class DriveTheLine extends React.Component {
         <MapView
           ref={(c) => (this._map = c)}
           style={sheet.matchParent}
-          styleURL={Mapbox.StyleURL.Dark}
+          styleURL={StyleURL.Dark}
         >
           <Camera zoomLevel={11} centerCoordinate={[-122.452652, 37.762963]} />
 

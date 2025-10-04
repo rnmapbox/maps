@@ -1,5 +1,5 @@
 import React from 'react';
-import { MapView, Camera, ShapeSource, FillLayer, CircleLayer, SymbolLayer, UserLocation, StyleURL } from '@rnmapbox/maps';
+import { MapView, Camera, ShapeSource, FillLayer, VectorSource, BackgroundLayer, StyleURL } from '@rnmapbox/maps';
 
 import sheet from '../../styles/sheet';
 import gridPattern from '../../assets/grid_pattern.png';
@@ -25,30 +25,30 @@ class GeoJSONSource extends React.Component {
   render() {
     return (
       <>
-        <<MapView
+        <MapView
           ref={(ref) => (this.map = ref)}
           style={sheet.matchParent}
-          styleURL={<StyleURL.Dark}
+          styleURL={StyleURL.Dark}
         >
-          <<Camera
+          <Camera
             zoomLevel={2}
             centerCoordinate={[-35.15165038, 40.6235728]}
           />
 
-          <<VectorSource>
-            <<BackgroundLayer
+          <VectorSource>
+            <BackgroundLayer
               id="background"
               style={layerStyles.background}
             />
-          </<VectorSource>
+          </VectorSource>
 
-          <<ShapeSource id="smileyFaceSource" shape={smileyFaceGeoJSON}>
-            <<FillLayer
+          <ShapeSource id="smileyFaceSource" shape={smileyFaceGeoJSON}>
+            <FillLayer
               id="smileyFaceFill"
               style={layerStyles.smileyFace}
             />
-          </<ShapeSource>
-        </<MapView>
+          </ShapeSource>
+        </MapView>
       </>
     );
   }

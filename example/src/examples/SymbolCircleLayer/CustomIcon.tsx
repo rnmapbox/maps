@@ -1,11 +1,12 @@
 import { useRef, memo, useState } from 'react';
 import { Text } from 'react-native';
-import MapboxGL, {
+import {
   MapView,
   Camera,
   ShapeSource,
   SymbolLayer,
   Images,
+  StyleURL,
 } from '@rnmapbox/maps';
 // @ts-expect-error - @turf packages have type resolution issues with package.json exports
 import { featureCollection, feature, point } from '@turf/helpers';
@@ -50,7 +51,7 @@ const CustomIcon = memo(() => {
     <>
       <MapView
         style={{ flex: 1 }}
-        styleURL={<StyleURL.Light}
+        styleURL={StyleURL.Light}
         onPress={onPress}
       >
         <Camera

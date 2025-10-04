@@ -59,33 +59,33 @@ class QueryAtPoint extends React.Component {
   render() {
     return (
       <>
-        <<MapView
+        <MapView
           ref={(c) => (this._map = c)}
           onPress={this.onPress}
           style={sheet.matchParent}
-          styleURL={<StyleURL.Light}
+          styleURL={StyleURL.Light}
         >
-          <<Camera
+          <Camera
             zoomLevel={9}
             centerCoordinate={[-73.970895, 40.723279]}
           />
 
-          <<ShapeSource id="nyc" shape={nycJSON}>
-            <<FillLayer id="nycFill" style={styles.neighborhoods} />
-          </<ShapeSource>
+          <ShapeSource id="nyc" shape={nycJSON}>
+            <FillLayer id="nycFill" style={styles.neighborhoods} />
+          </ShapeSource>
 
           {this.state.selectedGeoJSON ? (
-            <<ShapeSource
+            <ShapeSource
               id="selectedNYC"
               shape={this.state.selectedGeoJSON}
             >
-              <<FillLayer
+              <FillLayer
                 id="selectedNYCFill"
                 style={styles.selectedNeighborhood}
               />
-            </<ShapeSource>
+            </ShapeSource>
           ) : null}
-        </<MapView>
+        </MapView>
 
         <Bubble>
           <Text>Press on a feature to highlight it.</Text>
