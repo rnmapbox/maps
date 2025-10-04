@@ -7,6 +7,7 @@ import {
   Models,
   ModelLayer,
 } from '@rnmapbox/maps';
+import type { ExampleWithMetadata } from '../common/ExampleMetadata';
 
 const styles = {
   mapView: { flex: 1 },
