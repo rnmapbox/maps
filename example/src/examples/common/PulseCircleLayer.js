@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Animated } from 'react-native';
-import { MapView, Camera, ShapeSource, FillLayer, CircleLayer, SymbolLayer, UserLocation, Animated as MapboxAnimated } from '@rnmapbox/maps';
+import { Animated as MapboxAnimated } from '@rnmapbox/maps';
 
 const styles = {
   innerCircle: {
@@ -39,6 +39,7 @@ class PulseCircleLayer extends React.Component {
     duration: 1000,
   };
 
+  // @ts-ignore - Parameter type requires TypeScript annotation
   constructor(props) {
     super(props);
 
@@ -93,7 +94,9 @@ class PulseCircleLayer extends React.Component {
   }
 
   componentWillUnmount() {
-    this._loopAnim.stop();
+    if (this._loopAnim) {
+      this._loopAnim.stop();
+    }
   }
 
   render() {
@@ -101,25 +104,23 @@ class PulseCircleLayer extends React.Component {
       return null;
     }
 
-    const innerCircleStyle = [
-      styles.innerCircle,
-      this.props.innerCircleStyle,
-      { circleRadius: this.props.radius },
-    ];
+    const innerCircleStyle = {
+      ...styles.innerCircle,
+      ...this.props.innerCircleStyle,
+      circleRadius: this.props.radius,
+    };
 
-    const innerCirclePulseStyle = [
-      styles.innerCirclePulse,
-      { circleRadius: this.state.innerRadius },
-    ];
+    const innerCirclePulseStyle = {
+      ...styles.innerCirclePulse,
+      circleRadius: this.state.innerRadius,
+    };
 
-    const outerCircleStyle = [
-      styles.outerCircle,
-      this.props.outerCircleStyle,
-      {
-        circleRadius: this.state.pulseRadius,
-        circleOpacity: this.state.pulseOpacity,
-      },
-    ];
+    const outerCircleStyle = {
+      ...styles.outerCircle,
+      ...this.props.outerCircleStyle,
+      circleRadius: this.state.pulseRadius,
+      circleOpacity: this.state.pulseOpacity,
+    };
 
     return (
       <MapboxAnimated.ShapeSource
