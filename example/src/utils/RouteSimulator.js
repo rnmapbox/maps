@@ -1,6 +1,9 @@
 import { Animated } from 'react-native';
+// @ts-ignore - Missing types for @turf packages
 import along from '@turf/along';
+// @ts-ignore - Missing types for @turf packages
 import findDistance from '@turf/distance';
+// @ts-ignore - Missing types for @turf packages
 import { point } from '@turf/helpers';
 
 class Polyline {
