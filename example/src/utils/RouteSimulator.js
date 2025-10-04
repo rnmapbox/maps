@@ -7,6 +7,7 @@ import findDistance from '@turf/distance';
 import { point } from '@turf/helpers';
 
 class Polyline {
+  // @ts-ignore - Parameter type requires TypeScript annotation
   constructor(lineStringFeature) {
     this._coordinates = lineStringFeature.geometry.coordinates;
     this._lineStringFeature = lineStringFeature;
@@ -17,6 +18,7 @@ class Polyline {
     }
   }
 
+  // @ts-ignore - Parameter type requires TypeScript annotation
   coordinateFromStart(distance) {
     const pointAlong = along(this._lineStringFeature, distance);
     pointAlong.properties.distance = distance;
@@ -24,6 +26,7 @@ class Polyline {
     return pointAlong;
   }
 
+  // @ts-ignore - Parameter type requires TypeScript annotation
   findNearestFloorIndex(currentDistance) {
     let runningDistance = 0;
 
@@ -38,6 +41,7 @@ class Polyline {
     return -1;
   }
 
+  // @ts-ignore - Parameter type requires TypeScript annotation
   get(index) {
     return point(this._coordinates[index]);
   }
@@ -48,6 +52,7 @@ class Polyline {
 }
 
 class RouteSimulator {
+  // @ts-ignore - Parameter types require TypeScript annotation
   constructor(lineString, speed = 0.04) {
     this._polyline = new Polyline(lineString);
     this._previousDistance = 0;
@@ -55,6 +60,7 @@ class RouteSimulator {
     this._speed = speed;
   }
 
+  // @ts-ignore - Parameter type requires TypeScript annotation
   addListener(listener) {
     this._listener = listener;
   }
@@ -81,6 +87,7 @@ class RouteSimulator {
       this._currentDistance += this._speed;
 
       // interpolate between previous to current distance
+      // @ts-ignore - Parameter type requires TypeScript annotation
       const listener = (step) => {
         const currentPosition = this._polyline.coordinateFromStart(step.value);
         this.emit(currentPosition);
@@ -108,6 +115,7 @@ class RouteSimulator {
     });
   }
 
+  // @ts-ignore - Parameter type requires TypeScript annotation
   emit(pointFeature) {
     this._listener(pointFeature);
   }

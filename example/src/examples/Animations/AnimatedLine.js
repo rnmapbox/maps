@@ -54,6 +54,7 @@ class AnimatedLine extends React.Component {
     ...BaseExamplePropTypes,
   };
 
+  // @ts-ignore - Parameter type requires TypeScript annotation
   constructor(props) {
     super(props);
 

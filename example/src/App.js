@@ -59,6 +59,7 @@ const AppContainer = () => (
   </SafeAreaProvider>
 );
 class App extends React.Component {
+  // @ts-ignore - Parameter type requires TypeScript annotation
   constructor(props) {
     super(props);
 
