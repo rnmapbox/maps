@@ -41,7 +41,7 @@ function AppStackNavigator() {
       <Stack.Screen name="Item" component={Item} />
       <Stack.Screen name="ScreenWithoutMap" component={ScreenWithoutMap} />
       <Stack.Group
-        screenOptions={({ navigation: modalNavigation }) => ({
+        screenOptions={() => ({
           presentation: 'modal',
         })}
       >
@@ -87,7 +87,6 @@ class App extends React.Component {
       return (
         <SafeAreaView
           style={[sheet.matchParent, { backgroundColor: colors.primary.blue }]}
-          forceInset={{ top: 'always' }}
         >
           <View style={sheet.matchParent}>
             <Text style={styles.noPermissionsText}>
