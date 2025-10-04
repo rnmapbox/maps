@@ -6,9 +6,9 @@ contact_links:
     - name: 🚀 Discussions and Proposals
       url: https://github.com/rnmapbox/maps/discussions/categories/ideas
       about: Discuss the future of RNMapbox, submit feature requests
-    - name: ⚠️ Deprecated v10 / Old Architecture Support
+    - name: ⚠️ Sponsor-only Deprecated v10 / Old Architecture Support
       url: https://github.com/sponsors/rnmapbox
-      about: v10.x and old architecture issues are deprecated. Become a sponsor for special support options.
+      about: Support for v10.x and old architecture is only available to sponsors. Visit this page to become a sponsor and access special support options.
     - name: 📚 Sponsors Wiki
       url: https://github.com/rnmapbox/sponsors/wiki
       about: Details on sponsorship tiers, benefits, and support options
