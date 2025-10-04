@@ -122,26 +122,26 @@ class PulseCircleLayer extends React.Component {
     ];
 
     return (
-      <<Animated.ShapeSource
+      <MapboxAnimated.ShapeSource
         id="pulseCircleSource"
         shape={this.props.shape}
       >
-        <<Animated.CircleLayer
+        <MapboxAnimated.CircleLayer
           id="pulseOuterCircle"
           style={outerCircleStyle}
           aboveLayerID={this.props.aboveLayerID}
         />
-        <<Animated.CircleLayer
+        <MapboxAnimated.CircleLayer
           id="pulseInnerCircleCnt"
           style={innerCircleStyle}
           aboveLayerID="pulseOuterCircle"
         />
-        <<Animated.CircleLayer
+        <MapboxAnimated.CircleLayer
           id="pulseInnerCircle"
           style={innerCirclePulseStyle}
           aboveLayerID="pulseInnerCircleCnt"
         />
-      </<Animated.ShapeSource>
+      </MapboxAnimated.ShapeSource>
     );
   }
 }
