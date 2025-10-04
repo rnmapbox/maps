@@ -1,7 +1,7 @@
 import env from '../../env.json';
 
 class Config {
-  get(key: string) {
+  get(key) {
     return env[key];
   }
 }

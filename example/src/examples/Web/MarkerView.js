@@ -1,5 +1,4 @@
 import React from 'react';
-import type { ExampleWithMetadata } from '../common/ExampleMetadata';
 import { View, Text } from 'react-native';
 import { MapView, Camera, MarkerView } from '@rnmapbox/maps';
 
