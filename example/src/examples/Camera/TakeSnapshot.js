@@ -1,5 +1,5 @@
 import React from 'react';
-import MapboxGL from '@rnmapbox/maps';
+import { snapshotManager } from '@rnmapbox/maps';
 import {
   View,
   Image,
@@ -42,14 +42,14 @@ class TakeSnapshot extends React.Component {
   async takeSnapshot() {
     const { width, height } = Dimensions.get('window');
 
-    const uri = await MapboxGL.snapshotManager.takeSnap({
+    const uri = await snapshotManager.takeSnap({
       centerCoordinate: [-74.12641, 40.797968],
       width,
       height,
       zoomLevel: 12,
       pitch: 30,
       heading: 20,
-      styleURL: MapboxGL.StyleURL.Dark,
+      styleURL: "mapbox://styles/mapbox/dark-v11",
       writeToDisk: true,
     });
 

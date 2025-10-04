@@ -1,5 +1,5 @@
 import React from 'react';
-import MapboxGL from '@rnmapbox/maps';
+import { MapView, Camera, ShapeSource, FillLayer } from '@rnmapbox/maps';
 import bboxPolygon from '@turf/bbox-polygon';
 
 import sheet from '../../styles/sheet';
@@ -19,19 +19,19 @@ const polygon = bboxPolygon([sw[0], sw[1], ne[0], ne[1]]);
 
 const RestrictMapBounds = (props) => (
   <>
-    <MapboxGL.MapView
+    <MapView
       style={sheet.matchParent}
-      styleURL={MapboxGL.StyleURL.SatelliteStreet}
+      styleURL="mapbox://styles/mapbox/satellite-streets-v12"
     >
-      <MapboxGL.Camera
+      <Camera
         maxBounds={bounds}
         zoomLevel={7}
         centerCoordinate={[-4.744276, 50.361239]}
       />
-      <MapboxGL.ShapeSource id="bounds" shape={polygon}>
-        <MapboxGL.FillLayer id="boundsFill" style={boundsStyle} />
-      </MapboxGL.ShapeSource>
-    </MapboxGL.MapView>
+      <ShapeSource id="bounds" shape={polygon}>
+        <FillLayer id="boundsFill" style={boundsStyle} />
+      </ShapeSource>
+    </MapView>
   </>
 );
 
