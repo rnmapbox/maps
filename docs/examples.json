@@ -839,10 +839,10 @@
             "Camera",
             "Camera#zoomTo"
           ],
-          "docs": "\nChange camera via imperative methods"
+          "docs": "Change camera via imperative methods"
         },
-        "fullPath": "example/src/examples/Camera/Fit.js",
-        "relPath": "Camera/Fit.js",
+        "fullPath": "example/src/examples/Camera/Fit.tsx",
+        "relPath": "Camera/Fit.tsx",
         "name": "Fit"
       },
       {
