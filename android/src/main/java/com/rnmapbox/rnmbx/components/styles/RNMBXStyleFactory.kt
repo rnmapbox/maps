@@ -399,12 +399,6 @@ object RNMBXStyleFactory {
                 setTextOcclusionOpacityTransition(layer, styleValue)
               "iconColorSaturation" ->
                 setIconColorSaturation(layer, styleValue)
-              "iconColorContrast" ->
-                setIconColorContrast(layer, styleValue)
-              "iconColorBrightnessMin" ->
-                setIconColorBrightnessMin(layer, styleValue)
-              "iconColorBrightnessMax" ->
-                setIconColorBrightnessMax(layer, styleValue)
               "symbolZOffset" ->
                 setSymbolZOffset(layer, styleValue)
                 "symbolZOffsetTransition" ->
@@ -637,8 +631,6 @@ object RNMBXStyleFactory {
                 setFillExtrusionLineWidth(layer, styleValue)
                 "fillExtrusionLineWidthTransition" ->
                 setFillExtrusionLineWidthTransition(layer, styleValue)
-              "fillExtrusionCastShadows" ->
-                setFillExtrusionCastShadows(layer, styleValue)
           }
         } catch (e: MapboxStyleException) {
           Logger.e(LOG_TAG, "Failed to update: $styleKey ${e.message}")
@@ -2957,60 +2949,6 @@ object RNMBXStyleFactory {
       }
     }
 
-    fun setIconColorContrast(layer: SymbolLayer, styleValue: RNMBXStyleValue ) {
-      if (styleValue.isExpression()) {
-        val expression = styleValue.getExpression()
-        if (expression != null) {
-          layer.iconColorContrast(expression)
-        } else {
-          Logger.e("RNMBXSymbol", "Expression for iconColorContrast is null")
-        }
-      } else {
-          val value = styleValue.getDouble(VALUE_KEY)
-          if (value != null) {
-            layer.iconColorContrast(value)
-          } else {
-            Logger.e("RNMBXSymbol", "value for iconColorContrast is null")
-          }
-      }
-    }
-
-    fun setIconColorBrightnessMin(layer: SymbolLayer, styleValue: RNMBXStyleValue ) {
-      if (styleValue.isExpression()) {
-        val expression = styleValue.getExpression()
-        if (expression != null) {
-          layer.iconColorBrightnessMin(expression)
-        } else {
-          Logger.e("RNMBXSymbol", "Expression for iconColorBrightnessMin is null")
-        }
-      } else {
-          val value = styleValue.getDouble(VALUE_KEY)
-          if (value != null) {
-            layer.iconColorBrightnessMin(value)
-          } else {
-            Logger.e("RNMBXSymbol", "value for iconColorBrightnessMin is null")
-          }
-      }
-    }
-
-    fun setIconColorBrightnessMax(layer: SymbolLayer, styleValue: RNMBXStyleValue ) {
-      if (styleValue.isExpression()) {
-        val expression = styleValue.getExpression()
-        if (expression != null) {
-          layer.iconColorBrightnessMax(expression)
-        } else {
-          Logger.e("RNMBXSymbol", "Expression for iconColorBrightnessMax is null")
-        }
-      } else {
-          val value = styleValue.getDouble(VALUE_KEY)
-          if (value != null) {
-            layer.iconColorBrightnessMax(value)
-          } else {
-            Logger.e("RNMBXSymbol", "value for iconColorBrightnessMax is null")
-          }
-      }
-    }
-
     fun setSymbolZOffset(layer: SymbolLayer, styleValue: RNMBXStyleValue ) {
       if (styleValue.isExpression()) {
         val expression = styleValue.getExpression()
@@ -4083,24 +4021,6 @@ object RNMBXStyleFactory {
       val transition = styleValue.transition
       if (transition != null) {
         layer.fillExtrusionLineWidthTransition(transition);
-      }
-    }
-
-    fun setFillExtrusionCastShadows(layer: FillExtrusionLayer, styleValue: RNMBXStyleValue ) {
-      if (styleValue.isExpression()) {
-        val expression = styleValue.getExpression()
-        if (expression != null) {
-          layer.fillExtrusionCastShadows(expression)
-        } else {
-          Logger.e("RNMBXFillExtrusion", "Expression for fillExtrusionCastShadows is null")
-        }
-      } else {
-          val value = styleValue.getBoolean(VALUE_KEY)
-          if (value != null) {
-            layer.fillExtrusionCastShadows(value)
-          } else {
-            Logger.e("RNMBXFillExtrusion", "value for fillExtrusionCastShadows is null")
-          }
       }
     }
 
@@ -5496,3 +5416,5 @@ object RNMBXStyleFactory {
     }
 
 }
+
+

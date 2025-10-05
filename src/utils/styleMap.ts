@@ -157,9 +157,6 @@ const styleMap = {
   textOcclusionOpacity: StyleTypes.Constant,
   textOcclusionOpacityTransition: StyleTypes.Transition,
   iconColorSaturation: StyleTypes.Constant,
-  iconColorContrast: StyleTypes.Constant,
-  iconColorBrightnessMin: StyleTypes.Constant,
-  iconColorBrightnessMax: StyleTypes.Constant,
   symbolZOffset: StyleTypes.Constant,
   symbolZOffsetTransition: StyleTypes.Transition,
 
@@ -242,7 +239,6 @@ const styleMap = {
   fillExtrusionEmissiveStrengthTransition: StyleTypes.Transition,
   fillExtrusionLineWidth: StyleTypes.Constant,
   fillExtrusionLineWidthTransition: StyleTypes.Transition,
-  fillExtrusionCastShadows: StyleTypes.Constant,
 
   rasterOpacity: StyleTypes.Constant,
   rasterOpacityTransition: StyleTypes.Transition,

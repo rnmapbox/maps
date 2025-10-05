@@ -1326,18 +1326,6 @@ export interface SymbolLayerStyleProps {
    */
   iconColorSaturation?: Value<number>;
   /**
-   * Increase or reduce the contrast of the symbol icon.
-   */
-  iconColorContrast?: Value<number>;
-  /**
-   * Increase or reduce the brightness of the symbols. The value is the minimum brightness.
-   */
-  iconColorBrightnessMin?: Value<number>;
-  /**
-   * Increase or reduce the brightness of the symbols. The value is the maximum brightness.
-   */
-  iconColorBrightnessMax?: Value<number>;
-  /**
    * Specifies an uniform elevation from the ground, in meters.
    */
   symbolZOffset?: Value<number, ['zoom', 'feature']>;
@@ -1801,10 +1789,6 @@ export interface FillExtrusionLayerStyleProps {
    * The transition affecting any changes to this layer’s fillExtrusionLineWidth property.
    */
   fillExtrusionLineWidthTransition?: Transition;
-  /**
-   * Enable/Disable shadow casting for this layer
-   */
-  fillExtrusionCastShadows?: boolean;
 }
 export interface RasterLayerStyleProps {
   /**

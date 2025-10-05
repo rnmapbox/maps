@@ -381,12 +381,6 @@ func symbolLayer(layer: inout SymbolLayer, reactStyle:Dictionary<String, Any>, o
       self.setTextOcclusionOpacityTransition(&layer, styleValue:styleValue);
     } else if (prop == "iconColorSaturation") {
       self.setIconColorSaturation(&layer, styleValue:styleValue);
-    } else if (prop == "iconColorContrast") {
-      self.setIconColorContrast(&layer, styleValue:styleValue);
-    } else if (prop == "iconColorBrightnessMin") {
-      self.setIconColorBrightnessMin(&layer, styleValue:styleValue);
-    } else if (prop == "iconColorBrightnessMax") {
-      self.setIconColorBrightnessMax(&layer, styleValue:styleValue);
     } else if (prop == "symbolZOffset") {
       self.setSymbolZOffset(&layer, styleValue:styleValue);
     } else if (prop == "symbolZOffsetTransition") {
@@ -628,8 +622,6 @@ func fillExtrusionLayer(layer: inout FillExtrusionLayer, reactStyle:Dictionary<S
       self.setFillExtrusionLineWidth(&layer, styleValue:styleValue);
     } else if (prop == "fillExtrusionLineWidthTransition") {
       self.setFillExtrusionLineWidthTransition(&layer, styleValue:styleValue);
-    } else if (prop == "fillExtrusionCastShadows") {
-      self.setFillExtrusionCastShadows(&layer, styleValue:styleValue);
     } else {
       Logger.log(level:.error, message: "Unexpected property \(prop) for layer: fill-extrusion")
     }
@@ -2131,39 +2123,6 @@ func setIconColorSaturation(_ layer: inout SymbolLayer, styleValue: RNMBXStyleVa
       #endif
 }
 
-func setIconColorContrast(_ layer: inout SymbolLayer, styleValue: RNMBXStyleValue)
-{
-      #if RNMBX_11
-      
-        
-          layer.iconColorContrast = styleValue.mglStyleValueNumber();
-        
-      
-      #endif
-}
-
-func setIconColorBrightnessMin(_ layer: inout SymbolLayer, styleValue: RNMBXStyleValue)
-{
-      #if RNMBX_11
-      
-        
-          layer.iconColorBrightnessMin = styleValue.mglStyleValueNumber();
-        
-      
-      #endif
-}
-
-func setIconColorBrightnessMax(_ layer: inout SymbolLayer, styleValue: RNMBXStyleValue)
-{
-      #if RNMBX_11
-      
-        
-          layer.iconColorBrightnessMax = styleValue.mglStyleValueNumber();
-        
-      
-      #endif
-}
-
 func setSymbolZOffset(_ layer: inout SymbolLayer, styleValue: RNMBXStyleValue)
 {
       #if RNMBX_11
@@ -2826,17 +2785,6 @@ func setFillExtrusionLineWidthTransition(_ layer: inout FillExtrusionLayer, styl
 {
       #if RNMBX_11
     layer.fillExtrusionLineWidthTransition = styleValue.getTransition();
-      #endif
-}
-
-func setFillExtrusionCastShadows(_ layer: inout FillExtrusionLayer, styleValue: RNMBXStyleValue)
-{
-      #if RNMBX_11
-      
-        
-          layer.fillExtrusionCastShadows = styleValue.mglStyleValueBoolean();
-        
-      
       #endif
 }
 
