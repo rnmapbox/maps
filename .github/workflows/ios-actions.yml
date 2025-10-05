@@ -26,11 +26,7 @@ on:
     secrets:
       MAPBOX_ACCESS_TOKEN:
         required: true
-      MAPBOX_DOWNLOAD_TOKEN:
-        required: false
       ENV_MAPBOX_ACCESS_TOKEN:
-        required: false
-      ENV_MAPBOX_DOWNLOAD_TOKEN:
         required: false
 
 jobs:
@@ -60,10 +56,7 @@ jobs:
         env:
           MAPBOX_ACCESS_TOKEN: ${{ secrets.MAPBOX_ACCESS_TOKEN || secrets.ENV_MAPBOX_ACCESS_TOKEN }}
 
-        # Mapbox download token is no longer required as per Mapbox's removal of authentication requirement
-      # See: https://github.com/mapbox/mapbox-maps-flutter/issues/775
-      # .netrc setup is no longer needed for iOS builds
-
+        
       - name: Setup node ${{ inputs.NVMRC }}
         uses: actions/setup-node@v3.5.1
         with:

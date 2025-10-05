@@ -26,11 +26,7 @@ on:
     secrets:
       MAPBOX_ACCESS_TOKEN:
         required: true
-      MAPBOX_DOWNLOAD_TOKEN:
-        required: false
       ENV_MAPBOX_ACCESS_TOKEN:
-        required: false
-      ENV_MAPBOX_DOWNLOAD_TOKEN:
         required: false
 
 jobs:
@@ -60,19 +56,7 @@ jobs:
           distribution: 'zulu'
           java-version: '17'
 
-      # Mapbox download token is no longer required as per Mapbox's removal of authentication requirement
-      # See: https://github.com/mapbox/mapbox-maps-flutter/issues/775
-      # Only set if token is provided for backward compatibility
-      - run: |
-          mkdir -p ~/.gradle/
-          if [ -n "$MAPBOX_DOWNLOAD_TOKEN" ]; then
-            echo MAPBOX_DOWNLOADS_TOKEN=$MAPBOX_DOWNLOAD_TOKEN > ~/.gradle/gradle.properties
-          fi
-        working-directory: example
-        env:
-          MAPBOX_DOWNLOAD_TOKEN: ${{ secrets.MAPBOX_DOWNLOAD_TOKEN || secrets.ENV_MAPBOX_DOWNLOAD_TOKEN }}
-        if: "${{ secrets.MAPBOX_DOWNLOAD_TOKEN || secrets.ENV_MAPBOX_DOWNLOAD_TOKEN }}"
-
+      
       - run: echo $MAPBOX_ACCESS_TOKEN > ./accesstoken
         working-directory: example
         env:
