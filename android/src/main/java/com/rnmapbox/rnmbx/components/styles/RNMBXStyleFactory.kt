@@ -5416,5 +5416,3 @@ object RNMBXStyleFactory {
     }
 
 }
-
-
