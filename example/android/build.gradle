@@ -9,13 +9,10 @@ buildscript {
             RNMapboxMapsVersion = '10.19.0'
             kotlinVersion = '1.6.21'
         } else if (System.getenv('CI_MAP_IMPL').equals('mapbox11')) {
+            // Using default v11 version from main library
             RNMapboxMapsImpl = "mapbox"
-        } else if (project.hasProperty('RNMBX11')) {
-            if (project.getProperty('RNMBX11').toBoolean()) {
-                // RNMapboxMapsVersion = '11.15.2' - default
-            } else {
-                RNMapboxMapsVersion = '10.19.0'
-            }
+        } else if (project.hasProperty('RNMBX10') && project.getProperty('RNMBX10').toBoolean()) {
+            RNMapboxMapsVersion = '10.19.0'
         }
 
         // Mapbox deps

@@ -61,14 +61,14 @@ yarn generate
 
 ### Building for Different Configurations
 
-#### Mapbox v11 (Beta)
+#### Mapbox v10 - deprecated
 ```bash
 # iOS
 cd example/ios
-RNMBX11=1 pod update MapboxMaps
+RNMBX10=1 pod update MapboxMaps
 
 # Android
-# Edit example/android/gradle.properties: RNMBX11=true
+# Edit example/android/gradle.properties: RNMBX10=true
 ```
 
 #### New Architecture/Fabric

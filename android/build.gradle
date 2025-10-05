@@ -1,5 +1,5 @@
 def defaultMapboxMapsImpl = "mapbox"
-def defaultMapboxMapsVersion = "10.19.0"
+def defaultMapboxMapsVersion = "11.15.2"
 
 def safeExtGet(prop, fallback) {
     rootProject.ext.has(prop) ? rootProject.ext.get(prop) : fallback
@@ -71,10 +71,14 @@ android {
         sourceSets {
             main {
                 java.srcDirs = ['src/main/java']
-                def majorMapboxVersion = safeExtGet("RNMapboxMapsVersion", defaultMapboxMapsVersion).split("\\.")[0] as Integer
+                def mapboxVersion = safeExtGet("RNMapboxMapsVersion", defaultMapboxMapsVersion)
+                def majorMapboxVersion = mapboxVersion.split("\\.")[0] as Integer
                 if (majorMapboxVersion >= 11) {
                     java.srcDirs += 'src/main/mapbox-v11-compat/v11'
                 } else {
+                    logger.warn("⚠️ RNMapbox DEPRECATION WARNING: Mapbox v10.x is deprecated and will not receive active support.")
+                    logger.warn("⚠️ RNMapbox: Please upgrade to Mapbox v11.x for continued support and updates.")
+                    logger.warn("⚠️ RNMapbox: For sponsor-only support for v10.x: https://github.com/sponsors/rnmapbox")
                     java.srcDirs += 'src/main/mapbox-v11-compat/v10'
                 }
                 java.srcDirs += 'src/main/rn-compat/rn75'
@@ -225,6 +229,9 @@ android {
     }
 
     if (!isNewArchitectureEnabled()) {
+        logger.warn("⚠️ RNMapbox DEPRECATION WARNING: Old React Native Architecture (Paper/bridge) is deprecated and will not receive active support.")
+        logger.warn("⚠️ RNMapbox: Please upgrade to New Architecture (Fabric/TurboModules) for continued support and updates.")
+        logger.warn("⚠️ RNMapbox: For sponsor-only support for old architecture: https://github.com/sponsors/rnmapbox")
         sourceSets {
             main {
                 java.srcDirs += 'src/main/old-arch'
