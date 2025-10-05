@@ -214,7 +214,9 @@ allprojects {
       authentication { basic(BasicAuthentication) }
       credentials {
         username = 'mapbox'
-        password = project.properties['MAPBOX_DOWNLOADS_TOKEN'] ?: ""
+        password = project.properties['MAPBOX_DOWNLOADS_TOKEN'] ?: System.getenv('RNMAPBOX_MAPS_DOWNLOAD_TOKEN') ?: {
+          throw new GradleException('❌ RNMapbox Maps Error: Mapbox download token is required.\\nSet RNMAPBOX_MAPS_DOWNLOAD_TOKEN environment variable:\\n  export RNMAPBOX_MAPS_DOWNLOAD_TOKEN="sk.ey...qg"\\n  npx expo prebuild\\n\\nOr use deprecated config:\\n  RNMapboxMapsDownloadToken in app.json plugin config')
+        }()
       }
     }
   }
