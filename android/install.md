@@ -20,15 +20,20 @@ allprojects {
         // ...other repos
         maven {
             url 'https://api.mapbox.com/downloads/v2/releases/maven'
-            authentication {
-                basic(BasicAuthentication)
-            }
-            credentials {
-                // Do not change the username below.
-                // This should always be `mapbox` (not your username).
-                username = 'mapbox'
-                // Use the secret token you stored in gradle.properties as the password
-                password = project.properties['MAPBOX_DOWNLOADS_TOKEN'] ?: ""
+            // Authentication is no longer required as per Mapbox's removal of download token requirement
+            // See: https://github.com/mapbox/mapbox-maps-flutter/issues/775
+            // Keeping this as optional for backward compatibility
+            if (project.properties['MAPBOX_DOWNLOADS_TOKEN']) {
+                authentication {
+                    basic(BasicAuthentication)
+                }
+                credentials {
+                    // Do not change the username below.
+                    // This should always be `mapbox` (not your username).
+                    username = 'mapbox'
+                    // Use the secret token you stored in gradle.properties as the password
+                    password = project.properties['MAPBOX_DOWNLOADS_TOKEN']
+                }
             }
         }
         // ...even more repos?
