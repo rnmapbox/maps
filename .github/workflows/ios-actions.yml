@@ -79,7 +79,11 @@ jobs:
         uses: actions/cache@v4
         id: yarn-cache
         with:
-          path: node_modules
+          path: |
+            node_modules
+            example/node_modules
+            .yarn/cache
+            .yarn/install-state.gz
           key: node-modules-${{ hashFiles('**/yarn.lock') }}
 
       - name: Install Yarn Dependencies
