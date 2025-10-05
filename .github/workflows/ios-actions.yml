@@ -76,10 +76,14 @@ jobs:
           node-version: ${{ inputs.NVMRC }}
 
       - name: Cache node_modules
-        uses: actions/cache@v3
+        uses: actions/cache@v4
         id: yarn-cache
         with:
-          path: node_modules
+          path: |
+            node_modules
+            example/node_modules
+            .yarn/cache
+            .yarn/install-state.gz
           key: node-modules-${{ hashFiles('**/yarn.lock') }}
 
       - name: Install Yarn Dependencies
@@ -90,7 +94,7 @@ jobs:
         working-directory: example
 
       - name: Cache Pods
-        uses: actions/cache@v3
+        uses: actions/cache@v4
         id: pods-cache
         with:
           path: ios/Pods

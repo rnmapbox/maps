@@ -19,8 +19,8 @@ function readIosVersion() {
   const mapboxLine = lines.filter((i) => mapboxLineRegex.exec(i))[0];
 
   return {
-    v10: `${mapboxLineRegex.exec(mapboxLine)[1]}.0`,
-    v11: '11.0.0',
+    v10: '10.19.0',
+    v11: `${mapboxLineRegex.exec(mapboxLine)[1]}.0`,
   };
 }
 
@@ -37,8 +37,8 @@ function readAndroidVersion() {
     /^\s*def\s+defaultMapboxMapsVersion\s+=\s+"(\d+\.\d+\.\d+)"$/;
   const mapboxV10Line = lines.filter((i) => mapboxV10LineRegex.exec(i))[0];
   return {
-    v10: mapboxV10LineRegex.exec(mapboxV10Line)[1],
-    v11: '11.0.0',
+    v10: '10.19.0',
+    v11: mapboxV10LineRegex.exec(mapboxV10Line)[1],
   };
 }
 
@@ -319,9 +319,17 @@ function isTranslate(attrName) {
 
 const UnsupportedProperties = [
   'hillshade-emissive-strength', // should be supported in v11 according to specs but it's not on ios 11.0.0.rc2
+
+  'icon-color-contrast', // should be supported in v11 11.15.2 but it's not on android
+
+  'icon-color-brightness-min', // should be supported in v11 11.15.0 but it's not on android
+  'icon-color-brightness-max', // should be supported in v11 11.15.0 but it's not on android
+
+  'fill-extrusion-cast-shadows', // should be supported in v11 11.8.0 but it's not on android
 ];
 
 /**
+ *
  * @param {string[]|undefined} only
  */
 function isAttrSupported(name, attr, only) {
