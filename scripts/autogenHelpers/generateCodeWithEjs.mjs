@@ -190,9 +190,6 @@ function getSupportedLayers(layerNames) {
  * @param {string[]|null} only
  */
 function getSupportedProperties(attributes, only) {
-  if (attributes === undefined) {
-    console.log('#### undefined');
-  }
   return Object.keys(attributes).filter((attrName) =>
     isAttrSupported(attrName, attributes[attrName], only),
   );
