@@ -26,11 +26,7 @@ on:
     secrets:
       MAPBOX_ACCESS_TOKEN:
         required: true
-      MAPBOX_DOWNLOAD_TOKEN:
-        required: true
       ENV_MAPBOX_ACCESS_TOKEN:
-        required: false
-      ENV_MAPBOX_DOWNLOAD_TOKEN:
         required: false
 
 jobs:
@@ -60,16 +56,7 @@ jobs:
         env:
           MAPBOX_ACCESS_TOKEN: ${{ secrets.MAPBOX_ACCESS_TOKEN || secrets.ENV_MAPBOX_ACCESS_TOKEN }}
 
-      - name: Setup .netrc with MAPBOX_DOWNLOAD_TOKEN
-        run: |
-          echo 'machine api.mapbox.com' >> ~/.netrc
-          echo 'login mapbox' >> ~/.netrc
-          echo "password $MAPBOX_DOWNLOAD_TOKEN" >> ~/.netrc
-          chmod 0600 ~/.netrc
-        if: "${{ env.MAPBOX_DOWNLOAD_TOKEN != '' }}"
-        env:
-          MAPBOX_DOWNLOAD_TOKEN: ${{ secrets.MAPBOX_DOWNLOAD_TOKEN || secrets.ENV_MAPBOX_DOWNLOAD_TOKEN }}
-
+        
       - name: Setup node ${{ inputs.NVMRC }}
         uses: actions/setup-node@v3.5.1
         with:

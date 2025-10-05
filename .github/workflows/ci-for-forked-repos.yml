@@ -12,6 +12,5 @@ jobs:
       env_name: CI with Mapbox Tokens
       ref: ${{ github.event.pull_request.head.sha }}
     secrets:
-      ENV_MAPBOX_ACCESS_TOKEN: ${{ secrets.ENV_MAPBOX_ACCESS_TOKEN }}
-      ENV_MAPBOX_DOWNLOAD_TOKEN: ${{ secrets.ENV_MAPBOX_DOWNLOAD_TOKEN }}
+      MAPBOX_ACCESS_TOKEN: ${{ secrets.MAPBOX_ACCESS_TOKEN }}
 

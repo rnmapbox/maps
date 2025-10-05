@@ -211,12 +211,16 @@ allprojects {
   repositories {
     maven {
       url 'https://api.mapbox.com/downloads/v2/releases/maven'
-      authentication { basic(BasicAuthentication) }
-      credentials {
-        username = 'mapbox'
-        password = project.properties['MAPBOX_DOWNLOADS_TOKEN'] ?: System.getenv('RNMAPBOX_MAPS_DOWNLOAD_TOKEN') ?: {
-          throw new GradleException('❌ RNMapbox Maps Error: Mapbox download token is required.\\nSet RNMAPBOX_MAPS_DOWNLOAD_TOKEN environment variable:\\n  export RNMAPBOX_MAPS_DOWNLOAD_TOKEN="sk.ey...qg"\\n  npx expo prebuild\\n\\nOr use deprecated config:\\n  RNMapboxMapsDownloadToken in app.json plugin config')
-        }()
+      // Authentication is no longer required as per Mapbox's removal of download token requirement
+      // See: https://github.com/mapbox/mapbox-maps-flutter/issues/775
+      // Keeping this as optional for backward compatibility
+      def token = project.properties['MAPBOX_DOWNLOADS_TOKEN'] ?: System.getenv('RNMAPBOX_MAPS_DOWNLOAD_TOKEN')
+      if (token) {
+        authentication { basic(BasicAuthentication) }
+        credentials {
+          username = 'mapbox'
+          password = token
+        }
       }
     }
   }
