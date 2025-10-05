@@ -91,10 +91,11 @@ end
 
 if $RNMapboxMapsUseV11 != nil
   warn "WARNING: $RNMapboxMapsUseV11 is deprecated just set $RNMapboxMapsVersion to '= 11.15.0"
+  $RNMapboxMapsUseV11Imp = $RNMapboxMapsUseV11
 end
 
 if $MapboxImplVersion =~ /(~>|>=|=|>)?\S*11\./
-  $RNMapboxMapsUseV11 = true
+  $RNMapboxMapsUseV11Imp = true
 else
   puts "⚠️ RNMapbox DEPRECATION WARNING: Mapbox v10.x is deprecated and will not receive active support."
   puts "⚠️ RNMapbox: Please upgrade to Mapbox v11.x for continued support and updates."
@@ -151,7 +152,7 @@ end
 
 def $RNMapboxMaps.post_install(installer)
   map_pod = installer.pod_targets.find {|p| p.name == "MapboxMaps" }
-  use_v11 = $RNMapboxMapsUseV11 || (map_pod && map_pod.version.split('.')[0].to_i >= 11)
+  use_v11 = $RNMapboxMapsUseV11Imp || (map_pod && map_pod.version.split('.')[0].to_i >= 11)
   if use_v11
     installer.pods_project.build_configurations.each do |config|
       config.build_settings['OTHER_SWIFT_FLAGS'] ||= ['$(inherited)', '-D RNMBX_11']
@@ -238,7 +239,7 @@ Pod::Spec.new do |s|
   s.homepage    	= "https://github.com/rnmapbox/maps#readme"
   s.source      	= { :git => "https://github.com/rnmapbox/maps.git" }
   s.license     	= "MIT"
-  if $RNMapboxMapsUseV11
+  if $RNMapboxMapsUseV11Imp
     s.platform    	= :ios, "12.4"
   else
     s.platform    	= :ios, "11.0"
