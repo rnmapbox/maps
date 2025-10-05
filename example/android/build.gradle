@@ -6,12 +6,16 @@ buildscript {
 
         if (System.getenv('CI_MAP_IMPL').equals('mapbox')) {
             RNMapboxMapsImpl = "mapbox"
+            RNMapboxMapsVersion = '10.19.0'
             kotlinVersion = '1.6.21'
         } else if (System.getenv('CI_MAP_IMPL').equals('mapbox11')) {
-            RNMapboxMapsVersion = '11.15.0'
             RNMapboxMapsImpl = "mapbox"
-        } else if (project.hasProperty('RNMBX11') && project.getProperty('RNMBX11').toBoolean()) {
-            RNMapboxMapsVersion = '11.15.0'
+        } else if (project.hasProperty('RNMBX11')) {
+            if (project.getProperty('RNMBX11').toBoolean()) {
+                // RNMapboxMapsVersion = '11.15.2' - default
+            } else {
+                RNMapboxMapsVersion = '10.19.0'
+            }
         }
 
         // Mapbox deps
