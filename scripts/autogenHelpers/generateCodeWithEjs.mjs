@@ -19,8 +19,8 @@ function readIosVersion() {
   const mapboxLine = lines.filter((i) => mapboxLineRegex.exec(i))[0];
 
   return {
-    v10: `${mapboxLineRegex.exec(mapboxLine)[1]}.0`,
-    v11: '11.0.0',
+    v10: '10.19.0',
+    v11: `${mapboxLineRegex.exec(mapboxLine)[1]}.0`,
   };
 }
 
@@ -37,8 +37,8 @@ function readAndroidVersion() {
     /^\s*def\s+defaultMapboxMapsVersion\s+=\s+"(\d+\.\d+\.\d+)"$/;
   const mapboxV10Line = lines.filter((i) => mapboxV10LineRegex.exec(i))[0];
   return {
-    v10: mapboxV10LineRegex.exec(mapboxV10Line)[1],
-    v11: '11.0.0',
+    v10: '10.19.0',
+    v11: mapboxV10LineRegex.exec(mapboxV10Line)[1],
   };
 }
 
@@ -190,6 +190,9 @@ function getSupportedLayers(layerNames) {
  * @param {string[]|null} only
  */
 function getSupportedProperties(attributes, only) {
+  if (attributes === undefined) {
+    console.log('#### undefined');
+  }
   return Object.keys(attributes).filter((attrName) =>
     isAttrSupported(attrName, attributes[attrName], only),
   );
