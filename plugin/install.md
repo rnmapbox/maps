@@ -28,22 +28,14 @@ After installing this package, add the [config plugin](https://docs.expo.io/guid
 }
 ```
 
-You'll need to provide `RNMapboxMapsDownloadToken` as well. This secret token requires the `DOWNLOADS:READ` scope. You can refer to the [iOS guide](https://docs.mapbox.com/ios/maps/guides/install/#configure-credentials), which explains how to configure this token under the section `Configure your secret token`.
+You'll need to provide a download token. Set the `RNMAPBOX_MAPS_DOWNLOAD_TOKEN` environment variable to your download token (requires the `DOWNLOADS:READ` scope):
 
-```json
-{
-  "expo": {
-    "plugins": [
-      [
-        "@rnmapbox/maps",
-        {
-          "RNMapboxMapsDownloadToken": "sk.ey...qg"
-        }
-      ]
-    ]
-  }
-}
+```bash
+export RNMAPBOX_MAPS_DOWNLOAD_TOKEN="sk.ey...qg"
+npx expo prebuild
 ```
+
+For more information about obtaining a download token, refer to the [iOS guide](https://docs.mapbox.com/ios/maps/guides/install/#configure-credentials), which explains how to configure this token under the section `Configure your secret token`.
 
 If you want to show the user's current location on the map with the [UserLocation](../docs/UserLocation.md) component, you can use the [expo-location](https://docs.expo.dev/versions/latest/sdk/location/) plugin to configure the required `NSLocationWhenInUseUsageDescription` property. Install the plugin with `npx expo install expo-location` and add its config plugin to the plugins array of your `app.{json,config.js,config.ts}`:
 
@@ -75,8 +67,7 @@ It's possible to overwrite the native SDK version with `RNMapboxMapsVersion`:
       [
         "@rnmapbox/maps",
         {
-          "RNMapboxMapsVersion": "10.16.2",
-          "RNMapboxMapsDownloadToken": "sk.ey...qg"
+          "RNMapboxMapsVersion": "11.16.0"
         }
       ]
     ]
@@ -93,13 +84,22 @@ To use V11 just set the version to a 11 version, see [the ios guide](/ios/instal
       [
         "@rnmapbox/maps",
         {
-          "RNMapboxMapsVersion": "11.13.4",
-          "RNMapboxMapsDownloadToken": "sk.ey...qg",
+          "RNMapboxMapsVersion": "11.13.4"
         }
       ]
     ]
   }
 }
+```
+
+### Download Token Configuration
+
+For Expo projects, we recommend using the `RNMAPBOX_MAPS_DOWNLOAD_TOKEN` environment variable:
+
+```bash
+# Set the environment variable before building
+export RNMAPBOX_MAPS_DOWNLOAD_TOKEN="sk.ey...qg"
+npx expo prebuild
 ```
 
 ## Manual Setup

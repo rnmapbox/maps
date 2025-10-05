@@ -61,6 +61,8 @@ const addConstantBlock = (src, { RNMapboxMapsImpl, RNMapboxMapsVersion, RNMapbox
     }
     const newSrc = [];
     if (RNMapboxMapsDownloadToken) {
+        console.warn('⚠️ RNMapbox: RNMapboxMapsDownloadToken is deprecated. Use RNMAPBOX_MAPS_DOWNLOAD_TOKEN environment variable instead.');
+        console.warn('⚠️ RNMapbox: This token will be part of your Podfile. Be careful about committing it to source control.');
         newSrc.push(`$RNMapboxMapsDownloadToken = '${RNMapboxMapsDownloadToken}'`);
     }
     if (RNMapboxMapsImpl) {
@@ -132,6 +134,8 @@ const withCocoaPodsInstallerBlocks = (config, { RNMapboxMapsImpl, RNMapboxMapsVe
 const withAndroidPropertiesDownloadToken = (config, { RNMapboxMapsDownloadToken }) => {
     const key = 'MAPBOX_DOWNLOADS_TOKEN';
     if (RNMapboxMapsDownloadToken) {
+        console.warn('⚠️ WARNING: RNMapboxMapsDownloadToken is deprecated. Use RNMAPBOX_MAPS_DOWNLOAD_TOKEN environment variable instead.');
+        console.warn('⚠️ WARNING: This token will be part of your gradle.properties. Be careful about committing it to source control.');
         return (0, config_plugins_1.withGradleProperties)(config, (exportedConfig) => {
             exportedConfig.modResults = exportedConfig.modResults.filter((item) => !(item.type === 'property' && item.key === key));
             exportedConfig.modResults.push({
@@ -210,7 +214,9 @@ allprojects {
       authentication { basic(BasicAuthentication) }
       credentials {
         username = 'mapbox'
-        password = project.properties['MAPBOX_DOWNLOADS_TOKEN'] ?: ""
+        password = project.properties['MAPBOX_DOWNLOADS_TOKEN'] ?: System.getenv('RNMAPBOX_MAPS_DOWNLOAD_TOKEN') ?: {
+          throw new GradleException('❌ RNMapbox Maps Error: Mapbox download token is required.\\nSet RNMAPBOX_MAPS_DOWNLOAD_TOKEN environment variable:\\n  export RNMAPBOX_MAPS_DOWNLOAD_TOKEN="sk.ey...qg"\\n  npx expo prebuild\\n\\nOr use deprecated config:\\n  RNMapboxMapsDownloadToken in app.json plugin config')
+        }()
       }
     }
   }

@@ -211,6 +211,11 @@ end
 
 ## RNMapboxMapsDownloadToken
 # expo does not support `.netrc`, so we need to patch curl command used by cocoapods to pass the credentials
+# Supports both config variable and environment variable RNMAPBOX_MAPS_DOWNLOAD_TOKEN
+
+if !$RNMapboxMapsDownloadToken && ENV['RNMAPBOX_MAPS_DOWNLOAD_TOKEN']
+  $RNMapboxMapsDownloadToken = ENV['RNMAPBOX_MAPS_DOWNLOAD_TOKEN']
+end
 
 if $RNMapboxMapsDownloadToken
   module AddCredentialsToCurlWhenDownloadingMapbox
