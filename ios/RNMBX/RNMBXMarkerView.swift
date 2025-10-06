@@ -41,7 +41,17 @@ public class RNMBXMarkerView: UIView, RNMBXMapComponent {
   weak var _annotationView: RNMBXMarkerViewParentViewAnnotation?
   
   var didAddToMap = false
-  
+    
+    public override var description: String {
+        return "debugLabel=\(debugLabel), id=\(id), coordinate=\(coordinate), anchor=\(anchor), map=\(map == nil ? "nil" : String(describing: ObjectIdentifier(map!)))"
+    }
+    
+    @objc public var debugLabel: String? {
+        didSet {
+            update()
+        }
+    }
+    
   @objc public var coordinate: Array<NSNumber>? {
     didSet {
       update()
@@ -97,11 +107,13 @@ public class RNMBXMarkerView: UIView, RNMBXMapComponent {
   // MARK: - RNMBXMapComponent methods
 
   public func addToMap(_ map: RNMBXMapView, style: Style) {
+      print("[rnmapbox] [RNMBXMarkerView] add to map: \(self.description)")
     self.map = map
     add()
   }
 
   public func removeFromMap(_ map: RNMBXMapView, reason: RemovalReason) -> Bool {
+      print("[rnmapbox] [RNMBXMarkerView] remove from map: \(self.description)")
     remove()
     return true
   }
@@ -166,6 +178,7 @@ public class RNMBXMarkerView: UIView, RNMBXMapComponent {
   
   /// Because the necessary data to add an annotation arrives from different sources at unpredictable times, we let the arrival of each value trigger an attempt to add the annotation, which we only do if all of the data exists, and the annotation not been added already.
   private func add() {
+      print("[rnmapbox] [RNMBXMarkerView] add \(self.description)")
     self.map?.withMapView { _mapView in
       let annotationManager = self.getAnnotationManager(_mapView: _mapView)
     
@@ -188,6 +201,7 @@ public class RNMBXMarkerView: UIView, RNMBXMapComponent {
   }
 
   private func update() {
+      print("[rnmapbox] [RNMBXMarkerView] update \(self.description)")
     self.map?.withMapView { _mapView in
       let annotationManager = self.getAnnotationManager(_mapView: _mapView)
     
@@ -205,6 +219,7 @@ public class RNMBXMarkerView: UIView, RNMBXMapComponent {
   }
   
   private func remove() {
+      print("[rnmapbox] [RNMBXMarkerView] remove \(self.description)")
     self.map?.withMapView { _mapView in
       let annotationManager = self.getAnnotationManager(_mapView: _mapView)
       annotationManager.remove(self.annotationView)

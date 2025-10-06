@@ -12,6 +12,9 @@ import PointAnnotation from './PointAnnotation';
 const Mapbox = NativeModules.RNMBXModule;
 
 type Props = ViewProps & {
+
+  debugLabel: string;
+
   /**
    * The center point (specified as a map coordinate) of the marker.
    */
@@ -116,6 +119,7 @@ class MarkerView extends React.PureComponent<Props> {
           },
           this.props.style,
         ]}
+        debugLabel={this.props.debugLabel}
         coordinate={[
           Number(this.props.coordinate[0]),
           Number(this.props.coordinate[1]),

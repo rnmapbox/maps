@@ -12,6 +12,7 @@ type Point = {
 };
 
 export interface NativeProps extends ViewProps {
+  debugLabel: UnsafeMixed<string>;
   coordinate?: UnsafeMixed<Position>;
   anchor: UnsafeMixed<Point>;
   allowOverlap: UnsafeMixed<boolean>;
