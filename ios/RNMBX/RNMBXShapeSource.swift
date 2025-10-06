@@ -26,9 +26,15 @@ public class RNMBXShapeSource : RNMBXSource {
       }
     }
   }
+    
+    public override var description: String {
+        return "debugLabel=\(debugLabel), id=\(id), url=\(url), shape=\(shape)"
+    }
 
   var shapeAnimator: ShapeAnimator? = nil
   var shapeObject: GeoJSONObject? = nil
+    
+    @objc public var debugLabel: String?
 
   @objc public var shape : String? {
     didSet {
@@ -62,10 +68,12 @@ public class RNMBXShapeSource : RNMBXSource {
   }
   
   public override func addToMap(_ map: RNMBXMapView, style: Style) {
+      print("[rnmapbox] [RNMBXShapeSource] addToMap \(self.description)")
     super.addToMap(map, style: style)
   }
   
   public override func removeFromMap(_ map: RNMBXMapView, reason: RemovalReason) -> Bool {
+      print("[rnmapbox] [RNMBXShapeSource] removeFrom \(self.description)")
     if (reason == .ViewRemoval) {
       shapeAnimator?.unsubscribe(consumer: self)
     }
@@ -173,6 +181,7 @@ public class RNMBXShapeSource : RNMBXSource {
   }
 
   func updateSource(property: String, value: Any) {
+      print("[rnmapbox] [RNMBXShapeSource] updateSource \(self.description)")
     self.map?.withMapboxMap { [weak self] _mapboxMap in
       guard let self = self else { return }
       self.doUpdate(_mapboxMap: _mapboxMap) { style in

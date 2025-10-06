@@ -46,11 +46,7 @@ public class RNMBXMarkerView: UIView, RNMBXMapComponent {
         return "debugLabel=\(debugLabel), id=\(id), coordinate=\(coordinate), anchor=\(anchor), map=\(map == nil ? "nil" : String(describing: ObjectIdentifier(map!)))"
     }
     
-    @objc public var debugLabel: String? {
-        didSet {
-            update()
-        }
-    }
+    @objc public var debugLabel: String?
     
   @objc public var coordinate: Array<NSNumber>? {
     didSet {
@@ -107,13 +103,11 @@ public class RNMBXMarkerView: UIView, RNMBXMapComponent {
   // MARK: - RNMBXMapComponent methods
 
   public func addToMap(_ map: RNMBXMapView, style: Style) {
-      print("[rnmapbox] [RNMBXMarkerView] add to map: \(self.description)")
     self.map = map
     add()
   }
 
   public func removeFromMap(_ map: RNMBXMapView, reason: RemovalReason) -> Bool {
-      print("[rnmapbox] [RNMBXMarkerView] remove from map: \(self.description)")
     remove()
     return true
   }

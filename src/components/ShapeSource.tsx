@@ -32,6 +32,8 @@ export type Props = {
    */
   id: string;
 
+  debugLabel: string;
+
   /**
    * The id refers to en existing source in the style. Does not create a new source.
    */

@@ -123,3 +123,10 @@ export const __experimental = {
   MovePointShapeAnimator,
   ChangeLineOffsetsShapeAnimator,
 };
+
+const LineJoin = {
+  Bevel: 'bevel' as const,
+  Round: 'round' as const,
+  Miter: 'miter' as const,
+}
+export {LineJoin};

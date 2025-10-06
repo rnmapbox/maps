@@ -1,1 +1,4 @@
-// Placeholder file to fix Expo not resolving config plugin
+export * from './src/Mapbox';
+import * as Mapbox from './src/Mapbox';
+
+export default Mapbox;
