@@ -12,11 +12,11 @@ class RNMBXMarkerViewParentViewAnnotation : UIView {
   required init?(coder: NSCoder) {
     fatalError("not implented")
   }
-
+  
   func remove(marker: RNMBXMarkerView) {
     marker.removeFromSuperview()
   }
-
+  
   func updateSize(_ size: CGSize, oldOffset: CGVector, newOffset: CGVector) {
     let actSize = self.frame.size
     if actSize.width != size.width || actSize.height != size.height {
@@ -41,13 +41,13 @@ public class RNMBXMarkerView: UIView, RNMBXMapComponent {
   weak var _annotationView: RNMBXMarkerViewParentViewAnnotation?
   
   var didAddToMap = false
-    
-    public override var description: String {
-        return "debugLabel=\(debugLabel), id=\(id), coordinate=\(coordinate), anchor=\(anchor), map=\(map == nil ? "nil" : String(describing: ObjectIdentifier(map!)))"
-    }
-    
-    @objc public var debugLabel: String?
-    
+  
+  public override var description: String {
+    return "debugLabel=\(debugLabel), id=\(id), coordinate=\(coordinate), anchor=\(anchor), map=\(map == nil ? "nil" : String(describing: ObjectIdentifier(map!)))"
+  }
+  
+  @objc public var debugLabel: String?
+  
   @objc public var coordinate: Array<NSNumber>? {
     didSet {
       update()
@@ -77,36 +77,36 @@ public class RNMBXMarkerView: UIView, RNMBXMapComponent {
       update()
     }
   }
-
+  
   // MARK: - Derived variables
   
   func getAnnotationManager(_mapView: MapView) -> ViewAnnotationManager {
     _mapView.viewAnnotations
   }
-
+  
   var point: Point? {
     guard let _lat = coordinate?[1] else {
-        Logger.log(level: .error, message: "[getPoint] No latitude were set")
-        return nil
+      Logger.log(level: .error, message: "[getPoint] No latitude were set")
+      return nil
     }
     guard let _lon = coordinate?[0] else {
-        Logger.log(level: .error, message: "[getPoint] No Longitude were set")
-        return nil
+      Logger.log(level: .error, message: "[getPoint] No Longitude were set")
+      return nil
     }
     
     let coord = CLLocationCoordinate2D(
-        latitude: Double(_lat) as CLLocationDegrees, longitude: Double(_lon) as CLLocationDegrees);
-     
+      latitude: Double(_lat) as CLLocationDegrees, longitude: Double(_lon) as CLLocationDegrees);
+    
     return Point(coord)
   }
-
+  
   // MARK: - RNMBXMapComponent methods
-
+  
   public func addToMap(_ map: RNMBXMapView, style: Style) {
     self.map = map
     add()
   }
-
+  
   public func removeFromMap(_ map: RNMBXMapView, reason: RemovalReason) -> Bool {
     remove()
     return true
@@ -114,7 +114,7 @@ public class RNMBXMarkerView: UIView, RNMBXMapComponent {
   
   // MARK: - React methods
   
-    public override var isHidden: Bool {
+  public override var isHidden: Bool {
     get {
       return super.isHidden
     }
@@ -123,7 +123,7 @@ public class RNMBXMarkerView: UIView, RNMBXMapComponent {
     }
   }
   
-    public override func reactSetFrame(_ frame: CGRect) {
+  public override func reactSetFrame(_ frame: CGRect) {
     let prev = self.frame
     var next = frame
     
@@ -136,54 +136,54 @@ public class RNMBXMarkerView: UIView, RNMBXMapComponent {
         height: next.height
       )
     }
-
+    
     super.reactSetFrame(next)
     if frameDidChange {
-        updateAnnotationViewSize(next, prev)
+      updateAnnotationViewSize(next, prev)
     }
     addOrUpdate()
   }
-    
-    public override func insertReactSubview(_ subview: UIView, at atIndex: Int) {
-      super.insertReactSubview(subview, at: atIndex)
-    }
-    
-    public override func removeReactSubview(_ subview: UIView) {
-      super.removeReactSubview(subview)
-    }
-
+  
+  public override func insertReactSubview(_ subview: UIView, at atIndex: Int) {
+    super.insertReactSubview(subview, at: atIndex)
+  }
+  
+  public override func removeReactSubview(_ subview: UIView) {
+    super.removeReactSubview(subview)
+  }
+  
   @objc public func updateAnnotationViewSize(_ next: CGRect, _ prev: CGRect) {
     annotationView.updateSize(next.size, oldOffset:calcOffset(size: prev.size), newOffset: calcOffset(size: next.size))
   }
-
+  
   public func waitForStyleLoad() -> Bool {
     true
   }
-
+  
   // MARK: - Create, update, and remove methods
-
-   @objc public func addOrUpdate() {
-      if didAddToMap {
-        update()
-      } else {
-        add()
-      }
+  
+  @objc public func addOrUpdate() {
+    if didAddToMap {
+      update()
+    } else {
+      add()
     }
+  }
   
   /// Because the necessary data to add an annotation arrives from different sources at unpredictable times, we let the arrival of each value trigger an attempt to add the annotation, which we only do if all of the data exists, and the annotation not been added already.
   private func add() {
-      print("[rnmapbox] [RNMBXMarkerView] add \(self.description)")
+    print("[rnmapbox] [RNMBXMarkerView] add \(self.description)")
     self.map?.withMapView { _mapView in
       let annotationManager = self.getAnnotationManager(_mapView: _mapView)
-    
+      
       if self.didAddToMap {
         return
       }
-
+      
       guard let _ = self.point else {
         return
       }
-
+      
       do {
         let options = self.getOptions()
         try annotationManager.add(self.annotationView, id: self.id, options: options)
@@ -193,16 +193,16 @@ public class RNMBXMarkerView: UIView, RNMBXMapComponent {
       }
     }
   }
-
+  
   private func update() {
-      print("[rnmapbox] [RNMBXMarkerView] update \(self.description)")
+    print("[rnmapbox] [RNMBXMarkerView] update \(self.description)")
     self.map?.withMapView { _mapView in
       let annotationManager = self.getAnnotationManager(_mapView: _mapView)
-    
+      
       if !self.didAddToMap {
         return
       }
-    
+      
       do {
         let options = self.getOptions()
         try annotationManager.update(self.annotationView, options: options)
@@ -213,7 +213,7 @@ public class RNMBXMarkerView: UIView, RNMBXMapComponent {
   }
   
   private func remove() {
-      print("[rnmapbox] [RNMBXMarkerView] remove \(self.description)")
+    print("[rnmapbox] [RNMBXMarkerView] remove \(self.description)")
     self.map?.withMapView { _mapView in
       let annotationManager = self.getAnnotationManager(_mapView: _mapView)
       annotationManager.remove(self.annotationView)
@@ -233,7 +233,7 @@ public class RNMBXMarkerView: UIView, RNMBXMapComponent {
     
     let size = self.bounds.size
     let offset = calcOffset(size: size)
-  
+    
     var options = ViewAnnotationOptions(
       geometry: geometry,
       width: size.width,
@@ -243,10 +243,10 @@ public class RNMBXMarkerView: UIView, RNMBXMapComponent {
       offsetY: offset.dy,
       selected: isSelected
     )
-    #if RNMBX_11
+#if RNMBX_11
     options.allowOverlapWithPuck = allowOverlapWithPuck
     options.ignoreCameraPadding = true
-    #endif
+#endif
     return options
   }
   
@@ -254,10 +254,10 @@ public class RNMBXMarkerView: UIView, RNMBXMapComponent {
     guard let anchor = anchor, let anchorX = anchor["x"]?.CGFloat, let anchorY = anchor["y"]?.CGFloat else {
       return .zero
     }
-          
+    
     let x = (anchorX * 2 - 1) * (size.width / 2) * -1
     let y = (anchorY * 2 - 1) * (size.height / 2)
-
+    
     return CGVector(dx: x, dy: y)
   }
   
@@ -269,8 +269,8 @@ public class RNMBXMarkerView: UIView, RNMBXMapComponent {
     _annotationView = result
     return result
   }
-
-    @objc public override func didMoveToSuperview() {
+  
+  @objc public override func didMoveToSuperview() {
     // React tends to add back us to our original superview,
     // https://github.com/facebook/react-native/blob/11ece22fc6955d169def9ef9f2809c24bc457ba8/React/Views/UIView%2BReact.m#L172-L177
     // fix that if we see that

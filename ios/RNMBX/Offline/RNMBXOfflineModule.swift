@@ -18,7 +18,7 @@ class RNMBXOfflineModule: RCTEventEmitter {
   var hasListeners = false
   
   static let RNMapboxInfoMetadataKey = "_rnmapbox"
-
+  
   enum Callbacks : String {
     case error = "MapboOfflineRegionError"
     case progress = "MapboxOfflineRegionProgress"
@@ -33,21 +33,21 @@ class RNMBXOfflineModule: RCTEventEmitter {
   }
   
   lazy var offlineManager : OfflineManager = {
-    #if RNMBX_11
+#if RNMBX_11
     return OfflineManager()
-    #else
+#else
     return OfflineManager(resourceOptions: .init(accessToken: RNMBXModule.accessToken!))
-    #endif
+#endif
   }()
   
   lazy var offlineRegionManager: OfflineRegionManager = {
-    #if RNMBX_11
+#if RNMBX_11
     return OfflineRegionManager()
-    #else
+#else
     return OfflineRegionManager(resourceOptions: .init(accessToken: RNMBXModule.accessToken!))
-    #endif
+#endif
   }()
-
+  
   lazy var tileStore : TileStore = {
     return TileStore.default
   }()
@@ -58,7 +58,7 @@ class RNMBXOfflineModule: RCTEventEmitter {
       self.progress = progress
       self.metadata = metadata
       self.state = state
-
+      
       if let rnMetadata = metadata[RNMapboxInfoMetadataKey] as? [String:Any] {
         if let styleURI = rnMetadata["styleURI"] as? String {
           self.styleURI = StyleURI(rawValue: styleURI)
@@ -101,13 +101,13 @@ class RNMBXOfflineModule: RCTEventEmitter {
       ]
       self.metadata = metadata
     }
-
+    
     var name: String
     var cancelable: Cancelable? = nil
     var progress : TileRegionLoadProgress? = nil
     var state : State = .inactive
     var metadata : [String:Any]
-
+    
     // Stored in metadata for resume functionality:
     var bounds: Geometry? = nil
     var zoomRange: ClosedRange<UInt8>? = nil
@@ -149,7 +149,7 @@ class RNMBXOfflineModule: RCTEventEmitter {
   public func constantsToExport() -> [AnyHashable: Any]! {
     return [:]
   }
-
+  
   @objc
   override
   public func supportedEvents() -> [String] {
@@ -295,7 +295,7 @@ class RNMBXOfflineModule: RCTEventEmitter {
       reject("migrateOfflineCache", error.localizedDescription, error)
     }
   }
-
+  
   @objc
   func resetDatabase(_ resolve: @escaping RCTPromiseResolveBlock, rejecter: @escaping RCTPromiseRejectBlock) {
     self.tileStore.allTileRegions { result in
@@ -358,20 +358,20 @@ class RNMBXOfflineModule: RCTEventEmitter {
     
     let stylePackLoadOptions = StylePackLoadOptions(glyphsRasterizationMode: .ideographsRasterizedLocally, metadata: pack.metadata)
     
-    #if RNMBX_11
+#if RNMBX_11
     let descriptorOptions = TilesetDescriptorOptions(
       styleURI: styleURI,
       zoomRange: zoomRange,
       tilesets: [], // RNMBX_11_TODO
       stylePackOptions: stylePackLoadOptions
     )
-    #else
+#else
     let descriptorOptions = TilesetDescriptorOptions(
       styleURI: styleURI,
       zoomRange: zoomRange,
       stylePackOptions: stylePackLoadOptions
     )
-    #endif
+#endif
     let tilesetDescriptor = self.offlineManager.createTilesetDescriptor(for: descriptorOptions)
     
     let loadOptions = TileRegionLoadOptions(
@@ -491,7 +491,7 @@ class RNMBXOfflineModule: RCTEventEmitter {
       ]
       
       let completed = (region.completedResourceCount == region.requiredResourceCount)
-
+      
       var metadata : [String:Any] = metadata ?? [:]
       metadata["name"] = region.id
       
@@ -503,7 +503,7 @@ class RNMBXOfflineModule: RCTEventEmitter {
         "metadata": String(data:try! JSONSerialization.data(withJSONObject: metadata, options: [.prettyPrinted]), encoding: .utf8),
         "bounds": jsonBounds
       ]
-
+      
       if region.requiredResourceCount > 0 {
         result["percentage"] = region.toPercentage()
       } else {
@@ -512,12 +512,12 @@ class RNMBXOfflineModule: RCTEventEmitter {
       if let expires = region.expires {
         result["expires"] = expires.toJSONString()
       }
-
+      
       return result
     }
     return [:]
   }
-    
+  
   func toProgress(region: TileRegion) -> TileRegionLoadProgress? {
     return TileRegionLoadProgress(completedResourceCount: region.completedResourceCount, completedResourceSize: region.completedResourceSize, erroredResourceCount: 0, requiredResourceCount: region.requiredResourceCount, loadedResourceCount: 0, loadedResourceSize: 0)
   }
@@ -554,7 +554,7 @@ class RNMBXOfflineModule: RCTEventEmitter {
     }
     self.sendEvent(withName: name, body: event.toJSON())
   }
-
+  
   func _makeRegionStatusPayload(_ name:String, progress: TileRegionLoadProgress?, state: State, metadata:[String:Any]?) -> [String:Any?] {
     var result : [String:Any?] = [:]
     if let progress = progress {
@@ -610,7 +610,7 @@ extension RNMBXOfflineModule {
     progressEventThrottle.waitBetweenEvents = throttleValue.doubleValue
   }
   
-
+  
   func shouldSendProgressEvent(progress: TileRegionLoadProgress, state: State) -> Bool
   {
     let currentTimestamp: Double = CACurrentMediaTime() * 1000.0
@@ -631,7 +631,7 @@ extension RNMBXOfflineModule {
       progressEventThrottle.lastSentTimestamp = currentTimestamp
       return true;
     }
-     
+    
     return false;
   }
 }

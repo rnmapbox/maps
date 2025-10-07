@@ -42,6 +42,7 @@ extension RNMBXMapViewManager {
     }
 
   @objc public static func takeSnap(
+    
     _ view: RNMBXMapView,
     writeToDisk: Bool,
     resolver: @escaping RCTPromiseResolveBlock
