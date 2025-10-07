@@ -35,6 +35,12 @@ import MapboxMaps
 // MARK: - react methods
 
 extension RNMBXMapViewManager {
+    @objc public static func dumpState(_ view: RNMBXMapView,
+                         resolver: @escaping RCTPromiseResolveBlock) {
+        let encodedState = view.dumpState()
+        resolver(["encodedState": encodedState])
+    }
+
   @objc public static func takeSnap(
     _ view: RNMBXMapView,
     writeToDisk: Bool,

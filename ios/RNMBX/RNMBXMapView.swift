@@ -1502,6 +1502,22 @@ extension RNMBXMapView: GestureManagerDelegate {
 
 extension RNMBXMapView
 {
+    @objc public func dumpState() -> String {
+        let featuresDesc = self.features.map { [
+            "addedToMap": $0.addedToMap,
+            "feature": $0.feature.description
+        ]}
+        let sourcesDesc = self.sources.map {[
+            "id": $0.id,
+            "map": $0.map == self
+        ]}
+        let stateDict = ["featuresDesc": featuresDesc, "sourcesDesc": sourcesDesc]
+        if let jsonData = try? JSONSerialization.data(withJSONObject: stateDict, options: []), let jsonString = String(data: jsonData, encoding: .utf8) {
+            return jsonString
+        }
+        return "Failed to encode RNMBXMapView state"
+    }
+    
   @objc public func takeSnap(
     writeToDisk:Bool) -> URL
   {

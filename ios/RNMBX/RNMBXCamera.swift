@@ -15,7 +15,7 @@ public enum RemovalReason {
     case ViewRemoval, StyleChange, OnDestroy, ComponentChange, Reorder
 }
 
-public protocol RNMBXMapComponent: AnyObject {
+public protocol RNMBXMapComponent: AnyObject, CustomStringConvertible {
   func addToMap(_ map: RNMBXMapView, style: Style)
   func removeFromMap(_ map: RNMBXMapView, reason: RemovalReason) -> Bool
   

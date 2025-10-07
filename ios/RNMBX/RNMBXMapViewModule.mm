@@ -46,6 +46,11 @@ RCT_EXPORT_MODULE();
     }];
 }
 
+RCT_EXPORT_METHOD(dumpState:(nonnull NSNumber*)viewRef resolve:(RCTPromiseResolveBlock)resolve reject:(RCTPromiseRejectBlock)reject) {
+    [self withMapView:viewRef block:^(RNMBXMapView *view) {
+        [RNMBXMapViewManager dumpState:view resolver:resolve];
+    } reject:reject methodName:@"dumpState"];
+}
 
 RCT_EXPORT_METHOD(takeSnap:(nonnull NSNumber*)viewRef writeToDisk:(BOOL)writeToDisk resolve:(RCTPromiseResolveBlock)resolve reject:(RCTPromiseRejectBlock)reject)
 {

@@ -838,6 +838,11 @@ class MapView extends NativeBridgeComponent(
     );
   }
 
+  async dumpState(): Promise<string> {
+    const res = await this._runNative<{ encodedState: string }>('dumpState');
+    return res.encodedState;
+  }
+
   /**
    * Takes snapshot of map with current tiles and returns a URI to the image
    * @param  {Boolean} writeToDisk If true will create a temp file, otherwise it is in base64
