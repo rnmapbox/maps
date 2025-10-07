@@ -13,6 +13,7 @@ jobs:
         id: nvm
       - name: Create dummy accesstoken file
         run: echo 'dummytoken' > ./accesstoken
+        working-directory: example
       - name: Setup node ${{ steps.nvm.outputs.NVMRC }}
         uses: actions/setup-node@v4
         with:
