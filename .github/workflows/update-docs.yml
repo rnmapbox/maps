@@ -35,6 +35,8 @@ jobs:
       - uses: oven-sh/setup-bun@v1
         with:
           bun-version: latest
+      - name: Create dummy accesstoken file
+        run: echo 'dummytoken' > ./accesstoken
       - name: Install dependencies
         run: yarn install
       - name: Generate component docs into maps-docs repo

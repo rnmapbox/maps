@@ -11,13 +11,15 @@ jobs:
       - name: Read .nvmrc
         run: echo "NVMRC=$(cat .nvmrc)" >> $GITHUB_OUTPUT
         id: nvm
+      - name: Create dummy accesstoken file
+        run: echo 'dummytoken' > ./accesstoken
       - name: Setup node ${{ steps.nvm.outputs.NVMRC }}
         uses: actions/setup-node@v4
         with:
           node-version: ${{ steps.nvm.outputs.NVMRC }}
           registry-url: 'https://registry.npmjs.org'
       - name: Install dependencies and build 🔧
-        run: yarn install --frozen-lockfile
+        run: yarn install --immutable
       - name: Publish package on NPM 📦
         run: npm publish ${{ github.event.release.prerelease && '--tag next' || ''}}
         env:
