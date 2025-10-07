@@ -37,7 +37,7 @@ jobs:
           bun-version: latest
       - name: Create dummy accesstoken file
         run: echo 'dummytoken' > ./accesstoken
-        working-directory: example
+        working-directory: maps/example
       - name: Install dependencies
         run: yarn install
       - name: Generate component docs into maps-docs repo
