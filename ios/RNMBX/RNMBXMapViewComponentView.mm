@@ -224,6 +224,7 @@ using namespace facebook::react;
 - (void)prepareForRecycle
 {
     [super prepareForRecycle];
+    _lastStyleURL = nil;
     [self prepareView];
 }
 
