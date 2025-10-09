@@ -213,6 +213,8 @@ func symbolLayer(layer: inout SymbolLayer, reactStyle:Dictionary<String, Any>, o
       self.setSymbolAvoidEdges(&layer, styleValue:styleValue);
     } else if (prop == "symbolSortKey") {
       self.setSymbolSortKey(&layer, styleValue:styleValue);
+    } else if (prop == "symbolZOffset") {
+      self.setSymbolZOffset(&layer, styleValue:styleValue);
     } else if (prop == "symbolZOrder") {
       self.setSymbolZOrder(&layer, styleValue:styleValue);
     } else if (prop == "iconAllowOverlap") {
@@ -1479,6 +1481,15 @@ func setSymbolSortKey(_ layer: inout SymbolLayer, styleValue: RNMBXStyleValue)
       
         
           layer.symbolSortKey = styleValue.mglStyleValueNumber();
+        
+      
+}
+
+func setSymbolZOffset(_ layer: inout SymbolLayer, styleValue: RNMBXStyleValue)
+{
+      
+        
+          layer.symbolZOffset = styleValue.mglStyleValueNumber();
         
       
 }
