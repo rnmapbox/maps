@@ -44,7 +44,7 @@
             "offlineManager#getPack",
             "offlineManager#getPacks"
           ],
-          "docs": "\nDemonstates basic use of offlineManager api.\n"
+          "docs": "\nDemonstrates basic use of offlineManager api.\n"
         },
         "fullPath": "example/src/examples/CacheOffline/OfflineExample.tsx",
         "relPath": "CacheOffline/OfflineExample.tsx",
@@ -619,7 +619,7 @@
             "PointAnnotation",
             "MarkerView"
           ],
-          "docs": "\nShows marker view and point annotations\n"
+          "docs": "\nShows marker view and poitn annotations\n"
         },
         "fullPath": "example/src/examples/Annotations/MarkerView.tsx",
         "relPath": "Annotations/MarkerView.tsx",
