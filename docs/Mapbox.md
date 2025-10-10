@@ -43,6 +43,15 @@ gets the accessToken
 | `headerName` | `String` | `Yes` | name for customHeader |
 | `headerValue` | `String` | `Yes` | value for customHeader |
 
+### addCustomHeaderWithOptions(headerName, headerValue, options)
+
+#### arguments
+| Name | Type | Required | Description  |
+| ---- | :--: | :------: | :----------: |
+| `headerName` | `String` | `Yes` | name for customHeader |
+| `headerValue` | `String` | `Yes` | value for customHeader |
+| `options` | `{ urlRegexp }` | `No` | optional configurations for customHeader |
+
 #### Description
 also see [CustomHttpHeaders](/docs/CustomHttpHeaders.md)
 

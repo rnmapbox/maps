@@ -26,9 +26,16 @@ interface RNMBXModule {
   TileServers: {
     Mapbox: string;
   };
-
   removeCustomHeader(headerName: string): void;
-  addCustomHeader(headerName: string, headerValue: string): void;
+  addCustomHeader(
+    headerName: string,
+    headerValue: string
+  ): void;
+  addCustomHeaderWithOptions(
+    headerName: string,
+    headerValue: string,
+    options: { urlRegexp?: string },
+  ): void;
   setAccessToken(accessToken: string | null): Promise<string | null>;
   setWellKnownTileServer(tileServer: string): void;
   clearData(): Promise<void>;
@@ -59,6 +66,7 @@ export const {
   TileServers,
   removeCustomHeader,
   addCustomHeader,
+  addCustomHeaderWithOptions,
   setAccessToken,
   setWellKnownTileServer,
   clearData,
