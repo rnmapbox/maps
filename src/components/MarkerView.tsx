@@ -1,7 +1,7 @@
 import React from 'react';
 import { NativeModules, Platform, type ViewProps } from 'react-native';
 
-import RNMBXMakerViewContentCoponent from '../specs/RNMBXMarkerViewContentNativeComponent';
+import RNMBXMakerViewContentComponent from '../specs/RNMBXMarkerViewContentNativeComponent';
 import NativeMarkerViewComponent from '../specs/RNMBXMarkerViewNativeComponent';
 import { type Position } from '../types/Position';
 import { toJSONString } from '../utils';
@@ -128,7 +128,7 @@ class MarkerView extends React.PureComponent<Props> {
           e.stopPropagation();
         }}
       >
-        <RNMBXMakerViewContentCoponent
+        <RNMBXMakerViewContentComponent
           style={{ flex: 0, alignSelf: 'flex-start' }}
           onStartShouldSetResponder={(_event) => {
             return true;
@@ -138,7 +138,7 @@ class MarkerView extends React.PureComponent<Props> {
           }}
         >
           {this.props.children}
-        </RNMBXMakerViewContentCoponent>
+        </RNMBXMakerViewContentComponent>
       </RNMBXMarkerView>
     );
   }

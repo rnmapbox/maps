@@ -251,7 +251,7 @@ const metadata: ExampleWithMetadata['metadata'] = {
     'expressions',
   ],
   docs: `
-Renders earthqueke with clustering.
+Renders earthquake with clustering.
 
 Click a cluster to show list of contents in the cluster \`getClusterLeaves\`.
 `,

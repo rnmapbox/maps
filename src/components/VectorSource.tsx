@@ -19,7 +19,7 @@ interface Props {
   id: string;
 
   /**
-   * The id refers to en existing source in the style. Does not create a new source.
+   * The id refers to an existing source in the style. Does not create a new source.
    */
   existing?: boolean;
 

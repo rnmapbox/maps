@@ -225,7 +225,7 @@ const metadata = {
     'AnimatedExtractCoordinateFromArray',
   ],
   docs: `
-This is a fairly complex example demonstraing the use of AnimatedShape, Camera animation, queryTerrainElevation and AnimatedMarkerView
+This is a fairly complex example demonstrating the use of AnimatedShape, Camera animation, queryTerrainElevation and AnimatedMarkerView
 `,
 };
 QueryTerrainElevation.metadata = metadata;

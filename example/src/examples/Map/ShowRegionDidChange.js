@@ -163,7 +163,7 @@ const metadata = {
     'MapView#onRegionDidChange',
   ],
   docs: `
-Demonstates MapView region change events.
+Demonstrates MapView region change events.
 `,
 };
 ShowRegionDidChange.metadata = metadata;

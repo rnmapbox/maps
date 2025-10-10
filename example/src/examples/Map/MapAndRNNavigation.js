@@ -57,7 +57,7 @@ const metadata = {
   title: 'Map and React Navigation',
   tags: ['MapView'],
   docs: `
-Demonstrates various ways to embedd map via (Navigation, Page, modal, etc)
+Demonstrates various ways to embed map via (Navigation, Page, modal, etc)
 `,
 };
 MapAndNavigation.metadata = metadata;

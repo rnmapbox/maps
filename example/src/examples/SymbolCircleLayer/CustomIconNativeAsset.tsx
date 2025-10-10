@@ -92,7 +92,7 @@ const metadata: ExampleWithMetadata['metadata'] = {
     'SymbolLayer#iconImage',
   ],
   docs: `
-Renders a symbol layer with custom icon (native asset) defined using the Images component. Clicking a location on a map add a new icon.
+Renders a symbol layer with custom icon (native asset) defined using the Images component. Clicking a location on a map adds a new icon.
 `,
 };
 

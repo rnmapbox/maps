@@ -81,7 +81,7 @@ const metadata = {
   title: 'Terrain, Sky, & Atmosphere',
   tags: ['RasterDemSource', 'Terrain', 'Atmosphere', 'SkyLayer'],
   docs: `
-Demostrates use of Terran, Atmosphere and SkyLayer.
+Demostrates use of Terrain, Atmosphere and SkyLayer.
 `,
 };
 TerrainSkyAtmosphere.metadata = metadata;
