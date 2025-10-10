@@ -4,6 +4,7 @@ import {
   DirectEventHandler,
   Double,
   Int32,
+  // @ts-ignore - CI environment type resolution issue for CodegenTypes
 } from 'react-native/Libraries/Types/CodegenTypes';
 
 import type { NativeCameraStop, UnsafeMixed } from './codegenUtils';
@@ -41,6 +42,7 @@ export interface NativeProps extends ViewProps {
   onUserTrackingModeChange?: DirectEventHandler<UserTrackingModeChangeEventType>;
 }
 
+// @ts-ignore-error - Codegen requires single cast but TypeScript prefers double cast
 export default codegenNativeComponent<NativeProps>(
   'RNMBXCamera',
 ) as HostComponent<NativeProps>;

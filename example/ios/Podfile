@@ -9,8 +9,8 @@ platform :ios, '15.1'
 prepare_react_native_project!
 
 $RNMapboxMapsImpl = 'mapbox'
-if ENV['RNMBX11']
-  $RNMapboxMapsVersion = '= 11.13.4'
+if ENV['RNMBX10']
+  $RNMapboxMapsVersion = '10.19.0'
 end
 
 if ENV['CI_MAP_IMPL']
@@ -18,9 +18,10 @@ if ENV['CI_MAP_IMPL']
   case ENV['CI_MAP_IMPL']
   when 'mapbox'
     $RNMapboxMapsImpl = 'mapbox'
+    $RNMapboxMapsVersion = '10.19.0'
   when 'mapbox11'
     $RNMapboxMapsImpl = 'mapbox'
-    $RNMapboxMapsVersion = '= 11.13.4'
+    # Using default v11 version from main library
   else
     fail "Invalid CI_MAP_IMPL value: #{ENV['CI_MAP_IMPL']}"
   end
@@ -57,7 +58,7 @@ if INHIBIT_WARNING_BY_DEFAULT
   end
 end
 
-target 'RNMapboxGLExample' do
+target 'RNMapboxExample' do
   #pod 'rnmapbox-maps', :path => '../../', :inhibit_warnings => false
 
   config = use_native_modules!

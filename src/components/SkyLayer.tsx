@@ -65,8 +65,8 @@ class SkyLayer extends AbstractLayer<Props, NativeTypeProps> {
 
   render() {
     return (
+      // @ts-expect-error just codegen stuff
       <RNMBXSkyLayerNativeComponent
-        // @ts-expect-error just codegen stuff
         ref={this.setNativeLayer}
         {...this.baseProps}
       />

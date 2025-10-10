@@ -1,4 +1,3 @@
-import React from 'react';
 import { Camera, MapView } from '@rnmapbox/maps';
 
 const CENTER_COORD = [-74.00597, 40.71427];

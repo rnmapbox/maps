@@ -901,11 +901,13 @@ open class RNMBXMapView(private val mContext: Context, var mManager: RNMBXMapVie
 
     fun getPointInView(coordinate: Point, response: CommandResponse) {
         val point = mMap!!.pixelForCoordinate(coordinate)
+        val density = getDisplayDensity()
+        val pointInView = PointF((point.x / density).toFloat(), (point.y / density).toFloat())
 
         response.success {
             val array: WritableArray = WritableNativeArray()
-            array.pushDouble(point.x)
-            array.pushDouble(point.y)
+            array.pushDouble(pointInView.x.toDouble())
+            array.pushDouble(pointInView.y.toDouble())
             it.putArray("pointInView", array)
         }
     }

@@ -129,9 +129,17 @@ class RNMBXShapeSourceManager(private val mContext: ReactApplicationContext, val
                     )
                     ReadableType.Boolean -> Expression.literal(expressions.getBoolean(iExp))
                     ReadableType.Number -> Expression.literal(expressions.getDouble(iExp))
-                    else -> {
-                        Logger.d("setClusterProperties", "Unknown type for $iExp")
-                        return 
+                    ReadableType.String -> {
+                        val value = expressions.getString(iExp)
+                        if (value != null) {
+                            Expression.literal(value)
+                        } else {
+                            Logger.e("setClusterProperties", "String is null for $iExp")
+                            return
+                        }
+                    } else -> {
+                        Logger.e("setClusterProperties", "Unknown type for $iExp")
+                        return
                     }
                 }
                 builder.add(argument)

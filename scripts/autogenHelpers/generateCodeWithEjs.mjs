@@ -19,20 +19,26 @@ function readIosVersion() {
   const mapboxLine = lines.filter((i) => mapboxLineRegex.exec(i))[0];
 
   return {
-    v10: `${mapboxLineRegex.exec(mapboxLine)[1]}.0`,
-    v11: '11.0.0',
+    v10: '10.19.0',
+    v11: `${mapboxLineRegex.exec(mapboxLine)[1]}.0`,
   };
 }
 
 function readAndroidVersion() {
-  const buildGradlePath = path.join(__dirname, '..', '..', 'android', 'build.gradle');
+  const buildGradlePath = path.join(
+    __dirname,
+    '..',
+    '..',
+    'android',
+    'build.gradle',
+  );
   const lines = fs.readFileSync(buildGradlePath, 'utf8').split('\n');
   const mapboxV10LineRegex =
     /^\s*def\s+defaultMapboxMapsVersion\s+=\s+"(\d+\.\d+\.\d+)"$/;
   const mapboxV10Line = lines.filter((i) => mapboxV10LineRegex.exec(i))[0];
   return {
-    v10: mapboxV10LineRegex.exec(mapboxV10Line)[1],
-    v11: '11.0.0',
+    v10: '10.19.0',
+    v11: mapboxV10LineRegex.exec(mapboxV10Line)[1],
   };
 }
 
@@ -47,7 +53,6 @@ const androidVersion = readAndroidVersion();
 const iosVersion = readIosVersion();
 
 const TMPL_PATH = path.join(__dirname, '..', 'templates');
-
 
 const OUTPUT_PREFIX = ['..', '..'];
 
@@ -74,7 +79,6 @@ const ANDROID_V10_OUTPUT_PATH = path.join(
 
 const JS_OUTPUT_PATH = path.join(__dirname, ...OUTPUT_PREFIX, 'src', 'utils');
 
-
 /**
  * @param {string[]|undefined} only
  */
@@ -82,9 +86,13 @@ function getPropertiesFor(kind, only) {
   const attributes = styleSpecJSON[kind];
 
   const props = getSupportedProperties(attributes, only).map((attrName) => {
-    return Object.assign({}, buildProperties(attributes, attrName, null, kind), {
-      allowedFunctionTypes: [],
-    });
+    return Object.assign(
+      {},
+      buildProperties(attributes, attrName, null, kind),
+      {
+        allowedFunctionTypes: [],
+      },
+    );
   });
 
   return props;
@@ -104,7 +112,12 @@ function getPropertiesForLayer(layerName, only) {
 
   const paintProps = getSupportedProperties(paintAttributes, only).map(
     (attrName) => {
-      const prop = buildProperties(paintAttributes, attrName, 'paint', layerName);
+      const prop = buildProperties(
+        paintAttributes,
+        attrName,
+        'paint',
+        layerName,
+      );
 
       // overrides
       if (['line-width'].includes(attrName)) {
@@ -120,7 +133,12 @@ function getPropertiesForLayer(layerName, only) {
    */
   const layoutProps = getSupportedProperties(layoutAttributes, only).map(
     (attrName) => {
-      const prop = buildProperties(layoutAttributes, attrName, 'layout', layerName);
+      const prop = buildProperties(
+        layoutAttributes,
+        attrName,
+        'layout',
+        layerName,
+      );
 
       // overrides
       if (
@@ -169,7 +187,7 @@ function getSupportedLayers(layerNames) {
 }
 
 /**
- * @param {string[]|null} only 
+ * @param {string[]|null} only
  */
 function getSupportedProperties(attributes, only) {
   return Object.keys(attributes).filter((attrName) =>
@@ -178,12 +196,12 @@ function getSupportedProperties(attributes, only) {
 }
 
 /**
- * 
- * @param {*} attributes 
- * @param {string} attrName 
- * @param {'paint' | 'layout' | null} type 
+ *
+ * @param {*} attributes
+ * @param {string} attrName
+ * @param {'paint' | 'layout' | null} type
  * @param {string} layerName
- * @returns 
+ * @returns
  */
 function buildProperties(attributes, attrName, type, layerName) {
   return {
@@ -211,7 +229,10 @@ function buildProperties(attributes, attrName, type, layerName) {
     expression: attributes[attrName].expression,
     expressionSupported:
       Object.keys(attributes[attrName].expression || {}).length > 0,
-    support: _fixPropSupport(getAttributeSupport(attributes[attrName]['sdk-support']), attrName),
+    support: _fixPropSupport(
+      getAttributeSupport(attributes[attrName]['sdk-support']),
+      attrName,
+    ),
     allowedFunctionTypes: getAllowedFunctionTypes(attributes[attrName]),
   };
 }
@@ -220,6 +241,8 @@ function _fixPropSupport(support, attrName) {
   /* fill-extrusion-rounded-roof is not supported on v10 */
   if (attrName === 'fill-extrusion-rounded-roof') {
     support.basic.v10.android = false;
+    support.basic.v10.ios = false;
+  } else if (attrName === 'fill-extrusion-edge-radius') {
     support.basic.v10.ios = false;
   } else if (['model-id', 'model-scale', 'model-rotation'].includes(attrName)) {
     support.basic.v10.android = true;
@@ -236,9 +259,8 @@ function formatDescription(description) {
     const docMatch = word.match(/^(.+)\]\((.+)\)(.*)$/);
     if (docMatch) {
       if (docMatch[2].startsWith('/')) {
-        words[
-          i
-        ] = `${docMatch[1]}](https://docs.mapbox.com${docMatch[2]})${docMatch[3]}`;
+        words[i] =
+          `${docMatch[1]}](https://docs.mapbox.com${docMatch[2]})${docMatch[3]}`;
       }
     } else {
       if (word.includes('-')) {
@@ -296,22 +318,32 @@ function isTranslate(attrName) {
 }
 
 const UnsupportedProperties = [
-  'hillshade-emissive-strength' // should be supported in v11 according to specs but it's not on ios 11.0.0.rc2
-]
+  'hillshade-emissive-strength', // should be supported in v11 according to specs but it's not on ios 11.0.0.rc2
+
+  'icon-color-contrast', // should be supported in v11 11.15.2 but it's not on android
+
+  'icon-color-brightness-min', // should be supported in v11 11.15.0 but it's not on android
+  'icon-color-brightness-max', // should be supported in v11 11.15.0 but it's not on android
+
+  'fill-extrusion-cast-shadows', // should be supported in v11 11.8.0 but it's not on android
+];
 
 /**
- * @param {string[]|undefined} only 
+ *
+ * @param {string[]|undefined} only
  */
 function isAttrSupported(name, attr, only) {
   if (UnsupportedProperties.includes(name)) {
-    return false
+    return false;
   }
   const support = getAttributeSupport(attr['sdk-support']);
   if (attr.private === true) {
     return false;
   }
   if (only != null) {
-    return only.find(o => (support.basic[o].android && support.basic[o].ios)) != null;
+    return (
+      only.find((o) => support.basic[o].android && support.basic[o].ios) != null
+    );
   }
   return support.basic.v10.android && support.basic.v10.ios;
 }
@@ -320,11 +352,11 @@ function getAttributeSupport(sdkSupport) {
   const support = {
     basic: {
       v10: { android: false, ios: false },
-      v11: { android: false, ios: false }
+      v11: { android: false, ios: false },
     },
     data: {
       v10: { android: false, ios: false },
-      v11: { android: false, ios: false }
+      v11: { android: false, ios: false },
     },
   };
 
@@ -337,7 +369,7 @@ function getAttributeSupport(sdkSupport) {
     support.basic.v11.android = isVersionGTE(
       androidVersion.v11,
       basicSupport.android,
-    )
+    );
   }
   if (basicSupport && basicSupport.ios) {
     support.basic.v10.ios = isVersionGTE(iosVersion.v10, basicSupport.ios);
@@ -416,27 +448,29 @@ export function getLayers() {
       });
     },
   );
-  
+
   // add light as a layer
   layers.push({
     name: 'light',
     properties: getPropertiesFor('light'),
     props: {
-      v10: getPropertiesFor('light', ['v10','v11']),
+      v10: getPropertiesFor('light', ['v10', 'v11']),
     },
     support: { v10: true },
   });
-  
+
   // add atmosphere as a layer
   layers.push({
     name: 'atmosphere',
     properties: getPropertiesFor('fog'),
     props: {
-      v10: removeTransitionsOnV10Before1070(getPropertiesFor('fog', ['v10','v11'])),
+      v10: removeTransitionsOnV10Before1070(
+        getPropertiesFor('fog', ['v10', 'v11']),
+      ),
     },
     support: { v10: true },
   });
-  
+
   // add terrain as a layer
   layers.push({
     name: 'terrain',
@@ -452,7 +486,7 @@ export function getLayers() {
   return layers;
 }
 
-export default function generateCodeWithEjs(layers) {
+export default async function generateCodeWithEjs(layers) {
   const templateMappings = [
     /*{
       input: path.join(TMPL_PATH, 'index.d.ts.ejs'),
@@ -482,7 +516,7 @@ export default function generateCodeWithEjs(layers) {
   const outputPaths = templateMappings.map((m) => m.output);
 
   // autogenerate code
-  templateMappings.forEach(({ input, output, only }) => {
+  for (const { input, output, only } of templateMappings) {
     const filename = output.split('/').pop();
     console.log(`Generating ${filename}`);
     const tmpl = ejs.compile(fs.readFileSync(input, 'utf8'), { strict: true });
@@ -501,13 +535,17 @@ export default function generateCodeWithEjs(layers) {
       return result;
     }
     /**
-     * @param {string[]} only 
+     * @param {string[]} only
      */
+    // eslint-disable-next-line no-shadow
     function filterOnly(layers, only) {
       if (only != null) {
         let result = layers
           .filter((e) => only.find((v) => e.support[v]))
-          .map((e) => ({ ...e, properties: concatuniq(only.map(o => e.props[o] || [])) }));
+          .map((e) => ({
+            ...e,
+            properties: concatuniq(only.map((o) => e.props[o] || [])),
+          }));
         return result;
       } else {
         return layers;
@@ -516,12 +554,12 @@ export default function generateCodeWithEjs(layers) {
 
     let results = tmpl({ layers: filterOnly(layers, only) });
     if (filename.endsWith('ts')) {
-      results = prettier.format(results, {
+      results = await prettier.format(results, {
         ...prettierrc,
         filepath: filename,
       });
     }
     fs.writeFileSync(output, results);
-  });
+  }
   return outputPaths;
 }

@@ -1,4 +1,4 @@
-import { NodeHandle, findNodeHandle } from 'react-native';
+import { findNodeHandle } from 'react-native';
 
 export type NativeArg =
   | string
@@ -7,13 +7,11 @@ export type NativeArg =
   | null
   | { [k: string]: NativeArg }
   | NativeArg[]
-  // eslint-disable-next-line @typescript-eslint/ban-types
   | Function
   | GeoJSON.Geometry
   | undefined;
 
 type FunctionKeys<T> = keyof {
-  // eslint-disable-next-line @typescript-eslint/ban-types
   [K in keyof T as T[K] extends Function ? K : never]: T[K];
 };
 
@@ -74,7 +72,7 @@ export class NativeCommands<Spec extends object> {
     if (handle) {
       return (
         this.module[name] as (
-          arg0: NodeHandle,
+          arg0: number | null,
           ...args: NativeArg[]
         ) => Promise<T>
       )(handle, ...args);

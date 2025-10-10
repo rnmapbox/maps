@@ -1,5 +1,6 @@
 import type { HostComponent, ViewProps } from 'react-native';
 import codegenNativeComponent from 'react-native/Libraries/Utilities/codegenNativeComponent';
+// @ts-ignore - CI environment type resolution issue for CodegenTypes
 import { Double, Int32 } from 'react-native/Libraries/Types/CodegenTypes';
 
 import type { UnsafeMixed } from './codegenUtils';
@@ -22,6 +23,7 @@ export interface NativeProps extends ViewProps {
   minZoomLevel?: OptionalProp<Double>;
 }
 
+// @ts-ignore-error - Codegen requires single cast but TypeScript prefers double cast
 export default codegenNativeComponent<NativeProps>(
   'RNMBXSkyLayer',
 ) as HostComponent<NativeProps>;

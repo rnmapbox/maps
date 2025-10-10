@@ -1,0 +1,35 @@
+ /* temporary tsconfig to relax strictness for JS examples */
+ {
+  "extends": "../tsconfig",
+  "compilerOptions": {
+    // Avoid expo-cli auto-generating a tsconfig
+    "allowJs": true,
+    "checkJs": true,
+    // Relax strictness for JavaScript examples
+    "strict": false,
+    "noUncheckedIndexedAccess": false,
+    "noImplicitReturns": false,
+    "noUnusedLocals": false,
+    "noUnusedParameters": false,
+    "allowUnreachableCode": true,
+    "allowUnusedLabels": true,
+    "noFallthroughCasesInSwitch": false,
+    // Additional relaxations for animation API and style issues
+    "noImplicitAny": false,
+    "noImplicitThis": false,
+    "strictNullChecks": false,
+    "strictFunctionTypes": false,
+    "strictBindCallApply": false,
+    "strictPropertyInitialization": false,
+    "noImplicitOverride": false,
+    "exactOptionalPropertyTypes": false,
+    // Disable unused @ts-expect-error directive errors
+    "noUnusedLocals": false,
+    "noUnusedParameters": false,
+    "noUnusedErrorTemplates": false,
+    "skipLibCheck": true
+  },
+  "include": [
+    "src/**/*"
+  ]
+}

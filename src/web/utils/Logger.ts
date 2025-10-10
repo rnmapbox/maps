@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-empty-function */
 type LogMessage = {
   level: LogLevel;
   message: string;

@@ -28,7 +28,9 @@ class ChangeLayerColor extends React.Component {
     return (
       <>
         <MapView
-          ref={(c) => (this._map = c)}
+          ref={(c) => {
+            this._map = c;
+          }}
           onPress={this.onPress}
           style={styles.mapView}
         >
@@ -49,7 +51,10 @@ export default ChangeLayerColor;
 
 /* end-example-doc */
 
-/** @type ExampleWithMetadata['metadata'] */
+/**
+ * @typedef {import('../common/ExampleMetadata').ExampleWithMetadata} ExampleWithMetadata
+ * @type {ExampleWithMetadata['metadata']}
+ */
 const metadata = {
   title: 'Change Layer Color',
   tags: ['FillLayer#existing', 'FillLayer#fillColor'],

@@ -196,7 +196,7 @@ class DocJSONBuilder {
       if (tsTypeIsFunction(tsType)) {
         let { signature } = tsType;
         return `(${signature.arguments
-          .map(({ name, type }) => `${name}:${tsTypeDump(type)}`)
+          .map(({ name: _name, type }) => `${_name}:${tsTypeDump(type)}`)
           .join(', ')}) => ${tsTypeDump(signature.return)}`;
       } else if (tsTypeIsObject(tsType)) {
         let { signature } = tsType;
@@ -253,8 +253,8 @@ class DocJSONBuilder {
     function formatMethodJSDocToMD(description) {
       let result = description
         .replaceAll('@deprecated', '**DEPRECATED**')
-        .replaceAll(/@param\s+\{(.+)\}\s+(\S+)/g, (m, type, name) => {
-          return `- \`${name}\`: \`${type}\` `;
+        .replaceAll(/@param\s+\{(.+)\}\s+(\S+)/g, (m, type, _name) => {
+          return `- \`${_name}\`: \`${type}\` `;
         });
       return result;
     }
@@ -424,8 +424,9 @@ class DocJSONBuilder {
 
   generateModulesTask(results, filePath) {
     return new Promise((resolve, reject) => {
-      documentation.build([filePath], {})
-        .then(modules => {
+      documentation
+        .build([filePath], {})
+        .then((modules) => {
           for (const module of modules) {
             const node = new JSDocNodeTree(module);
             const name = `${module.name
@@ -448,7 +449,7 @@ class DocJSONBuilder {
 
           resolve();
         })
-        .catch(err => {
+        .catch((err) => {
           console.log(`documentation.build failed for ${filePath}`);
           reject(err);
         });

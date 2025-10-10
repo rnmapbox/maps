@@ -9,8 +9,11 @@ import {
   AnimatedCoordinatesArray,
   AnimatedShape,
 } from '@rnmapbox/maps';
+// @ts-ignore - Missing types for @turf packages
 import along from '@turf/along';
+// @ts-ignore - Missing types for @turf packages
 import length from '@turf/length';
+// @ts-ignore - Missing types for @turf packages
 import { point, lineString } from '@turf/helpers';
 
 import sheet from '../../styles/sheet';
@@ -51,6 +54,7 @@ class AnimatedLine extends React.Component {
     ...BaseExamplePropTypes,
   };
 
+  // @ts-ignore - Parameter type requires TypeScript annotation
   constructor(props) {
     super(props);
 
@@ -216,7 +220,9 @@ class AnimatedLine extends React.Component {
     return (
       <>
         <MapView
-          ref={(c) => (this._map = c)}
+          ref={(c) => {
+            this._map = c;
+          }}
           onPress={this.onPress}
           onDidFinishLoadingMap={this.onDidFinishLoadingMap}
           style={sheet.matchParent}

@@ -2,13 +2,10 @@
 
 ## Supported mapbox libraries
 
-We're only supporting mapbox 10.16* and 11.*. The default is 10.16*. 
+We're only supporting mapbox 10.16* and 11.*. The default is 10.16*.
 Next release will be 11.* only so we recommend updatign to 11.*
 
 ### Adding mapbox maven repo
-
-You will need to authorize your download of the Maps SDK via a secret access token with the `DOWNLOADS:READ` scope.  
-This [guide](https://docs.mapbox.com/android/maps/guides/install/#configure-credentials) explains how to `Configure credentials` and `Configure your secret token`.
 
 Then under section `allprojects/repositories` add your data:
 
@@ -20,21 +17,13 @@ allprojects {
         // ...other repos
         maven {
             url 'https://api.mapbox.com/downloads/v2/releases/maven'
-            authentication {
-                basic(BasicAuthentication)
-            }
-            credentials {
-                // Do not change the username below.
-                // This should always be `mapbox` (not your username).
-                username = 'mapbox'
-                // Use the secret token you stored in gradle.properties as the password
-                password = project.properties['MAPBOX_DOWNLOADS_TOKEN'] ?: ""
-            }
         }
         // ...even more repos?
     }
 }
 ```
+
+*Note:* mapbox lifted auth requirement from downloads so MAPBOX_DOWNLOADS_TOKEN is no longer needed
 
 ### Using non default mapbox version
 

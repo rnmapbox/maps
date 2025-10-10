@@ -20,7 +20,7 @@ require 'json'
 package = JSON.parse(File.read(File.join(__dir__, 'package.json')))
 
 ## Warning: these lines are scanned by autogenerate.js
-rnMapboxMapsDefaultMapboxVersion = '~> 10.19.0'
+rnMapboxMapsDefaultMapboxVersion = '~> 11.15.2'
 
 rnMapboxMapsDefaultImpl = 'mapbox'
 
@@ -34,6 +34,12 @@ def $RNMapboxMaps.compute_new_arch_enabled
 end
 
 new_arch_enabled = $RNMapboxMaps.compute_new_arch_enabled
+
+unless new_arch_enabled
+  puts "⚠️ RNMapbox DEPRECATION WARNING: Old React Native Architecture (Paper/bridge) is deprecated and will not receive active support."
+  puts "⚠️ RNMapbox: Please upgrade to New Architecture (Fabric/TurboModules) for continued support and updates."
+  puts "⚠️ RNMapbox: For sponsor-only support for old architecture: https://github.com/sponsors/rnmapbox"
+end
 
 # DEPRECATIONS
 
@@ -84,11 +90,16 @@ else
 end
 
 if $RNMapboxMapsUseV11 != nil
-  warn "WARNING: $RNMapboxMapsUseV11 is deprecated just set $RNMapboxMapsVersion to '= 11.13.4"
+  warn "WARNING: $RNMapboxMapsUseV11 is deprecated just set $RNMapboxMapsVersion to '= 11.15.0"
+  $RNMapboxMapsUseV11Imp = $RNMapboxMapsUseV11
 end
 
 if $MapboxImplVersion =~ /(~>|>=|=|>)?\S*11\./
-  $RNMapboxMapsUseV11 = true
+  $RNMapboxMapsUseV11Imp = true
+else
+  puts "⚠️ RNMapbox DEPRECATION WARNING: Mapbox v10.x is deprecated and will not receive active support."
+  puts "⚠️ RNMapbox: Please upgrade to Mapbox v11.x for continued support and updates."
+  puts "⚠️ RNMapbox: For sponsor-only support for v10.x: https://github.com/sponsors/rnmapbox"
 end
 
 def $RNMapboxMaps._check_no_mapbox_spm(project)
@@ -141,7 +152,7 @@ end
 
 def $RNMapboxMaps.post_install(installer)
   map_pod = installer.pod_targets.find {|p| p.name == "MapboxMaps" }
-  use_v11 = $RNMapboxMapsUseV11 || (map_pod && map_pod.version.split('.')[0].to_i >= 11)
+  use_v11 = $RNMapboxMapsUseV11Imp || (map_pod && map_pod.version.split('.')[0].to_i >= 11)
   if use_v11
     installer.pods_project.build_configurations.each do |config|
       config.build_settings['OTHER_SWIFT_FLAGS'] ||= ['$(inherited)', '-D RNMBX_11']
@@ -200,6 +211,11 @@ end
 
 ## RNMapboxMapsDownloadToken
 # expo does not support `.netrc`, so we need to patch curl command used by cocoapods to pass the credentials
+# Supports both config variable and environment variable RNMAPBOX_MAPS_DOWNLOAD_TOKEN
+
+if !$RNMapboxMapsDownloadToken && ENV['RNMAPBOX_MAPS_DOWNLOAD_TOKEN']
+  $RNMapboxMapsDownloadToken = ENV['RNMAPBOX_MAPS_DOWNLOAD_TOKEN']
+end
 
 if $RNMapboxMapsDownloadToken
   module AddCredentialsToCurlWhenDownloadingMapbox
@@ -228,7 +244,7 @@ Pod::Spec.new do |s|
   s.homepage    	= "https://github.com/rnmapbox/maps#readme"
   s.source      	= { :git => "https://github.com/rnmapbox/maps.git" }
   s.license     	= "MIT"
-  if $RNMapboxMapsUseV11
+  if $RNMapboxMapsUseV11Imp
     s.platform    	= :ios, "12.4"
   else
     s.platform    	= :ios, "11.0"

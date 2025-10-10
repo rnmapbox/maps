@@ -21,7 +21,7 @@ export type NativeRefType<P> = MutableRefObject<
  * ...
  * <RNMBXCamera ref={ref} ... />
  */
-export default function nativeRef<P>(
+export default function nativeRef<P extends {}>(
   c: RefObject<HostComponent<P> | null>,
 ): MutableRefObject<(Component<P> & Readonly<NativeMethods>) | null> {
   return c as NativeRefType<P>;

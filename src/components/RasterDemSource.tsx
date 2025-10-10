@@ -10,7 +10,7 @@ const isTileTemplateUrl = (url?: string): url is string =>
   !!url &&
   (url.includes('{z}') || url.includes('{bbox-') || url.includes('{quadkey}'));
 
-const MapboxGL = NativeModules.RNMBXModule;
+const Mapbox = NativeModules.RNMBXModule;
 
 type Props = {
   /**
@@ -61,7 +61,7 @@ type NativeProps = Props;
 
 class RasterDemSource extends AbstractSource<Props, NativeProps> {
   static defaultProps = {
-    id: MapboxGL.StyleSource.DefaultSourceID,
+    id: Mapbox.StyleSource.DefaultSourceID,
   };
 
   constructor(props: Props) {

@@ -39,7 +39,9 @@ describe('UserLocation', () => {
     });
 
     test('renders with CircleLayers by default', async () => {
-      const { UNSAFE_getAllByType, UNSAFE_queryByType } = render(<UserLocation />);
+      const { UNSAFE_getAllByType, UNSAFE_queryByType } = render(
+        <UserLocation />,
+      );
       await waitFor(() => {
         expect(() => UNSAFE_queryByType(UserLocation)).not.toThrow();
       });
@@ -79,9 +81,9 @@ describe('UserLocation', () => {
 
       const { UNSAFE_queryByType, UNSAFE_queryAllByType } = render(
         <UserLocation>
-          <CircleLayer key='testUserLocationCircle' {...circleLayerProps} />
-        </UserLocation>
-      )
+          <CircleLayer key="testUserLocationCircle" {...circleLayerProps} />
+        </UserLocation>,
+      );
       await waitFor(() => {
         expect(() => UNSAFE_queryByType(UserLocation)).not.toThrow();
       });
@@ -99,7 +101,9 @@ describe('UserLocation', () => {
     test('calls onUpdate callback when new location is received', async () => {
       const onUpdateCallback = jest.fn();
 
-      const { UNSAFE_getByType } = render(<UserLocation onUpdate={onUpdateCallback} />);
+      const { UNSAFE_getByType } = render(
+        <UserLocation onUpdate={onUpdateCallback} />,
+      );
 
       await waitFor(() => {
         expect(() => UNSAFE_getByType(UserLocation)).not.toThrow();
@@ -118,7 +122,7 @@ describe('UserLocation', () => {
           },
           timestamp: 1573730357879,
         });
-      })
+      });
 
       expect(onUpdateCallback).toHaveBeenCalled();
     });
@@ -152,7 +156,7 @@ describe('UserLocation', () => {
       const ul = UNSAFE_queryByType(UserLocation);
 
       const lastKnownLocation = [4.1036916, 51.5462244];
-      locationManager._lastKnownLocation = lastKnownLocation
+      locationManager._lastKnownLocation = lastKnownLocation;
 
       expect(locationManager.start).toHaveBeenCalledTimes(0);
       expect(locationManager._isListening).toStrictEqual(false);
@@ -219,13 +223,13 @@ describe('UserLocation', () => {
       test('called with "running" true', async () => {
         const lastKnownLocation = [4.1036916, 51.5462244];
         const heading = 251.5358428955078;
-        locationManager._lastKnownLocation = lastKnownLocation
+        locationManager._lastKnownLocation = lastKnownLocation;
 
         expect(ul.locationManagerRunning).toStrictEqual(false);
 
         await act(async () => {
           await ul.setLocationManager({ running: true });
-        })
+        });
 
         expect(ul.locationManagerRunning).toStrictEqual(true);
         expect(locationManager.start).toHaveBeenCalledTimes(1);
@@ -243,14 +247,14 @@ describe('UserLocation', () => {
         expect(ul.locationManagerRunning).toStrictEqual(false);
         await act(async () => {
           await ul.setLocationManager({ running: true });
-        })
+        });
 
         expect(ul.locationManagerRunning).toStrictEqual(true);
 
         // stop
         await act(async () => {
           await ul.setLocationManager({ running: false });
-        })
+        });
 
         expect(ul.locationManagerRunning).toStrictEqual(false);
         // only once from start

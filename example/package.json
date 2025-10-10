@@ -1,6 +1,6 @@
 {
-  "name": "RNMapboxGLExample",
-  "main": "expo/AppEntry.js",
+  "name": "@rnmapbox/maps-example",
+  "main": "index.js",
   "version": "1.0.0",
   "private": true,
   "scripts": {
@@ -9,12 +9,13 @@
     "web": "expo start -c --web",
     "pod:install": "cd ios && pod install",
     "start": "yarn react-native start",
-    "postinstall": "node ./scripts/set_access_token.js && patch-package",
+    "postinstall": "node ./scripts/set_access_token.js",
     "purge:android": "(cd android && ./gradlew --stop) && rm -rf ~/.gradle/caches/ android/app/build",
     "purge:ios": "rm -rf ios/Pods/* ios/build ~/Library/Caches/CocoaPods ~/Library/Developer/Xcode/DerivedData && pod cache clean --all",
     "purge:js": "rm -rf node_modules && yarn cache clean && watchman watch-del-all",
     "purge": "yarn purge:js && yarn purge:android && yarn purge:ios",
-    "type:check": "yarn tsc --version && yarn tsc --noEmit"
+    "type:check": "yarn tsc --version && yarn tsc --noEmit",
+    "type:check:example:todo": "yarn tsc --noEmit -p ./tsconfig.relaxed.json"
   },
   "dependencies": {
     "@mapbox/geo-viewport": "^0.5.0",
@@ -23,7 +24,6 @@
     "@react-navigation/native": "^7.1.17",
     "@react-navigation/native-stack": "^7.3.25",
     "@rneui/base": "4.0.0-rc.8",
-    "@rnmapbox/maps": "file:..",
     "@turf/along": "^6.5.0",
     "@turf/bbox": "^6.5.0",
     "@turf/bbox-polygon": "^6.5.0",
@@ -34,6 +34,7 @@
     "@types/mapbox__geo-viewport": "^0.5.3",
     "debounce": "^2.2.0",
     "fbjs": "^3.0.5",
+    "lodash.isequal": "^4.5.0",
     "moment": "^2.30.1",
     "prop-types": "^15.8.1",
     "react": "19.1.0",
@@ -43,12 +44,12 @@
     "react-native-vector-icons": "^10.3.0"
   },
   "optionalDependencies": {
-    "@expo/metro-runtime": "^6.1.0",
+    "@expo/metro-runtime": "~6.1.2",
     "@types/responselike": "1.0.3",
-    "expo": "^54.0.0-preview.6",
+    "expo": "~54.0.10",
     "mapbox-gl": "^3.14.0",
     "react-dom": "19.1.0",
-    "react-native-web": "~0.20.0"
+    "react-native-web": "~0.21.0"
   },
   "devDependencies": {
     "@babel/core": "^7.28.3",
@@ -61,6 +62,7 @@
     "@react-native/eslint-config": "^0.81.1",
     "@react-native/metro-config": "^0.81.1",
     "@react-native/typescript-config": "^0.81.1",
+    "@types/lodash.isequal": "^4.5.8",
     "@types/prop-types": "^15.7.15",
     "@types/react": "^19.1.10",
     "@types/react-test-renderer": "^19.1.0",
@@ -70,9 +72,11 @@
     "eslint": "^8.19.0",
     "glob-to-regexp": "^0.4.1",
     "jest": "^30.0.5",
-    "patch-package": "^8.0.0",
+    "metro-config": "^0.83.2",
     "pod-install": "^1.0.1",
     "prettier": "^2.8.8",
+    "react-native-builder-bob": "^0.40.13",
+    "react-native-monorepo-config": "^0.1.9",
     "react-test-renderer": "19.1.0",
     "typescript": "^5.8.3"
   },

@@ -26,7 +26,16 @@ fun ByteArray.toImageData() : DataRef {
 }
 
 fun DataRef.toByteArray(): ByteArray {
-    return this.buffer.array()
+    if (this.buffer.hasArray()) {
+        return this.buffer.array()
+    } else {
+        val buffer = this.buffer
+        val bytes = ByteArray(buffer.remaining())
+        val oldPos = buffer.position()
+        buffer.get(bytes)
+        buffer.position(oldPos)
+        return bytes
+    }
 }
 /*
 fun Drawable.toImageHolder(drawableId: Int) : ImageHolder {

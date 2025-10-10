@@ -199,6 +199,7 @@ The display of lines when joining.
 **bevel** - A join with a squared-off end which is drawn beyond the endpoint of the line at a distance of one-half of the line's width.<br />
 **round** - A join with a rounded end which is drawn beyond the endpoint of the line at a radius of one-half of the line's width and centered on the endpoint of the line.<br />
 **miter** - A join with a sharp, angled corner which is drawn with the outer sides beyond the endpoint of the path until they meet.<br />
+**none** - Line segments are not joined together, each one creates a separate line. Useful in combination with line-pattern. Line-cap property is not respected. Can't be used with data-driven styling.<br />
 
 
 #### Supported Style Functions
@@ -471,7 +472,7 @@ Stroke thickness.
 `camera`
 #### Expression
 
-Parameters: `zoom, feature, feature-state, measure-light`
+Parameters: `zoom, feature, feature-state, measure-light, line-progress`
 ___
 
 ### lineWidthTransition
@@ -698,7 +699,7 @@ Name: `lineTrimOffset`
 Mapbox spec: [line-trim-offset](https://docs.mapbox.com/style-spec/reference/layers/#paint-line-line-trim-offset)
 
 #### Description
-The line part between [trimStart, trimEnd] will be marked as transparent to make a route vanishing effect. The line trimOff offset is based on the whole line range [0.0, 1.0].
+The line part between [trimStart, trimEnd] will be painted using `lineTrimColor,` which is transparent by default to produce a route vanishing effect. The line trimOff offset is based on the whole line range [0.0, 1.0].
 
 #### Type
 `array<number>`

@@ -1,5 +1,5 @@
-/* eslint-disable @typescript-eslint/ban-types */
 import type { TurboModule } from 'react-native/Libraries/TurboModule/RCTExport';
+// @ts-ignore - CI environment type resolution issue for CodegenTypes
 import { Int32 } from 'react-native/Libraries/Types/CodegenTypes';
 import { TurboModuleRegistry } from 'react-native';
 

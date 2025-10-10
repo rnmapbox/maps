@@ -33,7 +33,9 @@ class SourceLayerVisibility extends React.Component {
     return (
       <>
         <MapView
-          ref={(c) => (this._map = c)}
+          ref={(c) => {
+            this._map = c;
+          }}
           onPress={this.onPress}
           style={styles.mapView}
         >
@@ -53,7 +55,10 @@ export default SourceLayerVisibility;
 
 /* end-example-doc */
 
-/** @type ExampleWithMetadata['metadata'] */
+/**
+ * @typedef {import('../common/ExampleMetadata').ExampleWithMetadata} ExampleWithMetadata
+ * @type {ExampleWithMetadata['metadata']}
+ */
 const metadata = {
   title: 'Source Layer Visibility',
   tags: ['MapView#setSoruceVisibility'],

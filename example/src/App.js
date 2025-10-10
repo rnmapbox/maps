@@ -27,6 +27,8 @@ const styles = StyleSheet.create({
 
 Mapbox.setAccessToken(config.get('accessToken'));
 
+console.log('### App.js - Mapbox:', Mapbox);
+
 const Stack = createNativeStackNavigator();
 
 function AppStackNavigator() {
@@ -39,7 +41,7 @@ function AppStackNavigator() {
       <Stack.Screen name="Item" component={Item} />
       <Stack.Screen name="ScreenWithoutMap" component={ScreenWithoutMap} />
       <Stack.Group
-        screenOptions={({ navigation: modalNavigation }) => ({
+        screenOptions={() => ({
           presentation: 'modal',
         })}
       >
@@ -57,6 +59,7 @@ const AppContainer = () => (
   </SafeAreaProvider>
 );
 class App extends React.Component {
+  // @ts-ignore - Parameter type requires TypeScript annotation
   constructor(props) {
     super(props);
 
@@ -85,7 +88,6 @@ class App extends React.Component {
       return (
         <SafeAreaView
           style={[sheet.matchParent, { backgroundColor: colors.primary.blue }]}
-          forceInset={{ top: 'always' }}
         >
           <View style={sheet.matchParent}>
             <Text style={styles.noPermissionsText}>

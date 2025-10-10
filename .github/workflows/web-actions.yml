@@ -9,18 +9,14 @@ on:
         type: string
       ref:
         required: false
-        type: string 
+        type: string
       NVMRC:
         required: true
         type: string
     secrets:
       MAPBOX_ACCESS_TOKEN:
         required: true
-      MAPBOX_DOWNLOAD_TOKEN:
-        required: true
       ENV_MAPBOX_ACCESS_TOKEN:
-        required: false
-      ENV_MAPBOX_DOWNLOAD_TOKEN:
         required: false
 
 jobs:
@@ -32,7 +28,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
         if: ${{ inputs.ref == '' }}
-      
+
       - name: Checkout fork
         uses: actions/checkout@v4
         if: ${{ inputs.ref != '' }}

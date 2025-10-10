@@ -1,7 +1,7 @@
 import {
   lineString,
   point,
-  convertDistance as convertDistanceFn, // eslint-disable-line import/named
+  convertDistance as convertDistanceFn,
   convertLength as convertLengthFn,
 } from '@turf/helpers';
 import distance from '@turf/distance';

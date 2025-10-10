@@ -16,6 +16,7 @@ const styles = {
   },
 };
 
+// @ts-ignore - GeoJSON type literal issues
 const features = {
   type: 'FeatureCollection',
   features: [
@@ -61,6 +62,7 @@ const modelLayerStyle = {
   modelScale: [50, 50, 50],
 };
 
+// @ts-ignore - Missing asset type declaration
 const models = {
   car: require('../../assets/sportcar.glb'),
 };
@@ -99,7 +101,11 @@ export default SimpleModelLayer;
 
 /* end-example-doc */
 
-/** @type ExampleWithMetadata['metadata'] */
+/**
+ * @typedef {import('../common/ExampleMetadata').ExampleWithMetadata} ExampleWithMetadata
+ */
+
+/** @type {ExampleWithMetadata['metadata']} */
 const metadata = {
   title: 'Simple Model Layer',
   tags: ['Models', 'ModelLayer'],

@@ -3,6 +3,7 @@ import codegenNativeComponent from 'react-native/Libraries/Utilities/codegenNati
 import {
   DirectEventHandler,
   Double,
+  // @ts-ignore - CI environment type resolution issue for CodegenTypes
 } from 'react-native/Libraries/Types/CodegenTypes';
 
 import type { UnsafeMixed } from './codegenUtils';
@@ -23,6 +24,7 @@ export interface NativeProps extends ViewProps {
   onMapboxVectorSourcePress: DirectEventHandler<OnMapboxVectorSourcePressEventType>;
 }
 
+// @ts-ignore-error - Codegen requires single cast but TypeScript prefers double cast
 export default codegenNativeComponent<NativeProps>(
   'RNMBXVectorSource',
 ) as HostComponent<NativeProps>;

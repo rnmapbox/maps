@@ -53,7 +53,9 @@ class SetHeading extends React.Component {
           onPress={(i) => this.onHeadingChange(i, this._bearingOptions[i].data)}
         />
         <Mapbox.MapView
-          ref={(ref) => (this.map = ref)}
+          ref={(ref) => {
+            this.map = ref;
+          }}
           style={styles.matchParent}
         >
           <Mapbox.Camera {...this.state} />

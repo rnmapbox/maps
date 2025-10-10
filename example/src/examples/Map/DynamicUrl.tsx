@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { Text } from 'react-native';
 import {
   Camera,
@@ -59,7 +59,7 @@ const DynamicUrl = () => {
           }}
         />
 
-        <ShapeSource id="countryShapeSource" url={country.url}>
+        <ShapeSource id="countryShapeSource" url={country!.url}>
           <FillLayer
             id="countryFillLayer"
             existing
@@ -72,7 +72,7 @@ const DynamicUrl = () => {
       </MapView>
 
       <Bubble onPress={handleUpdate}>
-        <Text>Update country (active: {country.id})</Text>
+        <Text>Update country (active: {country!.id})</Text>
       </Bubble>
     </>
   );

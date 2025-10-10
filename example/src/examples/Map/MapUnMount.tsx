@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from 'react';
 import Mapbox from '@rnmapbox/maps';
-import { Button } from '@rneui/base';
+import { useEffect, useState } from 'react';
+import { Button } from 'react-native';
 
 import sheet from '../../styles/sheet';
 import { ExampleWithMetadata } from '../common/ExampleMetadata'; // exclude-from-doc

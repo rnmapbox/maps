@@ -1,4 +1,4 @@
-import React, { ReactNode, useState } from 'react';
+import { ReactNode, useState } from 'react';
 import {
   MapView,
   CircleLayer,
@@ -89,7 +89,7 @@ const UserLocationRenderMode = () => {
               followUserMode,
             )}
             onPress={(index) => {
-              setFollowUserMode(Object.values(UserTrackingMode)[index]);
+              setFollowUserMode(Object.values(UserTrackingMode)[index]!);
             }}
           />
         </SettingsGroup>
@@ -101,7 +101,7 @@ const UserLocationRenderMode = () => {
               buttons={ANDROID_RENDER_MODES}
               selectedIndex={ANDROID_RENDER_MODES.indexOf(androidRenderMode)}
               onPress={(index) => {
-                setAndroidRenderMode(ANDROID_RENDER_MODES[index]);
+                setAndroidRenderMode(ANDROID_RENDER_MODES[index]!);
               }}
             />
           </SettingsGroup>
@@ -153,7 +153,7 @@ const UserLocationRenderMode = () => {
         buttons={Object.values(ExampleRenderMode).map(humanize)}
         selectedIndex={Object.values(ExampleRenderMode).indexOf(renderMode)}
         onPress={(index) => {
-          setRenderMode(Object.values(ExampleRenderMode)[index]);
+          setRenderMode(Object.values(ExampleRenderMode)[index]!);
         }}
       />
     </SafeAreaView>

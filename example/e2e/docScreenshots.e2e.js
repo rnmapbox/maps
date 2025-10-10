@@ -1,3 +1,5 @@
+/* global element, by, waitFor, describe, it, expect, beforeAll, afterAll, beforeEach, afterEach */
+
 /**
  * @file process the docs/examples.json file and take screenshots of each example and outputs it to <docRoot>/example-screenshots and <docRoot>/example-screenshots/screenshots.json
  */
@@ -8,6 +10,8 @@ const path = require('path');
 const { execSync } = require('child_process');
 
 const { device } = require('detox');
+
+const shouldRestartAppBetweenTests = true;
 
 const {
   examplesJSONPath,
@@ -41,6 +45,33 @@ if (false) {
         },
       ],
     },
+    {
+      groupName: 'CacheOffline',
+      metadata: {
+        title: 'Cache / Offline',
+      },
+      examples: [
+        {
+          metadata: {
+            title: 'CacheManagement',
+            tags: [
+              'Cache',
+              'Cache Management',
+              'Offline Manager',
+              'Offline Packs',
+              'Validate Cache',
+              'Invalidate Cache',
+              'Get Cache Size',
+              'Set Max Cache Size',
+            ],
+            docs: '\nManages map cache.\n\nUses the offline manager to manage the cache and the local storage in general. Shows how to invalidate cache to remove outdated tiles, how to clear the entire local storage from tiles and offline packs and to visualize the local storage usage amount.\n',
+          },
+          fullPath: 'example/src/examples/CacheOffline/CacheManagement.tsx',
+          relPath: 'CacheOffline/CacheManagement.tsx',
+          name: 'CacheManagement',
+        },
+      ],
+    },
   ];
 }
 
@@ -69,7 +100,9 @@ async function wait(ms) {
     await waitFor(element(by.id('no-such-view')))
       .toBeVisible()
       .withTimeout(ms);
-  } catch (e) {}
+  } catch (_e) {
+    console.log('e', _e);
+  }
 }
 
 /**
@@ -134,41 +167,62 @@ if (['true', 1, '1'].includes(process.env.SKIP_TESTS_NO_METAL)) {
       await device.launchApp({ permissions: { location: 'always' } });
     });
     beforeEach(async () => {
+      if (shouldRestartAppBetweenTests) {
+        await device.launchApp({ permissions: { location: 'always' } });
+      }
       await device.reloadReactNative();
+    });
+    afterEach(async () => {
+      if (shouldRestartAppBetweenTests) {
+        await device.terminateApp();
+      }
     });
 
     /** @type Screenshots */
     const screenshots = {};
 
-    examples.forEach(({ groupName, metadata: groupMetadata, examples }) => {
-      describe(`${groupName}`, () => {
-        examples.forEach(({ metadata, fullPath, name }) => {
-          if (metadata) {
-            it(`${name}`, async () => {
-              await setSampleLocation();
+    examples.forEach(
+      ({ groupName, metadata: groupMetadata, examples: examplesInGroup }) => {
+        describe(`${groupName}`, () => {
+          examplesInGroup.forEach(({ metadata, fullPath: _fullPath, name }) => {
+            if (metadata) {
+              it(`${name}`, async () => {
+                await device.setStatusBar({
+                  time: '11:34',
+                  batteryLevel: 1,
+                  batteryState: 'charged',
+                  dataNetwork: 'wifi',
+                  wifiMode: 'active',
+                  wifiBars: '3',
+                  cellularMode: 'searching',
+                });
+                await setSampleLocation();
 
-              await expect(element(by.text(groupMetadata.title))).toBeVisible();
-              await element(by.text(groupMetadata.title)).tap();
+                await expect(
+                  element(by.text(groupMetadata.title)),
+                ).toBeVisible();
+                await element(by.text(groupMetadata.title)).tap();
 
-              await waitFor(element(by.text(metadata.title)))
-                .toBeVisible()
-                .whileElement(by.id('example-list'))
-                .scroll(50, 'down');
-              await element(by.text(metadata.title)).tap();
+                await waitFor(element(by.text(metadata.title)))
+                  .toBeVisible()
+                  .whileElement(by.id('example-list'))
+                  .scroll(50, 'down');
+                await element(by.text(metadata.title)).tap();
 
-              let shots = new ExampleScreenshots(
-                { testName: name, groupName },
-                screenshots,
-              );
+                let shots = new ExampleScreenshots(
+                  { testName: name, groupName },
+                  screenshots,
+                );
 
-              await wait(1000);
+                await wait(1000);
 
-              await shots.screenshot();
-            });
-          }
+                await shots.screenshot();
+              });
+            }
+          });
         });
-      });
-    });
+      },
+    );
 
     afterAll(async () => {
       console.log('Writing screenshots.json', screenshotsJSONPath);

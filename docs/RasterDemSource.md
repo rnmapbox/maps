@@ -20,7 +20,7 @@ string
 ```
 A string that uniquely identifies the source.
 
-  _defaults to:_ `MapboxGL.StyleSource.DefaultSourceID`
+  _defaults to:_ `Mapbox.StyleSource.DefaultSourceID`
 
   
 ### existing

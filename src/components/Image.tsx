@@ -50,7 +50,7 @@ const Image = memo(
 
     const refresh = () => {
       const handle = findNodeHandle(imageRef.current as any);
-      NativeRNMBXImageModule.refresh(handle);
+      NativeRNMBXImageModule.refresh(handle ?? null);
     };
 
     React.useImperativeHandle(ref, () => {

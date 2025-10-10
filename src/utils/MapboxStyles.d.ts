@@ -162,8 +162,10 @@ enum LineJoinEnum {
   Round = 'round',
   /** A join with a sharp, angled corner which is drawn with the outer sides beyond the endpoint of the path until they meet. */
   Miter = 'miter',
+  /** Line segments are not joined together, each one creates a separate line. Useful in combination with line-pattern. Line-cap property is not respected. Can't be used with data-driven styling. */
+  None = 'none',
 }
-type LineJoinEnumValues = 'bevel' | 'round' | 'miter';
+type LineJoinEnumValues = 'bevel' | 'round' | 'miter' | 'none';
 enum LineTranslateAnchorEnum {
   /** The line is translated relative to the map. */
   Map = 'map',
@@ -171,6 +173,21 @@ enum LineTranslateAnchorEnum {
   Viewport = 'viewport',
 }
 type LineTranslateAnchorEnumValues = 'map' | 'viewport';
+enum LineElevationReferenceEnum {
+  /** Elevated rendering is disabled. */
+  None = 'none',
+  /** Elevated rendering is enabled. Use this mode to elevate lines relative to the sea level. */
+  Sea = 'sea',
+  /** Elevated rendering is enabled. Use this mode to elevate lines relative to the ground's height below them. */
+  Ground = 'ground',
+  /** Elevated rendering is enabled. Use this mode to describe additive and stackable features that should exist only on top of road polygons. */
+  HdRoadMarkup = 'hd-road-markup',
+}
+type LineElevationReferenceEnumValues =
+  | 'none'
+  | 'sea'
+  | 'ground'
+  | 'hd-road-markup';
 enum SymbolPlacementEnum {
   /** The label is placed at the point where the geometry is located. */
   Point = 'point',
@@ -183,7 +200,7 @@ type SymbolPlacementEnumValues = 'point' | 'line' | 'line-center';
 enum SymbolZOrderEnum {
   /** Sorts symbols by `symbol-sort-key` if set. Otherwise, sorts symbols by their y-position relative to the viewport if `icon-allow-overlap` or `text-allow-overlap` is set to `true` or `icon-ignore-placement` or `text-ignore-placement` is `false`. */
   Auto = 'auto',
-  /** Sorts symbols by their y-position relative to the viewport if `icon-allow-overlap` or `text-allow-overlap` is set to `true` or `icon-ignore-placement` or `text-ignore-placement` is `false`. */
+  /** Sorts symbols by their y-position relative to the viewport if any of the following is set to `true`: `icon-allow-overlap`, `text-allow-overlap`, `icon-ignore-placement`, `text-ignore-placement`. */
   ViewportY = 'viewport-y',
   /** Sorts symbols by `symbol-sort-key` if set. Otherwise, no sorting is applied; symbols are rendered in the same order as the source data. */
   Source = 'source',
@@ -367,6 +384,15 @@ enum TextTranslateAnchorEnum {
   Viewport = 'viewport',
 }
 type TextTranslateAnchorEnumValues = 'map' | 'viewport';
+enum SymbolElevationReferenceEnum {
+  /** Elevate symbols relative to the sea level. */
+  Sea = 'sea',
+  /** Elevate symbols relative to the ground's height below them. */
+  Ground = 'ground',
+  /** Use this mode to enable elevated behavior for features that are rendered on top of 3D road polygons. The feature is currently being developed. */
+  HdRoadMarkup = 'hd-road-markup',
+}
+type SymbolElevationReferenceEnumValues = 'sea' | 'ground' | 'hd-road-markup';
 enum CircleTranslateAnchorEnum {
   /** The circle is translated relative to the map. */
   Map = 'map',
@@ -388,6 +414,13 @@ enum CirclePitchAlignmentEnum {
   Viewport = 'viewport',
 }
 type CirclePitchAlignmentEnumValues = 'map' | 'viewport';
+enum CircleElevationReferenceEnum {
+  /** Elevated rendering is disabled. */
+  None = 'none',
+  /** Elevated rendering is enabled. Use this mode to describe additive and stackable features that should exist only on top of road polygons. */
+  HdRoadMarkup = 'hd-road-markup',
+}
+type CircleElevationReferenceEnumValues = 'none' | 'hd-road-markup';
 enum FillExtrusionTranslateAnchorEnum {
   /** The fill extrusion is translated relative to the map. */
   Map = 'map',
@@ -395,6 +428,20 @@ enum FillExtrusionTranslateAnchorEnum {
   Viewport = 'viewport',
 }
 type FillExtrusionTranslateAnchorEnumValues = 'map' | 'viewport';
+enum FillExtrusionHeightAlignmentEnum {
+  /** The fill extrusion height follows terrain slope. */
+  Terrain = 'terrain',
+  /** The fill extrusion height is flat over terrain. */
+  Flat = 'flat',
+}
+type FillExtrusionHeightAlignmentEnumValues = 'terrain' | 'flat';
+enum FillExtrusionBaseAlignmentEnum {
+  /** The fill extrusion base follows terrain slope. */
+  Terrain = 'terrain',
+  /** The fill extrusion base is flat over terrain. */
+  Flat = 'flat',
+}
+type FillExtrusionBaseAlignmentEnumValues = 'terrain' | 'flat';
 enum RasterResamplingEnum {
   /** (Bi)linear filtering interpolates pixel values using the weighted average of the four closest original source pixels creating a smooth but blurry look when overscaled */
   Linear = 'linear',
@@ -416,6 +463,13 @@ enum ModelTypeEnum {
   LocationIndicator = 'location-indicator',
 }
 type ModelTypeEnumValues = 'common-3d' | 'location-indicator';
+enum BackgroundPitchAlignmentEnum {
+  /** The background is aligned to the plane of the map. */
+  Map = 'map',
+  /** The background is aligned to the plane of the viewport, covering the whole screen. Note: This mode disables the automatic reordering of the layer when terrain or globe projection is used. */
+  Viewport = 'viewport',
+}
+type BackgroundPitchAlignmentEnumValues = 'map' | 'viewport';
 enum SkyTypeEnum {
   /** Renders the sky with a gradient that can be configured with `sky-gradient-radius` and `sky-gradient`. */
   Gradient = 'gradient',
@@ -509,6 +563,12 @@ export interface FillLayerStyleProps {
    */
   fillPattern?: Value<ResolvedImageType, ['zoom', 'feature']>;
   /**
+   * Controls the transition progress between the image variants of fillPattern. Zero means the first variant is used, one is the second, and in between they are blended together. Both images should be the same size and have the same type (either raster or vector).
+   *
+   * @requires linePattern
+   */
+  fillPatternCrossFade?: Value<number, ['zoom', 'measure-light']>;
+  /**
    * Controls the intensity of light emitted on the source features.
    *
    * @requires lights
@@ -594,7 +654,7 @@ export interface LineLayerStyleProps {
    */
   lineWidth?: Value<
     number,
-    ['zoom', 'feature', 'feature-state', 'measure-light']
+    ['zoom', 'feature', 'feature-state', 'measure-light', 'line-progress']
   >;
 
   /**
@@ -654,9 +714,59 @@ export interface LineLayerStyleProps {
    */
   lineGradient?: Value<string, ['line-progress']>;
   /**
-   * The line part between [trimStart, trimEnd] will be marked as transparent to make a route vanishing effect. The line trimOff offset is based on the whole line range [0.0, 1.0].
+   * The line part between [trimStart, trimEnd] will be painted using `lineTrimColor,` which is transparent by default to produce a route vanishing effect. The line trimOff offset is based on the whole line range [0.0, 1.0].
    */
   lineTrimOffset?: number[];
+  /**
+   * Vertical offset from ground, in meters. Defaults to 0. This is an experimental property with some known issues:
+   * Not supported for globe projection at the moment
+   * Elevated line discontinuity is possible on tile borders with terrain enabled
+   * Rendering artifacts can happen near line joins and line caps depending on the line styling
+   * Rendering artifacts relating to `lineOpacity` and `lineBlur`
+   * Elevated line visibility is determined by layer order
+   * ZFighting issues can happen with intersecting elevated lines
+   * Elevated lines don't cast shadows
+   *
+   * @requires lineElevationReference
+   */
+  lineZOffset?: Value<number, ['zoom', 'feature', 'line-progress']>;
+  /**
+   * Selects the base of lineElevation. Some modes might require precomputed elevation data in the tileset.
+   */
+  lineElevationReference?: Value<
+    Enum<LineElevationReferenceEnum, LineElevationReferenceEnumValues>
+  >;
+  /**
+   * Defines the slope of an elevated line. A value of 0 creates a horizontal line. A value of 1 creates a vertical line. Other values are currently not supported. If undefined, the line follows the terrain slope. This is an experimental property with some known issues:
+   * Vertical lines don't support line caps
+   * `lineJoin: round` is not supported with this property
+   *
+   * @requires lineZOffset
+   */
+  lineCrossSlope?: Value<number>;
+  /**
+   * Controls the transition progress between the image variants of linePattern. Zero means the first variant is used, one is the second, and in between they are blended together. Both images should be the same size and have the same type (either raster or vector).
+   *
+   * @requires linePattern
+   */
+  linePatternCrossFade?: Value<number, ['zoom', 'measure-light']>;
+  /**
+   * The fade range for the trimStart and trimEnd points is defined by the `lineTrimOffset` property. The first element of the array represents the fade range from the trimStart point toward the end of the line, while the second element defines the fade range from the trimEnd point toward the beginning of the line. The fade result is achieved by interpolating between `lineTrimColor` and the color specified by the `lineColor` or the `lineGradient` property.
+   *
+   * @requires lineTrimOffset
+   */
+  lineTrimFadeRange?: Value<number[], ['zoom', 'measure-light']>;
+  /**
+   * The color to be used for rendering the trimmed line section that is defined by the `lineTrimOffset` property.
+   *
+   * @requires lineTrimOffset
+   */
+  lineTrimColor?: Value<string, ['zoom', 'measure-light']>;
+
+  /**
+   * The transition affecting any changes to this layer’s lineTrimColor property.
+   */
+  lineTrimColorTransition?: Transition;
   /**
    * Controls the intensity of light emitted on the source features.
    *
@@ -668,6 +778,15 @@ export interface LineLayerStyleProps {
    * The transition affecting any changes to this layer’s lineEmissiveStrength property.
    */
   lineEmissiveStrengthTransition?: Transition;
+  /**
+   * Opacity multiplier (multiplies lineOpacity value) of the line part that is occluded by 3D objects. Value 0 hides occluded part, value 1 means the same opacity as nonOccluded part. The property is not supported when `lineOpacity` has dataDriven styling.
+   */
+  lineOcclusionOpacity?: Value<number, ['zoom']>;
+
+  /**
+   * The transition affecting any changes to this layer’s lineOcclusionOpacity property.
+   */
+  lineOcclusionOpacityTransition?: Transition;
 }
 export interface SymbolLayerStyleProps {
   /**
@@ -1130,15 +1249,39 @@ export interface SymbolLayerStyleProps {
     ['zoom']
   >;
   /**
-   * Position symbol on buildings (both fill extrusions and models) roof tops. In order to have minimal impact on performance, this is supported only when `fillExtrusionHeight` is not zoomDependent and not edited after initial bucket creation. For fading in buildings when zooming in, fillExtrusionVerticalScale should be used and symbols would raise with building roofs. Symbols are sorted by elevation, except in case when `viewportY` sorting or `symbolSortKey` are applied.
+   * Position symbol on buildings (both fill extrusions and models) rooftops. In order to have minimal impact on performance, this is supported only when `fillExtrusionHeight` is not zoomDependent and remains unchanged. For fading in buildings when zooming in, fillExtrusionVerticalScale should be used and symbols would raise with building rooftops. Symbols are sorted by elevation, except in cases when `viewportY` sorting or `symbolSortKey` are applied.
    */
   symbolZElevate?: Value<boolean, ['zoom']>;
+  /**
+   * Selects the base of symbolElevation.
+   */
+  symbolElevationReference?: Value<
+    Enum<SymbolElevationReferenceEnum, SymbolElevationReferenceEnumValues>,
+    ['zoom']
+  >;
+  /**
+   * The opacity at which the icon will be drawn in case of being depth occluded. Absent value means full occlusion against terrain only.
+   *
+   * @requires iconImage
+   */
+  iconOcclusionOpacity?: Value<
+    number,
+    ['zoom', 'feature', 'feature-state', 'measure-light']
+  >;
+
+  /**
+   * The transition affecting any changes to this layer’s iconOcclusionOpacity property.
+   */
+  iconOcclusionOpacityTransition?: Transition;
   /**
    * Controls the intensity of light emitted on the source features.
    *
    * @requires lights
    */
-  iconEmissiveStrength?: Value<number, ['zoom', 'measure-light']>;
+  iconEmissiveStrength?: Value<
+    number,
+    ['zoom', 'measure-light', 'feature-state']
+  >;
 
   /**
    * The transition affecting any changes to this layer’s iconEmissiveStrength property.
@@ -1149,24 +1292,48 @@ export interface SymbolLayerStyleProps {
    *
    * @requires lights
    */
-  textEmissiveStrength?: Value<number, ['zoom', 'measure-light']>;
+  textEmissiveStrength?: Value<
+    number,
+    ['zoom', 'measure-light', 'feature-state']
+  >;
 
   /**
    * The transition affecting any changes to this layer’s textEmissiveStrength property.
    */
   textEmissiveStrengthTransition?: Transition;
   /**
-   * Controls the transition progress between the image variants of iconImage. Zero means the first variant is used, one is the second, and in between they are blended together.
+   * Controls the transition progress between the image variants of iconImage. Zero means the first variant is used, one is the second, and in between they are blended together. . Both images should be the same size and have the same type (either raster or vector).
+   *
+   * @requires iconImage
    */
-  iconImageCrossFade?: Value<
+  iconImageCrossFade?: Value<number, ['zoom', 'measure-light']>;
+  /**
+   * The opacity at which the text will be drawn in case of being depth occluded. Absent value means full occlusion against terrain only.
+   *
+   * @requires textField
+   */
+  textOcclusionOpacity?: Value<
     number,
     ['zoom', 'feature', 'feature-state', 'measure-light']
   >;
 
   /**
-   * The transition affecting any changes to this layer’s iconImageCrossFade property.
+   * The transition affecting any changes to this layer’s textOcclusionOpacity property.
    */
-  iconImageCrossFadeTransition?: Transition;
+  textOcclusionOpacityTransition?: Transition;
+  /**
+   * Increase or reduce the saturation of the symbol icon.
+   */
+  iconColorSaturation?: Value<number>;
+  /**
+   * Specifies an uniform elevation from the ground, in meters.
+   */
+  symbolZOffset?: Value<number, ['zoom', 'feature']>;
+
+  /**
+   * The transition affecting any changes to this layer’s symbolZOffset property.
+   */
+  symbolZOffsetTransition?: Transition;
 }
 export interface CircleLayerStyleProps {
   /**
@@ -1202,7 +1369,7 @@ export interface CircleLayerStyleProps {
    */
   circleColorTransition?: Transition;
   /**
-   * Amount to blur the circle. 1 blurs the circle such that only the centerpoint is full opacity.
+   * Amount to blur the circle. 1 blurs the circle such that only the centerpoint is full opacity. Setting a negative value renders the blur as an inner glow effect.
    */
   circleBlur?: Value<
     number,
@@ -1294,6 +1461,12 @@ export interface CircleLayerStyleProps {
    */
   circleStrokeOpacityTransition?: Transition;
   /**
+   * Selects the base of circleElevation. Some modes might require precomputed elevation data in the tileset.
+   */
+  circleElevationReference?: Value<
+    Enum<CircleElevationReferenceEnum, CircleElevationReferenceEnumValues>
+  >;
+  /**
    * Controls the intensity of light emitted on the source features.
    *
    * @requires lights
@@ -1357,6 +1530,10 @@ export interface FillExtrusionLayerStyleProps {
    * Whether this layer is displayed.
    */
   visibility?: Value<Enum<VisibilityEnum, VisibilityEnumValues>>;
+  /**
+   * Radius of a fill extrusion edge in meters. If not zero, rounds extrusion edges for a smoother appearance.
+   */
+  fillExtrusionEdgeRadius?: Value<number>;
   /**
    * The opacity of the entire fill extrusion layer. This is rendered on a perLayer, not perFeature, basis, and dataDriven styling is not available.
    */
@@ -1430,17 +1607,59 @@ export interface FillExtrusionLayerStyleProps {
    */
   fillExtrusionVerticalGradient?: Value<boolean, ['zoom']>;
   /**
+   * Controls the intensity of shading near ground and concave angles between walls. Default value 0.0 disables ambient occlusion and values around 0.3 provide the most plausible results for buildings.
+   */
+  fillExtrusionAmbientOcclusionIntensity?: Value<number, ['zoom']>;
+
+  /**
+   * The transition affecting any changes to this layer’s fillExtrusionAmbientOcclusionIntensity property.
+   */
+  fillExtrusionAmbientOcclusionIntensityTransition?: Transition;
+  /**
+   * Shades area near ground and concave angles between walls where the radius defines only vertical impact. Default value 3.0 corresponds to height of one floor and brings the most plausible results for buildings. This property works only with legacy light. When 3D lights are enabled `fillExtrusionAmbientOcclusionWallRadius` and `fillExtrusionAmbientOcclusionGroundRadius` are used instead.
+   *
+   * @requires fillExtrusionEdgeRadius
+   */
+  fillExtrusionAmbientOcclusionRadius?: Value<number, ['zoom']>;
+
+  /**
+   * The transition affecting any changes to this layer’s fillExtrusionAmbientOcclusionRadius property.
+   */
+  fillExtrusionAmbientOcclusionRadiusTransition?: Transition;
+  /**
    * Indicates whether top edges should be rounded when fillExtrusionEdgeRadius has a value greater than 0. If false, rounded edges are only applied to the sides. Default is true.
    *
    * @requires fillExtrusionEdgeRadius
    */
   fillExtrusionRoundedRoof?: Value<boolean, ['zoom']>;
   /**
+   * Controls the transition progress between the image variants of fillExtrusionPattern. Zero means the first variant is used, one is the second, and in between they are blended together. Both images should be the same size and have the same type (either raster or vector).
+   *
+   * @requires linePattern
+   */
+  fillExtrusionPatternCrossFade?: Value<number, ['zoom', 'measure-light']>;
+  /**
+   * Controls the behavior of fill extrusion height over terrain
+   *
+   * @requires fillExtrusionHeight
+   */
+  fillExtrusionHeightAlignment?: Enum<
+    FillExtrusionHeightAlignmentEnum,
+    FillExtrusionHeightAlignmentEnumValues
+  >;
+  /**
+   * Controls the behavior of fill extrusion base over terrain
+   *
+   * @requires fillExtrusionBase
+   */
+  fillExtrusionBaseAlignment?: Enum<
+    FillExtrusionBaseAlignmentEnum,
+    FillExtrusionBaseAlignmentEnumValues
+  >;
+  /**
    * Shades area near ground and concave angles between walls where the radius defines only vertical impact. Default value 3.0 corresponds to height of one floor and brings the most plausible results for buildings.
    *
    * @requires lights, fillExtrusionEdgeRadius
-   *
-   * @disabledBy fillExtrusionFloodLightIntensity
    */
   fillExtrusionAmbientOcclusionWallRadius?: Value<number, ['zoom']>;
 
@@ -1452,8 +1671,6 @@ export interface FillExtrusionLayerStyleProps {
    * The extent of the ambient occlusion effect on the ground beneath the extruded buildings in meters.
    *
    * @requires lights
-   *
-   * @disabledBy fillExtrusionFloodLightIntensity
    */
   fillExtrusionAmbientOcclusionGroundRadius?: Value<number, ['zoom']>;
 
@@ -1465,8 +1682,6 @@ export interface FillExtrusionLayerStyleProps {
    * Provides a control to futher fineTune the look of the ambient occlusion on the ground beneath the extruded buildings. Lower values give the effect a more solid look while higher values make it smoother.
    *
    * @requires lights
-   *
-   * @disabledBy fillExtrusionFloodLightIntensity
    */
   fillExtrusionAmbientOcclusionGroundAttenuation?: Value<number, ['zoom']>;
 
@@ -1478,8 +1693,6 @@ export interface FillExtrusionLayerStyleProps {
    * The color of the flood light effect on the walls of the extruded buildings.
    *
    * @requires lights
-   *
-   * @disabledBy fillExtrusionAmbientOcclusionIntensity
    */
   fillExtrusionFloodLightColor?: Value<string, ['zoom', 'measure-light']>;
 
@@ -1491,8 +1704,6 @@ export interface FillExtrusionLayerStyleProps {
    * The intensity of the flood light color.
    *
    * @requires lights
-   *
-   * @disabledBy fillExtrusionAmbientOcclusionIntensity
    */
   fillExtrusionFloodLightIntensity?: Value<number, ['zoom', 'measure-light']>;
 
@@ -1504,8 +1715,6 @@ export interface FillExtrusionLayerStyleProps {
    * The extent of the flood light effect on the walls of the extruded buildings in meters.
    *
    * @requires lights
-   *
-   * @disabledBy fillExtrusionAmbientOcclusionIntensity
    */
   fillExtrusionFloodLightWallRadius?: Value<
     number,
@@ -1517,11 +1726,9 @@ export interface FillExtrusionLayerStyleProps {
    */
   fillExtrusionFloodLightWallRadiusTransition?: Transition;
   /**
-   * The extent of the flood light effect on the ground beneath the extruded buildings in meters.
+   * The extent of the flood light effect on the ground beneath the extruded buildings in meters. Note: this experimental property is evaluated once per tile, during tile initialization. Changing the property value could trigger tile reload. The `featureState` styling is deprecated and will get removed soon.
    *
    * @requires lights
-   *
-   * @disabledBy fillExtrusionAmbientOcclusionIntensity
    */
   fillExtrusionFloodLightGroundRadius?: Value<
     number,
@@ -1536,8 +1743,6 @@ export interface FillExtrusionLayerStyleProps {
    * Provides a control to futher fineTune the look of the flood light on the ground beneath the extruded buildings. Lower values give the effect a more solid look while higher values make it smoother.
    *
    * @requires lights
-   *
-   * @disabledBy fillExtrusionAmbientOcclusionIntensity
    */
   fillExtrusionFloodLightGroundAttenuation?: Value<number, ['zoom']>;
 
@@ -1555,9 +1760,35 @@ export interface FillExtrusionLayerStyleProps {
    */
   fillExtrusionVerticalScaleTransition?: Transition;
   /**
-   * This parameter defines the range for the fadeOut effect before an automatic content cutoff on pitched map views. The automatic cutoff range is calculated according to the minimum required zoom level of the source and layer. The fade range is expressed in relation to the height of the map view. A value of 1.0 indicates that the content is faded to the same extent as the map's height in pixels, while a value close to zero represents a sharp cutoff. When the value is set to 0.0, the cutoff is completely disabled. Note: The property has no effect on the map if terrain is enabled.
+   * This parameter defines the range for the fadeOut effect before an automatic content cutoff on pitched map views. Fade out is implemented by scaling down and removing buildings in the fade range in a staggered fashion. Opacity is not changed. The fade range is expressed in relation to the height of the map view. A value of 1.0 indicates that the content is faded to the same extent as the map's height in pixels, while a value close to zero represents a sharp cutoff. When the value is set to 0.0, the cutoff is completely disabled. Note: The property has no effect on the map if terrain is enabled.
    */
   fillExtrusionCutoffFadeRange?: Value<number>;
+  /**
+   * Controls the intensity of light emitted on the source features.
+   *
+   * @requires lights
+   */
+  fillExtrusionEmissiveStrength?: Value<
+    number,
+    ['zoom', 'measure-light', 'feature-state']
+  >;
+
+  /**
+   * The transition affecting any changes to this layer’s fillExtrusionEmissiveStrength property.
+   */
+  fillExtrusionEmissiveStrengthTransition?: Transition;
+  /**
+   * If a nonZero value is provided, it sets the fillExtrusion layer into wall rendering mode. The value is used to render the feature with the given width over the outlines of the geometry. Note: This property is experimental and some other fillExtrusion properties might not be supported with nonZero line width.
+   */
+  fillExtrusionLineWidth?: Value<
+    number,
+    ['zoom', 'feature', 'feature-state', 'measure-light']
+  >;
+
+  /**
+   * The transition affecting any changes to this layer’s fillExtrusionLineWidth property.
+   */
+  fillExtrusionLineWidthTransition?: Transition;
 }
 export interface RasterLayerStyleProps {
   /**
@@ -1645,7 +1876,7 @@ export interface RasterLayerStyleProps {
    */
   rasterColorMixTransition?: Transition;
   /**
-   * When `rasterColor` is active, specifies the range over which `rasterColor` is tabulated. Units correspond to the computed raster value via `rasterColorMix`.
+   * When `rasterColor` is active, specifies the range over which `rasterColor` is tabulated. Units correspond to the computed raster value via `rasterColorMix`. For `rasterarray` sources, if `rasterColorRange` is unspecified, the source's stated data range is used.
    *
    * @requires rasterColor
    */
@@ -1655,6 +1886,30 @@ export interface RasterLayerStyleProps {
    * The transition affecting any changes to this layer’s rasterColorRange property.
    */
   rasterColorRangeTransition?: Transition;
+  /**
+   * Controls the intensity of light emitted on the source features.
+   *
+   * @requires lights
+   */
+  rasterEmissiveStrength?: Value<number, ['zoom', 'measure-light']>;
+
+  /**
+   * The transition affecting any changes to this layer’s rasterEmissiveStrength property.
+   */
+  rasterEmissiveStrengthTransition?: Transition;
+  /**
+   * Displayed band of raster array source layer. Defaults to the first band if not set.
+   */
+  rasterArrayBand?: string;
+  /**
+   * Specifies an uniform elevation from the ground, in meters.
+   */
+  rasterElevation?: Value<number, ['zoom']>;
+
+  /**
+   * The transition affecting any changes to this layer’s rasterElevation property.
+   */
+  rasterElevationTransition?: Transition;
 }
 export interface HillshadeLayerStyleProps {
   /**
@@ -1718,13 +1973,13 @@ export interface ModelLayerStyleProps {
    */
   visibility?: Value<Enum<VisibilityEnum, VisibilityEnumValues>>;
   /**
-   * Model to render.
+   * Model to render. It can be either a string referencing an element to the models root property or an internal or external URL
    */
   modelId?: Value<string, ['zoom', 'feature']>;
   /**
-   * The opacity of the model layer.
+   * The opacity of the model layer. Except for zoom, expressions that are dataDriven are not supported if using GeoJSON or vector tile as the model layer source.
    */
-  modelOpacity?: Value<number, ['zoom']>;
+  modelOpacity?: Value<number, ['feature', 'feature-state', 'zoom']>;
 
   /**
    * The transition affecting any changes to this layer’s modelOpacity property.
@@ -1788,11 +2043,11 @@ export interface ModelLayerStyleProps {
   /**
    * Enable/Disable shadow casting for this layer
    */
-  modelCastShadows?: Value<boolean>;
+  modelCastShadows?: boolean;
   /**
    * Enable/Disable shadow receiving for this layer
    */
-  modelReceiveShadows?: Value<boolean>;
+  modelReceiveShadows?: boolean;
   /**
    * Intensity of the ambient occlusion if present in the 3D model.
    */
@@ -1803,7 +2058,7 @@ export interface ModelLayerStyleProps {
    */
   modelAmbientOcclusionIntensityTransition?: Transition;
   /**
-   * Strength of the emission. There is no emission for value 0. For value 1.0, only emissive component (no shading) is displayed and values above 1.0 produce light contribution to surrounding area, for some of the parts (e.g. doors). Expressions that depend on measureLight are not supported when using GeoJSON or vector tile as the model layer source.
+   * Strength of the emission. There is no emission for value 0. For value 1.0, only emissive component (no shading) is displayed and values above 1.0 produce light contribution to surrounding area, for some of the parts (e.g. doors). Expressions that depend on measureLight are only supported as a global layer value (and not for each feature) when using GeoJSON or vector tile as the model layer source.
    */
   modelEmissiveStrength?: Value<
     number,
@@ -1869,6 +2124,13 @@ export interface BackgroundLayerStyleProps {
    * The transition affecting any changes to this layer’s backgroundOpacity property.
    */
   backgroundOpacityTransition?: Transition;
+  /**
+   * Orientation of background layer.
+   */
+  backgroundPitchAlignment?: Value<
+    Enum<BackgroundPitchAlignmentEnum, BackgroundPitchAlignmentEnumValues>,
+    []
+  >;
   /**
    * Controls the intensity of light emitted on the source features.
    *

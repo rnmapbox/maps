@@ -80,7 +80,10 @@ export default GradientLine;
 
 /* end-example-doc */
 
-/** @type ExampleWithMetadata['metadata'] */
+/**
+ * @typedef {import('../common/ExampleMetadata').ExampleWithMetadata} ExampleWithMetadata
+ * @type {ExampleWithMetadata['metadata']}
+ */
 const metadata = {
   title: 'Gradient Line',
   tags: ['LineLayer', 'LineLayer#lineGradient'],

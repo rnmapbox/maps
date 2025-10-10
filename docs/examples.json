@@ -1,8 +1,8 @@
 [
   {
-    "groupName": "CacheManagement",
+    "groupName": "CacheOffline",
     "metadata": {
-      "title": "CacheManagement"
+      "title": "Cache / Offline"
     },
     "examples": [
       {
@@ -20,9 +20,45 @@
           ],
           "docs": "\nManages map cache.\n\nUses the offline manager to manage the cache and the local storage in general. Shows how to invalidate cache to remove outdated tiles, how to clear the entire local storage from tiles and offline packs and to visualize the local storage usage amount.\n"
         },
-        "fullPath": "example/src/examples/CacheManagement/CacheManagement.tsx",
-        "relPath": "CacheManagement/CacheManagement.tsx",
+        "fullPath": "example/src/examples/CacheOffline/CacheManagement.tsx",
+        "relPath": "CacheOffline/CacheManagement.tsx",
         "name": "CacheManagement"
+      },
+      {
+        "metadata": {
+          "title": "Change Offline Region",
+          "tags": [
+            "offlineManage#createPack"
+          ],
+          "docs": "\nCreates offline pack and montiors them\n"
+        },
+        "fullPath": "example/src/examples/CacheOffline/CreateOfflineRegion.js",
+        "relPath": "CacheOffline/CreateOfflineRegion.js",
+        "name": "CreateOfflineRegion"
+      },
+      {
+        "metadata": {
+          "title": "Offline Example",
+          "tags": [
+            "offlineManager#createPack",
+            "offlineManager#getPack",
+            "offlineManager#getPacks"
+          ],
+          "docs": "\nDemonstates basic use of offlineManager api.\n"
+        },
+        "fullPath": "example/src/examples/CacheOffline/OfflineExample.tsx",
+        "relPath": "CacheOffline/OfflineExample.tsx",
+        "name": "OfflineExample"
+      },
+      {
+        "metadata": {
+          "title": "Offline Tilesets",
+          "tags": [],
+          "docs": "\nUses offline manager tileset option to include additional tilesets in the offline pack.\n\nTo test:\n- First load the example with wifi/netowork off, make sure the map is blank, and also pressing \"Center Offline Location\" is blank\n- Close the test, enable wifi, open test again\n- Disable wifi/network presss \"Center Offline Location\" make sure blue line which shows country contours show up\n"
+        },
+        "fullPath": "example/src/examples/CacheOffline/OfflineTilesets.tsx",
+        "relPath": "CacheOffline/OfflineTilesets.tsx",
+        "name": "OfflineTilesets"
       }
     ]
   },
@@ -241,18 +277,6 @@
       },
       {
         "metadata": {
-          "title": "Change Offline Region",
-          "tags": [
-            "offlineManage#createPack"
-          ],
-          "docs": "\nCreates offline pack and montiors them\n"
-        },
-        "fullPath": "example/src/examples/Map/CreateOfflineRegion.js",
-        "relPath": "Map/CreateOfflineRegion.js",
-        "name": "CreateOfflineRegion"
-      },
-      {
-        "metadata": {
           "title": "Dynamic URL",
           "tags": [
             "ShapeSource#url"
@@ -306,20 +330,6 @@
         "fullPath": "example/src/examples/Map/MapUnMount.tsx",
         "relPath": "Map/MapUnMount.tsx",
         "name": "MapUnMount"
-      },
-      {
-        "metadata": {
-          "title": "Offline Example",
-          "tags": [
-            "offlineManager#createPack",
-            "offlineManager#getPack",
-            "offlineManager#getPacks"
-          ],
-          "docs": "\nDemonstrates basic use of offlineManager api.\n"
-        },
-        "fullPath": "example/src/examples/Map/OfflineExample.tsx",
-        "relPath": "Map/OfflineExample.tsx",
-        "name": "OfflineExample"
       },
       {
         "metadata": {
@@ -782,7 +792,7 @@
             "getCoordinateFromView",
             "Overlay"
           ],
-          "docs": "This example shows a simple polyline editor. It uses `onCameraChanged` to get the center of the map and `getCoordinateFromView` \n  to get the coordinates of the crosshair.\n  \n  The crosshair is an overlay that is positioned using `onLayout` and `getCoordinateFromView`.\n  \n  The `ShapeSource` is updated with the new coordinates and the `LineLayer` is updated with the new coordinates."
+          "docs": "This example shows a simple polyline editor. It uses `onCameraChanged` to get the center of the map and `getCoordinateFromView`\n  to get the coordinates of the crosshair.\n\n  The crosshair is an overlay that is positioned using `onLayout` and `getCoordinateFromView`.\n\n  The `ShapeSource` is updated with the new coordinates and the `LineLayer` is updated with the new coordinates."
         },
         "fullPath": "example/src/examples/LineLayer/DrawPolyline.tsx",
         "relPath": "LineLayer/DrawPolyline.tsx",
@@ -829,10 +839,10 @@
             "Camera",
             "Camera#zoomTo"
           ],
-          "docs": "\nChange camera via imperative methods"
+          "docs": "Change camera via imperative methods"
         },
-        "fullPath": "example/src/examples/Camera/Fit.js",
-        "relPath": "Camera/Fit.js",
+        "fullPath": "example/src/examples/Camera/Fit.tsx",
+        "relPath": "Camera/Fit.tsx",
         "name": "Fit"
       },
       {

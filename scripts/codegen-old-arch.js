@@ -46,7 +46,12 @@ function fixOldArchJava(dir) {
       'extends ReactContextBaseJavaModule implements ReactModuleWithSpec, TurboModule',
     );
     // insert import if ReactMethod import exists but ReactModuleWithSpec is missing
-    if (/import com\.facebook\.react\.bridge\.ReactMethod;/.test(newContent) && !/import com\.facebook\.react\.bridge\.ReactModuleWithSpec;/.test(newContent)) {
+    if (
+      /import com\.facebook\.react\.bridge\.ReactMethod;/.test(newContent) &&
+      !/import com\.facebook\.react\.bridge\.ReactModuleWithSpec;/.test(
+        newContent,
+      )
+    ) {
       newContent = newContent.replace(
         /import com\.facebook\.react\.bridge\.ReactMethod;/,
         'import com.facebook.react.bridge.ReactMethod;\nimport com.facebook.react.bridge.ReactModuleWithSpec;',
@@ -56,7 +61,10 @@ function fixOldArchJava(dir) {
     // RN77: for generated Interface files, remove ViewManagerWithGeneratedInterface import and extends
     if (file.endsWith('Interface.java')) {
       newContent = newContent
-        .replace(/import com\.facebook\.react\.uimanager\.ViewManagerWithGeneratedInterface;\s*\n?/g, '')
+        .replace(
+          /import com\.facebook\.react\.uimanager\.ViewManagerWithGeneratedInterface;\s*\n?/g,
+          '',
+        )
         .replace(/extends\s+ViewManagerWithGeneratedInterface /g, '');
     }
 
