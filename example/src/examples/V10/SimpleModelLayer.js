@@ -110,7 +110,7 @@ const metadata = {
   title: 'Simple Model Layer',
   tags: ['Models', 'ModelLayer'],
   docs: `
-Deomnstrate the use of ModelLayer to render, and Models to associate 3D models with names.
+Demonstrate the use of ModelLayer to render, and Models to associate 3D models with names.
 `,
 };
 SimpleModelLayer.metadata = metadata;

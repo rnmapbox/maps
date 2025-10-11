@@ -45,7 +45,7 @@ const metadata: ExampleWithMetadata['metadata'] = {
   title: 'User Location Updates',
   tags: ['UserLocation', 'UserLocation#onUpdate'],
   docs: `
-Retrieves and shows location updates from UserLocation componen via the \`onUpdate\` callback
+Retrieves and shows location updates from UserLocation component via the \`onUpdate\` callback
 `,
 };
 UserLocationUpdates.metadata = metadata;

@@ -29,7 +29,7 @@ A string that uniquely identifies the source in the style to which it is added.
 ```tsx
 boolean
 ```
-The id refers to en existing layer in the style. Does not create a new layer.
+The id refers to an existing layer in the style. Does not create a new layer.
 
 [Show and hide layer](../examples/Map/ShowAndHideLayer)
   

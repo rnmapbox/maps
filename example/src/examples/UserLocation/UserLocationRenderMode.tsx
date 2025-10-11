@@ -173,7 +173,7 @@ const metadata: ExampleWithMetadata['metadata'] = {
     'UserLocation#onUserTrackingModeChange',
   ],
   docs: `
-Demonstates UserLocation render modes, follow modes
+Demonstrates UserLocation render modes, follow modes
 `,
 };
 UserLocationRenderMode.metadata = metadata;

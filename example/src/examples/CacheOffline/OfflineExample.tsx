@@ -141,7 +141,7 @@ const metadata: ExampleWithMetadata['metadata'] = {
     'offlineManager#getPacks',
   ],
   docs: `
-Demonstates basic use of offlineManager api.
+Demonstrates basic use of offlineManager api.
 `,
 };
 OfflineExample.metadata = metadata;

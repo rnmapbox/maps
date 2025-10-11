@@ -344,7 +344,7 @@
         "required": false,
         "type": "boolean",
         "default": "none",
-        "description": "The id refers to en existing layer in the style. Does not create a new layer."
+        "description": "The id refers to an existing layer in the style. Does not create a new layer."
       },
       {
         "name": "sourceID",
@@ -942,7 +942,7 @@
         "required": false,
         "type": "boolean",
         "default": "none",
-        "description": "The id refers to en existing layer in the style. Does not create a new layer."
+        "description": "The id refers to an existing layer in the style. Does not create a new layer."
       },
       {
         "name": "sourceID",
@@ -1414,7 +1414,7 @@
         "required": false,
         "type": "boolean",
         "default": "none",
-        "description": "The id refers to en existing layer in the style. Does not create a new layer."
+        "description": "The id refers to an existing layer in the style. Does not create a new layer."
       },
       {
         "name": "sourceID",
@@ -1833,7 +1833,7 @@
         "required": false,
         "type": "boolean",
         "default": "none",
-        "description": "The id refers to en existing layer in the style. Does not create a new layer."
+        "description": "The id refers to an existing layer in the style. Does not create a new layer."
       },
       {
         "name": "sourceID",
@@ -2178,7 +2178,7 @@
         "required": false,
         "type": "boolean",
         "default": "none",
-        "description": "The id refers to en existing layer in the style. Does not create a new layer."
+        "description": "The id refers to an existing layer in the style. Does not create a new layer."
       },
       {
         "name": "sourceID",
@@ -2513,7 +2513,7 @@
         "required": false,
         "type": "boolean",
         "default": "none",
-        "description": "The id refers to en existing source in the style. Does not create a new source."
+        "description": "The id refers to an existing source in the style. Does not create a new source."
       },
       {
         "name": "url",
@@ -2736,7 +2736,7 @@
         "required": false,
         "type": "boolean",
         "default": "none",
-        "description": "The id refers to en existing layer in the style. Does not create a new layer."
+        "description": "The id refers to an existing layer in the style. Does not create a new layer."
       },
       {
         "name": "sourceID",
@@ -4585,7 +4585,7 @@
         "required": false,
         "type": "boolean",
         "default": "none",
-        "description": "The id refers to en existing layer in the style. Does not create a new layer."
+        "description": "The id refers to an existing layer in the style. Does not create a new layer."
       },
       {
         "name": "sourceID",
@@ -4864,7 +4864,7 @@
         "required": false,
         "type": "boolean",
         "default": "none",
-        "description": "The id refers to en existing source in the style. Does not create a new source."
+        "description": "The id refers to an existing source in the style. Does not create a new source."
       },
       {
         "name": "url",
@@ -4930,7 +4930,7 @@
         "required": false,
         "type": "boolean",
         "default": "none",
-        "description": "The id refers to en existing layer in the style. Does not create a new layer."
+        "description": "The id refers to an existing layer in the style. Does not create a new layer."
       },
       {
         "name": "sourceID",
@@ -5253,7 +5253,7 @@
         "required": false,
         "type": "boolean",
         "default": "none",
-        "description": "The id refers to en existing source in the style. Does not create a new source."
+        "description": "The id refers to an existing source in the style. Does not create a new source."
       },
       {
         "name": "url",
@@ -5456,7 +5456,7 @@
         "required": false,
         "type": "boolean",
         "default": "none",
-        "description": "The id refers to en existing source in the style. Does not create a new source."
+        "description": "The id refers to an existing source in the style. Does not create a new source."
       },
       {
         "name": "url",
@@ -5592,7 +5592,7 @@
         "required": false,
         "type": "boolean",
         "default": "none",
-        "description": "The id refers to en existing layer in the style. Does not create a new layer."
+        "description": "The id refers to an existing layer in the style. Does not create a new layer."
       },
       {
         "name": "sourceID",
@@ -5976,7 +5976,7 @@
         "required": false,
         "type": "boolean",
         "default": "none",
-        "description": "The id refers to en existing layer in the style. Does not create a new layer."
+        "description": "The id refers to an existing layer in the style. Does not create a new layer."
       },
       {
         "name": "sourceID",
@@ -7929,7 +7929,7 @@
         "required": false,
         "type": "boolean",
         "default": "none",
-        "description": "The id refers to en existing source in the style. Does not create a new source."
+        "description": "The id refers to an existing source in the style. Does not create a new source."
       },
       {
         "name": "url",

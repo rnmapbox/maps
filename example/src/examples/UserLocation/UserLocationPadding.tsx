@@ -50,9 +50,9 @@ const metadata: ExampleWithMetadata['metadata'] = {
   title: 'User Location Padding',
   tags: ['Images', 'Images#stretchX', 'Images#stretchY', 'Images#content'],
   docs: `
-Demonstates Scalable images.
+Demonstrates Scalable images.
 
-You can use strachX, stretchY and content to scale a bitmap image - keep parts of it fixed while only scale specific parts.
+You can use stretchX, stretchY and content to scale a bitmap image - keep parts of it fixed while only scale specific parts.
 `,
 };
 UserLocationPadding.metadata = metadata;

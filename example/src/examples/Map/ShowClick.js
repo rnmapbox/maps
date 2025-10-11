@@ -89,7 +89,7 @@ const metadata = {
   title: 'Show Click',
   tags: ['MapView#onPress'],
   docs: `
-Demonstates onPress event and how to get the screen point of the click.
+Demonstrates onPress event and how to get the screen point of the click.
 `,
 };
 ShowClick.metadata = metadata;

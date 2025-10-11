@@ -22,7 +22,7 @@ type LayerPropsCommon = {
   id: string;
 
   /**
-   * The id refers to en existing layer in the style. Does not create a new layer.
+   * The id refers to an existing layer in the style. Does not create a new layer.
    */
   existing?: boolean;
 
