@@ -103,7 +103,7 @@ const metadata = {
   title: 'Marker View',
   tags: ['PointAnnotation', 'MarkerView'],
   docs: `
-Shows marker view and poitn annotations
+Shows marker view and point annotations
 `,
 };
 ShowMarkerView.metadata = metadata;
