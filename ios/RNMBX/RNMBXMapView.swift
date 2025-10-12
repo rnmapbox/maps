@@ -466,7 +466,7 @@ open class RNMBXMapView: UIView, RCTInvalidating {
   func applyPreferredFramesPerSecond() {
     if let value = preferredFramesPerSecond {
       if #available(iOS 15.0, *) {
-        self.mapView.preferredFrameRateRange = CAFrameRateRange(minimum: 1, maximum: Float(value))
+        self.mapView.preferredFrameRateRange = CAFrameRateRange(minimum: 1, maximum: Float(value), preferred: Float(value))
       } else {
         self.mapView.preferredFramesPerSecond = value
       }
