@@ -25,8 +25,9 @@ open class RNMBXStyleImport: UIView, RNMBXMapComponent {
   }
 
   public func addToMap(_ map: RNMBXMapView, style: Style) {
-    mapView = map.mapView
-    apply(mapView: map.mapView)
+    map.withMapView { _mapView in
+      self.apply(mapView: _mapView)
+    }
   }
 
   public func removeFromMap(_ map: RNMBXMapView, reason: RemovalReason) -> Bool {

@@ -57,16 +57,19 @@ open class RNMBXViewport : UIView, RNMBXMapComponent, ViewportStatusObserver {
   }
 
   public func addToMap(_ map: RNMBXMapView, style: Style) {
-    mapView = map.mapView
-    applyHasStatusChanged(mapView: mapView!)
-    apply(mapView: map.mapView)
+    map.withMapView { _mapView in
+      self.applyHasStatusChanged(mapView: _mapView)
+      self.apply(mapView: _mapView)
+    }
   }
 
   public func removeFromMap(_ map: RNMBXMapView, reason: RemovalReason) -> Bool {
-    if (hasStatusChanged) {
-      map.mapView.viewport.removeStatusObserver(self)
+    map.withMapView { _mapView in
+      if (self.hasStatusChanged) {
+        _mapView.viewport.removeStatusObserver(self)
+      }
+      self.mapView = nil
     }
-    self.mapView = nil
     return true
   }
 

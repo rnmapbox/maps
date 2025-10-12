@@ -36,19 +36,25 @@ public class RNMBXSource : RNMBXInteractiveElement {
     super.insertReactSubview(subview, at: atIndex)
   }
     
-    @objc public func insertReactSubviewInternal(_ subview: UIView!, at atIndex: Int) {
-        if let layer = subview as? RNMBXSourceConsumer {
-          if let map = map {
-            layer.addToMap(map, style: map.mapboxMap.style)
+  @objc public func insertReactSubviewInternal(_ subview: UIView!, at atIndex: Int) {
+      if let layer = subview as? RNMBXSourceConsumer {
+        if let map = map {
+          map.withMapboxMap { [weak map] _mapboxMap in
+            guard let map = map else { return }
+            layer.addToMap(map, style: _mapboxMap.style)
           }
-          layers.append(layer)
-        } else if let component = subview as? RNMBXMapComponent {
-          if let map = map {
-            component.addToMap(map, style: map.mapboxMap.style)
-          }
-          components.append(component)
         }
-    }
+        layers.append(layer)
+      } else if let component = subview as? RNMBXMapComponent {
+        if let map = map {
+          map.withMapboxMap { [weak map] _mapboxMap in
+            guard let map = map else { return }
+            component.addToMap(map, style: _mapboxMap.style)
+          }
+        }
+        components.append(component)
+      }
+  }
   
   @objc public override func removeReactSubview(_ subview: UIView!) {
     removeReactSubviewInternal(subview)
@@ -58,7 +64,10 @@ public class RNMBXSource : RNMBXInteractiveElement {
     @objc public func removeReactSubviewInternal(_ subview: UIView!) {
         if let layer : RNMBXSourceConsumer = subview as? RNMBXSourceConsumer {
           if let map = map {
-            layer.removeFromMap(map, style: map.mapboxMap.style)
+            map.withMapboxMap { [weak map] _mapboxMap in
+              guard let map = map else { return }
+              layer.removeFromMap(map, style: _mapboxMap.style)
+            }
           }
           layers.removeAll { $0 as AnyObject === layer }
         } else if let component = subview as? RNMBXMapComponent {
@@ -101,10 +110,16 @@ public class RNMBXSource : RNMBXInteractiveElement {
     }
 
     for layer in self.layers {
-      layer.addToMap(map, style: map.mapboxMap.style)
+      map.withMapboxMap { [weak map] _mapboxMap in
+        guard let map = map else { return }
+        layer.addToMap(map, style: _mapboxMap.style)
+      }
     }
     for component in self.components {
-      component.addToMap(map, style: map.mapboxMap.style)
+      map.withMapboxMap { [weak map] _mapboxMap in
+        guard let map = map else { return }
+        component.addToMap(map, style: _mapboxMap.style)
+      }
     }
   }
 
@@ -112,15 +127,20 @@ public class RNMBXSource : RNMBXInteractiveElement {
     self.map = nil
 
     for layer in self.layers {
-      layer.removeFromMap(map, style: map.mapboxMap.style)
+      map.withMapboxMap { [weak map] _mapboxMap in
+        guard let map = map else { return }
+        layer.removeFromMap(map, style: _mapboxMap.style)
+      }
     }
 
     if self.ownsSource {
-      let style = map.mapboxMap.style
-      logged("StyleSource.removeFromMap", info: { "id: \(optional: self.id)"}) {
-        try style.removeSource(withId: id)
+      map.withMapboxMap { [weak map] _mapboxMap in
+        let style = _mapboxMap.style
+        logged("StyleSource.removeFromMap", info: { "id: \(optional: self.id)"}) {
+          try style.removeSource(withId: self.id)
+        }
+        self.ownsSource = false
       }
-      self.ownsSource = false
     }
     return true
   }

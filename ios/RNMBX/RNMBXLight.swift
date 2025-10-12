@@ -56,9 +56,12 @@ public class RNMBXLight: UIView, RNMBXMapComponent {
   }
 
   public func addToMap(_ map: RNMBXMapView, style: Style) {
-    self.map = map.mapboxMap
-    if (reactStyle != nil) {
-      addStyles()
+    map.withMapboxMap { [weak self] _mapboxMap in
+      guard let self = self else { return }
+      self.map = _mapboxMap
+      if (self.reactStyle != nil) {
+        self.addStyles()
+      }
     }
   }
   

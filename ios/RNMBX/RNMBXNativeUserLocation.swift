@@ -131,72 +131,70 @@ public class RNMBXNativeUserLocation: UIView, RNMBXMapComponent {
     guard let map = self.map else {
       return
     }
-    guard let mapView = map.mapView else {
-      Logger.error("RNMBXNativeUserLocation mapView was nil")
-      return
-    }
-    guard let location = mapView.location else {
-      Logger.error("RNMBXNativeUserLocation location was nil")
-      return
-    }
+    map.withMapView { _mapView in
+      guard let location = _mapView.location else {
+        Logger.error("RNMBXNativeUserLocation location was nil")
+        return
+      }
 
-    if (!visible) {
-      let emptyImage = UIGraphicsImageRenderer(size: CGSize(width: 1, height: 1)).image { _ in }
-      location.options.puckType = .puck2D(
-        Puck2DConfiguration(
-          topImage: emptyImage,
-          bearingImage: emptyImage,
-          shadowImage: emptyImage,
-          scale: Value.constant(1.0)
+      if (!self.visible) {
+        let emptyImage = UIGraphicsImageRenderer(size: CGSize(width: 1, height: 1)).image { _ in }
+        location.options.puckType = .puck2D(
+          Puck2DConfiguration(
+            topImage: emptyImage,
+            bearingImage: emptyImage,
+            shadowImage: emptyImage,
+            scale: Value.constant(1.0)
+          )
         )
-      )
-      return
-    } else {
-      var configuration : Puck2DConfiguration = images.isEmpty ?
-        .makeDefault(showBearing: puckBearingEnabled) : Puck2DConfiguration(
-          topImage: self.images[.top],
-          bearingImage: self.images[.bearing],
-          shadowImage: self.images[.shadow])
-      
-      if let scale = toDoubleValue(value: scale, name: "scale") {
-        configuration.scale = scale
-      }
-      
-      if let pulsing = pulsing {
-        if let kind = pulsing["kind"] as? String, kind == "default" {
-          configuration.pulsing = .default
-        } else {
-          var pulsingConfig = Puck2DConfiguration.Pulsing()
-          if let isEnabled = pulsing["isEnabled"] as? Bool {
-            pulsingConfig.isEnabled = isEnabled
-          }
-          
-          if let radius = pulsing["radius"] as? String {
-            if radius == "accuracy" {
-              pulsingConfig.radius = .accuracy
-            } else {
-              Logger.log(level: .error, message: "expected pulsing/radius to be either a number or accuracy but was \(radius)")
-            }
-          } else if let radius = pulsing["radius"] as? NSNumber {
-            pulsingConfig.radius = .constant(radius.doubleValue)
-          }
-          
-          if let color = pulsing["color"] {
-            if let uicolor = RCTConvert.uiColor(color) {
-              pulsingConfig.color = uicolor
-            } else {
-              Logger.log(level: .error, message: "expected color to be a color but was \(color)")
-            }
-          }
-          
-          configuration.pulsing = pulsingConfig
+        return
+      } else {
+        var configuration : Puck2DConfiguration = self.images.isEmpty ?
+          .makeDefault(showBearing: self.puckBearingEnabled) : Puck2DConfiguration(
+            topImage: self.images[.top],
+            bearingImage: self.images[.bearing],
+            shadowImage: self.images[.shadow])
+        
+        if let scale = self.toDoubleValue(value: self.scale, name: "scale") {
+          configuration.scale = scale
         }
+      
+        if let pulsing = self.pulsing {
+          if let kind = pulsing["kind"] as? String, kind == "default" {
+            configuration.pulsing = .default
+          } else {
+            var pulsingConfig = Puck2DConfiguration.Pulsing()
+            if let isEnabled = pulsing["isEnabled"] as? Bool {
+              pulsingConfig.isEnabled = isEnabled
+            }
+          
+            if let radius = pulsing["radius"] as? String {
+              if radius == "accuracy" {
+                pulsingConfig.radius = .accuracy
+              } else {
+                Logger.log(level: .error, message: "expected pulsing/radius to be either a number or accuracy but was \(radius)")
+              }
+            } else if let radius = pulsing["radius"] as? NSNumber {
+              pulsingConfig.radius = .constant(radius.doubleValue)
+            }
+          
+            if let color = pulsing["color"] {
+              if let uicolor = RCTConvert.uiColor(color) {
+                pulsingConfig.color = uicolor
+              } else {
+                Logger.log(level: .error, message: "expected color to be a color but was \(color)")
+              }
+            }
+          
+            configuration.pulsing = pulsingConfig
+          }
+        }
+        location.options.puckType = .puck2D(configuration)
       }
-      location.options.puckType = .puck2D(configuration)
-    }
-    location.options.puckBearingEnabled = puckBearingEnabled
-    if let puckBearing = _puckBearing {
-      location.options.puckBearing = puckBearing
+      location.options.puckBearingEnabled = self.puckBearingEnabled
+      if let puckBearing = self._puckBearing {
+        location.options.puckBearing = puckBearing
+      }
     }
   }
 
@@ -208,14 +206,16 @@ public class RNMBXNativeUserLocation: UIView, RNMBXMapComponent {
   }
 
   public func removeFromMap(_ map: RNMBXMapView, reason: RemovalReason) -> Bool {
-    if let location = map.mapView.location {
-      location.options.puckType = nil
-      location.options.puckType = .none
-    } else {
-      Logger.error("RNMBXNativeUserLocation.removeFromMap: location is nil")
+    map.withMapView { _mapView in
+      if let location = _mapView.location {
+        location.options.puckType = nil
+        location.options.puckType = .none
+      } else {
+        Logger.error("RNMBXNativeUserLocation.removeFromMap: location is nil")
+      }
+      self.removeSubscriptions()
+      self.map = nil
     }
-    removeSubscriptions()
-    self.map = nil
 
     return true
   }
@@ -248,26 +248,29 @@ extension RNMBXNativeUserLocation {
   }
 
   func _fetchImages(_ map: RNMBXMapView) {
-    if let style = map.mapView?.mapboxMap?.style {
-      imageNames.forEach { (part, name) in
-        if let name = name {
-          if style.imageExists(withId: name), let image = style.image(withId: name) {
-            images[part] = image
+    map.withMapView { [weak map] _mapView in
+      guard let map = map else { return }
+      if let style = _mapView.mapboxMap?.style {
+        self.imageNames.forEach { (part, name) in
+          if let name = name {
+            if style.imageExists(withId: name), let image = style.image(withId: name) {
+              self.images[part] = image
+            } else {
+              self.images.removeValue(forKey: part)
+            }
           } else {
-            images.removeValue(forKey: part)
+            self.images.removeValue(forKey: part)
           }
-        } else {
-          images.removeValue(forKey: part)
         }
       }
-    }
 
-    let imageManager = map.imageManager
-    removeSubscriptions()
-    self.imageManager = imageManager
-    imageNames.forEach { (part,name) in
-      if let name = name {
-        subscribe(imageManager, part, name)
+      let imageManager = map.imageManager
+      self.removeSubscriptions()
+      self.imageManager = imageManager
+      self.imageNames.forEach { (part,name) in
+        if let name = name {
+          self.subscribe(imageManager, part, name)
+        }
       }
     }
   }
