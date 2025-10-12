@@ -619,7 +619,7 @@
             "PointAnnotation",
             "MarkerView"
           ],
-          "docs": "\nShows marker view and poitn annotations\n"
+          "docs": "\nShows marker view and point annotations\n"
         },
         "fullPath": "example/src/examples/Annotations/MarkerView.tsx",
         "relPath": "Annotations/MarkerView.tsx",
