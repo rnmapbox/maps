@@ -10,7 +10,8 @@
       "types": "./lib/typescript/src/index.d.ts",
       "default": "./lib/module/index.js"
     },
-    "./package.json": "./package.json"
+    "./package.json": "./package.json",
+    "./app.plugin.js": "./app.plugin.js"
   },
   "files": [
     "src",
