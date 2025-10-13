@@ -92,8 +92,7 @@ target 'RNMapboxExample' do
     end
     react_native_post_install(
       installer,
-      # Set `mac_catalyst_enabled` to `true` in order to apply patches
-      # necessary for Mac Catalyst builds
+      config[:reactNativePath],
       :mac_catalyst_enabled => false,
       # :ccache_enabled => true
     )
