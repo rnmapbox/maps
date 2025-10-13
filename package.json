@@ -1,6 +1,6 @@
 {
   "name": "@rnmapbox/maps",
-  "version": "10.2.0",
+  "version": "10.2.1",
   "description": "Community-supported, open-source React Native library for building maps using Mapbox native maps SDK for iOS and Android",
   "main": "./lib/module/index.js",
   "types": "./lib/typescript/src/index.d.ts",
