@@ -16,6 +16,7 @@ import com.facebook.react.uimanager.BaseViewManager;
 import com.facebook.react.uimanager.BaseViewManagerDelegate;
 import com.facebook.react.uimanager.LayoutShadowNode;
 
+@SuppressWarnings("deprecation")
 public class RNMBXSymbolLayerManagerDelegate<T extends View, U extends BaseViewManager<T, ? extends LayoutShadowNode> & RNMBXSymbolLayerManagerInterface<T>> extends BaseViewManagerDelegate<T, U> {
   public RNMBXSymbolLayerManagerDelegate(U viewManager) {
     super(viewManager);

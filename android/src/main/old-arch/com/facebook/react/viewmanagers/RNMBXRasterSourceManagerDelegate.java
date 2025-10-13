@@ -16,6 +16,7 @@ import com.facebook.react.uimanager.BaseViewManager;
 import com.facebook.react.uimanager.BaseViewManagerDelegate;
 import com.facebook.react.uimanager.LayoutShadowNode;
 
+@SuppressWarnings("deprecation")
 public class RNMBXRasterSourceManagerDelegate<T extends View, U extends BaseViewManager<T, ? extends LayoutShadowNode> & RNMBXRasterSourceManagerInterface<T>> extends BaseViewManagerDelegate<T, U> {
   public RNMBXRasterSourceManagerDelegate(U viewManager) {
     super(viewManager);

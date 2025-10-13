@@ -16,6 +16,7 @@ import com.facebook.react.uimanager.BaseViewManager;
 import com.facebook.react.uimanager.BaseViewManagerDelegate;
 import com.facebook.react.uimanager.LayoutShadowNode;
 
+@SuppressWarnings("deprecation")
 public class RNMBXCircleLayerManagerDelegate<T extends View, U extends BaseViewManager<T, ? extends LayoutShadowNode> & RNMBXCircleLayerManagerInterface<T>> extends BaseViewManagerDelegate<T, U> {
   public RNMBXCircleLayerManagerDelegate(U viewManager) {
     super(viewManager);
