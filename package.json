@@ -3,11 +3,11 @@
   "version": "10.2.1",
   "description": "Community-supported, open-source React Native library for building maps using Mapbox native maps SDK for iOS and Android",
   "main": "./lib/module/index.js",
-  "types": "./lib/typescript/src/index.d.ts",
+  "types": "./lib/typescript/src/index.native.d.ts",
   "exports": {
     ".": {
       "source": "./src/index.ts",
-      "types": "./lib/typescript/src/index.d.ts",
+      "types": "./lib/typescript/src/index.native.d.ts",
       "default": "./lib/module/index.js"
     },
     "./package.json": "./package.json",
