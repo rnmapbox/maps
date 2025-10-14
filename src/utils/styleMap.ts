@@ -82,6 +82,7 @@ const styleMap = {
   symbolSpacing: StyleTypes.Constant,
   symbolAvoidEdges: StyleTypes.Constant,
   symbolSortKey: StyleTypes.Constant,
+  symbolZOffset: StyleTypes.Constant,
   symbolZOrder: StyleTypes.Enum,
   iconAllowOverlap: StyleTypes.Constant,
   iconIgnorePlacement: StyleTypes.Constant,
