@@ -1,6 +1,9 @@
 // codegen will generate folly::dynamic in place of this type, but it's not exported by RN
 // since codegen doesn't really follow imports, this way we can trick it into generating the correct type
 // while keeping typescript happy
+//
+// For booleans: UnsafeMixed<boolean> preserves nullability (true/false/null) vs boolean which defaults to false
+// This allows native code to distinguish between "prop not set" vs "prop explicitly set to false"
 export type UnsafeMixed<T> = T;
 
 // Fabric doesn't support optional props, so we need to use UnsafeMixed

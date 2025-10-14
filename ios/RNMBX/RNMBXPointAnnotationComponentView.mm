@@ -11,6 +11,8 @@
 #import <react/renderer/components/rnmapbox_maps_specs/Props.h>
 #import <react/renderer/components/rnmapbox_maps_specs/RCTComponentViewHelpers.h>
 
+#import "RNMBXFabricPropConvert.h"
+
 using namespace facebook::react;
 
 @interface RNMBXPointAnnotationComponentView () <RCTRNMBXPointAnnotationViewProtocol>
@@ -122,23 +124,26 @@ using namespace facebook::react;
 
 - (void)updateProps:(const Props::Shared &)props oldProps:(const Props::Shared &)oldProps
 {
-  const auto &newProps = static_cast<const RNMBXPointAnnotationProps &>(*props);
-    id coordinate = RNMBXConvertFollyDynamicToId(newProps.coordinate);
+  const auto &newViewProps = static_cast<const RNMBXPointAnnotationProps &>(*props);
+  const auto &oldViewProps = static_cast<const RNMBXPointAnnotationProps &>(*oldProps);
+    id coordinate = RNMBXConvertFollyDynamicToId(newViewProps.coordinate);
     if (coordinate != nil) {
         _view.coordinate = coordinate;
     }
-    id draggable = RNMBXConvertFollyDynamicToId(newProps.draggable);
+    id draggable = RNMBXConvertFollyDynamicToId(newViewProps.draggable);
     if (draggable != nil) {
         _view.draggable = draggable;
     }
-    id idx = RNMBXConvertFollyDynamicToId(newProps.id);
+    id idx = RNMBXConvertFollyDynamicToId(newViewProps.id);
     if (idx != nil) {
         _view.id = idx;
     }
-    id anchor = RNMBXConvertFollyDynamicToId(newProps.anchor);
+    id anchor = RNMBXConvertFollyDynamicToId(newViewProps.anchor);
     if (anchor != nil) {
         _view.anchor = anchor;
     }
+   
+  RNMBX_REMAP_OPTIONAL_PROP_BOOL(selected, reactSelected);
     
   [super updateProps:props oldProps:oldProps];
 }

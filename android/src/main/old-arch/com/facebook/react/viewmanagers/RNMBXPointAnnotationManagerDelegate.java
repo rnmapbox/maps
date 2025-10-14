@@ -35,6 +35,9 @@ public class RNMBXPointAnnotationManagerDelegate<T extends View, U extends BaseV
       case "anchor":
         mViewManager.setAnchor(view, new DynamicFromObject(value));
         break;
+      case "selected":
+        mViewManager.setSelected(view, new DynamicFromObject(value));
+        break;
       default:
         super.setProperty(view, propName, value);
     }
