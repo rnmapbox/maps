@@ -123,12 +123,14 @@ type ExpressionParameters =
   | 'feature-state'
   | 'sky-radial-progress'
   | 'line-progress'
-  | 'heatmap-density';
+  | 'heatmap-density'
+  | 'measure-light'
+  | 'raster-value';
 
 type ResolvedImageType = ImageSourcePropType | string;
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-export type Value<T, AllowedParameters extends ExpressionParameters[] = []> =
+export type Value<T, _AllowedParameters extends ExpressionParameters[] = []> =
   | T
   | Expression;
 
