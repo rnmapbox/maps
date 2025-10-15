@@ -1,7 +1,7 @@
 import React from 'react';
 import { NativeModules } from 'react-native';
 
-import {
+import type {
   FilterExpression,
   FillExtrusionLayerStyleProps,
 } from '../utils/MapboxStyles';

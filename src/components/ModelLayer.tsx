@@ -1,6 +1,9 @@
 import { NativeModules } from 'react-native';
 
-import { FilterExpression, ModelLayerStyleProps } from '../utils/MapboxStyles';
+import type {
+  FilterExpression,
+  ModelLayerStyleProps,
+} from '../utils/MapboxStyles';
 import { StyleValue } from '../utils/StyleValue';
 import RNMBXModelLayerNativeComponent from '../specs/RNMBXModelLayerNativeComponent';
 
