@@ -22,12 +22,10 @@ const MapboxLocationManager: typeof NativeRNMBXLocationModule = Platform.select(
 const IsTurbo: boolean =
   typeof MapboxLocationManager.onLocationUpdate === 'function';
 
-export const LocationModuleEventEmitter = Platform.select({
-  ios: new NativeEventEmitter(MapboxLocationManager as any),
-  android: !IsTurbo
+export const LocationModuleEventEmitter =
+  Platform.OS === 'ios' || (Platform.OS === 'android' && !IsTurbo)
     ? new NativeEventEmitter(MapboxLocationManager as any)
-    : null,
-});
+    : null;
 
 /**
  * Location sent by locationManager
