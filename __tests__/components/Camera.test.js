@@ -31,7 +31,7 @@ describe('Camera', () => {
   test('defaults are set', () => {
     const result = render(<Camera />);
     const { props } = result.queryByTestId('Camera');
-    expect(props.stop).toStrictEqual({});
+    expect(props.stop).toStrictEqual(null);
   });
   test('set location by center', () => {
     const result = render(

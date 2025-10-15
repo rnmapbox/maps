@@ -388,6 +388,17 @@ export const Camera = memo(
       }, [defaultSettings, buildNativeStop]);
 
       const nativeStop = useMemo(() => {
+        if (
+          centerCoordinate === undefined &&
+          bounds === undefined &&
+          heading === undefined &&
+          pitch === undefined &&
+          zoomLevel === undefined &&
+          padding === undefined
+        ) {
+          return null;
+        }
+
         return buildNativeStop({
           type: 'CameraStop',
           centerCoordinate,
