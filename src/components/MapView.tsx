@@ -23,7 +23,7 @@ import {
 } from '../utils';
 import { getFilter } from '../utils/filterUtils';
 import Logger from '../utils/Logger';
-import { FilterExpression } from '../utils/MapboxStyles';
+import type { FilterExpression } from '../utils/MapboxStyles';
 import { type Position } from '../types/Position';
 import { type Location } from '../modules/location/locationManager';
 

@@ -1,9 +1,9 @@
 import React, { JSX } from 'react';
 import { View, NativeModules } from 'react-native';
 
-import {
-  type FilterExpression,
-  type SymbolLayerStyleProps,
+import type {
+  FilterExpression,
+  SymbolLayerStyleProps,
 } from '../utils/MapboxStyles';
 import { type StyleValue } from '../utils/StyleValue';
 import RNMBXSymbolLayerNativeComponent from '../specs/RNMBXSymbolLayerNativeComponent';

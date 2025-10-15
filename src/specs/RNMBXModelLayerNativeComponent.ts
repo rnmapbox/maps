@@ -3,7 +3,7 @@ import codegenNativeComponent from 'react-native/Libraries/Utilities/codegenNati
 // @ts-ignore - CI environment type resolution issue for CodegenTypes
 import { Double, Int32 } from 'react-native/Libraries/Types/CodegenTypes';
 
-import { FilterExpression } from '../utils/MapboxStyles';
+import type { FilterExpression } from '../utils/MapboxStyles';
 import { StyleValue } from '../utils/StyleValue';
 
 import { UnsafeMixed } from './codegenUtils';

@@ -49,12 +49,12 @@ export type Expression = readonly [ExpressionName, ...ExpressionField[]];
 
 export type FilterExpression = Expression;
 
-type ExpressionParameters = 'zoom' | 'feature' | 'feature-state' | 'sky-radial-progress' | 'line-progress' | 'heatmap-density';
+type ExpressionParameters = 'zoom' | 'feature' | 'feature-state' | 'sky-radial-progress' | 'line-progress' | 'heatmap-density' | 'measure-light' | 'raster-value';
 
 type ResolvedImageType = ImageSourcePropType | string;
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-export type Value<T, AllowedParameters extends ExpressionParameters[] = []> =
+export type Value<T, _AllowedParameters extends ExpressionParameters[] = []> =
   | T
   | Expression;
 
@@ -65,7 +65,7 @@ export type Value<T, AllowedParameters extends ExpressionParameters[] = []> =
       <%- pascelCase(k) %> = '<%- k %>',
     <%_ } _%>
   }
-  type <%- pascelCase(enumInfo.name) %>EnumValues = <%- Object.keys(enumInfo.values).map(k => `'${k}'`).join(' | ') %>; 
+  type <%- pascelCase(enumInfo.name) %>EnumValues = <%- Object.keys(enumInfo.values).map(k => `'${k}'`).join(' | ') %>;
 <%_ } _%>
 
 type Enum<EnumType, EnumValues> = EnumType | EnumValues;

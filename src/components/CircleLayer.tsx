@@ -1,7 +1,10 @@
 import React from 'react';
 import { NativeModules } from 'react-native';
 
-import { FilterExpression, CircleLayerStyleProps } from '../utils/MapboxStyles';
+import type {
+  FilterExpression,
+  CircleLayerStyleProps,
+} from '../utils/MapboxStyles';
 import { StyleValue } from '../utils/StyleValue';
 import RNMBXCircleLayerNativeComponent from '../specs/RNMBXCircleLayerNativeComponent';
 

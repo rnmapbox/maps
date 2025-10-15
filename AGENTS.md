@@ -103,7 +103,7 @@ RCT_NEW_ARCH_ENABLED=1 pod update MapboxMaps
 
 ### Style System
 - Styles are defined in `style-spec/v8.json` (Mapbox style specification)
-- TypeScript definitions generated in `utils/MapboxStyles.d.ts`
+- TypeScript definitions generated in `utils/MapboxStyles.ts`
 - Native style setters generated for iOS/Android
 
 ## Key Development Patterns

@@ -494,7 +494,7 @@ export default async function generateCodeWithEjs(layers) {
     },*/
     {
       input: path.join(TMPL_PATH, 'MapboxStyles.ts.ejs'),
-      output: path.join(JS_OUTPUT_PATH, 'MapboxStyles.d.ts'),
+      output: path.join(JS_OUTPUT_PATH, 'MapboxStyles.ts'),
       only: ['v10', 'v11'],
     },
     {

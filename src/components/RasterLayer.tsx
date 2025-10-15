@@ -1,7 +1,10 @@
 import React from 'react';
 import { NativeModules } from 'react-native';
 
-import { FilterExpression, RasterLayerStyleProps } from '../utils/MapboxStyles';
+import type {
+  FilterExpression,
+  RasterLayerStyleProps,
+} from '../utils/MapboxStyles';
 import { StyleValue } from '../utils/StyleValue';
 import RNMBXRasterLayerNativeComponent from '../specs/RNMBXRasterLayerNativeComponent';
 

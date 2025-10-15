@@ -1,7 +1,10 @@
 import React from 'react';
 import { NativeModules } from 'react-native';
 
-import { FilterExpression, SkyLayerStyleProps } from '../utils/MapboxStyles';
+import type {
+  FilterExpression,
+  SkyLayerStyleProps,
+} from '../utils/MapboxStyles';
 import { StyleValue } from '../utils/StyleValue';
 import RNMBXSkyLayerNativeComponent from '../specs/RNMBXSkyLayerNativeComponent';
 
