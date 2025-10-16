@@ -16,4 +16,5 @@ public interface RNMBXPointAnnotationManagerInterface<T extends View> {
   void setDraggable(T view, Dynamic value);
   void setId(T view, Dynamic value);
   void setAnchor(T view, Dynamic value);
+  void setSelected(T view, Dynamic value);
 }
