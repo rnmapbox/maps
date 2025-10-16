@@ -128,7 +128,7 @@ using namespace facebook::react;
   const auto &newViewProps = static_cast<const RNMBXPointAnnotationProps &>(*props);
 
   RNMBX_OPTIONAL_PROP_NSString(coordinate)
-  RNMBX_OPTIONAL_PROP_BOOL(draggable);
+  RNMBX_OPTIONAL_PROP_BOOL(draggable)
   RNMBX_OPTIONAL_PROP_NSString(id)
   RNMBX_OPTIONAL_PROP_NSDictionary(anchor)
 
