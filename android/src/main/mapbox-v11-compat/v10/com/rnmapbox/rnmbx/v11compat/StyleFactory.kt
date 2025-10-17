@@ -10,7 +10,6 @@ import com.mapbox.maps.extension.style.layers.generated.LineLayer
 import com.mapbox.maps.extension.style.layers.generated.ModelLayer
 import com.mapbox.maps.extension.style.layers.generated.RasterLayer
 import com.mapbox.maps.extension.style.layers.generated.SymbolLayer
-import com.mapbox.maps.extension.style.expressions.generated.Expression
 import com.mapbox.maps.extension.style.types.StyleTransition
 
 internal fun RasterLayer.rasterColor(rasterColor: Int) {
