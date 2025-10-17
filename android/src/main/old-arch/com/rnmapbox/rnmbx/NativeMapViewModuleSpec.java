@@ -50,6 +50,10 @@ public abstract class NativeMapViewModuleSpec extends ReactContextBaseJavaModule
 
   @ReactMethod
   @DoNotStrip
+  public abstract void setStyleLayerProperty(@Nullable Double viewRef, String layerId, String propertyName, String propertyValue, Promise promise);
+
+  @ReactMethod
+  @DoNotStrip
   public abstract void getCenter(@Nullable Double viewRef, Promise promise);
 
   @ReactMethod
