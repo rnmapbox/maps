@@ -10,6 +10,7 @@ import com.mapbox.maps.extension.style.layers.generated.LineLayer
 import com.mapbox.maps.extension.style.layers.generated.ModelLayer
 import com.mapbox.maps.extension.style.layers.generated.RasterLayer
 import com.mapbox.maps.extension.style.layers.generated.SymbolLayer
+import com.mapbox.maps.extension.style.expressions.generated.Expression
 import com.mapbox.maps.extension.style.types.StyleTransition
 
 internal fun RasterLayer.rasterColor(rasterColor: Int) {
@@ -733,3 +734,32 @@ class BackgroundPitchAlignment {
     companion object
 }
 
+fun FillExtrusionLayer.fillExtrusionEdgeRadius(
+    expression: Expression
+) {
+    // V11 only
+}
+
+fun FillExtrusionLayer.fillExtrusionEdgeRadius(
+    value: Double
+) {
+    // V11 only
+}
+
+fun FillExtrusionLayer.fillExtrusionEmissiveStrength(
+    expression: Expression
+) {
+    // V11 only
+}
+
+fun FillExtrusionLayer.fillExtrusionEmissiveStrength(
+    value: Double
+) {
+    // V11 only
+}
+
+fun FillExtrusionLayer.fillExtrusionEmissiveStrengthTransition(
+    transition: StyleTransition
+) {
+    // V11 only
+}
