@@ -28,7 +28,6 @@ import com.rnmapbox.rnmbx.utils.DownloadMapImageTask.OnAllImagesLoaded
 import com.rnmapbox.rnmbx.utils.Logger
 
 import com.rnmapbox.rnmbx.v11compat.light.*;
-import com.rnmapbox.rnmbx.v11compat.layers.*;
 import com.rnmapbox.rnmbx.v11compat.stylefactory.*;
 
 import java.util.List;

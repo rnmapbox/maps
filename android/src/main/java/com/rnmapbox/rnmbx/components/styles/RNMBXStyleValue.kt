@@ -13,8 +13,9 @@ import com.rnmapbox.rnmbx.utils.ExpressionParser
 import com.rnmapbox.rnmbx.utils.Logger
 import java.util.ArrayList
 
-class RNMBXStyleValue(config: ReadableMap) {
+class RNMBXStyleValue(key: String?, config: ReadableMap) {
     val type: String?
+    val key: String?
     private var isExpression = false
     private var mExpression: Expression? = null
     private val mPayload: ReadableMap?
@@ -202,6 +203,7 @@ class RNMBXStyleValue(config: ReadableMap) {
     }
 
     init {
+        this.key = key
         type = config.getString("styletype")
         mPayload = config.getMap("stylevalue")
         isAddImage = false
@@ -231,7 +233,9 @@ class RNMBXStyleValue(config: ReadableMap) {
             val dynamic = mPayload!!.getDynamic("value")
             if (isExpression(dynamic)) {
                 isExpression = true
-                mExpression = ExpressionParser.fromTyped(mPayload)
+                Logger.logged("$key ExpressionParser.fromTyped") {
+                    mExpression = ExpressionParser.fromTyped(mPayload)
+                }
             }
         }
     }

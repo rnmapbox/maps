@@ -733,3 +733,32 @@ class BackgroundPitchAlignment {
     companion object
 }
 
+fun FillExtrusionLayer.fillExtrusionEdgeRadius(
+    expression: Expression
+) {
+    // V11 only
+}
+
+fun FillExtrusionLayer.fillExtrusionEdgeRadius(
+    value: Double
+) {
+    // V11 only
+}
+
+fun FillExtrusionLayer.fillExtrusionEmissiveStrength(
+    expression: Expression
+) {
+    // V11 only
+}
+
+fun FillExtrusionLayer.fillExtrusionEmissiveStrength(
+    value: Double
+) {
+    // V11 only
+}
+
+fun FillExtrusionLayer.fillExtrusionEmissiveStrengthTransition(
+    transition: StyleTransition
+) {
+    // V11 only
+}
