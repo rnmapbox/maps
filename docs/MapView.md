@@ -611,7 +611,7 @@ Returns an array of rendered map features that intersect with the given rectangl
 #### arguments
 | Name | Type | Required | Description  |
 | ---- | :--: | :------: | :----------: |
-| `bbox` | `BBox \| []` | `Yes` | A rectangle expressed in the map view’s coordinate system. For v10, this can be an empty array to query the visible map area. |
+| `bbox` | `BBox \| []` | `Yes` | A rectangle expressed in the map view’s coordinate system, density independent pixels and not map coordinates. This can be an empty array to query the visible map area. |
 | `filter` | `Array` | `No` | A set of strings that correspond to the names of layers defined in the current style. Only the features contained in these layers are included in the returned array. |
 | `layerIDs` | `Array` | `No` |  A array of layer id's to filter the features by |
 

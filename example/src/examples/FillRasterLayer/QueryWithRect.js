@@ -1,5 +1,5 @@
 import React from 'react';
-import { Text } from 'react-native';
+import { Text, Button } from 'react-native';
 import {
   MapView,
   Camera,
@@ -110,6 +110,23 @@ class QueryWithRect extends React.Component {
             </ShapeSource>
           ) : null}
         </MapView>
+        <Button
+          onPress={async () => {
+            console.log('::pressed');
+            const featureCollection =
+              await this._map.queryRenderedFeaturesInRect([], null, [
+                'nycFill',
+              ]);
+
+            this.setState({
+              screenCoords: [],
+              selectedGeoJSON: featureCollection.features.length
+                ? featureCollection
+                : null,
+            });
+          }}
+          title="Query screen features"
+        />
 
         <Bubble>
           <Text style={styles.bubbleText}>{this.message}</Text>
@@ -129,7 +146,7 @@ export default QueryWithRect;
  */
 const metadata = {
   title: 'Query Features Bounding Box',
-  tags: [],
+  tags: ['queryRenderedFeaturesInRect'],
   docs: '',
 };
 QueryWithRect.metadata = metadata;

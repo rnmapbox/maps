@@ -744,7 +744,9 @@
       {
         "metadata": {
           "title": "Query Features Bounding Box",
-          "tags": [],
+          "tags": [
+            "queryRenderedFeaturesInRect"
+          ],
           "docs": ""
         },
         "fullPath": "example/src/examples/FillRasterLayer/QueryWithRect.js",
