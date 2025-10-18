@@ -27,6 +27,11 @@ NSDictionary* RNMBXPropConvert_Optional_NSDictionary(const folly::dynamic &dyn, 
     _view.viewName = RNMBXPropConvert_Optional_BOOL(newViewProps.name, @#name); \
   }
 
+#define RNMBX_REMAP_OPTIONAL_PROP_NSDictionary(name, viewName) \
+  if ((!oldProps.get() || oldViewProps.name != newViewProps.name)) { \
+    _view.viewName = RNMBXPropConvert_Optional_NSDictionary(newViewProps.name, @#name); \
+  }
+
 #define RNMBX_OPTIONAL_PROP_BOOL(name) RNMBX_REMAP_OPTIONAL_PROP_BOOL(name, name)
 
 #define RNMBX_OPTIONAL_PROP_NSString(name) \
@@ -49,7 +54,4 @@ NSDictionary* RNMBXPropConvert_Optional_NSDictionary(const folly::dynamic &dyn, 
     _view.name = RNMBXPropConvert_BOOL(newViewProps.name, @#name); \
   }
 
-#define RNMBX_OPTIONAL_PROP_NSDictionary(name) \
-  if ((!oldProps.get() || oldViewProps.name != newViewProps.name)) { \
-    _view.name = RNMBXPropConvert_Optional_NSDictionary(newViewProps.name, @#name); \
-  }
+#define RNMBX_OPTIONAL_PROP_NSDictionary(name) RNMBX_REMAP_OPTIONAL_PROP_NSDictionary(name, name)
