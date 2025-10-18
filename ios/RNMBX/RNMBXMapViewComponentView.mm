@@ -190,6 +190,8 @@ using namespace facebook::react;
     RNMBX_REMAP_OPTIONAL_PROP_BOOL(rotateEnabled, reactRotateEnabled)
 
     RNMBX_REMAP_OPTIONAL_PROP_BOOL(pitchEnabled, reactPitchEnabled)
+  
+    RNMBX_REMAP_OPTIONAL_PROP_NSDictionary(gestureSettings, reactGestureSettings)
 
     id preferredFramesPerSecond = RNMBXConvertFollyDynamicToId(newViewProps.preferredFramesPerSecond);
     if (preferredFramesPerSecond != nil) {
