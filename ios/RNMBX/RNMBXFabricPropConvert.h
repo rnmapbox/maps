@@ -13,6 +13,7 @@ NSNumber* RNMBXPropConvert_Optional_BOOL_NSNumber(const folly::dynamic &dyn, NSS
 BOOL RNMBXPropConvert_Optional_BOOL(const folly::dynamic &dyn, NSString* propertyName);
 NSString* RNMBXPropConvert_Optional_NSString(const folly::dynamic &dyn, NSString* propertyName);
 NSNumber* RNMBXPropConvert_Optional_NSNumber(const folly::dynamic &dyn, NSString* propertyName);
+NSArray<NSNumber*>* RNMBXPropConvert_Optional_NumberArray(const folly::dynamic &dyn, NSString* propertyName);
 id RNMBXPropConvert_Optional_ExpressionDouble(const folly::dynamic &dyn, NSString* propertyName);
 BOOL RNMBXPropConvert_BOOL(const folly::dynamic &dyn, NSString* propertyName);
 NSDictionary* RNMBXPropConvert_Optional_NSDictionary(const folly::dynamic &dyn, NSString* propertyName);
@@ -37,6 +38,11 @@ NSDictionary* RNMBXPropConvert_Optional_NSDictionary(const folly::dynamic &dyn, 
 #define RNMBX_OPTIONAL_PROP_NSString(name) \
   if ((!oldProps.get() || oldViewProps.name != newViewProps.name) && !newViewProps.name.isNull()) { \
     _view.name = RNMBXPropConvert_Optional_NSString(newViewProps.name, @#name); \
+  }
+
+#define RNMBX_OPTIONAL_PROP_NumberArray(name) \
+  if ((!oldProps.get() || oldViewProps.name != newViewProps.name) && !newViewProps.name.isNull()) { \
+    _view.name = RNMBXPropConvert_Optional_NumberArray(newViewProps.name, @#name); \
   }
 
 #define RNMBX_OPTIONAL_PROP_NSNumber(name) \

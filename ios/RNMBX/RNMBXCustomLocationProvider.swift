@@ -36,7 +36,9 @@ public class RNMBXCustomLocationProvider: UIView, RNMBXMapComponent {
   
   @objc
   override public func didSetProps(_ props: [String]) {
-    changes.apply(self)
+    if customLocationProvider != nil {
+      changes.apply(self)
+    }
   }
   
   var customLocationProvider: CustomLocationProvider? = nil
@@ -49,6 +51,7 @@ public class RNMBXCustomLocationProvider: UIView, RNMBXMapComponent {
     self.map = map
     if let mapView = map.mapView {
       installCustomeLocationProviderIfNeeded(mapView: mapView)
+      changes.apply(self)
     }
   }
   
