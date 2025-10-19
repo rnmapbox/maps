@@ -901,11 +901,13 @@ open class RNMBXMapView(private val mContext: Context, var mManager: RNMBXMapVie
 
     fun getPointInView(coordinate: Point, response: CommandResponse) {
         val point = mMap!!.pixelForCoordinate(coordinate)
+        val density = getDisplayDensity()
+        val pointInView = PointF((point.x / density).toFloat(), (point.y / density).toFloat())
 
         response.success {
             val array: WritableArray = WritableNativeArray()
-            array.pushDouble(point.x)
-            array.pushDouble(point.y)
+            array.pushDouble(pointInView.x.toDouble())
+            array.pushDouble(pointInView.y.toDouble())
             it.putArray("pointInView", array)
         }
     }
@@ -935,7 +937,7 @@ open class RNMBXMapView(private val mContext: Context, var mManager: RNMBXMapVie
     }
 
     fun queryRenderedFeaturesInRect(rect: RectF?, filter: Expression?, layerIDs: List<String>?, response: CommandResponse) {
-        val size = mMap!!.getMapOptions().size
+        val size = mMap.getMapOptions().size
         val screenBox = if (rect == null) ScreenBox(ScreenCoordinate(0.0, 0.0), ScreenCoordinate(size?.width!!.toDouble(), size?.height!!.toDouble())) else ScreenBox(
                 ScreenCoordinate(rect.right.toDouble(), rect.bottom.toDouble() ),
                 ScreenCoordinate(rect.left.toDouble(), rect.top.toDouble()),
@@ -960,7 +962,7 @@ open class RNMBXMapView(private val mContext: Context, var mManager: RNMBXMapVie
     }
 
     fun querySourceFeatures(sourceId: String, filter: Expression?, sourceLayerIDs: List<String>?, response: CommandResponse) {
-        mMap?.querySourceFeatures(
+        mMap.querySourceFeatures(
                 sourceId,
                 SourceQueryOptions(sourceLayerIDs, (filter ?: Value.nullValue()) as Value),
         ) { features ->
@@ -980,7 +982,7 @@ open class RNMBXMapView(private val mContext: Context, var mManager: RNMBXMapVie
     }
 
     fun getVisibleBounds(response: CommandResponse) {
-        val bounds = mMap!!.coordinateBoundsForCamera(mMap!!.cameraState.toCameraOptions())
+        val bounds = mMap.coordinateBoundsForCamera(mMap.cameraState.toCameraOptions())
 
         response.success {
             it.putArray("visibleBounds", bounds.toReadableArray())
@@ -1007,7 +1009,7 @@ open class RNMBXMapView(private val mContext: Context, var mManager: RNMBXMapVie
     }
 
     fun queryTerrainElevation(longitude: Double, latitude: Double, response: CommandResponse) {
-        val result = mMap?.getElevation(Point.fromLngLat(longitude, latitude))
+        val result = mMap.getElevation(Point.fromLngLat(longitude, latitude))
 
         if (result != null) {
             response.success {

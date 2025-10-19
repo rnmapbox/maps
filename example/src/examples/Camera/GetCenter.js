@@ -41,13 +41,17 @@ class GetCenter extends React.Component {
       <>
         <Mapbox.MapView
           onRegionDidChange={this.onRegionDidChange}
-          ref={(c) => (this._map = c)}
+          ref={(c) => {
+            this._map = c;
+          }}
           onPress={this.onPress}
           style={styles.mapView}
         >
           <Mapbox.Camera
-            zoomLevel={9}
-            centerCoordinate={[-73.970895, 40.723279]}
+            defaultSettings={{
+              centerCoordinate: [-73.970895, 40.723279],
+              zoomLevel: 9,
+            }}
           />
         </Mapbox.MapView>
 
@@ -64,7 +68,10 @@ class GetCenter extends React.Component {
 export default GetCenter;
 /* end-example-doc */
 
-/** @type ExampleWithMetadata['metadata'] */
+/**
+ * @typedef {import('../common/ExampleMetadata').ExampleWithMetadata} ExampleWithMetadata
+ * @type {ExampleWithMetadata['metadata']}
+ */
 const metadata = {
   title: 'GetCenter',
   tags: ['Camera', 'Camera#getCenter'],

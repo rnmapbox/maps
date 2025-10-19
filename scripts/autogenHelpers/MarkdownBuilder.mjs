@@ -23,8 +23,8 @@ async function checkMDX(code) {
     const lines = code.split('\n');
     const { line, column } = e.place;
 
-    console.error(lines[line-1]);
-    console.error(' '.repeat(column-1) + '^');
+    console.error(lines[line - 1]);
+    console.error(' '.repeat(column - 1) + '^');
     console.error(e.reason);
     throw e;
   }

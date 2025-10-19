@@ -1,7 +1,9 @@
-import React from 'react';
 import { NativeModules } from 'react-native';
 
-import { FilterExpression, LineLayerStyleProps } from '../utils/MapboxStyles';
+import type {
+  FilterExpression,
+  LineLayerStyleProps,
+} from '../utils/MapboxStyles';
 import { StyleValue } from '../utils/StyleValue';
 import RNMBXLineLayerNativeComponent from '../specs/RNMBXLineLayerNativeComponent';
 
@@ -19,7 +21,7 @@ type LayerPropsCommon = {
   id: string;
 
   /**
-   * The id refers to en existing layer in the style. Does not create a new layer.
+   * The id refers to an existing layer in the style. Does not create a new layer.
    */
   existing?: boolean;
 

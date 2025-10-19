@@ -344,13 +344,13 @@
         "required": false,
         "type": "boolean",
         "default": "none",
-        "description": "The id refers to en existing layer in the style. Does not create a new layer."
+        "description": "The id refers to an existing layer in the style. Does not create a new layer."
       },
       {
         "name": "sourceID",
         "required": false,
         "type": "string",
-        "default": "MapboxGL.StyleSource.DefaultSourceID",
+        "default": "Mapbox.StyleSource.DefaultSourceID",
         "description": "The source from which to obtain the data to style.\nIf the source has not yet been added to the current style, the behavior is undefined.\nInferred from parent source only if the layer is a direct child to it."
       },
       {
@@ -942,7 +942,7 @@
         "required": false,
         "type": "boolean",
         "default": "none",
-        "description": "The id refers to en existing layer in the style. Does not create a new layer."
+        "description": "The id refers to an existing layer in the style. Does not create a new layer."
       },
       {
         "name": "sourceID",
@@ -1127,7 +1127,7 @@
         "type": "number",
         "values": [],
         "default": 0,
-        "description": "Amount to blur the circle. 1 blurs the circle such that only the centerpoint is full opacity.",
+        "description": "Amount to blur the circle. 1 blurs the circle such that only the centerpoint is full opacity. Setting a negative value renders the blur as an inner glow effect.",
         "requires": [],
         "disabledBy": [],
         "allowedFunctionTypes": [],
@@ -1414,13 +1414,13 @@
         "required": false,
         "type": "boolean",
         "default": "none",
-        "description": "The id refers to en existing layer in the style. Does not create a new layer."
+        "description": "The id refers to an existing layer in the style. Does not create a new layer."
       },
       {
         "name": "sourceID",
         "required": false,
         "type": "string",
-        "default": "MapboxGL.StyleSource.DefaultSourceID",
+        "default": "Mapbox.StyleSource.DefaultSourceID",
         "description": "The source from which to obtain the data to style.\nIf the source has not yet been added to the current style, the behavior is undefined.\nInferred from parent source only if the layer is a direct child to it."
       },
       {
@@ -1511,6 +1511,26 @@
         "mbx": {
           "fullName": "layout-fill-extrusion-visibility",
           "name": "visibility",
+          "namespace": "layout"
+        }
+      },
+      {
+        "name": "fillExtrusionEdgeRadius",
+        "type": "number",
+        "values": [],
+        "minimum": 0,
+        "maximum": 1,
+        "default": 0,
+        "description": "Radius of a fill extrusion edge in meters. If not zero, rounds extrusion edges for a smoother appearance.",
+        "requires": [],
+        "disabledBy": [],
+        "allowedFunctionTypes": [],
+        "expression": {
+          "interpolated": false
+        },
+        "mbx": {
+          "fullName": "layout-fill-extrusion-fill-extrusion-edge-radius",
+          "name": "fill-extrusion-edge-radius",
           "namespace": "layout"
         }
       },
@@ -1722,6 +1742,55 @@
         }
       },
       {
+        "name": "fillExtrusionAmbientOcclusionIntensity",
+        "type": "number",
+        "values": [],
+        "minimum": 0,
+        "maximum": 1,
+        "default": 0,
+        "description": "Controls the intensity of shading near ground and concave angles between walls. Default value 0.0 disables ambient occlusion and values around 0.3 provide the most plausible results for buildings.",
+        "requires": [],
+        "disabledBy": [],
+        "allowedFunctionTypes": [],
+        "expression": {
+          "interpolated": true,
+          "parameters": [
+            "zoom"
+          ]
+        },
+        "transition": true,
+        "mbx": {
+          "fullName": "paint-fill-extrusion-fill-extrusion-ambient-occlusion-intensity",
+          "name": "fill-extrusion-ambient-occlusion-intensity",
+          "namespace": "paint"
+        }
+      },
+      {
+        "name": "fillExtrusionAmbientOcclusionRadius",
+        "type": "number",
+        "values": [],
+        "minimum": 0,
+        "default": 3,
+        "description": "Shades area near ground and concave angles between walls where the radius defines only vertical impact. Default value 3.0 corresponds to height of one floor and brings the most plausible results for buildings. This property works only with legacy light. When 3D lights are enabled `fillExtrusionAmbientOcclusionWallRadius` and `fillExtrusionAmbientOcclusionGroundRadius` are used instead.",
+        "requires": [
+          "fillExtrusionEdgeRadius"
+        ],
+        "disabledBy": [],
+        "allowedFunctionTypes": [],
+        "expression": {
+          "interpolated": true,
+          "parameters": [
+            "zoom"
+          ]
+        },
+        "transition": true,
+        "mbx": {
+          "fullName": "paint-fill-extrusion-fill-extrusion-ambient-occlusion-radius",
+          "name": "fill-extrusion-ambient-occlusion-radius",
+          "namespace": "paint"
+        }
+      },
+      {
         "name": "fillExtrusionRoundedRoof",
         "type": "boolean",
         "values": [],
@@ -1764,7 +1833,7 @@
         "required": false,
         "type": "boolean",
         "default": "none",
-        "description": "The id refers to en existing layer in the style. Does not create a new layer."
+        "description": "The id refers to an existing layer in the style. Does not create a new layer."
       },
       {
         "name": "sourceID",
@@ -2109,7 +2178,7 @@
         "required": false,
         "type": "boolean",
         "default": "none",
-        "description": "The id refers to en existing layer in the style. Does not create a new layer."
+        "description": "The id refers to an existing layer in the style. Does not create a new layer."
       },
       {
         "name": "sourceID",
@@ -2444,7 +2513,7 @@
         "required": false,
         "type": "boolean",
         "default": "none",
-        "description": "The id refers to en existing source in the style. Does not create a new source."
+        "description": "The id refers to an existing source in the style. Does not create a new source."
       },
       {
         "name": "url",
@@ -2667,7 +2736,7 @@
         "required": false,
         "type": "boolean",
         "default": "none",
-        "description": "The id refers to en existing layer in the style. Does not create a new layer."
+        "description": "The id refers to an existing layer in the style. Does not create a new layer."
       },
       {
         "name": "sourceID",
@@ -2797,6 +2866,10 @@
           {
             "value": "miter",
             "doc": "A join with a sharp, angled corner which is drawn with the outer sides beyond the endpoint of the path until they meet."
+          },
+          {
+            "value": "none",
+            "doc": "Line segments are not joined together, each one creates a separate line. Useful in combination with line-pattern. Line-cap property is not respected. Can't be used with data-driven styling."
           }
         ],
         "default": "miter",
@@ -3040,7 +3113,8 @@
             "zoom",
             "feature",
             "feature-state",
-            "measure-light"
+            "measure-light",
+            "line-progress"
           ]
         },
         "transition": true,
@@ -3217,7 +3291,7 @@
           0,
           0
         ],
-        "description": "The line part between [trimStart, trimEnd] will be marked as transparent to make a route vanishing effect. The line trimOff offset is based on the whole line range [0.0, 1.0].",
+        "description": "The line part between [trimStart, trimEnd] will be painted using `lineTrimColor,` which is transparent by default to produce a route vanishing effect. The line trimOff offset is based on the whole line range [0.0, 1.0].",
         "requires": [],
         "disabledBy": [],
         "allowedFunctionTypes": [],
@@ -3261,7 +3335,7 @@
         "required": false,
         "type": "boolean",
         "default": "none",
-        "description": "iOS only. A Boolean value indicating whether the user location annotation may display a permanent heading indicator.\n\n@platform ios\n@deprecated use `puckBearingEnabled={true} puckBrearing=\"heading\"` instead"
+        "description": "iOS only. A Boolean value indicating whether the user location annotation may display a permanent heading indicator.\n\n@platform ios\n@deprecated use `puckBearingEnabled={true} puckBearing=\"heading\"` instead"
       },
       {
         "name": "topImage",
@@ -3469,14 +3543,14 @@
       },
       {
         "name": "queryRenderedFeaturesInRect",
-        "docblock": "Returns an array of rendered map features that intersect with the given rectangle,\nrestricted to the given style layers and filtered by the given predicate. In v10,\npassing an empty array will query the entire visible bounds of the map.\n\n@example\nthis._map.queryRenderedFeaturesInRect([30, 40, 20, 10], ['==', 'type', 'Point'], ['id1', 'id2'])\n\n@param  {Array<Number>} bbox - A rectangle expressed in the map view’s coordinate system. For v10, this can be an empty array to query the visible map area.\n@param  {Array=} filter - A set of strings that correspond to the names of layers defined in the current style. Only the features contained in these layers are included in the returned array.\n@param  {Array=} layerIDs -  A array of layer id's to filter the features by\n@return {FeatureCollection}",
+        "docblock": "Returns an array of rendered map features that intersect with the given rectangle,\nrestricted to the given style layers and filtered by the given predicate. In v10,\npassing an empty array will query the entire visible bounds of the map.\n\n@example\nthis._map.queryRenderedFeaturesInRect([30, 40, 20, 10], ['==', 'type', 'Point'], ['id1', 'id2'])\n\n@param  {Array<Number>} bbox - A rectangle expressed in the map view’s coordinate system, density independent pixels and not map coordinates. This can be an empty array to query the visible map area.\n@param  {Array=} filter - A set of strings that correspond to the names of layers defined in the current style. Only the features contained in these layers are included in the returned array.\n@param  {Array=} layerIDs -  A array of layer id's to filter the features by\n@return {FeatureCollection}",
         "modifiers": [
           "async"
         ],
         "params": [
           {
             "name": "bbox",
-            "description": "A rectangle expressed in the map view’s coordinate system. For v10, this can be an empty array to query the visible map area.",
+            "description": "A rectangle expressed in the map view’s coordinate system, density independent pixels and not map coordinates. This can be an empty array to query the visible map area.",
             "type": {
               "name": "BBox \\| []"
             },
@@ -4511,7 +4585,7 @@
         "required": false,
         "type": "boolean",
         "default": "none",
-        "description": "The id refers to en existing layer in the style. Does not create a new layer."
+        "description": "The id refers to an existing layer in the style. Does not create a new layer."
       },
       {
         "name": "sourceID",
@@ -4782,7 +4856,7 @@
         "name": "id",
         "required": false,
         "type": "string",
-        "default": "MapboxGL.StyleSource.DefaultSourceID",
+        "default": "Mapbox.StyleSource.DefaultSourceID",
         "description": "A string that uniquely identifies the source."
       },
       {
@@ -4790,7 +4864,7 @@
         "required": false,
         "type": "boolean",
         "default": "none",
-        "description": "The id refers to en existing source in the style. Does not create a new source."
+        "description": "The id refers to an existing source in the style. Does not create a new source."
       },
       {
         "name": "url",
@@ -4856,7 +4930,7 @@
         "required": false,
         "type": "boolean",
         "default": "none",
-        "description": "The id refers to en existing layer in the style. Does not create a new layer."
+        "description": "The id refers to an existing layer in the style. Does not create a new layer."
       },
       {
         "name": "sourceID",
@@ -5171,7 +5245,7 @@
         "name": "id",
         "required": false,
         "type": "string",
-        "default": "MapboxGL.StyleSource.DefaultSourceID",
+        "default": "Mapbox.StyleSource.DefaultSourceID",
         "description": "A string that uniquely identifies the source."
       },
       {
@@ -5179,7 +5253,7 @@
         "required": false,
         "type": "boolean",
         "default": "none",
-        "description": "The id refers to en existing source in the style. Does not create a new source."
+        "description": "The id refers to an existing source in the style. Does not create a new source."
       },
       {
         "name": "url",
@@ -5374,7 +5448,7 @@
         "name": "id",
         "required": false,
         "type": "string",
-        "default": "MapboxGL.StyleSource.DefaultSourceID",
+        "default": "Mapbox.StyleSource.DefaultSourceID",
         "description": "A string that uniquely identifies the source."
       },
       {
@@ -5382,7 +5456,7 @@
         "required": false,
         "type": "boolean",
         "default": "none",
-        "description": "The id refers to en existing source in the style. Does not create a new source."
+        "description": "The id refers to an existing source in the style. Does not create a new source."
       },
       {
         "name": "url",
@@ -5518,7 +5592,7 @@
         "required": false,
         "type": "boolean",
         "default": "none",
-        "description": "The id refers to en existing layer in the style. Does not create a new layer."
+        "description": "The id refers to an existing layer in the style. Does not create a new layer."
       },
       {
         "name": "sourceID",
@@ -5902,7 +5976,7 @@
         "required": false,
         "type": "boolean",
         "default": "none",
-        "description": "The id refers to en existing layer in the style. Does not create a new layer."
+        "description": "The id refers to an existing layer in the style. Does not create a new layer."
       },
       {
         "name": "sourceID",
@@ -6098,7 +6172,7 @@
           },
           {
             "value": "viewport-y",
-            "doc": "Sorts symbols by their y-position relative to the viewport if `icon-allow-overlap` or `text-allow-overlap` is set to `true` or `icon-ignore-placement` or `text-ignore-placement` is `false`."
+            "doc": "Sorts symbols by their y-position relative to the viewport if any of the following is set to `true`: `icon-allow-overlap`, `text-allow-overlap`, `icon-ignore-placement`, `text-ignore-placement`."
           },
           {
             "value": "source",
@@ -7847,7 +7921,7 @@
         "name": "id",
         "required": false,
         "type": "string",
-        "default": "MapboxGL.StyleSource.DefaultSourceID",
+        "default": "Mapbox.StyleSource.DefaultSourceID",
         "description": "A string that uniquely identifies the source."
       },
       {
@@ -7855,7 +7929,7 @@
         "required": false,
         "type": "boolean",
         "default": "none",
-        "description": "The id refers to en existing source in the style. Does not create a new source."
+        "description": "The id refers to an existing source in the style. Does not create a new source."
       },
       {
         "name": "url",

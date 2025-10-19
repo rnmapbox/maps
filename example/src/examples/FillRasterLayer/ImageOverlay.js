@@ -76,7 +76,9 @@ class ImageOverlay extends React.Component {
     return (
       <>
         <Mapbox.MapView
-          ref={(ref) => (this.map = ref)}
+          ref={(ref) => {
+            this.map = ref;
+          }}
           style={sheet.matchParent}
           styleURL={Mapbox.StyleURL.Satellite}
         >
@@ -110,7 +112,10 @@ export default ImageOverlay;
 
 /* end-example-doc */
 
-/** @type ExampleWithMetadata['metadata'] */
+/**
+ * @typedef {import('../common/ExampleMetadata').ExampleWithMetadata} ExampleWithMetadata
+ * @type {ExampleWithMetadata['metadata']}
+ */
 const metadata = {
   title: 'Image Overlay',
   tags: ['RasterLayer', 'ImageSource'],

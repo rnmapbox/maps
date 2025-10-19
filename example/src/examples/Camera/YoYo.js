@@ -1,5 +1,11 @@
 import React from 'react';
-import MapboxGL from '@rnmapbox/maps';
+import {
+  MapView,
+  Camera,
+  VectorSource,
+  FillLayer,
+  StyleURL,
+} from '@rnmapbox/maps';
 
 import sheet from '../../styles/sheet';
 import colors from '../../styles/colors';
@@ -60,20 +66,22 @@ class YoYo extends React.Component {
   render() {
     return (
       <>
-        <MapboxGL.MapView
-          ref={(ref) => (this.map = ref)}
+        <MapView
+          ref={(ref) => {
+            this.map = ref;
+          }}
           style={sheet.matchParent}
-          styleURL={MapboxGL.StyleURL.Dark}
+          styleURL={StyleURL.Dark}
         >
-          <MapboxGL.Camera
+          <Camera
             zoomLevel={this.state.zoomLevel}
             centerCoordinate={SF_OFFICE_COORDINATE}
           />
 
-          <MapboxGL.VectorSource>
-            <MapboxGL.FillLayer id="water" style={layerStyles.water} />
-          </MapboxGL.VectorSource>
-        </MapboxGL.MapView>
+          <VectorSource>
+            <FillLayer id="water" style={layerStyles.water} />
+          </VectorSource>
+        </MapView>
       </>
     );
   }

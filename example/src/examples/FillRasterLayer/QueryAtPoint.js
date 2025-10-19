@@ -1,6 +1,12 @@
 import React from 'react';
 import { Text } from 'react-native';
-import MapboxGL from '@rnmapbox/maps';
+import {
+  MapView,
+  Camera,
+  ShapeSource,
+  FillLayer,
+  StyleURL,
+} from '@rnmapbox/maps';
 
 import sheet from '../../styles/sheet';
 import nycJSON from '../../assets/nyc_geojson.json';
@@ -59,33 +65,29 @@ class QueryAtPoint extends React.Component {
   render() {
     return (
       <>
-        <MapboxGL.MapView
-          ref={(c) => (this._map = c)}
+        <MapView
+          ref={(c) => {
+            this._map = c;
+          }}
           onPress={this.onPress}
           style={sheet.matchParent}
-          styleURL={MapboxGL.StyleURL.Light}
+          styleURL={StyleURL.Light}
         >
-          <MapboxGL.Camera
-            zoomLevel={9}
-            centerCoordinate={[-73.970895, 40.723279]}
-          />
+          <Camera zoomLevel={9} centerCoordinate={[-73.970895, 40.723279]} />
 
-          <MapboxGL.ShapeSource id="nyc" shape={nycJSON}>
-            <MapboxGL.FillLayer id="nycFill" style={styles.neighborhoods} />
-          </MapboxGL.ShapeSource>
+          <ShapeSource id="nyc" shape={nycJSON}>
+            <FillLayer id="nycFill" style={styles.neighborhoods} />
+          </ShapeSource>
 
           {this.state.selectedGeoJSON ? (
-            <MapboxGL.ShapeSource
-              id="selectedNYC"
-              shape={this.state.selectedGeoJSON}
-            >
-              <MapboxGL.FillLayer
+            <ShapeSource id="selectedNYC" shape={this.state.selectedGeoJSON}>
+              <FillLayer
                 id="selectedNYCFill"
                 style={styles.selectedNeighborhood}
               />
-            </MapboxGL.ShapeSource>
+            </ShapeSource>
           ) : null}
-        </MapboxGL.MapView>
+        </MapView>
 
         <Bubble>
           <Text>Press on a feature to highlight it.</Text>
@@ -99,7 +101,10 @@ export default QueryAtPoint;
 
 /* end-example-doc */
 
-/** @type ExampleWithMetadata['metadata'] */
+/**
+ * @typedef {import('../common/ExampleMetadata').ExampleWithMetadata} ExampleWithMetadata
+ * @type {ExampleWithMetadata['metadata']}
+ */
 const metadata = {
   title: 'Query Feature Point',
   tags: [],

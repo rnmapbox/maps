@@ -26,11 +26,7 @@ on:
     secrets:
       MAPBOX_ACCESS_TOKEN:
         required: true
-      MAPBOX_DOWNLOAD_TOKEN:
-        required: true
       ENV_MAPBOX_ACCESS_TOKEN:
-        required: false
-      ENV_MAPBOX_DOWNLOAD_TOKEN:
         required: false
 
 jobs:
@@ -60,13 +56,7 @@ jobs:
           distribution: 'zulu'
           java-version: '17'
 
-      - run: |
-          mkdir -p ~/.gradle/
-          echo MAPBOX_DOWNLOADS_TOKEN=$MAPBOX_DOWNLOAD_TOKEN > ~/.gradle/gradle.properties
-        working-directory: example
-        env:
-          MAPBOX_DOWNLOAD_TOKEN: ${{ secrets.MAPBOX_DOWNLOAD_TOKEN || secrets.ENV_MAPBOX_DOWNLOAD_TOKEN }}
-
+      
       - run: echo $MAPBOX_ACCESS_TOKEN > ./accesstoken
         working-directory: example
         env:

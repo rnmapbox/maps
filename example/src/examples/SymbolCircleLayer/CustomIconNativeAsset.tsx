@@ -1,12 +1,14 @@
-import React, { useRef, memo, useState } from 'react';
+import { useRef, memo, useState } from 'react';
 import { Text } from 'react-native';
-import MapboxGL, {
+import {
   MapView,
   Camera,
   ShapeSource,
   SymbolLayer,
   Images,
+  StyleURL,
 } from '@rnmapbox/maps';
+// @ts-ignore - @turf packages have type resolution issues with package.json exports
 import { featureCollection, feature, point } from '@turf/helpers';
 
 import Bubble from '../common/Bubble';
@@ -46,11 +48,7 @@ const CustomIconNativeAsset = memo(() => {
 
   return (
     <>
-      <MapView
-        style={{ flex: 1 }}
-        styleURL={MapboxGL.StyleURL.Light}
-        onPress={onPress}
-      >
+      <MapView style={{ flex: 1 }} styleURL={StyleURL.Light} onPress={onPress}>
         <Camera
           ref={cameraRef}
           defaultSettings={{
@@ -92,7 +90,7 @@ const metadata: ExampleWithMetadata['metadata'] = {
     'SymbolLayer#iconImage',
   ],
   docs: `
-Renders a symbol layer with custom icon (native asset) defined using the Images component. Clicking a location on a map add a new icon.
+Renders a symbol layer with custom icon (native asset) defined using the Images component. Clicking a location on a map adds a new icon.
 `,
 };
 

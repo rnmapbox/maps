@@ -57,7 +57,10 @@ export default Heatmap;
 
 /* end-example-doc */
 
-/** @type ExampleWithMetadata['metadata'] */
+/**
+ * @typedef {import('../common/ExampleMetadata').ExampleWithMetadata} ExampleWithMetadata
+ * @type {ExampleWithMetadata['metadata']}
+ */
 const metadata = {
   title: 'Heatmap',
   tags: ['HeatmapLayer', 'HeatmapLayer#heatmapColor'],

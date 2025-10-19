@@ -7,7 +7,7 @@ import RNMBXRasterSourceNativeComponent from '../specs/RNMBXRasterSourceNativeCo
 
 import AbstractSource from './AbstractSource';
 
-const MapboxGL = NativeModules.RNMBXModule;
+const Mapbox = NativeModules.RNMBXModule;
 
 const isTileTemplateUrl = (url?: string): url is string =>
   !!url &&
@@ -20,7 +20,7 @@ type Props = BaseProps & {
   id: string;
 
   /**
-   * The id refers to en existing source in the style. Does not create a new source.
+   * The id refers to an existing source in the style. Does not create a new source.
    */
   existing?: boolean;
 
@@ -84,7 +84,7 @@ type NativeProps = Props;
  */
 class RasterSource extends AbstractSource<Props, NativeProps> {
   static defaultProps: Props = {
-    id: MapboxGL.StyleSource.DefaultSourceID,
+    id: Mapbox.StyleSource.DefaultSourceID,
   };
 
   constructor(props: Props) {

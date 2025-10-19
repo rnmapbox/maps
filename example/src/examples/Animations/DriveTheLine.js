@@ -1,5 +1,14 @@
 import React from 'react';
-import MapboxGL from '@rnmapbox/maps';
+import {
+  MapView,
+  Camera,
+  ShapeSource,
+  CircleLayer,
+  LineLayer,
+  LineJoin,
+  Animated,
+  StyleURL,
+} from '@rnmapbox/maps';
 import { View, StyleSheet } from 'react-native';
 import { Button } from '@rneui/base';
 import { lineString as makeLineString } from '@turf/helpers';
@@ -41,7 +50,7 @@ const layerStyles = {
   },
   route: {
     lineColor: 'white',
-    lineCap: MapboxGL.LineJoin.Round,
+    lineCap: LineJoin.Round,
     lineWidth: 3,
     lineOpacity: 0.84,
   },
@@ -106,13 +115,13 @@ class DriveTheLine extends React.Component {
     }
 
     return (
-      <MapboxGL.ShapeSource id="routeSource" shape={this.state.route}>
-        <MapboxGL.LineLayer
+      <ShapeSource id="routeSource" shape={this.state.route}>
+        <LineLayer
           id="routeFill"
           style={layerStyles.route}
           belowLayerID="originInnerCircle"
         />
-      </MapboxGL.ShapeSource>
+      </ShapeSource>
     );
   }
 
@@ -145,13 +154,13 @@ class DriveTheLine extends React.Component {
 
     const lineString = makeLineString(coords);
     return (
-      <MapboxGL.Animated.ShapeSource id="progressSource" shape={lineString}>
-        <MapboxGL.Animated.LineLayer
+      <Animated.ShapeSource id="progressSource" shape={lineString}>
+        <Animated.LineLayer
           id="progressFill"
           style={layerStyles.progress}
           aboveLayerID="routeFill"
         />
-      </MapboxGL.Animated.ShapeSource>
+      </Animated.ShapeSource>
     );
   }
 
@@ -165,9 +174,9 @@ class DriveTheLine extends React.Component {
     const style = [layerStyles.origin, { circleColor: backgroundColor }];
 
     return (
-      <MapboxGL.ShapeSource id="origin" shape={point(SF_OFFICE_COORDINATE)}>
-        <MapboxGL.Animated.CircleLayer id="originInnerCircle" style={style} />
-      </MapboxGL.ShapeSource>
+      <ShapeSource id="origin" shape={point(SF_OFFICE_COORDINATE)}>
+        <Animated.CircleLayer id="originInnerCircle" style={style} />
+      </ShapeSource>
     );
   }
 
@@ -191,15 +200,14 @@ class DriveTheLine extends React.Component {
   render() {
     return (
       <>
-        <MapboxGL.MapView
-          ref={(c) => (this._map = c)}
+        <MapView
+          ref={(c) => {
+            this._map = c;
+          }}
           style={sheet.matchParent}
-          styleURL={MapboxGL.StyleURL.Dark}
+          styleURL={StyleURL.Dark}
         >
-          <MapboxGL.Camera
-            zoomLevel={11}
-            centerCoordinate={[-122.452652, 37.762963]}
-          />
+          <Camera zoomLevel={11} centerCoordinate={[-122.452652, 37.762963]} />
 
           {this.renderOrigin()}
 
@@ -207,16 +215,13 @@ class DriveTheLine extends React.Component {
           {this.renderCurrentPoint()}
           {this.renderProgressLine()}
 
-          <MapboxGL.ShapeSource
-            id="destination"
-            shape={point(SF_ZOO_COORDINATE)}
-          >
-            <MapboxGL.CircleLayer
+          <ShapeSource id="destination" shape={point(SF_ZOO_COORDINATE)}>
+            <CircleLayer
               id="destinationInnerCircle"
               style={layerStyles.destination}
             />
-          </MapboxGL.ShapeSource>
-        </MapboxGL.MapView>
+          </ShapeSource>
+        </MapView>
 
         {this.renderActions()}
       </>

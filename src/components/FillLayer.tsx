@@ -1,8 +1,11 @@
 import React from 'react';
 import { NativeModules } from 'react-native';
 
-import { FilterExpression, FillLayerStyleProps } from '../utils/MapboxStyles';
-import { StyleValue } from '../utils/StyleValue';
+import type {
+  FilterExpression,
+  FillLayerStyleProps,
+} from '../utils/MapboxStyles';
+import type { StyleValue } from '../utils/StyleValue';
 import RNMBXFillLayerNativeComponent from '../specs/RNMBXFillLayerNativeComponent';
 
 import AbstractLayer from './AbstractLayer';
@@ -19,7 +22,7 @@ type LayerPropsCommon = {
   id: string;
 
   /**
-   * The id refers to en existing layer in the style. Does not create a new layer.
+   * The id refers to an existing layer in the style. Does not create a new layer.
    */
   existing?: boolean;
 

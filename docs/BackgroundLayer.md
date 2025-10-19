@@ -29,7 +29,7 @@ A string that uniquely identifies the layer in the style to which it is added.
 ```tsx
 boolean
 ```
-The id refers to en existing layer in the style. Does not create a new layer.
+The id refers to an existing layer in the style. Does not create a new layer.
 
 
   
@@ -42,7 +42,7 @@ The source from which to obtain the data to style.
 If the source has not yet been added to the current style, the behavior is undefined.
 Inferred from parent source only if the layer is a direct child to it.
 
-  _defaults to:_ `MapboxGL.StyleSource.DefaultSourceID`
+  _defaults to:_ `Mapbox.StyleSource.DefaultSourceID`
 
   
 ### sourceLayerID

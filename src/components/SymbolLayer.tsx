@@ -1,9 +1,9 @@
 import React, { JSX } from 'react';
 import { View, NativeModules } from 'react-native';
 
-import {
-  type FilterExpression,
-  type SymbolLayerStyleProps,
+import type {
+  FilterExpression,
+  SymbolLayerStyleProps,
 } from '../utils/MapboxStyles';
 import { type StyleValue } from '../utils/StyleValue';
 import RNMBXSymbolLayerNativeComponent from '../specs/RNMBXSymbolLayerNativeComponent';
@@ -24,7 +24,7 @@ type LayerPropsCommon = {
   id: string;
 
   /**
-   * The id refers to en existing layer in the style. Does not create a new layer.
+   * The id refers to an existing layer in the style. Does not create a new layer.
    */
   existing?: boolean;
 

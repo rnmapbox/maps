@@ -104,7 +104,7 @@ internal fun SymbolLayer.symbolZElevate(expression: Boolean) {
     TODO("v11 only")
 }
 
-internal fun LineLayer.lineEmissiveStrength(expression: Double) {
+internal fun LineLayer.lineEmissiveStrength(value: Double) {
     TODO("v11 only")
 }
 
@@ -393,3 +393,372 @@ internal fun SymbolLayer.iconEmissiveStrengthTransition(transition: StyleTransit
 }
 
 
+
+class FillExtrusionBaseAlignment(valueOf: Any) {
+    companion object
+}
+
+internal fun FillExtrusionBaseAlignment.Companion.valueOf(enumName: String) : String {
+    return enumName
+}
+
+internal fun LineElevationReference.Companion.valueOf(enumName: String) : String {
+    return enumName
+}
+
+class LineElevationReference {
+    companion object
+}
+
+internal fun SymbolLayer.textOcclusionOpacityTransition(
+    transition: StyleTransition
+) {
+    TODO("Not yet implemented")
+}
+
+internal fun SymbolLayer.textOcclusionOpacity(
+    expression: Expression
+) {
+    TODO("Not yet implemented")
+}
+
+internal fun SymbolLayer.textOcclusionOpacity(
+    value: Double
+) {
+    TODO("Not yet implemented")
+}
+
+internal fun SymbolLayer.iconOcclusionOpacity(
+    expression: Expression
+) {
+    TODO("Not yet implemented")
+}
+
+internal fun SymbolLayer.iconOcclusionOpacity(
+    value: Double
+) {
+    TODO("Not yet implemented")
+}
+
+internal fun LineLayer.lineTrimColorTransition(
+    transition: StyleTransition
+) {
+    TODO("Not yet implemented")
+}
+
+internal fun FillExtrusionLayer.fillExtrusionBaseAlignment(
+    valueOf: Any
+) {
+    TODO("Not yet implemented")
+}
+
+internal fun FillExtrusionLayer.fillExtrusionLineWidthTransition(
+    transition: StyleTransition
+) {
+    TODO("Not yet implemented")
+}
+
+internal fun RasterLayer.rasterElevationTransition(
+    transition: StyleTransition
+) {
+    TODO("Not yet implemented")
+}
+
+internal fun BackgroundLayer.backgroundPitchAlignment(
+    expression: Expression
+) {
+    TODO("Not yet implemented")
+}
+
+internal fun RasterLayer.rasterElevation(value: Double) {
+    TODO("Not yet implemented")
+}
+
+internal fun RasterLayer.rasterElevation(expression: Expression) {
+    TODO("Not yet implemented")
+}
+
+internal fun RasterLayer.rasterArrayBand(value: String) {
+    TODO("Not yet implemented")
+}
+
+internal fun RasterLayer.rasterArrayBand(expression: Expression) {
+    TODO("Not yet implemented")
+}
+
+
+
+internal fun RasterLayer.rasterEmissiveStrengthTransition(
+    transition: StyleTransition
+) {
+    TODO("Not yet implemented")
+}
+
+internal fun RasterLayer.rasterEmissiveStrength(
+    expression: Expression
+) {
+    TODO("Not yet implemented")
+}
+
+internal fun RasterLayer.rasterEmissiveStrength(
+    value: Double
+) {
+    TODO("Not yet implemented")
+}
+
+internal fun FillExtrusionLayer.fillExtrusionLineWidth(
+    value: Double
+) {
+    TODO("Not yet implemented")
+}
+
+internal fun FillExtrusionLayer.fillExtrusionLineWidth(
+    value: Expression
+) {
+    TODO("Not yet implemented")
+}
+
+internal fun FillExtrusionLayer.fillExtrusionHeightAlignment(
+    valueOf: String
+) {
+    TODO("Not yet implemented")
+}
+
+internal fun FillExtrusionLayer.fillExtrusionHeightAlignment(
+    valueOf: Expression
+) {
+    TODO("Not yet implemented")
+}
+
+internal fun FillExtrusionLayer.fillExtrusionPatternCrossFade(
+    value: Double
+) {
+    TODO("Not yet implemented")
+}
+
+internal fun FillExtrusionLayer.fillExtrusionPatternCrossFade(
+    value: Expression
+) {
+    TODO("Not yet implemented")
+}
+
+internal fun CircleLayer.circleElevationReference(
+    valueOf: Any
+) {
+    TODO("Not yet implemented")
+}
+
+internal fun SymbolLayer.symbolZOffsetTransition(
+    transition: StyleTransition
+) {
+    TODO("Not yet implemented")
+}
+
+internal fun SymbolLayer.symbolZOffset(expression: Expression) {
+    TODO("Not yet implemented")
+}
+
+internal fun SymbolLayer.symbolZOffset(value: Double) {
+    TODO("Not yet implemented")
+}
+
+internal fun SymbolLayer.iconColorSaturation(
+    expression: Expression
+) {
+    TODO("Not yet implemented")
+}
+
+internal fun SymbolLayer.iconColorSaturation(
+    value: Double
+) {
+    TODO("Not yet implemented")
+}
+
+internal fun SymbolLayer.iconOcclusionOpacityTransition(
+    transition: StyleTransition
+) {
+    TODO("Not yet implemented")
+}
+
+internal fun SymbolLayer.symbolElevationReference(
+    expression: Expression
+) {
+    TODO("Not yet implemented")
+}
+
+internal fun SymbolLayer.symbolElevationReference(
+    value: String
+) {
+    TODO("Not yet implemented")
+}
+
+internal fun LineLayer.lineOcclusionOpacityTransition(
+    transition: StyleTransition
+) {
+    TODO("Not yet implemented")
+}
+
+internal fun LineLayer.lineOcclusionOpacity(
+    expression: Expression
+) {
+    TODO("Not yet implemented")
+}
+
+internal fun LineLayer.lineOcclusionOpacity(
+    value: Double
+) {
+    TODO("Not yet implemented")
+}
+
+
+
+internal fun LineLayer.lineTrimColor(value: Int) {
+    TODO("Not yet implemented")
+}
+
+internal fun LineLayer.lineTrimFadeRange(expression: Expression) {
+    TODO("Not yet implemented")
+}
+
+internal fun LineLayer.linePatternCrossFade(expression: Expression) {
+    TODO("Not yet implemented")
+}
+
+internal fun LineLayer.linePatternCrossFade(value: Double) {
+    TODO("Not yet implemented")
+}
+
+internal fun LineLayer.lineCrossSlope(value: Double) {
+    TODO("Not yet implemented")
+}
+
+internal fun LineLayer.lineCrossSlope(expression: Expression) {
+    TODO("Not yet implemented")
+}
+
+internal fun LineLayer.lineElevationReference(
+    expression: Expression
+) {
+}
+
+internal fun LineLayer.lineElevationReference(
+    value: Double
+) {
+}
+
+internal fun LineLayer.lineElevationReference(
+    value: String
+) {
+}
+
+internal fun LineLayer.lineZOffset(expression: Expression) {}
+
+internal fun LineLayer.lineZOffset(value: Double) {}
+
+internal fun FillLayer.fillPatternCrossFade(
+    expression: Expression
+) {
+    TODO("Not yet implemented")
+}
+
+internal fun FillLayer.fillPatternCrossFade(
+    value: Double
+) {
+    TODO("Not yet implemented")
+}
+
+// Missing v10 dummy functions for compilation errors
+internal fun LineLayer.lineTrimFadeRange(value: Any) {
+    TODO("Not yet implemented")
+}
+
+internal fun LineLayer.lineTrimColor(expression: Expression) {
+    TODO("Not yet implemented")
+}
+
+internal fun RasterLayer.rasterBrightness(value: Double) {
+    TODO("Not yet implemented")
+}
+
+internal fun LineLayer.lineDasharray(value: FloatArray) {
+    TODO("Not yet implemented")
+}
+
+internal fun SymbolLayer.textField(expression: Expression) {
+    TODO("Not yet implemented")
+}
+
+internal fun SymbolLayer.textField(value: String) {
+    TODO("Not yet implemented")
+}
+
+internal fun SymbolLayer.textVariableAnchor(value: Double) {
+    TODO("Not yet implemented")
+}
+
+internal fun BackgroundLayer.backgroundPitchAlignment(value: Any) {
+    TODO("Not yet implemented")
+}
+
+// Missing enum classes for v10 compatibility (dummy implementations)
+internal fun SymbolElevationReference.Companion.valueOf(enumName: String) : String {
+    return enumName
+}
+
+class SymbolElevationReference {
+    companion object
+}
+
+internal fun CircleElevationReference.Companion.valueOf(enumName: String) : String {
+    return enumName
+}
+
+class CircleElevationReference {
+    companion object
+}
+
+internal fun FillExtrusionHeightAlignment.Companion.valueOf(enumName: String) : String {
+    return enumName
+}
+
+class FillExtrusionHeightAlignment {
+    companion object
+}
+
+internal fun BackgroundPitchAlignment.Companion.valueOf(enumName: String) : String {
+    return enumName
+}
+
+class BackgroundPitchAlignment {
+    companion object
+}
+
+fun FillExtrusionLayer.fillExtrusionEdgeRadius(
+    expression: Expression
+) {
+    // V11 only
+}
+
+fun FillExtrusionLayer.fillExtrusionEdgeRadius(
+    value: Double
+) {
+    // V11 only
+}
+
+fun FillExtrusionLayer.fillExtrusionEmissiveStrength(
+    expression: Expression
+) {
+    // V11 only
+}
+
+fun FillExtrusionLayer.fillExtrusionEmissiveStrength(
+    value: Double
+) {
+    // V11 only
+}
+
+fun FillExtrusionLayer.fillExtrusionEmissiveStrengthTransition(
+    transition: StyleTransition
+) {
+    // V11 only
+}

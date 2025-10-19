@@ -61,6 +61,16 @@ func fillLayer(layer: inout FillLayer, reactStyle:Dictionary<String, Any>, oldRe
         setImageOnLayerLater: { (_) in applyUpdater { (layer: inout FillLayer) in self.setFillPattern(&layer, styleValue: styleValue) } },
         name: "Fill.\(prop)"
       )
+    } else if (prop == "fillPatternCrossFade") {
+      styleValue.setImage(
+        bridge: bridge!,
+        style: style,
+        oldValue: oldReactStyle?[prop],
+        setImageOnLayer: { (_) in self.setFillPatternCrossFade(&layer, styleValue:styleValue) },
+        isLayerStillValid: isValid,
+        setImageOnLayerLater: { (_) in applyUpdater { (layer: inout FillLayer) in self.setFillPatternCrossFade(&layer, styleValue: styleValue) } },
+        name: "Fill.\(prop)"
+      )
     } else if (prop == "fillEmissiveStrength") {
       self.setFillEmissiveStrength(&layer, styleValue:styleValue);
     } else if (prop == "fillEmissiveStrengthTransition") {
@@ -144,10 +154,36 @@ func lineLayer(layer: inout LineLayer, reactStyle:Dictionary<String, Any>, oldRe
       self.setLineGradient(&layer, styleValue:styleValue);
     } else if (prop == "lineTrimOffset") {
       self.setLineTrimOffset(&layer, styleValue:styleValue);
+    } else if (prop == "lineZOffset") {
+      self.setLineZOffset(&layer, styleValue:styleValue);
+    } else if (prop == "lineElevationReference") {
+      self.setLineElevationReference(&layer, styleValue:styleValue);
+    } else if (prop == "lineCrossSlope") {
+      self.setLineCrossSlope(&layer, styleValue:styleValue);
+    } else if (prop == "linePatternCrossFade") {
+      styleValue.setImage(
+        bridge: bridge!,
+        style: style,
+        oldValue: oldReactStyle?[prop],
+        setImageOnLayer: { (_) in self.setLinePatternCrossFade(&layer, styleValue:styleValue) },
+        isLayerStillValid: isValid,
+        setImageOnLayerLater: { (_) in applyUpdater { (layer: inout LineLayer) in self.setLinePatternCrossFade(&layer, styleValue: styleValue) } },
+        name: "Line.\(prop)"
+      )
+    } else if (prop == "lineTrimFadeRange") {
+      self.setLineTrimFadeRange(&layer, styleValue:styleValue);
+    } else if (prop == "lineTrimColor") {
+      self.setLineTrimColor(&layer, styleValue:styleValue);
+    } else if (prop == "lineTrimColorTransition") {
+      self.setLineTrimColorTransition(&layer, styleValue:styleValue);
     } else if (prop == "lineEmissiveStrength") {
       self.setLineEmissiveStrength(&layer, styleValue:styleValue);
     } else if (prop == "lineEmissiveStrengthTransition") {
       self.setLineEmissiveStrengthTransition(&layer, styleValue:styleValue);
+    } else if (prop == "lineOcclusionOpacity") {
+      self.setLineOcclusionOpacity(&layer, styleValue:styleValue);
+    } else if (prop == "lineOcclusionOpacityTransition") {
+      self.setLineOcclusionOpacityTransition(&layer, styleValue:styleValue);
     } else {
       Logger.log(level:.error, message: "Unexpected property \(prop) for layer: line")
     }
@@ -315,6 +351,12 @@ func symbolLayer(layer: inout SymbolLayer, reactStyle:Dictionary<String, Any>, o
       self.setTextTranslateAnchor(&layer, styleValue:styleValue);
     } else if (prop == "symbolZElevate") {
       self.setSymbolZElevate(&layer, styleValue:styleValue);
+    } else if (prop == "symbolElevationReference") {
+      self.setSymbolElevationReference(&layer, styleValue:styleValue);
+    } else if (prop == "iconOcclusionOpacity") {
+      self.setIconOcclusionOpacity(&layer, styleValue:styleValue);
+    } else if (prop == "iconOcclusionOpacityTransition") {
+      self.setIconOcclusionOpacityTransition(&layer, styleValue:styleValue);
     } else if (prop == "iconEmissiveStrength") {
       self.setIconEmissiveStrength(&layer, styleValue:styleValue);
     } else if (prop == "iconEmissiveStrengthTransition") {
@@ -333,8 +375,16 @@ func symbolLayer(layer: inout SymbolLayer, reactStyle:Dictionary<String, Any>, o
         setImageOnLayerLater: { (_) in applyUpdater { (layer: inout SymbolLayer) in self.setIconImageCrossFade(&layer, styleValue: styleValue) } },
         name: "Symbol.\(prop)"
       )
-    } else if (prop == "iconImageCrossFadeTransition") {
-      self.setIconImageCrossFadeTransition(&layer, styleValue:styleValue);
+    } else if (prop == "textOcclusionOpacity") {
+      self.setTextOcclusionOpacity(&layer, styleValue:styleValue);
+    } else if (prop == "textOcclusionOpacityTransition") {
+      self.setTextOcclusionOpacityTransition(&layer, styleValue:styleValue);
+    } else if (prop == "iconColorSaturation") {
+      self.setIconColorSaturation(&layer, styleValue:styleValue);
+    } else if (prop == "symbolZOffset") {
+      self.setSymbolZOffset(&layer, styleValue:styleValue);
+    } else if (prop == "symbolZOffsetTransition") {
+      self.setSymbolZOffsetTransition(&layer, styleValue:styleValue);
     } else {
       Logger.log(level:.error, message: "Unexpected property \(prop) for layer: symbol")
     }
@@ -398,6 +448,8 @@ func circleLayer(layer: inout CircleLayer, reactStyle:Dictionary<String, Any>, o
       self.setCircleStrokeOpacity(&layer, styleValue:styleValue);
     } else if (prop == "circleStrokeOpacityTransition") {
       self.setCircleStrokeOpacityTransition(&layer, styleValue:styleValue);
+    } else if (prop == "circleElevationReference") {
+      self.setCircleElevationReference(&layer, styleValue:styleValue);
     } else if (prop == "circleEmissiveStrength") {
       self.setCircleEmissiveStrength(&layer, styleValue:styleValue);
     } else if (prop == "circleEmissiveStrengthTransition") {
@@ -464,6 +516,8 @@ func fillExtrusionLayer(layer: inout FillExtrusionLayer, reactStyle:Dictionary<S
 
     if (prop == "visibility") {
       self.setFillExtrusionStyleLayerVisibility(&layer, styleValue:styleValue);
+    } else if (prop == "fillExtrusionEdgeRadius") {
+      self.setFillExtrusionEdgeRadius(&layer, styleValue:styleValue);
     } else if (prop == "fillExtrusionOpacity") {
       self.setFillExtrusionOpacity(&layer, styleValue:styleValue);
     } else if (prop == "fillExtrusionOpacityTransition") {
@@ -498,8 +552,30 @@ func fillExtrusionLayer(layer: inout FillExtrusionLayer, reactStyle:Dictionary<S
       self.setFillExtrusionBaseTransition(&layer, styleValue:styleValue);
     } else if (prop == "fillExtrusionVerticalGradient") {
       self.setFillExtrusionVerticalGradient(&layer, styleValue:styleValue);
+    } else if (prop == "fillExtrusionAmbientOcclusionIntensity") {
+      self.setFillExtrusionAmbientOcclusionIntensity(&layer, styleValue:styleValue);
+    } else if (prop == "fillExtrusionAmbientOcclusionIntensityTransition") {
+      self.setFillExtrusionAmbientOcclusionIntensityTransition(&layer, styleValue:styleValue);
+    } else if (prop == "fillExtrusionAmbientOcclusionRadius") {
+      self.setFillExtrusionAmbientOcclusionRadius(&layer, styleValue:styleValue);
+    } else if (prop == "fillExtrusionAmbientOcclusionRadiusTransition") {
+      self.setFillExtrusionAmbientOcclusionRadiusTransition(&layer, styleValue:styleValue);
     } else if (prop == "fillExtrusionRoundedRoof") {
       self.setFillExtrusionRoundedRoof(&layer, styleValue:styleValue);
+    } else if (prop == "fillExtrusionPatternCrossFade") {
+      styleValue.setImage(
+        bridge: bridge!,
+        style: style,
+        oldValue: oldReactStyle?[prop],
+        setImageOnLayer: { (_) in self.setFillExtrusionPatternCrossFade(&layer, styleValue:styleValue) },
+        isLayerStillValid: isValid,
+        setImageOnLayerLater: { (_) in applyUpdater { (layer: inout FillExtrusionLayer) in self.setFillExtrusionPatternCrossFade(&layer, styleValue: styleValue) } },
+        name: "FillExtrusion.\(prop)"
+      )
+    } else if (prop == "fillExtrusionHeightAlignment") {
+      self.setFillExtrusionHeightAlignment(&layer, styleValue:styleValue);
+    } else if (prop == "fillExtrusionBaseAlignment") {
+      self.setFillExtrusionBaseAlignment(&layer, styleValue:styleValue);
     } else if (prop == "fillExtrusionAmbientOcclusionWallRadius") {
       self.setFillExtrusionAmbientOcclusionWallRadius(&layer, styleValue:styleValue);
     } else if (prop == "fillExtrusionAmbientOcclusionWallRadiusTransition") {
@@ -538,6 +614,14 @@ func fillExtrusionLayer(layer: inout FillExtrusionLayer, reactStyle:Dictionary<S
       self.setFillExtrusionVerticalScaleTransition(&layer, styleValue:styleValue);
     } else if (prop == "fillExtrusionCutoffFadeRange") {
       self.setFillExtrusionCutoffFadeRange(&layer, styleValue:styleValue);
+    } else if (prop == "fillExtrusionEmissiveStrength") {
+      self.setFillExtrusionEmissiveStrength(&layer, styleValue:styleValue);
+    } else if (prop == "fillExtrusionEmissiveStrengthTransition") {
+      self.setFillExtrusionEmissiveStrengthTransition(&layer, styleValue:styleValue);
+    } else if (prop == "fillExtrusionLineWidth") {
+      self.setFillExtrusionLineWidth(&layer, styleValue:styleValue);
+    } else if (prop == "fillExtrusionLineWidthTransition") {
+      self.setFillExtrusionLineWidthTransition(&layer, styleValue:styleValue);
     } else {
       Logger.log(level:.error, message: "Unexpected property \(prop) for layer: fill-extrusion")
     }
@@ -599,6 +683,16 @@ func rasterLayer(layer: inout RasterLayer, reactStyle:Dictionary<String, Any>, o
       self.setRasterColorRange(&layer, styleValue:styleValue);
     } else if (prop == "rasterColorRangeTransition") {
       self.setRasterColorRangeTransition(&layer, styleValue:styleValue);
+    } else if (prop == "rasterEmissiveStrength") {
+      self.setRasterEmissiveStrength(&layer, styleValue:styleValue);
+    } else if (prop == "rasterEmissiveStrengthTransition") {
+      self.setRasterEmissiveStrengthTransition(&layer, styleValue:styleValue);
+    } else if (prop == "rasterArrayBand") {
+      self.setRasterArrayBand(&layer, styleValue:styleValue);
+    } else if (prop == "rasterElevation") {
+      self.setRasterElevation(&layer, styleValue:styleValue);
+    } else if (prop == "rasterElevationTransition") {
+      self.setRasterElevationTransition(&layer, styleValue:styleValue);
     } else {
       Logger.log(level:.error, message: "Unexpected property \(prop) for layer: raster")
     }
@@ -756,6 +850,8 @@ func backgroundLayer(layer: inout BackgroundLayer, reactStyle:Dictionary<String,
       self.setBackgroundOpacity(&layer, styleValue:styleValue);
     } else if (prop == "backgroundOpacityTransition") {
       self.setBackgroundOpacityTransition(&layer, styleValue:styleValue);
+    } else if (prop == "backgroundPitchAlignment") {
+      self.setBackgroundPitchAlignment(&layer, styleValue:styleValue);
     } else if (prop == "backgroundEmissiveStrength") {
       self.setBackgroundEmissiveStrength(&layer, styleValue:styleValue);
     } else if (prop == "backgroundEmissiveStrengthTransition") {
@@ -1016,6 +1112,17 @@ func setFillPattern(_ layer: inout FillLayer, styleValue: RNMBXStyleValue)
       
 }
 
+func setFillPatternCrossFade(_ layer: inout FillLayer, styleValue: RNMBXStyleValue)
+{
+      #if RNMBX_11
+      
+        
+          layer.fillPatternCrossFade = styleValue.mglStyleValueNumber();
+        
+      
+      #endif
+}
+
 func setFillEmissiveStrength(_ layer: inout FillLayer, styleValue: RNMBXStyleValue)
 {
       #if RNMBX_11
@@ -1229,6 +1336,79 @@ func setLineTrimOffset(_ layer: inout LineLayer, styleValue: RNMBXStyleValue)
       
 }
 
+func setLineZOffset(_ layer: inout LineLayer, styleValue: RNMBXStyleValue)
+{
+      #if RNMBX_11
+      
+        
+          layer.lineZOffset = styleValue.mglStyleValueNumber();
+        
+      
+      #endif
+}
+
+func setLineElevationReference(_ layer: inout LineLayer, styleValue: RNMBXStyleValue)
+{
+      #if RNMBX_11
+      
+        
+          layer.lineElevationReference = styleValue.mglStyleValueEnum(); 
+        
+      
+      #endif
+}
+
+func setLineCrossSlope(_ layer: inout LineLayer, styleValue: RNMBXStyleValue)
+{
+      #if RNMBX_11
+      
+        
+          layer.lineCrossSlope = styleValue.mglStyleValueNumber();
+        
+      
+      #endif
+}
+
+func setLinePatternCrossFade(_ layer: inout LineLayer, styleValue: RNMBXStyleValue)
+{
+      #if RNMBX_11
+      
+        
+          layer.linePatternCrossFade = styleValue.mglStyleValueNumber();
+        
+      
+      #endif
+}
+
+func setLineTrimFadeRange(_ layer: inout LineLayer, styleValue: RNMBXStyleValue)
+{
+      #if RNMBX_11
+      
+        
+          layer.lineTrimFadeRange = styleValue.mglStyleValueArrayNumber();
+         
+      
+      #endif
+}
+
+func setLineTrimColor(_ layer: inout LineLayer, styleValue: RNMBXStyleValue)
+{
+      #if RNMBX_11
+      
+        
+          layer.lineTrimColor = styleValue.mglStyleValueColor();
+        
+      
+      #endif
+}
+
+func setLineTrimColorTransition(_ layer: inout LineLayer, styleValue: RNMBXStyleValue)
+{
+      #if RNMBX_11
+    layer.lineTrimColorTransition = styleValue.getTransition();
+      #endif
+}
+
 func setLineEmissiveStrength(_ layer: inout LineLayer, styleValue: RNMBXStyleValue)
 {
       #if RNMBX_11
@@ -1244,6 +1424,24 @@ func setLineEmissiveStrengthTransition(_ layer: inout LineLayer, styleValue: RNM
 {
       #if RNMBX_11
     layer.lineEmissiveStrengthTransition = styleValue.getTransition();
+      #endif
+}
+
+func setLineOcclusionOpacity(_ layer: inout LineLayer, styleValue: RNMBXStyleValue)
+{
+      #if RNMBX_11
+      
+        
+          layer.lineOcclusionOpacity = styleValue.mglStyleValueNumber();
+        
+      
+      #endif
+}
+
+func setLineOcclusionOpacityTransition(_ layer: inout LineLayer, styleValue: RNMBXStyleValue)
+{
+      #if RNMBX_11
+    layer.lineOcclusionOpacityTransition = styleValue.getTransition();
       #endif
 }
 
@@ -1820,6 +2018,35 @@ func setSymbolZElevate(_ layer: inout SymbolLayer, styleValue: RNMBXStyleValue)
       #endif
 }
 
+func setSymbolElevationReference(_ layer: inout SymbolLayer, styleValue: RNMBXStyleValue)
+{
+      #if RNMBX_11
+      
+        
+          layer.symbolElevationReference = styleValue.mglStyleValueEnum(); 
+        
+      
+      #endif
+}
+
+func setIconOcclusionOpacity(_ layer: inout SymbolLayer, styleValue: RNMBXStyleValue)
+{
+      #if RNMBX_11
+      
+        
+          layer.iconOcclusionOpacity = styleValue.mglStyleValueNumber();
+        
+      
+      #endif
+}
+
+func setIconOcclusionOpacityTransition(_ layer: inout SymbolLayer, styleValue: RNMBXStyleValue)
+{
+      #if RNMBX_11
+    layer.iconOcclusionOpacityTransition = styleValue.getTransition();
+      #endif
+}
+
 func setIconEmissiveStrength(_ layer: inout SymbolLayer, styleValue: RNMBXStyleValue)
 {
       #if RNMBX_11
@@ -1867,10 +2094,50 @@ func setIconImageCrossFade(_ layer: inout SymbolLayer, styleValue: RNMBXStyleVal
       #endif
 }
 
-func setIconImageCrossFadeTransition(_ layer: inout SymbolLayer, styleValue: RNMBXStyleValue)
+func setTextOcclusionOpacity(_ layer: inout SymbolLayer, styleValue: RNMBXStyleValue)
 {
       #if RNMBX_11
-    layer.iconImageCrossFadeTransition = styleValue.getTransition();
+      
+        
+          layer.textOcclusionOpacity = styleValue.mglStyleValueNumber();
+        
+      
+      #endif
+}
+
+func setTextOcclusionOpacityTransition(_ layer: inout SymbolLayer, styleValue: RNMBXStyleValue)
+{
+      #if RNMBX_11
+    layer.textOcclusionOpacityTransition = styleValue.getTransition();
+      #endif
+}
+
+func setIconColorSaturation(_ layer: inout SymbolLayer, styleValue: RNMBXStyleValue)
+{
+      #if RNMBX_11
+      
+        
+          layer.iconColorSaturation = styleValue.mglStyleValueNumber();
+        
+      
+      #endif
+}
+
+func setSymbolZOffset(_ layer: inout SymbolLayer, styleValue: RNMBXStyleValue)
+{
+      #if RNMBX_11
+      
+        
+          layer.symbolZOffset = styleValue.mglStyleValueNumber();
+        
+      
+      #endif
+}
+
+func setSymbolZOffsetTransition(_ layer: inout SymbolLayer, styleValue: RNMBXStyleValue)
+{
+      #if RNMBX_11
+    layer.symbolZOffsetTransition = styleValue.getTransition();
       #endif
 }
 
@@ -2029,6 +2296,17 @@ func setCircleStrokeOpacityTransition(_ layer: inout CircleLayer, styleValue: RN
     layer.circleStrokeOpacityTransition = styleValue.getTransition();
 }
 
+func setCircleElevationReference(_ layer: inout CircleLayer, styleValue: RNMBXStyleValue)
+{
+      #if RNMBX_11
+      
+        
+          layer.circleElevationReference = styleValue.mglStyleValueEnum(); 
+        
+      
+      #endif
+}
+
 func setCircleEmissiveStrength(_ layer: inout CircleLayer, styleValue: RNMBXStyleValue)
 {
       #if RNMBX_11
@@ -2119,6 +2397,17 @@ func setHeatmapOpacityTransition(_ layer: inout HeatmapLayer, styleValue: RNMBXS
 func setFillExtrusionStyleLayerVisibility(_ layer: inout FillExtrusionLayer, styleValue: RNMBXStyleValue)
 {
     layer.visibility = styleValue.isVisible();
+}
+
+func setFillExtrusionEdgeRadius(_ layer: inout FillExtrusionLayer, styleValue: RNMBXStyleValue)
+{
+      #if RNMBX_11
+      
+        
+          layer.fillExtrusionEdgeRadius = styleValue.mglStyleValueNumber();
+        
+      
+      #endif
 }
 
 func setFillExtrusionOpacity(_ layer: inout FillExtrusionLayer, styleValue: RNMBXStyleValue)
@@ -2218,12 +2507,73 @@ func setFillExtrusionVerticalGradient(_ layer: inout FillExtrusionLayer, styleVa
       
 }
 
+func setFillExtrusionAmbientOcclusionIntensity(_ layer: inout FillExtrusionLayer, styleValue: RNMBXStyleValue)
+{
+      
+        
+          layer.fillExtrusionAmbientOcclusionIntensity = styleValue.mglStyleValueNumber();
+        
+      
+}
+
+func setFillExtrusionAmbientOcclusionIntensityTransition(_ layer: inout FillExtrusionLayer, styleValue: RNMBXStyleValue)
+{
+    layer.fillExtrusionAmbientOcclusionIntensityTransition = styleValue.getTransition();
+}
+
+func setFillExtrusionAmbientOcclusionRadius(_ layer: inout FillExtrusionLayer, styleValue: RNMBXStyleValue)
+{
+      
+        
+          layer.fillExtrusionAmbientOcclusionRadius = styleValue.mglStyleValueNumber();
+        
+      
+}
+
+func setFillExtrusionAmbientOcclusionRadiusTransition(_ layer: inout FillExtrusionLayer, styleValue: RNMBXStyleValue)
+{
+    layer.fillExtrusionAmbientOcclusionRadiusTransition = styleValue.getTransition();
+}
+
 func setFillExtrusionRoundedRoof(_ layer: inout FillExtrusionLayer, styleValue: RNMBXStyleValue)
 {
       #if RNMBX_11
       
         
           layer.fillExtrusionRoundedRoof = styleValue.mglStyleValueBoolean();
+        
+      
+      #endif
+}
+
+func setFillExtrusionPatternCrossFade(_ layer: inout FillExtrusionLayer, styleValue: RNMBXStyleValue)
+{
+      #if RNMBX_11
+      
+        
+          layer.fillExtrusionPatternCrossFade = styleValue.mglStyleValueNumber();
+        
+      
+      #endif
+}
+
+func setFillExtrusionHeightAlignment(_ layer: inout FillExtrusionLayer, styleValue: RNMBXStyleValue)
+{
+      #if RNMBX_11
+      
+        
+          layer.fillExtrusionHeightAlignment = styleValue.mglStyleValueEnum(); 
+        
+      
+      #endif
+}
+
+func setFillExtrusionBaseAlignment(_ layer: inout FillExtrusionLayer, styleValue: RNMBXStyleValue)
+{
+      #if RNMBX_11
+      
+        
+          layer.fillExtrusionBaseAlignment = styleValue.mglStyleValueEnum(); 
         
       
       #endif
@@ -2402,6 +2752,42 @@ func setFillExtrusionCutoffFadeRange(_ layer: inout FillExtrusionLayer, styleVal
       #endif
 }
 
+func setFillExtrusionEmissiveStrength(_ layer: inout FillExtrusionLayer, styleValue: RNMBXStyleValue)
+{
+      #if RNMBX_11
+      
+        
+          layer.fillExtrusionEmissiveStrength = styleValue.mglStyleValueNumber();
+        
+      
+      #endif
+}
+
+func setFillExtrusionEmissiveStrengthTransition(_ layer: inout FillExtrusionLayer, styleValue: RNMBXStyleValue)
+{
+      #if RNMBX_11
+    layer.fillExtrusionEmissiveStrengthTransition = styleValue.getTransition();
+      #endif
+}
+
+func setFillExtrusionLineWidth(_ layer: inout FillExtrusionLayer, styleValue: RNMBXStyleValue)
+{
+      #if RNMBX_11
+      
+        
+          layer.fillExtrusionLineWidth = styleValue.mglStyleValueNumber();
+        
+      
+      #endif
+}
+
+func setFillExtrusionLineWidthTransition(_ layer: inout FillExtrusionLayer, styleValue: RNMBXStyleValue)
+{
+      #if RNMBX_11
+    layer.fillExtrusionLineWidthTransition = styleValue.getTransition();
+      #endif
+}
+
 
 
 func setRasterStyleLayerVisibility(_ layer: inout RasterLayer, styleValue: RNMBXStyleValue)
@@ -2555,6 +2941,53 @@ func setRasterColorRangeTransition(_ layer: inout RasterLayer, styleValue: RNMBX
 {
       #if RNMBX_11
     layer.rasterColorRangeTransition = styleValue.getTransition();
+      #endif
+}
+
+func setRasterEmissiveStrength(_ layer: inout RasterLayer, styleValue: RNMBXStyleValue)
+{
+      #if RNMBX_11
+      
+        
+          layer.rasterEmissiveStrength = styleValue.mglStyleValueNumber();
+        
+      
+      #endif
+}
+
+func setRasterEmissiveStrengthTransition(_ layer: inout RasterLayer, styleValue: RNMBXStyleValue)
+{
+      #if RNMBX_11
+    layer.rasterEmissiveStrengthTransition = styleValue.getTransition();
+      #endif
+}
+
+func setRasterArrayBand(_ layer: inout RasterLayer, styleValue: RNMBXStyleValue)
+{
+      #if RNMBX_11
+      
+        
+          layer.rasterArrayBand = styleValue.mglStyleValueString();
+        
+      
+      #endif
+}
+
+func setRasterElevation(_ layer: inout RasterLayer, styleValue: RNMBXStyleValue)
+{
+      #if RNMBX_11
+      
+        
+          layer.rasterElevation = styleValue.mglStyleValueNumber();
+        
+      
+      #endif
+}
+
+func setRasterElevationTransition(_ layer: inout RasterLayer, styleValue: RNMBXStyleValue)
+{
+      #if RNMBX_11
+    layer.rasterElevationTransition = styleValue.getTransition();
       #endif
 }
 
@@ -2915,6 +3348,17 @@ func setBackgroundOpacity(_ layer: inout BackgroundLayer, styleValue: RNMBXStyle
 func setBackgroundOpacityTransition(_ layer: inout BackgroundLayer, styleValue: RNMBXStyleValue)
 {
     layer.backgroundOpacityTransition = styleValue.getTransition();
+}
+
+func setBackgroundPitchAlignment(_ layer: inout BackgroundLayer, styleValue: RNMBXStyleValue)
+{
+      #if RNMBX_11
+      
+        
+          layer.backgroundPitchAlignment = styleValue.mglStyleValueEnum(); 
+        
+      
+      #endif
 }
 
 func setBackgroundEmissiveStrength(_ layer: inout BackgroundLayer, styleValue: RNMBXStyleValue)

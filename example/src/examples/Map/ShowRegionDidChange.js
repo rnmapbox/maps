@@ -137,7 +137,9 @@ class ShowRegionDidChange extends React.Component {
           }}
         />
         <MapView
-          ref={(c) => (this.map = c)}
+          ref={(c) => {
+            this.map = c;
+          }}
           style={sheet.matchParent}
           onRegionWillChange={this.onRegionWillChange}
           onRegionIsChanging={this.onRegionIsChanging}
@@ -163,7 +165,7 @@ const metadata = {
     'MapView#onRegionDidChange',
   ],
   docs: `
-Demonstates MapView region change events.
+Demonstrates MapView region change events.
 `,
 };
 ShowRegionDidChange.metadata = metadata;

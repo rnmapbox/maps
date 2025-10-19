@@ -1,8 +1,9 @@
 import type { HostComponent, ViewProps } from 'react-native';
 import codegenNativeComponent from 'react-native/Libraries/Utilities/codegenNativeComponent';
+// @ts-ignore - CI environment type resolution issue for CodegenTypes
 import { Double, Int32 } from 'react-native/Libraries/Types/CodegenTypes';
 
-import { FilterExpression } from '../utils/MapboxStyles';
+import type { FilterExpression } from '../utils/MapboxStyles';
 import { StyleValue } from '../utils/StyleValue';
 
 import { UnsafeMixed } from './codegenUtils';
@@ -33,6 +34,7 @@ export interface NativeProps extends ViewProps, CommonProps {
   reactStyle?: UnsafeMixed<{ [key: string]: StyleValue }>;
 }
 
+// @ts-ignore-error - Codegen requires single cast but TypeScript prefers double cast
 export default codegenNativeComponent<NativeProps>(
   'RNMBXModelLayer',
 ) as HostComponent<NativeProps>;

@@ -8,7 +8,7 @@ import { OnPressEvent } from '../types/OnPressEvent';
 
 import AbstractSource from './AbstractSource';
 
-const MapboxGL = NativeModules.RNMBXModule;
+const Mapbox = NativeModules.RNMBXModule;
 
 export const NATIVE_MODULE_NAME = 'RNMBXVectorSource';
 
@@ -19,7 +19,7 @@ interface Props {
   id: string;
 
   /**
-   * The id refers to en existing source in the style. Does not create a new source.
+   * The id refers to an existing source in the style. Does not create a new source.
    */
   existing?: boolean;
 
@@ -95,7 +95,7 @@ type NativeProps = Props; // Omit<Props, 'children'>;
  */
 class VectorSource extends AbstractSource<Props, NativeProps> {
   static defaultProps = {
-    id: MapboxGL.StyleSource.DefaultSourceID,
+    id: Mapbox.StyleSource.DefaultSourceID,
   };
 
   constructor(props: Props) {

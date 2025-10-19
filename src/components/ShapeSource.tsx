@@ -20,7 +20,7 @@ import { ShapeAnimatorInterface } from '../shapeAnimators';
 import AbstractSource from './AbstractSource';
 import NativeBridgeComponent from './NativeBridgeComponent';
 
-const MapboxGL = NativeModules.RNMBXModule;
+const Mapbox = NativeModules.RNMBXModule;
 
 type OnPressEventDeprecated = OnPressEvent & {
   nativeEvent?: OnPressEvent;
@@ -33,7 +33,7 @@ export type Props = {
   id: string;
 
   /**
-   * The id refers to en existing source in the style. Does not create a new source.
+   * The id refers to an existing source in the style. Does not create a new source.
    */
   existing?: boolean;
 
@@ -155,7 +155,7 @@ export class ShapeSource extends NativeBridgeComponent(
   static NATIVE_ASSETS_KEY = 'assets';
 
   static defaultProps = {
-    id: MapboxGL.StyleSource.DefaultSourceID,
+    id: Mapbox.StyleSource.DefaultSourceID,
   };
 
   constructor(props: Props) {

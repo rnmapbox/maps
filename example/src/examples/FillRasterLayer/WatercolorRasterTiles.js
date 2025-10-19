@@ -3,7 +3,6 @@ import { View, StyleSheet } from 'react-native';
 import Mapbox from '@rnmapbox/maps';
 import { Slider } from '@rneui/base';
 
-import sheet from '../../styles/sheet';
 import colors from '../../styles/colors';
 import { SF_OFFICE_COORDINATE } from '../../utils';
 
@@ -36,14 +35,14 @@ class WatercolorRasterTiles extends React.Component {
     const rasterSourceProps = {
       id: 'stamenWatercolorSource',
       tileUrlTemplates: [
-        'https://tiles-eu.stadiamaps.com/tiles/stamen_watercolor/{z}/{x}/{y}.jpg',
+        'https://tiles.stadiamaps.com/tiles/stamen_watercolor/{z}/{x}/{y}.jpg?api_key=36ff39ee-a31d-4153-8aee-71f361373a5c',
       ],
       tileSize: 256,
     };
 
     return (
       <>
-        <Mapbox.MapView style={sheet.matchParent}>
+        <Mapbox.MapView style={{ flex: 1 }}>
           <Mapbox.Camera
             defaultSettings={{
               zoomLevel: 16,
@@ -79,7 +78,10 @@ export default WatercolorRasterTiles;
 
 /* end-example-doc */
 
-/** @type ExampleWithMetadata['metadata'] */
+/**
+ * @typedef {import('../common/ExampleMetadata').ExampleWithMetadata} ExampleWithMetadata
+ * @type {ExampleWithMetadata['metadata']}
+ */
 const metadata = {
   title: 'Watercolor Raster Tiles',
   tags: ['RasterSource', 'RasterLayer'],

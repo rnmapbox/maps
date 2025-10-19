@@ -81,7 +81,7 @@ const PointAnnotationAnchors = (props) => {
           coordinate={p.coordinate}
           anchor={p.anchor}
         >
-          <View style={styles.small}>
+          <View style={styles.small} collapsable={false}>
             <Text style={[styles.text, { color: 'white' }]}>
               x={p.anchor.x.toPrecision(2)}, y={p.anchor.y.toPrecision(2)}
             </Text>
@@ -103,7 +103,7 @@ const PointAnnotationAnchors = (props) => {
             coordinate={p.coordinate}
             anchor={p.anchor}
           >
-            <View style={[styles.large, p.containerStyle]}>
+            <View style={[styles.large, p.containerStyle]} collapsable={false}>
               <View
                 style={{
                   height: ANNOTATION_SIZE * 2,
@@ -133,7 +133,10 @@ export default PointAnnotationAnchors;
 
 /* end-example-doc */
 
-/** @type ExampleWithMetadata['metadata'] */
+/**
+ * @typedef {import('../common/ExampleMetadata').ExampleWithMetadata} ExampleWithMetadata
+ * @type {ExampleWithMetadata['metadata']}
+ */
 const metadata = {
   title: 'Point Annotation Anchors',
   tags: ['PointAnnotation'],

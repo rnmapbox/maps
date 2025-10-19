@@ -22,7 +22,7 @@ const styles = StyleSheet.create({
 });
 
 const AnnotationContent = ({ title }: { title: string }) => (
-  <View style={styles.touchableContainer}>
+  <View style={styles.touchableContainer} collapsable={false}>
     <Text>{title}</Text>
     <TouchableOpacity style={styles.touchable}>
       <Text style={styles.touchableText}>Btn</Text>
@@ -63,7 +63,7 @@ const ShowMarkerView = () => {
           }}
         />
 
-        <Mapbox.PointAnnotation coordinate={pointList[1]} id="pt-ann">
+        <Mapbox.PointAnnotation coordinate={pointList[1]!} id="pt-ann">
           <AnnotationContent title={'this is a point annotation'} />
         </Mapbox.PointAnnotation>
 
@@ -103,7 +103,7 @@ const metadata = {
   title: 'Marker View',
   tags: ['PointAnnotation', 'MarkerView'],
   docs: `
-Shows marker view and poitn annotations
+Shows marker view and point annotations
 `,
 };
 ShowMarkerView.metadata = metadata;

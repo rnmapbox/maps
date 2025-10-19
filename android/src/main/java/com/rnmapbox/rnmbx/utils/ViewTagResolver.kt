@@ -23,7 +23,7 @@ open class ViewTagResolver(val context: ReactApplicationContext) {
     private val viewWaiters: HashMap<Int, MutableList<ViewTagWaiter<View?>>> = hashMapOf()
     private val handler = android.os.Handler(android.os.Looper.getMainLooper())
 
-    private fun <V>addWaiterWithTimeout(viewTag: Int, reject: Promise?, fn: (V) -> Unit) {
+    private fun <V>addWaiter(viewTag: Int, reject: Promise?, fn: (V) -> Unit) {
         val waiter = ViewTagWaiter<View?>({ view ->
             if (view != null) {
                 fn(view as V)
@@ -33,16 +33,6 @@ open class ViewTagResolver(val context: ReactApplicationContext) {
             }
         }, reject)
         viewWaiters.getOrPut(viewTag) { mutableListOf() }.add(waiter)
-        handler.postDelayed({
-            if (viewWaiters[viewTag]?.contains(waiter) == true) {
-                Logger.e(LOG_TAG, "Timeout waiting for view with tag: $viewTag")
-                reject?.reject(Throwable("Timeout waiting for view with tag: $viewTag"))
-                viewWaiters[viewTag]?.remove(waiter)
-                if (viewWaiters[viewTag]?.isEmpty() == true) {
-                    viewWaiters.remove(viewTag)
-                }
-            }
-        }, 200)
     }
     // to be called from view.setId
     fun tagAssigned(viewTag: Int) {
@@ -85,11 +75,11 @@ open class ViewTagResolver(val context: ReactApplicationContext) {
                 if (view != null) {
                     fn(view)
                 } else {
-                    addWaiterWithTimeout(viewTag, reject, fn)
+                    addWaiter(viewTag, reject, fn)
                 }
             } catch (err: IllegalViewOperationException) {
                 if (!createdViews.contains(viewTag)) {
-                    addWaiterWithTimeout(viewTag, reject, fn)
+                    addWaiter(viewTag, reject, fn)
                 } else {
                     reject?.reject(err)
                 }

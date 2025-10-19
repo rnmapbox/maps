@@ -7,6 +7,19 @@ body:
   attributes:
     value: |
       Thanks for taking the time to fill out this bug report!
+
+      ---
+
+      ⚠️ **Deprecation Notice** ⚠️
+
+      **v10.x and old architecture (Paper/bridge) issues are deprecated and will not receive attention.**
+
+      Please upgrade to v11+ with new architecture (Fabric/TurboModules) for active support.
+
+      **For sponsors-only support and resources:** https://github.com/rnmapbox/maps/wiki/SponsorsRepo
+      **Become a sponsor for special support:** https://github.com/sponsors/rnmapbox
+
+      ---
 - type: dropdown
   id: mapbox-implementation
   attributes:
@@ -35,6 +48,17 @@ body:
     description: |-
       The React Native version
     placeholder: 0.73.2
+  validations:
+    required: true
+- type: dropdown
+  id: react-native-architecture
+  attributes:
+    label: React Native Architecture
+    description: |-
+      Select the React Native architecture you're using
+    options:
+      - New Architecture (Fabric/TurboModules)
+      - Old Architecture (Paper/bridge)
   validations:
     required: true
 - type: dropdown
@@ -74,7 +98,7 @@ body:
         LineLayer,
         Camera,
       } from '@rnmapbox/maps';
-      
+
       const aLine = {
         type: 'LineString',
         coordinates: [
@@ -82,7 +106,7 @@ body:
           [-74.00697, 40.71527],
         ],
       };
-      
+
       class BugReportExample extends React.Component {
         render() {
           return (

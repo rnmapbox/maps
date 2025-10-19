@@ -35,6 +35,9 @@ jobs:
       - uses: oven-sh/setup-bun@v1
         with:
           bun-version: latest
+      - name: Create dummy accesstoken file
+        run: echo 'dummytoken' > ./accesstoken
+        working-directory: maps/example
       - name: Install dependencies
         run: yarn install
       - name: Generate component docs into maps-docs repo
@@ -58,6 +61,10 @@ jobs:
         run: |
           git config --global user.name "github-actions[bot]"
           git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git stash --include-untracked
+          git pull --rebase origin main
+          git stash pop || true
+          git log -1
           git add .
           git commit -m "Update docs from maps  rnmapbox/maps@${GITHUB_SHA::7}"
           git push origin main

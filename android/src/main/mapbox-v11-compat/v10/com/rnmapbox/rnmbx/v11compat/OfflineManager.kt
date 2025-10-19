@@ -6,6 +6,10 @@ import com.mapbox.common.toValue
 import com.mapbox.maps.OfflineManager
 import com.mapbox.maps.OfflineRegionManager
 import com.mapbox.maps.ResourceOptions
+import com.mapbox.maps.StylePackLoadOptions
+import com.mapbox.maps.TilesetDescriptorOptions
+import com.mapbox.maps.TilesetDescriptorOptionsForTilesets
+import com.mapbox.common.TilesetDescriptor
 
 fun getOfflineRegionManager(getAccessToken: () -> String): OfflineRegionManager {
   return OfflineRegionManager(ResourceOptions.Builder().accessToken(getAccessToken()).build())
@@ -18,6 +22,28 @@ fun getOfflineManager(tileStore: TileStore, getAccessToken: () -> String): Offli
         tileStore
       ).build()
   )
+}
+
+fun getTilesetDescriptors(offlineManager: OfflineManager, styleURI: String, minZoom: Byte, maxZoom: Byte, stylePackOptions: StylePackLoadOptions, tilesets: List<String>): ArrayList<TilesetDescriptor>{
+  val descriptorOptions = TilesetDescriptorOptions.Builder()
+    .styleURI(styleURI)
+    .minZoom(minZoom)
+    .maxZoom(maxZoom)
+    .stylePackOptions(stylePackOptions)
+    .pixelRatio(2.0f)
+    .build()
+  val descriptor = offlineManager.createTilesetDescriptor(descriptorOptions)
+  val descriptors = arrayListOf(descriptor)
+  if (tilesets.isNotEmpty()) {
+    val tilesetDescriptorOptions = TilesetDescriptorOptionsForTilesets.Builder()
+    .tilesets(tilesets)
+    .minZoom(minZoom)
+    .maxZoom(maxZoom)
+    .build()
+    val tilesetDescriptor = offlineManager.createTilesetDescriptor(tilesetDescriptorOptions)
+    descriptors.add(tilesetDescriptor)
+  }
+  return descriptors
 }
 
 fun TileStore.setAccessToken(token: String) {

@@ -65,7 +65,7 @@ export default class BridgeValue {
       for (const stringKey of stringKeys) {
         value.push([
           new BridgeValue(stringKey).toJSON(),
-          new BridgeValue(rawValue[stringKey]).toJSON(),
+          new BridgeValue(rawValue[stringKey]!).toJSON(),
         ]);
       }
     } else if (type === 'boolean' || type === 'number' || type === 'string') {

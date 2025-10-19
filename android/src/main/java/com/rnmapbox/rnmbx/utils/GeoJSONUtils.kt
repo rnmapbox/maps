@@ -30,8 +30,11 @@ object GeoJSONUtils {
                 "GeoJSONUtils.fromFeature geometry was null for feature: ${feature.toJson()}"
             )
         }
-        val properties = ConvertUtils.toWritableMap(feature.properties())
-        map.putMap("properties", properties)
+
+        feature.properties()?.let {
+            val properties = ConvertUtils.toWritableMap(it)
+            map.putMap("properties", properties)
+        }
         return map
     }
 

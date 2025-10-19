@@ -1,3 +1,4 @@
+import { memo, useRef, useState, useMemo, useCallback } from 'react';
 import { Button, StyleProp, View, ViewStyle } from 'react-native';
 import {
   Camera,
@@ -8,11 +9,12 @@ import {
   LineLayer,
 } from '@rnmapbox/maps';
 import { Position } from 'geojson';
-import React, { memo, useCallback, useMemo, useRef, useState } from 'react';
 import { Divider, Slider, Text } from '@rneui/base';
 import { SafeAreaView } from 'react-native-safe-area-context';
+// @ts-ignore - @turf packages have type resolution issues with package.json exports
 import { lineString } from '@turf/helpers';
 import bbox from '@turf/bbox';
+// @ts-ignore - @turf packages have type resolution issues with package.json exports
 import length from '@turf/length';
 
 import type { ExampleWithMetadata } from '../common/ExampleMetadata';
@@ -75,7 +77,7 @@ const AnimatedLineOffsets = memo(() => {
 
   const buildRandomizedLine = useCallback(() => {
     return baseCoordinates.map((c) => {
-      return [c[0] + randNorm() * 0.001, c[1] + randNorm() * 0.001];
+      return [c[0]! + randNorm() * 0.001, c[1]! + randNorm() * 0.001];
     });
   }, []);
 

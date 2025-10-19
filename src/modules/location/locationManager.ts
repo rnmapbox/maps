@@ -7,17 +7,25 @@ import {
   type AppStateStatus,
   Platform,
   EventSubscription,
-} from 'react-native'
+} from 'react-native';
 
-import NativeRNMBXLocationModule from '../../specs/NativeRNMBXLocationModule'
+import NativeRNMBXLocationModule from '../../specs/NativeRNMBXLocationModule';
 
-const MapboxGL = NativeModules.RNMBXModule
-const MapboxGLLocationManager: typeof NativeRNMBXLocationModule = Platform.select({ios: NativeModules.RNMBXLocationModule, android:  NativeRNMBXLocationModule})
-
-export const LocationModuleEventEmitter = new NativeEventEmitter(
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  MapboxGLLocationManager as any,
+const Mapbox = NativeModules.RNMBXModule;
+const MapboxLocationManager: typeof NativeRNMBXLocationModule = Platform.select(
+  {
+    ios: NativeModules.RNMBXLocationModule,
+    android: NativeRNMBXLocationModule,
+  },
 );
+
+const IsTurbo: boolean =
+  typeof MapboxLocationManager.onLocationUpdate === 'function';
+
+export const LocationModuleEventEmitter =
+  Platform.OS === 'ios' || (Platform.OS === 'android' && !IsTurbo)
+    ? new NativeEventEmitter(MapboxLocationManager as any)
+    : null;
 
 /**
  * Location sent by locationManager
@@ -106,8 +114,7 @@ export class LocationManager {
       // let's silently catch it and simply log out
       // instead of throwing an exception
       try {
-        lastKnownLocation =
-          await MapboxGLLocationManager.getLastKnownLocation();
+        lastKnownLocation = await MapboxLocationManager.getLastKnownLocation();
       } catch (error) {
         console.warn('locationManager Error: ', error);
       }
@@ -170,19 +177,21 @@ export class LocationManager {
     }
 
     if (!this._isListening) {
-      MapboxGLLocationManager.start(validDisplacement);
+      MapboxLocationManager.start(validDisplacement);
       //Determine if TurboModules (new architecture) are available.
-      const isTurbo: boolean = typeof MapboxGLLocationManager.onLocationUpdate === 'function';
 
-      if (Platform.OS === 'ios' || !isTurbo) {
+      if (LocationModuleEventEmitter) {
+        // Cast to match NativeEventEmitter's strict signature - runtime behavior is correct
         this.subscription = LocationModuleEventEmitter.addListener(
-          MapboxGL.LocationCallbackName.Update,
-          this._onUpdate,
+          Mapbox.LocationCallbackName.Update,
+          this._onUpdate as (...args: readonly Object[]) => unknown,
         );
       } else {
-        this.subscription = MapboxGLLocationManager.onLocationUpdate((location) => {
-          this._onUpdate(location.payload);
-        });
+        this.subscription = MapboxLocationManager.onLocationUpdate(
+          (location: any) => {
+            this._onUpdate(location.payload);
+          },
+        );
       }
 
       this._isListening = true;
@@ -190,7 +199,7 @@ export class LocationManager {
   }
 
   stop() {
-    MapboxGLLocationManager.stop();
+    MapboxLocationManager.stop();
 
     if (this._isListening && this.subscription) {
       this.subscription.remove();
@@ -201,11 +210,11 @@ export class LocationManager {
 
   setMinDisplacement(minDisplacement: number) {
     this._minDisplacement = minDisplacement;
-    MapboxGLLocationManager.setMinDisplacement(minDisplacement);
+    MapboxLocationManager.setMinDisplacement(minDisplacement);
   }
 
   setRequestsAlwaysUse(requestsAlwaysUse: boolean) {
-    MapboxGLLocationManager.setRequestsAlwaysUse(requestsAlwaysUse);
+    MapboxLocationManager.setRequestsAlwaysUse(requestsAlwaysUse);
     this._requestsAlwaysUse = requestsAlwaysUse;
   }
 
@@ -219,7 +228,7 @@ export class LocationManager {
    * simulates location updates, experimental  [V10, iOS only]
    */
   _simulateHeading(changesPerSecond: number, increment: number) {
-    MapboxGLLocationManager.simulateHeading(changesPerSecond, increment);
+    MapboxLocationManager.simulateHeading(changesPerSecond, increment);
   }
 
   /**
@@ -233,7 +242,7 @@ export class LocationManager {
    * @return {void}
    */
   setLocationEventThrottle(throttleValue: number) {
-    MapboxGLLocationManager.setLocationEventThrottle(throttleValue);
+    MapboxLocationManager.setLocationEventThrottle(throttleValue);
   }
 }
 

@@ -1,4 +1,4 @@
-import React, { memo, useMemo } from 'react';
+import { memo, useMemo } from 'react';
 
 import type { TerrainLayerStyleProps, Value } from '../utils/MapboxStyles';
 import { transformStyle } from '../utils/StyleValue';

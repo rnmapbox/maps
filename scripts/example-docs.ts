@@ -7,7 +7,6 @@ import * as fs from 'fs';
 import { execSync } from 'child_process';
 import Os from 'os';
 
-// eslint-disable-next-line import/order
 import {
   docSiteRootPath,
   screenshotsJSONPath,
@@ -17,7 +16,7 @@ import {
 
 const endOfExampleMarker = '/* end-example-doc */';
 
-import type { Examples, Example } from './autogenHelpers/examplesJsonSchema';
+import type { Examples } from './autogenHelpers/examplesJsonSchema';
 import type { Screenshots } from './autogenHelpers/screenshotsJsonSchema';
 
 const examples: Examples = JSON.parse(
@@ -29,9 +28,9 @@ const screenshots: Screenshots = JSON.parse(
 
 const destdir = path.join(docSiteRootPath, 'docs/examples');
 
-examples.forEach(({ groupName, examples, metadata }) => {
+examples.forEach(({ groupName, examples: _examples, metadata: _metadata }) => {
   const destGroupDir = path.join(destdir, groupName);
-  examples.forEach(({ metadata, fullPath, relPath, name }) => {
+  _examples.forEach(({ metadata, fullPath, relPath, name }) => {
     if (!metadata) {
       return;
     }
@@ -49,8 +48,6 @@ examples.forEach(({ groupName, examples, metadata }) => {
     }
 
     const mdPath = path.join(destGroupDir, `${name}.md`);
-
-    const basename = path.basename(name);
 
     if (screenshots[groupName] == null) {
       console.log(` => error: "${groupName}" is not in screenshots.json`);

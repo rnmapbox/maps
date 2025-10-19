@@ -53,7 +53,12 @@ const normalIcon = (
     style={layerStyles.normal.foreground}
   />,
   ...(showsUserHeadingIndicator && typeof heading === 'number'
-    ? [HeadingIndicator({ heading, key: 'mapboxUserLocationHeadingIndicator' })]
+    ? [
+        <HeadingIndicator
+          heading={heading}
+          key="mapboxUserLocationHeadingIndicator"
+        />,
+      ]
     : []),
 ];
 

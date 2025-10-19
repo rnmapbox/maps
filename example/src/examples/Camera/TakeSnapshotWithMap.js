@@ -1,6 +1,6 @@
 import React from 'react';
 import { StyleSheet, View, Text, TouchableOpacity, Image } from 'react-native';
-import MapboxGL from '@rnmapbox/maps';
+import { MapView, Camera, FillExtrusionLayer } from '@rnmapbox/maps';
 
 import sheet from '../../styles/sheet';
 import colors from '../../styles/colors';
@@ -51,20 +51,25 @@ class TakeSnapshotWithMap extends React.Component {
     return (
       <>
         <View style={styles.mapContainer}>
-          <MapboxGL.MapView ref={(ref) => (this.map = ref)} style={styles.map}>
-            <MapboxGL.Camera
+          <MapView
+            ref={(ref) => {
+              this.map = ref;
+            }}
+            style={styles.map}
+          >
+            <Camera
               zoomLevel={16}
               pitch={45}
               centerCoordinate={[-122.400021, 37.789085]}
             />
 
-            <MapboxGL.FillExtrusionLayer
+            <FillExtrusionLayer
               id="building3d"
               existing
               sourceLayerID="building"
               style={layerStyles.building}
             />
-          </MapboxGL.MapView>
+          </MapView>
 
           <View style={styles.imageContainer}>
             {this.state.uri ? (

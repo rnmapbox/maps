@@ -1,4 +1,4 @@
-import React, { ComponentProps, useCallback, useRef } from 'react';
+import { ComponentProps, useCallback, useRef } from 'react';
 import { Camera, FillLayer, MapView, ShapeSource } from '@rnmapbox/maps';
 
 import { ExampleWithMetadata } from '../common/ExampleMetadata';

@@ -29,7 +29,7 @@ A string that uniquely identifies the source in the style to which it is added.
 ```tsx
 boolean
 ```
-The id refers to en existing layer in the style. Does not create a new layer.
+The id refers to an existing layer in the style. Does not create a new layer.
 
 
   
@@ -310,7 +310,7 @@ Determines whether overlapping symbols in the same layer are rendered in the ord
 
 #### Supported Values
 **auto** - Sorts symbols by `symbol-sort-key` if set. Otherwise, sorts symbols by their y-position relative to the viewport if `icon-allow-overlap` or `text-allow-overlap` is set to `true` or `icon-ignore-placement` or `text-ignore-placement` is `false`.<br />
-**viewport-y** - Sorts symbols by their y-position relative to the viewport if `icon-allow-overlap` or `text-allow-overlap` is set to `true` or `icon-ignore-placement` or `text-ignore-placement` is `false`.<br />
+**viewport-y** - Sorts symbols by their y-position relative to the viewport if any of the following is set to `true`: `icon-allow-overlap`, `text-allow-overlap`, `icon-ignore-placement`, `text-ignore-placement`.<br />
 **source** - Sorts symbols by `symbol-sort-key` if set. Otherwise, no sorting is applied; symbols are rendered in the same order as the source data.<br />
 
 

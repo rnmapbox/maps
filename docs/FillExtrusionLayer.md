@@ -29,7 +29,7 @@ A string that uniquely identifies the layer in the style to which it is added.
 ```tsx
 boolean
 ```
-The id refers to en existing layer in the style. Does not create a new layer.
+The id refers to an existing layer in the style. Does not create a new layer.
 
 
   
@@ -42,7 +42,7 @@ The source from which to obtain the data to style.
 If the source has not yet been added to the current style, the behavior is undefined.
 Inferred from parent source only if the layer is a direct child to it.
 
-  _defaults to:_ `MapboxGL.StyleSource.DefaultSourceID`
+  _defaults to:_ `Mapbox.StyleSource.DefaultSourceID`
 
   
 ### sourceLayerID
@@ -128,6 +128,7 @@ Customizable style attributes
 ## styles
 
 * <a href="#visibility">visibility</a><br/>
+* <a href="#fillextrusionedgeradius">fillExtrusionEdgeRadius</a><br/>
 * <a href="#fillextrusionopacity">fillExtrusionOpacity</a><br/>
 * <a href="#fillextrusioncolor">fillExtrusionColor</a><br/>
 * <a href="#fillextrusiontranslate">fillExtrusionTranslate</a><br/>
@@ -136,6 +137,8 @@ Customizable style attributes
 * <a href="#fillextrusionheight">fillExtrusionHeight</a><br/>
 * <a href="#fillextrusionbase">fillExtrusionBase</a><br/>
 * <a href="#fillextrusionverticalgradient">fillExtrusionVerticalGradient</a><br/>
+* <a href="#fillextrusionambientocclusionintensity">fillExtrusionAmbientOcclusionIntensity</a><br/>
+* <a href="#fillextrusionambientocclusionradius">fillExtrusionAmbientOcclusionRadius</a><br/>
 * <a href="#fillextrusionroundedroof">fillExtrusionRoundedRoof</a><br/>
 
 ___
@@ -157,6 +160,32 @@ Whether this layer is displayed.
 **visible** - The layer is shown.<br />
 **none** - The layer is not shown.<br />
 
+
+#### Expression
+
+Parameters: ``
+
+___
+
+### fillExtrusionEdgeRadius
+Name: `fillExtrusionEdgeRadius`
+
+Mapbox spec: [fill-extrusion-edge-radius](https://docs.mapbox.com/style-spec/reference/layers/#layout-fill-extrusion-fill-extrusion-edge-radius)
+
+#### Description
+Radius of a fill extrusion edge in meters. If not zero, rounds extrusion edges for a smoother appearance.
+
+#### Type
+`number`
+#### Default Value
+`0`
+
+#### Minimum
+`0`
+
+
+#### Maximum
+`1`
 
 #### Expression
 
@@ -448,6 +477,96 @@ Whether to apply a vertical gradient to the sides of a fillExtrusion layer. If t
 #### Expression
 
 Parameters: `zoom`
+
+___
+
+### fillExtrusionAmbientOcclusionIntensity
+Name: `fillExtrusionAmbientOcclusionIntensity`
+
+Mapbox spec: [fill-extrusion-ambient-occlusion-intensity](https://docs.mapbox.com/style-spec/reference/layers/#paint-fill-extrusion-fill-extrusion-ambient-occlusion-intensity)
+
+#### Description
+Controls the intensity of shading near ground and concave angles between walls. Default value 0.0 disables ambient occlusion and values around 0.3 provide the most plausible results for buildings.
+
+#### Type
+`number`
+#### Default Value
+`0`
+
+#### Minimum
+`0`
+
+
+#### Maximum
+`1`
+
+#### Expression
+
+Parameters: `zoom`
+___
+
+### fillExtrusionAmbientOcclusionIntensityTransition
+Name: `fillExtrusionAmbientOcclusionIntensityTransition`
+
+#### Description
+
+The transition affecting any changes to this layer’s fillExtrusionAmbientOcclusionIntensity property.
+
+#### Type
+
+`{ duration, delay }`
+
+#### Units
+`milliseconds`
+
+#### Default Value
+`{duration: 300, delay: 0}`
+
+
+___
+
+### fillExtrusionAmbientOcclusionRadius
+Name: `fillExtrusionAmbientOcclusionRadius`
+
+Mapbox spec: [fill-extrusion-ambient-occlusion-radius](https://docs.mapbox.com/style-spec/reference/layers/#paint-fill-extrusion-fill-extrusion-ambient-occlusion-radius)
+
+#### Description
+Shades area near ground and concave angles between walls where the radius defines only vertical impact. Default value 3.0 corresponds to height of one floor and brings the most plausible results for buildings. This property works only with legacy light. When 3D lights are enabled `fillExtrusionAmbientOcclusionWallRadius` and `fillExtrusionAmbientOcclusionGroundRadius` are used instead.
+
+#### Type
+`number`
+#### Default Value
+`3`
+
+#### Minimum
+`0`
+
+
+#### Requires
+`fillExtrusionEdgeRadius`
+
+#### Expression
+
+Parameters: `zoom`
+___
+
+### fillExtrusionAmbientOcclusionRadiusTransition
+Name: `fillExtrusionAmbientOcclusionRadiusTransition`
+
+#### Description
+
+The transition affecting any changes to this layer’s fillExtrusionAmbientOcclusionRadius property.
+
+#### Type
+
+`{ duration, delay }`
+
+#### Units
+`milliseconds`
+
+#### Default Value
+`{duration: 300, delay: 0}`
+
 
 ___
 

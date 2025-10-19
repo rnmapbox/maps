@@ -2,11 +2,28 @@ package com.rnmapbox.rnmbx.components.annotation
 
 import android.content.Context
 import android.view.View.MeasureSpec
+import android.view.ViewGroup
 import com.facebook.react.views.view.ReactViewGroup
 
 class RNMBXMarkerViewContent(context: Context): ReactViewGroup(context) {
-
     var inAdd: Boolean = false
+
+    init {
+        allowRenderingOutside()
+    }
+
+    override fun onAttachedToWindow() {
+        super.onAttachedToWindow()
+        configureParentClipping()
+    }
+
+    private fun configureParentClipping() {
+        val parent = parent
+        if (parent is android.view.ViewGroup) {
+            parent.allowRenderingOutside()
+        }
+    }
+
     // see https://github.com/rnmapbox/maps/pull/3235
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
         if (inAdd) {
@@ -25,6 +42,10 @@ class RNMBXMarkerViewContent(context: Context): ReactViewGroup(context) {
             super.onMeasure(widthMeasureSpec, heightMeasureSpec)
         }
     }
+}
 
+private fun ViewGroup.allowRenderingOutside() {
+    this.clipChildren = false
+    this.clipToPadding = false
 }
 

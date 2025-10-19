@@ -1,6 +1,8 @@
 import type { TurboModule } from 'react-native/Libraries/TurboModule/RCTExport';
+// @ts-ignore - CI environment type resolution issue for CodegenTypes
 import { Int32, Double } from 'react-native/Libraries/Types/CodegenTypes';
 import { TurboModuleRegistry } from 'react-native';
+// @ts-expect-error - @turf packages have type resolution issues with package.json exports
 import { Position } from '@turf/helpers';
 
 //import type { UnsafeMixed } from './codegenUtils';

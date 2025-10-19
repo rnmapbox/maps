@@ -12,7 +12,7 @@ function extractNativeComponentsFromSpecs() {
   const specsDir = path.join(__dirname, '..', '..', 'src', 'specs');
   const nativeComponentFiles = fs
     .readdirSync(specsDir)
-    .filter(file => file.endsWith('NativeComponent.ts'));
+    .filter((file) => file.endsWith('NativeComponent.ts'));
 
   const components = {};
 
@@ -21,7 +21,9 @@ function extractNativeComponentsFromSpecs() {
     const content = fs.readFileSync(filePath, 'utf8');
 
     // Extract the component name from codegenNativeComponent('ComponentName')
-    const match = content.match(/codegenNativeComponent<[^>]*>\(\s*['"`]([^'"`]+)['"`]/);
+    const match = content.match(
+      /codegenNativeComponent<[^>]*>\(\s*['"`]([^'"`]+)['"`]/,
+    );
 
     if (match) {
       const [, componentName] = match; // e.g., 'RNMBXMapView'
@@ -31,7 +33,7 @@ function extractNativeComponentsFromSpecs() {
       components[componentName] = {
         className: className,
         nativeComponentName: nativeComponentName,
-        file: file
+        file: file,
       };
     }
   }
@@ -47,12 +49,12 @@ function generateIOSComponentsConfig() {
 
   const iosConfig = {
     components: {},
-    componentsProvider: {}
+    componentsProvider: {},
   };
 
   for (const [componentName, info] of Object.entries(components)) {
     iosConfig.components[componentName] = {
-      className: info.className
+      className: info.className,
     };
     iosConfig.componentsProvider[componentName] = info.className;
   }
@@ -76,8 +78,8 @@ function updatePackageJsonWithIOSComponents() {
       type: 'all',
       jsSrcsDir: 'src/specs',
       android: {
-        javaPackageName: 'com.rnmapbox.rnmbx'
-      }
+        javaPackageName: 'com.rnmapbox.rnmbx',
+      },
     };
   }
 
@@ -88,13 +90,23 @@ function updatePackageJsonWithIOSComponents() {
 
   // Update iOS components
   packageJson.codegenConfig.ios.components = iosConfig.components;
-  packageJson.codegenConfig.ios.componentsProvider = iosConfig.componentsProvider;
+  packageJson.codegenConfig.ios.componentsProvider =
+    iosConfig.componentsProvider;
 
   // Write back to package.json with proper formatting
-  fs.writeFileSync(packageJsonPath, JSON.stringify(packageJson, null, 2) + '\n');
+  fs.writeFileSync(
+    packageJsonPath,
+    JSON.stringify(packageJson, null, 2) + '\n',
+  );
 
-  console.log(`Updated package.json with ${Object.keys(iosConfig.components).length} iOS components`);
+  console.log(
+    `Updated package.json with ${Object.keys(iosConfig.components).length} iOS components`,
+  );
   return Object.keys(iosConfig.components);
 }
 
-export { extractNativeComponentsFromSpecs, generateIOSComponentsConfig, updatePackageJsonWithIOSComponents };
+export {
+  extractNativeComponentsFromSpecs,
+  generateIOSComponentsConfig,
+  updatePackageJsonWithIOSComponents,
+};

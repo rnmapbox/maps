@@ -36,8 +36,8 @@ class RNMBXCameraManager(private val mContext: ReactApplicationContext, val view
     override fun setStop(camera: RNMBXCamera, map: Dynamic) {
         if (!map.isNull) {
             val mapValue = map.asMap()
-            if (mapValue == null) {
-                Logger.e("RNMBXCameraManager", "stop map is null")
+            if (mapValue == null || mapValue.keySetIterator().hasNextKey().not()) {
+                Logger.e("RNMBXCameraManager", "stop map is null or empty")
                 return
             }
             val stop = fromReadableMap(mContext, mapValue, null)

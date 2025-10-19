@@ -56,9 +56,8 @@ cd example
 
 * Android: Set up your Mapbox developer keys as described in https://github.com/rnmapbox/maps/blob/main/android/install.md#adding-mapbox-maven-repo (no need to change build.gradle, just set up gradle.properties)
 
-* iOS: 
-  1. Set up your Mapbox developer keys as described in [https://github.com/rnmapbox/maps/blob/main/ios/install.md#adding-mapbox-maven-repo](https://github.com/rnmapbox/maps/blob/main/ios/install.md#mapbox-maps-sdk-v10) (add your cerdentials to .netrc as described)
-  2. Install pod dependencies
+* iOS:
+  1. Install pod dependencies
     ```
     cd ios
     pod install
@@ -107,8 +106,20 @@ If you are using [`nvm`](https://github.com/nvm-sh/nvm), make sure you copy [ios
 If you run into
 
 ```
-Command failed: /usr/libexec/PlistBuddy -c Print:CFBundleIdentifier build/Build/Products/Debug-iphonesimulator/RNMapboxGLExample.app/Info.plist
+Command failed: /usr/libexec/PlistBuddy -c Print:CFBundleIdentifier build/Build/Products/Debug-iphonesimulator/RNMapboxExample.app/Info.plist
 Print: Entry, ":CFBundleIdentifier", Does Not Exist
 ```
 
 Just run the example from Xcode, it seems to be an [issue](https://github.com/facebook/react-native/issues/14423) with RN.
+
+## Detox
+
+to run detox tests see
+https://github.com/rnmapbox/maps-docs/?tab=readme-ov-file#example-documentation-process
+
+```
+npx jest __tests__/exportTestInterface.js
+
+yarn detox build --configuration ios.debug
+yarn detox test --configuration ios.debug --debug-synchronization 500 --loglevel trace --record-logs all --take-screenshots all e2e/docScreenshots.e2e.js
+```

@@ -9,7 +9,7 @@ import {
   View,
 } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import type { BaseExampleProps } from 'src/examples/common/BaseExamplePropTypes';
+import type { BaseExampleProps } from '../examples/common/BaseExamplePropTypes';
 
 import MapHeader from '../examples/common/MapHeader';
 import Page, { PageProps } from '../examples/common/Page';
@@ -36,7 +36,7 @@ import * as Web from '../examples/Web';
 import BugReportExample from '../examples/BugReportExample';
 import BugReportExampleTS from '../examples/BugReportExampleTS';
 // Cache Management
-import * as CacheManagement from '../examples/CacheManagement';
+import * as CacheOffline from '../examples/CacheOffline';
 // V10
 import * as V10 from '../examples/V10';
 /*
@@ -178,7 +178,6 @@ class ExampleItem implements ExampleNode {
     return this.path;
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-empty-function
   updateIfNeeded(_updated: () => void): void {}
 }
 
@@ -207,7 +206,7 @@ class ExampleGroup implements ExampleNode {
 
   setParent(parent: string[]) {
     this.path = [...parent, this.label];
-    this.items.forEach(i => i.setParent(this.path));
+    this.items.forEach((i) => i.setParent(this.path));
   }
 
   find(path: string[]): ExampleNode | undefined {
@@ -230,7 +229,6 @@ class ExampleGroup implements ExampleNode {
     return this.path;
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-empty-function
   updateIfNeeded(_updated: () => void): void {}
 }
 
@@ -299,7 +297,7 @@ const Examples = new ExampleGroup('React Native Mapbox', [
   exampleGroup(Annotations),
   exampleGroup(Animations),
   exampleGroup(Web),
-  exampleGroup(CacheManagement),
+  exampleGroup(CacheOffline),
 ]);
 
 function ExampleGroupComponent({
@@ -345,7 +343,7 @@ function ExampleGroupComponent({
   const forceUpdate = useCallback(() => updateState({}), []);
 
   useEffect(() => {
-    items.forEach(item => {
+    items.forEach((item) => {
       item.updateIfNeeded(forceUpdate);
     });
   }, [items, forceUpdate]);
@@ -358,7 +356,7 @@ function ExampleGroupComponent({
           testID="example-list"
           style={styles.exampleList}
           data={items}
-          keyExtractor={item => item.label}
+          keyExtractor={(item) => item.label}
           renderItem={renderItem}
         />
       </View>

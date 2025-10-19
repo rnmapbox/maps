@@ -23,7 +23,7 @@ import {
 } from '../utils';
 import { getFilter } from '../utils/filterUtils';
 import Logger from '../utils/Logger';
-import { FilterExpression } from '../utils/MapboxStyles';
+import type { FilterExpression } from '../utils/MapboxStyles';
 import { type Position } from '../types/Position';
 import { type Location } from '../modules/location/locationManager';
 
@@ -465,7 +465,7 @@ const CallbablePropKeys = [
   'onCameraChanged',
 ] as const;
 
-type CallbablePropKeys = typeof CallbablePropKeys[number];
+type CallbablePropKeys = (typeof CallbablePropKeys)[number];
 
 type CallbablePropKeysWithoutOn = CallbablePropKeys extends `on${infer C}`
   ? C
@@ -577,7 +577,7 @@ class MapView extends NativeBridgeComponent(
     const callbackProps = CallbablePropKeys;
 
     const hasCallbackPropsChanged = callbackProps.some(
-      propName => prevProps[propName] !== this.props[propName]
+      (propName) => prevProps[propName] !== this.props[propName],
     );
 
     if (hasCallbackPropsChanged) {
@@ -755,7 +755,7 @@ class MapView extends NativeBridgeComponent(
    * @example
    * this._map.queryRenderedFeaturesInRect([30, 40, 20, 10], ['==', 'type', 'Point'], ['id1', 'id2'])
    *
-   * @param  {Array<Number>} bbox - A rectangle expressed in the map view’s coordinate system. For v10, this can be an empty array to query the visible map area.
+   * @param  {Array<Number>} bbox - A rectangle expressed in the map view’s coordinate system, density independent pixels and not map coordinates. This can be an empty array to query the visible map area.
    * @param  {Array=} filter - A set of strings that correspond to the names of layers defined in the current style. Only the features contained in these layers are included in the returned array.
    * @param  {Array=} layerIDs -  A array of layer id's to filter the features by
    * @return {FeatureCollection}
@@ -831,7 +831,7 @@ class MapView extends NativeBridgeComponent(
   ): Promise<ReturnType> {
     return super._runNativeMethod<typeof RNMBXMapView, ReturnType>(
       methodName,
-      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+
       // @ts-ignore TODO: fix types
       this._nativeRef as HostComponent<NativeProps> | undefined,
       args,
@@ -1170,7 +1170,7 @@ class MapView extends NativeBridgeComponent(
     });
   }
 
-  _handleOnChange<T>(propName: CallbablePropKeys, payload: object) {
+  _handleOnChange(propName: CallbablePropKeys, payload: object) {
     const func = this.props[propName] as (payload: object) => void;
     if (func && isFunction(func)) {
       func(payload);
@@ -1262,9 +1262,13 @@ class MapView extends NativeBridgeComponent(
     let mapView = null;
     if (this.state.isReady) {
       if (props._nativeImpl) {
+        // @ts-ignore - Complex native component prop type mismatch with React Native's new type system
+        // The custom _nativeImpl prop structure doesn't align with the strict NativeProps typing
         mapView = <props._nativeImpl {...props} {...callbacks} />;
       } else {
         mapView = (
+          // @ts-ignore - Native component prop type incompatibility with React Native's strict typing
+          // Props are correct at runtime but TypeScript can't verify the complex union type
           <RNMBXMapView {...props} {...callbacks}>
             {this.props.children}
           </RNMBXMapView>

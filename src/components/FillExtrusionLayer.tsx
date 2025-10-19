@@ -1,7 +1,7 @@
 import React from 'react';
 import { NativeModules } from 'react-native';
 
-import {
+import type {
   FilterExpression,
   FillExtrusionLayerStyleProps,
 } from '../utils/MapboxStyles';
@@ -10,7 +10,7 @@ import RNMBXFillExtrusionLayerNativeComponent from '../specs/RNMBXFillExtrusionL
 
 import AbstractLayer from './AbstractLayer';
 
-const MapboxGL = NativeModules.RNMBXModule;
+const Mapbox = NativeModules.RNMBXModule;
 
 export type Props = {
   /**
@@ -19,7 +19,7 @@ export type Props = {
   id: string;
 
   /**
-   * The id refers to en existing layer in the style. Does not create a new layer.
+   * The id refers to an existing layer in the style. Does not create a new layer.
    */
   existing?: boolean;
 
@@ -80,7 +80,7 @@ type NativeTypeProps = Omit<Props, 'style'> & {
  */
 class FillExtrusionLayer extends AbstractLayer<Props, NativeTypeProps> {
   static defaultProps = {
-    sourceID: MapboxGL.StyleSource.DefaultSourceID,
+    sourceID: Mapbox.StyleSource.DefaultSourceID,
   };
 
   render() {
@@ -90,8 +90,8 @@ class FillExtrusionLayer extends AbstractLayer<Props, NativeTypeProps> {
       sourceLayerID: this.props.sourceLayerID,
     };
     return (
+      // @ts-expect-error just codegen stuff
       <RNMBXFillExtrusionLayerNativeComponent
-        // @ts-expect-error just codegen stuff
         ref={this.setNativeLayer}
         {...props}
       />

@@ -10,13 +10,6 @@ const bounds1 = {
   sw: [-74.143727, 40.772177],
 };
 
-const paddingZero = {
-  paddingTop: 0,
-  paddingRight: 0,
-  paddingBottom: 0,
-  paddingLeft: 0,
-};
-
 const toFeature = (position) => {
   return {
     type: 'Feature',
@@ -38,7 +31,7 @@ describe('Camera', () => {
   test('defaults are set', () => {
     const result = render(<Camera />);
     const { props } = result.queryByTestId('Camera');
-    expect(props.stop).toStrictEqual({});
+    expect(props.stop).toStrictEqual(null);
   });
   test('set location by center', () => {
     const result = render(

@@ -1,7 +1,7 @@
 import type { NativeStackScreenProps } from '@react-navigation/native-stack';
-import React, { JSX } from 'react';
 import { Button, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import type { ReactElement } from 'react';
 
 type StackParamsList = {
   ScreenWithoutMap: Record<string, never>;
@@ -19,7 +19,7 @@ export function ScreenWithoutMap({
   navigation,
 }: {
   navigation: ScreenWithoutMapProps['navigation'];
-}): JSX.Element {
+}): ReactElement {
   return (
     <SafeAreaView>
       <View>

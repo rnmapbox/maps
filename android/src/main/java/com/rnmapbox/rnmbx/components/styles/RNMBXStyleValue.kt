@@ -13,8 +13,9 @@ import com.rnmapbox.rnmbx.utils.ExpressionParser
 import com.rnmapbox.rnmbx.utils.Logger
 import java.util.ArrayList
 
-class RNMBXStyleValue(config: ReadableMap) {
+class RNMBXStyleValue(key: String?, config: ReadableMap) {
     val type: String?
+    val key: String?
     private var isExpression = false
     private var mExpression: Expression? = null
     private val mPayload: ReadableMap?
@@ -83,6 +84,10 @@ class RNMBXStyleValue(config: ReadableMap) {
         for (i in 0 until arr.size()) {
             val item = arr.getMap(i)
             if (item != null) {
+                if (item.getString("type") != "number") {
+                    Logger.e("RNMBXStyleValue", "getFloatArray: invalid type for item: $i ${item.getString("type")} expected to be number")
+                    continue
+                }
                 result.add(item.getDouble("value"))
             } else {
                 Logger.e("RNMBXStyleValue", "getFloatArray: null value for item: $i")
@@ -110,6 +115,10 @@ class RNMBXStyleValue(config: ReadableMap) {
             val item = arr.getMap(i)
             val value = item?.getString("value")
             if (value != null) {
+                if (item.getString("type") != "string") {
+                    Logger.e("RNMBXStyleValue", "getStringArray: invalid type for item: $i ${item.getString("type")} expected to be string")
+                    continue
+                }
                 result.add(value)
             } else {
                 Logger.e("RNMBXStyleValue", "getStringArray: null value for item: $i")
@@ -194,6 +203,7 @@ class RNMBXStyleValue(config: ReadableMap) {
     }
 
     init {
+        this.key = key
         type = config.getString("styletype")
         mPayload = config.getMap("stylevalue")
         isAddImage = false
@@ -221,20 +231,46 @@ class RNMBXStyleValue(config: ReadableMap) {
         }
         if (!isAddImage) {
             val dynamic = mPayload!!.getDynamic("value")
-            if (dynamic.type == ReadableType.Array) {
-                val array = dynamic.asArray()
-                if (array == null) {
-                    Logger.e("RNMBXStyleValue", "value array is null")
-                } else {
-                    if (array.size() > 0 && mPayload.getString("type") == "array") {
-                        val map = array.getMap(0)
-                        if (map != null && map.getString("type") == "string") {
-                            isExpression = true
-                            mExpression = ExpressionParser.fromTyped(mPayload)
-                        }
-                    }
+            if (isExpression(dynamic)) {
+                isExpression = true
+                Logger.logged("$key ExpressionParser.fromTyped") {
+                    mExpression = ExpressionParser.fromTyped(mPayload)
                 }
             }
         }
+    }
+
+    private fun isExpression(payload: Dynamic): Boolean {
+        if (payload.type != ReadableType.Array) {
+            return false
+        }
+
+        var potentialExpression = payload.asArray()
+            ?: return false
+
+        while (
+            potentialExpression.size() > 0 &&
+            potentialExpression.getType(0) == ReadableType.Map
+        ) {
+            val firstElementMap = potentialExpression.getMap(0)
+                ?: return false
+
+            if (firstElementMap.getString("type") == "array") {
+                potentialExpression = firstElementMap.getArray("value")
+                    ?: return false
+            } else {
+                break
+            }
+        }
+
+        if (potentialExpression.size() == 0 || potentialExpression.getType(0) != ReadableType.Map) {
+            return false
+        }
+
+        val firstElementMap = potentialExpression.getMap(0)
+            ?: return false
+
+        // A valid expression starts with an operator, which is identified by its type being "string".
+        return firstElementMap.getString("type") == "string"
     }
 }
