@@ -14,6 +14,8 @@ RCT_EXTERN_METHOD(pausePackDownload:(NSString *)name
                   resolver:(RCTPromiseResolveBlock)resolve
                   rejecter:(RCTPromiseRejectBlock)reject)
 
+RCT_EXTERN_METHOD(setProgressEventThrottle:(nonnull NSNumber *)throttleValue)
+
 RCT_EXTERN_METHOD(getPackStatus:(NSString *)name
                  resolver:(RCTPromiseResolveBlock)resolve
                  rejecter:(RCTPromiseRejectBlock)reject)
@@ -27,6 +29,10 @@ RCT_EXTERN_METHOD(invalidatePack:(NSString *)name
                   rejecter:(RCTPromiseRejectBlock)reject)
 
 RCT_EXTERN_METHOD(migrateOfflineCache:(RCTPromiseResolveBlock)resolve reject:(RCTPromiseRejectBlock)reject)
+
+RCT_EXTERN_METHOD(setTileCountLimit:(nonnull NSNumber *)limit)
+
+RCT_EXTERN_METHOD(setTimeout:(nonnull NSNumber *)seconds)
 
 RCT_EXTERN_METHOD(resetDatabase:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject)
 
