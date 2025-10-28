@@ -5,6 +5,7 @@
 RCT_EXTERN_METHOD(setAccessToken:(NSString *)accessToken resolver:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject)
 
 RCT_EXTERN_METHOD(addCustomHeader:(NSString *)headerName forHeaderValue:(NSString *) headerValue)
+RCT_EXTERN_METHOD(addCustomHeaderWithOptions:(NSString *)headerName forHeaderValue:(NSString *) headerValue forOptions:(nullable NSDictionary *) options)
 RCT_EXTERN_METHOD(removeCustomHeader:(NSString *)headerName)
 
 RCT_EXTERN_METHOD(setTelemetryEnabled:(BOOL)telemetryEnabled)
