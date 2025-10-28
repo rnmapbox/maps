@@ -3820,6 +3820,42 @@
         ]
       },
       {
+        "name": "setStyleLayerProperty",
+        "docblock": "Sets the value of a property for a specific layer referencing the specified `layerId`\n\n@example\nawait this._map.setStyleLayerProperty('my-layer', 'visibility', 'none')\n\n@param {String} layerId - layerId\n@param {String} propertyName - propertyName\n@param {String} propertyValue - propertyValue",
+        "modifiers": [],
+        "params": [
+          {
+            "name": "layerId",
+            "description": "layerId",
+            "type": {
+              "name": "string"
+            },
+            "optional": false
+          },
+          {
+            "name": "propertyName",
+            "description": "propertyName",
+            "type": {
+              "name": "string"
+            },
+            "optional": false
+          },
+          {
+            "name": "propertyValue",
+            "description": "propertyValue",
+            "type": {
+              "name": "string"
+            },
+            "optional": false
+          }
+        ],
+        "returns": null,
+        "description": "Sets the value of a property for a specific layer referencing the specified `layerId`",
+        "examples": [
+          "\nawait this._map.setStyleLayerProperty('my-layer', 'visibility', 'none')\n\n"
+        ]
+      },
+      {
         "name": "setFeatureState",
         "docblock": "Updates the state map of a feature within a style source.\n\nUpdates entries in the state map of a given feature within a style source.\nOnly entries listed in the `state` will be updated.\nAn entry in the feature state map that is not listed in `state` will retain its previous value.\n\n@param {string} featureId Identifier of the feature whose state should be updated.\n@param {[k: string]: NativeArg} state Map of entries to update with their respective new values.\n@param {string} sourceId Style source identifier.\n@param {string | null} sourceLayerId Style source layer identifier (for multi-layer sources such as vector sources).",
         "modifiers": [
