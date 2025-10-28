@@ -16,6 +16,7 @@ import com.facebook.react.uimanager.BaseViewManager;
 import com.facebook.react.uimanager.BaseViewManagerDelegate;
 import com.facebook.react.uimanager.LayoutShadowNode;
 
+@SuppressWarnings("deprecation")
 public class RNMBXSkyLayerManagerDelegate<T extends View, U extends BaseViewManager<T, ? extends LayoutShadowNode> & RNMBXSkyLayerManagerInterface<T>> extends BaseViewManagerDelegate<T, U> {
   public RNMBXSkyLayerManagerDelegate(U viewManager) {
     super(viewManager);

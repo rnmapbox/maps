@@ -9,6 +9,7 @@ const root = path.resolve(__dirname, '..');
 module.exports = getConfig(
   {
     presets: ['babel-preset-expo'],
+    plugins: ['react-native-reanimated/plugin'],
   },
   { root, pkg },
 );

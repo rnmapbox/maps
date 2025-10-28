@@ -1,3 +1,4 @@
+#if !RCT_NEW_ARCH_ENABLED
 import Foundation
 import MapboxMaps
 
@@ -12,3 +13,4 @@ class RNMBXMarkerViewManager : RCTViewManager {
     return RNMBXMarkerView()
   }
 }
+#endif
