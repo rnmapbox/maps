@@ -84,7 +84,7 @@
     }
 
     NSTimeInterval elapsed = [[NSDate date] timeIntervalSinceDate:startTime];
-    if (elapsed >= 0.2) { // 200ms timeout
+    if (elapsed >= 0.5) { // 500ms timeout
         NSString *errorMsg = [NSString stringWithFormat:@"Could not find view with tag %@ in %@ after %d attempts over %.1fms",
                       viewRef, methodName, (int)attemptCount + 1, elapsed * 1000];
         NSLog(@"%@", errorMsg);
