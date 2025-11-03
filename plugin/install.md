@@ -20,13 +20,15 @@ After installing this package, add the [config plugin](https://docs.expo.io/guid
       [
         "@rnmapbox/maps",
         {
-          "RNMapboxMapsVersion": "11.13.4"
+          "RNMapboxMapsVersion": "11.15.0"
         }
       ]
     ]
   }
 }
 ```
+
+You can review the current map versions for [iOS](https://github.com/mapbox/mapbox-maps-ios/releases) and [Android](https://github.com/mapbox/mapbox-maps-android/releases) to determine the version required.
 
 You'll need to provide a download token. Set the `RNMAPBOX_MAPS_DOWNLOAD_TOKEN` environment variable to your download token (requires the `DOWNLOADS:READ` scope):
 
