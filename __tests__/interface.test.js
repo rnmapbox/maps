@@ -96,7 +96,6 @@ describe('Public Interface', () => {
       'requestAndroidLocationPermissions',
       'getAnnotationsLayerID',
       'addCustomHeader',
-      'addCustomHeaderWithOptions',
       'removeCustomHeader',
 
       // animated
