@@ -23,7 +23,7 @@ number
 Time in milliseconds to wait after last camera change before emitting 'steady' event.
 Default is 200ms.
 
-
+[Camera Gesture Observer](../examples/Map/CameraGestureObserver)
   
 ### maxIntervalMs
 
@@ -32,7 +32,7 @@ number
 ```
 Maximum time in milliseconds before emitting 'timeout' event during continuous activity.
 
-
+[Camera Gesture Observer](../examples/Map/CameraGestureObserver)
   
 ### onMapSteady
 
@@ -42,7 +42,7 @@ func
 Callback when the map reaches a steady state (no active gestures or animations).
 *signature:*`(event:{nativeEvent: OnMapSteadyEvent}) =&gt; void`
 
-
+[Camera Gesture Observer](../examples/Map/CameraGestureObserver)
   
 
 
