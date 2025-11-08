@@ -68,19 +68,11 @@ function WithCompiler({ count }) {
 }
 
 export default function CompilerTestExample() {
-  const [triggerCount, setTriggerCount] = useState(0);
-  const [countValue, setCountValue] = useState(0);
-  const [startTime, setStartTime] = useState(0);
-  const [renderTime, setRenderTime] = useState(null);
+  // Parent component state (doesn't affect child props)
+  const [parentState, setParentState] = useState(0);
 
-  const handleTriggerRender = () => {
-    setStartTime(Date.now());
-    setTriggerCount(triggerCount + 1);
-    // Measure render time
-    setTimeout(() => {
-      setRenderTime(Date.now() - Date.now());
-    }, 0);
-  };
+  // State passed to children as props
+  const [countValue, setCountValue] = useState(0);
 
   return (
     <View style={styles.container}>
@@ -95,23 +87,23 @@ export default function CompilerTestExample() {
 
       <View style={styles.overlay}>
         <View style={styles.card}>
-          <Text style={styles.title}>React Compiler Test</Text>
+          <Text style={styles.title}>React Compiler Test (Mode: infer)</Text>
           <Text style={styles.instructions}>
-            React Compiler auto-memoizes EXPENSIVE WORK inside components.
-            {'\n'}Watch how each component handles the expensive calculation:
+            Test how React Compiler auto-memoizes expensive calculations.
+            {'\n'}Parent state: {parentState}
           </Text>
 
           <TouchableOpacity
             style={styles.button}
-            onPress={handleTriggerRender}
+            onPress={() => setParentState(parentState + 1)}
           >
             <Text style={styles.buttonText}>
-              🔄 Trigger Re-render ({triggerCount})
+              🔄 Update Parent State ({parentState})
             </Text>
           </TouchableOpacity>
 
           <Text style={styles.helperText}>
-            ↑ All render, but watch which ones LAG (no memoization)
+            ↑ Changes parent state, props stay the same (count={countValue})
           </Text>
 
           <WithoutOptimization count={countValue} />
@@ -128,25 +120,22 @@ export default function CompilerTestExample() {
           </TouchableOpacity>
 
           <Text style={styles.helperText}>
-            ↑ This forces recalculation in all components
+            ↑ Changes props - all MUST recalculate
           </Text>
 
           <View style={styles.explanation}>
-            <Text style={styles.explanationTitle}>What to Look For:</Text>
+            <Text style={styles.explanationTitle}>How It Works:</Text>
             <Text style={styles.explanationText}>
-              Click "Trigger Re-render" multiple times:{'\n\n'}
-              • ❌ NO Optimization: Should feel SLOW/laggy{'\n'}
-              • ⚡ useMemo: Should feel FAST{'\n'}
-              • ✅ React Compiler: Should feel FAST (auto-memoized)
+              Click "Update Parent State" repeatedly:{'\n\n'}
+              • ❌ NO Optimization: Recalculates (SLOW){'\n'}
+              • ⚡ useMemo: Skips recalculation (FAST){'\n'}
+              • ✅ React Compiler: Should skip too (FAST)
             </Text>
             <Text style={styles.explanationText}>
-              {'\n'}💡 React Compiler optimizes INTERNALS, not component calls.
-              All render counts increase, but expensive work is memoized!
+              {'\n'}💡 All components re-render, but optimized ones skip the expensive work since count prop didn't change!
             </Text>
             <Text style={styles.explanationText}>
-              {'\n'}If "React Compiler" feels slow, change{' '}
-              <Text style={styles.codeText}>compilationMode</Text> to{' '}
-              <Text style={styles.codeText}>'all'</Text> in babel.config.js
+              {'\n'}Click "Change Count Value" to see all recalculate.
             </Text>
           </View>
         </View>
