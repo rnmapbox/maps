@@ -43,7 +43,9 @@ public class RNMBXCameraGestureObserver: RNMBXMapComponentBase, GestureManagerDe
     switch gestureType {
     case .pan: return "pan"
     case .pinch: return "pinch"
+    #if RNMBX_11
     case .rotation: return "rotate"
+    #endif
     case .pitch: return "pitch"
     default: return "\(gestureType)"
     }
