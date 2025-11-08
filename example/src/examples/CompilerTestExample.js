@@ -1,54 +1,86 @@
-import React, { useState, useRef, memo } from 'react';
+import React, { useState, useRef, memo, useMemo } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 import { MapView, Camera } from '@rnmapbox/maps';
 
-// Component WITHOUT any optimization - will re-render on every parent update
-function WithoutOptimization({ label, count }) {
+// Expensive calculation function
+const expensiveCalculation = (input) => {
+  let result = 0;
+  for (let i = 0; i < 10000000; i++) {
+    result += i * input;
+  }
+  return result % 1000;
+};
+
+// Component WITHOUT any optimization - recalculates on every render
+function WithoutOptimization({ count }) {
   const renderCount = useRef(0);
   renderCount.current += 1;
 
+  // This expensive calculation runs on EVERY render
+  const expensiveValue = expensiveCalculation(count);
+
   return (
     <View style={[styles.section, styles.sectionRed]}>
-      <Text style={styles.label}>❌ NO Optimization: {label}</Text>
+      <Text style={styles.label}>❌ NO Optimization</Text>
       <Text style={styles.renderCount}>Renders: {renderCount.current}</Text>
-      <Text style={styles.value}>Count prop: {count}</Text>
+      <Text style={styles.value}>Expensive value: {expensiveValue}</Text>
+      <Text style={styles.note}>⚠️ Recalculates every render!</Text>
     </View>
   );
 }
 
-// Component WITH React.memo (manual memoization) - will only re-render when props change
-const WithReactMemo = memo(function WithReactMemo({ label, count }) {
+// Component WITH manual useMemo - only recalculates when count changes
+function WithUseMemo({ count }) {
   const renderCount = useRef(0);
   renderCount.current += 1;
+
+  // Manually memoized - only recalculates when count changes
+  const expensiveValue = useMemo(() => expensiveCalculation(count), [count]);
 
   return (
     <View style={[styles.section, styles.sectionYellow]}>
-      <Text style={styles.label}>⚡ React.memo (Manual): {label}</Text>
+      <Text style={styles.label}>⚡ Manual useMemo</Text>
       <Text style={styles.renderCount}>Renders: {renderCount.current}</Text>
-      <Text style={styles.value}>Count prop: {count}</Text>
+      <Text style={styles.value}>Expensive value: {expensiveValue}</Text>
+      <Text style={styles.note}>✓ Only recalcs when count changes</Text>
     </View>
   );
-});
+}
 
-// Component WITH React Compiler optimization - should behave similar to React.memo
-function WithCompiler({ label, count }) {
-  'use memo'; // Tell React Compiler to optimize this
+// Component WITH React Compiler - should auto-memoize like useMemo
+function WithCompiler({ count }) {
+  'use memo'; // React Compiler should auto-memoize expensive work
 
   const renderCount = useRef(0);
   renderCount.current += 1;
 
+  // Compiler should automatically memoize this (no manual useMemo needed)
+  const expensiveValue = expensiveCalculation(count);
+
   return (
     <View style={[styles.section, styles.sectionGreen]}>
-      <Text style={styles.label}>✅ React Compiler: {label}</Text>
+      <Text style={styles.label}>✅ React Compiler</Text>
       <Text style={styles.renderCount}>Renders: {renderCount.current}</Text>
-      <Text style={styles.value}>Count prop: {count}</Text>
+      <Text style={styles.value}>Expensive value: {expensiveValue}</Text>
+      <Text style={styles.note}>✓ Auto-memoized by compiler</Text>
     </View>
   );
 }
 
 export default function CompilerTestExample() {
   const [triggerCount, setTriggerCount] = useState(0);
-  const [propsCount, setPropsCount] = useState(0);
+  const [countValue, setCountValue] = useState(0);
+  const [startTime, setStartTime] = useState(0);
+  const [renderTime, setRenderTime] = useState(null);
+
+  const handleTriggerRender = () => {
+    setStartTime(Date.now());
+    setTriggerCount(triggerCount + 1);
+    // Measure render time
+    setTimeout(() => {
+      setRenderTime(Date.now() - Date.now());
+    }, 0);
+  };
 
   return (
     <View style={styles.container}>
@@ -65,49 +97,54 @@ export default function CompilerTestExample() {
         <View style={styles.card}>
           <Text style={styles.title}>React Compiler Test</Text>
           <Text style={styles.instructions}>
-            Test if React Compiler is optimizing components by watching render counts:
+            React Compiler auto-memoizes EXPENSIVE WORK inside components.
+            {'\n'}Watch how each component handles the expensive calculation:
           </Text>
 
           <TouchableOpacity
             style={styles.button}
-            onPress={() => setTriggerCount(triggerCount + 1)}
+            onPress={handleTriggerRender}
           >
             <Text style={styles.buttonText}>
-              🔄 Trigger Parent Re-render ({triggerCount})
+              🔄 Trigger Re-render ({triggerCount})
             </Text>
           </TouchableOpacity>
 
           <Text style={styles.helperText}>
-            ↑ This changes parent state but NOT component props
+            ↑ All render, but watch which ones LAG (no memoization)
           </Text>
 
-          <WithoutOptimization label="Test" count={propsCount} />
-          <WithReactMemo label="Test" count={propsCount} />
-          <WithCompiler label="Test" count={propsCount} />
+          <WithoutOptimization count={countValue} />
+          <WithUseMemo count={countValue} />
+          <WithCompiler count={countValue} />
 
           <TouchableOpacity
             style={[styles.button, styles.buttonSecondary]}
-            onPress={() => setPropsCount(propsCount + 1)}
+            onPress={() => setCountValue(countValue + 1)}
           >
             <Text style={styles.buttonText}>
-              📝 Update Props ({propsCount})
+              📝 Change Count Value ({countValue})
             </Text>
           </TouchableOpacity>
 
           <Text style={styles.helperText}>
-            ↑ This changes the "count" prop - all should re-render
+            ↑ This forces recalculation in all components
           </Text>
 
           <View style={styles.explanation}>
-            <Text style={styles.explanationTitle}>Expected Behavior:</Text>
+            <Text style={styles.explanationTitle}>What to Look For:</Text>
             <Text style={styles.explanationText}>
-              When clicking "Trigger Parent Re-render":{'\n'}
-              • ❌ NO Optimization: Renders increase{'\n'}
-              • ⚡ React.memo: Renders stay the same{'\n'}
-              • ✅ React Compiler: Should behave like React.memo
+              Click "Trigger Re-render" multiple times:{'\n\n'}
+              • ❌ NO Optimization: Should feel SLOW/laggy{'\n'}
+              • ⚡ useMemo: Should feel FAST{'\n'}
+              • ✅ React Compiler: Should feel FAST (auto-memoized)
             </Text>
             <Text style={styles.explanationText}>
-              {'\n'}If React Compiler renders match "NO Optimization", try changing{' '}
+              {'\n'}💡 React Compiler optimizes INTERNALS, not component calls.
+              All render counts increase, but expensive work is memoized!
+            </Text>
+            <Text style={styles.explanationText}>
+              {'\n'}If "React Compiler" feels slow, change{' '}
               <Text style={styles.codeText}>compilationMode</Text> to{' '}
               <Text style={styles.codeText}>'all'</Text> in babel.config.js
             </Text>
@@ -203,6 +240,12 @@ const styles = StyleSheet.create({
   value: {
     fontSize: 12,
     color: '#666',
+  },
+  note: {
+    fontSize: 10,
+    color: '#888',
+    marginTop: 4,
+    fontStyle: 'italic',
   },
   helperText: {
     fontSize: 10,
