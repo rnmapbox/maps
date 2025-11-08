@@ -24,6 +24,9 @@ export default defineConfig([
       'prettier/prettier': 'warn',
       // TODO: Remove this rule disable eventually. Deep imports are needed for codegen specs.
       '@react-native/no-deep-imports': 'off',
+      // Ensure latest React Hooks rules are enforced (using updated eslint-plugin-react-hooks@7.0.1)
+      'react-hooks/rules-of-hooks': 'error',
+      'react-hooks/exhaustive-deps': 'warn',
     },
   },
   // ES Module files (.mjs)
