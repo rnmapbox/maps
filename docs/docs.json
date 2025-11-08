@@ -925,6 +925,15 @@
     "relPath": "src/components/Camera.tsx",
     "name": "Camera"
   },
+  "CameraGestureObserver": {
+    "description": "CameraGestureObserver\n\nUnified native observer optimized for onMapSteady.",
+    "displayName": "CameraGestureObserver",
+    "methods": [],
+    "fileNameWithExt": "CameraGestureObserver.tsx",
+    "relPath": "src/components/CameraGestureObserver.tsx",
+    "name": "CameraGestureObserver",
+    "props": []
+  },
   "CircleLayer": {
     "description": "CircleLayer is a style layer that renders one or more filled circles on the map.",
     "displayName": "CircleLayer",

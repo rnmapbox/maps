@@ -45,6 +45,7 @@ import com.rnmapbox.rnmbx.components.styles.sources.RNMBXShapeSourceManager
 import com.rnmapbox.rnmbx.components.styles.sources.RNMBXShapeSourceModule
 import com.rnmapbox.rnmbx.components.styles.sources.RNMBXVectorSourceManager
 import com.rnmapbox.rnmbx.components.styles.terrain.RNMBXTerrainManager
+import com.rnmapbox.rnmbx.events.RNMBXCameraGestureObserverManager
 import com.rnmapbox.rnmbx.modules.RNMBXLocationModule
 import com.rnmapbox.rnmbx.modules.RNMBXLogging
 import com.rnmapbox.rnmbx.modules.RNMBXModule
@@ -123,6 +124,7 @@ class RNMBXPackage : TurboReactPackage() {
         managers.add(RNMBXMapViewManager(reactApplicationContext, getViewTagResolver(reactApplicationContext, "RNMBXMapViewManager")))
         managers.add(RNMBXStyleImportManager(reactApplicationContext))
         managers.add(RNMBXModelsManager(reactApplicationContext))
+        managers.add(RNMBXCameraGestureObserverManager(reactApplicationContext))
 
         // annotations
         managers.add(RNMBXMarkerViewManager(reactApplicationContext))
