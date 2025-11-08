@@ -58,6 +58,24 @@ if (NativeModules.RNMBXModule == null) {
   }
 }
 
+/**
+ * Add a custom header to HTTP requests.
+ * @param headerName - The name of the header
+ * @param headerValue - The value of the header
+ * @param options - Optional configuration. If provided with urlRegexp, the header will only be added to URLs matching the regex
+ */
+function addCustomHeader(
+  headerName: string,
+  headerValue: string,
+  options?: { urlRegexp?: string },
+): void {
+  if (options) {
+    RNMBXModule.addCustomHeaderWithOptions(headerName, headerValue, options);
+  } else {
+    RNMBXModule.addCustomHeader(headerName, headerValue);
+  }
+}
+
 export const {
   StyleURL,
   OfflinePackDownloadState,
@@ -65,8 +83,6 @@ export const {
   StyleSource,
   TileServers,
   removeCustomHeader,
-  addCustomHeader,
-  addCustomHeaderWithOptions,
   setAccessToken,
   setWellKnownTileServer,
   clearData,
@@ -74,3 +90,5 @@ export const {
   setTelemetryEnabled,
   setConnected,
 } = RNMBXModule;
+
+export { addCustomHeader };
