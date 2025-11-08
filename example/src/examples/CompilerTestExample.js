@@ -4,11 +4,16 @@ import { MapView, Camera } from '@rnmapbox/maps';
 
 // Expensive calculation function
 const expensiveCalculation = (input) => {
+  const startTime = Date.now();
   let result = 0;
   for (let i = 0; i < 10000000; i++) {
     result += i * input;
   }
-  return result % 1000;
+  return {
+    value: result % 1000,
+    computedAt: new Date().toLocaleTimeString(),
+    duration: Date.now() - startTime,
+  };
 };
 
 // Component WITHOUT any optimization - recalculates on every render
@@ -17,13 +22,14 @@ function WithoutOptimization({ count }) {
   renderCount.current += 1;
 
   // This expensive calculation runs on EVERY render
-  const expensiveValue = expensiveCalculation(count);
+  const expensive = expensiveCalculation(count);
 
   return (
     <View style={[styles.section, styles.sectionRed]}>
       <Text style={styles.label}>❌ NO Optimization</Text>
       <Text style={styles.renderCount}>Renders: {renderCount.current}</Text>
-      <Text style={styles.value}>Expensive value: {expensiveValue}</Text>
+      <Text style={styles.value}>Value: {expensive.value}</Text>
+      <Text style={styles.timestamp}>Computed: {expensive.computedAt}</Text>
       <Text style={styles.note}>⚠️ Recalculates every render!</Text>
     </View>
   );
@@ -35,13 +41,14 @@ function WithUseMemo({ count }) {
   renderCount.current += 1;
 
   // Manually memoized - only recalculates when count changes
-  const expensiveValue = useMemo(() => expensiveCalculation(count), [count]);
+  const expensive = useMemo(() => expensiveCalculation(count), [count]);
 
   return (
     <View style={[styles.section, styles.sectionYellow]}>
       <Text style={styles.label}>⚡ Manual useMemo</Text>
       <Text style={styles.renderCount}>Renders: {renderCount.current}</Text>
-      <Text style={styles.value}>Expensive value: {expensiveValue}</Text>
+      <Text style={styles.value}>Value: {expensive.value}</Text>
+      <Text style={styles.timestamp}>Computed: {expensive.computedAt}</Text>
       <Text style={styles.note}>✓ Only recalcs when count changes</Text>
     </View>
   );
@@ -55,13 +62,14 @@ function WithCompiler({ count }) {
   renderCount.current += 1;
 
   // Compiler should automatically memoize this (no manual useMemo needed)
-  const expensiveValue = expensiveCalculation(count);
+  const expensive = expensiveCalculation(count);
 
   return (
     <View style={[styles.section, styles.sectionGreen]}>
       <Text style={styles.label}>✅ React Compiler</Text>
       <Text style={styles.renderCount}>Renders: {renderCount.current}</Text>
-      <Text style={styles.value}>Expensive value: {expensiveValue}</Text>
+      <Text style={styles.value}>Value: {expensive.value}</Text>
+      <Text style={styles.timestamp}>Computed: {expensive.computedAt}</Text>
       <Text style={styles.note}>✓ Auto-memoized by compiler</Text>
     </View>
   );
@@ -229,6 +237,12 @@ const styles = StyleSheet.create({
   value: {
     fontSize: 12,
     color: '#666',
+  },
+  timestamp: {
+    fontSize: 11,
+    color: '#2196F3',
+    fontWeight: '600',
+    marginTop: 2,
   },
   note: {
     fontSize: 10,
