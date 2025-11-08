@@ -9,6 +9,7 @@ const root = path.resolve(__dirname, '..');
 module.exports = getConfig(
   {
     presets: ['babel-preset-expo'],
+    plugins: [['babel-plugin-react-compiler', {}]],
   },
   { root, pkg },
 );
