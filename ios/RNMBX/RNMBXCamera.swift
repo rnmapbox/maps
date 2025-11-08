@@ -18,7 +18,17 @@ public enum RemovalReason {
 public protocol RNMBXMapComponent: AnyObject {
   func addToMap(_ map: RNMBXMapView, style: Style)
   func removeFromMap(_ map: RNMBXMapView, reason: RemovalReason) -> Bool
-  
+
+  func waitForStyleLoad() -> Bool
+}
+
+/// Protocol for components that require a valid MapView instance for both add and remove operations.
+/// Use this protocol when your component needs to interact with the native MapView directly.
+/// The MapView parameter is guaranteed to be non-nil when these methods are called.
+public protocol RNMBXMapAndMapViewComponent: AnyObject {
+  func addToMap(_ map: RNMBXMapView, mapView: MapView, style: Style)
+  func removeFromMap(_ map: RNMBXMapView, mapView: MapView, reason: RemovalReason) -> Bool
+
   func waitForStyleLoad() -> Bool
 }
 
@@ -85,7 +95,7 @@ class CameraUpdateQueue {
 open class RNMBXMapComponentBase : UIView, RNMBXMapComponent {
   private weak var _map: RNMBXMapView! = nil
   private var _mapCallbacks: [(RNMBXMapView) -> Void] = []
-  
+
   weak var map : RNMBXMapView? {
     return _map;
   }
@@ -103,11 +113,11 @@ open class RNMBXMapComponentBase : UIView, RNMBXMapComponent {
       _mapCallbacks.append(callback)
     }
   }
-  
+
   public func waitForStyleLoad() -> Bool {
     return false
   }
-  
+
   public func addToMap(_ map: RNMBXMapView, style: Style) {
     _mapCallbacks.forEach { callback in
         callback(map)
@@ -115,7 +125,7 @@ open class RNMBXMapComponentBase : UIView, RNMBXMapComponent {
     _mapCallbacks = []
     _map = map
   }
-  
+
   public func removeFromMap(_ map: RNMBXMapView, reason: RemovalReason) -> Bool {
     _mapCallbacks = []
     _map = nil
@@ -123,8 +133,50 @@ open class RNMBXMapComponentBase : UIView, RNMBXMapComponent {
   }
 }
 
+/// Base class for components that require MapView to be non-nil
+open class RNMBXMapAndMapViewComponentBase : UIView, RNMBXMapAndMapViewComponent {
+  private weak var _map: RNMBXMapView! = nil
+  private var _mapCallbacks: [(RNMBXMapView) -> Void] = []
+
+  weak var map : RNMBXMapView? {
+    return _map;
+  }
+
+  func withMapView(_ callback: @escaping (_ mapView: MapView) -> Void) {
+    withRNMBXMapView { mapView in
+      callback(mapView.mapView)
+    }
+  }
+
+  func withRNMBXMapView(_ callback: @escaping (_ map: RNMBXMapView) -> Void) {
+    if let map = _map {
+      callback(map)
+    } else {
+      _mapCallbacks.append(callback)
+    }
+  }
+
+  public func waitForStyleLoad() -> Bool {
+    return false
+  }
+
+  public func addToMap(_ map: RNMBXMapView, mapView: MapView, style: Style) {
+    _mapCallbacks.forEach { callback in
+        callback(map)
+    }
+    _mapCallbacks = []
+    _map = map
+  }
+
+  public func removeFromMap(_ map: RNMBXMapView, mapView: MapView, reason: RemovalReason) -> Bool {
+    _mapCallbacks = []
+    _map = nil
+    return true
+  }
+}
+
 @objc(RNMBXCamera)
-open class RNMBXCamera : RNMBXMapComponentBase {
+open class RNMBXCamera : RNMBXMapAndMapViewComponentBase {
   var cameraAnimator: BasicCameraAnimator?
   let cameraUpdateQueue = CameraUpdateQueue()
   
@@ -519,18 +571,18 @@ open class RNMBXCamera : RNMBXMapComponentBase {
     _updateCamera()
   }
   
-  public override func addToMap(_ map: RNMBXMapView, style: Style) {
-    super.addToMap(map, style: style)
+  public override func addToMap(_ map: RNMBXMapView, mapView: MapView, style: Style) {
+    super.addToMap(map, mapView: mapView, style: style)
     map.reactCamera = self
   }
-  
-  public override func removeFromMap(_ map: RNMBXMapView, reason: RemovalReason) -> Bool {
+
+  public override func removeFromMap(_ map: RNMBXMapView, mapView: MapView, reason: RemovalReason) -> Bool {
     if (reason == .StyleChange) {
       return false
     }
 
-    map.mapView.viewport.removeStatusObserver(self)
-    return super.removeFromMap(map, reason:reason)
+    mapView.viewport.removeStatusObserver(self)
+    return super.removeFromMap(map, mapView: mapView, reason: reason)
   }
 
   @objc public func moveBy(x: Double, y: Double, animationMode: NSNumber?, animationDuration: NSNumber?, resolve: @escaping RCTPromiseResolveBlock, reject: @escaping RCTPromiseRejectBlock) {

@@ -1,7 +1,7 @@
 import MapboxMaps
 
 @objc
-public class RNMBXNativeUserLocation: UIView, RNMBXMapComponent {
+public class RNMBXNativeUserLocation: UIView, RNMBXMapAndMapViewComponent {
   weak var map : RNMBXMapView! = nil
   var imageManager: ImageManager? = nil
   
@@ -200,20 +200,17 @@ public class RNMBXNativeUserLocation: UIView, RNMBXMapComponent {
     }
   }
 
-  public func addToMap(_ map: RNMBXMapView, style: Style) {
+  public func addToMap(_ map: RNMBXMapView, mapView: MapView, style: Style) {
     self.map = map
- 
+
     _fetchImages(map)
     _apply()
   }
 
-  public func removeFromMap(_ map: RNMBXMapView, reason: RemovalReason) -> Bool {
-    if let location = map.mapView.location {
-      location.options.puckType = nil
-      location.options.puckType = .none
-    } else {
-      Logger.error("RNMBXNativeUserLocation.removeFromMap: location is nil")
-    }
+  public func removeFromMap(_ map: RNMBXMapView, mapView: MapView, reason: RemovalReason) -> Bool {
+    let location = mapView.location
+    location.options.puckType = nil
+    location.options.puckType = .none
     removeSubscriptions()
     self.map = nil
 
