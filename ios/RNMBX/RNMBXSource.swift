@@ -3,7 +3,7 @@
 @objc
 public class RNMBXSource : RNMBXInteractiveElement {
   var layers: [RNMBXSourceConsumer] = []
-  var components: [RNMBXMapComponent] = []
+  var components: [RNMBXMapComponentProtocol] = []  // Use base protocol to store both types
 
   var source : Source? = nil
 
@@ -42,7 +42,15 @@ public class RNMBXSource : RNMBXInteractiveElement {
             layer.addToMap(map, style: mapView.mapboxMap.style)
           }
           layers.append(layer)
-        } else if let component = subview as? RNMBXMapComponent {
+        }
+        // Check for more specific protocol first (RNMBXMapAndMapViewComponent is a subtype of RNMBXMapComponent)
+        else if let mapAndMapViewComponent = subview as? RNMBXMapAndMapViewComponent {
+          if let map = map, let mapView = mapView {
+            mapAndMapViewComponent.addToMap(map, mapView: mapView, style: mapView.mapboxMap.style)
+          }
+          components.append(mapAndMapViewComponent)
+        }
+        else if let component = subview as? RNMBXMapComponent {
           if let map = map, let mapView = mapView {
             component.addToMap(map, style: mapView.mapboxMap.style)
           }
@@ -61,11 +69,19 @@ public class RNMBXSource : RNMBXInteractiveElement {
             layer.removeFromMap(map, style: mapView.mapboxMap.style)
           }
           layers.removeAll { $0 as AnyObject === layer }
-        } else if let component = subview as? RNMBXMapComponent {
+        }
+        // Check for more specific protocol first (RNMBXMapAndMapViewComponent is a subtype of RNMBXMapComponent)
+        else if let mapAndMapViewComponent = subview as? RNMBXMapAndMapViewComponent {
+          if let map = map, let mapView = mapView {
+            mapAndMapViewComponent.removeFromMap(map, mapView: mapView, reason: .ViewRemoval)
+          }
+          components.removeAll { $0 as AnyObject === mapAndMapViewComponent }
+        }
+        else if let component = subview as? RNMBXMapComponent {
           if let map = map {
             component.removeFromMap(map, reason: .ViewRemoval)
           }
-          layers.removeAll { $0 as AnyObject === component }
+          components.removeAll { $0 as AnyObject === component }
         }
     }
 
@@ -104,7 +120,12 @@ public class RNMBXSource : RNMBXInteractiveElement {
       layer.addToMap(map, style: style)
     }
     for component in self.components {
-      component.addToMap(map, style: style)
+      // Check for more specific protocol first
+      if let mapAndMapViewComponent = component as? RNMBXMapAndMapViewComponent {
+        mapAndMapViewComponent.addToMap(map, mapView: mapView, style: style)
+      } else if let mapComponent = component as? RNMBXMapComponent {
+        mapComponent.addToMap(map, style: style)
+      }
     }
   }
 
@@ -113,6 +134,15 @@ public class RNMBXSource : RNMBXInteractiveElement {
 
     for layer in self.layers {
       layer.removeFromMap(map, style: mapView.mapboxMap.style)
+    }
+
+    for component in self.components {
+      // Check for more specific protocol first
+      if let mapAndMapViewComponent = component as? RNMBXMapAndMapViewComponent {
+        mapAndMapViewComponent.removeFromMap(map, mapView: mapView, reason: reason)
+      } else if let mapComponent = component as? RNMBXMapComponent {
+        mapComponent.removeFromMap(map, reason: reason)
+      }
     }
 
     if self.ownsSource {

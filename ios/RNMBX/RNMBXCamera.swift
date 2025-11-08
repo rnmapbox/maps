@@ -36,9 +36,27 @@ public protocol RNMBXMapComponent: RNMBXMapComponentProtocol {
 /// Protocol for components that require a valid MapView instance for both add and remove operations.
 /// Use this protocol when your component needs to interact with the native MapView directly.
 /// The MapView parameter is guaranteed to be non-nil when these methods are called.
-public protocol RNMBXMapAndMapViewComponent: RNMBXMapComponentProtocol {
+///
+/// This protocol inherits from RNMBXMapComponent to ensure compatibility with existing code,
+/// but provides default implementations of the base protocol methods that throw errors,
+/// forcing implementers to use the mapView-aware versions.
+public protocol RNMBXMapAndMapViewComponent: RNMBXMapComponent {
   func addToMap(_ map: RNMBXMapView, mapView: MapView, style: Style)
   func removeFromMap(_ map: RNMBXMapView, mapView: MapView, reason: RemovalReason) -> Bool
+}
+
+/// Default implementations for RNMBXMapAndMapViewComponent that prevent accidental use of base protocol methods
+extension RNMBXMapAndMapViewComponent {
+  public func addToMap(_ map: RNMBXMapView, style: Style) {
+    Logger.error("CRITICAL: addToMap(_:style:) called on RNMBXMapAndMapViewComponent. Use addToMap(_:mapView:style:) instead. Component: \(type(of: self))")
+    assertionFailure("RNMBXMapAndMapViewComponent must use addToMap(_:mapView:style:) instead")
+  }
+
+  public func removeFromMap(_ map: RNMBXMapView, reason: RemovalReason) -> Bool {
+    Logger.error("CRITICAL: removeFromMap(_:reason:) called on RNMBXMapAndMapViewComponent. Use removeFromMap(_:mapView:reason:) instead. Component: \(type(of: self))")
+    assertionFailure("RNMBXMapAndMapViewComponent must use removeFromMap(_:mapView:reason:) instead")
+    return false
+  }
 }
 
 enum CameraMode: Int {
