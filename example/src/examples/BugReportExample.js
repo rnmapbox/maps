@@ -64,8 +64,6 @@ class BugReportExample extends React.Component {
   };
 
   render() {
-    'use memo'; // Tell React Compiler to optimize this render method
-
     const circleLayerStyle = {
       ...styles.circleLayer,
       ...{ circleRadius: this.state.radius },
