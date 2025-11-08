@@ -1,63 +1,54 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, memo } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 import { MapView, Camera } from '@rnmapbox/maps';
 
-// Component WITHOUT React Compiler optimization
-function WithoutCompiler({ label }) {
+// Component WITHOUT any optimization - will re-render on every parent update
+function WithoutOptimization({ label, count }) {
   const renderCount = useRef(0);
   renderCount.current += 1;
 
-  const expensiveCalculation = () => {
-    // Simulate some work
-    let result = 0;
-    for (let i = 0; i < 1000; i++) {
-      result += i;
-    }
-    return result;
-  };
-
-  const value = expensiveCalculation();
-
   return (
-    <View style={styles.section}>
-      <Text style={styles.label}>WITHOUT Compiler: {label}</Text>
+    <View style={[styles.section, styles.sectionRed]}>
+      <Text style={styles.label}>❌ NO Optimization: {label}</Text>
       <Text style={styles.renderCount}>Renders: {renderCount.current}</Text>
-      <Text style={styles.value}>Value: {value}</Text>
+      <Text style={styles.value}>Count prop: {count}</Text>
     </View>
   );
 }
 
-// Component WITH React Compiler optimization
-function WithCompiler({ label }) {
-  'use memo'; // React Compiler optimizes this component
+// Component WITH React.memo (manual memoization) - will only re-render when props change
+const WithReactMemo = memo(function WithReactMemo({ label, count }) {
+  const renderCount = useRef(0);
+  renderCount.current += 1;
+
+  return (
+    <View style={[styles.section, styles.sectionYellow]}>
+      <Text style={styles.label}>⚡ React.memo (Manual): {label}</Text>
+      <Text style={styles.renderCount}>Renders: {renderCount.current}</Text>
+      <Text style={styles.value}>Count prop: {count}</Text>
+    </View>
+  );
+});
+
+// Component WITH React Compiler optimization - should behave similar to React.memo
+function WithCompiler({ label, count }) {
+  'use memo'; // Tell React Compiler to optimize this
 
   const renderCount = useRef(0);
   renderCount.current += 1;
 
-  const expensiveCalculation = () => {
-    // Simulate some work
-    let result = 0;
-    for (let i = 0; i < 1000; i++) {
-      result += i;
-    }
-    return result;
-  };
-
-  // React Compiler should automatically memoize this
-  const value = expensiveCalculation();
-
   return (
-    <View style={styles.section}>
-      <Text style={styles.label}>WITH Compiler: {label}</Text>
+    <View style={[styles.section, styles.sectionGreen]}>
+      <Text style={styles.label}>✅ React Compiler: {label}</Text>
       <Text style={styles.renderCount}>Renders: {renderCount.current}</Text>
-      <Text style={styles.value}>Value: {value}</Text>
+      <Text style={styles.value}>Count prop: {count}</Text>
     </View>
   );
 }
 
 export default function CompilerTestExample() {
-  const [counter, setCounter] = useState(0);
-  const [mapCounter, setMapCounter] = useState(0);
+  const [triggerCount, setTriggerCount] = useState(0);
+  const [propsCount, setPropsCount] = useState(0);
 
   return (
     <View style={styles.container}>
@@ -74,41 +65,51 @@ export default function CompilerTestExample() {
         <View style={styles.card}>
           <Text style={styles.title}>React Compiler Test</Text>
           <Text style={styles.instructions}>
-            Tap buttons below. The "WITH Compiler" component should re-render
-            less often than "WITHOUT Compiler" when you tap "Trigger Re-render".
+            Test if React Compiler is optimizing components by watching render counts:
           </Text>
 
           <TouchableOpacity
             style={styles.button}
-            onPress={() => setCounter(counter + 1)}
+            onPress={() => setTriggerCount(triggerCount + 1)}
           >
             <Text style={styles.buttonText}>
-              Trigger Re-render (Count: {counter})
+              🔄 Trigger Parent Re-render ({triggerCount})
             </Text>
           </TouchableOpacity>
+
+          <Text style={styles.helperText}>
+            ↑ This changes parent state but NOT component props
+          </Text>
+
+          <WithoutOptimization label="Test" count={propsCount} />
+          <WithReactMemo label="Test" count={propsCount} />
+          <WithCompiler label="Test" count={propsCount} />
 
           <TouchableOpacity
             style={[styles.button, styles.buttonSecondary]}
-            onPress={() => setMapCounter(mapCounter + 1)}
+            onPress={() => setPropsCount(propsCount + 1)}
           >
             <Text style={styles.buttonText}>
-              Update Map State (Count: {mapCounter})
+              📝 Update Props ({propsCount})
             </Text>
           </TouchableOpacity>
 
-          <WithoutCompiler label="Static Props" />
-          <WithCompiler label="Static Props" />
+          <Text style={styles.helperText}>
+            ↑ This changes the "count" prop - all should re-render
+          </Text>
 
           <View style={styles.explanation}>
+            <Text style={styles.explanationTitle}>Expected Behavior:</Text>
             <Text style={styles.explanationText}>
-              💡 Both components receive the same props. Without compiler
-              optimization, the component re-renders on every parent state
-              change. With 'use memo', React Compiler automatically optimizes it
-              to skip unnecessary re-renders.
+              When clicking "Trigger Parent Re-render":{'\n'}
+              • ❌ NO Optimization: Renders increase{'\n'}
+              • ⚡ React.memo: Renders stay the same{'\n'}
+              • ✅ React Compiler: Should behave like React.memo
             </Text>
             <Text style={styles.explanationText}>
-              🔍 Watch the "Renders" counter difference when clicking "Trigger
-              Re-render"!
+              {'\n'}If React Compiler renders match "NO Optimization", try changing{' '}
+              <Text style={styles.codeText}>compilationMode</Text> to{' '}
+              <Text style={styles.codeText}>'all'</Text> in babel.config.js
             </Text>
           </View>
         </View>
@@ -175,14 +176,26 @@ const styles = StyleSheet.create({
     marginTop: 10,
     borderLeftWidth: 4,
   },
+  sectionRed: {
+    borderLeftColor: '#FF3B30',
+    backgroundColor: '#FFF5F5',
+  },
+  sectionYellow: {
+    borderLeftColor: '#FFCC00',
+    backgroundColor: '#FFFBF0',
+  },
+  sectionGreen: {
+    borderLeftColor: '#34C759',
+    backgroundColor: '#F0FFF4',
+  },
   label: {
-    fontSize: 14,
+    fontSize: 13,
     fontWeight: '600',
     marginBottom: 5,
     color: '#333',
   },
   renderCount: {
-    fontSize: 16,
+    fontSize: 18,
     fontWeight: 'bold',
     color: '#FF3B30',
     marginBottom: 3,
@@ -191,18 +204,37 @@ const styles = StyleSheet.create({
     fontSize: 12,
     color: '#666',
   },
+  helperText: {
+    fontSize: 10,
+    color: '#999',
+    marginTop: -5,
+    marginBottom: 10,
+    fontStyle: 'italic',
+  },
   explanation: {
     marginTop: 15,
-    padding: 10,
-    backgroundColor: '#FFF9E6',
+    padding: 12,
+    backgroundColor: '#E3F2FD',
     borderRadius: 8,
     borderLeftWidth: 4,
-    borderLeftColor: '#FFD700',
+    borderLeftColor: '#2196F3',
+  },
+  explanationTitle: {
+    fontSize: 13,
+    fontWeight: 'bold',
+    color: '#1976D2',
+    marginBottom: 8,
   },
   explanationText: {
     fontSize: 11,
-    color: '#666',
-    lineHeight: 16,
-    marginBottom: 5,
+    color: '#555',
+    lineHeight: 17,
+  },
+  codeText: {
+    fontFamily: 'Courier',
+    backgroundColor: '#f5f5f5',
+    paddingHorizontal: 4,
+    fontSize: 11,
+    color: '#E91E63',
   },
 });
