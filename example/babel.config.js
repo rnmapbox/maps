@@ -16,6 +16,9 @@ module.exports = getConfig(
           // Log what the compiler is doing (set to false to disable logging)
           // When enabled, you'll see "React Compiler: compiled X functions" in Metro logs
           compilationMode: 'annotation', // 'annotation' | 'all' | 'infer'
+
+          // IMPORTANT: 'all' mode tries to compile class components which causes errors
+          // Use 'annotation' mode and mark function components with 'use memo' instead
         },
       ],
     ],
