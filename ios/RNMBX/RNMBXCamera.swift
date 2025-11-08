@@ -15,21 +15,30 @@ public enum RemovalReason {
     case ViewRemoval, StyleChange, OnDestroy, ComponentChange, Reorder
 }
 
-public protocol RNMBXMapComponent: AnyObject {
+/// Base protocol for all map components
+public protocol RNMBXMapComponentProtocol: AnyObject {
+  func waitForStyleLoad() -> Bool
+}
+
+/// Default implementation: most components don't need to wait for style load
+extension RNMBXMapComponentProtocol {
+  public func waitForStyleLoad() -> Bool {
+    return false
+  }
+}
+
+/// Protocol for components that can work without direct MapView access
+public protocol RNMBXMapComponent: RNMBXMapComponentProtocol {
   func addToMap(_ map: RNMBXMapView, style: Style)
   func removeFromMap(_ map: RNMBXMapView, reason: RemovalReason) -> Bool
-
-  func waitForStyleLoad() -> Bool
 }
 
 /// Protocol for components that require a valid MapView instance for both add and remove operations.
 /// Use this protocol when your component needs to interact with the native MapView directly.
 /// The MapView parameter is guaranteed to be non-nil when these methods are called.
-public protocol RNMBXMapAndMapViewComponent: AnyObject {
+public protocol RNMBXMapAndMapViewComponent: RNMBXMapComponentProtocol {
   func addToMap(_ map: RNMBXMapView, mapView: MapView, style: Style)
   func removeFromMap(_ map: RNMBXMapView, mapView: MapView, reason: RemovalReason) -> Bool
-
-  func waitForStyleLoad() -> Bool
 }
 
 enum CameraMode: Int {
@@ -114,9 +123,7 @@ open class RNMBXMapComponentBase : UIView, RNMBXMapComponent {
     }
   }
 
-  public func waitForStyleLoad() -> Bool {
-    return false
-  }
+  // Uses default implementation from RNMBXMapComponentProtocol extension
 
   public func addToMap(_ map: RNMBXMapView, style: Style) {
     _mapCallbacks.forEach { callback in
@@ -156,9 +163,7 @@ open class RNMBXMapAndMapViewComponentBase : UIView, RNMBXMapAndMapViewComponent
     }
   }
 
-  public func waitForStyleLoad() -> Bool {
-    return false
-  }
+  // Uses default implementation from RNMBXMapComponentProtocol extension
 
   public func addToMap(_ map: RNMBXMapView, mapView: MapView, style: Style) {
     _mapCallbacks.forEach { callback in

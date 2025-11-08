@@ -67,9 +67,7 @@ public class RNMBXCustomLocationProvider: UIView, RNMBXMapAndMapViewComponent {
     return true
   }
 
-  public func waitForStyleLoad() -> Bool {
-    false
-  }
+  // Uses default implementation from RNMBXMapComponentProtocol extension (returns false)
 }
 
 #if RNMBX_11
