@@ -1,6 +1,8 @@
-import React, { useCallback, useState } from 'react';
+import { useCallback, useState } from 'react';
 import { View, StyleSheet, Text } from 'react-native';
-import { MapView, Camera, CameraGestureObserver } from '@rnmapbox/maps';
+import { MapView, Camera, CameraGestureObserver, type OnMapSteadyEvent } from '@rnmapbox/maps';
+
+import { ExampleWithMetadata } from '../common/ExampleMetadata'; // exclude-from-doc
 
 const styles = StyleSheet.create({
   container: {
@@ -43,7 +45,7 @@ const styles = StyleSheet.create({
 const CameraGestureObserverExample = () => {
   const [status, setStatus] = useState('Waiting for interaction...');
 
-  const onMapSteady = useCallback(({ nativeEvent }) => {
+  const onMapSteady = useCallback(({ nativeEvent } : { nativeEvent: OnMapSteadyEvent }) => {
     const { reason, idleDurationMs, lastGestureType, timestamp } = nativeEvent;
 
     let message = `✓ Map is steady!\n\nReason: ${reason}`;
@@ -89,3 +91,18 @@ const CameraGestureObserverExample = () => {
 };
 
 export default CameraGestureObserverExample;
+
+/* end-example-doc */
+
+const metadata: ExampleWithMetadata['metadata'] = {
+  title: 'Camera Gesture Observer',
+  tags: [
+    'CameraGestureObserver#onMapSteady',
+    'CameraGestureObserver#quietPeriodMs',
+    'CameraGestureObserver#maxIntervalMs',
+  ],
+  docs: `
+Demonstrates how to detect when the map becomes steady after user gestures (pan, zoom, rotate). The CameraGestureObserver component fires the onMapSteady event after a configurable quiet period, providing information about the last gesture type and idle duration.
+`,
+};
+CameraGestureObserverExample.metadata = metadata;

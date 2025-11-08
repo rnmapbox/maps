@@ -42,6 +42,7 @@ export { default as BackgroundLayer } from './components/BackgroundLayer';
 export { default as CustomLocationProvider } from './components/CustomLocationProvider';
 export { Terrain } from './components/Terrain';
 export { default as CameraGestureObserver } from './components/CameraGestureObserver';
+export { OnMapSteadyEvent } from './specs/RNMBXCameraGestureObserverNativeComponent';
 export {
   default as locationManager,
   type Location,
