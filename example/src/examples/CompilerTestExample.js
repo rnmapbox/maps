@@ -17,9 +17,13 @@ const expensiveCalculation = (input) => {
 };
 
 // Component WITHOUT any optimization - recalculates on every render
+// NOTE: React Compiler BAILS OUT of this component because:
+// - ref.current is accessed during render (renderCount.current += 1)
+// - This violates React's Rules: refs should only be accessed in effects/handlers
+// - Compiler correctly refuses to optimize code that breaks the rules
 function WithoutOptimization({ count }) {
   const renderCount = useRef(0);
-  renderCount.current += 1;
+  renderCount.current += 1; // ⚠️ Causes compiler bail-out
 
   // This expensive calculation runs on EVERY render
   const expensive = expensiveCalculation(count);
