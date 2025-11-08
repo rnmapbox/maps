@@ -35,6 +35,7 @@ import * as Web from '../examples/Web';
 // MISC
 import BugReportExample from '../examples/BugReportExample';
 import BugReportExampleTS from '../examples/BugReportExampleTS';
+import CompilerTestExample from '../examples/CompilerTestExample';
 // Cache Management
 import * as CacheOffline from '../examples/CacheOffline';
 // V10
@@ -286,6 +287,7 @@ const Examples = new ExampleGroup('React Native Mapbox', [
   new MostRecentExampleItem(),
   new ExampleItem('Bug Report Template', BugReportPage(BugReportExample)),
   new ExampleItem('Bug Report Template TS', BugReportPage(BugReportExampleTS)),
+  new ExampleItem('React Compiler Test', BugReportPage(CompilerTestExample)),
   exampleGroup(V10),
   new ExampleGroup('V11', [example(StyleImportConfig)]),
   exampleGroup(Map),
