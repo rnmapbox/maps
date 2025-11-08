@@ -1,10 +1,7 @@
 import type { ViewProps } from 'react-native';
 import codegenNativeComponent from 'react-native/Libraries/Utilities/codegenNativeComponent';
-import {
-  DirectEventHandler,
-  // @ts-ignore - CI environment type resolution issue for CodegenTypes
-  Double,
-} from 'react-native/Libraries/Types/CodegenTypes';
+// @ts-ignore - CI environment type resolution issue for CodegenTypes
+import { DirectEventHandler, Double, } from 'react-native/Libraries/Types/CodegenTypes';
 
 import type { UnsafeMixed } from './codegenUtils';
 
