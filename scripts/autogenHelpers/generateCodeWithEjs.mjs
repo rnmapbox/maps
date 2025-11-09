@@ -166,11 +166,16 @@ function getSupportedLayers(layerNames) {
       support.basic.v10.android = true;
       support.basic.v10.ios = true;
     }
-    if (support.basic.v10.android && support.basic.v10.ios) {
+
+    const hasV10Support = support.basic.v10.android && support.basic.v10.ios;
+    const hasV11Support = support.basic.v11.android && support.basic.v11.ios;
+
+    if (hasV10Support || hasV11Support) {
       supportedLayers.push({
         layerName,
         support: {
-          v10: support.basic.v10.android && support.basic.v10.ios,
+          v10: hasV10Support,
+          v11: hasV11Support,
         },
       });
     }
@@ -338,7 +343,10 @@ function isAttrSupported(name, attr, only) {
       only.find((o) => support.basic[o].android && support.basic[o].ios) != null
     );
   }
-  return support.basic.v10.android && support.basic.v10.ios;
+  // Support both v10 and v11-only properties
+  const hasV10Support = support.basic.v10.android && support.basic.v10.ios;
+  const hasV11Support = support.basic.v11.android && support.basic.v11.ios;
+  return hasV10Support || hasV11Support;
 }
 
 function getAttributeSupport(sdkSupport) {
