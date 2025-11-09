@@ -1,4 +1,4 @@
-import MapboxMaps
+@_spi(Experimental) import MapboxMaps
 
 @objc
 public class RNMBXRasterArraySource : RNMBXSource {

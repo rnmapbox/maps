@@ -1,4 +1,4 @@
-import MapboxMaps
+@_spi(Experimental) import MapboxMaps
 
 @objc(RNMBXRasterParticleLayer)
 public class RNMBXRasterParticleLayer: RNMBXLayer {
