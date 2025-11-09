@@ -134,12 +134,27 @@ Customizable style attributes
 * <a href="#fillextrusiontranslate">fillExtrusionTranslate</a><br/>
 * <a href="#fillextrusiontranslateanchor">fillExtrusionTranslateAnchor</a><br/>
 * <a href="#fillextrusionpattern">fillExtrusionPattern</a><br/>
+* <a href="#fillextrusionpatterncrossfade">fillExtrusionPatternCrossFade</a><br/>
 * <a href="#fillextrusionheight">fillExtrusionHeight</a><br/>
 * <a href="#fillextrusionbase">fillExtrusionBase</a><br/>
+* <a href="#fillextrusionheightalignment">fillExtrusionHeightAlignment</a><br/>
+* <a href="#fillextrusionbasealignment">fillExtrusionBaseAlignment</a><br/>
 * <a href="#fillextrusionverticalgradient">fillExtrusionVerticalGradient</a><br/>
 * <a href="#fillextrusionambientocclusionintensity">fillExtrusionAmbientOcclusionIntensity</a><br/>
 * <a href="#fillextrusionambientocclusionradius">fillExtrusionAmbientOcclusionRadius</a><br/>
+* <a href="#fillextrusionambientocclusionwallradius">fillExtrusionAmbientOcclusionWallRadius</a><br/>
+* <a href="#fillextrusionambientocclusiongroundradius">fillExtrusionAmbientOcclusionGroundRadius</a><br/>
+* <a href="#fillextrusionambientocclusiongroundattenuation">fillExtrusionAmbientOcclusionGroundAttenuation</a><br/>
+* <a href="#fillextrusionfloodlightcolor">fillExtrusionFloodLightColor</a><br/>
+* <a href="#fillextrusionfloodlightintensity">fillExtrusionFloodLightIntensity</a><br/>
+* <a href="#fillextrusionfloodlightwallradius">fillExtrusionFloodLightWallRadius</a><br/>
+* <a href="#fillextrusionfloodlightgroundradius">fillExtrusionFloodLightGroundRadius</a><br/>
+* <a href="#fillextrusionfloodlightgroundattenuation">fillExtrusionFloodLightGroundAttenuation</a><br/>
+* <a href="#fillextrusionverticalscale">fillExtrusionVerticalScale</a><br/>
 * <a href="#fillextrusionroundedroof">fillExtrusionRoundedRoof</a><br/>
+* <a href="#fillextrusioncutofffaderange">fillExtrusionCutoffFadeRange</a><br/>
+* <a href="#fillextrusionemissivestrength">fillExtrusionEmissiveStrength</a><br/>
+* <a href="#fillextrusionlinewidth">fillExtrusionLineWidth</a><br/>
 
 ___
 
@@ -367,6 +382,35 @@ Parameters: `zoom, feature`
 
 ___
 
+### fillExtrusionPatternCrossFade
+Name: `fillExtrusionPatternCrossFade`
+
+Mapbox spec: [fill-extrusion-pattern-cross-fade](https://docs.mapbox.com/style-spec/reference/layers/#paint-fill-extrusion-fill-extrusion-pattern-cross-fade)
+
+#### Description
+Controls the transition progress between the image variants of fillExtrusionPattern. Zero means the first variant is used, one is the second, and in between they are blended together. Both images should be the same size and have the same type (either raster or vector).
+
+#### Type
+`number`
+#### Default Value
+`0`
+
+#### Minimum
+`0`
+
+
+#### Maximum
+`1`
+
+#### Requires
+`linePattern`
+
+#### Expression
+
+Parameters: `zoom, measure-light`
+
+___
+
 ### fillExtrusionHeight
 Name: `fillExtrusionHeight`
 
@@ -456,6 +500,54 @@ The transition affecting any changes to this layer’s fillExtrusionBase propert
 
 #### Default Value
 `{duration: 300, delay: 0}`
+
+
+___
+
+### fillExtrusionHeightAlignment
+Name: `fillExtrusionHeightAlignment`
+
+Mapbox spec: [fill-extrusion-height-alignment](https://docs.mapbox.com/style-spec/reference/layers/#paint-fill-extrusion-fill-extrusion-height-alignment)
+
+#### Description
+Controls the behavior of fill extrusion height over terrain
+
+#### Type
+`enum`
+#### Default Value
+`flat`
+
+#### Supported Values
+**terrain** - The fill extrusion height follows terrain slope.<br />
+**flat** - The fill extrusion height is flat over terrain.<br />
+
+
+#### Requires
+`fillExtrusionHeight`
+
+
+___
+
+### fillExtrusionBaseAlignment
+Name: `fillExtrusionBaseAlignment`
+
+Mapbox spec: [fill-extrusion-base-alignment](https://docs.mapbox.com/style-spec/reference/layers/#paint-fill-extrusion-fill-extrusion-base-alignment)
+
+#### Description
+Controls the behavior of fill extrusion base over terrain
+
+#### Type
+`enum`
+#### Default Value
+`terrain`
+
+#### Supported Values
+**terrain** - The fill extrusion base follows terrain slope.<br />
+**flat** - The fill extrusion base is flat over terrain.<br />
+
+
+#### Requires
+`fillExtrusionBase`
 
 
 ___
@@ -570,6 +662,417 @@ The transition affecting any changes to this layer’s fillExtrusionAmbientOcclu
 
 ___
 
+### fillExtrusionAmbientOcclusionWallRadius
+Name: `fillExtrusionAmbientOcclusionWallRadius`
+
+Mapbox spec: [fill-extrusion-ambient-occlusion-wall-radius](https://docs.mapbox.com/style-spec/reference/layers/#paint-fill-extrusion-fill-extrusion-ambient-occlusion-wall-radius)
+
+#### Description
+Shades area near ground and concave angles between walls where the radius defines only vertical impact. Default value 3.0 corresponds to height of one floor and brings the most plausible results for buildings.
+
+#### Type
+`number`
+#### Default Value
+`3`
+
+#### Minimum
+`0`
+
+
+#### Requires
+`lights, fillExtrusionEdgeRadius`
+
+#### Expression
+
+Parameters: `zoom`
+___
+
+### fillExtrusionAmbientOcclusionWallRadiusTransition
+Name: `fillExtrusionAmbientOcclusionWallRadiusTransition`
+
+#### Description
+
+The transition affecting any changes to this layer’s fillExtrusionAmbientOcclusionWallRadius property.
+
+#### Type
+
+`{ duration, delay }`
+
+#### Units
+`milliseconds`
+
+#### Default Value
+`{duration: 300, delay: 0}`
+
+
+___
+
+### fillExtrusionAmbientOcclusionGroundRadius
+Name: `fillExtrusionAmbientOcclusionGroundRadius`
+
+Mapbox spec: [fill-extrusion-ambient-occlusion-ground-radius](https://docs.mapbox.com/style-spec/reference/layers/#paint-fill-extrusion-fill-extrusion-ambient-occlusion-ground-radius)
+
+#### Description
+The extent of the ambient occlusion effect on the ground beneath the extruded buildings in meters.
+
+#### Type
+`number`
+#### Default Value
+`3`
+
+#### Minimum
+`0`
+
+
+#### Requires
+`lights`
+
+#### Expression
+
+Parameters: `zoom`
+___
+
+### fillExtrusionAmbientOcclusionGroundRadiusTransition
+Name: `fillExtrusionAmbientOcclusionGroundRadiusTransition`
+
+#### Description
+
+The transition affecting any changes to this layer’s fillExtrusionAmbientOcclusionGroundRadius property.
+
+#### Type
+
+`{ duration, delay }`
+
+#### Units
+`milliseconds`
+
+#### Default Value
+`{duration: 300, delay: 0}`
+
+
+___
+
+### fillExtrusionAmbientOcclusionGroundAttenuation
+Name: `fillExtrusionAmbientOcclusionGroundAttenuation`
+
+Mapbox spec: [fill-extrusion-ambient-occlusion-ground-attenuation](https://docs.mapbox.com/style-spec/reference/layers/#paint-fill-extrusion-fill-extrusion-ambient-occlusion-ground-attenuation)
+
+#### Description
+Provides a control to futher fineTune the look of the ambient occlusion on the ground beneath the extruded buildings. Lower values give the effect a more solid look while higher values make it smoother.
+
+#### Type
+`number`
+#### Default Value
+`0.69`
+
+#### Minimum
+`0`
+
+
+#### Maximum
+`1`
+
+#### Requires
+`lights`
+
+#### Expression
+
+Parameters: `zoom`
+___
+
+### fillExtrusionAmbientOcclusionGroundAttenuationTransition
+Name: `fillExtrusionAmbientOcclusionGroundAttenuationTransition`
+
+#### Description
+
+The transition affecting any changes to this layer’s fillExtrusionAmbientOcclusionGroundAttenuation property.
+
+#### Type
+
+`{ duration, delay }`
+
+#### Units
+`milliseconds`
+
+#### Default Value
+`{duration: 300, delay: 0}`
+
+
+___
+
+### fillExtrusionFloodLightColor
+Name: `fillExtrusionFloodLightColor`
+
+Mapbox spec: [fill-extrusion-flood-light-color](https://docs.mapbox.com/style-spec/reference/layers/#paint-fill-extrusion-fill-extrusion-flood-light-color)
+
+#### Description
+The color of the flood light effect on the walls of the extruded buildings.
+
+#### Type
+`color`
+#### Default Value
+`#ffffff`
+
+
+#### Requires
+`lights`
+
+#### Expression
+
+Parameters: `zoom, measure-light`
+___
+
+### fillExtrusionFloodLightColorTransition
+Name: `fillExtrusionFloodLightColorTransition`
+
+#### Description
+
+The transition affecting any changes to this layer’s fillExtrusionFloodLightColor property.
+
+#### Type
+
+`{ duration, delay }`
+
+#### Units
+`milliseconds`
+
+#### Default Value
+`{duration: 300, delay: 0}`
+
+
+___
+
+### fillExtrusionFloodLightIntensity
+Name: `fillExtrusionFloodLightIntensity`
+
+Mapbox spec: [fill-extrusion-flood-light-intensity](https://docs.mapbox.com/style-spec/reference/layers/#paint-fill-extrusion-fill-extrusion-flood-light-intensity)
+
+#### Description
+The intensity of the flood light color.
+
+#### Type
+`number`
+#### Default Value
+`0`
+
+#### Minimum
+`0`
+
+
+#### Maximum
+`1`
+
+#### Requires
+`lights`
+
+#### Expression
+
+Parameters: `zoom, measure-light`
+___
+
+### fillExtrusionFloodLightIntensityTransition
+Name: `fillExtrusionFloodLightIntensityTransition`
+
+#### Description
+
+The transition affecting any changes to this layer’s fillExtrusionFloodLightIntensity property.
+
+#### Type
+
+`{ duration, delay }`
+
+#### Units
+`milliseconds`
+
+#### Default Value
+`{duration: 300, delay: 0}`
+
+
+___
+
+### fillExtrusionFloodLightWallRadius
+Name: `fillExtrusionFloodLightWallRadius`
+
+Mapbox spec: [fill-extrusion-flood-light-wall-radius](https://docs.mapbox.com/style-spec/reference/layers/#paint-fill-extrusion-fill-extrusion-flood-light-wall-radius)
+
+#### Description
+The extent of the flood light effect on the walls of the extruded buildings in meters.
+
+#### Type
+`number`
+#### Default Value
+`0`
+
+#### Units
+`meters`
+
+#### Minimum
+`0`
+
+
+#### Requires
+`lights`
+
+#### Expression
+
+Parameters: `feature, feature-state`
+___
+
+### fillExtrusionFloodLightWallRadiusTransition
+Name: `fillExtrusionFloodLightWallRadiusTransition`
+
+#### Description
+
+The transition affecting any changes to this layer’s fillExtrusionFloodLightWallRadius property.
+
+#### Type
+
+`{ duration, delay }`
+
+#### Units
+`milliseconds`
+
+#### Default Value
+`{duration: 300, delay: 0}`
+
+
+___
+
+### fillExtrusionFloodLightGroundRadius
+Name: `fillExtrusionFloodLightGroundRadius`
+
+Mapbox spec: [fill-extrusion-flood-light-ground-radius](https://docs.mapbox.com/style-spec/reference/layers/#paint-fill-extrusion-fill-extrusion-flood-light-ground-radius)
+
+#### Description
+The extent of the flood light effect on the ground beneath the extruded buildings in meters. Note: this experimental property is evaluated once per tile, during tile initialization. Changing the property value could trigger tile reload. The `featureState` styling is deprecated and will get removed soon.
+
+#### Type
+`number`
+#### Default Value
+`0`
+
+#### Units
+`meters`
+
+
+#### Requires
+`lights`
+
+#### Expression
+
+Parameters: `feature, feature-state`
+___
+
+### fillExtrusionFloodLightGroundRadiusTransition
+Name: `fillExtrusionFloodLightGroundRadiusTransition`
+
+#### Description
+
+The transition affecting any changes to this layer’s fillExtrusionFloodLightGroundRadius property.
+
+#### Type
+
+`{ duration, delay }`
+
+#### Units
+`milliseconds`
+
+#### Default Value
+`{duration: 300, delay: 0}`
+
+
+___
+
+### fillExtrusionFloodLightGroundAttenuation
+Name: `fillExtrusionFloodLightGroundAttenuation`
+
+Mapbox spec: [fill-extrusion-flood-light-ground-attenuation](https://docs.mapbox.com/style-spec/reference/layers/#paint-fill-extrusion-fill-extrusion-flood-light-ground-attenuation)
+
+#### Description
+Provides a control to futher fineTune the look of the flood light on the ground beneath the extruded buildings. Lower values give the effect a more solid look while higher values make it smoother.
+
+#### Type
+`number`
+#### Default Value
+`0.69`
+
+#### Minimum
+`0`
+
+
+#### Maximum
+`1`
+
+#### Requires
+`lights`
+
+#### Expression
+
+Parameters: `zoom`
+___
+
+### fillExtrusionFloodLightGroundAttenuationTransition
+Name: `fillExtrusionFloodLightGroundAttenuationTransition`
+
+#### Description
+
+The transition affecting any changes to this layer’s fillExtrusionFloodLightGroundAttenuation property.
+
+#### Type
+
+`{ duration, delay }`
+
+#### Units
+`milliseconds`
+
+#### Default Value
+`{duration: 300, delay: 0}`
+
+
+___
+
+### fillExtrusionVerticalScale
+Name: `fillExtrusionVerticalScale`
+
+Mapbox spec: [fill-extrusion-vertical-scale](https://docs.mapbox.com/style-spec/reference/layers/#paint-fill-extrusion-fill-extrusion-vertical-scale)
+
+#### Description
+A global multiplier that can be used to scale base, height, AO, and flood light of the fill extrusions.
+
+#### Type
+`number`
+#### Default Value
+`1`
+
+#### Minimum
+`0`
+
+
+#### Expression
+
+Parameters: `zoom`
+___
+
+### fillExtrusionVerticalScaleTransition
+Name: `fillExtrusionVerticalScaleTransition`
+
+#### Description
+
+The transition affecting any changes to this layer’s fillExtrusionVerticalScale property.
+
+#### Type
+
+`{ duration, delay }`
+
+#### Units
+`milliseconds`
+
+#### Default Value
+`{duration: 300, delay: 0}`
+
+
+___
+
 ### fillExtrusionRoundedRoof
 Name: `fillExtrusionRoundedRoof`
 
@@ -590,4 +1093,123 @@ Indicates whether top edges should be rounded when fillExtrusionEdgeRadius has a
 #### Expression
 
 Parameters: `zoom`
+
+___
+
+### fillExtrusionCutoffFadeRange
+Name: `fillExtrusionCutoffFadeRange`
+
+Mapbox spec: [fill-extrusion-cutoff-fade-range](https://docs.mapbox.com/style-spec/reference/layers/#paint-fill-extrusion-fill-extrusion-cutoff-fade-range)
+
+#### Description
+This parameter defines the range for the fadeOut effect before an automatic content cutoff on pitched map views. Fade out is implemented by scaling down and removing buildings in the fade range in a staggered fashion. Opacity is not changed. The fade range is expressed in relation to the height of the map view. A value of 1.0 indicates that the content is faded to the same extent as the map's height in pixels, while a value close to zero represents a sharp cutoff. When the value is set to 0.0, the cutoff is completely disabled. Note: The property has no effect on the map if terrain is enabled.
+
+#### Type
+`number`
+#### Default Value
+`0`
+
+#### Minimum
+`0`
+
+
+#### Maximum
+`1`
+
+#### Expression
+
+Parameters: ``
+
+___
+
+### fillExtrusionEmissiveStrength
+Name: `fillExtrusionEmissiveStrength`
+
+Mapbox spec: [fill-extrusion-emissive-strength](https://docs.mapbox.com/style-spec/reference/layers/#paint-fill-extrusion-fill-extrusion-emissive-strength)
+
+#### Description
+Controls the intensity of light emitted on the source features.
+
+#### Type
+`number`
+#### Default Value
+`0`
+
+#### Units
+`intensity`
+
+#### Minimum
+`0`
+
+
+#### Requires
+`lights`
+
+#### Expression
+
+Parameters: `zoom, measure-light, feature-state`
+___
+
+### fillExtrusionEmissiveStrengthTransition
+Name: `fillExtrusionEmissiveStrengthTransition`
+
+#### Description
+
+The transition affecting any changes to this layer’s fillExtrusionEmissiveStrength property.
+
+#### Type
+
+`{ duration, delay }`
+
+#### Units
+`milliseconds`
+
+#### Default Value
+`{duration: 300, delay: 0}`
+
+
+___
+
+### fillExtrusionLineWidth
+Name: `fillExtrusionLineWidth`
+
+Mapbox spec: [fill-extrusion-line-width](https://docs.mapbox.com/style-spec/reference/layers/#paint-fill-extrusion-fill-extrusion-line-width)
+
+#### Description
+If a nonZero value is provided, it sets the fillExtrusion layer into wall rendering mode. The value is used to render the feature with the given width over the outlines of the geometry. Note: This property is experimental and some other fillExtrusion properties might not be supported with nonZero line width.
+
+#### Type
+`number`
+#### Default Value
+`0`
+
+#### Units
+`meters`
+
+#### Minimum
+`0`
+
+
+#### Expression
+
+Parameters: `zoom, feature, feature-state, measure-light`
+___
+
+### fillExtrusionLineWidthTransition
+Name: `fillExtrusionLineWidthTransition`
+
+#### Description
+
+The transition affecting any changes to this layer’s fillExtrusionLineWidth property.
+
+#### Type
+
+`{ duration, delay }`
+
+#### Units
+`milliseconds`
+
+#### Default Value
+`{duration: 300, delay: 0}`
+
 

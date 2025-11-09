@@ -254,11 +254,17 @@
         "RNMBXPointAnnotation": {
           "className": "RNMBXPointAnnotationComponentView"
         },
+        "RNMBXRasterArraySource": {
+          "className": "RNMBXRasterArraySourceComponentView"
+        },
         "RNMBXRasterDemSource": {
           "className": "RNMBXRasterDemSourceComponentView"
         },
         "RNMBXRasterLayer": {
           "className": "RNMBXRasterLayerComponentView"
+        },
+        "RNMBXRasterParticleLayer": {
+          "className": "RNMBXRasterParticleLayerComponentView"
         },
         "RNMBXRasterSource": {
           "className": "RNMBXRasterSourceComponentView"
@@ -307,8 +313,10 @@
         "RNMBXModels": "RNMBXModelsComponentView",
         "RNMBXNativeUserLocation": "RNMBXNativeUserLocationComponentView",
         "RNMBXPointAnnotation": "RNMBXPointAnnotationComponentView",
+        "RNMBXRasterArraySource": "RNMBXRasterArraySourceComponentView",
         "RNMBXRasterDemSource": "RNMBXRasterDemSourceComponentView",
         "RNMBXRasterLayer": "RNMBXRasterLayerComponentView",
+        "RNMBXRasterParticleLayer": "RNMBXRasterParticleLayerComponentView",
         "RNMBXRasterSource": "RNMBXRasterSourceComponentView",
         "RNMBXShapeSource": "RNMBXShapeSourceComponentView",
         "RNMBXSkyLayer": "RNMBXSkyLayerComponentView",

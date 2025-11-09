@@ -479,6 +479,13 @@ enum SkyTypeEnum {
   Atmosphere = 'atmosphere',
 }
 type SkyTypeEnumValues = 'gradient' | 'atmosphere';
+enum ClipLayerTypesEnum {
+  /** If present the clip layer would remove all 3d model layers below it. Currently only instanced models (e.g. trees) are removed. */
+  Model = 'model',
+  /** If present the clip layer would remove all symbol layers below it. */
+  Symbol = 'symbol',
+}
+type ClipLayerTypesEnumValues = 'model' | 'symbol';
 enum AnchorEnum {
   /** The position of the light source is aligned to the rotation of the map. */
   Map = 'map',
@@ -1909,7 +1916,7 @@ export interface RasterLayerStyleProps {
   rasterElevation?: Value<number, ['zoom']>;
 
   /**
-   * The transition affecting any changes to this layer's rasterElevation property.
+   * The transition affecting any changes to this layer’s rasterElevation property.
    */
   rasterElevationTransition?: Transition;
 }
@@ -1920,65 +1927,49 @@ export interface RasterParticleLayerStyleProps {
   visibility?: Value<Enum<VisibilityEnum, VisibilityEnumValues>>;
   /**
    * Displayed band of raster array source layer
-   *
-   * @experimental
    */
   rasterParticleArrayBand?: string;
   /**
    * Defines the amount of particles per tile.
-   *
-   * @experimental
    */
-  rasterParticleCount?: Value<number, ['zoom']>;
+  rasterParticleCount?: number;
   /**
-   * Defines a color map by which to colorize a raster particle layer, parameterized by the `["raster-particle-speed"]` expression and evaluated at 256 uniformly spaced steps over the range specified by `raster-particle-max-speed`.
-   *
-   * @experimental
+   * Defines a color map by which to colorize a raster particle layer, parameterized by the `["rasterParticleSpeed"]` expression and evaluated at 256 uniformly spaced steps over the range specified by `rasterParticleMaxSpeed`.
    */
   rasterParticleColor?: Value<string, ['raster-particle-speed']>;
   /**
    * Defines the maximum speed for particles. Velocities with magnitudes equal to or exceeding this value are clamped to the max value.
-   *
-   * @experimental
    */
-  rasterParticleMaxSpeed?: Value<number, ['zoom']>;
+  rasterParticleMaxSpeed?: number;
   /**
-   * Defines a coefficient for the speed of particles' motion.
-   *
-   * @experimental
+   * Defines a coefficient for the speed of particles’ motion.
    */
   rasterParticleSpeedFactor?: Value<number, ['zoom']>;
 
   /**
-   * The transition affecting any changes to this layer's rasterParticleSpeedFactor property.
+   * The transition affecting any changes to this layer’s rasterParticleSpeedFactor property.
    */
   rasterParticleSpeedFactorTransition?: Transition;
   /**
    * Defines defines the opacity coefficient applied to the faded particles in each frame. In practice, this property controls the length of the particle tail.
-   *
-   * @experimental
    */
   rasterParticleFadeOpacityFactor?: Value<number, ['zoom']>;
 
   /**
-   * The transition affecting any changes to this layer's rasterParticleFadeOpacityFactor property.
+   * The transition affecting any changes to this layer’s rasterParticleFadeOpacityFactor property.
    */
   rasterParticleFadeOpacityFactorTransition?: Transition;
   /**
    * Defines a coefficient for a time period at which particles will restart at a random position, to avoid degeneration (empty areas without particles).
-   *
-   * @experimental
    */
-  rasterParticleResetRateFactor?: Value<number, ['zoom']>;
+  rasterParticleResetRateFactor?: number;
   /**
    * Specifies an uniform elevation from the ground, in meters.
-   *
-   * @experimental
    */
   rasterParticleElevation?: Value<number, ['zoom']>;
 
   /**
-   * The transition affecting any changes to this layer's rasterParticleElevation property.
+   * The transition affecting any changes to this layer’s rasterParticleElevation property.
    */
   rasterParticleElevationTransition?: Transition;
 }
@@ -2261,6 +2252,17 @@ export interface SkyLayerStyleProps {
    */
   skyOpacityTransition?: Transition;
 }
+export interface SlotLayerStyleProps {}
+export interface ClipLayerStyleProps {
+  /**
+   * Layer types that will also be removed if fallen below this clip layer.
+   */
+  clipLayerTypes?: Value<Enum<ClipLayerTypesEnum, ClipLayerTypesEnumValues>[]>;
+  /**
+   * Removes content from layers with the specified scope. By default all layers are affected. For example specifying `basemap` will only remove content from the Mapbox Standard style layers which have the same scope
+   */
+  clipLayerScope?: Value<string[]>;
+}
 export interface LightLayerStyleProps {
   /**
    * Whether extruded geometries are lit relative to the map or viewport.
@@ -2376,10 +2378,13 @@ export type AllLayerStyleProps =
   | HeatmapLayerStyleProps
   | FillExtrusionLayerStyleProps
   | RasterLayerStyleProps
+  | RasterParticleLayerStyleProps
   | HillshadeLayerStyleProps
   | ModelLayerStyleProps
   | BackgroundLayerStyleProps
   | SkyLayerStyleProps
+  | SlotLayerStyleProps
+  | ClipLayerStyleProps
   | LightLayerStyleProps
   | AtmosphereLayerStyleProps
   | TerrainLayerStyleProps;

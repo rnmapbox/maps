@@ -699,6 +699,51 @@ func rasterLayer(layer: inout RasterLayer, reactStyle:Dictionary<String, Any>, o
   }
 }
 
+func rasterParticleLayer(layer: inout RasterParticleLayer, reactStyle:Dictionary<String, Any>, oldReactStyle:Dictionary<String, Any>?, applyUpdater: @escaping  ((inout RasterParticleLayer)->Void)->Void, isValid: @escaping () -> Bool)
+{
+  guard self._hasReactStyle(reactStyle) else {
+    Logger.log(level:.error, message: "Invalid style: \(reactStyle)")
+    return
+  }
+
+  let styleProps = reactStyle.keys
+  for prop in styleProps {
+    if (prop == "__MAPBOX_STYLESHEET__") {
+      continue;
+    }
+
+    let styleValue = RNMBXStyleValue.make(reactStyle[prop])
+
+    if (prop == "visibility") {
+      self.setRasterParticleStyleLayerVisibility(&layer, styleValue:styleValue);
+    } else if (prop == "rasterParticleArrayBand") {
+      self.setRasterParticleArrayBand(&layer, styleValue:styleValue);
+    } else if (prop == "rasterParticleCount") {
+      self.setRasterParticleCount(&layer, styleValue:styleValue);
+    } else if (prop == "rasterParticleColor") {
+      self.setRasterParticleColor(&layer, styleValue:styleValue);
+    } else if (prop == "rasterParticleMaxSpeed") {
+      self.setRasterParticleMaxSpeed(&layer, styleValue:styleValue);
+    } else if (prop == "rasterParticleSpeedFactor") {
+      self.setRasterParticleSpeedFactor(&layer, styleValue:styleValue);
+    } else if (prop == "rasterParticleSpeedFactorTransition") {
+      self.setRasterParticleSpeedFactorTransition(&layer, styleValue:styleValue);
+    } else if (prop == "rasterParticleFadeOpacityFactor") {
+      self.setRasterParticleFadeOpacityFactor(&layer, styleValue:styleValue);
+    } else if (prop == "rasterParticleFadeOpacityFactorTransition") {
+      self.setRasterParticleFadeOpacityFactorTransition(&layer, styleValue:styleValue);
+    } else if (prop == "rasterParticleResetRateFactor") {
+      self.setRasterParticleResetRateFactor(&layer, styleValue:styleValue);
+    } else if (prop == "rasterParticleElevation") {
+      self.setRasterParticleElevation(&layer, styleValue:styleValue);
+    } else if (prop == "rasterParticleElevationTransition") {
+      self.setRasterParticleElevationTransition(&layer, styleValue:styleValue);
+    } else {
+      Logger.log(level:.error, message: "Unexpected property \(prop) for layer: raster-particle")
+    }
+  }
+}
+
 func hillshadeLayer(layer: inout HillshadeLayer, reactStyle:Dictionary<String, Any>, oldReactStyle:Dictionary<String, Any>?, applyUpdater: @escaping  ((inout HillshadeLayer)->Void)->Void, isValid: @escaping () -> Bool)
 {
   guard self._hasReactStyle(reactStyle) else {
@@ -901,6 +946,52 @@ func skyLayer(layer: inout SkyLayer, reactStyle:Dictionary<String, Any>, oldReac
       self.setSkyOpacityTransition(&layer, styleValue:styleValue);
     } else {
       Logger.log(level:.error, message: "Unexpected property \(prop) for layer: sky")
+    }
+  }
+}
+
+func slotLayer(layer: inout Slot, reactStyle:Dictionary<String, Any>, oldReactStyle:Dictionary<String, Any>?, applyUpdater: @escaping  ((inout Slot)->Void)->Void, isValid: @escaping () -> Bool)
+{
+  guard self._hasReactStyle(reactStyle) else {
+    Logger.log(level:.error, message: "Invalid style: \(reactStyle)")
+    return
+  }
+
+  let styleProps = reactStyle.keys
+  for prop in styleProps {
+    if (prop == "__MAPBOX_STYLESHEET__") {
+      continue;
+    }
+
+    let styleValue = RNMBXStyleValue.make(reactStyle[prop])
+
+    } else {
+      Logger.log(level:.error, message: "Unexpected property \(prop) for layer: slot")
+    }
+  }
+}
+
+func clipLayer(layer: inout ClipLayer, reactStyle:Dictionary<String, Any>, oldReactStyle:Dictionary<String, Any>?, applyUpdater: @escaping  ((inout ClipLayer)->Void)->Void, isValid: @escaping () -> Bool)
+{
+  guard self._hasReactStyle(reactStyle) else {
+    Logger.log(level:.error, message: "Invalid style: \(reactStyle)")
+    return
+  }
+
+  let styleProps = reactStyle.keys
+  for prop in styleProps {
+    if (prop == "__MAPBOX_STYLESHEET__") {
+      continue;
+    }
+
+    let styleValue = RNMBXStyleValue.make(reactStyle[prop])
+
+    if (prop == "clipLayerTypes") {
+      self.setClipLayerTypes(&layer, styleValue:styleValue);
+    } else if (prop == "clipLayerScope") {
+      self.setClipLayerScope(&layer, styleValue:styleValue);
+    } else {
+      Logger.log(level:.error, message: "Unexpected property \(prop) for layer: clip")
     }
   }
 }
@@ -2993,6 +3084,124 @@ func setRasterElevationTransition(_ layer: inout RasterLayer, styleValue: RNMBXS
 
 
 
+func setRasterParticleStyleLayerVisibility(_ layer: inout RasterParticleLayer, styleValue: RNMBXStyleValue)
+{
+      #if RNMBX_11
+    layer.visibility = styleValue.isVisible();
+      #endif
+}
+
+func setRasterParticleArrayBand(_ layer: inout RasterParticleLayer, styleValue: RNMBXStyleValue)
+{
+      #if RNMBX_11
+      
+        
+          layer.rasterParticleArrayBand = styleValue.mglStyleValueString();
+        
+      
+      #endif
+}
+
+func setRasterParticleCount(_ layer: inout RasterParticleLayer, styleValue: RNMBXStyleValue)
+{
+      #if RNMBX_11
+      
+        
+          layer.rasterParticleCount = styleValue.mglStyleValueNumber();
+        
+      
+      #endif
+}
+
+func setRasterParticleColor(_ layer: inout RasterParticleLayer, styleValue: RNMBXStyleValue)
+{
+      #if RNMBX_11
+      
+        
+          layer.rasterParticleColor = styleValue.mglStyleValueColor();
+        
+      
+      #endif
+}
+
+func setRasterParticleMaxSpeed(_ layer: inout RasterParticleLayer, styleValue: RNMBXStyleValue)
+{
+      #if RNMBX_11
+      
+        
+          layer.rasterParticleMaxSpeed = styleValue.mglStyleValueNumber();
+        
+      
+      #endif
+}
+
+func setRasterParticleSpeedFactor(_ layer: inout RasterParticleLayer, styleValue: RNMBXStyleValue)
+{
+      #if RNMBX_11
+      
+        
+          layer.rasterParticleSpeedFactor = styleValue.mglStyleValueNumber();
+        
+      
+      #endif
+}
+
+func setRasterParticleSpeedFactorTransition(_ layer: inout RasterParticleLayer, styleValue: RNMBXStyleValue)
+{
+      #if RNMBX_11
+    layer.rasterParticleSpeedFactorTransition = styleValue.getTransition();
+      #endif
+}
+
+func setRasterParticleFadeOpacityFactor(_ layer: inout RasterParticleLayer, styleValue: RNMBXStyleValue)
+{
+      #if RNMBX_11
+      
+        
+          layer.rasterParticleFadeOpacityFactor = styleValue.mglStyleValueNumber();
+        
+      
+      #endif
+}
+
+func setRasterParticleFadeOpacityFactorTransition(_ layer: inout RasterParticleLayer, styleValue: RNMBXStyleValue)
+{
+      #if RNMBX_11
+    layer.rasterParticleFadeOpacityFactorTransition = styleValue.getTransition();
+      #endif
+}
+
+func setRasterParticleResetRateFactor(_ layer: inout RasterParticleLayer, styleValue: RNMBXStyleValue)
+{
+      #if RNMBX_11
+      
+        
+          layer.rasterParticleResetRateFactor = styleValue.mglStyleValueNumber();
+        
+      
+      #endif
+}
+
+func setRasterParticleElevation(_ layer: inout RasterParticleLayer, styleValue: RNMBXStyleValue)
+{
+      #if RNMBX_11
+      
+        
+          layer.rasterParticleElevation = styleValue.mglStyleValueNumber();
+        
+      
+      #endif
+}
+
+func setRasterParticleElevationTransition(_ layer: inout RasterParticleLayer, styleValue: RNMBXStyleValue)
+{
+      #if RNMBX_11
+    layer.rasterParticleElevationTransition = styleValue.getTransition();
+      #endif
+}
+
+
+
 func setHillshadeStyleLayerVisibility(_ layer: inout HillshadeLayer, styleValue: RNMBXStyleValue)
 {
     layer.visibility = styleValue.isVisible();
@@ -3470,6 +3679,32 @@ func setSkyOpacity(_ layer: inout SkyLayer, styleValue: RNMBXStyleValue)
 func setSkyOpacityTransition(_ layer: inout SkyLayer, styleValue: RNMBXStyleValue)
 {
     layer.skyOpacityTransition = styleValue.getTransition();
+}
+
+
+
+
+
+func setClipLayerTypes(_ layer: inout ClipLayer, styleValue: RNMBXStyleValue)
+{
+      #if RNMBX_11
+      
+        
+          layer.clipLayerTypes = styleValue.mglStyleValueArrayClipLayerTypes();
+         
+      
+      #endif
+}
+
+func setClipLayerScope(_ layer: inout ClipLayer, styleValue: RNMBXStyleValue)
+{
+      #if RNMBX_11
+      
+        
+          layer.clipLayerScope = styleValue.mglStyleValueArrayString();
+         
+      
+      #endif
 }
 
 
