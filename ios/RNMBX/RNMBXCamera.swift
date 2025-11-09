@@ -53,7 +53,6 @@ extension RNMBXMapAndMapViewComponent {
 
   public func removeFromMap(_ map: RNMBXMapView, reason: RemovalReason) -> Bool {
     Logger.error("CRITICAL: removeFromMap(_:reason:) called on RNMBXMapAndMapViewComponent. Use removeFromMap(_:mapView:reason:) instead. Component: \(type(of: self))")
-    assertionFailure("RNMBXMapAndMapViewComponent must use removeFromMap(_:mapView:reason:) instead")
     return false
   }
 }
