@@ -208,9 +208,12 @@ public class RNMBXNativeUserLocation: UIView, RNMBXMapAndMapViewComponent {
   }
 
   public func removeFromMap(_ map: RNMBXMapView, mapView: MapView, reason: RemovalReason) -> Bool {
-    let location = mapView.location
-    location.options.puckType = nil
-    location.options.puckType = .none
+    if  let location = mapView.location {
+      location.options.puckType = nil
+      location.options.puckType = .none
+    } else {
+      Logger.error("[RNMBXNativeUserLocation] removeFromMap, location is null")
+    }
     removeSubscriptions()
     self.map = nil
 
