@@ -3666,7 +3666,7 @@ func setClipLayerTypes(_ layer: inout ClipLayer, styleValue: RNMBXStyleValue)
       #if RNMBX_11
       
         
-          layer.clipLayerTypes = styleValue.mglStyleValueArrayString();
+          layer.clipLayerTypes = styleValue.mglStyleValueArrayClipLayerTypes();
          
       
       #endif

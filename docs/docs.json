@@ -6089,7 +6089,7 @@
         "required": false,
         "type": "number",
         "default": "none",
-        "description": "Size of the map tiles.\nDefaults to 512."
+        "description": "Size of the map tiles.\nDefaults to 512.\n\n@platform android\nNote: This property is not supported on iOS due to SDK limitations.\nOn iOS, tileSize will be derived from the TileJSON when using url, or use the default value.\nIf you need custom tile size on iOS, include it in your TileJSON response."
       },
       {
         "name": "children",
@@ -6103,7 +6103,7 @@
         "required": false,
         "type": "Array",
         "default": "none",
-        "description": "An array containing the longitude and latitude of the southwest and northeast corners of\nthe source's bounding box in the following order: `[sw.lng, sw.lat, ne.lng, ne.lat]`.\nWhen this property is included in a source, no tiles outside of the given bounds are requested by Mapbox GL."
+        "description": "An array containing the longitude and latitude of the southwest and northeast corners of\nthe source's bounding box in the following order: `[sw.lng, sw.lat, ne.lng, ne.lat]`.\nWhen this property is included in a source, no tiles outside of the given bounds are requested by Mapbox GL.\n\n@platform android\nNote: This property is not supported on iOS due to SDK limitations.\nOn iOS, bounds will be derived from the TileJSON when using url.\nIf you need custom bounds on iOS, include them in your TileJSON response."
       }
     ],
     "fileNameWithExt": "RasterArraySource.tsx",
