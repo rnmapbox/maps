@@ -139,8 +139,6 @@ open class RNMBXMapComponentBase : UIView, RNMBXMapComponent {
     }
   }
 
-  // Uses default implementation from RNMBXMapComponentProtocol extension
-
   public func addToMap(_ map: RNMBXMapView, style: Style) {
     _mapCallbacks.forEach { callback in
         callback(map)
