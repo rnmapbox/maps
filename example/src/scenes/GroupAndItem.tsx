@@ -290,7 +290,10 @@ const Examples = new ExampleGroup('React Native Mapbox', [
   new ExampleItem('Bug Report Template TS', BugReportPage(BugReportExampleTS)),
   new ExampleItem('React Compiler Test', BugReportPage(CompilerTestExample)),
   exampleGroup(V10),
-  new ExampleGroup('V11', [example(StyleImportConfig), example(RasterParticle)]),
+  new ExampleGroup('V11', [
+    example(StyleImportConfig),
+    example(RasterParticle),
+  ]),
   exampleGroup(Map),
   exampleGroup(Camera),
   exampleGroup(UserLocation),

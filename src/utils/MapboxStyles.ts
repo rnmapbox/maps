@@ -125,7 +125,8 @@ type ExpressionParameters =
   | 'line-progress'
   | 'heatmap-density'
   | 'measure-light'
-  | 'raster-value';
+  | 'raster-value'
+  | 'raster-particle-speed';
 
 type ResolvedImageType = ImageSourcePropType | string;
 

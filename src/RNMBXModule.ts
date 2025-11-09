@@ -27,10 +27,7 @@ interface RNMBXModule {
     Mapbox: string;
   };
   removeCustomHeader(headerName: string): void;
-  addCustomHeader(
-    headerName: string,
-    headerValue: string
-  ): void;
+  addCustomHeader(headerName: string, headerValue: string): void;
   addCustomHeaderWithOptions(
     headerName: string,
     headerValue: string,
