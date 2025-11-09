@@ -17,6 +17,8 @@ public class RNMBXRasterArraySource : RNMBXSource {
   override func makeSource() -> Source
   {
     #if RNMBX_11
+    // Note: tileSize and bounds are read-only after initialization in RasterArraySource
+    // They can only be set via the constructor or are derived from the source
     var result = RasterArraySource(id: self.id)
     #else
     var result = RasterArraySource()
@@ -27,10 +29,6 @@ public class RNMBXRasterArraySource : RNMBXSource {
       result.tiles = tileUrlTemplates
     }
 
-    if let tileSize = tileSize {
-      result.tileSize = tileSize.doubleValue
-    }
-
     if let minZoomLevel = minZoomLevel {
       result.minzoom = minZoomLevel.doubleValue
     }
@@ -39,9 +37,11 @@ public class RNMBXRasterArraySource : RNMBXSource {
       result.maxzoom = maxZoomLevel.doubleValue
     }
 
-    if let bounds = sourceBounds {
-      result.bounds = bounds.map { $0.doubleValue }
-    }
+    // Note: tileSize and bounds are read-only properties in RasterArraySource
+    // and cannot be set directly. They are either:
+    // - Derived from the TileJSON when using url
+    // - Use default values when using tiles
+    // If custom values are needed, they should be included in the TileJSON response
 
     return result
   }

@@ -52,6 +52,11 @@ type Props = BaseProps & {
   /**
    * Size of the map tiles.
    * Defaults to 512.
+   *
+   * @platform android
+   * Note: This property is not supported on iOS due to SDK limitations.
+   * On iOS, tileSize will be derived from the TileJSON when using url, or use the default value.
+   * If you need custom tile size on iOS, include it in your TileJSON response.
    */
   tileSize?: number;
 
@@ -61,6 +66,11 @@ type Props = BaseProps & {
    * An array containing the longitude and latitude of the southwest and northeast corners of
    * the source's bounding box in the following order: `[sw.lng, sw.lat, ne.lng, ne.lat]`.
    * When this property is included in a source, no tiles outside of the given bounds are requested by Mapbox GL.
+   *
+   * @platform android
+   * Note: This property is not supported on iOS due to SDK limitations.
+   * On iOS, bounds will be derived from the TileJSON when using url.
+   * If you need custom bounds on iOS, include them in your TileJSON response.
    */
   sourceBounds?: number[];
 };
