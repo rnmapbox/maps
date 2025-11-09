@@ -72,6 +72,10 @@
     "url": "https://github.com/rnmapbox/maps/issues"
   },
   "homepage": "https://github.com/rnmapbox/maps#readme",
+  "mapbox": {
+    "ios": "~> 11.15.2",
+    "android": "11.15.2"
+  },
   "publishConfig": {
     "registry": "https://registry.npmjs.org/",
     "access": "public"
