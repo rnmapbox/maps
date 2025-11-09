@@ -274,8 +274,6 @@ const styleMap = {
   rasterParticleFadeOpacityFactor: StyleTypes.Constant,
   rasterParticleFadeOpacityFactorTransition: StyleTypes.Transition,
   rasterParticleResetRateFactor: StyleTypes.Constant,
-  rasterParticleElevation: StyleTypes.Constant,
-  rasterParticleElevationTransition: StyleTypes.Transition,
 
   hillshadeIlluminationDirection: StyleTypes.Constant,
   hillshadeIlluminationAnchor: StyleTypes.Enum,

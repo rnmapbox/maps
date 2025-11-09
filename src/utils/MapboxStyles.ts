@@ -1964,15 +1964,6 @@ export interface RasterParticleLayerStyleProps {
    * Defines a coefficient for a time period at which particles will restart at a random position, to avoid degeneration (empty areas without particles).
    */
   rasterParticleResetRateFactor?: number;
-  /**
-   * Specifies an uniform elevation from the ground, in meters.
-   */
-  rasterParticleElevation?: Value<number, ['zoom']>;
-
-  /**
-   * The transition affecting any changes to this layer’s rasterParticleElevation property.
-   */
-  rasterParticleElevationTransition?: Transition;
 }
 export interface HillshadeLayerStyleProps {
   /**

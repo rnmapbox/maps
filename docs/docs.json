@@ -6896,29 +6896,6 @@
           "name": "raster-particle-reset-rate-factor",
           "namespace": "paint"
         }
-      },
-      {
-        "name": "rasterParticleElevation",
-        "type": "number",
-        "values": [],
-        "minimum": 0,
-        "default": 0,
-        "description": "Specifies an uniform elevation from the ground, in meters.",
-        "requires": [],
-        "disabledBy": [],
-        "allowedFunctionTypes": [],
-        "expression": {
-          "interpolated": true,
-          "parameters": [
-            "zoom"
-          ]
-        },
-        "transition": true,
-        "mbx": {
-          "fullName": "paint-raster-particle-raster-particle-elevation",
-          "name": "raster-particle-elevation",
-          "namespace": "paint"
-        }
       }
     ]
   },

@@ -327,6 +327,8 @@ const UnsupportedProperties = [
   'icon-color-brightness-max', // should be supported in v11 11.15.0 but it's not on android
 
   'fill-extrusion-cast-shadows', // should be supported in v11 11.8.0 but it's not on android
+
+  'raster-particle-elevation', // should be supported in v11 11.7.0 but it's not yet implemented in SDK
 ];
 
 /**

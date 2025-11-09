@@ -736,10 +736,6 @@ object RNMBXStyleFactory {
                 setRasterParticleFadeOpacityFactorTransition(layer, styleValue)
               "rasterParticleResetRateFactor" ->
                 setRasterParticleResetRateFactor(layer, styleValue)
-              "rasterParticleElevation" ->
-                setRasterParticleElevation(layer, styleValue)
-                "rasterParticleElevationTransition" ->
-                setRasterParticleElevationTransition(layer, styleValue)
           }
         } catch (e: MapboxStyleException) {
           Logger.e(LOG_TAG, "Failed to update: $styleKey ${e.message}")
@@ -4579,32 +4575,6 @@ object RNMBXStyleFactory {
           } else {
             Logger.e("RNMBXRasterParticle", "value for rasterParticleResetRateFactor is null")
           }
-      }
-    }
-
-    fun setRasterParticleElevation(layer: RasterParticleLayer, styleValue: RNMBXStyleValue ) {
-      if (styleValue.isExpression()) {
-        val expression = styleValue.getExpression()
-        if (expression != null) {
-          layer.rasterParticleElevation(expression)
-        } else {
-          Logger.e("RNMBXRasterParticle", "Expression for rasterParticleElevation is null")
-        }
-      } else {
-          val value = styleValue.getDouble(VALUE_KEY)
-          if (value != null) {
-            layer.rasterParticleElevation(value)
-          } else {
-            Logger.e("RNMBXRasterParticle", "value for rasterParticleElevation is null")
-          }
-      }
-    }
-
-
-    fun setRasterParticleElevationTransition(layer: RasterParticleLayer, styleValue: RNMBXStyleValue) {
-      val transition = styleValue.transition
-      if (transition != null) {
-        layer.rasterParticleElevationTransition(transition);
       }
     }
 

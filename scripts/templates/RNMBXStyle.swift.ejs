@@ -81,7 +81,11 @@ func set<%- iosPropMethodName(layer, pascelCase(prop.name)) -%>(_ layer: inout <
         <% } %>
       <% } else if (prop.type === 'array') { %>
         <% if (prop.value === 'enum') { %>
+          <%_ if (['textWritingMode', 'textVariableAnchor'].includes(prop.name)) { _%>
           layer.<%- iosV10PropName(prop.name) -%> = styleValue.mglStyleValueArray<%- pascelCase(prop.name) %>();
+          <%_ } else { _%>
+          layer.<%- iosV10PropName(prop.name) -%> = styleValue.mglStyleValueArrayString();
+          <%_ } _%>
         <% } else { %>
           layer.<%- iosV10PropName(prop.name) -%> = styleValue.mglStyleValueArray<%- pascelCase(prop.value) %>();
         <% } %> 

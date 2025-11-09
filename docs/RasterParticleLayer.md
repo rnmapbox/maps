@@ -148,7 +148,6 @@ Customizable style attributes
 * <a href="#rasterparticlespeedfactor">rasterParticleSpeedFactor</a><br/>
 * <a href="#rasterparticlefadeopacityfactor">rasterParticleFadeOpacityFactor</a><br/>
 * <a href="#rasterparticleresetratefactor">rasterParticleResetRateFactor</a><br/>
-* <a href="#rasterparticleelevation">rasterParticleElevation</a><br/>
 
 ___
 
@@ -358,47 +357,5 @@ Defines a coefficient for a time period at which particles will restart at a ran
 
 #### Maximum
 `1`
-
-
-___
-
-### rasterParticleElevation
-Name: `rasterParticleElevation`
-
-Mapbox spec: [raster-particle-elevation](https://docs.mapbox.com/style-spec/reference/layers/#paint-raster-particle-raster-particle-elevation)
-
-#### Description
-Specifies an uniform elevation from the ground, in meters.
-
-#### Type
-`number`
-#### Default Value
-`0`
-
-#### Minimum
-`0`
-
-
-#### Expression
-
-Parameters: `zoom`
-___
-
-### rasterParticleElevationTransition
-Name: `rasterParticleElevationTransition`
-
-#### Description
-
-The transition affecting any changes to this layer’s rasterParticleElevation property.
-
-#### Type
-
-`{ duration, delay }`
-
-#### Units
-`milliseconds`
-
-#### Default Value
-`{duration: 300, delay: 0}`
 
 
