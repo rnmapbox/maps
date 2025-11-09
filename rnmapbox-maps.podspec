@@ -20,7 +20,7 @@ require 'json'
 package = JSON.parse(File.read(File.join(__dir__, 'package.json')))
 
 ## Warning: these lines are scanned by autogenerate.js
-rnMapboxMapsDefaultMapboxVersion = '~> 11.15.2'
+rnMapboxMapsDefaultMapboxVersion = package['mapbox']['ios']
 
 rnMapboxMapsDefaultImpl = 'mapbox'
 

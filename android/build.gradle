@@ -1,5 +1,13 @@
 def defaultMapboxMapsImpl = "mapbox"
-def defaultMapboxMapsVersion = "11.15.2"
+
+def getDefaultMapboxMapsVersion() {
+    def packageJson = new groovy.json.JsonSlurper().parseText(
+        new File(projectDir.getPath(), "../package.json").text
+    )
+    return packageJson.mapbox.android
+}
+
+def defaultMapboxMapsVersion = getDefaultMapboxMapsVersion()
 
 def safeExtGet(prop, fallback) {
     rootProject.ext.has(prop) ? rootProject.ext.get(prop) : fallback

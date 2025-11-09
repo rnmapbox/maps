@@ -2,6 +2,7 @@ import ejs from 'ejs';
 import path from 'path';
 import fs from 'fs';
 import styleSpecJSON from '../../style-spec/v8.json' with { type: 'json' };
+import packageJSON from '../../package.json' with { type: 'json' };
 import * as url from 'url';
 
 import prettier from 'prettier';
@@ -12,33 +13,25 @@ const __dirname = url.fileURLToPath(new URL('.', import.meta.url));
 import { camelCase } from './globals.mjs';
 
 function readIosVersion() {
-  const podspecPath = path.join(__dirname, '..', '..', 'rnmapbox-maps.podspec');
-  const lines = fs.readFileSync(podspecPath, 'utf8').split('\n');
-  const mapboxLineRegex =
-    /^\s*rnMapboxMapsDefaultMapboxVersion\s*=\s*'~>\s+(\d+\.\d+)(\.\d+)?'$/;
-  const mapboxLine = lines.filter((i) => mapboxLineRegex.exec(i))[0];
+  const iosVersion = packageJSON.mapbox.ios;
+  // Extract version number from format like "~> 11.15.2"
+  const versionMatch = iosVersion.match(/(\d+\.\d+)(\.\d+)?/);
+  if (!versionMatch) {
+    throw new Error(`Invalid iOS version format in package.json: ${iosVersion}`);
+  }
 
   return {
     v10: '10.19.0',
-    v11: `${mapboxLineRegex.exec(mapboxLine)[1]}.0`,
+    v11: `${versionMatch[1]}.0`,
   };
 }
 
 function readAndroidVersion() {
-  const buildGradlePath = path.join(
-    __dirname,
-    '..',
-    '..',
-    'android',
-    'build.gradle',
-  );
-  const lines = fs.readFileSync(buildGradlePath, 'utf8').split('\n');
-  const mapboxV10LineRegex =
-    /^\s*def\s+defaultMapboxMapsVersion\s+=\s+"(\d+\.\d+\.\d+)"$/;
-  const mapboxV10Line = lines.filter((i) => mapboxV10LineRegex.exec(i))[0];
+  const androidVersion = packageJSON.mapbox.android;
+
   return {
     v10: '10.19.0',
-    v11: mapboxV10LineRegex.exec(mapboxV10Line)[1],
+    v11: androidVersion,
   };
 }
 
