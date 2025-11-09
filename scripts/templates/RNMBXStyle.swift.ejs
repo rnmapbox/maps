@@ -30,6 +30,7 @@ func <%- setLayerMethodName(layer, 'ios') -%>(layer: inout <%- getLayerType(laye
 
     let styleValue = RNMBXStyleValue.make(reactStyle[prop])
 
+  <% if (layer.properties.length > 0) { -%>
   <% for (let i = 0; i < layer.properties.length; i++) { -%>
   <%- ifOrElseIf(i) -%> (prop == "<%= layer.properties[i].name %>") {
   <%_ if (layer.properties[i].image) { _%>
@@ -53,6 +54,9 @@ func <%- setLayerMethodName(layer, 'ios') -%>(layer: inout <%- getLayerType(laye
   } else {
       Logger.log(level:.error, message: "Unexpected property \(prop) for layer: <%- layer.name -%>")
     }
+  <% } else { -%>
+    Logger.log(level:.error, message: "Unexpected property \(prop) for layer: <%- layer.name -%>")
+  <% } -%>
   }
 }
 <% } %>
