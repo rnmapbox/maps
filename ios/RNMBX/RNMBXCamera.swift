@@ -49,7 +49,6 @@ public protocol RNMBXMapAndMapViewComponent: RNMBXMapComponent {
 extension RNMBXMapAndMapViewComponent {
   public func addToMap(_ map: RNMBXMapView, style: Style) {
     Logger.error("CRITICAL: addToMap(_:style:) called on RNMBXMapAndMapViewComponent. Use addToMap(_:mapView:style:) instead. Component: \(type(of: self))")
-    assertionFailure("RNMBXMapAndMapViewComponent must use addToMap(_:mapView:style:) instead")
   }
 
   public func removeFromMap(_ map: RNMBXMapView, reason: RemovalReason) -> Bool {
