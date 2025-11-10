@@ -81,6 +81,7 @@ case $RNMapboxMapsImpl
 when 'mapbox'
   rnMapboxMapsTargetsToChangeToDynamic = ['MapboxMobileEvents', 'Turf', 'MapboxMaps', 'MapboxCoreMaps', 'MapboxCommon']
   $MapboxImplVersion = $RNMapboxMapsVersion || rnMapboxMapsDefaultMapboxVersion
+  puts "rnmapbox-maps: Using Mapbox iOS SDK #{$MapboxImplVersion}"
 when 'mapbox-gl'
   abort 'Errors: mapbox-gl in @rnmapbox/maps is removed. See https://github.com/rnmapbox/maps/wiki/Deprecated-RNMapboxImpl-Maplibre#ios'
 when 'maplibre'

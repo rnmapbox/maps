@@ -302,7 +302,8 @@ dependencies {
         if (safeExtGet("RNMapboxMapsImpl", defaultMapboxMapsImpl) == "mapbox") {
             def targetSdk = safeExtGet("targetSdkVersion", 28)
             def mapboxVersion = safeExtGet("RNMapboxMapsVersion", defaultMapboxMapsVersion)
-            
+            logger.info("@rnmapbox/maps: Using Mapbox Android SDK ${mapboxVersion}")
+
             // Use NDK27 variant for Android 15+ (API 35+) to support 16KB page size
             // Required by Google Play for apps targeting Android 15+ by November 1, 2025
             // See: https://github.com/rnmapbox/maps/issues/3896
