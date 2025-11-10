@@ -480,13 +480,6 @@ enum SkyTypeEnum {
   Atmosphere = 'atmosphere',
 }
 type SkyTypeEnumValues = 'gradient' | 'atmosphere';
-enum ClipLayerTypesEnum {
-  /** If present the clip layer would remove all 3d model layers below it. Currently only instanced models (e.g. trees) are removed. */
-  Model = 'model',
-  /** If present the clip layer would remove all symbol layers below it. */
-  Symbol = 'symbol',
-}
-type ClipLayerTypesEnumValues = 'model' | 'symbol';
 enum AnchorEnum {
   /** The position of the light source is aligned to the rotation of the map. */
   Map = 'map',
@@ -2244,17 +2237,6 @@ export interface SkyLayerStyleProps {
    */
   skyOpacityTransition?: Transition;
 }
-export interface SlotLayerStyleProps {}
-export interface ClipLayerStyleProps {
-  /**
-   * Layer types that will also be removed if fallen below this clip layer.
-   */
-  clipLayerTypes?: Value<Enum<ClipLayerTypesEnum, ClipLayerTypesEnumValues>[]>;
-  /**
-   * Removes content from layers with the specified scope. By default all layers are affected. For example specifying `basemap` will only remove content from the Mapbox Standard style layers which have the same scope
-   */
-  clipLayerScope?: Value<string[]>;
-}
 export interface LightLayerStyleProps {
   /**
    * Whether extruded geometries are lit relative to the map or viewport.
@@ -2375,8 +2357,6 @@ export type AllLayerStyleProps =
   | ModelLayerStyleProps
   | BackgroundLayerStyleProps
   | SkyLayerStyleProps
-  | SlotLayerStyleProps
-  | ClipLayerStyleProps
   | LightLayerStyleProps
   | AtmosphereLayerStyleProps
   | TerrainLayerStyleProps;

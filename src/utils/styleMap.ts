@@ -332,9 +332,6 @@ const styleMap = {
   skyOpacity: StyleTypes.Constant,
   skyOpacityTransition: StyleTypes.Transition,
 
-  clipLayerTypes: StyleTypes.Constant,
-  clipLayerScope: StyleTypes.Constant,
-
   anchor: StyleTypes.Enum,
   position: StyleTypes.Constant,
   positionTransition: StyleTypes.Transition,

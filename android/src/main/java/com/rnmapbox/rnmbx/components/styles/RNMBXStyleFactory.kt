@@ -13,6 +13,7 @@ import com.mapbox.maps.extension.style.layers.generated.SkyLayer
 // import com.mapbox.maps.extension.style.layers.generated.PropertyFactory
 // import com.mapbox.maps.extension.style.layers.generated.PropertyValue
 import com.mapbox.maps.extension.style.layers.generated.RasterLayer
+import com.mapbox.maps.extension.style.layers.generated.RasterParticleLayer
 import com.mapbox.maps.extension.style.layers.generated.SymbolLayer
 import com.mapbox.maps.extension.style.layers.generated.HeatmapLayer
 import com.mapbox.maps.extension.style.layers.generated.HillshadeLayer
@@ -930,46 +931,6 @@ object RNMBXStyleFactory {
                 setSkyOpacity(layer, styleValue)
                 "skyOpacityTransition" ->
                 setSkyOpacityTransition(layer, styleValue)
-          }
-        } catch (e: MapboxStyleException) {
-          Logger.e(LOG_TAG, "Failed to update: $styleKey ${e.message}")
-        }
-      }
-    }
-    fun setSlotLayerStyle(layer: Slot, style: RNMBXStyle ) {
-      val styleKeys = style.allStyleKeys
-
-      if (styleKeys.isEmpty()) {
-        return
-      }
-
-      for (styleKey in styleKeys) {
-        try {
-          val styleValue = style.getStyleValueForKey(styleKey)
-
-          when (styleKey) {
-          }
-        } catch (e: MapboxStyleException) {
-          Logger.e(LOG_TAG, "Failed to update: $styleKey ${e.message}")
-        }
-      }
-    }
-    fun setClipLayerStyle(layer: ClipLayer, style: RNMBXStyle ) {
-      val styleKeys = style.allStyleKeys
-
-      if (styleKeys.isEmpty()) {
-        return
-      }
-
-      for (styleKey in styleKeys) {
-        try {
-          val styleValue = style.getStyleValueForKey(styleKey)
-
-          when (styleKey) {
-              "clipLayerTypes" ->
-                setClipLayerTypes(layer, styleValue)
-              "clipLayerScope" ->
-                setClipLayerScope(layer, styleValue)
           }
         } catch (e: MapboxStyleException) {
           Logger.e(LOG_TAG, "Failed to update: $styleKey ${e.message}")
@@ -4463,7 +4424,7 @@ object RNMBXStyleFactory {
           Logger.e("RNMBXRasterParticle", "Expression for rasterParticleCount is null")
         }
       } else {
-          val value = styleValue.getDouble(VALUE_KEY)
+          val value = styleValue.getLong(VALUE_KEY)
           if (value != null) {
             layer.rasterParticleCount(value)
           } else {
@@ -4481,12 +4442,7 @@ object RNMBXStyleFactory {
           Logger.e("RNMBXRasterParticle", "Expression for rasterParticleColor is null")
         }
       } else {
-          val value = styleValue.getInt(VALUE_KEY)
-          if (value != null) {
-            layer.rasterParticleColor(value)
-          } else {
-            Logger.e("RNMBXRasterParticle", "value for rasterParticleColor is null")
-          }
+          layer.rasterParticleColor(styleValue.getIntExpression(VALUE_KEY))
       }
     }
 
@@ -5349,42 +5305,6 @@ object RNMBXStyleFactory {
       val transition = styleValue.transition
       if (transition != null) {
         layer.skyOpacityTransition(transition);
-      }
-    }
-
-    fun setClipLayerTypes(layer: ClipLayer, styleValue: RNMBXStyleValue ) {
-      if (styleValue.isExpression()) {
-        val expression = styleValue.getExpression()
-        if (expression != null) {
-          layer.clipLayerTypes(expression)
-        } else {
-          Logger.e("RNMBXClip", "Expression for clipLayerTypes is null")
-        }
-      } else {
-          val value = styleValue.getStringArray(VALUE_KEY)
-          if (value != null) {
-            layer.clipLayerTypes(value)
-          } else {
-            Logger.e("RNMBXClip", "value for clipLayerTypes is null")
-          }
-      }
-    }
-
-    fun setClipLayerScope(layer: ClipLayer, styleValue: RNMBXStyleValue ) {
-      if (styleValue.isExpression()) {
-        val expression = styleValue.getExpression()
-        if (expression != null) {
-          layer.clipLayerScope(expression)
-        } else {
-          Logger.e("RNMBXClip", "Expression for clipLayerScope is null")
-        }
-      } else {
-          val value = styleValue.getStringArray(VALUE_KEY)
-          if (value != null) {
-            layer.clipLayerScope(value)
-          } else {
-            Logger.e("RNMBXClip", "value for clipLayerScope is null")
-          }
       }
     }
 

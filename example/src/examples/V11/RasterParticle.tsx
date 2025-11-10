@@ -26,8 +26,8 @@ export default function RasterParticleExample() {
         }}
       />
 
-      <RasterArraySource
-        id="wind-source"
+      {true && <RasterArraySource
+        id="wind-mrt-source"
         url="mapbox://mapbox.gfs-winds"
         tileSize={512}
       >
@@ -59,7 +59,7 @@ export default function RasterParticleExample() {
             ],
           }}
         />
-      </RasterArraySource>
+      </RasterArraySource>}
     </MapView>
   );
 }

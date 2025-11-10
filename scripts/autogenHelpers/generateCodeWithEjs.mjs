@@ -443,6 +443,10 @@ export function getLayers() {
 
   getSupportedLayers(Object.keys(styleSpecJSON.layer.type.values)).forEach(
     ({ layerName, support }) => {
+      // Skip slot and clip layers - no React Native components implemented yet
+      if (layerName === 'slot' || layerName === 'clip') {
+        return;
+      }
       layers.push({
         name: layerName,
         properties: getPropertiesForLayer(layerName),

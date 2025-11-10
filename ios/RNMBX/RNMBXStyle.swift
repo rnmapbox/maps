@@ -946,50 +946,6 @@ func skyLayer(layer: inout SkyLayer, reactStyle:Dictionary<String, Any>, oldReac
     }
 }
 
-func slotLayer(layer: inout Slot, reactStyle:Dictionary<String, Any>, oldReactStyle:Dictionary<String, Any>?, applyUpdater: @escaping  ((inout Slot)->Void)->Void, isValid: @escaping () -> Bool)
-{
-  guard self._hasReactStyle(reactStyle) else {
-    Logger.log(level:.error, message: "Invalid style: \(reactStyle)")
-    return
-  }
-
-  let styleProps = reactStyle.keys
-  for prop in styleProps {
-    if (prop == "__MAPBOX_STYLESHEET__") {
-      continue;
-    }
-
-    let styleValue = RNMBXStyleValue.make(reactStyle[prop])
-
-      Logger.log(level:.error, message: "Unexpected property \(prop) for layer: slot")
-    }
-}
-
-func clipLayer(layer: inout ClipLayer, reactStyle:Dictionary<String, Any>, oldReactStyle:Dictionary<String, Any>?, applyUpdater: @escaping  ((inout ClipLayer)->Void)->Void, isValid: @escaping () -> Bool)
-{
-  guard self._hasReactStyle(reactStyle) else {
-    Logger.log(level:.error, message: "Invalid style: \(reactStyle)")
-    return
-  }
-
-  let styleProps = reactStyle.keys
-  for prop in styleProps {
-    if (prop == "__MAPBOX_STYLESHEET__") {
-      continue;
-    }
-
-    let styleValue = RNMBXStyleValue.make(reactStyle[prop])
-
-      if (prop == "clipLayerTypes") {
-      self.setClipLayerTypes(&layer, styleValue:styleValue);
-    } else if (prop == "clipLayerScope") {
-      self.setClipLayerScope(&layer, styleValue:styleValue);
-    } else {
-      Logger.log(level:.error, message: "Unexpected property \(prop) for layer: clip")
-    }
-    }
-}
-
 func lightLayer(layer: inout Light, reactStyle:Dictionary<String, Any>, oldReactStyle:Dictionary<String, Any>?, applyUpdater: @escaping  ((inout Light)->Void)->Void, isValid: @escaping () -> Bool)
 {
   guard self._hasReactStyle(reactStyle) else {
@@ -3655,32 +3611,6 @@ func setSkyOpacity(_ layer: inout SkyLayer, styleValue: RNMBXStyleValue)
 func setSkyOpacityTransition(_ layer: inout SkyLayer, styleValue: RNMBXStyleValue)
 {
     layer.skyOpacityTransition = styleValue.getTransition();
-}
-
-
-
-
-
-func setClipLayerTypes(_ layer: inout ClipLayer, styleValue: RNMBXStyleValue)
-{
-      #if RNMBX_11
-      
-        
-          layer.clipLayerTypes = styleValue.mglStyleValueArrayClipLayerTypes();
-         
-      
-      #endif
-}
-
-func setClipLayerScope(_ layer: inout ClipLayer, styleValue: RNMBXStyleValue)
-{
-      #if RNMBX_11
-      
-        
-          layer.clipLayerScope = styleValue.mglStyleValueArrayString();
-         
-      
-      #endif
 }
 
 
