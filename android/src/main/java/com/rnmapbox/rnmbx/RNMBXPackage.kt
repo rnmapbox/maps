@@ -157,7 +157,9 @@ class RNMBXPackage : TurboReactPackage() {
         managers.add(RNMBXCircleLayerManager())
         managers.add(RNMBXSymbolLayerManager())
         managers.add(RNMBXRasterLayerManager())
-        managers.add(RNMBXRasterParticleLayerManager())
+        if (RNMBXRasterParticleLayerManager.isImplemented) {
+            managers.add(RNMBXRasterParticleLayerManager())
+        }
         managers.add(RNMBXSkyLayerManager())
         managers.add(RNMBXTerrainManager())
         managers.add(RNMBXAtmosphereManager())

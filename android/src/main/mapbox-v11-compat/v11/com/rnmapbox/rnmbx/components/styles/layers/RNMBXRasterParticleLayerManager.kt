@@ -80,5 +80,6 @@ class RNMBXRasterParticleLayerManager : ViewGroupManager<RNMBXRasterParticleLaye
 
     companion object {
         const val REACT_CLASS = "RNMBXRasterParticleLayer"
+        const val isImplemented = true
     }
 }
