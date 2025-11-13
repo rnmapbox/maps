@@ -14,6 +14,8 @@ RCT_EXTERN_METHOD(pausePackDownload:(NSString *)name
                   resolver:(RCTPromiseResolveBlock)resolve
                   rejecter:(RCTPromiseRejectBlock)reject)
 
+RCT_EXTERN_METHOD(setTileCountLimit:(nonnull NSNumber *)limit)
+
 RCT_EXTERN_METHOD(getPackStatus:(NSString *)name
                  resolver:(RCTPromiseResolveBlock)resolve
                  rejecter:(RCTPromiseRejectBlock)reject)

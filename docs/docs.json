@@ -8620,6 +8620,29 @@
             "name": "OfflinePack"
           }
         }
+      },
+      {
+        "name": "setTileCountLimit",
+        "description": "Sets the maximum number of Mapbox-hosted tiles that may be downloaded and stored on the current device.\nThe Mapbox Terms of Service prohibit changing or bypassing this limit without permission from Mapbox.",
+        "params": [
+          {
+            "name": "limit",
+            "description": "Map tile limit count.",
+            "type": {
+              "name": "Number"
+            },
+            "optional": false
+          }
+        ],
+        "examples": [
+          "Mapbox.offlineManagerLegacy.setTileCountLimit(1000);"
+        ],
+        "returns": {
+          "description": "",
+          "type": {
+            "name": "void"
+          }
+        }
       }
     ]
   },

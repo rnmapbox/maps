@@ -375,6 +375,16 @@ class RNMBXOfflineModuleLegacy(private val mReactContext: ReactApplicationContex
     }
 
     @ReactMethod
+    fun setTileCountLimit(tileCountLimit: Int) {
+        UiThreadUtil.runOnUiThread {
+            val offlineRegionManager = getOfflineRegionManager {
+                RNMBXModule.getAccessToken(mReactContext)
+            }
+            offlineRegionManager.setOfflineMapboxTileCountLimit(tileCountLimit.toLong())
+        }
+    }
+
+    @ReactMethod
     fun resetDatabase(promise: Promise) {
         UiThreadUtil.runOnUiThread {
             var purgedCount = 0
