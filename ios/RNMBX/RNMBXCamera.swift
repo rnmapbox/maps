@@ -15,11 +15,46 @@ public enum RemovalReason {
     case ViewRemoval, StyleChange, OnDestroy, ComponentChange, Reorder
 }
 
-public protocol RNMBXMapComponent: AnyObject {
+/// Base protocol for all map components
+public protocol RNMBXMapComponentProtocol: AnyObject {
+  func waitForStyleLoad() -> Bool
+}
+
+/// Default implementation: most components don't need to wait for style load
+extension RNMBXMapComponentProtocol {
+  public func waitForStyleLoad() -> Bool {
+    return false
+  }
+}
+
+/// Protocol for components that can work without direct MapView access
+public protocol RNMBXMapComponent: RNMBXMapComponentProtocol {
   func addToMap(_ map: RNMBXMapView, style: Style)
   func removeFromMap(_ map: RNMBXMapView, reason: RemovalReason) -> Bool
-  
-  func waitForStyleLoad() -> Bool
+}
+
+/// Protocol for components that require a valid MapView instance for both add and remove operations.
+/// Use this protocol when your component needs to interact with the native MapView directly.
+/// The MapView parameter is guaranteed to be non-nil when these methods are called.
+///
+/// This protocol inherits from RNMBXMapComponent to ensure compatibility with existing code,
+/// but provides default implementations of the base protocol methods that throw errors,
+/// forcing implementers to use the mapView-aware versions.
+public protocol RNMBXMapAndMapViewComponent: RNMBXMapComponent {
+  func addToMap(_ map: RNMBXMapView, mapView: MapView, style: Style)
+  func removeFromMap(_ map: RNMBXMapView, mapView: MapView, reason: RemovalReason) -> Bool
+}
+
+/// Default implementations for RNMBXMapAndMapViewComponent that prevent accidental use of base protocol methods
+extension RNMBXMapAndMapViewComponent {
+  public func addToMap(_ map: RNMBXMapView, style: Style) {
+    Logger.error("CRITICAL: addToMap(_:style:) called on RNMBXMapAndMapViewComponent. Use addToMap(_:mapView:style:) instead. Component: \(type(of: self))")
+  }
+
+  public func removeFromMap(_ map: RNMBXMapView, reason: RemovalReason) -> Bool {
+    Logger.error("CRITICAL: removeFromMap(_:reason:) called on RNMBXMapAndMapViewComponent. Use removeFromMap(_:mapView:reason:) instead. Component: \(type(of: self))")
+    return false
+  }
 }
 
 enum CameraMode: Int {
@@ -85,7 +120,7 @@ class CameraUpdateQueue {
 open class RNMBXMapComponentBase : UIView, RNMBXMapComponent {
   private weak var _map: RNMBXMapView! = nil
   private var _mapCallbacks: [(RNMBXMapView) -> Void] = []
-  
+
   weak var map : RNMBXMapView? {
     return _map;
   }
@@ -103,11 +138,7 @@ open class RNMBXMapComponentBase : UIView, RNMBXMapComponent {
       _mapCallbacks.append(callback)
     }
   }
-  
-  public func waitForStyleLoad() -> Bool {
-    return false
-  }
-  
+
   public func addToMap(_ map: RNMBXMapView, style: Style) {
     _mapCallbacks.forEach { callback in
         callback(map)
@@ -115,7 +146,7 @@ open class RNMBXMapComponentBase : UIView, RNMBXMapComponent {
     _mapCallbacks = []
     _map = map
   }
-  
+
   public func removeFromMap(_ map: RNMBXMapView, reason: RemovalReason) -> Bool {
     _mapCallbacks = []
     _map = nil
@@ -123,8 +154,48 @@ open class RNMBXMapComponentBase : UIView, RNMBXMapComponent {
   }
 }
 
+/// Base class for components that require MapView to be non-nil
+open class RNMBXMapAndMapViewComponentBase : UIView, RNMBXMapAndMapViewComponent {
+  private weak var _map: RNMBXMapView! = nil
+  private var _mapCallbacks: [(RNMBXMapView) -> Void] = []
+
+  weak var map : RNMBXMapView? {
+    return _map;
+  }
+
+  func withMapView(_ callback: @escaping (_ mapView: MapView) -> Void) {
+    withRNMBXMapView { mapView in
+      callback(mapView.mapView)
+    }
+  }
+
+  func withRNMBXMapView(_ callback: @escaping (_ map: RNMBXMapView) -> Void) {
+    if let map = _map {
+      callback(map)
+    } else {
+      _mapCallbacks.append(callback)
+    }
+  }
+
+  // Uses default implementation from RNMBXMapComponentProtocol extension
+
+  public func addToMap(_ map: RNMBXMapView, mapView: MapView, style: Style) {
+    _mapCallbacks.forEach { callback in
+        callback(map)
+    }
+    _mapCallbacks = []
+    _map = map
+  }
+
+  public func removeFromMap(_ map: RNMBXMapView, mapView: MapView, reason: RemovalReason) -> Bool {
+    _mapCallbacks = []
+    _map = nil
+    return true
+  }
+}
+
 @objc(RNMBXCamera)
-open class RNMBXCamera : RNMBXMapComponentBase {
+open class RNMBXCamera : RNMBXMapAndMapViewComponentBase {
   var cameraAnimator: BasicCameraAnimator?
   let cameraUpdateQueue = CameraUpdateQueue()
   
@@ -519,18 +590,18 @@ open class RNMBXCamera : RNMBXMapComponentBase {
     _updateCamera()
   }
   
-  public override func addToMap(_ map: RNMBXMapView, style: Style) {
-    super.addToMap(map, style: style)
+  public override func addToMap(_ map: RNMBXMapView, mapView: MapView, style: Style) {
+    super.addToMap(map, mapView: mapView, style: style)
     map.reactCamera = self
   }
-  
-  public override func removeFromMap(_ map: RNMBXMapView, reason: RemovalReason) -> Bool {
+
+  public override func removeFromMap(_ map: RNMBXMapView, mapView: MapView, reason: RemovalReason) -> Bool {
     if (reason == .StyleChange) {
       return false
     }
 
-    map.mapView.viewport.removeStatusObserver(self)
-    return super.removeFromMap(map, reason:reason)
+    mapView.viewport.removeStatusObserver(self)
+    return super.removeFromMap(map, mapView: mapView, reason: reason)
   }
 
   @objc public func moveBy(x: Double, y: Double, animationMode: NSNumber?, animationDuration: NSNumber?, resolve: @escaping RCTPromiseResolveBlock, reject: @escaping RCTPromiseRejectBlock) {

@@ -3,15 +3,15 @@ import MapboxMaps
 let TAG = "RNMBXCustomLocationProvider"
 
 @objc
-public class RNMBXCustomLocationProvider: UIView, RNMBXMapComponent {
+public class RNMBXCustomLocationProvider: UIView, RNMBXMapAndMapViewComponent {
   var map: RNMBXMapView? = nil
-  
+
   let changes : PropertyChanges<RNMBXCustomLocationProvider> = PropertyChanges()
-  
+
   enum Property: String {
     case coordinate
     case heading
-    
+
     func apply(locationProvider: RNMBXCustomLocationProvider) {
       switch self {
         case .coordinate: locationProvider.applyCoordinate()
@@ -19,61 +19,55 @@ public class RNMBXCustomLocationProvider: UIView, RNMBXMapComponent {
       }
     }
   }
-  
+
   @objc
   public var coordinate: [Double] = [] {
     didSet { changed(.coordinate) }
   }
-    
+
   @objc
   public var heading: NSNumber = 0.0 {
     didSet { changed(.heading) }
   }
-  
+
   func changed(_ property: Property) {
     changes.add(name: property.rawValue, update: property.apply)
   }
-  
+
   @objc
   override public func didSetProps(_ props: [String]) {
     if customLocationProvider != nil {
       changes.apply(self)
     }
   }
-  
+
   var customLocationProvider: CustomLocationProvider? = nil
   #if RNMBX_11
   #else
   var defaultLocationProvider: LocationProvider?
   #endif
 
-  public func addToMap(_ map: RNMBXMapView, style: Style) {
+  public func addToMap(_ map: RNMBXMapView, mapView: MapView, style: Style) {
     self.map = map
-    if let mapView = map.mapView {
-      installCustomeLocationProviderIfNeeded(mapView: mapView)
-      changes.apply(self)
-    }
+    installCustomeLocationProviderIfNeeded(mapView: mapView)
+    changes.apply(self)
   }
-  
+
   private func applyCoordinate() {
     updateCoordinate(latitude: coordinate[1], longitude: coordinate[0])
   }
-  
+
   private func applyHeading() {
     updateHeading(heading: heading.doubleValue)
   }
-  
-  public func removeFromMap(_ map: RNMBXMapView, reason: RemovalReason) -> Bool {
-    if let mapView = map.mapView {
-      removeCustomLocationProvider(mapView: mapView)
-    }
+
+  public func removeFromMap(_ map: RNMBXMapView, mapView: MapView, reason: RemovalReason) -> Bool {
+    removeCustomLocationProvider(mapView: mapView)
     self.map = nil
     return true
   }
 
-  public func waitForStyleLoad() -> Bool {
-    false
-  }
+  // Uses default implementation from RNMBXMapComponentProtocol extension (returns false)
 }
 
 #if RNMBX_11

@@ -74,11 +74,8 @@ open class RNMBXImages : UIView, RNMBXMapComponent {
   }
   
   // MARK: - RNMBXMapComponent
+  // Uses default implementation from RNMBXMapComponentProtocol extension (returns false)
 
-  public func waitForStyleLoad() -> Bool {
-    return false
-  }
-  
   public func addToMap(_ map: RNMBXMapView, style: Style) {
     self.style = style
     imageManager = map.imageManager
