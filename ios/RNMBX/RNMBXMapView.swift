@@ -155,7 +155,33 @@ class RNMBXCameraChanged : RNMBXEvent, RCTEvent {
 
 @objc(RNMBXMapView)
 open class RNMBXMapView: UIView, RCTInvalidating {
-  
+
+  // Backward compatibility single-delegate property; internally we maintain a weak set.
+  public weak var rnmbxGestures: GestureManagerDelegate? {
+    didSet {
+      if let old = oldValue { _gestureDelegates.remove(old as AnyObject) }
+      if let d = rnmbxGestures { _gestureDelegates.add(d as AnyObject) }
+      #if DEBUG
+      print("[RNMBXMapView] rnmbxGestures didSet; delegates=\(_gestureDelegates.allObjects.count)")
+      #endif
+    }
+  }
+  private var _gestureDelegates: NSHashTable<AnyObject> = NSHashTable.weakObjects()
+
+  public func addGestureDelegate(_ delegate: GestureManagerDelegate) {
+    _gestureDelegates.add(delegate as AnyObject)
+    #if DEBUG
+    print("[RNMBXMapView] addGestureDelegate; delegates=\(_gestureDelegates.allObjects.count)")
+    #endif
+  }
+
+  public func removeGestureDelegate(_ delegate: GestureManagerDelegate) {
+    _gestureDelegates.remove(delegate as AnyObject)
+    #if DEBUG
+    print("[RNMBXMapView] removeGestureDelegate; delegates=\(_gestureDelegates.allObjects.count)")
+    #endif
+  }
+
   public func invalidate() {
     self.removeAllFeaturesFromMap(reason: .ViewRemoval)
 
@@ -163,14 +189,14 @@ open class RNMBXMapView: UIView, RCTInvalidating {
     cancelables.forEach { $0.cancel() }
     cancelables.removeAll()
 #endif
-    
+
     _mapView.gestures.delegate = nil
     _mapView.removeFromSuperview()
     _mapView = nil
-    
+
     self.removeFromSuperview()
   }
-  
+
   var imageManager: ImageManager = ImageManager()
 
   var tapDelegate: IgnoreRNMBXMakerViewGestureDelegate? = nil
@@ -1407,17 +1433,35 @@ extension RNMBXMapView: GestureManagerDelegate {
   }
 
   public func gestureManager(_ gestureManager: GestureManager, didBegin gestureType: GestureType) {
+    #if DEBUG
+    print("[RNMBXMapView] gesture didBegin type=\(gestureType) delegates=\(_gestureDelegates.allObjects.count)")
+    #endif
+    for case let d as GestureManagerDelegate in _gestureDelegates.allObjects {
+      d.gestureManager(gestureManager, didBegin: gestureType)
+    }
     isGestureActive = true
   }
 
   public func gestureManager(_ gestureManager: GestureManager, didEnd gestureType: GestureType, willAnimate: Bool) {
+    #if DEBUG
+    print("[RNMBXMapView] gesture didEnd type=\(gestureType) willAnimate=\(willAnimate) delegates=\(_gestureDelegates.allObjects.count)")
+    #endif
+    for case let d as GestureManagerDelegate in _gestureDelegates.allObjects {
+      d.gestureManager(gestureManager, didEnd: gestureType, willAnimate: willAnimate)
+    }
     if !willAnimate {
-      isGestureActive = false;
+      isGestureActive = false
     }
   }
 
   public func gestureManager(_ gestureManager: GestureManager, didEndAnimatingFor gestureType: GestureType) {
-    isGestureActive = false;
+    #if DEBUG
+    print("[RNMBXMapView] gesture didEndAnimatingFor type=\(gestureType) delegates=\(_gestureDelegates.allObjects.count)")
+    #endif
+    for case let d as GestureManagerDelegate in _gestureDelegates.allObjects {
+      d.gestureManager(gestureManager, didEndAnimatingFor: gestureType)
+    }
+    isGestureActive = false
   }
 }
 
