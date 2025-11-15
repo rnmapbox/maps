@@ -139,6 +139,9 @@ Customizable style attributes
 
 * <a href="#visibility">visibility</a><br/>
 * <a href="#rasteropacity">rasterOpacity</a><br/>
+* <a href="#rastercolor">rasterColor</a><br/>
+* <a href="#rastercolormix">rasterColorMix</a><br/>
+* <a href="#rastercolorrange">rasterColorRange</a><br/>
 * <a href="#rasterhuerotate">rasterHueRotate</a><br/>
 * <a href="#rasterbrightnessmin">rasterBrightnessMin</a><br/>
 * <a href="#rasterbrightnessmax">rasterBrightnessMax</a><br/>
@@ -146,6 +149,9 @@ Customizable style attributes
 * <a href="#rastercontrast">rasterContrast</a><br/>
 * <a href="#rasterresampling">rasterResampling</a><br/>
 * <a href="#rasterfadeduration">rasterFadeDuration</a><br/>
+* <a href="#rasteremissivestrength">rasterEmissiveStrength</a><br/>
+* <a href="#rasterarrayband">rasterArrayBand</a><br/>
+* <a href="#rasterelevation">rasterElevation</a><br/>
 
 ___
 
@@ -204,6 +210,106 @@ Name: `rasterOpacityTransition`
 #### Description
 
 The transition affecting any changes to this layer’s rasterOpacity property.
+
+#### Type
+
+`{ duration, delay }`
+
+#### Units
+`milliseconds`
+
+#### Default Value
+`{duration: 300, delay: 0}`
+
+
+___
+
+### rasterColor
+Name: `rasterColor`
+
+Mapbox spec: [raster-color](https://docs.mapbox.com/style-spec/reference/layers/#paint-raster-raster-color)
+
+#### Description
+Defines a color map by which to colorize a raster layer, parameterized by the `["rasterValue"]` expression and evaluated at 256 uniformly spaced steps over the range specified by `rasterColorRange`.
+
+#### Type
+`color`
+
+
+#### Expression
+
+Parameters: `raster-value`
+
+___
+
+### rasterColorMix
+Name: `rasterColorMix`
+
+Mapbox spec: [raster-color-mix](https://docs.mapbox.com/style-spec/reference/layers/#paint-raster-raster-color-mix)
+
+#### Description
+When `rasterColor` is active, specifies the combination of source RGB channels used to compute the raster value. Computed using the equation `mix.r * src.r + mix.g * src.g + mix.b * src.b + mix.a`. The first three components specify the mix of source red, green, and blue channels, respectively. The fourth component serves as a constant offset and is *not* multipled by source alpha. Source alpha is instead carried through and applied as opacity to the colorized result. Default value corresponds to RGB luminosity.
+
+#### Type
+`array<number>`
+#### Default Value
+`[0.2126,0.7152,0.0722,0]`
+
+
+#### Requires
+`rasterColor`
+
+#### Expression
+
+Parameters: `zoom`
+___
+
+### rasterColorMixTransition
+Name: `rasterColorMixTransition`
+
+#### Description
+
+The transition affecting any changes to this layer’s rasterColorMix property.
+
+#### Type
+
+`{ duration, delay }`
+
+#### Units
+`milliseconds`
+
+#### Default Value
+`{duration: 300, delay: 0}`
+
+
+___
+
+### rasterColorRange
+Name: `rasterColorRange`
+
+Mapbox spec: [raster-color-range](https://docs.mapbox.com/style-spec/reference/layers/#paint-raster-raster-color-range)
+
+#### Description
+When `rasterColor` is active, specifies the range over which `rasterColor` is tabulated. Units correspond to the computed raster value via `rasterColorMix`. For `rasterarray` sources, if `rasterColorRange` is unspecified, the source's stated data range is used.
+
+#### Type
+`array<number>`
+
+
+#### Requires
+`rasterColor`
+
+#### Expression
+
+Parameters: `zoom`
+___
+
+### rasterColorRangeTransition
+Name: `rasterColorRangeTransition`
+
+#### Description
+
+The transition affecting any changes to this layer’s rasterColorRange property.
 
 #### Type
 
@@ -487,4 +593,109 @@ Fade duration when a new tile is added.
 #### Expression
 
 Parameters: `zoom`
+
+___
+
+### rasterEmissiveStrength
+Name: `rasterEmissiveStrength`
+
+Mapbox spec: [raster-emissive-strength](https://docs.mapbox.com/style-spec/reference/layers/#paint-raster-raster-emissive-strength)
+
+#### Description
+Controls the intensity of light emitted on the source features.
+
+#### Type
+`number`
+#### Default Value
+`0`
+
+#### Units
+`intensity`
+
+#### Minimum
+`0`
+
+
+#### Requires
+`lights`
+
+#### Expression
+
+Parameters: `zoom, measure-light`
+___
+
+### rasterEmissiveStrengthTransition
+Name: `rasterEmissiveStrengthTransition`
+
+#### Description
+
+The transition affecting any changes to this layer’s rasterEmissiveStrength property.
+
+#### Type
+
+`{ duration, delay }`
+
+#### Units
+`milliseconds`
+
+#### Default Value
+`{duration: 300, delay: 0}`
+
+
+___
+
+### rasterArrayBand
+Name: `rasterArrayBand`
+
+Mapbox spec: [raster-array-band](https://docs.mapbox.com/style-spec/reference/layers/#paint-raster-raster-array-band)
+
+#### Description
+Displayed band of raster array source layer. Defaults to the first band if not set.
+
+#### Type
+`string`
+
+
+
+___
+
+### rasterElevation
+Name: `rasterElevation`
+
+Mapbox spec: [raster-elevation](https://docs.mapbox.com/style-spec/reference/layers/#paint-raster-raster-elevation)
+
+#### Description
+Specifies an uniform elevation from the ground, in meters.
+
+#### Type
+`number`
+#### Default Value
+`0`
+
+#### Minimum
+`0`
+
+
+#### Expression
+
+Parameters: `zoom`
+___
+
+### rasterElevationTransition
+Name: `rasterElevationTransition`
+
+#### Description
+
+The transition affecting any changes to this layer’s rasterElevation property.
+
+#### Type
+
+`{ duration, delay }`
+
+#### Units
+`milliseconds`
+
+#### Default Value
+`{duration: 300, delay: 0}`
+
 

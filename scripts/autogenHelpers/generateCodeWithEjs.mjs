@@ -166,11 +166,16 @@ function getSupportedLayers(layerNames) {
       support.basic.v10.android = true;
       support.basic.v10.ios = true;
     }
-    if (support.basic.v10.android && support.basic.v10.ios) {
+
+    const hasV10Support = support.basic.v10.android && support.basic.v10.ios;
+    const hasV11Support = support.basic.v11.android && support.basic.v11.ios;
+
+    if (hasV10Support || hasV11Support) {
       supportedLayers.push({
         layerName,
         support: {
-          v10: support.basic.v10.android && support.basic.v10.ios,
+          v10: hasV10Support,
+          v11: hasV11Support,
         },
       });
     }
@@ -183,6 +188,9 @@ function getSupportedLayers(layerNames) {
  * @param {string[]|null} only
  */
 function getSupportedProperties(attributes, only) {
+  if (!attributes) {
+    return [];
+  }
   return Object.keys(attributes).filter((attrName) =>
     isAttrSupported(attrName, attributes[attrName], only),
   );
@@ -319,6 +327,8 @@ const UnsupportedProperties = [
   'icon-color-brightness-max', // should be supported in v11 11.15.0 but it's not on android
 
   'fill-extrusion-cast-shadows', // should be supported in v11 11.8.0 but it's not on android
+
+  'raster-particle-elevation', // should be supported in v11 11.7.0 but it's not yet implemented in SDK
 ];
 
 /**
@@ -338,7 +348,10 @@ function isAttrSupported(name, attr, only) {
       only.find((o) => support.basic[o].android && support.basic[o].ios) != null
     );
   }
-  return support.basic.v10.android && support.basic.v10.ios;
+  // Support both v10 and v11-only properties
+  const hasV10Support = support.basic.v10.android && support.basic.v10.ios;
+  const hasV11Support = support.basic.v11.android && support.basic.v11.ios;
+  return hasV10Support || hasV11Support;
 }
 
 function getAttributeSupport(sdkSupport) {
@@ -430,6 +443,10 @@ export function getLayers() {
 
   getSupportedLayers(Object.keys(styleSpecJSON.layer.type.values)).forEach(
     ({ layerName, support }) => {
+      // Skip slot and clip layers - no React Native components implemented yet
+      if (layerName === 'slot' || layerName === 'clip') {
+        return;
+      }
       layers.push({
         name: layerName,
         properties: getPropertiesForLayer(layerName),

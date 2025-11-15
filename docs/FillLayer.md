@@ -145,6 +145,8 @@ Customizable style attributes
 * <a href="#filltranslate">fillTranslate</a><br/>
 * <a href="#filltranslateanchor">fillTranslateAnchor</a><br/>
 * <a href="#fillpattern">fillPattern</a><br/>
+* <a href="#fillpatterncrossfade">fillPatternCrossFade</a><br/>
+* <a href="#fillemissivestrength">fillEmissiveStrength</a><br/>
 
 ___
 
@@ -421,4 +423,81 @@ Name of image in sprite to use for drawing image fills. For seamless patterns, i
 #### Expression
 
 Parameters: `zoom, feature`
+
+___
+
+### fillPatternCrossFade
+Name: `fillPatternCrossFade`
+
+Mapbox spec: [fill-pattern-cross-fade](https://docs.mapbox.com/style-spec/reference/layers/#paint-fill-fill-pattern-cross-fade)
+
+#### Description
+Controls the transition progress between the image variants of fillPattern. Zero means the first variant is used, one is the second, and in between they are blended together. Both images should be the same size and have the same type (either raster or vector).
+
+#### Type
+`number`
+#### Default Value
+`0`
+
+#### Minimum
+`0`
+
+
+#### Maximum
+`1`
+
+#### Requires
+`linePattern`
+
+#### Expression
+
+Parameters: `zoom, measure-light`
+
+___
+
+### fillEmissiveStrength
+Name: `fillEmissiveStrength`
+
+Mapbox spec: [fill-emissive-strength](https://docs.mapbox.com/style-spec/reference/layers/#paint-fill-fill-emissive-strength)
+
+#### Description
+Controls the intensity of light emitted on the source features.
+
+#### Type
+`number`
+#### Default Value
+`0`
+
+#### Units
+`intensity`
+
+#### Minimum
+`0`
+
+
+#### Requires
+`lights`
+
+#### Expression
+
+Parameters: `zoom, measure-light`
+___
+
+### fillEmissiveStrengthTransition
+Name: `fillEmissiveStrengthTransition`
+
+#### Description
+
+The transition affecting any changes to this layer’s fillEmissiveStrength property.
+
+#### Type
+
+`{ duration, delay }`
+
+#### Units
+`milliseconds`
+
+#### Default Value
+`{duration: 300, delay: 0}`
+
 

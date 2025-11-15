@@ -126,9 +126,11 @@ Customizable style attributes
 ## styles
 
 * <a href="#visibility">visibility</a><br/>
+* <a href="#backgroundpitchalignment">backgroundPitchAlignment</a><br/>
 * <a href="#backgroundcolor">backgroundColor</a><br/>
 * <a href="#backgroundpattern">backgroundPattern</a><br/>
 * <a href="#backgroundopacity">backgroundOpacity</a><br/>
+* <a href="#backgroundemissivestrength">backgroundEmissiveStrength</a><br/>
 
 ___
 
@@ -148,6 +150,30 @@ Whether this layer is displayed.
 #### Supported Values
 **visible** - The layer is shown.<br />
 **none** - The layer is not shown.<br />
+
+
+#### Expression
+
+Parameters: ``
+
+___
+
+### backgroundPitchAlignment
+Name: `backgroundPitchAlignment`
+
+Mapbox spec: [background-pitch-alignment](https://docs.mapbox.com/style-spec/reference/layers/#paint-background-background-pitch-alignment)
+
+#### Description
+Orientation of background layer.
+
+#### Type
+`enum`
+#### Default Value
+`map`
+
+#### Supported Values
+**map** - The background is aligned to the plane of the map.<br />
+**viewport** - The background is aligned to the plane of the viewport, covering the whole screen. Note: This mode disables the automatic reordering of the layer when terrain or globe projection is used.<br />
 
 
 #### Expression
@@ -247,6 +273,54 @@ Name: `backgroundOpacityTransition`
 #### Description
 
 The transition affecting any changes to this layer’s backgroundOpacity property.
+
+#### Type
+
+`{ duration, delay }`
+
+#### Units
+`milliseconds`
+
+#### Default Value
+`{duration: 300, delay: 0}`
+
+
+___
+
+### backgroundEmissiveStrength
+Name: `backgroundEmissiveStrength`
+
+Mapbox spec: [background-emissive-strength](https://docs.mapbox.com/style-spec/reference/layers/#paint-background-background-emissive-strength)
+
+#### Description
+Controls the intensity of light emitted on the source features.
+
+#### Type
+`number`
+#### Default Value
+`0`
+
+#### Units
+`intensity`
+
+#### Minimum
+`0`
+
+
+#### Requires
+`lights`
+
+#### Expression
+
+Parameters: `zoom, measure-light`
+___
+
+### backgroundEmissiveStrengthTransition
+Name: `backgroundEmissiveStrengthTransition`
+
+#### Description
+
+The transition affecting any changes to this layer’s backgroundEmissiveStrength property.
 
 #### Type
 

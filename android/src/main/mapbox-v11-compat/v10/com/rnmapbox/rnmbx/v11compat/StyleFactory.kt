@@ -762,3 +762,48 @@ fun FillExtrusionLayer.fillExtrusionEmissiveStrengthTransition(
 ) {
     // V11 only
 }
+
+// RasterParticleLayer - v11 only
+internal fun setRasterParticleLayerStyle(layer: Any, style: Any) {
+    TODO("RasterParticleLayer is v11 only")
+}
+
+internal fun setVisibility(layer: Any, styleValue: Any) {
+    TODO("RasterParticleLayer is v11 only")
+}
+
+internal fun setRasterParticleArrayBand(layer: Any, styleValue: Any) {
+    TODO("RasterParticleLayer is v11 only")
+}
+
+internal fun setRasterParticleCount(layer: Any, styleValue: Any) {
+    TODO("RasterParticleLayer is v11 only")
+}
+
+internal fun setRasterParticleColor(layer: Any, styleValue: Any) {
+    TODO("RasterParticleLayer is v11 only")
+}
+
+internal fun setRasterParticleMaxSpeed(layer: Any, styleValue: Any) {
+    TODO("RasterParticleLayer is v11 only")
+}
+
+internal fun setRasterParticleSpeedFactor(layer: Any, styleValue: Any) {
+    TODO("RasterParticleLayer is v11 only")
+}
+
+internal fun setRasterParticleSpeedFactorTransition(layer: Any, styleValue: Any) {
+    TODO("RasterParticleLayer is v11 only")
+}
+
+internal fun setRasterParticleFadeOpacityFactor(layer: Any, styleValue: Any) {
+    TODO("RasterParticleLayer is v11 only")
+}
+
+internal fun setRasterParticleFadeOpacityFactorTransition(layer: Any, styleValue: Any) {
+    TODO("RasterParticleLayer is v11 only")
+}
+
+internal fun setRasterParticleResetRateFactor(layer: Any, styleValue: Any) {
+    TODO("RasterParticleLayer is v11 only")
+}
