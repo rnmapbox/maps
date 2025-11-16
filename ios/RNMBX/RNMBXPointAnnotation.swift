@@ -248,18 +248,16 @@ public class RNMBXPointAnnotation : RNMBXInteractiveElement {
       }
     }
   
-  // MARK: - RNMBXMapComponent
-  
-  public override func addToMap(_ map: RNMBXMapView, style: Style) {
-    super.addToMap(map, style: style)
-    self.map = map
+  // MARK: - RNMBXMapAndMapViewComponent
+
+  public override func addToMap(_ map: RNMBXMapView, mapView: MapView, style: Style) {
+    super.addToMap(map, mapView: mapView, style: style)
     addIfPossible()
   }
 
-  public override func removeFromMap(_ map: RNMBXMapView, reason: RemovalReason) -> Bool {
+  public override func removeFromMap(_ map: RNMBXMapView, mapView: MapView, reason: RemovalReason) -> Bool {
     removeIfAdded()
-    self.map = nil
-    return true
+    return super.removeFromMap(map, mapView: mapView, reason: reason)
   }
   
   // MARK: - RNMBXInteractiveElement

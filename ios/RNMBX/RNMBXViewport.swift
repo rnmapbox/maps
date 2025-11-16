@@ -6,13 +6,13 @@ typealias ViewportManager = Viewport
 #endif
 
 @objc(RNMBXViewport)
-open class RNMBXViewport : UIView, RNMBXMapComponent, ViewportStatusObserver {
+open class RNMBXViewport : UIView, RNMBXMapAndMapViewComponent, ViewportStatusObserver {
   var mapView: MapView? = nil
-    
+
   // MARK: React properties
   @objc
   public var onStatusChanged: RCTBubblingEventBlock? = nil
-  
+
   @objc
   public var hasStatusChanged: Bool = false {
     didSet {
@@ -21,7 +21,7 @@ open class RNMBXViewport : UIView, RNMBXMapComponent, ViewportStatusObserver {
       }
     }
   }
-  
+
   func applyHasStatusChanged(mapView: MapView) {
     if (hasStatusChanged) {
       mapView.viewport.addStatusObserver(self)
@@ -29,7 +29,7 @@ open class RNMBXViewport : UIView, RNMBXMapComponent, ViewportStatusObserver {
       mapView.viewport.removeStatusObserver(self)
     }
   }
-  
+
   public func viewportStatusDidChange(from fromStatus: ViewportStatus,
                                to toStatus: ViewportStatus,
                                reason: ViewportStatusChangeReason)
@@ -42,7 +42,7 @@ open class RNMBXViewport : UIView, RNMBXMapComponent, ViewportStatusObserver {
         "reason": reasonToString(reason)
       ]])
   }
-  
+
   @objc
   public var transitionsToIdleUponUserInteraction: NSNumber? = nil {
     didSet {
@@ -51,20 +51,20 @@ open class RNMBXViewport : UIView, RNMBXMapComponent, ViewportStatusObserver {
       }
     }
   }
-  
+
   public func waitForStyleLoad() -> Bool {
     true
   }
 
-  public func addToMap(_ map: RNMBXMapView, style: Style) {
-    mapView = map.mapView
-    applyHasStatusChanged(mapView: mapView!)
-    apply(mapView: map.mapView)
+  public func addToMap(_ map: RNMBXMapView, mapView: MapView, style: Style) {
+    self.mapView = mapView
+    applyHasStatusChanged(mapView: mapView)
+    apply(mapView: mapView)
   }
 
-  public func removeFromMap(_ map: RNMBXMapView, reason: RemovalReason) -> Bool {
+  public func removeFromMap(_ map: RNMBXMapView, mapView: MapView, reason: RemovalReason) -> Bool {
     if (hasStatusChanged) {
-      map.mapView.viewport.removeStatusObserver(self)
+      mapView.viewport.removeStatusObserver(self)
     }
     self.mapView = nil
     return true
