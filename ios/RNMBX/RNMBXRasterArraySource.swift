@@ -1,3 +1,4 @@
+#if RNMBX_11
 @_spi(Experimental) import MapboxMaps
 
 @objc
@@ -16,13 +17,9 @@ public class RNMBXRasterArraySource : RNMBXSource {
 
   override func makeSource() -> Source
   {
-    #if RNMBX_11
     // Note: tileSize and bounds are read-only after initialization in RasterArraySource
     // They can only be set via the constructor or are derived from the source
     var result = RasterArraySource(id: self.id)
-    #else
-    var result = RasterArraySource()
-    #endif
     if let url = url {
       result.url = url
     } else {
@@ -47,3 +44,4 @@ public class RNMBXRasterArraySource : RNMBXSource {
   }
 
 }
+#endif

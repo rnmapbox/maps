@@ -142,7 +142,9 @@ class RNMBXPackage : TurboReactPackage() {
             ))
         managers.add(RNMBXRasterDemSourceManager(reactApplicationContext))
         managers.add(RNMBXRasterSourceManager(reactApplicationContext))
-        managers.add(RNMBXRasterArraySourceManager(reactApplicationContext))
+        if (RNMBXRasterArraySourceManager.isImplemented) {
+            managers.add(RNMBXRasterArraySourceManager(reactApplicationContext))
+        }
         managers.add(RNMBXImageSourceManager())
 
         // images

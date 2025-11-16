@@ -37,6 +37,7 @@ class RNMBXRasterArraySourceManager(reactApplicationContext: ReactApplicationCon
 
     companion object {
         const val REACT_CLASS = "RNMBXRasterArraySource"
+        const val isImplemented = true
     }
 
     @ReactProp(name = "existing")

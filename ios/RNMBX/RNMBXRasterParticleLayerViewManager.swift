@@ -1,5 +1,6 @@
 import Foundation
 
+#if RNMBX_11
 @objc(RNMBXRasterParticleLayerViewManager)
 class RNMBXRasterParticleLayerViewManager: RCTViewManager {
   @objc
@@ -13,3 +14,4 @@ class RNMBXRasterParticleLayerViewManager: RCTViewManager {
     return layer
   }
 }
+#endif
