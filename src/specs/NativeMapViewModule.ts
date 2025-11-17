@@ -15,6 +15,12 @@ export interface Spec extends TurboModule {
     sourceId: string,
     sourceLayerId: string,
   ) => Promise<Object>;
+  setStyleLayerProperty: (
+    viewRef: Int32 | null, 
+    layerId: string, 
+    propertyName: string, 
+    propertyValue: string,
+  ) => Promise<Object>;
   getCenter: (viewRef: Int32 | null) => Promise<Object>;
   getCoordinateFromView: (
     viewRef: Int32 | null,
