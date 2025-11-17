@@ -125,7 +125,8 @@ type ExpressionParameters =
   | 'line-progress'
   | 'heatmap-density'
   | 'measure-light'
-  | 'raster-value';
+  | 'raster-value'
+  | 'raster-particle-speed';
 
 type ResolvedImageType = ImageSourcePropType | string;
 
@@ -1913,6 +1914,50 @@ export interface RasterLayerStyleProps {
    */
   rasterElevationTransition?: Transition;
 }
+export interface RasterParticleLayerStyleProps {
+  /**
+   * Whether this layer is displayed.
+   */
+  visibility?: Value<Enum<VisibilityEnum, VisibilityEnumValues>>;
+  /**
+   * Displayed band of raster array source layer
+   */
+  rasterParticleArrayBand?: string;
+  /**
+   * Defines the amount of particles per tile.
+   */
+  rasterParticleCount?: number;
+  /**
+   * Defines a color map by which to colorize a raster particle layer, parameterized by the `["rasterParticleSpeed"]` expression and evaluated at 256 uniformly spaced steps over the range specified by `rasterParticleMaxSpeed`.
+   */
+  rasterParticleColor?: Value<string, ['raster-particle-speed']>;
+  /**
+   * Defines the maximum speed for particles. Velocities with magnitudes equal to or exceeding this value are clamped to the max value.
+   */
+  rasterParticleMaxSpeed?: number;
+  /**
+   * Defines a coefficient for the speed of particles’ motion.
+   */
+  rasterParticleSpeedFactor?: Value<number, ['zoom']>;
+
+  /**
+   * The transition affecting any changes to this layer’s rasterParticleSpeedFactor property.
+   */
+  rasterParticleSpeedFactorTransition?: Transition;
+  /**
+   * Defines defines the opacity coefficient applied to the faded particles in each frame. In practice, this property controls the length of the particle tail.
+   */
+  rasterParticleFadeOpacityFactor?: Value<number, ['zoom']>;
+
+  /**
+   * The transition affecting any changes to this layer’s rasterParticleFadeOpacityFactor property.
+   */
+  rasterParticleFadeOpacityFactorTransition?: Transition;
+  /**
+   * Defines a coefficient for a time period at which particles will restart at a random position, to avoid degeneration (empty areas without particles).
+   */
+  rasterParticleResetRateFactor?: number;
+}
 export interface HillshadeLayerStyleProps {
   /**
    * Whether this layer is displayed.
@@ -2307,6 +2352,7 @@ export type AllLayerStyleProps =
   | HeatmapLayerStyleProps
   | FillExtrusionLayerStyleProps
   | RasterLayerStyleProps
+  | RasterParticleLayerStyleProps
   | HillshadeLayerStyleProps
   | ModelLayerStyleProps
   | BackgroundLayerStyleProps

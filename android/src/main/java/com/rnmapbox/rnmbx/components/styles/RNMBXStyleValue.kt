@@ -33,6 +33,10 @@ class RNMBXStyleValue(key: String?, config: ReadableMap) {
         return mPayload!!.getInt(key!!)
     }
 
+    fun getLong(key: String?): Long {
+        return mPayload!!.getInt(key!!).toLong()
+    }
+
     fun getIntExpression(key: String?): Expression {
         return Expression.literal(mPayload!!.getInt(key!!).toLong())
     }

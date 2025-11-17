@@ -141,6 +141,9 @@ Customizable style attributes
 * <a href="#linemiterlimit">lineMiterLimit</a><br/>
 * <a href="#lineroundlimit">lineRoundLimit</a><br/>
 * <a href="#linesortkey">lineSortKey</a><br/>
+* <a href="#linezoffset">lineZOffset</a><br/>
+* <a href="#lineelevationreference">lineElevationReference</a><br/>
+* <a href="#linecrossslope">lineCrossSlope</a><br/>
 * <a href="#visibility">visibility</a><br/>
 * <a href="#lineopacity">lineOpacity</a><br/>
 * <a href="#linecolor">lineColor</a><br/>
@@ -152,8 +155,13 @@ Customizable style attributes
 * <a href="#lineblur">lineBlur</a><br/>
 * <a href="#linedasharray">lineDasharray</a><br/>
 * <a href="#linepattern">linePattern</a><br/>
+* <a href="#linepatterncrossfade">linePatternCrossFade</a><br/>
 * <a href="#linegradient">lineGradient</a><br/>
 * <a href="#linetrimoffset">lineTrimOffset</a><br/>
+* <a href="#linetrimfaderange">lineTrimFadeRange</a><br/>
+* <a href="#linetrimcolor">lineTrimColor</a><br/>
+* <a href="#lineemissivestrength">lineEmissiveStrength</a><br/>
+* <a href="#lineocclusionopacity">lineOcclusionOpacity</a><br/>
 
 ___
 
@@ -265,6 +273,85 @@ Sorts features in ascending order based on this value. Features with a higher so
 #### Expression
 
 Parameters: `zoom, feature`
+
+___
+
+### lineZOffset
+Name: `lineZOffset`
+
+Mapbox spec: [line-z-offset](https://docs.mapbox.com/style-spec/reference/layers/#layout-line-line-z-offset)
+
+#### Description
+Vertical offset from ground, in meters. Defaults to 0. This is an experimental property with some known issues:
+ * Not supported for globe projection at the moment 
+ * Elevated line discontinuity is possible on tile borders with terrain enabled 
+ * Rendering artifacts can happen near line joins and line caps depending on the line styling 
+ * Rendering artifacts relating to `lineOpacity` and `lineBlur` 
+ * Elevated line visibility is determined by layer order 
+ * ZFighting issues can happen with intersecting elevated lines 
+ * Elevated lines don't cast shadows
+
+#### Type
+`number`
+#### Default Value
+`0`
+
+
+#### Requires
+`lineElevationReference`
+
+#### Expression
+
+Parameters: `zoom, feature, line-progress`
+
+___
+
+### lineElevationReference
+Name: `lineElevationReference`
+
+Mapbox spec: [line-elevation-reference](https://docs.mapbox.com/style-spec/reference/layers/#layout-line-line-elevation-reference)
+
+#### Description
+Selects the base of lineElevation. Some modes might require precomputed elevation data in the tileset.
+
+#### Type
+`enum`
+#### Default Value
+`none`
+
+#### Supported Values
+**none** - Elevated rendering is disabled.<br />
+**sea** - Elevated rendering is enabled. Use this mode to elevate lines relative to the sea level.<br />
+**ground** - Elevated rendering is enabled. Use this mode to elevate lines relative to the ground's height below them.<br />
+**hd-road-markup** - Elevated rendering is enabled. Use this mode to describe additive and stackable features that should exist only on top of road polygons.<br />
+
+
+#### Expression
+
+Parameters: ``
+
+___
+
+### lineCrossSlope
+Name: `lineCrossSlope`
+
+Mapbox spec: [line-cross-slope](https://docs.mapbox.com/style-spec/reference/layers/#layout-line-line-cross-slope)
+
+#### Description
+Defines the slope of an elevated line. A value of 0 creates a horizontal line. A value of 1 creates a vertical line. Other values are currently not supported. If undefined, the line follows the terrain slope. This is an experimental property with some known issues:
+ * Vertical lines don't support line caps 
+ * `lineJoin: round` is not supported with this property
+
+#### Type
+`number`
+
+
+#### Requires
+`lineZOffset`
+
+#### Expression
+
+Parameters: ``
 
 ___
 
@@ -672,6 +759,35 @@ Parameters: `zoom, feature`
 
 ___
 
+### linePatternCrossFade
+Name: `linePatternCrossFade`
+
+Mapbox spec: [line-pattern-cross-fade](https://docs.mapbox.com/style-spec/reference/layers/#paint-line-line-pattern-cross-fade)
+
+#### Description
+Controls the transition progress between the image variants of linePattern. Zero means the first variant is used, one is the second, and in between they are blended together. Both images should be the same size and have the same type (either raster or vector).
+
+#### Type
+`number`
+#### Default Value
+`0`
+
+#### Minimum
+`0`
+
+
+#### Maximum
+`1`
+
+#### Requires
+`linePattern`
+
+#### Expression
+
+Parameters: `zoom, measure-light`
+
+___
+
 ### lineGradient
 Name: `lineGradient`
 
@@ -712,5 +828,169 @@ The line part between [trimStart, trimEnd] will be painted using `lineTrimColor,
 
 #### Maximum
 `1,1`
+
+
+___
+
+### lineTrimFadeRange
+Name: `lineTrimFadeRange`
+
+Mapbox spec: [line-trim-fade-range](https://docs.mapbox.com/style-spec/reference/layers/#paint-line-line-trim-fade-range)
+
+#### Description
+The fade range for the trimStart and trimEnd points is defined by the `lineTrimOffset` property. The first element of the array represents the fade range from the trimStart point toward the end of the line, while the second element defines the fade range from the trimEnd point toward the beginning of the line. The fade result is achieved by interpolating between `lineTrimColor` and the color specified by the `lineColor` or the `lineGradient` property.
+
+#### Type
+`array<number>`
+#### Default Value
+`[0,0]`
+
+#### Minimum
+`0,0`
+
+
+#### Maximum
+`1,1`
+
+#### Requires
+`lineTrimOffset`
+
+#### Expression
+
+Parameters: `zoom, measure-light`
+
+___
+
+### lineTrimColor
+Name: `lineTrimColor`
+
+Mapbox spec: [line-trim-color](https://docs.mapbox.com/style-spec/reference/layers/#paint-line-line-trim-color)
+
+#### Description
+The color to be used for rendering the trimmed line section that is defined by the `lineTrimOffset` property.
+
+#### Type
+`color`
+#### Default Value
+`transparent`
+
+
+#### Requires
+`lineTrimOffset`
+
+#### Expression
+
+Parameters: `zoom, measure-light`
+___
+
+### lineTrimColorTransition
+Name: `lineTrimColorTransition`
+
+#### Description
+
+The transition affecting any changes to this layer’s lineTrimColor property.
+
+#### Type
+
+`{ duration, delay }`
+
+#### Units
+`milliseconds`
+
+#### Default Value
+`{duration: 300, delay: 0}`
+
+
+___
+
+### lineEmissiveStrength
+Name: `lineEmissiveStrength`
+
+Mapbox spec: [line-emissive-strength](https://docs.mapbox.com/style-spec/reference/layers/#paint-line-line-emissive-strength)
+
+#### Description
+Controls the intensity of light emitted on the source features.
+
+#### Type
+`number`
+#### Default Value
+`0`
+
+#### Units
+`intensity`
+
+#### Minimum
+`0`
+
+
+#### Requires
+`lights`
+
+#### Expression
+
+Parameters: `zoom, measure-light`
+___
+
+### lineEmissiveStrengthTransition
+Name: `lineEmissiveStrengthTransition`
+
+#### Description
+
+The transition affecting any changes to this layer’s lineEmissiveStrength property.
+
+#### Type
+
+`{ duration, delay }`
+
+#### Units
+`milliseconds`
+
+#### Default Value
+`{duration: 300, delay: 0}`
+
+
+___
+
+### lineOcclusionOpacity
+Name: `lineOcclusionOpacity`
+
+Mapbox spec: [line-occlusion-opacity](https://docs.mapbox.com/style-spec/reference/layers/#paint-line-line-occlusion-opacity)
+
+#### Description
+Opacity multiplier (multiplies lineOpacity value) of the line part that is occluded by 3D objects. Value 0 hides occluded part, value 1 means the same opacity as nonOccluded part. The property is not supported when `lineOpacity` has dataDriven styling.
+
+#### Type
+`number`
+#### Default Value
+`0`
+
+#### Minimum
+`0`
+
+
+#### Maximum
+`1`
+
+#### Expression
+
+Parameters: `zoom`
+___
+
+### lineOcclusionOpacityTransition
+Name: `lineOcclusionOpacityTransition`
+
+#### Description
+
+The transition affecting any changes to this layer’s lineOcclusionOpacity property.
+
+#### Type
+
+`{ duration, delay }`
+
+#### Units
+`milliseconds`
+
+#### Default Value
+`{duration: 300, delay: 0}`
 
 

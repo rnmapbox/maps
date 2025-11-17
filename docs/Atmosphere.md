@@ -38,6 +38,7 @@ FIX ME NO DESCRIPTION
 * <a href="#spacecolor">spaceColor</a><br/>
 * <a href="#horizonblend">horizonBlend</a><br/>
 * <a href="#starintensity">starIntensity</a><br/>
+* <a href="#verticalrange">verticalRange</a><br/>
 
 ___
 
@@ -279,6 +280,48 @@ Name: `starIntensityTransition`
 #### Description
 
 The transition affecting any changes to this layer’s starIntensity property.
+
+#### Type
+
+`{ duration, delay }`
+
+#### Units
+`milliseconds`
+
+#### Default Value
+`{duration: 300, delay: 0}`
+
+
+___
+
+### verticalRange
+Name: `verticalRange`
+
+Mapbox spec: [vertical-range](https://docs.mapbox.com/style-spec/reference/layers/#vertical-range)
+
+#### Description
+An array of two number values, specifying the vertical range, measured in meters, over which the fog should gradually fade out. When both parameters are set to zero, the fog will be rendered without any vertical constraints.
+
+#### Type
+`array<number>`
+#### Default Value
+`[0,0]`
+
+#### Minimum
+`0`
+
+
+#### Expression
+
+Parameters: `zoom, measure-light`
+___
+
+### verticalRangeTransition
+Name: `verticalRangeTransition`
+
+#### Description
+
+The transition affecting any changes to this layer’s verticalRange property.
 
 #### Type
 
