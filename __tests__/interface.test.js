@@ -13,6 +13,7 @@ describe('Public Interface', () => {
       'Annotation',
       'Callout',
       'Camera',
+      'CameraGestureObserver',
       'UserLocation',
       'NativeUserLocation', // deprecated
       'LocationPuck',
@@ -112,6 +113,9 @@ describe('Public Interface', () => {
       // helpers
       'Logger',
       'Style',
+
+      // types
+      'OnMapSteadyEvent',
 
       '__experimental',
     ];
