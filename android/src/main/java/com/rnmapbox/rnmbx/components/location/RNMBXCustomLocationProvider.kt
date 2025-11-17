@@ -87,6 +87,13 @@ class RNMBXCustomLocationProvider(context: Context) : AbstractMapFeature(context
         if (customLocationProvider == null) {
             customLocationProvider = object : LocationProvider {
                 override fun registerLocationConsumer(locationConsumer: LocationConsumer) {
+                    heading?.let {
+                        locationConsumer.onBearingUpdated(it)
+                    }
+                    coordinate?.let {
+                        val point = Point.fromLngLat(it.first, it.second)
+                        locationConsumer.onLocationUpdated(point)
+                    }
                     locationConsumers.add(locationConsumer)
                 }
 

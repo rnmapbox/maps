@@ -77,6 +77,10 @@ extension RNMBXCustomLocationProvider {
     if (customLocationProvider == nil) {
       let customLocationProvider = CustomLocationProvider()
       self.customLocationProvider = customLocationProvider
+      applyHeading()
+      if (!coordinate.isEmpty) {
+        applyCoordinate()
+      }
       
       if let locationModule = RNMBXLocationModule.shared {
         locationModule.locationProvider = customLocationProvider
