@@ -917,7 +917,13 @@ open class RNMBXMapView(private val mContext: Context, var mManager: RNMBXMapVie
             Logger.e("queryRenderedFeaturesAtPoint", "mapbox map is null")
             return
         }
-        val screenCoordinate = ScreenCoordinate(point.x.toDouble(), point.y.toDouble())
+        // JS sends point values in DIP (see getPointInView which divides by display density),
+        // but Mapbox core expects screen pixel coordinates. Convert back to px here.
+        val density: Float = getDisplayDensity()
+        val screenCoordinate = ScreenCoordinate(
+                (point.x * density).toDouble(),
+                (point.y * density).toDouble()
+        )
         val queryGeometry = RenderedQueryGeometry(screenCoordinate)
         val layers = layerIDs?.takeUnless { it.isEmpty() } ?: null;
         val queryOptions = RenderedQueryOptions(layers, filter)
