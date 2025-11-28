@@ -163,10 +163,10 @@ export class ShapeSource extends NativeBridgeComponent(
   }
 
   _setNativeRef(
-    nativeRef: React.Component<NativeProps> & Readonly<NativeMethods>,
+    nativeRef: RNMBXShapeSourceRefType,
   ) {
     this.setNativeRef(nativeRef);
-    super._runPendingNativeMethods(nativeRef);
+    super._setNativeRef(nativeRef);
   }
 
   /**
@@ -317,7 +317,7 @@ export class ShapeSource extends NativeBridgeComponent(
       lineMetrics: this.props.lineMetrics,
       onPress: undefined,
       ref: (
-        nativeRef: React.Component<NativeProps> & Readonly<NativeMethods>,
+        nativeRef: RNMBXShapeSourceRefType,
       ) => this._setNativeRef(nativeRef),
     };
 
@@ -336,3 +336,5 @@ type NativeProps = {
   id: string;
   shape?: string;
 };
+
+type RNMBXShapeSourceRefType = React.Component<NativeProps> & Readonly<NativeMethods>;

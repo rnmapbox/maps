@@ -476,8 +476,8 @@ type Debounced<F> = F & { clear(): void; flush(): void };
 /**
  * MapView backed by Mapbox Native GL
  */
-class MapView extends NativeBridgeComponent(
-  React.PureComponent<Props>,
+class MapView extends NativeBridgeComponent<Props, RNMBXMapViewRefType, typeof React.PureComponent>(
+  React.PureComponent,
   NativeMapViewModule,
 ) {
   static defaultProps: Props = {
@@ -521,7 +521,6 @@ class MapView extends NativeBridgeComponent(
       >,
     ) => void
   >;
-  _nativeRef?: RNMBXMapViewRefType;
   state: {
     isReady: boolean | null;
     region: null;
@@ -1196,13 +1195,6 @@ class MapView extends NativeBridgeComponent(
     }
 
     return this.props.contentInset;
-  }
-
-  _setNativeRef(nativeRef: RNMBXMapViewRefType | null) {
-    if (nativeRef != null) {
-      this._nativeRef = nativeRef;
-      super._runPendingNativeMethods(nativeRef);
-    }
   }
 
   setNativeProps(props: NativeProps) {
