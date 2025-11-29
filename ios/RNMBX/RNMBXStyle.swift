@@ -699,6 +699,7 @@ func rasterLayer(layer: inout RasterLayer, reactStyle:Dictionary<String, Any>, o
     }
 }
 
+#if RNMBX_11
 func rasterParticleLayer(layer: inout RasterParticleLayer, reactStyle:Dictionary<String, Any>, oldReactStyle:Dictionary<String, Any>?, applyUpdater: @escaping  ((inout RasterParticleLayer)->Void)->Void, isValid: @escaping () -> Bool)
 {
   guard self._hasReactStyle(reactStyle) else {
@@ -739,6 +740,7 @@ func rasterParticleLayer(layer: inout RasterParticleLayer, reactStyle:Dictionary
     }
     }
 }
+#endif
 
 func hillshadeLayer(layer: inout HillshadeLayer, reactStyle:Dictionary<String, Any>, oldReactStyle:Dictionary<String, Any>?, applyUpdater: @escaping  ((inout HillshadeLayer)->Void)->Void, isValid: @escaping () -> Bool)
 {
@@ -3033,105 +3035,87 @@ func setRasterElevationTransition(_ layer: inout RasterLayer, styleValue: RNMBXS
 }
 
 
+#if RNMBX_11
 
 func setRasterParticleStyleLayerVisibility(_ layer: inout RasterParticleLayer, styleValue: RNMBXStyleValue)
 {
-      #if RNMBX_11
     layer.visibility = styleValue.isVisible();
-      #endif
 }
 
 func setRasterParticleArrayBand(_ layer: inout RasterParticleLayer, styleValue: RNMBXStyleValue)
 {
-      #if RNMBX_11
       
         
           layer.rasterParticleArrayBand = styleValue.mglStyleValueString();
         
       
-      #endif
 }
 
 func setRasterParticleCount(_ layer: inout RasterParticleLayer, styleValue: RNMBXStyleValue)
 {
-      #if RNMBX_11
       
         
           layer.rasterParticleCount = styleValue.mglStyleValueNumber();
         
       
-      #endif
 }
 
 func setRasterParticleColor(_ layer: inout RasterParticleLayer, styleValue: RNMBXStyleValue)
 {
-      #if RNMBX_11
       
         
           layer.rasterParticleColor = styleValue.mglStyleValueColor();
         
       
-      #endif
 }
 
 func setRasterParticleMaxSpeed(_ layer: inout RasterParticleLayer, styleValue: RNMBXStyleValue)
 {
-      #if RNMBX_11
       
         
           layer.rasterParticleMaxSpeed = styleValue.mglStyleValueNumber();
         
       
-      #endif
 }
 
 func setRasterParticleSpeedFactor(_ layer: inout RasterParticleLayer, styleValue: RNMBXStyleValue)
 {
-      #if RNMBX_11
       
         
           layer.rasterParticleSpeedFactor = styleValue.mglStyleValueNumber();
         
       
-      #endif
 }
 
 func setRasterParticleSpeedFactorTransition(_ layer: inout RasterParticleLayer, styleValue: RNMBXStyleValue)
 {
-      #if RNMBX_11
     layer.rasterParticleSpeedFactorTransition = styleValue.getTransition();
-      #endif
 }
 
 func setRasterParticleFadeOpacityFactor(_ layer: inout RasterParticleLayer, styleValue: RNMBXStyleValue)
 {
-      #if RNMBX_11
       
         
           layer.rasterParticleFadeOpacityFactor = styleValue.mglStyleValueNumber();
         
       
-      #endif
 }
 
 func setRasterParticleFadeOpacityFactorTransition(_ layer: inout RasterParticleLayer, styleValue: RNMBXStyleValue)
 {
-      #if RNMBX_11
     layer.rasterParticleFadeOpacityFactorTransition = styleValue.getTransition();
-      #endif
 }
 
 func setRasterParticleResetRateFactor(_ layer: inout RasterParticleLayer, styleValue: RNMBXStyleValue)
 {
-      #if RNMBX_11
       
         
           layer.rasterParticleResetRateFactor = styleValue.mglStyleValueNumber();
         
       
-      #endif
 }
 
+#endif
 
 
 func setHillshadeStyleLayerVisibility(_ layer: inout HillshadeLayer, styleValue: RNMBXStyleValue)

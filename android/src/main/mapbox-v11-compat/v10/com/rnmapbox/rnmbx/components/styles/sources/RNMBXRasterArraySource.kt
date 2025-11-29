@@ -1,17 +1,16 @@
 package com.rnmapbox.rnmbx.components.styles.sources
 
 import android.content.Context
-import com.mapbox.maps.extension.style.sources.generated.RasterArraySource
+import android.view.ViewGroup
 
-// Dummy class for v10 compatibility - never instantiated
-class RNMBXRasterArraySource(context: Context?) : RNMBXTileSource<RasterArraySource?>(context) {
-    override fun makeSource(): RasterArraySource {
-        throw UnsupportedOperationException("RasterArraySource is only supported in Mapbox v11+")
+/**
+ * Dummy implementation of RNMBXRasterArraySource for v10 compatibility.
+ * This class extends ViewGroup directly (instead of RNMBXTileSource) to avoid
+ * inheriting from Source which has internal abstract methods in v10.
+ * This class should never be instantiated in v10 builds.
+ */
+class RNMBXRasterArraySource(context: Context) : ViewGroup(context) {
+    override fun onLayout(changed: Boolean, l: Int, t: Int, r: Int, b: Int) {
+        // Stub - never called
     }
-
-    override fun hasPressListener(): Boolean = false
-
-    override fun onPress(feature: OnPressEvent?) {}
-
-    override fun hasNoDataSoRefersToExisting(): Boolean = false
 }

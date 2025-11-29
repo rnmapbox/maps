@@ -3,7 +3,6 @@
 package com.mapbox.maps.extension.style.sources.generated
 
 import com.mapbox.maps.extension.style.sources.Source
-import com.mapbox.maps.TileSet
 
 /**
  * Dummy implementation of RasterArraySource for v10 compatibility.
@@ -16,7 +15,6 @@ class RasterArraySource private constructor(
     class Builder(val sourceId: String) {
         fun url(url: String): Builder = this
         fun tileSize(tileSize: Long): Builder = this
-        fun tileSet(tileSet: TileSet): Builder = this
         fun build(): RasterArraySource = RasterArraySource(this)
     }
 }

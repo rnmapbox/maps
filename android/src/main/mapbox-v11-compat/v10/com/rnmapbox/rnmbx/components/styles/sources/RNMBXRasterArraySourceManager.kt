@@ -1,16 +1,16 @@
 package com.rnmapbox.rnmbx.components.styles.sources
 
 import com.facebook.react.bridge.Dynamic
-import com.facebook.react.bridge.ReactApplicationContext
 import com.facebook.react.uimanager.ThemedReactContext
+import com.facebook.react.uimanager.ViewGroupManager
 import com.facebook.react.uimanager.annotations.ReactProp
 import com.facebook.react.viewmanagers.RNMBXRasterArraySourceManagerInterface
 import com.rnmapbox.rnmbx.events.constants.EventKeys
 import com.rnmapbox.rnmbx.events.constants.eventMapOf
 import javax.annotation.Nonnull
 
-class RNMBXRasterArraySourceManager(reactApplicationContext: ReactApplicationContext) :
-    RNMBXTileSourceManager<RNMBXRasterArraySource>(reactApplicationContext),
+class RNMBXRasterArraySourceManager :
+    ViewGroupManager<RNMBXRasterArraySource>(),
     RNMBXRasterArraySourceManagerInterface<RNMBXRasterArraySource> {
     @Nonnull
     override fun getName(): String {
@@ -22,8 +22,26 @@ class RNMBXRasterArraySourceManager(reactApplicationContext: ReactApplicationCon
         throw UnsupportedOperationException("RasterArraySource is only supported in Mapbox v11+")
     }
 
+    @ReactProp(name = "id")
+    override fun setId(source: RNMBXRasterArraySource, id: Dynamic) {}
+
+    @ReactProp(name = "url")
+    override fun setUrl(source: RNMBXRasterArraySource, url: Dynamic) {}
+
+    @ReactProp(name = "tileUrlTemplates")
+    override fun setTileUrlTemplates(source: RNMBXRasterArraySource, tileUrlTemplates: Dynamic) {}
+
     @ReactProp(name = "tileSize")
     override fun setTileSize(source: RNMBXRasterArraySource, tileSize: Dynamic) {}
+
+    @ReactProp(name = "minZoomLevel")
+    override fun setMinZoomLevel(source: RNMBXRasterArraySource, minZoomLevel: Dynamic) {}
+
+    @ReactProp(name = "maxZoomLevel")
+    override fun setMaxZoomLevel(source: RNMBXRasterArraySource, maxZoomLevel: Dynamic) {}
+
+    @ReactProp(name = "attribution")
+    override fun setAttribution(source: RNMBXRasterArraySource, attribution: Dynamic) {}
 
     override fun customEvents(): Map<String, String>? {
         return eventMapOf(
