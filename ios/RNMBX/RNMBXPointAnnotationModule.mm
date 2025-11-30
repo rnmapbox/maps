@@ -27,22 +27,14 @@ RCT_EXPORT_MODULE();
 
 - (void)withPointAnnotation:(nonnull NSNumber*)viewRef block:(void (^)(RNMBXPointAnnotation *))block reject:(RCTPromiseRejectBlock)reject methodName:(NSString *)methodName
 {
-#ifdef RCT_NEW_ARCH_ENABLED
-    [self.viewRegistry_DEPRECATED addUIBlock:^(RCTViewRegistry *viewRegistry) {
-        RNMBXPointAnnotationComponentView *componentView = [self.viewRegistry_DEPRECATED viewForReactTag:viewRef];
-        RNMBXPointAnnotation *view = componentView.contentView;
-        
-#else
-    [self.bridge.uiManager
-     addUIBlock:^(RCTUIManager *uiManager, NSDictionary<NSNumber *, UIView *> *viewRegistry) {
-        RNMBXPointAnnotation *view = [uiManager viewForReactTag:viewRef];
-#endif // RCT_NEW_ARCH_ENABLED
-        if (view != nil) {
-           block(view);
-        } else {
-            reject(methodName, [NSString stringWithFormat:@"Unknown reactTag: %@", viewRef], nil);
-        }
-    }];
+    [RNMBXViewResolver withViewRef:viewRef
+                          delegate:self
+                     expectedClass:[RNMBXPointAnnotation class]
+                             block:^(UIView *view) {
+                                 block((RNMBXPointAnnotation *)view);
+                             }
+                            reject:reject
+                        methodName:methodName];
 }
 
 

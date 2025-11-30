@@ -27,22 +27,14 @@ RCT_EXPORT_MODULE();
 
 - (void)withImage:(nonnull NSNumber*)viewRef block:(void (^)(RNMBXImage *))block reject:(RCTPromiseRejectBlock)reject methodName:(NSString *)methodName
 {
-#ifdef RCT_NEW_ARCH_ENABLED
-    [self.viewRegistry_DEPRECATED addUIBlock:^(RCTViewRegistry *viewRegistry) {
-        RNMBXImageComponentView *componentView = [self.viewRegistry_DEPRECATED viewForReactTag:viewRef];
-        RNMBXImage *view = componentView.contentView;
-
-#else
-    [self.bridge.uiManager
-     addUIBlock:^(RCTUIManager *uiManager, NSDictionary<NSNumber *, UIView *> *viewRegistry) {
-        RNMBXImage *view = [uiManager viewForReactTag:viewRef];
-#endif // RCT_NEW_ARCH_ENABLED
-        if (view != nil) {
-           block(view);
-        } else {
-            reject(methodName, [NSString stringWithFormat:@"Unknown reactTag: %@", viewRef], nil);
-        }
-    }];
+    [RNMBXViewResolver withViewRef:viewRef
+                          delegate:self
+                     expectedClass:[RNMBXImage class]
+                             block:^(UIView *view) {
+                                 block((RNMBXImage *)view);
+                             }
+                            reject:reject
+                        methodName:methodName];
 }
 
 

@@ -36,22 +36,14 @@ RCT_EXPORT_MODULE();
 
 - (void)withCamera:(nonnull NSNumber*)viewRef block:(void (^)(RNMBXCamera *))block reject:(RCTPromiseRejectBlock)reject methodName:(NSString *)methodName
 {
-#ifdef RCT_NEW_ARCH_ENABLED
-    [self.viewRegistry_DEPRECATED addUIBlock:^(RCTViewRegistry *viewRegistry) {
-    RNMBXCameraComponentView *componentView = [self.viewRegistry_DEPRECATED viewForReactTag:viewRef];
-        RNMBXCamera *view = componentView.contentView;
-        
-#else
-    [self.bridge.uiManager
-     addUIBlock:^(RCTUIManager *uiManager, NSDictionary<NSNumber *, UIView *> *viewRegistry) {
-        RNMBXCamera *view = [uiManager viewForReactTag:viewRef];
-#endif // RCT_NEW_ARCH_ENABLED
-        if (view != nil) {
-           block(view);
-        } else {
-            reject(methodName, [NSString stringWithFormat:@"Unknown reactTag: %@", viewRef], nil);
-        }
-    }];
+    [RNMBXViewResolver withViewRef:viewRef
+                          delegate:self
+                     expectedClass:[RNMBXCamera class]
+                             block:^(UIView *view) {
+                                 block((RNMBXCamera *)view);
+                             }
+                            reject:reject
+                        methodName:methodName];
 }
 
 RCT_EXPORT_METHOD(updateCameraStop:(nonnull NSNumber *)viewRef
