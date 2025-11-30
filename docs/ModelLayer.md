@@ -134,3 +134,573 @@ Customizable style attributes
 
 
 
+## styles
+
+* <a href="#visibility">visibility</a><br/>
+* <a href="#modelid">modelId</a><br/>
+* <a href="#modelopacity">modelOpacity</a><br/>
+* <a href="#modelrotation">modelRotation</a><br/>
+* <a href="#modelscale">modelScale</a><br/>
+* <a href="#modeltranslation">modelTranslation</a><br/>
+* <a href="#modelcolor">modelColor</a><br/>
+* <a href="#modelcolormixintensity">modelColorMixIntensity</a><br/>
+* <a href="#modeltype">modelType</a><br/>
+* <a href="#modelcastshadows">modelCastShadows</a><br/>
+* <a href="#modelreceiveshadows">modelReceiveShadows</a><br/>
+* <a href="#modelambientocclusionintensity">modelAmbientOcclusionIntensity</a><br/>
+* <a href="#modelemissivestrength">modelEmissiveStrength</a><br/>
+* <a href="#modelroughness">modelRoughness</a><br/>
+* <a href="#modelheightbasedemissivestrengthmultiplier">modelHeightBasedEmissiveStrengthMultiplier</a><br/>
+* <a href="#modelcutofffaderange">modelCutoffFadeRange</a><br/>
+
+___
+
+### visibility
+Name: `visibility`
+
+Mapbox spec: [visibility](https://docs.mapbox.com/style-spec/reference/layers/#layout-model-visibility)
+
+#### Description
+Whether this layer is displayed.
+
+#### Type
+`enum`
+#### Default Value
+`visible`
+
+#### Supported Values
+**visible** - The layer is shown.<br />
+**none** - The layer is not shown.<br />
+
+
+#### Expression
+
+Parameters: ``
+
+___
+
+### modelId
+Name: `modelId`
+
+Mapbox spec: [model-id](https://docs.mapbox.com/style-spec/reference/layers/#layout-model-model-id)
+
+#### Description
+Model to render. It can be either a string referencing an element to the models root property or an internal or external URL
+
+#### Type
+`string`
+#### Default Value
+`empty string`
+
+
+#### Expression
+
+Parameters: `zoom, feature`
+
+___
+
+### modelOpacity
+Name: `modelOpacity`
+
+Mapbox spec: [model-opacity](https://docs.mapbox.com/style-spec/reference/layers/#paint-model-model-opacity)
+
+#### Description
+The opacity of the model layer. Except for zoom, expressions that are dataDriven are not supported if using GeoJSON or vector tile as the model layer source.
+
+#### Type
+`number`
+#### Default Value
+`1`
+
+#### Minimum
+`0`
+
+
+#### Maximum
+`1`
+
+#### Expression
+
+Parameters: `feature, feature-state, zoom`
+___
+
+### modelOpacityTransition
+Name: `modelOpacityTransition`
+
+#### Description
+
+The transition affecting any changes to this layer’s modelOpacity property.
+
+#### Type
+
+`{ duration, delay }`
+
+#### Units
+`milliseconds`
+
+#### Default Value
+`{duration: 300, delay: 0}`
+
+
+___
+
+### modelRotation
+Name: `modelRotation`
+
+Mapbox spec: [model-rotation](https://docs.mapbox.com/style-spec/reference/layers/#paint-model-model-rotation)
+
+#### Description
+The rotation of the model in euler angles [lon, lat, z].
+
+#### Type
+`array<number>`
+#### Default Value
+`[0,0,0]`
+
+#### Units
+`degrees`
+
+
+#### Expression
+
+Parameters: `feature, feature-state, zoom`
+___
+
+### modelRotationTransition
+Name: `modelRotationTransition`
+
+#### Description
+
+The transition affecting any changes to this layer’s modelRotation property.
+
+#### Type
+
+`{ duration, delay }`
+
+#### Units
+`milliseconds`
+
+#### Default Value
+`{duration: 300, delay: 0}`
+
+
+___
+
+### modelScale
+Name: `modelScale`
+
+Mapbox spec: [model-scale](https://docs.mapbox.com/style-spec/reference/layers/#paint-model-model-scale)
+
+#### Description
+The scale of the model. Expressions that are zoomDependent are not supported if using GeoJSON or vector tile as the model layer source.
+
+#### Type
+`array<number>`
+#### Default Value
+`[1,1,1]`
+
+
+#### Expression
+
+Parameters: `feature, feature-state, zoom`
+___
+
+### modelScaleTransition
+Name: `modelScaleTransition`
+
+#### Description
+
+The transition affecting any changes to this layer’s modelScale property.
+
+#### Type
+
+`{ duration, delay }`
+
+#### Units
+`milliseconds`
+
+#### Default Value
+`{duration: 300, delay: 0}`
+
+
+___
+
+### modelTranslation
+Name: `modelTranslation`
+
+Mapbox spec: [model-translation](https://docs.mapbox.com/style-spec/reference/layers/#paint-model-model-translation)
+
+#### Description
+The translation of the model in meters in form of [longitudal, latitudal, altitude] offsets.
+
+#### Type
+`array<number>`
+#### Default Value
+`[0,0,0]`
+
+
+#### Expression
+
+Parameters: `feature, feature-state, zoom`
+___
+
+### modelTranslationTransition
+Name: `modelTranslationTransition`
+
+#### Description
+
+The transition affecting any changes to this layer’s modelTranslation property.
+
+#### Type
+
+`{ duration, delay }`
+
+#### Units
+`milliseconds`
+
+#### Default Value
+`{duration: 300, delay: 0}`
+
+
+___
+
+### modelColor
+Name: `modelColor`
+
+Mapbox spec: [model-color](https://docs.mapbox.com/style-spec/reference/layers/#paint-model-model-color)
+
+#### Description
+The tint color of the model layer. modelColorMixIntensity (defaults to 0) defines tint(mix) intensity  this means that, this color is not used unless modelColorMixIntensity gets value greater than 0. Expressions that depend on measureLight are not supported when using GeoJSON or vector tile as the model layer source.
+
+#### Type
+`color`
+#### Default Value
+`#ffffff`
+
+
+#### Expression
+
+Parameters: `feature, feature-state, measure-light, zoom`
+___
+
+### modelColorTransition
+Name: `modelColorTransition`
+
+#### Description
+
+The transition affecting any changes to this layer’s modelColor property.
+
+#### Type
+
+`{ duration, delay }`
+
+#### Units
+`milliseconds`
+
+#### Default Value
+`{duration: 300, delay: 0}`
+
+
+___
+
+### modelColorMixIntensity
+Name: `modelColorMixIntensity`
+
+Mapbox spec: [model-color-mix-intensity](https://docs.mapbox.com/style-spec/reference/layers/#paint-model-model-color-mix-intensity)
+
+#### Description
+Intensity of modelColor (on a scale from 0 to 1) in color mix with original 3D model's colors. Higher number will present a higher modelColor contribution in mix. Expressions that depend on measureLight are not supported when using GeoJSON or vector tile as the model layer source.
+
+#### Type
+`number`
+#### Default Value
+`0`
+
+#### Minimum
+`0`
+
+
+#### Maximum
+`1`
+
+#### Expression
+
+Parameters: `feature, feature-state, measure-light`
+___
+
+### modelColorMixIntensityTransition
+Name: `modelColorMixIntensityTransition`
+
+#### Description
+
+The transition affecting any changes to this layer’s modelColorMixIntensity property.
+
+#### Type
+
+`{ duration, delay }`
+
+#### Units
+`milliseconds`
+
+#### Default Value
+`{duration: 300, delay: 0}`
+
+
+___
+
+### modelType
+Name: `modelType`
+
+Mapbox spec: [model-type](https://docs.mapbox.com/style-spec/reference/layers/#paint-model-model-type)
+
+#### Description
+Defines rendering behavior of model in respect to other 3D scene objects.
+
+#### Type
+`enum`
+#### Default Value
+`common-3d`
+
+#### Supported Values
+**common-3d** - Integrated to 3D scene, using depth testing, along with terrain, fill-extrusions and custom layer.<br />
+**location-indicator** - Displayed over other 3D content, occluded by terrain.<br />
+
+
+
+___
+
+### modelCastShadows
+Name: `modelCastShadows`
+
+Mapbox spec: [model-cast-shadows](https://docs.mapbox.com/style-spec/reference/layers/#paint-model-model-cast-shadows)
+
+#### Description
+Enable/Disable shadow casting for this layer
+
+#### Type
+`boolean`
+#### Default Value
+`true`
+
+
+
+___
+
+### modelReceiveShadows
+Name: `modelReceiveShadows`
+
+Mapbox spec: [model-receive-shadows](https://docs.mapbox.com/style-spec/reference/layers/#paint-model-model-receive-shadows)
+
+#### Description
+Enable/Disable shadow receiving for this layer
+
+#### Type
+`boolean`
+#### Default Value
+`true`
+
+
+
+___
+
+### modelAmbientOcclusionIntensity
+Name: `modelAmbientOcclusionIntensity`
+
+Mapbox spec: [model-ambient-occlusion-intensity](https://docs.mapbox.com/style-spec/reference/layers/#paint-model-model-ambient-occlusion-intensity)
+
+#### Description
+Intensity of the ambient occlusion if present in the 3D model.
+
+#### Type
+`number`
+#### Default Value
+`1`
+
+#### Minimum
+`0`
+
+
+#### Maximum
+`1`
+
+#### Expression
+
+Parameters: `zoom`
+___
+
+### modelAmbientOcclusionIntensityTransition
+Name: `modelAmbientOcclusionIntensityTransition`
+
+#### Description
+
+The transition affecting any changes to this layer’s modelAmbientOcclusionIntensity property.
+
+#### Type
+
+`{ duration, delay }`
+
+#### Units
+`milliseconds`
+
+#### Default Value
+`{duration: 300, delay: 0}`
+
+
+___
+
+### modelEmissiveStrength
+Name: `modelEmissiveStrength`
+
+Mapbox spec: [model-emissive-strength](https://docs.mapbox.com/style-spec/reference/layers/#paint-model-model-emissive-strength)
+
+#### Description
+Strength of the emission. There is no emission for value 0. For value 1.0, only emissive component (no shading) is displayed and values above 1.0 produce light contribution to surrounding area, for some of the parts (e.g. doors). Expressions that depend on measureLight are only supported as a global layer value (and not for each feature) when using GeoJSON or vector tile as the model layer source.
+
+#### Type
+`number`
+#### Default Value
+`0`
+
+#### Units
+`intensity`
+
+#### Minimum
+`0`
+
+
+#### Maximum
+`5`
+
+#### Expression
+
+Parameters: `feature, feature-state, measure-light`
+___
+
+### modelEmissiveStrengthTransition
+Name: `modelEmissiveStrengthTransition`
+
+#### Description
+
+The transition affecting any changes to this layer’s modelEmissiveStrength property.
+
+#### Type
+
+`{ duration, delay }`
+
+#### Units
+`milliseconds`
+
+#### Default Value
+`{duration: 300, delay: 0}`
+
+
+___
+
+### modelRoughness
+Name: `modelRoughness`
+
+Mapbox spec: [model-roughness](https://docs.mapbox.com/style-spec/reference/layers/#paint-model-model-roughness)
+
+#### Description
+Material roughness. Material is fully smooth for value 0, and fully rough for value 1. Affects only layers using batchedModel source.
+
+#### Type
+`number`
+#### Default Value
+`1`
+
+#### Minimum
+`0`
+
+
+#### Maximum
+`1`
+
+#### Expression
+
+Parameters: `feature, feature-state`
+___
+
+### modelRoughnessTransition
+Name: `modelRoughnessTransition`
+
+#### Description
+
+The transition affecting any changes to this layer’s modelRoughness property.
+
+#### Type
+
+`{ duration, delay }`
+
+#### Units
+`milliseconds`
+
+#### Default Value
+`{duration: 300, delay: 0}`
+
+
+___
+
+### modelHeightBasedEmissiveStrengthMultiplier
+Name: `modelHeightBasedEmissiveStrengthMultiplier`
+
+Mapbox spec: [model-height-based-emissive-strength-multiplier](https://docs.mapbox.com/style-spec/reference/layers/#paint-model-model-height-based-emissive-strength-multiplier)
+
+#### Description
+Emissive strength multiplier along model height (gradient begin, gradient end, value at begin, value at end, gradient curve power (logarithmic scale, curve power = pow(10, val)).
+
+#### Type
+`array<number>`
+#### Default Value
+`[1,1,1,1,0]`
+
+
+#### Expression
+
+Parameters: `feature, feature-state, measure-light`
+___
+
+### modelHeightBasedEmissiveStrengthMultiplierTransition
+Name: `modelHeightBasedEmissiveStrengthMultiplierTransition`
+
+#### Description
+
+The transition affecting any changes to this layer’s modelHeightBasedEmissiveStrengthMultiplier property.
+
+#### Type
+
+`{ duration, delay }`
+
+#### Units
+`milliseconds`
+
+#### Default Value
+`{duration: 300, delay: 0}`
+
+
+___
+
+### modelCutoffFadeRange
+Name: `modelCutoffFadeRange`
+
+Mapbox spec: [model-cutoff-fade-range](https://docs.mapbox.com/style-spec/reference/layers/#paint-model-model-cutoff-fade-range)
+
+#### Description
+This parameter defines the range for the fadeOut effect before an automatic content cutoff on pitched map views. The automatic cutoff range is calculated according to the minimum required zoom level of the source and layer. The fade range is expressed in relation to the height of the map view. A value of 1.0 indicates that the content is faded to the same extent as the map's height in pixels, while a value close to zero represents a sharp cutoff. When the value is set to 0.0, the cutoff is completely disabled. Note: The property has no effect on the map if terrain is enabled.
+
+#### Type
+`number`
+#### Default Value
+`0`
+
+#### Minimum
+`0`
+
+
+#### Maximum
+`1`
+
+#### Expression
+
+Parameters: ``
+

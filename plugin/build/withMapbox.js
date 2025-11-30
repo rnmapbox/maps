@@ -148,7 +148,7 @@ const withAndroidPropertiesDownloadToken = (config, { RNMapboxMapsDownloadToken 
     }
     return config;
 };
-const withAndroidPropertiesImpl2 = (config, { RNMapboxMapsImpl, RNMapboxMapsVersion, RNMapboxMapsUseV11 } = {}) => {
+const withAndroidPropertiesImpl2 = (config, { RNMapboxMapsImpl, RNMapboxMapsVersion, RNMapboxMapsUseV11, } = {}) => {
     const keyValues = {
         expoRNMapboxMapsImpl: RNMapboxMapsImpl,
         expoRNMapboxMapsVersion: RNMapboxMapsVersion,

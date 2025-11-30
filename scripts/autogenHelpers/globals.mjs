@@ -111,6 +111,8 @@ export function getLayerType(layer, platform) {
       return isIOS ? 'MGLTerrain' : 'Terrain';
     case 'model':
       return isIOS ? 'ModelLayer' : 'ModelLayer';
+    case 'raster-particle':
+      return isIOS ? 'RasterParticleLayer' : 'RasterParticleLayer';
     default:
       throw new Error(
         `Is ${layer.name} a new layer? We should add support for it!`,

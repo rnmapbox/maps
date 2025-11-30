@@ -152,6 +152,8 @@ This is now deprecated, use Image component instead.
 * <a href="#symbolavoidedges">symbolAvoidEdges</a><br/>
 * <a href="#symbolsortkey">symbolSortKey</a><br/>
 * <a href="#symbolzorder">symbolZOrder</a><br/>
+* <a href="#symbolzelevate">symbolZElevate</a><br/>
+* <a href="#symbolelevationreference">symbolElevationReference</a><br/>
 * <a href="#iconallowoverlap">iconAllowOverlap</a><br/>
 * <a href="#iconignoreplacement">iconIgnorePlacement</a><br/>
 * <a href="#iconoptional">iconOptional</a><br/>
@@ -190,19 +192,26 @@ This is now deprecated, use Image component instead.
 * <a href="#textoptional">textOptional</a><br/>
 * <a href="#visibility">visibility</a><br/>
 * <a href="#iconopacity">iconOpacity</a><br/>
+* <a href="#iconocclusionopacity">iconOcclusionOpacity</a><br/>
+* <a href="#iconemissivestrength">iconEmissiveStrength</a><br/>
+* <a href="#textemissivestrength">textEmissiveStrength</a><br/>
 * <a href="#iconcolor">iconColor</a><br/>
 * <a href="#iconhalocolor">iconHaloColor</a><br/>
 * <a href="#iconhalowidth">iconHaloWidth</a><br/>
 * <a href="#iconhaloblur">iconHaloBlur</a><br/>
 * <a href="#icontranslate">iconTranslate</a><br/>
 * <a href="#icontranslateanchor">iconTranslateAnchor</a><br/>
+* <a href="#iconimagecrossfade">iconImageCrossFade</a><br/>
 * <a href="#textopacity">textOpacity</a><br/>
+* <a href="#textocclusionopacity">textOcclusionOpacity</a><br/>
 * <a href="#textcolor">textColor</a><br/>
 * <a href="#texthalocolor">textHaloColor</a><br/>
 * <a href="#texthalowidth">textHaloWidth</a><br/>
 * <a href="#texthaloblur">textHaloBlur</a><br/>
 * <a href="#texttranslate">textTranslate</a><br/>
 * <a href="#texttranslateanchor">textTranslateAnchor</a><br/>
+* <a href="#iconcolorsaturation">iconColorSaturation</a><br/>
+* <a href="#symbolzoffset">symbolZOffset</a><br/>
 
 ___
 
@@ -312,6 +321,51 @@ Determines whether overlapping symbols in the same layer are rendered in the ord
 **auto** - Sorts symbols by `symbol-sort-key` if set. Otherwise, sorts symbols by their y-position relative to the viewport if `icon-allow-overlap` or `text-allow-overlap` is set to `true` or `icon-ignore-placement` or `text-ignore-placement` is `false`.<br />
 **viewport-y** - Sorts symbols by their y-position relative to the viewport if any of the following is set to `true`: `icon-allow-overlap`, `text-allow-overlap`, `icon-ignore-placement`, `text-ignore-placement`.<br />
 **source** - Sorts symbols by `symbol-sort-key` if set. Otherwise, no sorting is applied; symbols are rendered in the same order as the source data.<br />
+
+
+#### Expression
+
+Parameters: `zoom`
+
+___
+
+### symbolZElevate
+Name: `symbolZElevate`
+
+Mapbox spec: [symbol-z-elevate](https://docs.mapbox.com/style-spec/reference/layers/#layout-symbol-symbol-z-elevate)
+
+#### Description
+Position symbol on buildings (both fill extrusions and models) rooftops. In order to have minimal impact on performance, this is supported only when `fillExtrusionHeight` is not zoomDependent and remains unchanged. For fading in buildings when zooming in, fillExtrusionVerticalScale should be used and symbols would raise with building rooftops. Symbols are sorted by elevation, except in cases when `viewportY` sorting or `symbolSortKey` are applied.
+
+#### Type
+`boolean`
+#### Default Value
+`false`
+
+
+#### Expression
+
+Parameters: `zoom`
+
+___
+
+### symbolElevationReference
+Name: `symbolElevationReference`
+
+Mapbox spec: [symbol-elevation-reference](https://docs.mapbox.com/style-spec/reference/layers/#layout-symbol-symbol-elevation-reference)
+
+#### Description
+Selects the base of symbolElevation.
+
+#### Type
+`enum`
+#### Default Value
+`ground`
+
+#### Supported Values
+**sea** - Elevate symbols relative to the sea level.<br />
+**ground** - Elevate symbols relative to the ground's height below them.<br />
+**hd-road-markup** - Use this mode to enable elevated behavior for features that are rendered on top of 3D road polygons. The feature is currently being developed.<br />
 
 
 #### Expression
@@ -1337,6 +1391,150 @@ The transition affecting any changes to this layer’s iconOpacity property.
 
 ___
 
+### iconOcclusionOpacity
+Name: `iconOcclusionOpacity`
+
+Mapbox spec: [icon-occlusion-opacity](https://docs.mapbox.com/style-spec/reference/layers/#paint-symbol-icon-occlusion-opacity)
+
+#### Description
+The opacity at which the icon will be drawn in case of being depth occluded. Absent value means full occlusion against terrain only.
+
+#### Type
+`number`
+#### Default Value
+`0`
+
+#### Minimum
+`0`
+
+
+#### Maximum
+`1`
+
+#### Requires
+`iconImage`
+
+#### Expression
+
+Parameters: `zoom, feature, feature-state, measure-light`
+___
+
+### iconOcclusionOpacityTransition
+Name: `iconOcclusionOpacityTransition`
+
+#### Description
+
+The transition affecting any changes to this layer’s iconOcclusionOpacity property.
+
+#### Type
+
+`{ duration, delay }`
+
+#### Units
+`milliseconds`
+
+#### Default Value
+`{duration: 300, delay: 0}`
+
+
+___
+
+### iconEmissiveStrength
+Name: `iconEmissiveStrength`
+
+Mapbox spec: [icon-emissive-strength](https://docs.mapbox.com/style-spec/reference/layers/#paint-symbol-icon-emissive-strength)
+
+#### Description
+Controls the intensity of light emitted on the source features.
+
+#### Type
+`number`
+#### Default Value
+`1`
+
+#### Units
+`intensity`
+
+#### Minimum
+`0`
+
+
+#### Requires
+`lights`
+
+#### Expression
+
+Parameters: `zoom, measure-light, feature-state`
+___
+
+### iconEmissiveStrengthTransition
+Name: `iconEmissiveStrengthTransition`
+
+#### Description
+
+The transition affecting any changes to this layer’s iconEmissiveStrength property.
+
+#### Type
+
+`{ duration, delay }`
+
+#### Units
+`milliseconds`
+
+#### Default Value
+`{duration: 300, delay: 0}`
+
+
+___
+
+### textEmissiveStrength
+Name: `textEmissiveStrength`
+
+Mapbox spec: [text-emissive-strength](https://docs.mapbox.com/style-spec/reference/layers/#paint-symbol-text-emissive-strength)
+
+#### Description
+Controls the intensity of light emitted on the source features.
+
+#### Type
+`number`
+#### Default Value
+`1`
+
+#### Units
+`intensity`
+
+#### Minimum
+`0`
+
+
+#### Requires
+`lights`
+
+#### Expression
+
+Parameters: `zoom, measure-light, feature-state`
+___
+
+### textEmissiveStrengthTransition
+Name: `textEmissiveStrengthTransition`
+
+#### Description
+
+The transition affecting any changes to this layer’s textEmissiveStrength property.
+
+#### Type
+
+`{ duration, delay }`
+
+#### Units
+`milliseconds`
+
+#### Default Value
+`{duration: 300, delay: 0}`
+
+
+___
+
 ### iconColor
 Name: `iconColor`
 
@@ -1589,6 +1787,35 @@ Parameters: `zoom`
 
 ___
 
+### iconImageCrossFade
+Name: `iconImageCrossFade`
+
+Mapbox spec: [icon-image-cross-fade](https://docs.mapbox.com/style-spec/reference/layers/#paint-symbol-icon-image-cross-fade)
+
+#### Description
+Controls the transition progress between the image variants of iconImage. Zero means the first variant is used, one is the second, and in between they are blended together. . Both images should be the same size and have the same type (either raster or vector).
+
+#### Type
+`number`
+#### Default Value
+`0`
+
+#### Minimum
+`0`
+
+
+#### Maximum
+`1`
+
+#### Requires
+`iconImage`
+
+#### Expression
+
+Parameters: `zoom, measure-light`
+
+___
+
 ### textOpacity
 Name: `textOpacity`
 
@@ -1623,6 +1850,54 @@ Name: `textOpacityTransition`
 #### Description
 
 The transition affecting any changes to this layer’s textOpacity property.
+
+#### Type
+
+`{ duration, delay }`
+
+#### Units
+`milliseconds`
+
+#### Default Value
+`{duration: 300, delay: 0}`
+
+
+___
+
+### textOcclusionOpacity
+Name: `textOcclusionOpacity`
+
+Mapbox spec: [text-occlusion-opacity](https://docs.mapbox.com/style-spec/reference/layers/#paint-symbol-text-occlusion-opacity)
+
+#### Description
+The opacity at which the text will be drawn in case of being depth occluded. Absent value means full occlusion against terrain only.
+
+#### Type
+`number`
+#### Default Value
+`0`
+
+#### Minimum
+`0`
+
+
+#### Maximum
+`1`
+
+#### Requires
+`textField`
+
+#### Expression
+
+Parameters: `zoom, feature, feature-state, measure-light`
+___
+
+### textOcclusionOpacityTransition
+Name: `textOcclusionOpacityTransition`
+
+#### Description
+
+The transition affecting any changes to this layer’s textOcclusionOpacity property.
 
 #### Type
 
@@ -1886,4 +2161,72 @@ Controls the frame of reference for `textTranslate`.
 #### Expression
 
 Parameters: `zoom`
+
+___
+
+### iconColorSaturation
+Name: `iconColorSaturation`
+
+Mapbox spec: [icon-color-saturation](https://docs.mapbox.com/style-spec/reference/layers/#paint-symbol-icon-color-saturation)
+
+#### Description
+Increase or reduce the saturation of the symbol icon.
+
+#### Type
+`number`
+#### Default Value
+`0`
+
+#### Minimum
+`-1`
+
+
+#### Maximum
+`1`
+
+#### Expression
+
+Parameters: ``
+
+___
+
+### symbolZOffset
+Name: `symbolZOffset`
+
+Mapbox spec: [symbol-z-offset](https://docs.mapbox.com/style-spec/reference/layers/#paint-symbol-symbol-z-offset)
+
+#### Description
+Specifies an uniform elevation from the ground, in meters.
+
+#### Type
+`number`
+#### Default Value
+`0`
+
+#### Minimum
+`0`
+
+
+#### Expression
+
+Parameters: `zoom, feature`
+___
+
+### symbolZOffsetTransition
+Name: `symbolZOffsetTransition`
+
+#### Description
+
+The transition affecting any changes to this layer’s symbolZOffset property.
+
+#### Type
+
+`{ duration, delay }`
+
+#### Units
+`milliseconds`
+
+#### Default Value
+`{duration: 300, delay: 0}`
+
 
