@@ -581,6 +581,33 @@ class RNMBXStyleValue {
   }
 
   #if RNMBX_11
+  func mglStyleValueArrayClipLayerTypes() -> Value<[ClipLayerTypes]> {
+    guard let value = value as? Dictionary<String,Any> else {
+      Logger.log(level: .error, message: "Invalid value for array of ClipLayerTypes: \(value)")
+      return .constant([])
+    }
+    let valueObj = RNMBXStyleValue.convert(value["stylevalue"] as! [String:Any])
+
+    if let valueObj = valueObj as? [String] {
+      let convertedVal = valueObj.compactMap(ClipLayerTypes.init(rawValue:))
+      return .constant(convertedVal)
+    } else {
+      do {
+        if valueObj is String {
+          throw StyleConversionError.unexpectedType(message: "should be array constant or expression")
+        }
+        let data = try JSONSerialization.data(withJSONObject: valueObj, options: .prettyPrinted)
+        let decodedExpression = try JSONDecoder().decode(Expression.self, from: data)
+        return .expression(decodedExpression)
+      } catch {
+        Logger.log(level: .error, message: "Invalid value for array => value: \(value) error: \(error) setting dummy value")
+        return .constant([])
+      }
+    }
+  }
+  #endif
+
+  #if RNMBX_11
   func getSphericalPosition() -> Value<[Double]> {
     if let array = styleObject as? [NSNumber] {
       var result = array.map { $0.doubleValue }

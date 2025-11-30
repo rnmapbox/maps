@@ -39,6 +39,7 @@ describe('Public Interface', () => {
       'SymbolLayer',
       'BackgroundLayer',
       'RasterLayer',
+      'RasterParticleLayer',
       'SkyLayer',
       'Terrain',
       'Atmosphere',
@@ -47,6 +48,7 @@ describe('Public Interface', () => {
       'VectorSource',
       'ShapeSource',
       'RasterSource',
+      'RasterArraySource',
       'ImageSource',
       'RasterDemSource',
       'Images',
@@ -97,7 +99,6 @@ describe('Public Interface', () => {
       'requestAndroidLocationPermissions',
       'getAnnotationsLayerID',
       'addCustomHeader',
-      'addCustomHeaderWithOptions',
       'removeCustomHeader',
 
       // animated

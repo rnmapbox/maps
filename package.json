@@ -1,6 +1,6 @@
 {
   "name": "@rnmapbox/maps",
-  "version": "10.2.6",
+  "version": "10.2.8",
   "description": "Community-supported, open-source React Native library for building maps using Mapbox native maps SDK for iOS and Android",
   "main": "./lib/module/index.js",
   "types": "./lib/typescript/src/index.native.d.ts",
@@ -72,6 +72,10 @@
     "url": "https://github.com/rnmapbox/maps/issues"
   },
   "homepage": "https://github.com/rnmapbox/maps#readme",
+  "mapbox": {
+    "ios": "~> 11.16.2",
+    "android": "11.16.2"
+  },
   "publishConfig": {
     "registry": "https://registry.npmjs.org/",
     "access": "public"
@@ -253,11 +257,17 @@
         "RNMBXPointAnnotation": {
           "className": "RNMBXPointAnnotationComponentView"
         },
+        "RNMBXRasterArraySource": {
+          "className": "RNMBXRasterArraySourceComponentView"
+        },
         "RNMBXRasterDemSource": {
           "className": "RNMBXRasterDemSourceComponentView"
         },
         "RNMBXRasterLayer": {
           "className": "RNMBXRasterLayerComponentView"
+        },
+        "RNMBXRasterParticleLayer": {
+          "className": "RNMBXRasterParticleLayerComponentView"
         },
         "RNMBXRasterSource": {
           "className": "RNMBXRasterSourceComponentView"
@@ -307,8 +317,10 @@
         "RNMBXModels": "RNMBXModelsComponentView",
         "RNMBXNativeUserLocation": "RNMBXNativeUserLocationComponentView",
         "RNMBXPointAnnotation": "RNMBXPointAnnotationComponentView",
+        "RNMBXRasterArraySource": "RNMBXRasterArraySourceComponentView",
         "RNMBXRasterDemSource": "RNMBXRasterDemSourceComponentView",
         "RNMBXRasterLayer": "RNMBXRasterLayerComponentView",
+        "RNMBXRasterParticleLayer": "RNMBXRasterParticleLayerComponentView",
         "RNMBXRasterSource": "RNMBXRasterSourceComponentView",
         "RNMBXShapeSource": "RNMBXShapeSourceComponentView",
         "RNMBXSkyLayer": "RNMBXSkyLayerComponentView",

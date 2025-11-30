@@ -27,22 +27,14 @@ RCT_EXPORT_MODULE();
 
 - (void)withShapeSource:(nonnull NSNumber*)viewRef block:(void (^)(RNMBXShapeSource *))block reject:(RCTPromiseRejectBlock)reject methodName:(NSString *)methodName
 {
-#ifdef RCT_NEW_ARCH_ENABLED
-    [self.viewRegistry_DEPRECATED addUIBlock:^(RCTViewRegistry *viewRegistry) {
-        RNMBXShapeSourceComponentView *componentView = [self.viewRegistry_DEPRECATED viewForReactTag:viewRef];
-        RNMBXShapeSource *view = componentView.contentView;
-        
-#else
-    [self.bridge.uiManager
-     addUIBlock:^(RCTUIManager *uiManager, NSDictionary<NSNumber *, UIView *> *viewRegistry) {
-        RNMBXShapeSource *view = [uiManager viewForReactTag:viewRef];
-#endif // RCT_NEW_ARCH_ENABLED
-        if (view != nil) {
-           block(view);
-        } else {
-            reject(methodName, [NSString stringWithFormat:@"Unknown reactTag: %@", viewRef], nil);
-        }
-    }];
+    [RNMBXViewResolver withViewRef:viewRef
+                          delegate:self
+                     expectedClass:[RNMBXShapeSource class]
+                             block:^(UIView *view) {
+                                 block((RNMBXShapeSource *)view);
+                             }
+                            reject:reject
+                        methodName:methodName];
 }
 
 

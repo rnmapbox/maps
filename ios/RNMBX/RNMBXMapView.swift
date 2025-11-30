@@ -60,11 +60,11 @@ public class RNMBXMapViewFactory {
 }
 
 class FeatureEntry {
-  let feature: RNMBXMapComponent
+  let feature: AnyObject  // Can be RNMBXMapComponent or RNMBXMapAndMapViewComponent
   let view: UIView
   var addedToMap: Bool = false
 
-  init(feature:RNMBXMapComponent, view: UIView, addedToMap: Bool = false) {
+  init(feature: AnyObject, view: UIView, addedToMap: Bool = false) {
     self.feature = feature
     self.view = view
     self.addedToMap = addedToMap
@@ -295,7 +295,27 @@ open class RNMBXMapView: UIView, RCTInvalidating {
 
   @objc public func addToMap(_ subview: UIView) {
     withMapView { mapView in
-      if let mapComponent = subview as? RNMBXMapComponent {
+      // Check for RNMBXMapAndMapViewComponent first (requires MapView)
+      if let mapAndMapViewComponent = subview as? RNMBXMapAndMapViewComponent {
+        let style = mapView.mapboxMap.style
+        var addToMap = false
+        if mapAndMapViewComponent.waitForStyleLoad() {
+          if (self.styleLoadWaiters.hasInited()) {
+            addToMap = true
+          }
+        } else {
+          addToMap = true
+        }
+
+        let entry = FeatureEntry(feature: mapAndMapViewComponent, view: subview, addedToMap: false)
+        if (addToMap) {
+          mapAndMapViewComponent.addToMap(self, mapView: mapView, style: style)
+          entry.addedToMap = true
+        }
+        self.features.append(entry)
+      }
+      // Fallback to RNMBXMapComponent (doesn't require MapView)
+      else if let mapComponent = subview as? RNMBXMapComponent {
         let style = mapView.mapboxMap.style
         var addToMap = false
         if mapComponent.waitForStyleLoad() {
@@ -322,7 +342,26 @@ open class RNMBXMapView: UIView, RCTInvalidating {
   }
 
   @objc public func removeFromMap(_ subview: UIView) {
-    if let mapComponent = subview as? RNMBXMapComponent {
+    // Check for RNMBXMapAndMapViewComponent first (requires MapView)
+    if let mapAndMapViewComponent = subview as? RNMBXMapAndMapViewComponent {
+      var entryIndex = features.firstIndex { $0.view == subview }
+      if let entryIndex = entryIndex {
+        var entry = features[entryIndex]
+        if (entry.addedToMap) {
+          // mapView should always be non-nil here if our invariants hold
+          guard let mapView = _mapView else {
+            Logger.error("RNMBXMapView.removeFromMap: CRITICAL - mapView is nil for component that requires it: \(type(of: subview))")
+            features.remove(at: entryIndex)
+            return
+          }
+          mapAndMapViewComponent.removeFromMap(self, mapView: mapView, reason: .OnDestroy)
+          entry.addedToMap = false
+        }
+        features.remove(at: entryIndex)
+      }
+    }
+    // Fallback to RNMBXMapComponent (doesn't require MapView)
+    else if let mapComponent = subview as? RNMBXMapComponent {
       var entryIndex = features.firstIndex { $0.view == subview }
       if let entryIndex = entryIndex {
         var entry = features[entryIndex]
@@ -868,16 +907,39 @@ open class RNMBXMapView: UIView, RCTInvalidating {
   private func removeAllFeaturesFromMap(reason: RemovalReason) {
     features.forEach { entry in
       if (entry.addedToMap) {
-        entry.feature.removeFromMap(self, reason: reason)
+        // Handle RNMBXMapAndMapViewComponent
+        if let mapAndMapViewComponent = entry.feature as? RNMBXMapAndMapViewComponent {
+          guard let mapView = _mapView else {
+            Logger.error("RNMBXMapView.removeAllFeaturesFromMap: mapView is nil")
+            return
+          }
+          mapAndMapViewComponent.removeFromMap(self, mapView: mapView, reason: reason)
+        }
+        // Handle RNMBXMapComponent
+        else if let mapComponent = entry.feature as? RNMBXMapComponent {
+          mapComponent.removeFromMap(self, reason: reason)
+        }
         entry.addedToMap = false
       }
     }
   }
 
   private func addFeaturesToMap(style: Style) {
+    guard let mapView = _mapView else {
+      Logger.error("RNMBXMapView.addFeaturesToMap: mapView is nil")
+      return
+    }
+
     features.forEach { entry in
       if (!entry.addedToMap) {
-        entry.feature.addToMap(self, style: style)
+        // Handle RNMBXMapAndMapViewComponent
+        if let mapAndMapViewComponent = entry.feature as? RNMBXMapAndMapViewComponent {
+          mapAndMapViewComponent.addToMap(self, mapView: mapView, style: style)
+        }
+        // Handle RNMBXMapComponent
+        else if let mapComponent = entry.feature as? RNMBXMapComponent {
+          mapComponent.addToMap(self, style: style)
+        }
         entry.addedToMap = true
       }
     }

@@ -24,18 +24,6 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  call_android_workflow:
-    name: "Android/Mapbox"
-    uses: ./.github/workflows/android-actions.yml
-    with:
-      env_name: ${{ inputs.env_name }}
-      ref: ${{ inputs.ref }}
-      NVMRC: ${{ inputs.NVMRC }}
-      MAP_IMPL: mapbox
-    secrets:
-      MAPBOX_ACCESS_TOKEN: ${{ secrets.MAPBOX_ACCESS_TOKEN }}
-      ENV_MAPBOX_ACCESS_TOKEN: ${{ secrets.ENV_MAPBOX_ACCESS_TOKEN }}
-
   call_android_workflow_fabric:
     name: "Android/Mapbox/Fabric"
     uses: ./.github/workflows/android-actions.yml
@@ -49,7 +37,6 @@ jobs:
       MAPBOX_ACCESS_TOKEN: ${{ secrets.MAPBOX_ACCESS_TOKEN }}
       ENV_MAPBOX_ACCESS_TOKEN: ${{ secrets.ENV_MAPBOX_ACCESS_TOKEN }}
 
-
   call_android_workflow_11:
     name: "Android/Mapbox11"
     uses: ./.github/workflows/android-actions.yml
@@ -62,14 +49,15 @@ jobs:
       MAPBOX_ACCESS_TOKEN: ${{ secrets.MAPBOX_ACCESS_TOKEN }}
       ENV_MAPBOX_ACCESS_TOKEN: ${{ secrets.ENV_MAPBOX_ACCESS_TOKEN }}
 
-  call_ios_workflow:
-    name: "iOS/Mapbox"
-    uses: ./.github/workflows/ios-actions.yml
+  call_android_workflow_11_fabric:
+    name: "Android/Mapbox11/Fabric"
+    uses: ./.github/workflows/android-actions.yml
     with:
       env_name: ${{ inputs.env_name }}
       ref: ${{ inputs.ref }}
       NVMRC: ${{ inputs.NVMRC }}
-      MAP_IMPL: mapbox
+      MAP_IMPL: mapbox11
+      NEW_ARCH: true
     secrets:
       MAPBOX_ACCESS_TOKEN: ${{ secrets.MAPBOX_ACCESS_TOKEN }}
       ENV_MAPBOX_ACCESS_TOKEN: ${{ secrets.ENV_MAPBOX_ACCESS_TOKEN }}
@@ -95,6 +83,19 @@ jobs:
       ref: ${{ inputs.ref }}
       NVMRC: ${{ inputs.NVMRC }}
       MAP_IMPL: mapbox11
+    secrets:
+      MAPBOX_ACCESS_TOKEN: ${{ secrets.MAPBOX_ACCESS_TOKEN }}
+      ENV_MAPBOX_ACCESS_TOKEN: ${{ secrets.ENV_MAPBOX_ACCESS_TOKEN }}
+
+  call_ios_workflow_11_fabric:
+    name: "iOS/Mapbox11/Fabric"
+    uses: ./.github/workflows/ios-actions.yml
+    with:
+      env_name: ${{ inputs.env_name }}
+      ref: ${{ inputs.ref }}
+      NVMRC: ${{ inputs.NVMRC }}
+      MAP_IMPL: mapbox11
+      NEW_ARCH: true
     secrets:
       MAPBOX_ACCESS_TOKEN: ${{ secrets.MAPBOX_ACCESS_TOKEN }}
       ENV_MAPBOX_ACCESS_TOKEN: ${{ secrets.ENV_MAPBOX_ACCESS_TOKEN }}

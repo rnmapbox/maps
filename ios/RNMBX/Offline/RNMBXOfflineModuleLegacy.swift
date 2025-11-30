@@ -364,6 +364,11 @@ func getRegionByName(name: String, offlineRegions: [OfflineRegion]) -> OfflineRe
   }
 
   @objc
+  func setTileCountLimit(_ limit: NSNumber) {
+    self.offlineRegionManager.setOfflineMapboxTileCountLimitForLimit(limit.uint64Value)
+  }
+
+  @objc
   func resetDatabase(_ resolver: @escaping RCTPromiseResolveBlock,
     rejecter: @escaping RCTPromiseRejectBlock)
   {

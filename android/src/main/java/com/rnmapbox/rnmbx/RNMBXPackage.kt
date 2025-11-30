@@ -34,11 +34,13 @@ import com.rnmapbox.rnmbx.components.styles.layers.RNMBXHeatmapLayerManager
 import com.rnmapbox.rnmbx.components.styles.layers.RNMBXLineLayerManager
 import com.rnmapbox.rnmbx.components.styles.layers.RNMBXModelLayerManager
 import com.rnmapbox.rnmbx.components.styles.layers.RNMBXRasterLayerManager
+import com.rnmapbox.rnmbx.components.styles.layers.RNMBXRasterParticleLayerManager
 import com.rnmapbox.rnmbx.components.styles.layers.RNMBXSkyLayerManager
 import com.rnmapbox.rnmbx.components.styles.layers.RNMBXSymbolLayerManager
 import com.rnmapbox.rnmbx.components.styles.light.RNMBXLightManager
 import com.rnmapbox.rnmbx.components.styles.model.RNMBXModelsManager
 import com.rnmapbox.rnmbx.components.styles.sources.RNMBXImageSourceManager
+import com.rnmapbox.rnmbx.components.styles.sources.RNMBXRasterArraySourceManager
 import com.rnmapbox.rnmbx.components.styles.sources.RNMBXRasterDemSourceManager
 import com.rnmapbox.rnmbx.components.styles.sources.RNMBXRasterSourceManager
 import com.rnmapbox.rnmbx.components.styles.sources.RNMBXShapeSourceManager
@@ -142,6 +144,9 @@ class RNMBXPackage : TurboReactPackage() {
             ))
         managers.add(RNMBXRasterDemSourceManager(reactApplicationContext))
         managers.add(RNMBXRasterSourceManager(reactApplicationContext))
+        if (RNMBXRasterArraySourceManager.isImplemented) {
+            managers.add(RNMBXRasterArraySourceManager(reactApplicationContext))
+        }
         managers.add(RNMBXImageSourceManager())
 
         // images
@@ -156,6 +161,9 @@ class RNMBXPackage : TurboReactPackage() {
         managers.add(RNMBXCircleLayerManager())
         managers.add(RNMBXSymbolLayerManager())
         managers.add(RNMBXRasterLayerManager())
+        if (RNMBXRasterParticleLayerManager.isImplemented) {
+            managers.add(RNMBXRasterParticleLayerManager())
+        }
         managers.add(RNMBXSkyLayerManager())
         managers.add(RNMBXTerrainManager())
         managers.add(RNMBXAtmosphereManager())

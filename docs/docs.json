@@ -324,6 +324,34 @@
           "name": "star-intensity",
           "namespace": null
         }
+      },
+      {
+        "name": "verticalRange",
+        "type": "array<number>",
+        "values": [],
+        "minimum": 0,
+        "default": [
+          0,
+          0
+        ],
+        "description": "An array of two number values, specifying the vertical range, measured in meters, over which the fog should gradually fade out. When both parameters are set to zero, the fog will be rendered without any vertical constraints.",
+        "requires": [],
+        "disabledBy": [],
+        "allowedFunctionTypes": [],
+        "expression": {
+          "interpolated": true,
+          "parameters": [
+            "zoom",
+            "measure-light"
+          ],
+          "relaxZoomRestriction": true
+        },
+        "transition": true,
+        "mbx": {
+          "fullName": "vertical-range",
+          "name": "vertical-range",
+          "namespace": null
+        }
       }
     ]
   },
@@ -445,6 +473,34 @@
         }
       },
       {
+        "name": "backgroundPitchAlignment",
+        "type": "enum",
+        "values": [
+          {
+            "value": "map",
+            "doc": "The background is aligned to the plane of the map."
+          },
+          {
+            "value": "viewport",
+            "doc": "The background is aligned to the plane of the viewport, covering the whole screen. Note: This mode disables the automatic reordering of the layer when terrain or globe projection is used."
+          }
+        ],
+        "default": "map",
+        "description": "Orientation of background layer.",
+        "requires": [],
+        "disabledBy": [],
+        "allowedFunctionTypes": [],
+        "expression": {
+          "interpolated": false,
+          "parameters": []
+        },
+        "mbx": {
+          "fullName": "paint-background-background-pitch-alignment",
+          "name": "background-pitch-alignment",
+          "namespace": "paint"
+        }
+      },
+      {
         "name": "backgroundColor",
         "type": "color",
         "values": [],
@@ -510,6 +566,33 @@
         "mbx": {
           "fullName": "paint-background-background-opacity",
           "name": "background-opacity",
+          "namespace": "paint"
+        }
+      },
+      {
+        "name": "backgroundEmissiveStrength",
+        "type": "number",
+        "values": [],
+        "minimum": 0,
+        "units": "intensity",
+        "default": 0,
+        "description": "Controls the intensity of light emitted on the source features.",
+        "requires": [
+          "lights"
+        ],
+        "disabledBy": [],
+        "allowedFunctionTypes": [],
+        "expression": {
+          "interpolated": true,
+          "parameters": [
+            "zoom",
+            "measure-light"
+          ]
+        },
+        "transition": true,
+        "mbx": {
+          "fullName": "paint-background-background-emissive-strength",
+          "name": "background-emissive-strength",
           "namespace": "paint"
         }
       }
@@ -1077,6 +1160,34 @@
         }
       },
       {
+        "name": "circleElevationReference",
+        "type": "enum",
+        "values": [
+          {
+            "value": "none",
+            "doc": "Elevated rendering is disabled."
+          },
+          {
+            "value": "hd-road-markup",
+            "doc": "Elevated rendering is enabled. Use this mode to describe additive and stackable features that should exist only on top of road polygons."
+          }
+        ],
+        "default": "none",
+        "description": "Selects the base of circleElevation. Some modes might require precomputed elevation data in the tileset.",
+        "requires": [],
+        "disabledBy": [],
+        "allowedFunctionTypes": [],
+        "expression": {
+          "interpolated": false
+        },
+        "transition": false,
+        "mbx": {
+          "fullName": "layout-circle-circle-elevation-reference",
+          "name": "circle-elevation-reference",
+          "namespace": "layout"
+        }
+      },
+      {
         "name": "visibility",
         "type": "enum",
         "values": [
@@ -1403,6 +1514,33 @@
           "name": "circle-stroke-opacity",
           "namespace": "paint"
         }
+      },
+      {
+        "name": "circleEmissiveStrength",
+        "type": "number",
+        "values": [],
+        "minimum": 0,
+        "units": "intensity",
+        "default": 0,
+        "description": "Controls the intensity of light emitted on the source features.",
+        "requires": [
+          "lights"
+        ],
+        "disabledBy": [],
+        "allowedFunctionTypes": [],
+        "expression": {
+          "interpolated": true,
+          "parameters": [
+            "zoom",
+            "measure-light"
+          ]
+        },
+        "transition": true,
+        "mbx": {
+          "fullName": "paint-circle-circle-emissive-strength",
+          "name": "circle-emissive-strength",
+          "namespace": "paint"
+        }
       }
     ]
   },
@@ -1699,6 +1837,32 @@
         }
       },
       {
+        "name": "fillExtrusionPatternCrossFade",
+        "type": "number",
+        "values": [],
+        "minimum": 0,
+        "maximum": 1,
+        "default": 0,
+        "description": "Controls the transition progress between the image variants of fillExtrusionPattern. Zero means the first variant is used, one is the second, and in between they are blended together. Both images should be the same size and have the same type (either raster or vector).",
+        "requires": [
+          "linePattern"
+        ],
+        "disabledBy": [],
+        "allowedFunctionTypes": [],
+        "expression": {
+          "interpolated": true,
+          "parameters": [
+            "zoom",
+            "measure-light"
+          ]
+        },
+        "mbx": {
+          "fullName": "paint-fill-extrusion-fill-extrusion-pattern-cross-fade",
+          "name": "fill-extrusion-pattern-cross-fade",
+          "namespace": "paint"
+        }
+      },
+      {
         "name": "fillExtrusionHeight",
         "type": "number",
         "values": [],
@@ -1749,6 +1913,58 @@
         "mbx": {
           "fullName": "paint-fill-extrusion-fill-extrusion-base",
           "name": "fill-extrusion-base",
+          "namespace": "paint"
+        }
+      },
+      {
+        "name": "fillExtrusionHeightAlignment",
+        "type": "enum",
+        "values": [
+          {
+            "value": "terrain",
+            "doc": "The fill extrusion height follows terrain slope."
+          },
+          {
+            "value": "flat",
+            "doc": "The fill extrusion height is flat over terrain."
+          }
+        ],
+        "default": "flat",
+        "description": "Controls the behavior of fill extrusion height over terrain",
+        "requires": [
+          "fillExtrusionHeight"
+        ],
+        "disabledBy": [],
+        "allowedFunctionTypes": [],
+        "mbx": {
+          "fullName": "paint-fill-extrusion-fill-extrusion-height-alignment",
+          "name": "fill-extrusion-height-alignment",
+          "namespace": "paint"
+        }
+      },
+      {
+        "name": "fillExtrusionBaseAlignment",
+        "type": "enum",
+        "values": [
+          {
+            "value": "terrain",
+            "doc": "The fill extrusion base follows terrain slope."
+          },
+          {
+            "value": "flat",
+            "doc": "The fill extrusion base is flat over terrain."
+          }
+        ],
+        "default": "terrain",
+        "description": "Controls the behavior of fill extrusion base over terrain",
+        "requires": [
+          "fillExtrusionBase"
+        ],
+        "disabledBy": [],
+        "allowedFunctionTypes": [],
+        "mbx": {
+          "fullName": "paint-fill-extrusion-fill-extrusion-base-alignment",
+          "name": "fill-extrusion-base-alignment",
           "namespace": "paint"
         }
       },
@@ -1824,6 +2040,237 @@
         }
       },
       {
+        "name": "fillExtrusionAmbientOcclusionWallRadius",
+        "type": "number",
+        "values": [],
+        "minimum": 0,
+        "default": 3,
+        "description": "Shades area near ground and concave angles between walls where the radius defines only vertical impact. Default value 3.0 corresponds to height of one floor and brings the most plausible results for buildings.",
+        "requires": [
+          "lights",
+          "fillExtrusionEdgeRadius"
+        ],
+        "disabledBy": [],
+        "allowedFunctionTypes": [],
+        "expression": {
+          "interpolated": true,
+          "parameters": [
+            "zoom"
+          ]
+        },
+        "transition": true,
+        "mbx": {
+          "fullName": "paint-fill-extrusion-fill-extrusion-ambient-occlusion-wall-radius",
+          "name": "fill-extrusion-ambient-occlusion-wall-radius",
+          "namespace": "paint"
+        }
+      },
+      {
+        "name": "fillExtrusionAmbientOcclusionGroundRadius",
+        "type": "number",
+        "values": [],
+        "minimum": 0,
+        "default": 3,
+        "description": "The extent of the ambient occlusion effect on the ground beneath the extruded buildings in meters.",
+        "requires": [
+          "lights"
+        ],
+        "disabledBy": [],
+        "allowedFunctionTypes": [],
+        "expression": {
+          "interpolated": true,
+          "parameters": [
+            "zoom"
+          ]
+        },
+        "transition": true,
+        "mbx": {
+          "fullName": "paint-fill-extrusion-fill-extrusion-ambient-occlusion-ground-radius",
+          "name": "fill-extrusion-ambient-occlusion-ground-radius",
+          "namespace": "paint"
+        }
+      },
+      {
+        "name": "fillExtrusionAmbientOcclusionGroundAttenuation",
+        "type": "number",
+        "values": [],
+        "minimum": 0,
+        "maximum": 1,
+        "default": 0.69,
+        "description": "Provides a control to futher fineTune the look of the ambient occlusion on the ground beneath the extruded buildings. Lower values give the effect a more solid look while higher values make it smoother.",
+        "requires": [
+          "lights"
+        ],
+        "disabledBy": [],
+        "allowedFunctionTypes": [],
+        "expression": {
+          "interpolated": true,
+          "parameters": [
+            "zoom"
+          ]
+        },
+        "transition": true,
+        "mbx": {
+          "fullName": "paint-fill-extrusion-fill-extrusion-ambient-occlusion-ground-attenuation",
+          "name": "fill-extrusion-ambient-occlusion-ground-attenuation",
+          "namespace": "paint"
+        }
+      },
+      {
+        "name": "fillExtrusionFloodLightColor",
+        "type": "color",
+        "values": [],
+        "default": "#ffffff",
+        "description": "The color of the flood light effect on the walls of the extruded buildings.",
+        "requires": [
+          "lights"
+        ],
+        "disabledBy": [],
+        "allowedFunctionTypes": [],
+        "expression": {
+          "interpolated": true,
+          "parameters": [
+            "zoom",
+            "measure-light"
+          ]
+        },
+        "transition": true,
+        "mbx": {
+          "fullName": "paint-fill-extrusion-fill-extrusion-flood-light-color",
+          "name": "fill-extrusion-flood-light-color",
+          "namespace": "paint"
+        }
+      },
+      {
+        "name": "fillExtrusionFloodLightIntensity",
+        "type": "number",
+        "values": [],
+        "minimum": 0,
+        "maximum": 1,
+        "default": 0,
+        "description": "The intensity of the flood light color.",
+        "requires": [
+          "lights"
+        ],
+        "disabledBy": [],
+        "allowedFunctionTypes": [],
+        "expression": {
+          "interpolated": true,
+          "parameters": [
+            "zoom",
+            "measure-light"
+          ]
+        },
+        "transition": true,
+        "mbx": {
+          "fullName": "paint-fill-extrusion-fill-extrusion-flood-light-intensity",
+          "name": "fill-extrusion-flood-light-intensity",
+          "namespace": "paint"
+        }
+      },
+      {
+        "name": "fillExtrusionFloodLightWallRadius",
+        "type": "number",
+        "values": [],
+        "minimum": 0,
+        "units": "meters",
+        "default": 0,
+        "description": "The extent of the flood light effect on the walls of the extruded buildings in meters.",
+        "requires": [
+          "lights"
+        ],
+        "disabledBy": [],
+        "allowedFunctionTypes": [],
+        "expression": {
+          "interpolated": true,
+          "parameters": [
+            "feature",
+            "feature-state"
+          ]
+        },
+        "transition": true,
+        "mbx": {
+          "fullName": "paint-fill-extrusion-fill-extrusion-flood-light-wall-radius",
+          "name": "fill-extrusion-flood-light-wall-radius",
+          "namespace": "paint"
+        }
+      },
+      {
+        "name": "fillExtrusionFloodLightGroundRadius",
+        "type": "number",
+        "values": [],
+        "units": "meters",
+        "default": 0,
+        "description": "The extent of the flood light effect on the ground beneath the extruded buildings in meters. Note: this experimental property is evaluated once per tile, during tile initialization. Changing the property value could trigger tile reload. The `featureState` styling is deprecated and will get removed soon.",
+        "requires": [
+          "lights"
+        ],
+        "disabledBy": [],
+        "allowedFunctionTypes": [],
+        "expression": {
+          "interpolated": true,
+          "parameters": [
+            "feature",
+            "feature-state"
+          ]
+        },
+        "transition": true,
+        "mbx": {
+          "fullName": "paint-fill-extrusion-fill-extrusion-flood-light-ground-radius",
+          "name": "fill-extrusion-flood-light-ground-radius",
+          "namespace": "paint"
+        }
+      },
+      {
+        "name": "fillExtrusionFloodLightGroundAttenuation",
+        "type": "number",
+        "values": [],
+        "minimum": 0,
+        "maximum": 1,
+        "default": 0.69,
+        "description": "Provides a control to futher fineTune the look of the flood light on the ground beneath the extruded buildings. Lower values give the effect a more solid look while higher values make it smoother.",
+        "requires": [
+          "lights"
+        ],
+        "disabledBy": [],
+        "allowedFunctionTypes": [],
+        "expression": {
+          "interpolated": true,
+          "parameters": [
+            "zoom"
+          ]
+        },
+        "transition": true,
+        "mbx": {
+          "fullName": "paint-fill-extrusion-fill-extrusion-flood-light-ground-attenuation",
+          "name": "fill-extrusion-flood-light-ground-attenuation",
+          "namespace": "paint"
+        }
+      },
+      {
+        "name": "fillExtrusionVerticalScale",
+        "type": "number",
+        "values": [],
+        "minimum": 0,
+        "default": 1,
+        "description": "A global multiplier that can be used to scale base, height, AO, and flood light of the fill extrusions.",
+        "requires": [],
+        "disabledBy": [],
+        "allowedFunctionTypes": [],
+        "expression": {
+          "interpolated": true,
+          "parameters": [
+            "zoom"
+          ]
+        },
+        "transition": true,
+        "mbx": {
+          "fullName": "paint-fill-extrusion-fill-extrusion-vertical-scale",
+          "name": "fill-extrusion-vertical-scale",
+          "namespace": "paint"
+        }
+      },
+      {
         "name": "fillExtrusionRoundedRoof",
         "type": "boolean",
         "values": [],
@@ -1844,6 +2291,82 @@
         "mbx": {
           "fullName": "paint-fill-extrusion-fill-extrusion-rounded-roof",
           "name": "fill-extrusion-rounded-roof",
+          "namespace": "paint"
+        }
+      },
+      {
+        "name": "fillExtrusionCutoffFadeRange",
+        "type": "number",
+        "values": [],
+        "minimum": 0,
+        "maximum": 1,
+        "default": 0,
+        "description": "This parameter defines the range for the fadeOut effect before an automatic content cutoff on pitched map views. Fade out is implemented by scaling down and removing buildings in the fade range in a staggered fashion. Opacity is not changed. The fade range is expressed in relation to the height of the map view. A value of 1.0 indicates that the content is faded to the same extent as the map's height in pixels, while a value close to zero represents a sharp cutoff. When the value is set to 0.0, the cutoff is completely disabled. Note: The property has no effect on the map if terrain is enabled.",
+        "requires": [],
+        "disabledBy": [],
+        "allowedFunctionTypes": [],
+        "expression": {
+          "interpolated": false
+        },
+        "transition": false,
+        "mbx": {
+          "fullName": "paint-fill-extrusion-fill-extrusion-cutoff-fade-range",
+          "name": "fill-extrusion-cutoff-fade-range",
+          "namespace": "paint"
+        }
+      },
+      {
+        "name": "fillExtrusionEmissiveStrength",
+        "type": "number",
+        "values": [],
+        "minimum": 0,
+        "units": "intensity",
+        "default": 0,
+        "description": "Controls the intensity of light emitted on the source features.",
+        "requires": [
+          "lights"
+        ],
+        "disabledBy": [],
+        "allowedFunctionTypes": [],
+        "expression": {
+          "interpolated": true,
+          "parameters": [
+            "zoom",
+            "measure-light",
+            "feature-state"
+          ]
+        },
+        "transition": true,
+        "mbx": {
+          "fullName": "paint-fill-extrusion-fill-extrusion-emissive-strength",
+          "name": "fill-extrusion-emissive-strength",
+          "namespace": "paint"
+        }
+      },
+      {
+        "name": "fillExtrusionLineWidth",
+        "type": "number",
+        "values": [],
+        "minimum": 0,
+        "units": "meters",
+        "default": 0,
+        "description": "If a nonZero value is provided, it sets the fillExtrusion layer into wall rendering mode. The value is used to render the feature with the given width over the outlines of the geometry. Note: This property is experimental and some other fillExtrusion properties might not be supported with nonZero line width.",
+        "requires": [],
+        "disabledBy": [],
+        "allowedFunctionTypes": [],
+        "expression": {
+          "interpolated": true,
+          "parameters": [
+            "zoom",
+            "feature",
+            "feature-state",
+            "measure-light"
+          ]
+        },
+        "transition": true,
+        "mbx": {
+          "fullName": "paint-fill-extrusion-fill-extrusion-line-width",
+          "name": "fill-extrusion-line-width",
           "namespace": "paint"
         }
       }
@@ -2172,6 +2695,59 @@
         "mbx": {
           "fullName": "paint-fill-fill-pattern",
           "name": "fill-pattern",
+          "namespace": "paint"
+        }
+      },
+      {
+        "name": "fillPatternCrossFade",
+        "type": "number",
+        "values": [],
+        "minimum": 0,
+        "maximum": 1,
+        "default": 0,
+        "description": "Controls the transition progress between the image variants of fillPattern. Zero means the first variant is used, one is the second, and in between they are blended together. Both images should be the same size and have the same type (either raster or vector).",
+        "requires": [
+          "linePattern"
+        ],
+        "disabledBy": [],
+        "allowedFunctionTypes": [],
+        "expression": {
+          "interpolated": true,
+          "parameters": [
+            "zoom",
+            "measure-light"
+          ]
+        },
+        "mbx": {
+          "fullName": "paint-fill-fill-pattern-cross-fade",
+          "name": "fill-pattern-cross-fade",
+          "namespace": "paint"
+        }
+      },
+      {
+        "name": "fillEmissiveStrength",
+        "type": "number",
+        "values": [],
+        "minimum": 0,
+        "units": "intensity",
+        "default": 0,
+        "description": "Controls the intensity of light emitted on the source features.",
+        "requires": [
+          "lights"
+        ],
+        "disabledBy": [],
+        "allowedFunctionTypes": [],
+        "expression": {
+          "interpolated": true,
+          "parameters": [
+            "zoom",
+            "measure-light"
+          ]
+        },
+        "transition": true,
+        "mbx": {
+          "fullName": "paint-fill-fill-emissive-strength",
+          "name": "fill-emissive-strength",
           "namespace": "paint"
         }
       }
@@ -2989,6 +3565,86 @@
         }
       },
       {
+        "name": "lineZOffset",
+        "type": "number",
+        "values": [],
+        "default": 0,
+        "description": "Vertical offset from ground, in meters. Defaults to 0. This is an experimental property with some known issues:\n * Not supported for globe projection at the moment \n * Elevated line discontinuity is possible on tile borders with terrain enabled \n * Rendering artifacts can happen near line joins and line caps depending on the line styling \n * Rendering artifacts relating to `lineOpacity` and `lineBlur` \n * Elevated line visibility is determined by layer order \n * ZFighting issues can happen with intersecting elevated lines \n * Elevated lines don't cast shadows",
+        "requires": [
+          "lineElevationReference"
+        ],
+        "disabledBy": [],
+        "allowedFunctionTypes": [],
+        "expression": {
+          "interpolated": false,
+          "parameters": [
+            "zoom",
+            "feature",
+            "line-progress"
+          ]
+        },
+        "mbx": {
+          "fullName": "layout-line-line-z-offset",
+          "name": "line-z-offset",
+          "namespace": "layout"
+        }
+      },
+      {
+        "name": "lineElevationReference",
+        "type": "enum",
+        "values": [
+          {
+            "value": "none",
+            "doc": "Elevated rendering is disabled."
+          },
+          {
+            "value": "sea",
+            "doc": "Elevated rendering is enabled. Use this mode to elevate lines relative to the sea level."
+          },
+          {
+            "value": "ground",
+            "doc": "Elevated rendering is enabled. Use this mode to elevate lines relative to the ground's height below them."
+          },
+          {
+            "value": "hd-road-markup",
+            "doc": "Elevated rendering is enabled. Use this mode to describe additive and stackable features that should exist only on top of road polygons."
+          }
+        ],
+        "default": "none",
+        "description": "Selects the base of lineElevation. Some modes might require precomputed elevation data in the tileset.",
+        "requires": [],
+        "disabledBy": [],
+        "allowedFunctionTypes": [],
+        "expression": {
+          "interpolated": false
+        },
+        "transition": false,
+        "mbx": {
+          "fullName": "layout-line-line-elevation-reference",
+          "name": "line-elevation-reference",
+          "namespace": "layout"
+        }
+      },
+      {
+        "name": "lineCrossSlope",
+        "type": "number",
+        "values": [],
+        "description": "Defines the slope of an elevated line. A value of 0 creates a horizontal line. A value of 1 creates a vertical line. Other values are currently not supported. If undefined, the line follows the terrain slope. This is an experimental property with some known issues:\n * Vertical lines don't support line caps \n * `lineJoin: round` is not supported with this property",
+        "requires": [
+          "lineZOffset"
+        ],
+        "disabledBy": [],
+        "allowedFunctionTypes": [],
+        "expression": {
+          "interpolated": false
+        },
+        "mbx": {
+          "fullName": "layout-line-line-cross-slope",
+          "name": "line-cross-slope",
+          "namespace": "layout"
+        }
+      },
+      {
         "name": "visibility",
         "type": "enum",
         "values": [
@@ -3286,6 +3942,32 @@
         }
       },
       {
+        "name": "linePatternCrossFade",
+        "type": "number",
+        "values": [],
+        "minimum": 0,
+        "maximum": 1,
+        "default": 0,
+        "description": "Controls the transition progress between the image variants of linePattern. Zero means the first variant is used, one is the second, and in between they are blended together. Both images should be the same size and have the same type (either raster or vector).",
+        "requires": [
+          "linePattern"
+        ],
+        "disabledBy": [],
+        "allowedFunctionTypes": [],
+        "expression": {
+          "interpolated": true,
+          "parameters": [
+            "zoom",
+            "measure-light"
+          ]
+        },
+        "mbx": {
+          "fullName": "paint-line-line-pattern-cross-fade",
+          "name": "line-pattern-cross-fade",
+          "namespace": "paint"
+        }
+      },
+      {
         "name": "lineGradient",
         "type": "color",
         "values": [],
@@ -3332,6 +4014,118 @@
         "mbx": {
           "fullName": "paint-line-line-trim-offset",
           "name": "line-trim-offset",
+          "namespace": "paint"
+        }
+      },
+      {
+        "name": "lineTrimFadeRange",
+        "type": "array<number>",
+        "values": [],
+        "minimum": [
+          0,
+          0
+        ],
+        "maximum": [
+          1,
+          1
+        ],
+        "default": [
+          0,
+          0
+        ],
+        "description": "The fade range for the trimStart and trimEnd points is defined by the `lineTrimOffset` property. The first element of the array represents the fade range from the trimStart point toward the end of the line, while the second element defines the fade range from the trimEnd point toward the beginning of the line. The fade result is achieved by interpolating between `lineTrimColor` and the color specified by the `lineColor` or the `lineGradient` property.",
+        "requires": [
+          "lineTrimOffset"
+        ],
+        "disabledBy": [],
+        "allowedFunctionTypes": [],
+        "expression": {
+          "interpolated": true,
+          "parameters": [
+            "zoom",
+            "measure-light"
+          ]
+        },
+        "transition": false,
+        "mbx": {
+          "fullName": "paint-line-line-trim-fade-range",
+          "name": "line-trim-fade-range",
+          "namespace": "paint"
+        }
+      },
+      {
+        "name": "lineTrimColor",
+        "type": "color",
+        "values": [],
+        "default": "transparent",
+        "description": "The color to be used for rendering the trimmed line section that is defined by the `lineTrimOffset` property.",
+        "requires": [
+          "lineTrimOffset"
+        ],
+        "disabledBy": [],
+        "allowedFunctionTypes": [],
+        "expression": {
+          "interpolated": true,
+          "parameters": [
+            "zoom",
+            "measure-light"
+          ]
+        },
+        "transition": true,
+        "mbx": {
+          "fullName": "paint-line-line-trim-color",
+          "name": "line-trim-color",
+          "namespace": "paint"
+        }
+      },
+      {
+        "name": "lineEmissiveStrength",
+        "type": "number",
+        "values": [],
+        "minimum": 0,
+        "units": "intensity",
+        "default": 0,
+        "description": "Controls the intensity of light emitted on the source features.",
+        "requires": [
+          "lights"
+        ],
+        "disabledBy": [],
+        "allowedFunctionTypes": [],
+        "expression": {
+          "interpolated": true,
+          "parameters": [
+            "zoom",
+            "measure-light"
+          ]
+        },
+        "transition": true,
+        "mbx": {
+          "fullName": "paint-line-line-emissive-strength",
+          "name": "line-emissive-strength",
+          "namespace": "paint"
+        }
+      },
+      {
+        "name": "lineOcclusionOpacity",
+        "type": "number",
+        "values": [],
+        "minimum": 0,
+        "maximum": 1,
+        "default": 0,
+        "description": "Opacity multiplier (multiplies lineOpacity value) of the line part that is occluded by 3D objects. Value 0 hides occluded part, value 1 means the same opacity as nonOccluded part. The property is not supported when `lineOpacity` has dataDriven styling.",
+        "requires": [],
+        "disabledBy": [],
+        "allowedFunctionTypes": [],
+        "expression": {
+          "interpolated": true,
+          "parameters": [
+            "zoom"
+          ]
+        },
+        "transition": true,
+        "mbx": {
+          "fullName": "paint-line-line-occlusion-opacity",
+          "name": "line-occlusion-opacity",
           "namespace": "paint"
         }
       }
@@ -4697,7 +5491,403 @@
     "mbx": {
       "name": "model"
     },
-    "styles": []
+    "styles": [
+      {
+        "name": "visibility",
+        "type": "enum",
+        "values": [
+          {
+            "value": "visible",
+            "doc": "The layer is shown."
+          },
+          {
+            "value": "none",
+            "doc": "The layer is not shown."
+          }
+        ],
+        "default": "visible",
+        "description": "Whether this layer is displayed.",
+        "requires": [],
+        "disabledBy": [],
+        "allowedFunctionTypes": [],
+        "expression": {
+          "interpolated": false
+        },
+        "mbx": {
+          "fullName": "layout-model-visibility",
+          "name": "visibility",
+          "namespace": "layout"
+        }
+      },
+      {
+        "name": "modelId",
+        "type": "string",
+        "values": [],
+        "default": "",
+        "description": "Model to render. It can be either a string referencing an element to the models root property or an internal or external URL",
+        "requires": [],
+        "disabledBy": [],
+        "allowedFunctionTypes": [],
+        "expression": {
+          "interpolated": false,
+          "parameters": [
+            "zoom",
+            "feature"
+          ]
+        },
+        "transition": false,
+        "mbx": {
+          "fullName": "layout-model-model-id",
+          "name": "model-id",
+          "namespace": "layout"
+        }
+      },
+      {
+        "name": "modelOpacity",
+        "type": "number",
+        "values": [],
+        "minimum": 0,
+        "maximum": 1,
+        "default": 1,
+        "description": "The opacity of the model layer. Except for zoom, expressions that are dataDriven are not supported if using GeoJSON or vector tile as the model layer source.",
+        "requires": [],
+        "disabledBy": [],
+        "allowedFunctionTypes": [],
+        "expression": {
+          "interpolated": true,
+          "parameters": [
+            "feature",
+            "feature-state",
+            "zoom"
+          ]
+        },
+        "transition": true,
+        "mbx": {
+          "fullName": "paint-model-model-opacity",
+          "name": "model-opacity",
+          "namespace": "paint"
+        }
+      },
+      {
+        "name": "modelRotation",
+        "type": "array<number>",
+        "values": [],
+        "units": "degrees",
+        "default": [
+          0,
+          0,
+          0
+        ],
+        "description": "The rotation of the model in euler angles [lon, lat, z].",
+        "requires": [],
+        "disabledBy": [],
+        "allowedFunctionTypes": [],
+        "expression": {
+          "interpolated": true,
+          "parameters": [
+            "feature",
+            "feature-state",
+            "zoom"
+          ]
+        },
+        "transition": true,
+        "mbx": {
+          "fullName": "paint-model-model-rotation",
+          "name": "model-rotation",
+          "namespace": "paint"
+        }
+      },
+      {
+        "name": "modelScale",
+        "type": "array<number>",
+        "values": [],
+        "default": [
+          1,
+          1,
+          1
+        ],
+        "description": "The scale of the model. Expressions that are zoomDependent are not supported if using GeoJSON or vector tile as the model layer source.",
+        "requires": [],
+        "disabledBy": [],
+        "allowedFunctionTypes": [],
+        "expression": {
+          "interpolated": true,
+          "parameters": [
+            "feature",
+            "feature-state",
+            "zoom"
+          ]
+        },
+        "transition": true,
+        "mbx": {
+          "fullName": "paint-model-model-scale",
+          "name": "model-scale",
+          "namespace": "paint"
+        }
+      },
+      {
+        "name": "modelTranslation",
+        "type": "array<number>",
+        "values": [],
+        "default": [
+          0,
+          0,
+          0
+        ],
+        "description": "The translation of the model in meters in form of [longitudal, latitudal, altitude] offsets.",
+        "requires": [],
+        "disabledBy": [],
+        "allowedFunctionTypes": [],
+        "expression": {
+          "interpolated": true,
+          "parameters": [
+            "feature",
+            "feature-state",
+            "zoom"
+          ]
+        },
+        "transition": true,
+        "mbx": {
+          "fullName": "paint-model-model-translation",
+          "name": "model-translation",
+          "namespace": "paint"
+        }
+      },
+      {
+        "name": "modelColor",
+        "type": "color",
+        "values": [],
+        "default": "#ffffff",
+        "description": "The tint color of the model layer. modelColorMixIntensity (defaults to 0) defines tint(mix) intensity  this means that, this color is not used unless modelColorMixIntensity gets value greater than 0. Expressions that depend on measureLight are not supported when using GeoJSON or vector tile as the model layer source.",
+        "requires": [],
+        "disabledBy": [],
+        "allowedFunctionTypes": [],
+        "expression": {
+          "interpolated": true,
+          "parameters": [
+            "feature",
+            "feature-state",
+            "measure-light",
+            "zoom"
+          ]
+        },
+        "transition": true,
+        "mbx": {
+          "fullName": "paint-model-model-color",
+          "name": "model-color",
+          "namespace": "paint"
+        }
+      },
+      {
+        "name": "modelColorMixIntensity",
+        "type": "number",
+        "values": [],
+        "minimum": 0,
+        "maximum": 1,
+        "default": 0,
+        "description": "Intensity of modelColor (on a scale from 0 to 1) in color mix with original 3D model's colors. Higher number will present a higher modelColor contribution in mix. Expressions that depend on measureLight are not supported when using GeoJSON or vector tile as the model layer source.",
+        "requires": [],
+        "disabledBy": [],
+        "allowedFunctionTypes": [],
+        "expression": {
+          "interpolated": true,
+          "parameters": [
+            "feature",
+            "feature-state",
+            "measure-light"
+          ]
+        },
+        "transition": true,
+        "mbx": {
+          "fullName": "paint-model-model-color-mix-intensity",
+          "name": "model-color-mix-intensity",
+          "namespace": "paint"
+        }
+      },
+      {
+        "name": "modelType",
+        "type": "enum",
+        "values": [
+          {
+            "value": "common-3d",
+            "doc": "Integrated to 3D scene, using depth testing, along with terrain, fill-extrusions and custom layer."
+          },
+          {
+            "value": "location-indicator",
+            "doc": "Displayed over other 3D content, occluded by terrain."
+          }
+        ],
+        "default": "common-3d",
+        "description": "Defines rendering behavior of model in respect to other 3D scene objects.",
+        "requires": [],
+        "disabledBy": [],
+        "allowedFunctionTypes": [],
+        "mbx": {
+          "fullName": "paint-model-model-type",
+          "name": "model-type",
+          "namespace": "paint"
+        }
+      },
+      {
+        "name": "modelCastShadows",
+        "type": "boolean",
+        "values": [],
+        "default": true,
+        "description": "Enable/Disable shadow casting for this layer",
+        "requires": [],
+        "disabledBy": [],
+        "allowedFunctionTypes": [],
+        "transition": false,
+        "mbx": {
+          "fullName": "paint-model-model-cast-shadows",
+          "name": "model-cast-shadows",
+          "namespace": "paint"
+        }
+      },
+      {
+        "name": "modelReceiveShadows",
+        "type": "boolean",
+        "values": [],
+        "default": true,
+        "description": "Enable/Disable shadow receiving for this layer",
+        "requires": [],
+        "disabledBy": [],
+        "allowedFunctionTypes": [],
+        "transition": false,
+        "mbx": {
+          "fullName": "paint-model-model-receive-shadows",
+          "name": "model-receive-shadows",
+          "namespace": "paint"
+        }
+      },
+      {
+        "name": "modelAmbientOcclusionIntensity",
+        "type": "number",
+        "values": [],
+        "minimum": 0,
+        "maximum": 1,
+        "default": 1,
+        "description": "Intensity of the ambient occlusion if present in the 3D model.",
+        "requires": [],
+        "disabledBy": [],
+        "allowedFunctionTypes": [],
+        "expression": {
+          "interpolated": true,
+          "parameters": [
+            "zoom"
+          ]
+        },
+        "transition": true,
+        "mbx": {
+          "fullName": "paint-model-model-ambient-occlusion-intensity",
+          "name": "model-ambient-occlusion-intensity",
+          "namespace": "paint"
+        }
+      },
+      {
+        "name": "modelEmissiveStrength",
+        "type": "number",
+        "values": [],
+        "minimum": 0,
+        "maximum": 5,
+        "units": "intensity",
+        "default": 0,
+        "description": "Strength of the emission. There is no emission for value 0. For value 1.0, only emissive component (no shading) is displayed and values above 1.0 produce light contribution to surrounding area, for some of the parts (e.g. doors). Expressions that depend on measureLight are only supported as a global layer value (and not for each feature) when using GeoJSON or vector tile as the model layer source.",
+        "requires": [],
+        "disabledBy": [],
+        "allowedFunctionTypes": [],
+        "expression": {
+          "interpolated": true,
+          "parameters": [
+            "feature",
+            "feature-state",
+            "measure-light"
+          ]
+        },
+        "transition": true,
+        "mbx": {
+          "fullName": "paint-model-model-emissive-strength",
+          "name": "model-emissive-strength",
+          "namespace": "paint"
+        }
+      },
+      {
+        "name": "modelRoughness",
+        "type": "number",
+        "values": [],
+        "minimum": 0,
+        "maximum": 1,
+        "default": 1,
+        "description": "Material roughness. Material is fully smooth for value 0, and fully rough for value 1. Affects only layers using batchedModel source.",
+        "requires": [],
+        "disabledBy": [],
+        "allowedFunctionTypes": [],
+        "expression": {
+          "interpolated": true,
+          "parameters": [
+            "feature",
+            "feature-state"
+          ]
+        },
+        "transition": true,
+        "mbx": {
+          "fullName": "paint-model-model-roughness",
+          "name": "model-roughness",
+          "namespace": "paint"
+        }
+      },
+      {
+        "name": "modelHeightBasedEmissiveStrengthMultiplier",
+        "type": "array<number>",
+        "values": [],
+        "default": [
+          1,
+          1,
+          1,
+          1,
+          0
+        ],
+        "description": "Emissive strength multiplier along model height (gradient begin, gradient end, value at begin, value at end, gradient curve power (logarithmic scale, curve power = pow(10, val)).",
+        "requires": [],
+        "disabledBy": [],
+        "allowedFunctionTypes": [],
+        "expression": {
+          "interpolated": true,
+          "parameters": [
+            "feature",
+            "feature-state",
+            "measure-light"
+          ]
+        },
+        "transition": true,
+        "mbx": {
+          "fullName": "paint-model-model-height-based-emissive-strength-multiplier",
+          "name": "model-height-based-emissive-strength-multiplier",
+          "namespace": "paint"
+        }
+      },
+      {
+        "name": "modelCutoffFadeRange",
+        "type": "number",
+        "values": [],
+        "minimum": 0,
+        "maximum": 1,
+        "default": 0,
+        "description": "This parameter defines the range for the fadeOut effect before an automatic content cutoff on pitched map views. The automatic cutoff range is calculated according to the minimum required zoom level of the source and layer. The fade range is expressed in relation to the height of the map view. A value of 1.0 indicates that the content is faded to the same extent as the map's height in pixels, while a value close to zero represents a sharp cutoff. When the value is set to 0.0, the cutoff is completely disabled. Note: The property has no effect on the map if terrain is enabled.",
+        "requires": [],
+        "disabledBy": [],
+        "allowedFunctionTypes": [],
+        "expression": {
+          "interpolated": false
+        },
+        "transition": false,
+        "mbx": {
+          "fullName": "paint-model-model-cutoff-fade-range",
+          "name": "model-cutoff-fade-range",
+          "namespace": "paint"
+        }
+      }
+    ]
   },
   "Models": {
     "description": "Name of 3D model assets to be used in the map",
@@ -4879,6 +6069,79 @@
     "fileNameWithExt": "PointAnnotation.tsx",
     "relPath": "src/components/PointAnnotation.tsx",
     "name": "PointAnnotation"
+  },
+  "RasterArraySource": {
+    "description": "RasterArraySource is a map content source that supplies raster array image tiles to be shown on the map.\nThis is typically used for particle animations like wind or precipitation patterns.\nThe location of and metadata about the tiles are defined either by an option dictionary\nor by an external file that conforms to the TileJSON specification.\n\n@experimental This component requires Mapbox Maps SDK v11.4.0 or later",
+    "displayName": "RasterArraySource",
+    "methods": [],
+    "props": [
+      {
+        "name": "id",
+        "required": false,
+        "type": "string",
+        "default": "Mapbox.StyleSource.DefaultSourceID",
+        "description": "A string that uniquely identifies the source."
+      },
+      {
+        "name": "existing",
+        "required": false,
+        "type": "boolean",
+        "default": "none",
+        "description": "The id refers to an existing source in the style. Does not create a new source."
+      },
+      {
+        "name": "url",
+        "required": false,
+        "type": "string",
+        "default": "none",
+        "description": "A URL to a TileJSON configuration file describing the source's contents and other metadata."
+      },
+      {
+        "name": "tileUrlTemplates",
+        "required": false,
+        "type": "Array",
+        "default": "none",
+        "description": "An array of tile URL templates. If multiple endpoints are specified, clients may use any combination of endpoints.\nExample: https://example.com/raster-tiles/{z}/{x}/{y}.png"
+      },
+      {
+        "name": "minZoomLevel",
+        "required": false,
+        "type": "number",
+        "default": "none",
+        "description": "An unsigned integer that specifies the minimum zoom level at which to display tiles from the source.\nThe value should be between 0 and 22, inclusive, and less than\nmaxZoomLevel, if specified. The default value for this option is 0."
+      },
+      {
+        "name": "maxZoomLevel",
+        "required": false,
+        "type": "number",
+        "default": "none",
+        "description": "An unsigned integer that specifies the maximum zoom level at which to display tiles from the source.\nThe value should be between 0 and 22, inclusive, and less than\nminZoomLevel, if specified. The default value for this option is 22."
+      },
+      {
+        "name": "tileSize",
+        "required": false,
+        "type": "number",
+        "default": "none",
+        "description": "Size of the map tiles.\nDefaults to 512.\n\n@platform android\nNote: This property is not supported on iOS due to SDK limitations.\nOn iOS, tileSize will be derived from the TileJSON when using url, or use the default value.\nIf you need custom tile size on iOS, include it in your TileJSON response."
+      },
+      {
+        "name": "children",
+        "required": false,
+        "type": "React.ReactElement \\| React.ReactElement[]",
+        "default": "none",
+        "description": "FIX ME NO DESCRIPTION"
+      },
+      {
+        "name": "sourceBounds",
+        "required": false,
+        "type": "Array",
+        "default": "none",
+        "description": "An array containing the longitude and latitude of the southwest and northeast corners of\nthe source's bounding box in the following order: `[sw.lng, sw.lat, ne.lng, ne.lat]`.\nWhen this property is included in a source, no tiles outside of the given bounds are requested by Mapbox GL.\n\n@platform android\nNote: This property is not supported on iOS due to SDK limitations.\nOn iOS, bounds will be derived from the TileJSON when using url.\nIf you need custom bounds on iOS, include them in your TileJSON response."
+      }
+    ],
+    "fileNameWithExt": "RasterArraySource.tsx",
+    "relPath": "src/components/RasterArraySource.tsx",
+    "name": "RasterArraySource"
   },
   "RasterDemSource": {
     "description": "",
@@ -5095,6 +6358,79 @@
         }
       },
       {
+        "name": "rasterColor",
+        "type": "color",
+        "values": [],
+        "description": "Defines a color map by which to colorize a raster layer, parameterized by the `[\"rasterValue\"]` expression and evaluated at 256 uniformly spaced steps over the range specified by `rasterColorRange`.",
+        "requires": [],
+        "disabledBy": [],
+        "allowedFunctionTypes": [],
+        "expression": {
+          "interpolated": true,
+          "parameters": [
+            "raster-value"
+          ]
+        },
+        "transition": false,
+        "mbx": {
+          "fullName": "paint-raster-raster-color",
+          "name": "raster-color",
+          "namespace": "paint"
+        }
+      },
+      {
+        "name": "rasterColorMix",
+        "type": "array<number>",
+        "values": [],
+        "default": [
+          0.2126,
+          0.7152,
+          0.0722,
+          0
+        ],
+        "description": "When `rasterColor` is active, specifies the combination of source RGB channels used to compute the raster value. Computed using the equation `mix.r * src.r + mix.g * src.g + mix.b * src.b + mix.a`. The first three components specify the mix of source red, green, and blue channels, respectively. The fourth component serves as a constant offset and is *not* multipled by source alpha. Source alpha is instead carried through and applied as opacity to the colorized result. Default value corresponds to RGB luminosity.",
+        "requires": [
+          "rasterColor"
+        ],
+        "disabledBy": [],
+        "allowedFunctionTypes": [],
+        "expression": {
+          "interpolated": true,
+          "parameters": [
+            "zoom"
+          ]
+        },
+        "transition": true,
+        "mbx": {
+          "fullName": "paint-raster-raster-color-mix",
+          "name": "raster-color-mix",
+          "namespace": "paint"
+        }
+      },
+      {
+        "name": "rasterColorRange",
+        "type": "array<number>",
+        "values": [],
+        "description": "When `rasterColor` is active, specifies the range over which `rasterColor` is tabulated. Units correspond to the computed raster value via `rasterColorMix`. For `rasterarray` sources, if `rasterColorRange` is unspecified, the source's stated data range is used.",
+        "requires": [
+          "rasterColor"
+        ],
+        "disabledBy": [],
+        "allowedFunctionTypes": [],
+        "expression": {
+          "interpolated": true,
+          "parameters": [
+            "zoom"
+          ]
+        },
+        "transition": true,
+        "mbx": {
+          "fullName": "paint-raster-raster-color-range",
+          "name": "raster-color-range",
+          "namespace": "paint"
+        }
+      },
+      {
         "name": "rasterHueRotate",
         "type": "number",
         "values": [],
@@ -5264,6 +6600,333 @@
         "mbx": {
           "fullName": "paint-raster-raster-fade-duration",
           "name": "raster-fade-duration",
+          "namespace": "paint"
+        }
+      },
+      {
+        "name": "rasterEmissiveStrength",
+        "type": "number",
+        "values": [],
+        "minimum": 0,
+        "units": "intensity",
+        "default": 0,
+        "description": "Controls the intensity of light emitted on the source features.",
+        "requires": [
+          "lights"
+        ],
+        "disabledBy": [],
+        "allowedFunctionTypes": [],
+        "expression": {
+          "interpolated": true,
+          "parameters": [
+            "zoom",
+            "measure-light"
+          ]
+        },
+        "transition": true,
+        "mbx": {
+          "fullName": "paint-raster-raster-emissive-strength",
+          "name": "raster-emissive-strength",
+          "namespace": "paint"
+        }
+      },
+      {
+        "name": "rasterArrayBand",
+        "type": "string",
+        "values": [],
+        "description": "Displayed band of raster array source layer. Defaults to the first band if not set.",
+        "requires": [],
+        "disabledBy": [],
+        "allowedFunctionTypes": [],
+        "transition": false,
+        "mbx": {
+          "fullName": "paint-raster-raster-array-band",
+          "name": "raster-array-band",
+          "namespace": "paint"
+        }
+      },
+      {
+        "name": "rasterElevation",
+        "type": "number",
+        "values": [],
+        "minimum": 0,
+        "default": 0,
+        "description": "Specifies an uniform elevation from the ground, in meters.",
+        "requires": [],
+        "disabledBy": [],
+        "allowedFunctionTypes": [],
+        "expression": {
+          "interpolated": true,
+          "parameters": [
+            "zoom"
+          ]
+        },
+        "transition": true,
+        "mbx": {
+          "fullName": "paint-raster-raster-elevation",
+          "name": "raster-elevation",
+          "namespace": "paint"
+        }
+      }
+    ]
+  },
+  "RasterParticleLayer": {
+    "description": "RasterParticleLayer renders a particle animation driven by velocity data from a raster array source.\nThis is typically used to visualize wind patterns, ocean currents, or other directional flow data.\n\n@experimental This component requires Mapbox Maps SDK v11.4.0 or later",
+    "displayName": "RasterParticleLayer",
+    "methods": [],
+    "props": [
+      {
+        "name": "id",
+        "required": true,
+        "type": "string",
+        "default": "none",
+        "description": "A string that uniquely identifies the source in the style to which it is added."
+      },
+      {
+        "name": "existing",
+        "required": false,
+        "type": "boolean",
+        "default": "none",
+        "description": "The id refers to an existing layer in the style. Does not create a new layer."
+      },
+      {
+        "name": "sourceID",
+        "required": false,
+        "type": "string",
+        "default": "Mapbox.StyleSource.DefaultSourceID",
+        "description": "The source from which to obtain the data to style.\nIf the source has not yet been added to the current style, the behavior is undefined.\nInferred from parent source only if the layer is a direct child to it."
+      },
+      {
+        "name": "sourceLayerID",
+        "required": false,
+        "type": "string",
+        "default": "none",
+        "description": "Identifier of the layer within the source identified by the sourceID property from which the receiver obtains the data to style."
+      },
+      {
+        "name": "aboveLayerID",
+        "required": false,
+        "type": "string",
+        "default": "none",
+        "description": "Inserts a layer above aboveLayerID."
+      },
+      {
+        "name": "belowLayerID",
+        "required": false,
+        "type": "string",
+        "default": "none",
+        "description": "Inserts a layer below belowLayerID"
+      },
+      {
+        "name": "layerIndex",
+        "required": false,
+        "type": "number",
+        "default": "none",
+        "description": "Inserts a layer at a specified index"
+      },
+      {
+        "name": "filter",
+        "required": false,
+        "type": "FilterExpression",
+        "default": "none",
+        "description": "Filter only the features in the source layer that satisfy a condition that you define"
+      },
+      {
+        "name": "minZoomLevel",
+        "required": false,
+        "type": "number",
+        "default": "none",
+        "description": "The minimum zoom level at which the layer gets parsed and appears."
+      },
+      {
+        "name": "maxZoomLevel",
+        "required": false,
+        "type": "number",
+        "default": "none",
+        "description": "The maximum zoom level at which the layer gets parsed and appears."
+      },
+      {
+        "name": "slot",
+        "required": false,
+        "type": "'bottom' \\| 'middle' \\| 'top'",
+        "default": "none",
+        "description": "The slot this layer is assigned to. If specified, and a slot with that name exists, it will be placed at that position in the layer order.\n\nv11 only"
+      },
+      {
+        "name": "style",
+        "required": true,
+        "type": "RasterParticleLayerStyleProps",
+        "default": "none",
+        "description": "Customizable style attributes"
+      }
+    ],
+    "fileNameWithExt": "RasterParticleLayer.tsx",
+    "relPath": "src/components/RasterParticleLayer.tsx",
+    "name": "RasterParticleLayer",
+    "mbx": {
+      "name": "raster-particle"
+    },
+    "styles": [
+      {
+        "name": "visibility",
+        "type": "enum",
+        "values": [
+          {
+            "value": "visible",
+            "doc": "The layer is shown."
+          },
+          {
+            "value": "none",
+            "doc": "The layer is not shown."
+          }
+        ],
+        "default": "visible",
+        "description": "Whether this layer is displayed.",
+        "requires": [],
+        "disabledBy": [],
+        "allowedFunctionTypes": [],
+        "expression": {
+          "interpolated": false
+        },
+        "mbx": {
+          "fullName": "layout-raster-particle-visibility",
+          "name": "visibility",
+          "namespace": "layout"
+        }
+      },
+      {
+        "name": "rasterParticleArrayBand",
+        "type": "string",
+        "values": [],
+        "description": "Displayed band of raster array source layer",
+        "requires": [],
+        "disabledBy": [],
+        "allowedFunctionTypes": [],
+        "transition": false,
+        "mbx": {
+          "fullName": "paint-raster-particle-raster-particle-array-band",
+          "name": "raster-particle-array-band",
+          "namespace": "paint"
+        }
+      },
+      {
+        "name": "rasterParticleCount",
+        "type": "number",
+        "values": [],
+        "minimum": 1,
+        "default": 512,
+        "description": "Defines the amount of particles per tile.",
+        "requires": [],
+        "disabledBy": [],
+        "allowedFunctionTypes": [],
+        "transition": false,
+        "mbx": {
+          "fullName": "paint-raster-particle-raster-particle-count",
+          "name": "raster-particle-count",
+          "namespace": "paint"
+        }
+      },
+      {
+        "name": "rasterParticleColor",
+        "type": "color",
+        "values": [],
+        "description": "Defines a color map by which to colorize a raster particle layer, parameterized by the `[\"rasterParticleSpeed\"]` expression and evaluated at 256 uniformly spaced steps over the range specified by `rasterParticleMaxSpeed`.",
+        "requires": [],
+        "disabledBy": [],
+        "allowedFunctionTypes": [],
+        "expression": {
+          "interpolated": true,
+          "parameters": [
+            "raster-particle-speed"
+          ]
+        },
+        "transition": false,
+        "mbx": {
+          "fullName": "paint-raster-particle-raster-particle-color",
+          "name": "raster-particle-color",
+          "namespace": "paint"
+        }
+      },
+      {
+        "name": "rasterParticleMaxSpeed",
+        "type": "number",
+        "values": [],
+        "minimum": 1,
+        "default": 1,
+        "description": "Defines the maximum speed for particles. Velocities with magnitudes equal to or exceeding this value are clamped to the max value.",
+        "requires": [],
+        "disabledBy": [],
+        "allowedFunctionTypes": [],
+        "transition": false,
+        "mbx": {
+          "fullName": "paint-raster-particle-raster-particle-max-speed",
+          "name": "raster-particle-max-speed",
+          "namespace": "paint"
+        }
+      },
+      {
+        "name": "rasterParticleSpeedFactor",
+        "type": "number",
+        "values": [],
+        "minimum": 0,
+        "maximum": 1,
+        "default": 0.2,
+        "description": "Defines a coefficient for the speed of particles’ motion.",
+        "requires": [],
+        "disabledBy": [],
+        "allowedFunctionTypes": [],
+        "expression": {
+          "interpolated": true,
+          "parameters": [
+            "zoom"
+          ]
+        },
+        "transition": true,
+        "mbx": {
+          "fullName": "paint-raster-particle-raster-particle-speed-factor",
+          "name": "raster-particle-speed-factor",
+          "namespace": "paint"
+        }
+      },
+      {
+        "name": "rasterParticleFadeOpacityFactor",
+        "type": "number",
+        "values": [],
+        "minimum": 0,
+        "maximum": 1,
+        "default": 0.98,
+        "description": "Defines defines the opacity coefficient applied to the faded particles in each frame. In practice, this property controls the length of the particle tail.",
+        "requires": [],
+        "disabledBy": [],
+        "allowedFunctionTypes": [],
+        "expression": {
+          "interpolated": true,
+          "parameters": [
+            "zoom"
+          ]
+        },
+        "transition": true,
+        "mbx": {
+          "fullName": "paint-raster-particle-raster-particle-fade-opacity-factor",
+          "name": "raster-particle-fade-opacity-factor",
+          "namespace": "paint"
+        }
+      },
+      {
+        "name": "rasterParticleResetRateFactor",
+        "type": "number",
+        "values": [],
+        "minimum": 0,
+        "maximum": 1,
+        "default": 0.8,
+        "description": "Defines a coefficient for a time period at which particles will restart at a random position, to avoid degeneration (empty areas without particles).",
+        "requires": [],
+        "disabledBy": [],
+        "allowedFunctionTypes": [],
+        "transition": false,
+        "mbx": {
+          "fullName": "paint-raster-particle-raster-particle-reset-rate-factor",
+          "name": "raster-particle-reset-rate-factor",
           "namespace": "paint"
         }
       }
@@ -6226,6 +7889,61 @@
         "mbx": {
           "fullName": "layout-symbol-symbol-z-order",
           "name": "symbol-z-order",
+          "namespace": "layout"
+        }
+      },
+      {
+        "name": "symbolZElevate",
+        "type": "boolean",
+        "values": [],
+        "default": false,
+        "description": "Position symbol on buildings (both fill extrusions and models) rooftops. In order to have minimal impact on performance, this is supported only when `fillExtrusionHeight` is not zoomDependent and remains unchanged. For fading in buildings when zooming in, fillExtrusionVerticalScale should be used and symbols would raise with building rooftops. Symbols are sorted by elevation, except in cases when `viewportY` sorting or `symbolSortKey` are applied.",
+        "requires": [],
+        "disabledBy": [],
+        "allowedFunctionTypes": [],
+        "expression": {
+          "interpolated": false,
+          "parameters": [
+            "zoom"
+          ]
+        },
+        "mbx": {
+          "fullName": "layout-symbol-symbol-z-elevate",
+          "name": "symbol-z-elevate",
+          "namespace": "layout"
+        }
+      },
+      {
+        "name": "symbolElevationReference",
+        "type": "enum",
+        "values": [
+          {
+            "value": "sea",
+            "doc": "Elevate symbols relative to the sea level."
+          },
+          {
+            "value": "ground",
+            "doc": "Elevate symbols relative to the ground's height below them."
+          },
+          {
+            "value": "hd-road-markup",
+            "doc": "Use this mode to enable elevated behavior for features that are rendered on top of 3D road polygons. The feature is currently being developed."
+          }
+        ],
+        "default": "ground",
+        "description": "Selects the base of symbolElevation.",
+        "requires": [],
+        "disabledBy": [],
+        "allowedFunctionTypes": [],
+        "expression": {
+          "interpolated": false,
+          "parameters": [
+            "zoom"
+          ]
+        },
+        "mbx": {
+          "fullName": "layout-symbol-symbol-elevation-reference",
+          "name": "symbol-elevation-reference",
           "namespace": "layout"
         }
       },
@@ -7349,6 +9067,91 @@
         }
       },
       {
+        "name": "iconOcclusionOpacity",
+        "type": "number",
+        "values": [],
+        "minimum": 0,
+        "maximum": 1,
+        "default": 0,
+        "description": "The opacity at which the icon will be drawn in case of being depth occluded. Absent value means full occlusion against terrain only.",
+        "requires": [
+          "iconImage"
+        ],
+        "disabledBy": [],
+        "allowedFunctionTypes": [],
+        "expression": {
+          "interpolated": true,
+          "parameters": [
+            "zoom",
+            "feature",
+            "feature-state",
+            "measure-light"
+          ]
+        },
+        "transition": true,
+        "mbx": {
+          "fullName": "paint-symbol-icon-occlusion-opacity",
+          "name": "icon-occlusion-opacity",
+          "namespace": "paint"
+        }
+      },
+      {
+        "name": "iconEmissiveStrength",
+        "type": "number",
+        "values": [],
+        "minimum": 0,
+        "units": "intensity",
+        "default": 1,
+        "description": "Controls the intensity of light emitted on the source features.",
+        "requires": [
+          "lights"
+        ],
+        "disabledBy": [],
+        "allowedFunctionTypes": [],
+        "expression": {
+          "interpolated": true,
+          "parameters": [
+            "zoom",
+            "measure-light",
+            "feature-state"
+          ]
+        },
+        "transition": true,
+        "mbx": {
+          "fullName": "paint-symbol-icon-emissive-strength",
+          "name": "icon-emissive-strength",
+          "namespace": "paint"
+        }
+      },
+      {
+        "name": "textEmissiveStrength",
+        "type": "number",
+        "values": [],
+        "minimum": 0,
+        "units": "intensity",
+        "default": 1,
+        "description": "Controls the intensity of light emitted on the source features.",
+        "requires": [
+          "lights"
+        ],
+        "disabledBy": [],
+        "allowedFunctionTypes": [],
+        "expression": {
+          "interpolated": true,
+          "parameters": [
+            "zoom",
+            "measure-light",
+            "feature-state"
+          ]
+        },
+        "transition": true,
+        "mbx": {
+          "fullName": "paint-symbol-text-emissive-strength",
+          "name": "text-emissive-strength",
+          "namespace": "paint"
+        }
+      },
+      {
         "name": "iconColor",
         "type": "color",
         "values": [],
@@ -7522,6 +9325,32 @@
         }
       },
       {
+        "name": "iconImageCrossFade",
+        "type": "number",
+        "values": [],
+        "minimum": 0,
+        "maximum": 1,
+        "default": 0,
+        "description": "Controls the transition progress between the image variants of iconImage. Zero means the first variant is used, one is the second, and in between they are blended together. . Both images should be the same size and have the same type (either raster or vector).",
+        "requires": [
+          "iconImage"
+        ],
+        "disabledBy": [],
+        "allowedFunctionTypes": [],
+        "expression": {
+          "interpolated": true,
+          "parameters": [
+            "zoom",
+            "measure-light"
+          ]
+        },
+        "mbx": {
+          "fullName": "paint-symbol-icon-image-cross-fade",
+          "name": "icon-image-cross-fade",
+          "namespace": "paint"
+        }
+      },
+      {
         "name": "textOpacity",
         "type": "number",
         "values": [],
@@ -7547,6 +9376,35 @@
         "mbx": {
           "fullName": "paint-symbol-text-opacity",
           "name": "text-opacity",
+          "namespace": "paint"
+        }
+      },
+      {
+        "name": "textOcclusionOpacity",
+        "type": "number",
+        "values": [],
+        "minimum": 0,
+        "maximum": 1,
+        "default": 0,
+        "description": "The opacity at which the text will be drawn in case of being depth occluded. Absent value means full occlusion against terrain only.",
+        "requires": [
+          "textField"
+        ],
+        "disabledBy": [],
+        "allowedFunctionTypes": [],
+        "expression": {
+          "interpolated": true,
+          "parameters": [
+            "zoom",
+            "feature",
+            "feature-state",
+            "measure-light"
+          ]
+        },
+        "transition": true,
+        "mbx": {
+          "fullName": "paint-symbol-text-occlusion-opacity",
+          "name": "text-occlusion-opacity",
           "namespace": "paint"
         }
       },
@@ -7720,6 +9578,51 @@
         "mbx": {
           "fullName": "paint-symbol-text-translate-anchor",
           "name": "text-translate-anchor",
+          "namespace": "paint"
+        }
+      },
+      {
+        "name": "iconColorSaturation",
+        "type": "number",
+        "values": [],
+        "minimum": -1,
+        "maximum": 1,
+        "default": 0,
+        "description": "Increase or reduce the saturation of the symbol icon.",
+        "requires": [],
+        "disabledBy": [],
+        "allowedFunctionTypes": [],
+        "expression": {
+          "interpolated": false
+        },
+        "transition": false,
+        "mbx": {
+          "fullName": "paint-symbol-icon-color-saturation",
+          "name": "icon-color-saturation",
+          "namespace": "paint"
+        }
+      },
+      {
+        "name": "symbolZOffset",
+        "type": "number",
+        "values": [],
+        "minimum": 0,
+        "default": 0,
+        "description": "Specifies an uniform elevation from the ground, in meters.",
+        "requires": [],
+        "disabledBy": [],
+        "allowedFunctionTypes": [],
+        "expression": {
+          "interpolated": true,
+          "parameters": [
+            "zoom",
+            "feature"
+          ]
+        },
+        "transition": true,
+        "mbx": {
+          "fullName": "paint-symbol-symbol-z-offset",
+          "name": "symbol-z-offset",
           "namespace": "paint"
         }
       }
@@ -8651,6 +10554,29 @@
           "description": "",
           "type": {
             "name": "OfflinePack"
+          }
+        }
+      },
+      {
+        "name": "setTileCountLimit",
+        "description": "Sets the maximum number of Mapbox-hosted tiles that may be downloaded and stored on the current device.\nThe Mapbox Terms of Service prohibit changing or bypassing this limit without permission from Mapbox.",
+        "params": [
+          {
+            "name": "limit",
+            "description": "Map tile limit count.",
+            "type": {
+              "name": "Number"
+            },
+            "optional": false
+          }
+        ],
+        "examples": [
+          "Mapbox.offlineManagerLegacy.setTileCountLimit(1000);"
+        ],
+        "returns": {
+          "description": "",
+          "type": {
+            "name": "void"
           }
         }
       }

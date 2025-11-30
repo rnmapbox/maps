@@ -27,7 +27,7 @@ func fillLayer(layer: inout FillLayer, reactStyle:Dictionary<String, Any>, oldRe
 
     let styleValue = RNMBXStyleValue.make(reactStyle[prop])
 
-    if (prop == "fillSortKey") {
+      if (prop == "fillSortKey") {
       self.setFillSortKey(&layer, styleValue:styleValue);
     } else if (prop == "visibility") {
       self.setFillStyleLayerVisibility(&layer, styleValue:styleValue);
@@ -78,7 +78,7 @@ func fillLayer(layer: inout FillLayer, reactStyle:Dictionary<String, Any>, oldRe
     } else {
       Logger.log(level:.error, message: "Unexpected property \(prop) for layer: fill")
     }
-  }
+    }
 }
 
 func lineLayer(layer: inout LineLayer, reactStyle:Dictionary<String, Any>, oldReactStyle:Dictionary<String, Any>?, applyUpdater: @escaping  ((inout LineLayer)->Void)->Void, isValid: @escaping () -> Bool)
@@ -96,7 +96,7 @@ func lineLayer(layer: inout LineLayer, reactStyle:Dictionary<String, Any>, oldRe
 
     let styleValue = RNMBXStyleValue.make(reactStyle[prop])
 
-    if (prop == "lineCap") {
+      if (prop == "lineCap") {
       self.setLineCap(&layer, styleValue:styleValue);
     } else if (prop == "lineJoin") {
       self.setLineJoin(&layer, styleValue:styleValue);
@@ -187,7 +187,7 @@ func lineLayer(layer: inout LineLayer, reactStyle:Dictionary<String, Any>, oldRe
     } else {
       Logger.log(level:.error, message: "Unexpected property \(prop) for layer: line")
     }
-  }
+    }
 }
 
 func symbolLayer(layer: inout SymbolLayer, reactStyle:Dictionary<String, Any>, oldReactStyle:Dictionary<String, Any>?, applyUpdater: @escaping  ((inout SymbolLayer)->Void)->Void, isValid: @escaping () -> Bool)
@@ -205,7 +205,7 @@ func symbolLayer(layer: inout SymbolLayer, reactStyle:Dictionary<String, Any>, o
 
     let styleValue = RNMBXStyleValue.make(reactStyle[prop])
 
-    if (prop == "symbolPlacement") {
+      if (prop == "symbolPlacement") {
       self.setSymbolPlacement(&layer, styleValue:styleValue);
     } else if (prop == "symbolSpacing") {
       self.setSymbolSpacing(&layer, styleValue:styleValue);
@@ -388,7 +388,7 @@ func symbolLayer(layer: inout SymbolLayer, reactStyle:Dictionary<String, Any>, o
     } else {
       Logger.log(level:.error, message: "Unexpected property \(prop) for layer: symbol")
     }
-  }
+    }
 }
 
 func circleLayer(layer: inout CircleLayer, reactStyle:Dictionary<String, Any>, oldReactStyle:Dictionary<String, Any>?, applyUpdater: @escaping  ((inout CircleLayer)->Void)->Void, isValid: @escaping () -> Bool)
@@ -406,7 +406,7 @@ func circleLayer(layer: inout CircleLayer, reactStyle:Dictionary<String, Any>, o
 
     let styleValue = RNMBXStyleValue.make(reactStyle[prop])
 
-    if (prop == "circleSortKey") {
+      if (prop == "circleSortKey") {
       self.setCircleSortKey(&layer, styleValue:styleValue);
     } else if (prop == "visibility") {
       self.setCircleStyleLayerVisibility(&layer, styleValue:styleValue);
@@ -457,7 +457,7 @@ func circleLayer(layer: inout CircleLayer, reactStyle:Dictionary<String, Any>, o
     } else {
       Logger.log(level:.error, message: "Unexpected property \(prop) for layer: circle")
     }
-  }
+    }
 }
 
 func heatmapLayer(layer: inout HeatmapLayer, reactStyle:Dictionary<String, Any>, oldReactStyle:Dictionary<String, Any>?, applyUpdater: @escaping  ((inout HeatmapLayer)->Void)->Void, isValid: @escaping () -> Bool)
@@ -475,7 +475,7 @@ func heatmapLayer(layer: inout HeatmapLayer, reactStyle:Dictionary<String, Any>,
 
     let styleValue = RNMBXStyleValue.make(reactStyle[prop])
 
-    if (prop == "visibility") {
+      if (prop == "visibility") {
       self.setHeatmapStyleLayerVisibility(&layer, styleValue:styleValue);
     } else if (prop == "heatmapRadius") {
       self.setHeatmapRadius(&layer, styleValue:styleValue);
@@ -496,7 +496,7 @@ func heatmapLayer(layer: inout HeatmapLayer, reactStyle:Dictionary<String, Any>,
     } else {
       Logger.log(level:.error, message: "Unexpected property \(prop) for layer: heatmap")
     }
-  }
+    }
 }
 
 func fillExtrusionLayer(layer: inout FillExtrusionLayer, reactStyle:Dictionary<String, Any>, oldReactStyle:Dictionary<String, Any>?, applyUpdater: @escaping  ((inout FillExtrusionLayer)->Void)->Void, isValid: @escaping () -> Bool)
@@ -514,7 +514,7 @@ func fillExtrusionLayer(layer: inout FillExtrusionLayer, reactStyle:Dictionary<S
 
     let styleValue = RNMBXStyleValue.make(reactStyle[prop])
 
-    if (prop == "visibility") {
+      if (prop == "visibility") {
       self.setFillExtrusionStyleLayerVisibility(&layer, styleValue:styleValue);
     } else if (prop == "fillExtrusionEdgeRadius") {
       self.setFillExtrusionEdgeRadius(&layer, styleValue:styleValue);
@@ -625,7 +625,7 @@ func fillExtrusionLayer(layer: inout FillExtrusionLayer, reactStyle:Dictionary<S
     } else {
       Logger.log(level:.error, message: "Unexpected property \(prop) for layer: fill-extrusion")
     }
-  }
+    }
 }
 
 func rasterLayer(layer: inout RasterLayer, reactStyle:Dictionary<String, Any>, oldReactStyle:Dictionary<String, Any>?, applyUpdater: @escaping  ((inout RasterLayer)->Void)->Void, isValid: @escaping () -> Bool)
@@ -643,7 +643,7 @@ func rasterLayer(layer: inout RasterLayer, reactStyle:Dictionary<String, Any>, o
 
     let styleValue = RNMBXStyleValue.make(reactStyle[prop])
 
-    if (prop == "visibility") {
+      if (prop == "visibility") {
       self.setRasterStyleLayerVisibility(&layer, styleValue:styleValue);
     } else if (prop == "rasterOpacity") {
       self.setRasterOpacity(&layer, styleValue:styleValue);
@@ -696,8 +696,51 @@ func rasterLayer(layer: inout RasterLayer, reactStyle:Dictionary<String, Any>, o
     } else {
       Logger.log(level:.error, message: "Unexpected property \(prop) for layer: raster")
     }
-  }
+    }
 }
+
+#if RNMBX_11
+func rasterParticleLayer(layer: inout RasterParticleLayer, reactStyle:Dictionary<String, Any>, oldReactStyle:Dictionary<String, Any>?, applyUpdater: @escaping  ((inout RasterParticleLayer)->Void)->Void, isValid: @escaping () -> Bool)
+{
+  guard self._hasReactStyle(reactStyle) else {
+    Logger.log(level:.error, message: "Invalid style: \(reactStyle)")
+    return
+  }
+
+  let styleProps = reactStyle.keys
+  for prop in styleProps {
+    if (prop == "__MAPBOX_STYLESHEET__") {
+      continue;
+    }
+
+    let styleValue = RNMBXStyleValue.make(reactStyle[prop])
+
+      if (prop == "visibility") {
+      self.setRasterParticleStyleLayerVisibility(&layer, styleValue:styleValue);
+    } else if (prop == "rasterParticleArrayBand") {
+      self.setRasterParticleArrayBand(&layer, styleValue:styleValue);
+    } else if (prop == "rasterParticleCount") {
+      self.setRasterParticleCount(&layer, styleValue:styleValue);
+    } else if (prop == "rasterParticleColor") {
+      self.setRasterParticleColor(&layer, styleValue:styleValue);
+    } else if (prop == "rasterParticleMaxSpeed") {
+      self.setRasterParticleMaxSpeed(&layer, styleValue:styleValue);
+    } else if (prop == "rasterParticleSpeedFactor") {
+      self.setRasterParticleSpeedFactor(&layer, styleValue:styleValue);
+    } else if (prop == "rasterParticleSpeedFactorTransition") {
+      self.setRasterParticleSpeedFactorTransition(&layer, styleValue:styleValue);
+    } else if (prop == "rasterParticleFadeOpacityFactor") {
+      self.setRasterParticleFadeOpacityFactor(&layer, styleValue:styleValue);
+    } else if (prop == "rasterParticleFadeOpacityFactorTransition") {
+      self.setRasterParticleFadeOpacityFactorTransition(&layer, styleValue:styleValue);
+    } else if (prop == "rasterParticleResetRateFactor") {
+      self.setRasterParticleResetRateFactor(&layer, styleValue:styleValue);
+    } else {
+      Logger.log(level:.error, message: "Unexpected property \(prop) for layer: raster-particle")
+    }
+    }
+}
+#endif
 
 func hillshadeLayer(layer: inout HillshadeLayer, reactStyle:Dictionary<String, Any>, oldReactStyle:Dictionary<String, Any>?, applyUpdater: @escaping  ((inout HillshadeLayer)->Void)->Void, isValid: @escaping () -> Bool)
 {
@@ -714,7 +757,7 @@ func hillshadeLayer(layer: inout HillshadeLayer, reactStyle:Dictionary<String, A
 
     let styleValue = RNMBXStyleValue.make(reactStyle[prop])
 
-    if (prop == "visibility") {
+      if (prop == "visibility") {
       self.setHillshadeStyleLayerVisibility(&layer, styleValue:styleValue);
     } else if (prop == "hillshadeIlluminationDirection") {
       self.setHillshadeIlluminationDirection(&layer, styleValue:styleValue);
@@ -739,7 +782,7 @@ func hillshadeLayer(layer: inout HillshadeLayer, reactStyle:Dictionary<String, A
     } else {
       Logger.log(level:.error, message: "Unexpected property \(prop) for layer: hillshade")
     }
-  }
+    }
 }
 
 func modelLayer(layer: inout ModelLayer, reactStyle:Dictionary<String, Any>, oldReactStyle:Dictionary<String, Any>?, applyUpdater: @escaping  ((inout ModelLayer)->Void)->Void, isValid: @escaping () -> Bool)
@@ -757,7 +800,7 @@ func modelLayer(layer: inout ModelLayer, reactStyle:Dictionary<String, Any>, old
 
     let styleValue = RNMBXStyleValue.make(reactStyle[prop])
 
-    if (prop == "visibility") {
+      if (prop == "visibility") {
       self.setModelStyleLayerVisibility(&layer, styleValue:styleValue);
     } else if (prop == "modelId") {
       self.setModelId(&layer, styleValue:styleValue);
@@ -812,7 +855,7 @@ func modelLayer(layer: inout ModelLayer, reactStyle:Dictionary<String, Any>, old
     } else {
       Logger.log(level:.error, message: "Unexpected property \(prop) for layer: model")
     }
-  }
+    }
 }
 
 func backgroundLayer(layer: inout BackgroundLayer, reactStyle:Dictionary<String, Any>, oldReactStyle:Dictionary<String, Any>?, applyUpdater: @escaping  ((inout BackgroundLayer)->Void)->Void, isValid: @escaping () -> Bool)
@@ -830,7 +873,7 @@ func backgroundLayer(layer: inout BackgroundLayer, reactStyle:Dictionary<String,
 
     let styleValue = RNMBXStyleValue.make(reactStyle[prop])
 
-    if (prop == "visibility") {
+      if (prop == "visibility") {
       self.setBackgroundStyleLayerVisibility(&layer, styleValue:styleValue);
     } else if (prop == "backgroundColor") {
       self.setBackgroundColor(&layer, styleValue:styleValue);
@@ -859,7 +902,7 @@ func backgroundLayer(layer: inout BackgroundLayer, reactStyle:Dictionary<String,
     } else {
       Logger.log(level:.error, message: "Unexpected property \(prop) for layer: background")
     }
-  }
+    }
 }
 
 func skyLayer(layer: inout SkyLayer, reactStyle:Dictionary<String, Any>, oldReactStyle:Dictionary<String, Any>?, applyUpdater: @escaping  ((inout SkyLayer)->Void)->Void, isValid: @escaping () -> Bool)
@@ -877,7 +920,7 @@ func skyLayer(layer: inout SkyLayer, reactStyle:Dictionary<String, Any>, oldReac
 
     let styleValue = RNMBXStyleValue.make(reactStyle[prop])
 
-    if (prop == "visibility") {
+      if (prop == "visibility") {
       self.setSkyStyleLayerVisibility(&layer, styleValue:styleValue);
     } else if (prop == "skyType") {
       self.setSkyType(&layer, styleValue:styleValue);
@@ -902,7 +945,7 @@ func skyLayer(layer: inout SkyLayer, reactStyle:Dictionary<String, Any>, oldReac
     } else {
       Logger.log(level:.error, message: "Unexpected property \(prop) for layer: sky")
     }
-  }
+    }
 }
 
 func lightLayer(layer: inout Light, reactStyle:Dictionary<String, Any>, oldReactStyle:Dictionary<String, Any>?, applyUpdater: @escaping  ((inout Light)->Void)->Void, isValid: @escaping () -> Bool)
@@ -920,7 +963,7 @@ func lightLayer(layer: inout Light, reactStyle:Dictionary<String, Any>, oldReact
 
     let styleValue = RNMBXStyleValue.make(reactStyle[prop])
 
-    if (prop == "anchor") {
+      if (prop == "anchor") {
       self.setAnchor(&layer, styleValue:styleValue);
     } else if (prop == "position") {
       self.setPosition(&layer, styleValue:styleValue);
@@ -937,7 +980,7 @@ func lightLayer(layer: inout Light, reactStyle:Dictionary<String, Any>, oldReact
     } else {
       Logger.log(level:.error, message: "Unexpected property \(prop) for layer: light")
     }
-  }
+    }
 }
 
 func atmosphereLayer(layer: inout Atmosphere, reactStyle:Dictionary<String, Any>, oldReactStyle:Dictionary<String, Any>?, applyUpdater: @escaping  ((inout Atmosphere)->Void)->Void, isValid: @escaping () -> Bool)
@@ -955,7 +998,7 @@ func atmosphereLayer(layer: inout Atmosphere, reactStyle:Dictionary<String, Any>
 
     let styleValue = RNMBXStyleValue.make(reactStyle[prop])
 
-    if (prop == "range") {
+      if (prop == "range") {
       self.setRange(&layer, styleValue:styleValue);
     } else if (prop == "rangeTransition") {
       self.setRangeTransition(&layer, styleValue:styleValue);
@@ -986,7 +1029,7 @@ func atmosphereLayer(layer: inout Atmosphere, reactStyle:Dictionary<String, Any>
     } else {
       Logger.log(level:.error, message: "Unexpected property \(prop) for layer: atmosphere")
     }
-  }
+    }
 }
 
 func terrainLayer(layer: inout Terrain, reactStyle:Dictionary<String, Any>, oldReactStyle:Dictionary<String, Any>?, applyUpdater: @escaping  ((inout Terrain)->Void)->Void, isValid: @escaping () -> Bool)
@@ -1004,12 +1047,12 @@ func terrainLayer(layer: inout Terrain, reactStyle:Dictionary<String, Any>, oldR
 
     let styleValue = RNMBXStyleValue.make(reactStyle[prop])
 
-    if (prop == "exaggeration") {
+      if (prop == "exaggeration") {
       self.setExaggeration(&layer, styleValue:styleValue);
     } else {
       Logger.log(level:.error, message: "Unexpected property \(prop) for layer: terrain")
     }
-  }
+    }
 }
 
 
@@ -2991,6 +3034,88 @@ func setRasterElevationTransition(_ layer: inout RasterLayer, styleValue: RNMBXS
       #endif
 }
 
+
+#if RNMBX_11
+
+func setRasterParticleStyleLayerVisibility(_ layer: inout RasterParticleLayer, styleValue: RNMBXStyleValue)
+{
+    layer.visibility = styleValue.isVisible();
+}
+
+func setRasterParticleArrayBand(_ layer: inout RasterParticleLayer, styleValue: RNMBXStyleValue)
+{
+      
+        
+          layer.rasterParticleArrayBand = styleValue.mglStyleValueString();
+        
+      
+}
+
+func setRasterParticleCount(_ layer: inout RasterParticleLayer, styleValue: RNMBXStyleValue)
+{
+      
+        
+          layer.rasterParticleCount = styleValue.mglStyleValueNumber();
+        
+      
+}
+
+func setRasterParticleColor(_ layer: inout RasterParticleLayer, styleValue: RNMBXStyleValue)
+{
+      
+        
+          layer.rasterParticleColor = styleValue.mglStyleValueColor();
+        
+      
+}
+
+func setRasterParticleMaxSpeed(_ layer: inout RasterParticleLayer, styleValue: RNMBXStyleValue)
+{
+      
+        
+          layer.rasterParticleMaxSpeed = styleValue.mglStyleValueNumber();
+        
+      
+}
+
+func setRasterParticleSpeedFactor(_ layer: inout RasterParticleLayer, styleValue: RNMBXStyleValue)
+{
+      
+        
+          layer.rasterParticleSpeedFactor = styleValue.mglStyleValueNumber();
+        
+      
+}
+
+func setRasterParticleSpeedFactorTransition(_ layer: inout RasterParticleLayer, styleValue: RNMBXStyleValue)
+{
+    layer.rasterParticleSpeedFactorTransition = styleValue.getTransition();
+}
+
+func setRasterParticleFadeOpacityFactor(_ layer: inout RasterParticleLayer, styleValue: RNMBXStyleValue)
+{
+      
+        
+          layer.rasterParticleFadeOpacityFactor = styleValue.mglStyleValueNumber();
+        
+      
+}
+
+func setRasterParticleFadeOpacityFactorTransition(_ layer: inout RasterParticleLayer, styleValue: RNMBXStyleValue)
+{
+    layer.rasterParticleFadeOpacityFactorTransition = styleValue.getTransition();
+}
+
+func setRasterParticleResetRateFactor(_ layer: inout RasterParticleLayer, styleValue: RNMBXStyleValue)
+{
+      
+        
+          layer.rasterParticleResetRateFactor = styleValue.mglStyleValueNumber();
+        
+      
+}
+
+#endif
 
 
 func setHillshadeStyleLayerVisibility(_ layer: inout HillshadeLayer, styleValue: RNMBXStyleValue)
