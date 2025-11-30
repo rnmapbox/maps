@@ -1,15 +1,14 @@
 package com.rnmapbox.rnmbx.components.styles.sources
 
 import com.facebook.react.bridge.Dynamic
+import com.facebook.react.bridge.ReactApplicationContext
 import com.facebook.react.uimanager.ThemedReactContext
 import com.facebook.react.uimanager.ViewGroupManager
 import com.facebook.react.uimanager.annotations.ReactProp
 import com.facebook.react.viewmanagers.RNMBXRasterArraySourceManagerInterface
-import com.rnmapbox.rnmbx.events.constants.EventKeys
-import com.rnmapbox.rnmbx.events.constants.eventMapOf
 import javax.annotation.Nonnull
 
-class RNMBXRasterArraySourceManager :
+class RNMBXRasterArraySourceManager(reactApplicationContext: ReactApplicationContext) :
     ViewGroupManager<RNMBXRasterArraySource>(),
     RNMBXRasterArraySourceManagerInterface<RNMBXRasterArraySource> {
     @Nonnull
@@ -41,12 +40,10 @@ class RNMBXRasterArraySourceManager :
     override fun setMaxZoomLevel(source: RNMBXRasterArraySource, maxZoomLevel: Dynamic) {}
 
     @ReactProp(name = "attribution")
-    override fun setAttribution(source: RNMBXRasterArraySource, attribution: Dynamic) {}
+    fun setAttribution(source: RNMBXRasterArraySource, attribution: Dynamic) {}
 
-    override fun customEvents(): Map<String, String>? {
-        return eventMapOf(
-            EventKeys.MAP_ANDROID_CALLBACK to "onAndroidCallback"
-        )
+    fun customEvents(): Map<String, String>? {
+        return null
     }
 
     companion object {

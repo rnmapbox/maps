@@ -14,6 +14,8 @@
 
 using namespace facebook::react;
 
+#if RNMBX_11
+
 @interface RNMBXRasterParticleLayerComponentView () <RCTRNMBXRasterParticleLayerViewProtocol>
 @end
 
@@ -72,5 +74,48 @@ Class<RCTComponentViewProtocol> RNMBXRasterParticleLayerCls(void)
 {
   return RNMBXRasterParticleLayerComponentView.class;
 }
+
+#else // !RNMBX_11
+
+// RasterParticleLayer is only available in Mapbox v11+
+// Provide a stub implementation for v10 builds
+
+@interface RNMBXRasterParticleLayerComponentView () <RCTRNMBXRasterParticleLayerViewProtocol>
+@end
+
+@implementation RNMBXRasterParticleLayerComponentView
+
++ (void)load
+{
+  [super load];
+}
+
+- (instancetype)initWithFrame:(CGRect)frame
+{
+  if (self = [super initWithFrame:frame]) {
+    static const auto defaultProps = std::make_shared<const RNMBXRasterParticleLayerProps>();
+    _props = defaultProps;
+  }
+  return self;
+}
+
++ (ComponentDescriptorProvider)componentDescriptorProvider
+{
+  return concreteComponentDescriptorProvider<RNMBXRasterParticleLayerComponentDescriptor>();
+}
+
+- (void)updateProps:(const Props::Shared &)props oldProps:(const Props::Shared &)oldProps
+{
+  [super updateProps:props oldProps:oldProps];
+}
+
+@end
+
+Class<RCTComponentViewProtocol> RNMBXRasterParticleLayerCls(void)
+{
+  return RNMBXRasterParticleLayerComponentView.class;
+}
+
+#endif // RNMBX_11
 
 #endif // RCT_NEW_ARCH_ENABLED

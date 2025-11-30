@@ -3,39 +3,39 @@
 package com.mapbox.maps.extension.style.layers.generated
 
 import com.mapbox.maps.extension.style.expressions.generated.Expression
-import com.mapbox.maps.extension.style.layers.Layer
 import com.mapbox.maps.extension.style.layers.properties.generated.Visibility
 import com.mapbox.maps.extension.style.types.StyleTransition
 
 /**
  * Dummy implementation of RasterParticleLayer for v10 compatibility.
  * This class should never be instantiated in v10 builds.
+ * Note: Does not extend Layer to avoid abstract method issues in v10.
  */
-class RasterParticleLayer(private val id: String, private val sourceId: String) : Layer() {
+class RasterParticleLayer(private val id: String, private val sourceId: String) {
 
-    override val layerId: String
+    val layerId: String
         get() = id
 
-    override var minZoom: Double? = null
+    var minZoom: Double? = null
         private set
 
-    override var maxZoom: Double? = null
+    var maxZoom: Double? = null
         private set
 
-    override var visibility: Visibility? = null
+    var visibility: Visibility? = null
         private set
 
-    override fun minZoom(minZoom: Double): Layer {
+    fun minZoom(minZoom: Double): RasterParticleLayer {
         this.minZoom = minZoom
         return this
     }
 
-    override fun maxZoom(maxZoom: Double): Layer {
+    fun maxZoom(maxZoom: Double): RasterParticleLayer {
         this.maxZoom = maxZoom
         return this
     }
 
-    internal override fun getType(): String = "raster-particle"
+    fun getType(): String = "raster-particle"
 
     fun rasterParticleArrayBand(value: String) {}
     fun rasterParticleArrayBand(expression: Expression) {}
