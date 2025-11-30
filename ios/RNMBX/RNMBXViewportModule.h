@@ -1,5 +1,6 @@
 #import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
+#import "RNMBXViewResolver.h"
 
 #ifdef RCT_NEW_ARCH_ENABLED
 #import "rnmapbox_maps_specs.h"
@@ -9,9 +10,9 @@
 
 @interface RNMBXViewportModule : NSObject
 #ifdef RCT_NEW_ARCH_ENABLED
-<NativeRNMBXViewportModuleSpec>
+<NativeRNMBXViewportModuleSpec, RNMBXViewResolverDelegate>
 #else
-<RCTBridgeModule>
+<RCTBridgeModule, RNMBXViewResolverDelegate>
 #endif
 
 @end
