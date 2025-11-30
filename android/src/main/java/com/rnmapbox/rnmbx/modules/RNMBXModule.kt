@@ -12,8 +12,8 @@ import com.rnmapbox.rnmbx.events.constants.EventTypes
 import com.rnmapbox.rnmbx.modules.RNMBXOfflineModule
 import com.rnmapbox.rnmbx.modules.RNMBXLocationModule
 import com.facebook.react.bridge.ReactMethod
+import com.facebook.react.bridge.Arguments
 import com.facebook.react.bridge.ReadableMap
-import com.facebook.react.bridge.buildReadableMap
 import com.facebook.react.common.MapBuilder
 import com.mapbox.bindgen.None
 import com.mapbox.common.*
@@ -173,7 +173,7 @@ class RNMBXModule(private val mReactContext: ReactApplicationContext) : ReactCon
     }
 
     @ReactMethod
-    fun addCustomHeaderWithOptions(headerName: String, headerValue: String, options: ReadableMap? = buildReadableMap { }) {
+    fun addCustomHeaderWithOptions(headerName: String, headerValue: String, options: ReadableMap? = Arguments.createMap()) {
         try {
             val urlRegexp = options?.getString("urlRegexp")?.toRegex()
             CustomHttpHeaders.addCustomHeader(headerName, headerValue, CustomHttpHeadersOptions(urlRegexp = urlRegexp))
