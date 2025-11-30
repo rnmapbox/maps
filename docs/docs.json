@@ -1008,6 +1008,39 @@
     "relPath": "src/components/Camera.tsx",
     "name": "Camera"
   },
+  "CameraGestureObserver": {
+    "description": "CameraGestureObserver\n\nUnified native observer optimized for onMapSteady.",
+    "methods": [],
+    "props": [
+      {
+        "name": "quietPeriodMs",
+        "required": false,
+        "type": "number",
+        "default": "none",
+        "description": "Time in milliseconds to wait after last camera change before emitting 'steady' event.\nDefault is 200ms."
+      },
+      {
+        "name": "maxIntervalMs",
+        "required": false,
+        "type": "number",
+        "default": "none",
+        "description": "Maximum time in milliseconds before emitting 'timeout' event during continuous activity."
+      },
+      {
+        "name": "onMapSteady",
+        "required": false,
+        "type": {
+          "name": "func",
+          "funcSignature": "(event:{nativeEvent: OnMapSteadyEvent}) => void"
+        },
+        "default": "none",
+        "description": "Callback when the map reaches a steady state (no active gestures or animations).\n*signature:*`(event:{nativeEvent: OnMapSteadyEvent}) => void`"
+      }
+    ],
+    "fileNameWithExt": "CameraGestureObserver.tsx",
+    "relPath": "src/components/CameraGestureObserver.tsx",
+    "name": "CameraGestureObserver"
+  },
   "CircleLayer": {
     "description": "CircleLayer is a style layer that renders one or more filled circles on the map.",
     "displayName": "CircleLayer",

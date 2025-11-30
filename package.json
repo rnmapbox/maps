@@ -200,6 +200,9 @@
         "RNMBXCallout": {
           "className": "RNMBXCalloutComponentView"
         },
+        "RNMBXCameraGestureObserver": {
+          "className": "RNMBXCameraGestureObserverComponentView"
+        },
         "RNMBXCamera": {
           "className": "RNMBXCameraComponentView"
         },
@@ -295,6 +298,7 @@
         "RNMBXAtmosphere": "RNMBXAtmosphereComponentView",
         "RNMBXBackgroundLayer": "RNMBXBackgroundLayerComponentView",
         "RNMBXCallout": "RNMBXCalloutComponentView",
+        "RNMBXCameraGestureObserver": "RNMBXCameraGestureObserverComponentView",
         "RNMBXCamera": "RNMBXCameraComponentView",
         "RNMBXCircleLayer": "RNMBXCircleLayerComponentView",
         "RNMBXCustomLocationProvider": "RNMBXCustomLocationProviderComponentView",
