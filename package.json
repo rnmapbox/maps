@@ -11,7 +11,8 @@
       "default": "./lib/module/index.js"
     },
     "./package.json": "./package.json",
-    "./app.plugin.js": "./app.plugin.js"
+    "./app.plugin.js": "./app.plugin.js",
+    "./setup-jest": "./setup-jest.js"
   },
   "files": [
     "src",
