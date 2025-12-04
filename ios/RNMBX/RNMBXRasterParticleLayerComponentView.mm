@@ -14,10 +14,10 @@
 
 using namespace facebook::react;
 
-#if RNMBX_11
-
 @interface RNMBXRasterParticleLayerComponentView () <RCTRNMBXRasterParticleLayerViewProtocol>
 @end
+
+#if RNMBX_11
 
 @implementation RNMBXRasterParticleLayerComponentView {
     RNMBXRasterParticleLayer *_view;
@@ -70,18 +70,7 @@ using namespace facebook::react;
 
 @end
 
-Class<RCTComponentViewProtocol> RNMBXRasterParticleLayerCls(void)
-{
-  return RNMBXRasterParticleLayerComponentView.class;
-}
-
 #else // !RNMBX_11
-
-// RasterParticleLayer is only available in Mapbox v11+
-// Provide a stub implementation for v10 builds
-
-@interface RNMBXRasterParticleLayerComponentView () <RCTRNMBXRasterParticleLayerViewProtocol>
-@end
 
 @implementation RNMBXRasterParticleLayerComponentView
 
@@ -111,11 +100,11 @@ Class<RCTComponentViewProtocol> RNMBXRasterParticleLayerCls(void)
 
 @end
 
+#endif // RNMBX_11
+
 Class<RCTComponentViewProtocol> RNMBXRasterParticleLayerCls(void)
 {
   return RNMBXRasterParticleLayerComponentView.class;
 }
-
-#endif // RNMBX_11
 
 #endif // RCT_NEW_ARCH_ENABLED
