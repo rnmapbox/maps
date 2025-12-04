@@ -13,10 +13,10 @@
 
 using namespace facebook::react;
 
-#if RNMBX_11
-
 @interface RNMBXRasterArraySourceComponentView () <RCTRNMBXRasterArraySourceViewProtocol>
 @end
+
+#if RNMBX_11
 
 @implementation RNMBXRasterArraySourceComponentView {
     RNMBXRasterArraySource *_view;
@@ -117,18 +117,10 @@ using namespace facebook::react;
 
 @end
 
-Class<RCTComponentViewProtocol> RNMBXRasterArraySourceCls(void)
-{
-  return RNMBXRasterArraySourceComponentView.class;
-}
-
 #else // !RNMBX_11
 
 // RasterArraySource is only available in Mapbox v11+
 // Provide a stub implementation for v10 builds
-
-@interface RNMBXRasterArraySourceComponentView () <RCTRNMBXRasterArraySourceViewProtocol>
-@end
 
 @implementation RNMBXRasterArraySourceComponentView
 
@@ -158,11 +150,12 @@ Class<RCTComponentViewProtocol> RNMBXRasterArraySourceCls(void)
 
 @end
 
+#endif // RNMBX_11
+
 Class<RCTComponentViewProtocol> RNMBXRasterArraySourceCls(void)
 {
   return RNMBXRasterArraySourceComponentView.class;
 }
 
-#endif // RNMBX_11
 
 #endif // RCT_NEW_ARCH_ENABLED
