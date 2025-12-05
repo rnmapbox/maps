@@ -446,13 +446,25 @@
         "metadata": {
           "title": "Source Layer Visibility",
           "tags": [
-            "MapView#setSoruceVisibility"
+            "MapView#setSourceVisibility"
           ],
           "docs": "\nChanges visibility of layers using a source in the map\n"
         },
         "fullPath": "example/src/examples/Map/SourceLayerVisibility.js",
         "relPath": "Map/SourceLayerVisibility.js",
         "name": "SourceLayerVisibility"
+      },
+      {
+        "metadata": {
+          "title": "Style Layer Property",
+          "tags": [
+            "MapView#setStyleLayerProperty"
+          ],
+          "docs": "\nChanges the property of a layer using the specified layerId\n"
+        },
+        "fullPath": "example/src/examples/Map/StyleLayerProperty.js",
+        "relPath": "Map/StyleLayerProperty.js",
+        "name": "StyleLayerProperty"
       },
       {
         "metadata": {

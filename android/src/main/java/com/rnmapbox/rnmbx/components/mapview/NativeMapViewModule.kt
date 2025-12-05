@@ -70,6 +70,20 @@ class NativeMapViewModule(context: ReactApplicationContext, val viewTagResolver:
             promise.resolve(null)
         }
     }
+    
+    override fun setStyleLayerProperty(
+        viewRef: ViewRefTag?,
+        layerId: String,
+        propertyName: String,
+        propertyValue: String,
+        promise: Promise
+    ) {
+        withMapViewOnUIThread(viewRef, promise) {
+            it.setStyleLayerProperty(layerId, propertyName, propertyValue)
+
+            promise.resolve(null)
+        }
+    }
 
     override fun getCenter(viewRef: ViewRefTag?, promise: Promise) {
         withMapViewOnUIThread(viewRef, promise) {
