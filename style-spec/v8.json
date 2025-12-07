@@ -8723,7 +8723,6 @@
     },
     "line-border-width": {
       "type": "number",
-      "private": true,
       "doc": "The width of the line border. A value of zero means no border.",
       "default": 0.0,
       "minimum": 0.0,
@@ -8752,7 +8751,6 @@
     },
     "line-border-color": {
       "type": "color",
-      "private": true,
       "doc": "The color of the line border. If line-border-width is greater than zero and the alpha value of this color is 0 (default), the color for the border will be selected automatically based on the line color.",
       "default": "rgba(0, 0, 0, 0)",
       "use-theme": true,

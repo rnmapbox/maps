@@ -161,6 +161,8 @@ Customizable style attributes
 * <a href="#linetrimfaderange">lineTrimFadeRange</a><br/>
 * <a href="#linetrimcolor">lineTrimColor</a><br/>
 * <a href="#lineemissivestrength">lineEmissiveStrength</a><br/>
+* <a href="#lineborderwidth">lineBorderWidth</a><br/>
+* <a href="#linebordercolor">lineBorderColor</a><br/>
 * <a href="#lineocclusionopacity">lineOcclusionOpacity</a><br/>
 
 ___
@@ -937,6 +939,87 @@ Name: `lineEmissiveStrengthTransition`
 #### Description
 
 The transition affecting any changes to this layer’s lineEmissiveStrength property.
+
+#### Type
+
+`{ duration, delay }`
+
+#### Units
+`milliseconds`
+
+#### Default Value
+`{duration: 300, delay: 0}`
+
+
+___
+
+### lineBorderWidth
+Name: `lineBorderWidth`
+
+Mapbox spec: [line-border-width](https://docs.mapbox.com/style-spec/reference/layers/#paint-line-line-border-width)
+
+#### Description
+The width of the line border. A value of zero means no border.
+
+#### Type
+`number`
+#### Default Value
+`0`
+
+#### Minimum
+`0`
+
+
+#### Expression
+
+Parameters: `zoom, feature, feature-state`
+___
+
+### lineBorderWidthTransition
+Name: `lineBorderWidthTransition`
+
+#### Description
+
+The transition affecting any changes to this layer’s lineBorderWidth property.
+
+#### Type
+
+`{ duration, delay }`
+
+#### Units
+`milliseconds`
+
+#### Default Value
+`{duration: 300, delay: 0}`
+
+
+___
+
+### lineBorderColor
+Name: `lineBorderColor`
+
+Mapbox spec: [line-border-color](https://docs.mapbox.com/style-spec/reference/layers/#paint-line-line-border-color)
+
+#### Description
+The color of the line border. If lineBorderWidth is greater than zero and the alpha value of this color is 0 (default), the color for the border will be selected automatically based on the line color.
+
+#### Type
+`color`
+#### Default Value
+`rgba(0, 0, 0, 0)`
+
+
+#### Expression
+
+Parameters: `zoom, feature, feature-state`
+___
+
+### lineBorderColorTransition
+Name: `lineBorderColorTransition`
+
+#### Description
+
+The transition affecting any changes to this layer’s lineBorderColor property.
 
 #### Type
 
