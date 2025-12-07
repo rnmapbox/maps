@@ -440,6 +440,7 @@ open class RNMBXMapView: UIView, RCTInvalidating {
     case scrollEnabled
     case rotateEnabled
     case pitchEnabled
+    case maxPitch
     case onMapChange
     case styleURL
     case gestureSettings
@@ -476,6 +477,8 @@ open class RNMBXMapView: UIView, RCTInvalidating {
         map.applyLocalizeLabels()
       case .pitchEnabled:
         map.applyPitchEnabled()
+      case .maxPitch:
+        map.applyMaxPitch()
       case .gestureSettings:
         map.applyGestureSettings()
       case .preferredFramesPerSecond:
@@ -534,6 +537,30 @@ open class RNMBXMapView: UIView, RCTInvalidating {
         self.mapView.preferredFrameRateRange = CAFrameRateRange(minimum: 1, maximum: Float(value), preferred: Float(value))
       } else {
         self.mapView.preferredFramesPerSecond = value
+      }
+    }
+  }
+
+  var maxPitch: Double? = nil
+
+  @objc public func setReactMaxPitch(_ value: NSNumber?) {
+    maxPitch = value?.doubleValue
+    changed(.maxPitch)
+  }
+
+  func applyMaxPitch() {
+    guard let maxPitch = maxPitch else { return }
+
+    withMapboxMap { mapboxMap in
+      logged("RNMBXMapView.applyMaxPitch") {
+        let current = mapboxMap.cameraBounds
+        var options = CameraBoundsOptions()
+        options.bounds = current.bounds
+        options.maxZoom = current.maxZoom
+        options.minZoom = current.minZoom
+        options.minPitch = current.minPitch
+        options.maxPitch = maxPitch
+        try mapboxMap.setCameraBounds(with: options)
       }
     }
   }
