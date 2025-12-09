@@ -4871,6 +4871,13 @@
         "description": "Enable/Disable pitch on map"
       },
       {
+        "name": "maxPitch",
+        "required": false,
+        "type": "number",
+        "default": "none",
+        "description": "Maximum allowed pitch in degrees. Mirrors the Mapbox map option `maxPitch`."
+      },
+      {
         "name": "rotateEnabled",
         "required": false,
         "type": "boolean",
