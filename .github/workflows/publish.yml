@@ -22,6 +22,8 @@ jobs:
         with:
           node-version: ${{ steps.nvm.outputs.NVMRC }}
           registry-url: 'https://registry.npmjs.org'
+      - name: Upgrade npm for OIDC support
+        run: npm install -g npm@latest
       - name: Install dependencies and build 🔧
         run: yarn install --immutable
       - name: Publish package on NPM 📦
