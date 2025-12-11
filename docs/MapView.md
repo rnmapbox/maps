@@ -94,6 +94,15 @@ Enable/Disable pitch on map
   _defaults to:_ `true`
 
   
+### maxPitch
+
+```tsx
+number
+```
+Maximum allowed pitch in degrees. Mirrors the Mapbox map option `maxPitch`.
+
+
+  
 ### rotateEnabled
 
 ```tsx

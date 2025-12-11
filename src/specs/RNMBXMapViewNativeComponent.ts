@@ -4,6 +4,7 @@ import {
   BubblingEventHandler,
   DirectEventHandler,
   Int32,
+  Double,
   // @ts-ignore - CI environment type resolution issue for CodegenTypes
 } from 'react-native/Libraries/Types/CodegenTypes';
 
@@ -53,6 +54,7 @@ export interface NativeProps extends ViewProps {
   scrollEnabled?: OptionalProp<boolean>;
   rotateEnabled?: OptionalProp<boolean>;
   pitchEnabled?: OptionalProp<boolean>;
+  maxPitch?: OptionalProp<Double>;
 
   deselectAnnotationOnTap?: OptionalProp<boolean>;
 

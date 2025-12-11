@@ -160,6 +160,7 @@ open class RNMBXMapView(private val mContext: Context, var mManager: RNMBXMapVie
     private var mQueuedFeatures: MutableList<AbstractMapFeature>? = ArrayList()
     private val mCameraChangeTracker = CameraChangeTracker()
     private var mPreferredFrameRate: Int? = null
+    private var mMaxPitch: Double? = null
     private lateinit var mMap: MapboxMap
 
     private lateinit var mMapView: MapView
@@ -513,7 +514,8 @@ open class RNMBXMapView(private val mContext: Context, var mManager: RNMBXMapVie
         ATTRIBUTION(RNMBXMapView::applyAttribution),
         LOGO(RNMBXMapView::applyLogo),
         SCALEBAR(RNMBXMapView::applyScaleBar),
-        COMPASS(RNMBXMapView::applyCompass),;
+        COMPASS(RNMBXMapView::applyCompass),
+        MAX_PITCH(RNMBXMapView::applyMaxPitch),;
 
         override fun apply(mapView: RNMBXMapView) {
            _apply(mapView)
@@ -580,6 +582,28 @@ open class RNMBXMapView(private val mContext: Context, var mManager: RNMBXMapVie
         if (this::mMapView.isInitialized) {
             mMapView.setMaximumFps(preferredFramesPerSecond)
         }
+    }
+
+    fun setReactMaxPitch(maxPitch: Double?) {
+        mMaxPitch = maxPitch
+        changes.add(Property.MAX_PITCH)
+    }
+
+    private fun applyMaxPitch() {
+        val maxPitch = mMaxPitch ?: return
+        if (!this::mMap.isInitialized) {
+            return
+        }
+
+        val currentBounds = mMap.getBounds()
+        val builder = CameraBoundsOptions.Builder()
+            .bounds(currentBounds.bounds)
+            .maxZoom(currentBounds.maxZoom)
+            .minZoom(currentBounds.minZoom)
+            .minPitch(currentBounds.minPitch)
+            .maxPitch(maxPitch)
+
+        mMap.setBounds(builder.build())
     }
 
     fun setReactStyleURL(styleURL: String) {

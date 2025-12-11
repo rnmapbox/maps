@@ -27,6 +27,7 @@ public interface RNMBXMapViewManagerInterface<T extends View> {
   void setScrollEnabled(T view, Dynamic value);
   void setRotateEnabled(T view, Dynamic value);
   void setPitchEnabled(T view, Dynamic value);
+  void setMaxPitch(T view, Dynamic value);
   void setDeselectAnnotationOnTap(T view, Dynamic value);
   void setRequestDisallowInterceptTouchEvent(T view, Dynamic value);
   void setProjection(T view, Dynamic value);
