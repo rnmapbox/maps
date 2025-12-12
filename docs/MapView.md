@@ -320,7 +320,7 @@ func
 Map press listener, gets called when a user presses the map
 *signature:*`(feature:GeoJSON.Feature) =&gt; void`
 
-[Show Click](../examples/Map/ShowClick)
+[Screen Coordinates](../examples/Map/ScreenCoordinates), [Show Click](../examples/Map/ShowClick)
   
 ### onLongPress
 
@@ -330,7 +330,7 @@ func
 Map long press listener, gets called when a user long presses the map
 *signature:*`(feature:GeoJSON.Feature) =&gt; void`
 
-
+[Screen Coordinates](../examples/Map/ScreenCoordinates)
   
 ### onRegionWillChange
 
@@ -563,7 +563,7 @@ const pointInView = await this._map.getPointInView([-37.817070, 144.949901]);
 ```
 
 
-### getCoordinateFromView(point)
+[Screen Coordinates](../examples/Map/ScreenCoordinates)### getCoordinateFromView(point)
 
 Converts a point in the given view’s coordinate system to a geographic coordinate.
 
@@ -579,7 +579,7 @@ const coordinate = await this._map.getCoordinateFromView([100, 100]);
 ```
 
 
-### getVisibleBounds()
+[Screen Coordinates](../examples/Map/ScreenCoordinates)### getVisibleBounds()
 
 The coordinate bounds (ne, sw) visible in the user’s viewport.
 
@@ -613,7 +613,7 @@ this._map.queryRenderedFeaturesAtPoint([30, 40], ['==', 'type', 'Point'], ['id1'
 ```
 
 
-### queryRenderedFeaturesInRect(bbox[, filter][, layerIDs])
+[Screen Coordinates](../examples/Map/ScreenCoordinates)### queryRenderedFeaturesInRect(bbox[, filter][, layerIDs])
 
 Returns an array of rendered map features that intersect with the given rectangle,<br/>restricted to the given style layers and filtered by the given predicate. In v10,<br/>passing an empty array will query the entire visible bounds of the map.
 
@@ -631,7 +631,7 @@ this._map.queryRenderedFeaturesInRect([30, 40, 20, 10], ['==', 'type', 'Point'],
 ```
 
 
-### querySourceFeatures(sourceId[, filter][, sourceLayerIDs])
+[Screen Coordinates](../examples/Map/ScreenCoordinates)### querySourceFeatures(sourceId[, filter][, sourceLayerIDs])
 
 Returns an array of GeoJSON Feature objects representing features within the specified vector tile or GeoJSON source that satisfy the query parameters.
 
