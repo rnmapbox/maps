@@ -317,7 +317,7 @@ Gesture configuration allows to control the user touch interaction.
 ```tsx
 func
 ```
-Map press listener, gets called when a user presses the map
+Map press listener, called when a user presses the map.
 *signature:*`(feature:GeoJSON.Feature) =&gt; void`
 
 [Screen Coordinates](../examples/Map/ScreenCoordinates), [Show Click](../examples/Map/ShowClick)
@@ -327,7 +327,7 @@ Map press listener, gets called when a user presses the map
 ```tsx
 func
 ```
-Map long press listener, gets called when a user long presses the map
+Map long press listener, called when a user long presses the map.
 *signature:*`(feature:GeoJSON.Feature) =&gt; void`
 
 [Screen Coordinates](../examples/Map/ScreenCoordinates)
@@ -549,39 +549,42 @@ the onPress event for the taps that deselect the annotation. Default is false.
 ## methods
 ### getPointInView(coordinate)
 
-Converts a geographic coordinate to a point in the given view’s coordinate system.
+Converts a geographic coordinate to a screen coordinate relative to the map view.
 
 #### arguments
 | Name | Type | Required | Description  |
 | ---- | :--: | :------: | :----------: |
-| `coordinate` | `Position` | `Yes` | A point expressed in the map view's coordinate system. |
+| `coordinate` | `Position` | `Yes` | A point expressed in the map view's coordinate system `[longitude, latitude]`. |
 
 
 
 ```javascript
-const pointInView = await this._map.getPointInView([-37.817070, 144.949901]);
+const longitude = 144.949901;
+const latitude = -37.817070;
+const [x, y] = await this._map.getPointInView([longitude, latitude]);
 ```
 
 
 [Screen Coordinates](../examples/Map/ScreenCoordinates)### getCoordinateFromView(point)
 
-Converts a point in the given view’s coordinate system to a geographic coordinate.
+Converts a screen coordinate relative to the map view to a geographic coordinate.
 
 #### arguments
 | Name | Type | Required | Description  |
 | ---- | :--: | :------: | :----------: |
-| `point` | `Position` | `Yes` | A point expressed in the given view’s coordinate system. |
+| `point` | `Position` | `Yes` | A point expressed in screen coordinates relative to the map view `[x, y]`. |
 
 
 
 ```javascript
-const coordinate = await this._map.getCoordinateFromView([100, 100]);
+const x = 100; const y = 100;
+const [longitude, latitude] = await this._map.getCoordinateFromView([x, y]);
 ```
 
 
 [Screen Coordinates](../examples/Map/ScreenCoordinates)### getVisibleBounds()
 
-The coordinate bounds (ne, sw) visible in the user’s viewport.
+The coordinate bounds of the map viewport.
 
 #### arguments
 | Name | Type | Required | Description  |
@@ -591,7 +594,7 @@ The coordinate bounds (ne, sw) visible in the user’s viewport.
 
 
 ```javascript
-const visibleBounds = await this._map.getVisibleBounds();
+const [[rightLon, topLat], [leftLon, bottomLat]] = await this._map.getVisibleBounds();
 ```
 
 
@@ -602,14 +605,15 @@ Returns an array of rendered map features that intersect with a given point.
 #### arguments
 | Name | Type | Required | Description  |
 | ---- | :--: | :------: | :----------: |
-| `coordinate` | `Position` | `Yes` | A point expressed in the map view’s coordinate system. |
-| `filter` | `Array` | `No` | A set of strings that correspond to the names of layers defined in the current style. Only the features contained in these layers are included in the returned array. |
-| `layerIDs` | `Array` | `No` | A array of layer id's to filter the features by |
+| `coordinate` | `Position` | `Yes` | A point expressed in the map view’s coordinate system `[x, y]`; |
+| `filter` | `FilterExpression \| tuple` | `No` | A set of strings that correspond to the names of layers defined in the current style. Only the features contained in these layers are included in the returned array. |
+| `layerIDs` | `Array` | `No` | A array of layer IDs by which to filter the features. |
 
 
 
 ```javascript
-this._map.queryRenderedFeaturesAtPoint([30, 40], ['==', 'type', 'Point'], ['id1', 'id2'])
+const x = 30; const y = 40;
+this._map.queryRenderedFeaturesAtPoint([x, y], ['==', 'type', 'Point'], ['id1', 'id2'])
 ```
 
 
@@ -620,14 +624,16 @@ Returns an array of rendered map features that intersect with the given rectangl
 #### arguments
 | Name | Type | Required | Description  |
 | ---- | :--: | :------: | :----------: |
-| `bbox` | `BBox \| []` | `Yes` | A rectangle expressed in the map view’s coordinate system, density independent pixels and not map coordinates. This can be an empty array to query the visible map area. |
-| `filter` | `Array` | `No` | A set of strings that correspond to the names of layers defined in the current style. Only the features contained in these layers are included in the returned array. |
-| `layerIDs` | `Array` | `No` |  A array of layer id's to filter the features by |
+| `bbox` | `BBox \| []` | `Yes` | A rectangle expressed in density-independent screen coordinates relative to the map view `[top, left, bottom, right]` or `[minY, minX, maxY, maxX]` (not geographic coordinates). An empty array queries the visible map area. |
+| `filter` | `FilterExpression` | `No` | An array of strings that correspond to the names of layers defined in the current style. Only the features contained in these layers are included in the returned array. |
+| `layerIDs` | `Array` | `No` |  A array of layer IDs by which to filter the features. |
 
 
 
 ```javascript
-this._map.queryRenderedFeaturesInRect([30, 40, 20, 10], ['==', 'type', 'Point'], ['id1', 'id2'])
+const left = 40; const top = 30;
+const right = 10; const bottom = 20;
+this._map.queryRenderedFeaturesInRect([top, left, bottom, right], ['==', 'type', 'Point'], ['id1', 'id2'])
 ```
 
 
@@ -639,7 +645,7 @@ Returns an array of GeoJSON Feature objects representing features within the spe
 | Name | Type | Required | Description  |
 | ---- | :--: | :------: | :----------: |
 | `sourceId` | `string` | `Yes` | Style source identifier used to query for source features. |
-| `filter` | `Array` | `No` | A filter to limit query results. |
+| `filter` | `FilterExpression \| tuple` | `No` | A filter to limit query results. |
 | `sourceLayerIDs` | `Array` | `No` | The name of the source layers to query. For vector tile sources, this parameter is required. For GeoJSON sources, it is ignored. |
 
 
@@ -661,12 +667,12 @@ Map camera will perform updates based on provided config. Deprecated use Camera#
 
 ### takeSnap([writeToDisk])
 
-Takes snapshot of map with current tiles and returns a URI to the image
+Takes snapshot of map with current tiles and returns a Base64-encoded PNG image,<br/>or an file-system URI to a temporary PNG file if `writeToDisk` is `true`.
 
 #### arguments
 | Name | Type | Required | Description  |
 | ---- | :--: | :------: | :----------: |
-| `writeToDisk` | `Boolean` | `No` | If true will create a temp file, otherwise it is in base64 |
+| `writeToDisk` | `boolean` | `No` | If `true`, creates a temporary PNG file and returns a file-system URI, otherwise returns a Base64-encoded PNG image. (Defaults to `false`) |
 
 
 ### getZoom()
@@ -687,7 +693,7 @@ const zoom = await this._map.getZoom();
 
 ### getCenter()
 
-Returns the map's geographical centerpoint
+Returns the map's center point expressed as geographic coordinates `[longitude, latitude]`.
 
 #### arguments
 | Name | Type | Required | Description  |
@@ -718,7 +724,7 @@ Queries the currently loaded data for elevation at a geographical location.<br/>
 #### arguments
 | Name | Type | Required | Description  |
 | ---- | :--: | :------: | :----------: |
-| `coordinate` | `Position` | `Yes` | the coordinates to query elevation at |
+| `coordinate` | `Position` | `Yes` | The geographic coordinates `[longitude, latitude]` at which to query elevation. |
 
 
 [Query Terrain Elevation](../examples/V10/QueryTerrainElevation)### setSourceVisibility(visible, sourceId[, sourceLayerId])
@@ -729,8 +735,8 @@ Sets the visibility of all the layers referencing the specified `sourceLayerId` 
 | Name | Type | Required | Description  |
 | ---- | :--: | :------: | :----------: |
 | `visible` | `boolean` | `Yes` | Visibility of the layers |
-| `sourceId` | `string` | `Yes` | Identifier of the target source (e.g. 'composite') |
-| `sourceLayerId` | `String` | `No` | Identifier of the target source-layer (e.g. 'building') |
+| `sourceId` | `string` | `Yes` | Target source identifier (e.g. 'composite') |
+| `sourceLayerId` | `string` | `No` | Target source-layer identifier (e.g. 'building'). If `null`, the change affects all layers in the target source. |
 
 
 
