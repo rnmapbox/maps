@@ -65,6 +65,11 @@ export type RegionPayload = {
   pitch: number;
 };
 
+export type ScreenPointPayload = {
+  readonly screenPointX: number;
+  readonly screenPointY: number;
+};
+
 export type GestureSettings = {
   /**
    * Whether double tapping the map with one touch results in a zoom-in animation.
@@ -314,12 +319,16 @@ type Props = ViewProps & {
   /**
    * Map press listener, gets called when a user presses the map
    */
-  onPress?: (feature: GeoJSON.Feature) => void;
+  onPress?: (
+    feature: GeoJSON.Feature<GeoJSON.Point, ScreenPointPayload>,
+  ) => void;
 
   /**
    * Map long press listener, gets called when a user long presses the map
    */
-  onLongPress?: (feature: GeoJSON.Feature) => void;
+  onLongPress?: (
+    feature: GeoJSON.Feature<GeoJSON.Point, ScreenPointPayload>,
+  ) => void;
 
   /**
    * <v10 only
@@ -1036,13 +1045,21 @@ class MapView extends NativeBridgeComponent(
     }
   }
 
-  _onPress(e: NativeSyntheticEvent<{ payload: GeoJSON.Feature | string }>) {
+  _onPress(
+    e: NativeSyntheticEvent<{
+      payload: GeoJSON.Feature<GeoJSON.Point, ScreenPointPayload> | string;
+    }>,
+  ) {
     if (isFunction(this.props.onPress)) {
       this.props.onPress(this._decodePayload(e.nativeEvent.payload));
     }
   }
 
-  _onLongPress(e: NativeSyntheticEvent<{ payload: GeoJSON.Feature | string }>) {
+  _onLongPress(
+    e: NativeSyntheticEvent<{
+      payload: GeoJSON.Feature<GeoJSON.Point, ScreenPointPayload> | string;
+    }>,
+  ) {
     if (isFunction(this.props.onLongPress)) {
       this.props.onLongPress(this._decodePayload(e.nativeEvent.payload));
     }
