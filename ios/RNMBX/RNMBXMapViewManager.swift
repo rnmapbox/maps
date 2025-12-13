@@ -247,7 +247,7 @@ extension RNMBXMapViewManager {
     rejecter: @escaping RCTPromiseRejectBlock
   ) {
     view.withMapboxMap { map in
-      let point = CGPoint(x: CGFloat(point[0].floatValue), y: CGFloat(point[1].floatValue))
+      let point = CGPoint(x: point[0].CGFloat, y: point[1].CGFloat)
 
       logged("queryRenderedFeaturesAtPoint.option", rejecter: rejecter) {
         let options = try RenderedQueryOptions(
@@ -282,16 +282,24 @@ extension RNMBXMapViewManager {
     resolver: @escaping RCTPromiseResolveBlock,
     rejecter: @escaping RCTPromiseRejectBlock
   ) {
-    let top = bbox.isEmpty ? 0.0 : CGFloat(bbox[0].floatValue)
-    let right = bbox.isEmpty ? 0.0 : CGFloat(bbox[1].floatValue)
-    let bottom = bbox.isEmpty ? 0.0 : CGFloat(bbox[2].floatValue)
-    let left = bbox.isEmpty ? 0.0 : CGFloat(bbox[3].floatValue)
-    let rect =
+    let top = bbox.isEmpty ? 0.0 : bbox[0].CGFloat
+    let left = bbox.isEmpty ? 0.0 : bbox[1].CGFloat
+    let bottom = bbox.isEmpty ? 0.0 : bbox[2].CGFloat
+    let right = bbox.isEmpty ? 0.0 : bbox[3].CGFloat
+    let rect: CGRect =
       bbox.isEmpty
-      ? CGRect(x: 0.0, y: 0.0, width: map.bounds.size.width, height: map.bounds.size.height)
-      : CGRect(
-        x: [left, right].min()!, y: [top, bottom].min()!, width: abs(right - left),
-        height: abs(bottom - top))
+        ? CGRect(
+            x: 0.0,
+            y: 0.0,
+            width: map.bounds.size.width,
+            height: map.bounds.size.height
+        )
+        : CGRect(
+            x: min(left, right),
+            y: min(top, bottom),
+            width: abs(right - left),
+            height: abs(bottom - top)
+          )
     logged("queryRenderedFeaturesInRect.option", rejecter: rejecter) {
       let options = try RenderedQueryOptions(
         layerIds: layerIDs?.isEmpty ?? true ? nil : layerIDs, filter: filter?.asExpression())
