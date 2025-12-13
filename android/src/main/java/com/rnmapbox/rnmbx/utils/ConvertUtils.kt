@@ -1,7 +1,5 @@
 package com.rnmapbox.rnmbx.utils
 
-import android.graphics.PointF
-import android.graphics.RectF
 import android.util.Log
 import com.facebook.react.bridge.Arguments
 import com.facebook.react.bridge.NoSuchKeyException
@@ -170,34 +168,6 @@ object ConvertUtils {
         }
 
         return list
-    }
-
-    fun toPointF(array: ReadableArray?): PointF {
-        val pointF = PointF()
-
-        if (array == null) {
-            return pointF
-        }
-
-        pointF.set(array.getDouble(0).toFloat(), array.getDouble(1).toFloat())
-        return pointF
-    }
-
-    // returns null if array is null
-    fun toRectF(array: ReadableArray?): RectF? {
-        val rectF = RectF()
-
-        if (array == null || array.size() == 0) {
-            return null
-        }
-
-        rectF.set(
-            array.getDouble(3).toFloat(),
-            array.getDouble(0).toFloat(),
-            array.getDouble(1).toFloat(),
-            array.getDouble(2).toFloat()
-        )
-        return rectF
     }
 
     fun getDouble(key: String, map: ReadableMap, defaultValue: Double): Double {
