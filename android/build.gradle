@@ -84,10 +84,12 @@ android {
                 if (majorMapboxVersion >= 11) {
                     java.srcDirs += 'src/main/mapbox-v11-compat/v11'
                 } else {
-                    logger.warn("⚠️ RNMapbox DEPRECATION WARNING: Mapbox v10.x is deprecated and will not receive active support.")
-                    logger.warn("⚠️ RNMapbox: Please upgrade to Mapbox v11.x for continued support and updates.")
-                    logger.warn("⚠️ RNMapbox: For sponsor-only support for v10.x: https://github.com/sponsors/rnmapbox")
-                    java.srcDirs += 'src/main/mapbox-v11-compat/v10'
+                    def msg = """
+❌ ERROR: Mapbox v10 is no longer supported as of @rnmapbox/maps 10.3.0
+Please upgrade to Mapbox v11.x or use @rnmapbox/maps 10.2.x
+"""
+                    logger.error(msg)
+                    throw new GradleException(msg)
                 }
                 java.srcDirs += 'src/main/rn-compat/rn75'
 
@@ -237,14 +239,12 @@ android {
     }
 
     if (!isNewArchitectureEnabled()) {
-        logger.warn("⚠️ RNMapbox DEPRECATION WARNING: Old React Native Architecture (Paper/bridge) is deprecated and will not receive active support.")
-        logger.warn("⚠️ RNMapbox: Please upgrade to New Architecture (Fabric/TurboModules) for continued support and updates.")
-        logger.warn("⚠️ RNMapbox: For sponsor-only support for old architecture: https://github.com/sponsors/rnmapbox")
-        sourceSets {
-            main {
-                java.srcDirs += 'src/main/old-arch'
-            }
-        }
+        def msg = """
+❌ ERROR: Old React Native Architecture is no longer supported as of @rnmapbox/maps 10.3.0
+Please enable New Architecture (newArchEnabled=true) or use @rnmapbox/maps 10.2.x
+"""
+        logger.error(msg)
+        throw new GradleException(msg)
     }
 
     compileSdkVersion safeExtGet("compileSdkVersion", 28)
