@@ -1,4 +1,3 @@
-#if RNMBX_11
 @_spi(Experimental) import MapboxMaps
 
 @objc
@@ -44,4 +43,3 @@ public class RNMBXRasterArraySource : RNMBXSource {
   }
 
 }
-#endif

@@ -17,8 +17,6 @@ using namespace facebook::react;
 @interface RNMBXRasterParticleLayerComponentView () <RCTRNMBXRasterParticleLayerViewProtocol>
 @end
 
-#if RNMBX_11
-
 @implementation RNMBXRasterParticleLayerComponentView {
     RNMBXRasterParticleLayer *_view;
 }
@@ -69,38 +67,6 @@ using namespace facebook::react;
 }
 
 @end
-
-#else // !RNMBX_11
-
-@implementation RNMBXRasterParticleLayerComponentView
-
-+ (void)load
-{
-  [super load];
-}
-
-- (instancetype)initWithFrame:(CGRect)frame
-{
-  if (self = [super initWithFrame:frame]) {
-    static const auto defaultProps = std::make_shared<const RNMBXRasterParticleLayerProps>();
-    _props = defaultProps;
-  }
-  return self;
-}
-
-+ (ComponentDescriptorProvider)componentDescriptorProvider
-{
-  return concreteComponentDescriptorProvider<RNMBXRasterParticleLayerComponentDescriptor>();
-}
-
-- (void)updateProps:(const Props::Shared &)props oldProps:(const Props::Shared &)oldProps
-{
-  [super updateProps:props oldProps:oldProps];
-}
-
-@end
-
-#endif // RNMBX_11
 
 Class<RCTComponentViewProtocol> RNMBXRasterParticleLayerCls(void)
 {

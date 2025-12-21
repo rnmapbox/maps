@@ -1,7 +1,6 @@
   func setCommonOptions(_ layer: inout <%= layerType %>Layer) -> Bool {
     var changed = false
 <% if (layerType !== 'Sky') { %>
-    #if RNMBX_11
     if let sourceLayerID = sourceLayerID {
       layer.sourceLayer = sourceLayerID
       changed = true
@@ -24,7 +23,6 @@
         Logger.log(level: .error, message: "parsing filters failed for layer \(optional: id): \(error.localizedDescription)")
       }
     }
-    #endif
 <% } %>
     return changed
   }

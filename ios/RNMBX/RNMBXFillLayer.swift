@@ -6,14 +6,10 @@ public class RNMBXFillLayer: RNMBXVectorLayer {
 
   override func makeLayer(style: Style) throws -> Layer {
     let _ : VectorSource = try self.layerWithSourceID(in: style)
-    #if RNMBX_11
     var layer: Layer = FillLayer(id: self.id!, source: sourceID!)
-    #else
-    var layer: Layer = FillLayer(id: self.id!)
-    #endif
-    
+
     setOptions(&layer)
-    
+
     return layer
   }
 
@@ -25,7 +21,6 @@ public class RNMBXFillLayer: RNMBXVectorLayer {
   func setCommonOptions(_ layer: inout FillLayer) -> Bool {
     var changed = false
 
-    #if RNMBX_11
     if let sourceLayerID = sourceLayerID {
       layer.sourceLayer = sourceLayerID
       changed = true
@@ -48,7 +43,6 @@ public class RNMBXFillLayer: RNMBXVectorLayer {
         Logger.log(level: .error, message: "parsing filters failed for layer \(optional: id): \(error.localizedDescription)")
       }
     }
-    #endif
 
     return changed
   }

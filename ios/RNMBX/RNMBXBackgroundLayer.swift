@@ -6,10 +6,6 @@ public class RNMBXBackgroundLayer: RNMBXLayer {
 
   override func makeLayer(style: Style) throws -> Layer {
     var layer = LayerType(id: self.id!)
-    #if !RNMBX_11
-    layer.sourceLayer = self.sourceLayerID
-    layer.source = sourceID
-    #endif
     return layer
   }
 

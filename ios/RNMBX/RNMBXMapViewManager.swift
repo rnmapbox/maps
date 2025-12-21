@@ -1,10 +1,8 @@
 import MapboxMaps
 
-#if RNMBX_11
-  extension QueriedSourceFeature {
-    var feature: Feature { return self.queriedFeature.feature }
-  }
-#endif
+extension QueriedSourceFeature {
+  var feature: Feature { return self.queriedFeature.feature }
+}
 
 #if !RCT_NEW_ARCH_ENABLED
 
@@ -154,7 +152,6 @@ extension RNMBXMapViewManager {
       resolver: @escaping RCTPromiseResolveBlock,
       rejecter: @escaping RCTPromiseRejectBlock) {
         view.withMapboxMap { map in
-          #if RNMBX_11
           map.setFeatureState(
             sourceId: sourceId,
             sourceLayerId: sourceLayerId,
@@ -166,15 +163,6 @@ extension RNMBXMapViewManager {
               case .failure(let error): rejecter("setFeatureState", "failed to set feature state", error)
             }
           }
-          #else
-          map.setFeatureState(
-            sourceId: sourceId,
-            sourceLayerId: sourceLayerId,
-            featureId: featureId,
-            state: state
-          )
-          resolver(nil)
-          #endif
         }
     }
 
@@ -210,7 +198,6 @@ extension RNMBXMapViewManager {
       resolver: @escaping RCTPromiseResolveBlock,
       rejecter: @escaping RCTPromiseRejectBlock) {
         view.withMapboxMap { map in
-          #if RNMBX_11
           map.removeFeatureState(
             sourceId: sourceId,
             sourceLayerId: sourceLayerId,
@@ -222,15 +209,6 @@ extension RNMBXMapViewManager {
               case .failure(let error): rejecter("removeFeatureState", "failed to remove feature state", error)
             }
           }
-          #else
-          map.removeFeatureState(
-            sourceId: sourceId,
-            sourceLayerId: sourceLayerId,
-            featureId: featureId,
-            stateKey: stateKey
-          )
-          resolver(nil)
-          #endif
         }
     }
 }
@@ -350,11 +328,7 @@ extension RNMBXMapViewManager {
   }
 
   static func clearData(_ view: RNMBXMapView, completion: @escaping (Error?) -> Void) {
-    #if RNMBX_11
-      MapboxMap.clearData(completion: completion)
-    #else
-      view.mapboxMap.clearData(completion: completion)
-    #endif
+    MapboxMap.clearData(completion: completion)
   }
 
   @objc public static func clearData(

@@ -6,11 +6,7 @@ public class RNMBXRasterLayer: RNMBXLayer {
 
   override func makeLayer(style: Style) throws -> Layer {
     // let source : ImageSource = try self.sourceWithSourceID(in: style)
-    #if RNMBX_11
     var layer = LayerType(id: self.id!, source: sourceID!)
-    #else
-    var layer = LayerType(id: self.id!)
-    #endif
     layer.source = sourceID
     return layer
   }
@@ -19,7 +15,6 @@ public class RNMBXRasterLayer: RNMBXLayer {
   func setCommonOptions(_ layer: inout RasterLayer) -> Bool {
     var changed = false
 
-    #if RNMBX_11
     if let sourceLayerID = sourceLayerID {
       layer.sourceLayer = sourceLayerID
       changed = true
@@ -42,7 +37,6 @@ public class RNMBXRasterLayer: RNMBXLayer {
         Logger.log(level: .error, message: "parsing filters failed for layer \(optional: id): \(error.localizedDescription)")
       }
     }
-    #endif
 
     return changed
   }

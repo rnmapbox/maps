@@ -31,19 +31,11 @@ class RNMBXOfflineModule: RCTEventEmitter {
   }
   
   lazy var offlineManager : OfflineManager = {
-    #if RNMBX_11
     return OfflineManager()
-    #else
-    return OfflineManager(resourceOptions: .init(accessToken: RNMBXModule.accessToken!))
-    #endif
   }()
-  
+
   lazy var offlineRegionManager: OfflineRegionManager = {
-    #if RNMBX_11
     return OfflineRegionManager()
-    #else
-    return OfflineRegionManager(resourceOptions: .init(accessToken: RNMBXModule.accessToken!))
-    #endif
   }()
 
   lazy var tileStore : TileStore = {
@@ -363,7 +355,6 @@ class RNMBXOfflineModule: RCTEventEmitter {
     
     let stylePackLoadOptions = StylePackLoadOptions(glyphsRasterizationMode: .ideographsRasterizedLocally, metadata: pack.metadata)!
     
-    #if RNMBX_11
     let threadedOfflineManager = OfflineManager()
     taskGroup.enter()
     let stylePackTask = threadedOfflineManager.loadStylePack(for: styleURI, loadOptions: stylePackLoadOptions) { progress in
@@ -391,20 +382,6 @@ class RNMBXOfflineModule: RCTEventEmitter {
     )
     let tilesetDescriptor = threadedOfflineManager.createTilesetDescriptor(for: descriptorOptions)
     let descriptors = [tilesetDescriptor]
-    #else
-    let descriptorOptions = TilesetDescriptorOptions(
-      styleURI: styleURI,
-      zoomRange: zoomRange,
-      stylePackOptions: stylePackLoadOptions
-    )
-    let descriptor = self.offlineManager.createTilesetDescriptor(for: descriptorOptions)
-    let tilesetDescriptorOptions = TilesetDescriptorOptionsForTilesets(tilesets: pack.tilesets, zoomRange: zoomRange)
-    let tilesetDescriptor = self.offlineManager.createTilesetDescriptorForTilesetDescriptorOptions(tilesetDescriptorOptions)
-    var descriptors = [descriptor]
-    if (!pack.tilesets.isEmpty) {
-      descriptors.append(tilesetDescriptor)
-    }
-    #endif
     
     let loadOptions = TileRegionLoadOptions(
       geometry: bounds, // RNMBXFeatureUtils.geometryToGeometry(bounds),
@@ -452,11 +429,7 @@ class RNMBXOfflineModule: RCTEventEmitter {
       self.tileRegionPacks[id]!.state = downloadError ? .inactive : .complete
     }
 
-    #if RNMBX_11
     self.tileRegionPacks[id]!.cancelables = [task, stylePackTask]
-    #else
-    self.tileRegionPacks[id]!.cancelables = [task]
-    #endif
   }
   
   func convertRegionsToJSON(regions: [TileRegion], resolve: @escaping RCTPromiseResolveBlock, rejecter: @escaping RCTPromiseRejectBlock) {
