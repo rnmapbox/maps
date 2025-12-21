@@ -25,9 +25,6 @@ Add the following to your `ios/Podfile`:
 
 <br>
 
-You will need to authorize your download of the Maps SDK with a secret access token with the `DOWNLOADS:READ` scope. This [guide](https://docs.mapbox.com/ios/maps/guides/install/#configure-credentials) explains how to configure the secret token under section `Configure your secret token`.
-
-
 Run `pod install` to download the proper mapbox dependency.
 
 ```sh
