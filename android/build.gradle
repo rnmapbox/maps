@@ -76,21 +76,22 @@ android {
         throw new GradleException(msg)
     }
     else if (safeExtGet("RNMapboxMapsImpl", defaultMapboxMapsImpl) == "mapbox") {
-        sourceSets {
-            main {
-                java.srcDirs = ['src/main/java']
-                def mapboxVersion = safeExtGet("RNMapboxMapsVersion", defaultMapboxMapsVersion)
-                def majorMapboxVersion = mapboxVersion.split("\\.")[0] as Integer
-                if (majorMapboxVersion >= 11) {
-                    java.srcDirs += 'src/main/mapbox-v11-compat/v11'
-                } else {
-                    def msg = """
+        // Validate Mapbox version is v11+
+        def mapboxVersion = safeExtGet("RNMapboxMapsVersion", defaultMapboxMapsVersion)
+        def majorMapboxVersion = mapboxVersion.split("\\.")[0] as Integer
+        if (majorMapboxVersion < 11) {
+            def msg = """
 ❌ ERROR: Mapbox v10 is no longer supported as of @rnmapbox/maps 10.3.0
 Please upgrade to Mapbox v11.x or use @rnmapbox/maps 10.2.x
 """
-                    logger.error(msg)
-                    throw new GradleException(msg)
-                }
+            logger.error(msg)
+            throw new GradleException(msg)
+        }
+
+        sourceSets {
+            main {
+                java.srcDirs = ['src/main/java']
+                java.srcDirs += 'src/main/mapbox-v11-compat/v11'
                 java.srcDirs += 'src/main/rn-compat/rn75'
 
                 // Adapted from react-native-screens for consistency
@@ -219,9 +220,6 @@ Please upgrade to Mapbox v11.x or use @rnmapbox/maps 10.2.x
                     }
                 }
 
-                if (safeExtGet("RNMapboxMapsUseV11", false)) {
-                    logger.warn("RNMapboxMapsUseV11 is deprecated, just set RNMapboxMapsVersion to 11.*")
-                }
             }
         }
 
