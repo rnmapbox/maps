@@ -35,11 +35,7 @@ public class RNMBXImageSource : RNMBXSource {
 
   override func makeSource() -> Source
   {
-    #if RNMBX_11
     var result = ImageSource(id: self.id)
-    #else
-    var result = ImageSource()
-    #endif
     if let url = url {
       result.url = url
     }

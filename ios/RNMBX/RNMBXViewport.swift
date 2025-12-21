@@ -1,10 +1,5 @@
 @_spi(Experimental) import MapboxMaps
 
-#if RNMBX_11
-#else
-typealias ViewportManager = Viewport
-#endif
-
 @objc(RNMBXViewport)
 open class RNMBXViewport : UIView, RNMBXMapAndMapViewComponent, ViewportStatusObserver {
   var mapView: MapView? = nil

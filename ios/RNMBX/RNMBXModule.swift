@@ -13,15 +13,9 @@ class RNMBXModule : NSObject {
   
   public static var accessToken : String? {
     didSet {
-#if RNMBX_11
       if let token = accessToken {
         MapboxOptions.accessToken = token
       }
-#else
-      if let token = accessToken {
-        ResourceOptionsManager.default.resourceOptions.accessToken = token
-      }
-#endif
     }
   }
 
@@ -133,9 +127,8 @@ class RNMBXModule : NSObject {
 
   @objc func clearData(_ resolver: @escaping RCTPromiseResolveBlock,
     rejecter: @escaping RCTPromiseRejectBlock) {
-    
+
     DispatchQueue.main.async {
-      #if RNMBX_11
       MapboxMap.clearData { error in
         if let error = error {
           rejecter("error", error.localizedDescription, error)
@@ -143,15 +136,6 @@ class RNMBXModule : NSObject {
           resolver(nil)
         }
       }
-      #else
-      MapboxMap.clearData(for: ResourceOptions(accessToken: RNMBXModule.accessToken ?? "")) { error in
-        if let error = error {
-          rejecter("error", error.localizedDescription, error)
-        } else {
-          resolver(nil)
-        }
-      }
-      #endif
     }
   }
 }

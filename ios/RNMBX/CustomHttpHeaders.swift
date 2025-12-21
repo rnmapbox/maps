@@ -10,7 +10,6 @@ struct CustomHttpHeadersMapValue {
 }
 
 class CustomHttpHeaders : HttpServiceInterceptorInterface {
-  #if RNMBX_11
   func onRequest(for request: HttpRequest, continuation: @escaping HttpServiceInterceptorRequestContinuation) {
     let request = onRequest(for: request)
     continuation(HttpRequestOrResponse.fromHttpRequest(request))
@@ -19,7 +18,6 @@ class CustomHttpHeaders : HttpServiceInterceptorInterface {
   func onResponse(for response: HttpResponse, continuation: @escaping HttpServiceInterceptorResponseContinuation) {
     continuation(response)
   }
-  #endif
 
   static var shared : CustomHttpHeaders = {
     let headers = CustomHttpHeaders()
@@ -30,20 +28,11 @@ class CustomHttpHeaders : HttpServiceInterceptorInterface {
   var customHeaders : [String:CustomHttpHeadersMapValue] = [:]
 
   func install() {
-    #if RNMBX_11
     HttpServiceFactory.setHttpServiceInterceptorForInterceptor(self)
-    #else
-    HttpServiceFactory.getInstance().setInterceptorForInterceptor(self)
-    #endif
   }
 
   func reset() {
-    #if RNMBX_11
     HttpServiceFactory.setHttpServiceInterceptorForInterceptor(nil)
-    #else
-    HttpServiceFactory.getInstance().setInterceptorForInterceptor(nil)
-
-    #endif
   }
 
   // MARK: - HttpServiceInterceptorInterface
@@ -75,14 +64,6 @@ class CustomHttpHeaders : HttpServiceInterceptorInterface {
     request.headers.merge(customHeaders) { (_, new) in new }
     return request
   }
-
-  #if !RNMBX_11
-  func onDownload(forDownload download: DownloadOptions) -> DownloadOptions {
-    let customHeaders = getCustomRequestHeaders(for: download.request, with: customHeaders)
-    download.request.headers.merge(customHeaders) { (_, new) in new }
-    return download
-  }
-  #endif
 
   func onResponse(for response: HttpResponse) -> HttpResponse {
     return response

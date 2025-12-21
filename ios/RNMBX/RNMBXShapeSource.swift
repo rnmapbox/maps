@@ -95,11 +95,7 @@ public class RNMBXShapeSource : RNMBXSource {
 
   override func makeSource() -> Source
   {
-    #if RNMBX_11
     var result =  GeoJSONSource(id: id)
-    #else
-    var result =  GeoJSONSource()
-    #endif
 
     if let shapeObject = shapeObject {
       result.data = toGeoJSONSourceData(shapeObject)
@@ -255,14 +251,8 @@ extension RNMBXShapeSource
       return .featureCollection(featureCollection)
     case .geometry(let geometry):
       return .geometry(geometry)
-    #if RNMBX_11
     case .string(_):
-      // RNMBX_11_TODO
       throw RNMBXError.parseError("url as shape is not supported when updating a ShapeSource")
-    #else
-    case .url(_):
-      throw RNMBXError.parseError("url as shape is not supported when updating a ShapeSource")
-      #endif
     }
   }
 
@@ -292,56 +282,6 @@ extension RNMBXShapeSource
     return objs
   }
 }
-
-#if !RNMBX_11
-class DummyCancellable : Cancelable {
-  func cancel() {}
-}
-
-#if false
-extension MapboxMap {
-  @discardableResult
-  public func getGeoJsonClusterExpansionZoom(forSourceId sourceId: String,
-                                             feature: Feature,
-                                             completion: @escaping (Result<FeatureExtensionValue, Error>) -> Void) -> Cancelable {
-    self.queryFeatureExtension(for: sourceId,
-                               feature: feature,
-                               extension: "supercluster",
-                               extensionField: "expansion-zoom",
-                               args: nil,
-                               completion: completion)
-    return DummyCancellable()
-  }
-  @discardableResult
-  public func getGeoJsonClusterChildren(forSourceId sourceId: String,
-                                        feature: Feature,
-                                        completion: @escaping (Result<FeatureExtensionValue, Error>) -> Void) -> Cancelable {
-    self.queryFeatureExtension(for: sourceId,
-                                   feature: feature,
-                                   extension: "supercluster",
-                                   extensionField: "children",
-                                   args: nil,
-                                   completion: completion)
-    return DummyCancellable()
-  }
-
-  @discardableResult
-  public func getGeoJsonClusterLeaves(forSourceId sourceId: String,
-                                      feature: Feature,
-                                      limit: UInt64 = 10,
-                                      offset: UInt64 = 0,
-                                      completion: @escaping (Result<FeatureExtensionValue, Error>) -> Void) -> Cancelable {
-      self.queryFeatureExtension(for: sourceId,
-                                   feature: /*MapboxCommon.Feature(*/feature/*)*/,
-                                   extension: "supercluster",
-                                   extensionField: "leaves",
-                                   args: ["limit": limit, "offset": offset],
-                                   completion: completion)
-    return DummyCancellable()
-  }
-}
-#endif
-#endif
 
 // MARK: - getClusterExpansionZoom/getClusterLeaves
 
