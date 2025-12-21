@@ -12,7 +12,7 @@
 #           product_name: "Mapbox"
 #         }
 #         ```
-#  $RNMapboxMapsDownloadToken - *expo only* download token
+#  $RNMapboxMapsDownloadToken - *deprecated* download token is no longer required
 #  $RNMapboxMapsCustomPods - use a custom pod for mapbox libs
 
 require 'json'
