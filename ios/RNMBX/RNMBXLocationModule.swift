@@ -1,436 +1,110 @@
-import Foundation
 import MapboxMaps
 
-#if !RNMBX_11
+let RCT_MAPBOX_USER_LOCATION_UPDATE = "MapboxUserLocationUpdate";
 
 @objc(RNMBXLocation)
 class RNMBXLocation: NSObject {
-  var location : CLLocation = CLLocation(latitude: 0.0, longitude: 0.0)
+  var location : Location? = nil
   
-  var heading : CLHeading? = nil
+  var heading : Heading? = nil
 
   var timestamp: Date? = nil
 
-  func toJSON() -> NSDictionary {
-    return [
-      "coords": [
-        "longitude": location.coordinate.longitude,
+  func toJSON() -> [String:Any] {
+    var coords: [String:Any] = [:]
+    
+    if let location = location {
+      coords = coords.merging([
         "latitude": location.coordinate.latitude,
+        "longitude": location.coordinate.longitude,
         "altitude": location.altitude,
         "accuracy": location.horizontalAccuracy,
-        "heading": heading?.trueHeading ?? 0.0,
-        "course": location.course,
-        "speed": location.speed,
-      ],
-      "timestamp": (timestamp ?? location.timestamp).timeIntervalSince1970 * 1000
+        "course": location.bearing,
+        "speed": location.speed
+      ]) { (_, new ) in new }
+    }
+    if let heading = heading {
+      coords = coords.merging([
+        "heading": heading.direction
+      ]) { (_, new) in new }
+    }
+    
+    return [
+      "coords": coords,
+      "timestamp": (timestamp ?? location?.timestamp ?? heading?.timestamp ?? Date()).timeIntervalSince1970 * 1000
     ]
   }
 }
 
-typealias RNMBXLocationBlock = (RNMBXLocation?) -> Void
-
-let RCT_MAPBOX_USER_LOCATION_UPDATE = "MapboxUserLocationUpdate";
-
-/// This implementation of LocationProviderDelegate is used by `LocationManager` to work around
-/// the fact that the `LocationProvider` API does not allow the delegate to be set to `nil`.
-internal class EmptyLocationProviderDelegate: LocationProviderDelegate {
-    func locationProvider(_ provider: LocationProvider, didFailWithError error: Error) {}
-    func locationProvider(_ provider: LocationProvider, didUpdateHeading newHeading: CLHeading) {}
-    func locationProvider(_ provider: LocationProvider, didUpdateLocations locations: [CLLocation]) {}
-    func locationProviderDidChangeAuthorization(_ provider: LocationProvider) {}
-}
-
-protocol LocationProviderRNMBXDelegate : AnyObject {
-  func locationManager(_ locationManager: LocationProviderRNMBX, didUpdateLocation: RNMBXLocation)
-}
-
-class RNMBXAppleLocationProvider: NSObject {
-    private var locationProvider: CLLocationManager
-  
-    private var privateLocationProviderOptions: LocationOptions {
-        didSet {
-            locationProvider.distanceFilter = privateLocationProviderOptions.distanceFilter
-            locationProvider.desiredAccuracy = privateLocationProviderOptions.desiredAccuracy
-            locationProvider.activityType = privateLocationProviderOptions.activityType
-        }
-    }
-    private weak var delegate: LocationProviderDelegate?
-
-    public var headingOrientation: CLDeviceOrientation {
-        didSet { locationProvider.headingOrientation = headingOrientation }
-    }
-
-    public override init() {
-        locationProvider = CLLocationManager()
-        privateLocationProviderOptions = LocationOptions()
-        headingOrientation = locationProvider.headingOrientation
-        super.init()
-        locationProvider.delegate = self
-    }
-}
-
-extension RNMBXAppleLocationProvider: LocationProvider {
-    public var locationProviderOptions: LocationOptions {
-        get { privateLocationProviderOptions }
-        set { privateLocationProviderOptions = newValue }
-    }
-
-    public var authorizationStatus: CLAuthorizationStatus {
-        if #available(iOS 14.0, *) {
-            return locationProvider.authorizationStatus
-        } else {
-            return CLLocationManager.authorizationStatus()
-        }
-    }
-
-    public var accuracyAuthorization: CLAccuracyAuthorization {
-        if #available(iOS 14.0, *) {
-            return locationProvider.accuracyAuthorization
-        } else {
-            return .fullAccuracy
-        }
-    }
-
-    public var heading: CLHeading? {
-        return locationProvider.heading
-    }
-
-    public func setDelegate(_ delegate: LocationProviderDelegate) {
-        self.delegate = delegate
-    }
-
-    public func requestAlwaysAuthorization() {
-        locationProvider.requestAlwaysAuthorization()
-    }
-
-    public func requestWhenInUseAuthorization() {
-        locationProvider.requestWhenInUseAuthorization()
-    }
-
-    @available(iOS 14.0, *)
-    public func requestTemporaryFullAccuracyAuthorization(withPurposeKey purposeKey: String) {
-        locationProvider.requestTemporaryFullAccuracyAuthorization(withPurposeKey: purposeKey)
-    }
-
-    public func startUpdatingLocation() {
-        locationProvider.startUpdatingLocation()
-    }
-
-    public func stopUpdatingLocation() {
-        locationProvider.stopUpdatingLocation()
-    }
-
-    public func startUpdatingHeading() {
-        locationProvider.startUpdatingHeading()
-    }
-
-    public func stopUpdatingHeading() {
-        locationProvider.stopUpdatingHeading()
-    }
-
-    public func dismissHeadingCalibrationDisplay() {
-        locationProvider.dismissHeadingCalibrationDisplay()
-    }
-}
-
-extension RNMBXAppleLocationProvider: CLLocationManagerDelegate {
-  public func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
-    delegate?.locationProvider(self, didUpdateLocations: locations)
-  }
-
-  public func locationManager(_ manager: CLLocationManager, didUpdateHeading heading: CLHeading) {
-    delegate?.locationProvider(self, didUpdateHeading: heading)
-  }
-
-  public func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
-      delegate?.locationProvider(self, didFailWithError: error)
-  }
-
-  @available(iOS 14.0, *)
-  public func locationManagerDidChangeAuthorization(_ manager: CLLocationManager) {
-      delegate?.locationProviderDidChangeAuthorization(self)
-  }
-
-  public func locationManagerShouldDisplayHeadingCalibration(_ manager: CLLocationManager) -> Bool {
-    guard let calibratingDelegate = delegate as? CalibratingLocationProviderDelegate else {
-      return false
-    }
-
-    return calibratingDelegate.locationProviderShouldDisplayHeadingCalibration(self)
-  }
-}
-
-internal protocol CalibratingLocationProviderDelegate: LocationProviderDelegate {
-    func locationProviderShouldDisplayHeadingCalibration(_ locationProvider: LocationProvider) -> Bool
-}
-
-/// LocationProviderRNMBX listens to updates from a locationProvider and implements the LocationProvider interface itself
-/// So it can be source of Mapbox locationProduces (which updates location pluck and viewport if configured) as well as source to updates
-/// to RNMBXLocationModules.
-class LocationProviderRNMBX : LocationProviderDelegate {
-  enum LocationUpdateType {
-    case heading
-    case location
-  }
-  
-  var provider: LocationProvider
-  
-  var lastKnownLocation : CLLocation?
-  var lastKnownHeading : CLHeading?
-  var shouldRequestAlwaysAuthorization: Bool?
-  
-  weak var delegate: LocationProviderRNMBXDelegate?
-  weak var locationProviderDelage: LocationProviderDelegate?
+/*
+class RNMBXAppleLocationProviderProxy : LocationProvider & HeadingProvider {
+  var origProvider : AppleLocationProvider
   
   var headingSimulator: Timer? = nil
   var simulatedHeading: Double = 0.0
   var simulatedHeadingIncrement: Double = 1.0
   
-  
-  struct Status {
-    var provider = (updatingLocation: false, updatingHeading: false)
-    var RNMBXModule = false
-    
-    var shouldUpdateLocation: Bool {
-      return provider.updatingLocation || RNMBXModule
+  public var options: AppleLocationProvider.Options {
+    get {
+      origProvider.options
     }
-    var shouldUpdateHeading: Bool {
-      return provider.updatingHeading || RNMBXModule
-    }
-  }
-
-  var started = Status(provider: (updatingLocation: false, updatingHeading: false), RNMBXModule: false) {
-    didSet {
-      _syncStarted(oldValue: oldValue, started: started)
-    }
-  }
-
-  init() {
-    provider = RNMBXAppleLocationProvider()
-    provider.setDelegate(self)
-  }
-  
-  func setDistanceFilter(_ distanceFilter: CLLocationDistance) {
-    var options = provider.locationProviderOptions
-    options.distanceFilter = distanceFilter
-    provider.locationProviderOptions = options
-  }
-  
-  func setRequestsAlwaysUse(_ requestsAlwaysUse: Bool) {
-    shouldRequestAlwaysAuthorization = requestsAlwaysUse;
-  }
-
-  func start() {
-    if shouldRequestAlwaysAuthorization == true {
-      provider.requestAlwaysAuthorization()
-    }
-    provider.requestWhenInUseAuthorization()
-    started.RNMBXModule = true
-  }
-  
-  func stop() {
-    started.RNMBXModule = false
-  }
-
-  func _syncStarted(oldValue: Status, started: Status) {
-    var stoppedSomething = false
-    if (oldValue.shouldUpdateLocation != started.shouldUpdateLocation) {
-      if started.shouldUpdateLocation {
-        provider.setDelegate(self)
-        provider.startUpdatingLocation()
-      } else {
-        provider.stopUpdatingLocation()
-        stoppedSomething = true
-      }
-    }
-    
-    if (oldValue.shouldUpdateHeading != started.shouldUpdateHeading) {
-      if started.shouldUpdateHeading {
-        provider.setDelegate(self)
-        provider.startUpdatingHeading()
-      } else {
-        provider.stopUpdatingHeading()
-        stoppedSomething = true
-      }
-    }
-    
-    if stoppedSomething && !started.shouldUpdateLocation && !started.shouldUpdateHeading {
-      provider.setDelegate(EmptyLocationProviderDelegate())
+    set {
+      origProvider.options = newValue
     }
   }
   
-  func _convertToMapboxLocation(_ location: CLLocation?, type: LocationUpdateType) -> RNMBXLocation {
-    guard let location = location else {
-      return RNMBXLocation()
+  var onLocationUpdate: Signal<[Location]> {
+    get {
+      origProvider.onLocationUpdate
     }
-
-    let userLocation = RNMBXLocation()
-    userLocation.location = location;
-    userLocation.heading = lastKnownHeading
-    switch type {
-    case .location:
-      userLocation.timestamp = location.timestamp
-    case .heading:
-      userLocation.timestamp = lastKnownHeading!.timestamp
+  }
+  
+  var onHeadingUpdate: Signal<Heading> {
+    get {
+      origProvider.onHeadingUpdate
     }
-    return userLocation;
   }
   
-  func _updateDelegate(type: LocationUpdateType) {
-    if delegate == nil {
-      return;
+  init(provider: AppleLocationProvider) {
+    self.origProvider = provider
+  }
+  
+  func addLocationObserver(for observer: LocationObserver) {
+    origProvider.addLocationObserver(for: observer)
+  }
+  
+  func removeLocationObserver(for observer: LocationObserver) {
+    origProvider.removeLocationObserver(for: observer)
+  }
+  
+  func getLastObservedLocation() -> Location? {
+    origProvider.getLastObservedLocation()
+  }
+  
+  var latestHeading: MapboxMaps.Heading? {
+    get {
+      return origProvider.latestHeading
     }
-
-    let userLocation = _convertToMapboxLocation(lastKnownLocation, type: type)
-
-    delegate?.locationManager(self, didUpdateLocation: userLocation)
   }
   
-    // MARK: - LocationProviderDelegate
-  
-  func locationProvider(_ provider: LocationProvider, didUpdateLocations locations: [CLLocation]) {
-    lastKnownLocation = locations.last
-    self._updateDelegate(type: .location)
-    
-    locationProviderDelage?.locationProvider(provider, didUpdateLocations: locations)
+  var latestLocation: MapboxMaps.Location? {
+    get {
+      return origProvider.latestLocation
+    }
   }
   
-  func locationProvider(_ provider: LocationProvider, didUpdateHeading newHeading: CLHeading) {
-    lastKnownHeading = newHeading
-    self._updateDelegate(type: .heading)
-    
-    locationProviderDelage?.locationProvider(provider, didUpdateHeading: newHeading)
+  func add(headingObserver: MapboxMaps.HeadingObserver) {
+    origProvider.add(headingObserver: headingObserver)
   }
   
-  func locationProvider(_ provider: LocationProvider, didFailWithError error: Error) {
-    locationProviderDelage?.locationProvider(provider, didFailWithError: error)
-  }
-  
-  func locationProviderDidChangeAuthorization(_ provider: LocationProvider) {
-    locationProviderDelage?.locationProviderDidChangeAuthorization(provider)
+  func remove(headingObserver: MapboxMaps.HeadingObserver) {
+    origProvider.remove(headingObserver: headingObserver)
   }
 }
 
-// MARK: LocationProvider
+// MARK: - heading simulation
 
-extension LocationProviderRNMBX: LocationProvider {
-  var locationProviderOptions: LocationOptions {
-    get {
-      provider.locationProviderOptions
-    }
-    set(newValue) {
-      provider.locationProviderOptions = newValue
-    }
-  }
-  
-  var authorizationStatus: CLAuthorizationStatus {
-    get {
-      provider.authorizationStatus
-    }
-  }
-  
-  var accuracyAuthorization: CLAccuracyAuthorization {
-    get {
-      provider.accuracyAuthorization
-    }
-  }
-  
-  var heading: CLHeading? {
-    get {
-      provider.heading
-    }
-  }
-  
-  func setDelegate(_ delegate: LocationProviderDelegate) {
-    provider.setDelegate(self)
-    locationProviderDelage = delegate
-
-    if let lastLocation = lastKnownLocation {
-      DispatchQueue.main.async {
-        self.locationProviderDelage?.locationProvider(self, didUpdateLocations: [lastLocation])
-      }
-    }
-    if let lastHeading = lastKnownHeading {
-      DispatchQueue.main.async { [self] in
-        self.locationProviderDelage?.locationProvider(self, didUpdateHeading: lastHeading)
-      }
-    }
-  }
-  
-  func requestAlwaysAuthorization() {
-    provider.requestAlwaysAuthorization()
-  }
-  
-  func requestWhenInUseAuthorization() {
-    provider.requestWhenInUseAuthorization()
-  }
-  
-  func requestTemporaryFullAccuracyAuthorization(withPurposeKey purposeKey: String) {
-    if #available(iOS 14.0, *) {
-      provider.requestTemporaryFullAccuracyAuthorization(withPurposeKey: purposeKey)
-    } else {
-      // Fallback on earlier versions
-    }
-  }
-  
-  func startUpdatingLocation() {
-    started.provider.updatingLocation = true
-  }
-  
-  func stopUpdatingLocation() {
-    started.provider.updatingLocation = false
-  }
-  
-  var headingOrientation: CLDeviceOrientation {
-    get {
-      return provider.headingOrientation
-    }
-    set(newValue) {
-      provider.headingOrientation = newValue
-    }
-  }
-  
-  func startUpdatingHeading() {
-    started.provider.updatingHeading = true
-  }
-  
-  func stopUpdatingHeading() {
-    started.provider.updatingHeading = false
-  }
-  
-  func dismissHeadingCalibrationDisplay() {
-    provider.dismissHeadingCalibrationDisplay()
-  }
-}
-
-// MARK: heading simulation
-
-final public class SimulatedHeading: CLHeading {
-  init(trueHeading: CLLocationDirection, timestamp: Date) {
-    _trueHeading = trueHeading
-    _timestamp = timestamp
-    super.init()
-  }
-  
-  required init?(coder: NSCoder) {
-    fatalError("init(coder:) has not been implemented")
-  }
-  
-    private var _trueHeading: CLLocationDirection = 0
-    private var _timestamp: Date
-
-    public override var trueHeading: CLLocationDirection {
-        get {  _trueHeading }
-        set { _trueHeading = newValue }
-    }
-
-    public override var timestamp: Date{
-      get {  _timestamp }
-      set { _timestamp = newValue }
-    }
-}
-
-extension LocationProviderRNMBX {
+extension RNMBXAppleLocationProviderProxy {
   func simulateHeading(changesPerSecond: Int, increment: Double) {
     self.simulatedHeadingIncrement = increment
     DispatchQueue.main.async {
@@ -450,34 +124,31 @@ extension LocationProviderRNMBX {
     }
   }
 }
+*/
 
-// LocationModule is a sigleton class
+// MARK: - RNMBXLocationModule
+
 @objc(RNMBXLocationModule)
-class RNMBXLocationModule: RCTEventEmitter, LocationProviderRNMBXDelegate {
-
+class RNMBXLocationModule: RCTEventEmitter {
   static weak var shared : RNMBXLocationModule? = nil
+  
+  var _locationProvider : LocationProvider & HeadingProvider = AppleLocationProvider()
+  var locationUpdateObserver : Cancelable? = nil
+  var locationHeadingObserver : Cancelable? = nil
+  
+  var actLocation : RNMBXLocation = RNMBXLocation()
+  
+  var hasListener : Bool = false
 
-  var hasListener = false
-  
-  var locationProvider : LocationProvider
-  var defaultLocationProvider : LocationProvider? = nil
-  
-  var locationEventThrottle : (
-    waitBetweenEvents: Double?,
-    lastSentTimestamp: Double?
-  ) = (
-    nil,
-    nil
-  )
+  var throttler = EventThrottler()
 
   override init() {
-    locationProvider = LocationProviderRNMBX()
-    defaultLocationProvider = locationProvider
     super.init()
-    if let locationProvider = locationProvider as? LocationProviderRNMBX {
-      locationProvider.delegate = self
-    }
     RNMBXLocationModule.shared = self
+  }
+  
+  func override(for locationManager: LocationManager) {
+    locationManager.override(provider: _locationProvider)
   }
   
   @objc
@@ -485,67 +156,132 @@ class RNMBXLocationModule: RCTEventEmitter, LocationProviderRNMBXDelegate {
     return true
   }
   
-  @objc
-  override func constantsToExport() -> [AnyHashable: Any]! {
-    return [:];
-  }
-
   @objc override func supportedEvents() -> [String]
   {
     return [RCT_MAPBOX_USER_LOCATION_UPDATE];
   }
   
   @objc func start(_ minDisplacement: CLLocationDistance) {
-    if minDisplacement >= 0.0 {
-      if let locationProvider = locationProvider as? LocationProviderRNMBX {
-        locationProvider.setDistanceFilter(minDisplacement)
+    setMinDisplacement(minDisplacement)
+    
+    locationUpdateObserver?.cancel()
+    locationUpdateObserver = observeLocationUpdates(_locationProvider) { location in
+      guard self.hasListener else { return }
+  
+      self.actLocation.location = location.last
+      self.throttler.perform {
+        self.sendEvent(withName: RCT_MAPBOX_USER_LOCATION_UPDATE, body: self.actLocation.toJSON())
       }
     }
-    if let locationProvider = locationProvider as? LocationProviderRNMBX {
-      locationProvider.start()
+    locationHeadingObserver?.cancel()
+    locationHeadingObserver = observeHeadingUpdates(_locationProvider) { heading in
+      guard self.hasListener else { return }
+
+      self.actLocation.heading = heading
+      self.throttler.perform {
+        self.sendEvent(withName: RCT_MAPBOX_USER_LOCATION_UPDATE, body: self.actLocation.toJSON())
+      }
     }
+  }
+  
+  class _LocationObserver : Cancelable, LocationObserver  {
+    weak var locationProvider: LocationProvider?
+    var callback: (([Location]) -> Void)?
+    
+    init(_ locationProvider: LocationProvider) {
+      self.locationProvider = locationProvider
+    }
+
+    func onLocationUpdateReceived(for locations: [Location]) {
+      callback?(locations)
+    }
+  
+    func cancel() {
+      locationProvider?.removeLocationObserver(for: self)
+      locationProvider = nil
+    }
+    
+    deinit {
+      self.cancel()
+    }
+  }
+  
+  class _HeadingObserver: Cancelable, HeadingObserver {
+    var headingProvider: HeadingProvider?
+    var callback: ((Heading) -> Void)?
+
+    init(_ headingProvider: HeadingProvider) {
+      self.headingProvider = headingProvider
+    }
+    
+    func onHeadingUpdate(_ heading: MapboxMaps.Heading) {
+      callback?(heading)
+    }
+    
+    func cancel() {
+      headingProvider?.remove(headingObserver: self)
+      headingProvider = nil
+    }
+    
+    deinit {
+      self.cancel()
+    }
+  }
+  
+  func observeLocationUpdates(_ locationProvider: LocationProvider, callback: @escaping ([Location]) -> Void) -> Cancelable {
+    let observer = _LocationObserver(locationProvider)
+    observer.callback = callback
+    locationProvider.addLocationObserver(for: observer)
+    return observer
+  }
+  
+  func observeHeadingUpdates(_ headingProvider: HeadingProvider, callback: @escaping (Heading) -> Void) -> Cancelable {
+    let observer = _HeadingObserver(headingProvider)
+    observer.callback = callback
+    headingProvider.add(headingObserver: observer)
+    return observer
   }
   
   @objc func stop() {
-    if let locationProvider = locationProvider as? LocationProviderRNMBX {
-      locationProvider.stop()
+    locationUpdateObserver?.cancel()
+    locationUpdateObserver = nil
+    locationHeadingObserver?.cancel()
+    locationHeadingObserver = nil
+    throttler.cancel()
+  }
+  
+  @objc func getLastKnownLocation() -> [String: Any]? {
+    let last = RNMBXLocation()
+    last.heading = _locationProvider.latestHeading
+    last.location = _locationProvider.getLastObservedLocation()
+    return last.toJSON()
+  }
+  
+  @objc
+  func setMinDisplacement(_ minDisplacement: CLLocationDistance) {
+    if let appleLocationProvider = _locationProvider as? AppleLocationProvider {
+      var newOptions = appleLocationProvider.options
+      newOptions.distanceFilter = minDisplacement
+      if minDisplacement >= 0.0 { appleLocationProvider.options = newOptions }
     }
   }
   
-  @objc func getLastKnownLocation() -> NSDictionary? {
-    let result = RNMBXLocation()
-    if let locationProvider = locationProvider as? LocationProviderRNMBX {
-      if let location = locationProvider.lastKnownLocation {
-        result.location = location
-        result.timestamp = location.timestamp
-      }
-      if let heading = locationProvider.lastKnownHeading {
-        result.heading = heading
-        if result.timestamp == nil ||
-            heading.timestamp.compare(result.timestamp!) == .orderedAscending {
-          result.timestamp = heading.timestamp
-        }
-      }
-    }
-    return result.toJSON()
-  }
-  
-  @objc func setMinDisplacement(_ minDisplacement: CLLocationDistance) {
-    if let locationProvider = locationProvider as? LocationProviderRNMBX {
-      locationProvider.setDistanceFilter(minDisplacement)
+  @objc
+  func setLocationEventThrottle(_ throttleValue:NSNumber) {
+    let throttleValue = throttleValue.doubleValue
+    if throttleValue > 0.0 {
+      throttler.waitBetweenEvents = throttleValue
+    } else {
+      throttler.waitBetweenEvents = nil
     }
   }
 
   @objc func setRequestsAlwaysUse(_ requestsAlwaysUse: Bool) {
-    if let locationProvider = locationProvider as? LocationProviderRNMBX {
-      locationProvider.setRequestsAlwaysUse(requestsAlwaysUse)
-    }
+    // V11TODO
   }
 
   @objc func simulateHeading(_ changesPerSecond: NSNumber, increment: NSNumber) {
-    if let locationProvider = locationProvider as? LocationProviderRNMBX {
-      locationProvider.simulateHeading(changesPerSecond: changesPerSecond.intValue, increment: increment.doubleValue)
-    }
+    // V11TODO
   }
 
   @objc
@@ -557,70 +293,59 @@ class RNMBXLocationModule: RCTEventEmitter, LocationProviderRNMBXDelegate {
   @objc
   override func stopObserving() {
     super.stopObserving()
+    throttler.cancel()
     hasListener = false
   }
-  
-  func locationManager(_ locationManager: LocationProviderRNMBX, didUpdateLocation location: RNMBXLocation) {
-    guard hasListener, let _ = bridge else {
-      return
-    }
 
-    if shouldSendLocationEvent() {
-      self.sendEvent(withName: RCT_MAPBOX_USER_LOCATION_UPDATE, body: location.toJSON())
+  var locationProvider : LocationProvider & HeadingProvider {
+    get {
+      return _locationProvider
     }
-  }
-  
-  func override(for locationManager: LocationManager) {
-    if let locationModule = RNMBXLocationModule.shared {
-      var isSameProvider = false
-      if let currentProvider = locationManager.locationProvider as? AnyObject, let newProvider = locationModule.locationProvider as? AnyObject {
-        if currentProvider === newProvider {
-          isSameProvider = true
-        }
-      }
-      if !isSameProvider {
-        locationManager.overrideLocationProvider(with: locationModule.locationProvider)
-      }
+    set(value) {
+      _locationProvider = value
     }
   }
   
-  func resetLocationProvider() {
-    if let defaultLocationProvider = defaultLocationProvider {
-      self.locationProvider = defaultLocationProvider
-    }
+  func overrideLocationProvider(newProvider: LocationProvider & HeadingProvider) {
+    _locationProvider = newProvider
   }
+  
+  
+}
 
-  // MARK: - location event throttle
-  @objc
-  func setLocationEventThrottle(_ throttleValue:NSNumber) {
-    let throttleValue = throttleValue.doubleValue
-    if throttleValue > 0.0 {
-      locationEventThrottle.waitBetweenEvents = throttleValue
-    } else {
-      locationEventThrottle.waitBetweenEvents = nil
-    }
-  }
-
-  func shouldSendLocationEvent() -> Bool {
-    guard let waitBetweenEvents = locationEventThrottle.waitBetweenEvents, waitBetweenEvents > 0 else {
+class EventThrottler {
+  var waitBetweenEvents: Double? = nil
+  var lastSentTimestamp: Double? = nil
+  
+  func shouldSend() -> Bool {
+    guard let waitBetweenEvents = waitBetweenEvents, waitBetweenEvents > 0 else {
       return true
     }
   
     let currentTimestamp: Double = CACurrentMediaTime() * 1000.0
     
-    guard let lastSentTimestamp = locationEventThrottle.lastSentTimestamp else {
-      locationEventThrottle.lastSentTimestamp = currentTimestamp
+    guard let lastSentTimestamp = lastSentTimestamp else {
+      self.lastSentTimestamp = currentTimestamp
       return true;
     }
     
     if (currentTimestamp - lastSentTimestamp > waitBetweenEvents) {
-      locationEventThrottle.lastSentTimestamp = currentTimestamp
+      self.lastSentTimestamp = currentTimestamp
       return true;
     }
      
     return false;
   }
+  
+  func cancel() {}
+  
+  func shouldTrhottle() -> Bool {
+    return !shouldSend()
+  }
+  
+  func perform(action: @escaping () -> Void) {
+    if shouldSend() {
+      action()
+    }
+  }
 }
-
-#endif
-

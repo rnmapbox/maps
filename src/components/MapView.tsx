@@ -207,6 +207,11 @@ type Props = ViewProps & {
   pitchEnabled?: boolean;
 
   /**
+   * Maximum allowed pitch in degrees. Mirrors the Mapbox map option `maxPitch`.
+   */
+  maxPitch?: number;
+
+  /**
    * Enable/Disable rotation on map
    */
   rotateEnabled?: boolean;

@@ -1,4 +1,3 @@
-#if RNMBX_11
 @_spi(Experimental) import MapboxMaps
 
 @objc(RNMBXRasterParticleLayer)
@@ -15,7 +14,6 @@ public class RNMBXRasterParticleLayer: RNMBXLayer {
   func setCommonOptions(_ layer: inout RasterParticleLayer) -> Bool {
     var changed = false
 
-    #if RNMBX_11
     if let sourceLayerID = sourceLayerID {
       layer.sourceLayer = sourceLayerID
       changed = true
@@ -38,7 +36,6 @@ public class RNMBXRasterParticleLayer: RNMBXLayer {
         Logger.log(level: .error, message: "parsing filters failed for layer \(optional: id): \(error.localizedDescription)")
       }
     }
-    #endif
 
     return changed
   }
@@ -97,4 +94,3 @@ public class RNMBXRasterParticleLayer: RNMBXLayer {
     return LayerType.self
   }
 }
-#endif

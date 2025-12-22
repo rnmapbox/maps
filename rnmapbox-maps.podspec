@@ -12,7 +12,7 @@
 #           product_name: "Mapbox"
 #         }
 #         ```
-#  $RNMapboxMapsDownloadToken - *expo only* download token
+#  $RNMapboxMapsDownloadToken - *deprecated* download token is no longer required
 #  $RNMapboxMapsCustomPods - use a custom pod for mapbox libs
 
 require 'json'
@@ -36,9 +36,9 @@ end
 new_arch_enabled = $RNMapboxMaps.compute_new_arch_enabled
 
 unless new_arch_enabled
-  puts "⚠️ RNMapbox DEPRECATION WARNING: Old React Native Architecture (Paper/bridge) is deprecated and will not receive active support."
-  puts "⚠️ RNMapbox: Please upgrade to New Architecture (Fabric/TurboModules) for continued support and updates."
-  puts "⚠️ RNMapbox: For sponsor-only support for old architecture: https://github.com/sponsors/rnmapbox"
+  Pod::UI.puts "[RNMapbox] ❌ ERROR: Old React Native Architecture is no longer supported as of @rnmapbox/maps 10.3.0"
+  Pod::UI.puts "[RNMapbox] Please enable New Architecture or use @rnmapbox/maps 10.2.x"
+  raise "Old React Native Architecture is no longer supported. Enable New Architecture or use @rnmapbox/maps 10.2.x"
 end
 
 # DEPRECATIONS
@@ -97,9 +97,9 @@ end
 if $MapboxImplVersion =~ /(~>|>=|=|>)?\S*11\./
   $RNMapboxMapsUseV11Imp = true
 else
-  puts "⚠️ RNMapbox DEPRECATION WARNING: Mapbox v10.x is deprecated and will not receive active support."
-  puts "⚠️ RNMapbox: Please upgrade to Mapbox v11.x for continued support and updates."
-  puts "⚠️ RNMapbox: For sponsor-only support for v10.x: https://github.com/sponsors/rnmapbox"
+  Pod::UI.puts "[RNMapbox] ❌ ERROR: Mapbox v10 is no longer supported as of @rnmapbox/maps 10.3.0"
+  Pod::UI.puts "[RNMapbox] Please upgrade to Mapbox v11.x or use @rnmapbox/maps 10.2.x"
+  raise "Mapbox v10 is no longer supported. Upgrade to v11.x or use @rnmapbox/maps 10.2.x"
 end
 
 def $RNMapboxMaps._check_no_mapbox_spm(project)
@@ -275,7 +275,7 @@ Pod::Spec.new do |s|
     case $RNMapboxMapsImpl
     when 'mapbox'
       sp.source_files = "ios/RNMBX/**/*.{h,m,mm,swift}"
-      sp.private_header_files = 'ios/RNMBX/RNMBXFabricHelpers.h', 'ios/RNMBX/RNMBXFabricPropConvert.h', 'ios/RNMBX/rnmapbox_maps-Swift.pre.h', 'ios/RNMBX/Utils/RNMBXFollyConvert.h', 'ios/RNMBX/Utils/RNMBXViewResolver.h'
+      sp.private_header_files = 'ios/RNMBX/RNMBXFabricHelpers.h', 'ios/RNMBX/RNMBXFabricPropConvert.h', 'ios/RNMBX/rnmapbox_maps-Swift.pre.h', 'ios/RNMBX/Utils/RNMBXFollyConvert.h'
 
       if new_arch_enabled
         sp.pod_target_xcconfig = { 'DEFINES_MODULE' => 'YES' }

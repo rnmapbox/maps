@@ -5,6 +5,9 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      id-token: write
     steps:
       - name: Checkout
         uses: actions/checkout@v3
@@ -19,9 +22,9 @@ jobs:
         with:
           node-version: ${{ steps.nvm.outputs.NVMRC }}
           registry-url: 'https://registry.npmjs.org'
+      - name: Upgrade npm for OIDC support
+        run: npm install -g npm@latest
       - name: Install dependencies and build 🔧
         run: yarn install --immutable
       - name: Publish package on NPM 📦
-        run: npm publish ${{ github.event.release.prerelease && '--tag next' || ''}}
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_PUBLISH_TOKEN_RNMAPBOX }}
+        run: npm publish --provenance --access public ${{ github.event.release.prerelease && '--tag next' || ''}}

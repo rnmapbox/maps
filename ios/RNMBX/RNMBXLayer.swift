@@ -6,11 +6,7 @@ protocol RNMBXSourceConsumer : class {
 }
 
 func styleLayerExists(_ style: Style, id: String) -> Bool {
-  #if RNMBX_11
   return style.layerExists(withId: id)
-  #else
-  return style.styleManager.styleLayerExists(forLayerId: id)
-  #endif
 }
 
 @objc(RNMBXLayer)
@@ -258,7 +254,6 @@ public class RNMBXLayer : UIView, RNMBXMapComponent, RNMBXSourceConsumer {
     removeFromMap(style)
   }
 
-  #if RNMBX_11
   func _toSlot(_ slot: String) -> Slot? {
     switch slot {
     case "top":
@@ -271,7 +266,6 @@ public class RNMBXLayer : UIView, RNMBXMapComponent, RNMBXSourceConsumer {
       return Slot(rawValue: slot);
     }
   }
-  #endif
 
   func setBaseOptions<T: Layer>(_ layer: inout T) {
     if let minZoom = minZoomLevel {
@@ -282,36 +276,13 @@ public class RNMBXLayer : UIView, RNMBXMapComponent, RNMBXSourceConsumer {
       layer.maxZoom = maxZoom.doubleValue
     }
 
-    #if RNMBX_11
     if let slot = slot {
       layer.slot = _toSlot(slot)
     }
-    #endif
   }
 
   func setOptions(_ layer: inout Layer) {
     setBaseOptions(&layer)
-    #if !RNMBX_11
-    if let sourceLayerID = sourceLayerID {
-      layer.sourceLayer = sourceLayerID
-    }
-
-    if let sourceID = sourceID {
-      if !(existingLayer && sourceID == DEFAULT_SOURCE_ID) && hasSource() {
-        layer.source = sourceID
-      }
-    }
-
-    if let filter = filter, filter.count > 0 {
-      do {
-        let data = try JSONSerialization.data(withJSONObject: filter, options: .prettyPrinted)
-        let decodedExpression = try JSONDecoder().decode(Expression.self, from: data)
-        layer.filter = decodedExpression
-      } catch {
-        Logger.log(level: .error, message: "parsing filters failed for layer \(optional: id): \(error.localizedDescription)")
-      }
-    }
-    #endif
   }
 
   private func optionsChanged() {
@@ -381,14 +352,8 @@ public class RNMBXLayer : UIView, RNMBXMapComponent, RNMBXSourceConsumer {
   }
 }
 
-#if RNMBX_11
 protocol LayerWithSource : Layer {
   var source: String? { get set }
   var sourceLayer: String? { get set }
   var filter: MapboxMaps.Expression? { get set}
 }
-#else
-protocol LayerWithSource : Layer {
-
-}
-#endif

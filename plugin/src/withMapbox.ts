@@ -37,6 +37,9 @@ export type MapboxPlugProps = {
 
   RNMapboxMapsVersion?: string;
 
+  /**
+   * @deprecated Download token is no longer required by Mapbox. Do not set this.
+   */
   RNMapboxMapsDownloadToken?: string;
 
   RNMapboxMapsUseV11?: boolean;

@@ -1,7 +1,6 @@
 import Foundation
 import MapboxMaps
 
-#if RNMBX_11
 @objc(RNMBXRasterArraySourceViewManager)
 class RNMBXRasterArraySourceViewManager : RCTViewManager {
   @objc
@@ -13,4 +12,3 @@ class RNMBXRasterArraySourceViewManager : RCTViewManager {
     return RNMBXRasterArraySource()
   }
 }
-#endif

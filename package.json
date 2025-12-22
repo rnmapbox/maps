@@ -1,6 +1,6 @@
 {
   "name": "@rnmapbox/maps",
-  "version": "10.2.9",
+  "version": "10.3.0",
   "description": "Community-supported, open-source React Native library for building maps using Mapbox native maps SDK for iOS and Android",
   "main": "./lib/module/index.js",
   "types": "./lib/typescript/src/index.native.d.ts",
@@ -138,7 +138,7 @@
     "mapbox-gl": "^2.9.0",
     "react": ">=17.0.0",
     "react-dom": ">= 17.0.0",
-    "react-native": ">=0.69"
+    "react-native": ">=0.79"
   },
   "peerDependenciesMeta": {
     "expo": {

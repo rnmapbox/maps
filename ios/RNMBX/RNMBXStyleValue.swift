@@ -203,7 +203,6 @@ class RNMBXStyleValue {
     }
   }
 
-  #if RNMBX_11
   func mglStyleValueNumberRaw() -> Value<Double> {
     guard let value = value as? Dictionary<String,Any> else {
       Logger.log(level: .error, message: "Invalid value for number: \(value) retuning 0.0")
@@ -224,28 +223,6 @@ class RNMBXStyleValue {
     }
     return .constant(1.0)
   }
-  #else
-  func mglStyleValueNumberRaw() -> Double {
-    guard let value = value as? Dictionary<String,Any> else {
-      Logger.log(level: .error, message: "Invalid value for number: \(value) retuning 0.0")
-      return 0.0
-    }
-
-    let valueObj = RNMBXStyleValue.convert(value["stylevalue"] as! [String:Any])
-
-    if let num = valueObj as? NSNumber {
-      return num.doubleValue
-    } else if let num = valueObj as? Double {
-      return num
-    } else if let num = valueObj as? Int {
-      return Double(num)
-    } else {
-      Logger.log(level: .error, message: "Invalid value for number: \(value) retuning 0.0")
-      return 0.0
-    }
-    return 1.0
-  }
-  #endif
 
   func uicolor(_ rgbValue: Int) -> UIColor {
       return UIColor(
@@ -280,7 +257,6 @@ class RNMBXStyleValue {
     return decodedExpression
   }
 
-  #if RNMBX_11
   func mglStyleValueColorRaw() -> Value<StyleColor> {
     guard let value = value as? Dictionary<String,Any> else {
       Logger.log(level: .error, message: "Invalid value for color: \(value) retuning red")
@@ -296,23 +272,6 @@ class RNMBXStyleValue {
       return .constant(StyleColor(UIColor.red))
     }
   }
-  #else
-  func mglStyleValueColorRaw() -> StyleColor {
-    guard let value = value as? Dictionary<String,Any> else {
-      Logger.log(level: .error, message: "Invalid value for color: \(value) retuning red")
-      return StyleColor(UIColor.red)
-    }
-    let valueObj = RNMBXStyleValue.convert(value["stylevalue"] as! [String:Any])
-
-    if let num = valueObj as? Int {
-      let uicolor = uicolor(num)
-      return StyleColor(uicolor)
-    } else {
-      Logger.log(level: .error, message: "Unexpeted value for color: \(valueObj), retuning red")
-      return StyleColor(UIColor.red)
-    }
-  }
-  #endif
 
   func mglStyleValueBoolean() -> Value<Bool> {
     guard let value = value as? Dictionary<String,Any> else {
@@ -478,16 +437,10 @@ class RNMBXStyleValue {
     return Value.constant([])
   }
 
-  #if RNMBX_11
   func mglStyleValueAnchorRaw() -> Value<Anchor> {
     // RNMBX_11 TODO Support expressions
     return .constant(mglStyleEnum())
   }
-  #else
-  func mglStyleValueAnchorRaw() -> Anchor {
-    return mglStyleEnum()
-  }
-  #endif
 
   func shouldAddImage() -> Bool {
     if let uri = getImageURI() {
@@ -580,7 +533,6 @@ class RNMBXStyleValue {
     }
   }
 
-  #if RNMBX_11
   func mglStyleValueArrayClipLayerTypes() -> Value<[ClipLayerTypes]> {
     guard let value = value as? Dictionary<String,Any> else {
       Logger.log(level: .error, message: "Invalid value for array of ClipLayerTypes: \(value)")
@@ -605,9 +557,7 @@ class RNMBXStyleValue {
       }
     }
   }
-  #endif
 
-  #if RNMBX_11
   func getSphericalPosition() -> Value<[Double]> {
     if let array = styleObject as? [NSNumber] {
       var result = array.map { $0.doubleValue }
@@ -617,17 +567,6 @@ class RNMBXStyleValue {
     Logger.log(level: .error, message: "Expected array of numbers as position received: \(optional: styleObject)")
     return .constant([])
   }
-  #else
-  func getSphericalPosition() -> [Double] {
-    if let array = styleObject as? [NSNumber] {
-      var result = array.map { $0.doubleValue }
-      result[0] = deg2rad(result[0])
-      return result
-    }
-    Logger.log(level: .error, message: "Expected array of numbers as position received: \(optional: styleObject)")
-    return []
-  }
-  #endif
 
   func mglStyleValueFormatted() -> Value<String> {
     if let value = value as? Dictionary<String,Any> {

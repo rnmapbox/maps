@@ -6,11 +6,7 @@ class RNMBXOfflineModuleLegacy: RCTEventEmitter {
   final let CompleteRegionDownloadState = 2
   
   lazy var offlineRegionManager: OfflineRegionManager = {
-    #if RNMBX_11
     return OfflineRegionManager()
-    #else
-    return OfflineRegionManager(resourceOptions: .init(accessToken: RNMBXModule.accessToken!))
-    #endif
   }()
 
   @objc

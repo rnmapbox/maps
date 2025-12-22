@@ -25,9 +25,7 @@ public class RNMBXCameraGestureObserver: RNMBXMapComponentBase, GestureManagerDe
   private var timeoutTimer: DispatchSourceTimer? = nil
   private var emittedForCurrentActivity: Bool = false
 
-  #if RNMBX_11
   private var _cancelables = Set<AnyCancelable>()
-  #endif
 
   private var quietMs: Double { (quietPeriodMs?.doubleValue) ?? 200.0 }
   private var maxMs: Double? { maxIntervalMs?.doubleValue }
@@ -43,9 +41,7 @@ public class RNMBXCameraGestureObserver: RNMBXMapComponentBase, GestureManagerDe
     switch gestureType {
     case .pan: return "pan"
     case .pinch: return "pinch"
-    #if RNMBX_11
     case .rotation: return "rotate"
-    #endif
     case .pitch: return "pitch"
     default: return "\(gestureType)"
     }
@@ -145,7 +141,6 @@ public class RNMBXCameraGestureObserver: RNMBXMapComponentBase, GestureManagerDe
 
     guard hasOnMapSteady else { return }
 
-    #if RNMBX_11
     let camera = map.mapView.camera!
 
     // Camera animator lifecycle
@@ -175,14 +170,11 @@ public class RNMBXCameraGestureObserver: RNMBXMapComponentBase, GestureManagerDe
     // Subscribe to gestures as a secondary observer (multicast from RNMBXMapView)
     map.addGestureDelegate(self)
     debugLog("addToMap and subscribed to gestures")
-    #endif
   }
 
   public override func removeFromMap(_ map: RNMBXMapView, reason: RemovalReason) -> Bool {
-    #if RNMBX_11
     _cancelables.forEach { $0.cancel() }
     _cancelables.removeAll()
-    #endif
     map.removeGestureDelegate(self)
     debugLog("removeFromMap and unsubscribed from gestures")
     cancelQuietTimer()
