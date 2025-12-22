@@ -721,6 +721,24 @@ export interface LineLayerStyleProps {
    */
   lineTrimOffset?: number[];
   /**
+   * The width of the line border. A value of zero means no border.
+   */
+  lineBorderWidth?: Value<number, ['zoom', 'feature', 'feature-state']>;
+
+  /**
+   * The transition affecting any changes to this layer’s lineBorderWidth property.
+   */
+  lineBorderWidthTransition?: Transition;
+  /**
+   * The color of the line border. If lineBorderWidth is greater than zero and the alpha value of this color is 0 (default), the color for the border will be selected automatically based on the line color.
+   */
+  lineBorderColor?: Value<string, ['zoom', 'feature', 'feature-state']>;
+
+  /**
+   * The transition affecting any changes to this layer’s lineBorderColor property.
+   */
+  lineBorderColorTransition?: Transition;
+  /**
    * Vertical offset from ground, in meters. Defaults to 0. This is an experimental property with some known issues:
    * Not supported for globe projection at the moment
    * Elevated line discontinuity is possible on tile borders with terrain enabled

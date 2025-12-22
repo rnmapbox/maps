@@ -4106,6 +4106,55 @@
         }
       },
       {
+        "name": "lineBorderWidth",
+        "type": "number",
+        "values": [],
+        "minimum": 0,
+        "default": 0,
+        "description": "The width of the line border. A value of zero means no border.",
+        "requires": [],
+        "disabledBy": [],
+        "allowedFunctionTypes": [],
+        "expression": {
+          "interpolated": true,
+          "parameters": [
+            "zoom",
+            "feature",
+            "feature-state"
+          ]
+        },
+        "transition": true,
+        "mbx": {
+          "fullName": "paint-line-line-border-width",
+          "name": "line-border-width",
+          "namespace": "paint"
+        }
+      },
+      {
+        "name": "lineBorderColor",
+        "type": "color",
+        "values": [],
+        "default": "rgba(0, 0, 0, 0)",
+        "description": "The color of the line border. If lineBorderWidth is greater than zero and the alpha value of this color is 0 (default), the color for the border will be selected automatically based on the line color.",
+        "requires": [],
+        "disabledBy": [],
+        "allowedFunctionTypes": [],
+        "expression": {
+          "interpolated": true,
+          "parameters": [
+            "zoom",
+            "feature",
+            "feature-state"
+          ]
+        },
+        "transition": true,
+        "mbx": {
+          "fullName": "paint-line-line-border-color",
+          "name": "line-border-color",
+          "namespace": "paint"
+        }
+      },
+      {
         "name": "lineOcclusionOpacity",
         "type": "number",
         "values": [],
