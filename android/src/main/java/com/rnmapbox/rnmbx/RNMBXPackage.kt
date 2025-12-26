@@ -177,7 +177,6 @@ class RNMBXPackage : TurboReactPackage() {
         resetViewTagResolver()
         return ReactModuleInfoProvider {
             val moduleInfos: MutableMap<String, ReactModuleInfo> = HashMap()
-            val isTurboModule = BuildConfig.IS_NEW_ARCHITECTURE_ENABLED
             moduleInfos[RNMBXModule.REACT_CLASS] = ReactModuleInfo(
                 RNMBXModule.REACT_CLASS,
                 RNMBXModule.REACT_CLASS,
@@ -194,7 +193,7 @@ class RNMBXPackage : TurboReactPackage() {
                 false,  // needsEagerInit
                 true,  // hasConstants
                 false,  // isCxxModule
-                isTurboModule // isTurboModule
+                true // isTurboModule
             )
             moduleInfos[RNMBXOfflineModule.REACT_CLASS] = ReactModuleInfo(
                 RNMBXOfflineModule.REACT_CLASS,
@@ -248,7 +247,7 @@ class RNMBXPackage : TurboReactPackage() {
                 false,  // needsEagerInit
                 false,  // hasConstants
                 false,  // isCxxModule
-                isTurboModule // isTurboModule
+                true // isTurboModule
             )
             moduleInfos[RNMBXViewportModule.NAME] = ReactModuleInfo(
                 RNMBXViewportModule.NAME,
@@ -257,7 +256,7 @@ class RNMBXPackage : TurboReactPackage() {
                 false,  // needsEagerInit
                 false,  // hasConstants
                 false,  // isCxxModule
-                isTurboModule // isTurboModule
+                true // isTurboModule
             )
             moduleInfos[RNMBXCameraModule.NAME] = ReactModuleInfo(
                 RNMBXCameraModule.NAME,
@@ -266,7 +265,7 @@ class RNMBXPackage : TurboReactPackage() {
                 false,  // needsEagerInit
                 false,  // hasConstants
                 false,  // isCxxModule
-                isTurboModule // isTurboModule
+                true // isTurboModule
             )
             moduleInfos[RNMBXShapeSourceModule.NAME] = ReactModuleInfo(
                 RNMBXShapeSourceModule.NAME,
@@ -275,7 +274,7 @@ class RNMBXPackage : TurboReactPackage() {
                 false,  // needsEagerInit
                 false,  // hasConstants
                 false,  // isCxxModule
-                isTurboModule // isTurboModule
+                true // isTurboModule
             )
             moduleInfos[RNMBXImageModule.NAME] = ReactModuleInfo(
                 RNMBXImageModule.NAME,
@@ -284,7 +283,7 @@ class RNMBXPackage : TurboReactPackage() {
                 false,  // needsEagerInit
                 false,  // hasConstants
                 false,  // isCxxModule
-                isTurboModule // isTurboModule
+                true // isTurboModule
             )
             moduleInfos[RNMBXPointAnnotationModule.NAME] = ReactModuleInfo(
                 RNMBXPointAnnotationModule.NAME,
@@ -293,7 +292,7 @@ class RNMBXPackage : TurboReactPackage() {
                 false,  // needsEagerInit
                 false,  // hasConstants
                 false,  // isCxxModule
-                isTurboModule // isTurboModule
+                true // isTurboModule
             )
             moduleInfos[RNMBXMovePointShapeAnimatorModule.NAME] = ReactModuleInfo(
                 RNMBXMovePointShapeAnimatorModule.NAME,
@@ -302,7 +301,7 @@ class RNMBXPackage : TurboReactPackage() {
                 false,
                 false,
                 false,
-                isTurboModule
+                true // isTurboModule
             )
             moduleInfos[RNMBXChangeLineOffsetsShapeAnimatorModule.NAME] = ReactModuleInfo(
                 RNMBXChangeLineOffsetsShapeAnimatorModule.NAME,
@@ -311,7 +310,7 @@ class RNMBXPackage : TurboReactPackage() {
                 false,
                 false,
                 false,
-                isTurboModule
+                true // isTurboModule
             )
             moduleInfos
         }
