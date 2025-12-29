@@ -16,19 +16,27 @@ object MBTilesServer : Runnable {
 
     private const val TAG = "MBTilesServer"
     const val port = 8888
-    private val serverSocket: ServerSocket = ServerSocket(port)
+    private var serverSocket: ServerSocket? = null  // Created in start()
     var isRunning = false
     val sources: MutableMap<String, MBTilesSource> = mutableMapOf()
 
     fun start() {
-        isRunning = true
-        Thread(this).start()
+        if (isRunning) return
+
+        try {
+            serverSocket = ServerSocket(port)
+            isRunning = true
+            Thread(this).start()
+        } catch (e: Exception) {
+            Log.e(TAG, "Error starting server: ${e.localizedMessage}")
+        }
     }
 
     fun stop() {
         isRunning = false
         try {
-            serverSocket.close()
+            serverSocket?.close()
+            serverSocket = null
         } catch (e: Exception) {
             Log.e(TAG, "Error closing server socket: ${e.localizedMessage}")
         }
@@ -37,7 +45,7 @@ object MBTilesServer : Runnable {
     override fun run() {
         try {
             while (isRunning) {
-                serverSocket.accept().use { socket ->
+                serverSocket?.accept()?.use { socket ->
                     Log.d(TAG, "Handling request")
                     handle(socket)
                     Log.d(TAG, "Request handled")

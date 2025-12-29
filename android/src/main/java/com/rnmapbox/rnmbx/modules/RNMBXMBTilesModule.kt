@@ -150,6 +150,40 @@ class RNMBXMBTilesModule(private val reactContext: ReactApplicationContext) :
         promise.resolve(sources)
     }
 
+    /**
+     * Manually start the MBTiles server
+     */
+    @ReactMethod
+    fun startServer(promise: Promise) {
+        try {
+            MBTilesServer.start()
+            promise.resolve(MBTilesServer.isRunning)
+        } catch (e: Exception) {
+            promise.reject("SERVER_ERROR", "Error starting MBTiles server: ${e.localizedMessage}")
+        }
+    }
+
+    /**
+     * Manually stop the MBTiles server
+     */
+    @ReactMethod
+    fun stopServer(promise: Promise) {
+        try {
+            MBTilesServer.stop()
+            promise.resolve(true)
+        } catch (e: Exception) {
+            promise.reject("SERVER_ERROR", "Error stopping MBTiles server: ${e.localizedMessage}")
+        }
+    }
+
+    /**
+     * Check if the MBTiles server is running
+     */
+    @ReactMethod
+    fun isServerRunning(promise: Promise) {
+        promise.resolve(MBTilesServer.isRunning)
+    }
+
     @ReactMethod
     fun addListener(eventName: String) {
         // Required for RN built-in Event Emitter Calls

@@ -78,6 +78,33 @@ class MBTiles {
   async getActiveSources(): Promise<string[]> {
     return await RNMBXMBTiles.getActiveMBTilesSources();
   }
+
+  /**
+   * Manually start the MBTiles server
+   * Call this at app startup to pre-start the server before loading any maps.
+   * The server will also auto-start when initializing an MBTiles source.
+   * @returns True if the server is running after the call
+   */
+  async startServer(): Promise<boolean> {
+    return await RNMBXMBTiles.startServer();
+  }
+
+  /**
+   * Manually stop the MBTiles server
+   * Note: The server will also auto-stop when all MBTiles sources are removed.
+   * @returns True if the server was stopped
+   */
+  async stopServer(): Promise<boolean> {
+    return await RNMBXMBTiles.stopServer();
+  }
+
+  /**
+   * Check if the MBTiles server is currently running
+   * @returns True if the server is running
+   */
+  async isServerRunning(): Promise<boolean> {
+    return await RNMBXMBTiles.isServerRunning();
+  }
 }
 
 export default new MBTiles();

@@ -27,4 +27,13 @@ RCT_EXTERN_METHOD(isMBTilesSourceActive:(NSString *)sourceId
 RCT_EXTERN_METHOD(getActiveMBTilesSources:(RCTPromiseResolveBlock)resolve
                  rejecter:(RCTPromiseRejectBlock)reject)
 
+RCT_EXTERN_METHOD(startServer:(RCTPromiseResolveBlock)resolve
+                 rejecter:(RCTPromiseRejectBlock)reject)
+
+RCT_EXTERN_METHOD(stopServer:(RCTPromiseResolveBlock)resolve
+                 rejecter:(RCTPromiseRejectBlock)reject)
+
+RCT_EXTERN_METHOD(isServerRunning:(RCTPromiseResolveBlock)resolve
+                 rejecter:(RCTPromiseRejectBlock)reject)
+
 @end

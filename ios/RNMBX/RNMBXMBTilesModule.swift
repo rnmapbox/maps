@@ -15,7 +15,10 @@ class RNMBXMBTilesModule: NSObject {
      * Initialize and activate an MBTiles source from a file path
      */
     @objc
-    func initMBTilesSource(_ filePath: String, sourceId: String, resolver: RCTPromiseResolveBlock, rejecter: RCTPromiseRejectBlock) {
+    func initMBTilesSource(
+        _ filePath: String, sourceId: String, resolver: RCTPromiseResolveBlock,
+        rejecter: RCTPromiseRejectBlock
+    ) {
         // Handle file URL paths if provided
         var resolvedPath = filePath
         if filePath.starts(with: "file://") {
@@ -31,7 +34,8 @@ class RNMBXMBTilesModule: NSObject {
 
         do {
             // Create and activate the MBTiles source
-            let mbSource = try MBTilesSource(filePath: resolvedPath, sourceId: sourceId.isEmpty ? nil : sourceId)
+            let mbSource = try MBTilesSource(
+                filePath: resolvedPath, sourceId: sourceId.isEmpty ? nil : sourceId)
             mbSource.activate()
             activeSources[mbSource.id] = mbSource
 
@@ -42,7 +46,7 @@ class RNMBXMBTilesModule: NSObject {
                 "isVector": mbSource.isVector,
                 "format": mbSource.format,
                 "minZoom": mbSource.minZoom as Any,
-                "maxZoom": mbSource.maxZoom as Any
+                "maxZoom": mbSource.maxZoom as Any,
             ]
 
             resolver(resultDict)
@@ -51,7 +55,9 @@ class RNMBXMBTilesModule: NSObject {
         } catch MBTilesSourceError.unsupportedFormat {
             rejecter("UNSUPPORTED_FORMAT", "MBTiles format is not supported", nil)
         } catch {
-            rejecter("UNKNOWN_ERROR", "Error initializing MBTiles source: \(error.localizedDescription)", nil)
+            rejecter(
+                "UNKNOWN_ERROR", "Error initializing MBTiles source: \(error.localizedDescription)",
+                nil)
         }
     }
 
@@ -59,13 +65,17 @@ class RNMBXMBTilesModule: NSObject {
      * Initialize an MBTiles source from an asset in the app bundle
      */
     @objc
-    func initMBTilesSourceFromAsset(_ assetName: String, sourceId: String, resolver: RCTPromiseResolveBlock, rejecter: RCTPromiseRejectBlock) {
+    func initMBTilesSourceFromAsset(
+        _ assetName: String, sourceId: String, resolver: RCTPromiseResolveBlock,
+        rejecter: RCTPromiseRejectBlock
+    ) {
         do {
             // Copy from asset to local file
             let filePath = try MBTilesSource.readAsset(name: assetName)
 
             // Create and activate the MBTiles source
-            let mbSource = try MBTilesSource(filePath: filePath, sourceId: sourceId.isEmpty ? nil : sourceId)
+            let mbSource = try MBTilesSource(
+                filePath: filePath, sourceId: sourceId.isEmpty ? nil : sourceId)
             mbSource.activate()
             activeSources[mbSource.id] = mbSource
 
@@ -76,7 +86,7 @@ class RNMBXMBTilesModule: NSObject {
                 "isVector": mbSource.isVector,
                 "format": mbSource.format,
                 "minZoom": mbSource.minZoom as Any,
-                "maxZoom": mbSource.maxZoom as Any
+                "maxZoom": mbSource.maxZoom as Any,
             ]
 
             resolver(resultDict)
@@ -85,7 +95,9 @@ class RNMBXMBTilesModule: NSObject {
         } catch MBTilesSourceError.unsupportedFormat {
             rejecter("UNSUPPORTED_FORMAT", "MBTiles format is not supported", nil)
         } catch {
-            rejecter("UNKNOWN_ERROR", "Error initializing MBTiles source from asset: \(error.localizedDescription)", nil)
+            rejecter(
+                "UNKNOWN_ERROR",
+                "Error initializing MBTiles source from asset: \(error.localizedDescription)", nil)
         }
     }
 
@@ -93,7 +105,9 @@ class RNMBXMBTilesModule: NSObject {
      * Get the HTTP URL for an active MBTiles source to use in style json
      */
     @objc
-    func getMBTilesURL(_ sourceId: String, resolver: RCTPromiseResolveBlock, rejecter: RCTPromiseRejectBlock) {
+    func getMBTilesURL(
+        _ sourceId: String, resolver: RCTPromiseResolveBlock, rejecter: RCTPromiseRejectBlock
+    ) {
         if let mbSource = activeSources[sourceId] {
             resolver(mbSource.url)
         } else {
@@ -105,7 +119,9 @@ class RNMBXMBTilesModule: NSObject {
      * Stop and remove an MBTiles source
      */
     @objc
-    func removeMBTilesSource(_ sourceId: String, resolver: RCTPromiseResolveBlock, rejecter: RCTPromiseRejectBlock) {
+    func removeMBTilesSource(
+        _ sourceId: String, resolver: RCTPromiseResolveBlock, rejecter: RCTPromiseRejectBlock
+    ) {
         if let mbSource = activeSources[sourceId] {
             mbSource.deactivate()
             activeSources.removeValue(forKey: sourceId)
@@ -119,7 +135,9 @@ class RNMBXMBTilesModule: NSObject {
      * Check if an MBTiles source is currently active
      */
     @objc
-    func isMBTilesSourceActive(_ sourceId: String, resolver: RCTPromiseResolveBlock, rejecter: RCTPromiseRejectBlock) {
+    func isMBTilesSourceActive(
+        _ sourceId: String, resolver: RCTPromiseResolveBlock, rejecter: RCTPromiseRejectBlock
+    ) {
         resolver(activeSources[sourceId] != nil)
     }
 
@@ -127,8 +145,36 @@ class RNMBXMBTilesModule: NSObject {
      * List all active MBTiles sources
      */
     @objc
-    func getActiveMBTilesSources(_ resolver: RCTPromiseResolveBlock, rejecter: RCTPromiseRejectBlock) {
+    func getActiveMBTilesSources(
+        _ resolver: RCTPromiseResolveBlock, rejecter: RCTPromiseRejectBlock
+    ) {
         let sourceIds = Array(activeSources.keys)
         resolver(sourceIds)
+    }
+
+    /**
+     * Manually start the MBTiles server
+     */
+    @objc
+    func startServer(_ resolver: RCTPromiseResolveBlock, rejecter: RCTPromiseRejectBlock) {
+        MBTilesServer.shared.start()
+        resolver(MBTilesServer.shared.isRunning)
+    }
+
+    /**
+     * Manually stop the MBTiles server
+     */
+    @objc
+    func stopServer(_ resolver: RCTPromiseResolveBlock, rejecter: RCTPromiseRejectBlock) {
+        MBTilesServer.shared.stop()
+        resolver(true)
+    }
+
+    /**
+     * Check if the MBTiles server is running
+     */
+    @objc
+    func isServerRunning(_ resolver: RCTPromiseResolveBlock, rejecter: RCTPromiseRejectBlock) {
+        resolver(MBTilesServer.shared.isRunning)
     }
 }

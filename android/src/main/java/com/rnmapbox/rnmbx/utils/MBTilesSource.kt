@@ -123,7 +123,6 @@ class MBTilesSource(filePath: String, sourceId: String? = null) {
 
     fun activate() = with(MBTilesServer) {
         sources[id] = this@MBTilesSource
-        if (!isRunning) start()
     }
 
     fun deactivate() = with(MBTilesServer) {

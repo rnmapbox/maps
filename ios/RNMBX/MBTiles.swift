@@ -89,7 +89,8 @@ public class MBTilesServer {
     }
 
     private func receiveRequest(on connection: NWConnection) {
-        connection.receive(minimumIncompleteLength: 1, maximumLength: 65536) { [weak self] data, _, isComplete, error in
+        connection.receive(minimumIncompleteLength: 1, maximumLength: 65536) {
+            [weak self] data, _, isComplete, error in
             guard let self = self, let data = data, !data.isEmpty, error == nil else {
                 connection.cancel()
                 return
@@ -99,7 +100,8 @@ public class MBTilesServer {
                 // Parse the HTTP request to extract the path
                 // This is a simplified implementation - a real HTTP server would need more robust parsing
                 if let requestLine = requestString.components(separatedBy: "\r\n").first,
-                   let getRequestPath = requestLine.components(separatedBy: " ").dropFirst().first {
+                    let getRequestPath = requestLine.components(separatedBy: " ").dropFirst().first
+                {
 
                     let path = getRequestPath
 
@@ -110,7 +112,8 @@ public class MBTilesServer {
                     // First component is empty (leading slash), second is sourceId
                     if pathComponents.count >= 4 {
                         // Use the first non-empty component as the sourceId
-                        let sourceId = pathComponents[0].isEmpty ? pathComponents[1] : pathComponents[0]
+                        let sourceId =
+                            pathComponents[0].isEmpty ? pathComponents[1] : pathComponents[0]
 
                         if let source = self.sources[sourceId] {
                             // Determine the indices for z, x, y based on path component count and empty first component
@@ -133,9 +136,10 @@ public class MBTilesServer {
                             let parts = lastComponent.split(separator: ".").map(String.init)
 
                             if parts.count == 2,
-                               let z = Int(zString),
-                               let x = Int(xString),
-                               let y = Int(parts[0]) {
+                                let z = Int(zString),
+                                let x = Int(xString),
+                                let y = Int(parts[0])
+                            {
 
                                 let format = parts[1]
 
@@ -145,7 +149,8 @@ public class MBTilesServer {
                                 if let tileData = source.getTile(z: z, x: x, y: flippedY) {
                                     // Send the tile data as response
                                     let contentType = self.mimeTypeFor(format: format)
-                                    var headers = "HTTP/1.1 200 OK\r\nContent-Type: \(contentType)\r\nContent-Length: \(tileData.count)\r\n"
+                                    var headers =
+                                        "HTTP/1.1 200 OK\r\nContent-Type: \(contentType)\r\nContent-Length: \(tileData.count)\r\n"
 
                                     if source.isVector {
                                         headers += "Content-Encoding: gzip\r\n"
@@ -155,16 +160,20 @@ public class MBTilesServer {
 
                                     if let headerData = headers.data(using: .utf8) {
                                         // Send headers
-                                        connection.send(content: headerData, completion: .contentProcessed { error in
-                                            if error == nil {
-                                                // Send the tile data
-                                                connection.send(content: tileData, completion: .contentProcessed { error in
+                                        connection.send(
+                                            content: headerData,
+                                            completion: .contentProcessed { error in
+                                                if error == nil {
+                                                    // Send the tile data
+                                                    connection.send(
+                                                        content: tileData,
+                                                        completion: .contentProcessed { error in
+                                                            connection.cancel()
+                                                        })
+                                                } else {
                                                     connection.cancel()
-                                                })
-                                            } else {
-                                                connection.cancel()
-                                            }
-                                        })
+                                                }
+                                            })
                                     } else {
                                         self.sendErrorResponse(connection, statusCode: 500)
                                     }
@@ -205,9 +214,11 @@ public class MBTilesServer {
 
         let response = "HTTP/1.1 \(statusCode) \(statusText)\r\nContent-Length: 0\r\n\r\n"
         if let data = response.data(using: .utf8) {
-            connection.send(content: data, completion: .contentProcessed { _ in
-                connection.cancel()
-            })
+            connection.send(
+                content: data,
+                completion: .contentProcessed { _ in
+                    connection.cancel()
+                })
         } else {
             connection.cancel()
         }
@@ -244,17 +255,17 @@ public class MBTilesSource: MBTileProvider {
     public lazy var instance: Source = {
         if isVector {
             #if RNMBX_11
-            var builder = VectorSource(id: id)
+                var builder = VectorSource(id: id)
             #else
-            var builder = VectorSource()
+                var builder = VectorSource()
             #endif
             builder.tiles = [url]
             return builder
         } else {
             #if RNMBX_11
-            var builder = RasterSource(id: id)
+                var builder = RasterSource(id: id)
             #else
-            var builder = RasterSource()
+                var builder = RasterSource()
             #endif
             builder.tiles = [url]
             builder.tileSize = 256
@@ -264,7 +275,8 @@ public class MBTilesSource: MBTileProvider {
 
     public init(filePath: String, sourceId: String? = nil) throws {
         // Set the source ID (use filename if not provided)
-        self.id = sourceId ?? URL(fileURLWithPath: filePath).deletingPathExtension().lastPathComponent
+        self.id =
+            sourceId ?? URL(fileURLWithPath: filePath).deletingPathExtension().lastPathComponent
         self.url = "http://localhost:\(MBTilesServer.shared.port)/\(id)/{z}/{x}/{y}.{format}"
 
         // Open the SQLite database
@@ -285,7 +297,8 @@ public class MBTilesSource: MBTileProvider {
         var statement: OpaquePointer?
 
         guard sqlite3_prepare_v2(db, query, -1, &statement, nil) == SQLITE_OK else {
-            throw MBTilesSourceError.databaseError(message: "Failed to prepare statement for format query")
+            throw MBTilesSourceError.databaseError(
+                message: "Failed to prepare statement for format query")
         }
 
         defer { sqlite3_finalize(statement) }
@@ -336,7 +349,9 @@ public class MBTilesSource: MBTileProvider {
         let cName = name.cString(using: .utf8)
         sqlite3_bind_text(statement, 1, cName, -1, nil)
 
-        if sqlite3_step(statement) == SQLITE_ROW, let valueCString = sqlite3_column_text(statement, 0) {
+        if sqlite3_step(statement) == SQLITE_ROW,
+            let valueCString = sqlite3_column_text(statement, 0)
+        {
             return String(cString: valueCString)
         }
 
@@ -344,7 +359,8 @@ public class MBTilesSource: MBTileProvider {
     }
 
     public func getTile(z: Int, x: Int, y: Int) -> Data? {
-        let query = "SELECT tile_data FROM tiles WHERE zoom_level = ? AND tile_column = ? AND tile_row = ?"
+        let query =
+            "SELECT tile_data FROM tiles WHERE zoom_level = ? AND tile_column = ? AND tile_row = ?"
         var statement: OpaquePointer?
 
         guard sqlite3_prepare_v2(db, query, -1, &statement, nil) == SQLITE_OK else {
@@ -371,7 +387,6 @@ public class MBTilesSource: MBTileProvider {
 
     public func activate() {
         MBTilesServer.shared.sources[id] = self
-        MBTilesServer.shared.start()
     }
 
     public func deactivate() {
@@ -394,7 +409,8 @@ public class MBTilesSource: MBTileProvider {
         }
 
         // Create directory if needed
-        let documentsDirectory = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0]
+        let documentsDirectory = NSSearchPathForDirectoriesInDomains(
+            .documentDirectory, .userDomainMask, true)[0]
         let destinationPath = "\(documentsDirectory)/\(name)"
 
         // Copy file from bundle to documents directory
