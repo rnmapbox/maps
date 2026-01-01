@@ -6,22 +6,18 @@ import com.mapbox.maps.extension.style.sources.addSource
 import com.rnmapbox.rnmbx.components.AbstractMapFeature
 import com.rnmapbox.rnmbx.components.mapview.RNMBXMapView
 import com.mapbox.maps.MapboxMap
-import com.rnmapbox.rnmbx.components.styles.sources.AbstractSourceConsumer
 import com.facebook.react.bridge.ReadableMap
-import com.rnmapbox.rnmbx.components.styles.sources.RNMBXSource
-import android.graphics.PointF
 import android.view.View
 import com.facebook.react.common.MapBuilder
 import com.mapbox.geojson.Feature
+import com.mapbox.maps.ScreenCoordinate
 import com.mapbox.maps.Style
 import com.mapbox.maps.extension.style.StyleContract
 import com.mapbox.maps.extension.style.sources.Source
 import com.rnmapbox.rnmbx.components.RemovalReason
-import com.rnmapbox.rnmbx.components.styles.sources.RNMBXSource.OnPressEvent
 import com.rnmapbox.rnmbx.utils.LatLng
 import com.rnmapbox.rnmbx.utils.Logger
 import java.lang.ClassCastException
-import java.util.ArrayList
 import java.util.HashMap
 
 data class FeatureInfo(val feature: AbstractMapFeature?, var added: Boolean) {
@@ -221,7 +217,7 @@ abstract class RNMBXSource<T : Source?>(context: Context?) : AbstractMapFeature(
 
 
     abstract fun makeSource(): T
-    class OnPressEvent(var features: List<Feature>, var latLng: LatLng, var screenPoint: PointF)
+    class OnPressEvent(var features: List<Feature>, var latLng: LatLng, var screenPoint: ScreenCoordinate)
 
     abstract fun onPress(event: OnPressEvent?)
 
