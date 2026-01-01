@@ -1,4 +1,3 @@
-#ifdef RCT_NEW_ARCH_ENABLED
 
 #import "RNMBXCustomLocationProviderComponentView.h"
 #import "RNMBXFabricHelpers.h"
@@ -80,4 +79,3 @@ Class<RCTComponentViewProtocol> RNMBXCustomLocationProviderCls(void)
   return RNMBXCustomLocationProviderComponentView.class;
 }
 
-#endif // RCT_NEW_ARCH_ENABLED

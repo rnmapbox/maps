@@ -1,4 +1,3 @@
-#ifdef RCT_NEW_ARCH_ENABLED
 
 #import "RNMBXMarkerViewComponentView.h"
 #import "RNMBXFabricHelpers.h"
@@ -126,4 +125,3 @@ Class<RCTComponentViewProtocol> RNMBXMarkerViewCls(void)
   return RNMBXMarkerViewComponentView.class;
 }
 
-#endif // RCT_NEW_ARCH_ENABLED

@@ -1,4 +1,3 @@
-#ifdef RCT_NEW_ARCH_ENABLED
 
 #import "RNMBXCameraGestureObserverComponentView.h"
 #import "RNMBXFabricHelpers.h"
@@ -116,4 +115,3 @@ Class<RCTComponentViewProtocol> RNMBXCameraGestureObserverCls(void)
   return RNMBXCameraGestureObserverComponentView.class;
 }
 
-#endif // RCT_NEW_ARCH_ENABLED

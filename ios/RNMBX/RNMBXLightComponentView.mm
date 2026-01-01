@@ -1,4 +1,3 @@
-#ifdef RCT_NEW_ARCH_ENABLED
 
 #import "RNMBXLightComponentView.h"
 #import "RNMBXFabricHelpers.h"
@@ -71,4 +70,3 @@ Class<RCTComponentViewProtocol> RNMBXLightCls(void)
   return RNMBXLightComponentView.class;
 }
 
-#endif // RCT_NEW_ARCH_ENABLED

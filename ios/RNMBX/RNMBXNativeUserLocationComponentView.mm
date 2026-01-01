@@ -1,4 +1,3 @@
-#ifdef RCT_NEW_ARCH_ENABLED
 
 #import "RNMBXNativeUserLocationComponentView.h"
 #import "RNMBXFabricHelpers.h"
@@ -84,4 +83,3 @@ Class<RCTComponentViewProtocol> RNMBXNativeUserLocationCls(void)
   return RNMBXNativeUserLocationComponentView.class;
 }
 
-#endif // RCT_NEW_ARCH_ENABLED
