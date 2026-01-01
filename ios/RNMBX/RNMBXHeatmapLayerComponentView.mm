@@ -1,4 +1,3 @@
-#ifdef RCT_NEW_ARCH_ENABLED
 
 #import "RNMBXHeatmapLayerComponentView.h"
 #import "RNMBXFabricHelpers.h"
@@ -73,4 +72,3 @@ Class<RCTComponentViewProtocol> RNMBXHeatmapLayerCls(void)
   return RNMBXHeatmapLayerComponentView.class;
 }
 
-#endif // RCT_NEW_ARCH_ENABLED

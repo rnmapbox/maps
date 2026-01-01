@@ -1,7 +1,7 @@
 //
 //  RNMBXViewResolver.h
 //
-//  A utility class for resolving React Native views across both old and new architecture
+//  A utility class for resolving React Native views.
 //  This eliminates code duplication found in multiple RNMBX modules.
 //
 
@@ -14,9 +14,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @protocol RNMBXViewResolverDelegate <NSObject>
 
-#ifdef RCT_NEW_ARCH_ENABLED
 @property (nonatomic, weak, nullable) RCTViewRegistry *viewRegistry_DEPRECATED;
-#endif
 @property (nonatomic, weak, nullable) RCTBridge *bridge;
 
 @end

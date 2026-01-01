@@ -1,4 +1,3 @@
-#ifdef RCT_NEW_ARCH_ENABLED
 
 #import "RNMBXAtmosphereComponentView.h"
 #import "RNMBXFabricHelpers.h"
@@ -79,4 +78,3 @@ Class<RCTComponentViewProtocol> RNMBXAtmosphereCls(void)
   return RNMBXAtmosphereComponentView.class;
 }
 
-#endif // RCT_NEW_ARCH_ENABLED

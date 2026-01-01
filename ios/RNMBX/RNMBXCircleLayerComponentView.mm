@@ -1,4 +1,3 @@
-#ifdef RCT_NEW_ARCH_ENABLED
 
 #import "RNMBXCircleLayerComponentView.h"
 #import "RNMBXFabricHelpers.h"
@@ -73,4 +72,3 @@ Class<RCTComponentViewProtocol> RNMBXCircleLayerCls(void)
   return RNMBXCircleLayerComponentView.class;
 }
 
-#endif // RCT_NEW_ARCH_ENABLED

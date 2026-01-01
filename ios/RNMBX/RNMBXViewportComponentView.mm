@@ -1,4 +1,3 @@
-#ifdef RCT_NEW_ARCH_ENABLED
 
 #import "RNMBXViewportComponentView.h"
 
@@ -123,4 +122,3 @@ Class<RCTComponentViewProtocol> RNMBXViewportCls(void)
   return RNMBXViewportComponentView.class;
 }
 
-#endif // RCT_NEW_ARCH_ENABLED

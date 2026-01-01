@@ -1,5 +1,3 @@
-#ifdef RCT_NEW_ARCH_ENABLED
-
 #import <React/RCTConversions.h>
 #import <React/RCTFabricComponentsPlugins.h>
 #import <React/RCTBridge+Private.h>
@@ -156,5 +154,3 @@ NSDictionary* RNMBXPropConvert_Optional_NSDictionary(const folly::dynamic &dyn, 
 NSArray<NSNumber*> * RNMBXPropConvert_Optional_NumberArray(const folly::dynamic &dyn, NSString* propertyName) {
   return RNMBXPropConvert_ID(dyn);
 }
-
-#endif

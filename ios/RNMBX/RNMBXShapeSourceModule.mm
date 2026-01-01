@@ -3,9 +3,7 @@
 #import <React/RCTUIManagerUtils.h>
 
 #import "RNMBXShapeSourceModule.h"
-#ifdef RCT_NEW_ARCH_ENABLED
 #import "RNMBXShapeSourceComponentView.h"
-#endif // RCT_NEW_ARCH_ENABLED
 
 #import "rnmapbox_maps-Swift.pre.h"
 
@@ -13,9 +11,7 @@
 
 RCT_EXPORT_MODULE();
 
-#ifdef RCT_NEW_ARCH_ENABLED
 @synthesize viewRegistry_DEPRECATED = _viewRegistry_DEPRECATED;
-#endif // RCT_NEW_ARCH_ENABLED
 @synthesize bridge = _bridge;
 
 - (dispatch_queue_t)methodQueue
@@ -59,13 +55,10 @@ RCT_EXPORT_METHOD(getClusterExpansionZoom:(nonnull NSNumber *)viewRef featureJSO
  } reject:reject methodName:@"getClusterExpansionZoom"];
 }
 
-// Thanks to this guard, we won't compile this code when we build for the old architecture.
-#ifdef RCT_NEW_ARCH_ENABLED
 - (std::shared_ptr<facebook::react::TurboModule>)getTurboModule:
     (const facebook::react::ObjCTurboModule::InitParams &)params
 {
     return std::make_shared<facebook::react::NativeRNMBXShapeSourceModuleSpecJSI>(params);
 }
-#endif // RCT_NEW_ARCH_ENABLED
 
 @end

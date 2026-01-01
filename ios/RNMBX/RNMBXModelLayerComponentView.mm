@@ -1,4 +1,3 @@
-#ifdef RCT_NEW_ARCH_ENABLED
 
 #import "RNMBXModelLayerComponentView.h"
 #import "RNMBXFabricHelpers.h"
@@ -73,4 +72,3 @@ Class<RCTComponentViewProtocol> RNMBXModelLayerCls(void)
   return RNMBXModelLayerComponentView.class;
 }
 
-#endif // RCT_NEW_ARCH_ENABLED

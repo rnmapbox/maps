@@ -1,4 +1,3 @@
-#ifdef RCT_NEW_ARCH_ENABLED
 
 #import "RNMBXModelsComponentView.h"
 
@@ -70,4 +69,3 @@ Class<RCTComponentViewProtocol> RNMBXModelsCls(void)
   return RNMBXModelsComponentView.class;
 }
 
-#endif // RCT_NEW_ARCH_ENABLED
