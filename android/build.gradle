@@ -14,13 +14,6 @@ def safeExtGet(prop, fallback) {
 }
 
 
-def isNewArchitectureEnabled() {
-    // To opt-in for the New Architecture, you can either:
-    // - Set `newArchEnabled` to true inside the `gradle.properties` file
-    // - Invoke gradle with `-newArchEnabled=true`
-    // - Set an environment variable `ORG_GRADLE_PROJECT_newArchEnabled=true`
-    return project.hasProperty("newArchEnabled") && project.newArchEnabled == "true"
-}
 
 def getCoroutinesVersion(kotlinVersion) {
     return kotlinVersion >= '1.9' ? '1.8.0' : '1.6.4'
@@ -50,9 +43,7 @@ buildscript {
   }
 }
 
-if (isNewArchitectureEnabled()) {
-    apply plugin: 'com.facebook.react'
-}
+apply plugin: 'com.facebook.react'
 apply plugin: 'com.android.library'
 
 if (safeExtGet("RNMapboxMapsImpl", defaultMapboxMapsImpl) == "mapbox") {
@@ -236,15 +227,6 @@ Please upgrade to Mapbox v11.x or use @rnmapbox/maps 10.2.x
         throw new GradleException(msg)
     }
 
-    if (!isNewArchitectureEnabled()) {
-        def msg = """
-❌ ERROR: Old React Native Architecture is no longer supported as of @rnmapbox/maps 10.3.0
-Please enable New Architecture (newArchEnabled=true) or use @rnmapbox/maps 10.2.x
-"""
-        logger.error(msg)
-        throw new GradleException(msg)
-    }
-
     compileSdkVersion safeExtGet("compileSdkVersion", 28)
     buildToolsVersion safeExtGet("buildToolsVersion", '28.0.3')
 
@@ -253,7 +235,6 @@ Please enable New Architecture (newArchEnabled=true) or use @rnmapbox/maps 10.2.
         targetSdkVersion safeExtGet('targetSdkVersion', 26)
         versionCode 1
         versionName "1.0"
-        buildConfigField "boolean", "IS_NEW_ARCHITECTURE_ENABLED", isNewArchitectureEnabled().toString()
     }
 
     compileOptions {
