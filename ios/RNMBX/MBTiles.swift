@@ -23,6 +23,8 @@ public class MBTilesServer {
     public let port: UInt16 = 8888
     private var listener: NWListener?
     public var sources: [String: MBTileProvider] = [:]
+    private let serverQueue = DispatchQueue(
+        label: "com.rnmapbox.mbtiles.server", qos: .userInitiated, attributes: .concurrent)
 
     public var isRunning: Bool {
         return listener != nil
@@ -57,7 +59,7 @@ public class MBTilesServer {
                 self?.handleConnection(connection)
             }
 
-            listener?.start(queue: .main)
+            listener?.start(queue: serverQueue)
         } catch {
             RNMBXLogError("Error starting MBTiles server: \(error.localizedDescription)")
         }
@@ -85,7 +87,7 @@ public class MBTilesServer {
             }
         }
 
-        connection.start(queue: .main)
+        connection.start(queue: serverQueue)
     }
 
     private func receiveRequest(on connection: NWConnection) {
