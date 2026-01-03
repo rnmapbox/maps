@@ -939,6 +939,28 @@ class MapView extends NativeBridgeComponent(
   }
 
   /**
+   * Sets the value of a property for a specific layer referencing the specified `layerId`
+   *
+   * @example
+   * await this._map.setStyleLayerProperty('my-layer', 'visibility', 'none')
+   *
+   * @param {String} layerId - layerId
+   * @param {String} propertyName - propertyName
+   * @param {String} propertyValue - propertyValue
+   */
+  setStyleLayerProperty(
+    layerId: string,
+    propertyName: string,
+    propertyValue: string,
+  ) {
+    this._runNative<void>('setStyleLayerProperty', [
+      layerId,
+      propertyName,
+      propertyValue,
+    ]);
+  }
+
+  /**
    * Updates the state map of a feature within a style source.
    *
    * Updates entries in the state map of a given feature within a style source.

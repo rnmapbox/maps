@@ -1173,6 +1173,41 @@ open class RNMBXMapView(private val mContext: Context, var mManager: RNMBXMapVie
             }
         }
     }
+    
+    fun setStyleLayerProperty(
+        layerId: String, 
+        propertyName: String, 
+        propertyValue: String
+    ): Boolean {
+        if (mMap == null) {
+            Logger.e("MapView", "setStyleLayerProperty, map is null")
+            return false
+        }
+
+        val style = mMap.getStyle()
+        if (style == null) {
+            Logger.e("MapView", "setStyleLayerProperty, style is null")
+            return false
+        }
+
+        try {
+            val result = style.setStyleLayerProperty(
+                layerId,
+                propertyName,
+                Value.valueOf(propertyValue)
+            )
+
+            if (result.isError) {
+                Logger.e("MapView", "setStyleLayerProperty error: ${result.error}")
+                return false
+            }
+
+            return true
+        } catch (e: Exception) {
+            Logger.e("MapView", "setStyleLayerProperty exception: ${e.message}")
+            return false
+        }
+    }
     // endregion
 
     companion object {
