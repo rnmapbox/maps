@@ -35,6 +35,7 @@ import * as Web from '../examples/Web';
 // MISC
 import BugReportExample from '../examples/BugReportExample';
 import BugReportExampleTS from '../examples/BugReportExampleTS';
+import CompilerTestExample from '../examples/CompilerTestExample';
 // Cache Management
 import * as CacheOffline from '../examples/CacheOffline';
 // V10
@@ -49,6 +50,7 @@ import TerrainSkyAtmosphere from '../examples/V10/TerrainSkyAtmosphere';
 */
 // V11
 import StyleImportConfig from '../examples/V11/StyleImportConfig';
+import RasterParticle from '../examples/V11/RasterParticle';
 
 const MostRecentExampleKey = '@recent_example';
 
@@ -286,8 +288,12 @@ const Examples = new ExampleGroup('React Native Mapbox', [
   new MostRecentExampleItem(),
   new ExampleItem('Bug Report Template', BugReportPage(BugReportExample)),
   new ExampleItem('Bug Report Template TS', BugReportPage(BugReportExampleTS)),
+  new ExampleItem('React Compiler Test', BugReportPage(CompilerTestExample)),
   exampleGroup(V10),
-  new ExampleGroup('V11', [example(StyleImportConfig)]),
+  new ExampleGroup('V11', [
+    example(StyleImportConfig),
+    example(RasterParticle),
+  ]),
   exampleGroup(Map),
   exampleGroup(Camera),
   exampleGroup(UserLocation),

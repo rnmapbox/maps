@@ -1,6 +1,6 @@
 {
   "name": "@rnmapbox/maps",
-  "version": "10.2.5",
+  "version": "10.3.0",
   "description": "Community-supported, open-source React Native library for building maps using Mapbox native maps SDK for iOS and Android",
   "main": "./lib/module/index.js",
   "types": "./lib/typescript/src/index.native.d.ts",
@@ -11,7 +11,8 @@
       "default": "./lib/module/index.js"
     },
     "./package.json": "./package.json",
-    "./app.plugin.js": "./app.plugin.js"
+    "./app.plugin.js": "./app.plugin.js",
+    "./setup-jest": "./setup-jest.js"
   },
   "files": [
     "src",
@@ -72,6 +73,10 @@
     "url": "https://github.com/rnmapbox/maps/issues"
   },
   "homepage": "https://github.com/rnmapbox/maps#readme",
+  "mapbox": {
+    "ios": "~> 11.16.2",
+    "android": "11.16.2"
+  },
   "publishConfig": {
     "registry": "https://registry.npmjs.org/",
     "access": "public"
@@ -133,7 +138,7 @@
     "mapbox-gl": "^2.9.0",
     "react": ">=17.0.0",
     "react-dom": ">= 17.0.0",
-    "react-native": ">=0.69"
+    "react-native": ">=0.79"
   },
   "peerDependenciesMeta": {
     "expo": {
@@ -196,6 +201,9 @@
         "RNMBXCallout": {
           "className": "RNMBXCalloutComponentView"
         },
+        "RNMBXCameraGestureObserver": {
+          "className": "RNMBXCameraGestureObserverComponentView"
+        },
         "RNMBXCamera": {
           "className": "RNMBXCameraComponentView"
         },
@@ -250,11 +258,17 @@
         "RNMBXPointAnnotation": {
           "className": "RNMBXPointAnnotationComponentView"
         },
+        "RNMBXRasterArraySource": {
+          "className": "RNMBXRasterArraySourceComponentView"
+        },
         "RNMBXRasterDemSource": {
           "className": "RNMBXRasterDemSourceComponentView"
         },
         "RNMBXRasterLayer": {
           "className": "RNMBXRasterLayerComponentView"
+        },
+        "RNMBXRasterParticleLayer": {
+          "className": "RNMBXRasterParticleLayerComponentView"
         },
         "RNMBXRasterSource": {
           "className": "RNMBXRasterSourceComponentView"
@@ -285,6 +299,7 @@
         "RNMBXAtmosphere": "RNMBXAtmosphereComponentView",
         "RNMBXBackgroundLayer": "RNMBXBackgroundLayerComponentView",
         "RNMBXCallout": "RNMBXCalloutComponentView",
+        "RNMBXCameraGestureObserver": "RNMBXCameraGestureObserverComponentView",
         "RNMBXCamera": "RNMBXCameraComponentView",
         "RNMBXCircleLayer": "RNMBXCircleLayerComponentView",
         "RNMBXCustomLocationProvider": "RNMBXCustomLocationProviderComponentView",
@@ -303,8 +318,10 @@
         "RNMBXModels": "RNMBXModelsComponentView",
         "RNMBXNativeUserLocation": "RNMBXNativeUserLocationComponentView",
         "RNMBXPointAnnotation": "RNMBXPointAnnotationComponentView",
+        "RNMBXRasterArraySource": "RNMBXRasterArraySourceComponentView",
         "RNMBXRasterDemSource": "RNMBXRasterDemSourceComponentView",
         "RNMBXRasterLayer": "RNMBXRasterLayerComponentView",
+        "RNMBXRasterParticleLayer": "RNMBXRasterParticleLayerComponentView",
         "RNMBXRasterSource": "RNMBXRasterSourceComponentView",
         "RNMBXShapeSource": "RNMBXShapeSourceComponentView",
         "RNMBXSkyLayer": "RNMBXSkyLayerComponentView",

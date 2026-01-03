@@ -13,6 +13,7 @@ describe('Public Interface', () => {
       'Annotation',
       'Callout',
       'Camera',
+      'CameraGestureObserver',
       'UserLocation',
       'NativeUserLocation', // deprecated
       'LocationPuck',
@@ -38,6 +39,7 @@ describe('Public Interface', () => {
       'SymbolLayer',
       'BackgroundLayer',
       'RasterLayer',
+      'RasterParticleLayer',
       'SkyLayer',
       'Terrain',
       'Atmosphere',
@@ -46,6 +48,7 @@ describe('Public Interface', () => {
       'VectorSource',
       'ShapeSource',
       'RasterSource',
+      'RasterArraySource',
       'ImageSource',
       'RasterDemSource',
       'Images',
@@ -112,6 +115,9 @@ describe('Public Interface', () => {
       // helpers
       'Logger',
       'Style',
+
+      // types
+      'OnMapSteadyEvent',
 
       '__experimental',
     ];

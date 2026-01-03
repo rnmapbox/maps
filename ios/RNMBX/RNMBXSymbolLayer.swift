@@ -7,11 +7,7 @@ public class RNMBXSymbolLayer: RNMBXVectorLayer {
 
   override func makeLayer(style: Style) throws -> Layer {
     let _ : VectorSource = try self.layerWithSourceID(in: style)
-    #if RNMBX_11
     var layer = LayerType(id: self.id!, source: sourceID!)
-    #else
-    var layer = LayerType(id: self.id!)
-    #endif
     layer.sourceLayer = self.sourceLayerID
     layer.source = sourceID
     return layer
@@ -25,7 +21,6 @@ public class RNMBXSymbolLayer: RNMBXVectorLayer {
   func setCommonOptions(_ layer: inout SymbolLayer) -> Bool {
     var changed = false
 
-    #if RNMBX_11
     if let sourceLayerID = sourceLayerID {
       layer.sourceLayer = sourceLayerID
       changed = true
@@ -48,7 +43,6 @@ public class RNMBXSymbolLayer: RNMBXVectorLayer {
         Logger.log(level: .error, message: "parsing filters failed for layer \(optional: id): \(error.localizedDescription)")
       }
     }
-    #endif
 
     return changed
   }

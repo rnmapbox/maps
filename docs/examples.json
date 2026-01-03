@@ -264,6 +264,20 @@
     "examples": [
       {
         "metadata": {
+          "title": "Camera Gesture Observer",
+          "tags": [
+            "CameraGestureObserver#onMapSteady",
+            "CameraGestureObserver#quietPeriodMs",
+            "CameraGestureObserver#maxIntervalMs"
+          ],
+          "docs": "\nDemonstrates how to detect when the map becomes steady after user gestures (pan, zoom, rotate). The CameraGestureObserver component fires the onMapSteady event after a configurable quiet period, providing information about the last gesture type and idle duration.\n"
+        },
+        "fullPath": "example/src/examples/Map/CameraGestureObserver.tsx",
+        "relPath": "Map/CameraGestureObserver.tsx",
+        "name": "CameraGestureObserver"
+      },
+      {
+        "metadata": {
           "title": "Change Layer Color",
           "tags": [
             "FillLayer#existing",
@@ -756,7 +770,9 @@
       {
         "metadata": {
           "title": "Query Features Bounding Box",
-          "tags": [],
+          "tags": [
+            "queryRenderedFeaturesInRect"
+          ],
           "docs": ""
         },
         "fullPath": "example/src/examples/FillRasterLayer/QueryWithRect.js",

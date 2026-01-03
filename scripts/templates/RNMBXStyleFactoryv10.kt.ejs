@@ -16,6 +16,7 @@ import com.mapbox.maps.extension.style.layers.generated.SkyLayer
 // import com.mapbox.maps.extension.style.layers.generated.PropertyFactory
 // import com.mapbox.maps.extension.style.layers.generated.PropertyValue
 import com.mapbox.maps.extension.style.layers.generated.RasterLayer
+import com.mapbox.maps.extension.style.layers.generated.RasterParticleLayer
 import com.mapbox.maps.extension.style.layers.generated.SymbolLayer
 import com.mapbox.maps.extension.style.layers.generated.HeatmapLayer
 import com.mapbox.maps.extension.style.layers.generated.HillshadeLayer
@@ -31,7 +32,6 @@ import com.rnmapbox.rnmbx.utils.DownloadMapImageTask.OnAllImagesLoaded
 import com.rnmapbox.rnmbx.utils.Logger
 
 import com.rnmapbox.rnmbx.v11compat.light.*;
-import com.rnmapbox.rnmbx.v11compat.layers.*;
 import com.rnmapbox.rnmbx.v11compat.stylefactory.*;
 
 import java.util.List;
@@ -124,10 +124,17 @@ object RNMBXStyleFactory {
       } else {
         <%_ if (prop.type === 'enum') { _%>
           layer.<%- prop.name -%>(<%- pascelCase(prop.name) %>.valueOf(styleValue.getEnumName()))
-        <%_ } else if (prop.name === 'lineGradient' || prop.name === 'heatmapColor' || prop.name === 'skyGradient') { _%>
+        <%_ } else if (prop.name === 'lineGradient' || prop.name === 'heatmapColor' || prop.name === 'skyGradient' || prop.name === 'rasterParticleColor') { _%>
           layer.<%- prop.name -%>(styleValue.getIntExpression(VALUE_KEY))
         <%_ } else if (prop.name === 'position') { _%>
           layer.<%- prop.name -%>(styleValue.getLightPosition())
+        <%_ } else if (prop.name === 'rasterParticleCount') { _%>
+          val value = styleValue.getLong(VALUE_KEY)
+          if (value != null) {
+            layer.<%- prop.name -%>(value)
+          } else {
+            Logger.e("RNMBX<%- pascelCase(layer.name) %>", "value for <%- prop.name %> is null")
+          }
         <%_ } else { _%>
           val value = <%- androidGetConfigTypeKt(androidInputType(prop.type, prop.value), prop) %>
           if (value != null) {

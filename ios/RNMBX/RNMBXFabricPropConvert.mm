@@ -153,4 +153,8 @@ NSDictionary* RNMBXPropConvert_Optional_NSDictionary(const folly::dynamic &dyn, 
   return RNMBXPropConvert_ID(dyn);
 }
 
+NSArray<NSNumber*> * RNMBXPropConvert_Optional_NumberArray(const folly::dynamic &dyn, NSString* propertyName) {
+  return RNMBXPropConvert_ID(dyn);
+}
+
 #endif

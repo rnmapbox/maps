@@ -137,6 +137,7 @@ Customizable style attributes
 ## styles
 
 * <a href="#circlesortkey">circleSortKey</a><br/>
+* <a href="#circleelevationreference">circleElevationReference</a><br/>
 * <a href="#visibility">visibility</a><br/>
 * <a href="#circleradius">circleRadius</a><br/>
 * <a href="#circlecolor">circleColor</a><br/>
@@ -149,6 +150,7 @@ Customizable style attributes
 * <a href="#circlestrokewidth">circleStrokeWidth</a><br/>
 * <a href="#circlestrokecolor">circleStrokeColor</a><br/>
 * <a href="#circlestrokeopacity">circleStrokeOpacity</a><br/>
+* <a href="#circleemissivestrength">circleEmissiveStrength</a><br/>
 
 ___
 
@@ -167,6 +169,30 @@ Sorts features in ascending order based on this value. Features with a higher so
 #### Expression
 
 Parameters: `zoom, feature`
+
+___
+
+### circleElevationReference
+Name: `circleElevationReference`
+
+Mapbox spec: [circle-elevation-reference](https://docs.mapbox.com/style-spec/reference/layers/#layout-circle-circle-elevation-reference)
+
+#### Description
+Selects the base of circleElevation. Some modes might require precomputed elevation data in the tileset.
+
+#### Type
+`enum`
+#### Default Value
+`none`
+
+#### Supported Values
+**none** - Elevated rendering is disabled.<br />
+**hd-road-markup** - Elevated rendering is enabled. Use this mode to describe additive and stackable features that should exist only on top of road polygons.<br />
+
+
+#### Expression
+
+Parameters: ``
 
 ___
 
@@ -594,6 +620,54 @@ Name: `circleStrokeOpacityTransition`
 #### Description
 
 The transition affecting any changes to this layer’s circleStrokeOpacity property.
+
+#### Type
+
+`{ duration, delay }`
+
+#### Units
+`milliseconds`
+
+#### Default Value
+`{duration: 300, delay: 0}`
+
+
+___
+
+### circleEmissiveStrength
+Name: `circleEmissiveStrength`
+
+Mapbox spec: [circle-emissive-strength](https://docs.mapbox.com/style-spec/reference/layers/#paint-circle-circle-emissive-strength)
+
+#### Description
+Controls the intensity of light emitted on the source features.
+
+#### Type
+`number`
+#### Default Value
+`0`
+
+#### Units
+`intensity`
+
+#### Minimum
+`0`
+
+
+#### Requires
+`lights`
+
+#### Expression
+
+Parameters: `zoom, measure-light`
+___
+
+### circleEmissiveStrengthTransition
+Name: `circleEmissiveStrengthTransition`
+
+#### Description
+
+The transition affecting any changes to this layer’s circleEmissiveStrength property.
 
 #### Type
 

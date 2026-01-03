@@ -49,9 +49,7 @@ open class RNMBXModels : UIView, RNMBXMapComponent {
   
   public func removeFromMap(_ map: RNMBXMapView, reason: RemovalReason) -> Bool {
     modelIdToUrl.forEach { (id, _) in
-      #if RNMBX_11
       try? map._mapView?.mapboxMap.removeStyleModel(modelId: id)
-      #endif
     }
     return true
   }

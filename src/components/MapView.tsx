@@ -207,6 +207,11 @@ type Props = ViewProps & {
   pitchEnabled?: boolean;
 
   /**
+   * Maximum allowed pitch in degrees. Mirrors the Mapbox map option `maxPitch`.
+   */
+  maxPitch?: number;
+
+  /**
    * Enable/Disable rotation on map
    */
   rotateEnabled?: boolean;
@@ -755,7 +760,7 @@ class MapView extends NativeBridgeComponent(
    * @example
    * this._map.queryRenderedFeaturesInRect([30, 40, 20, 10], ['==', 'type', 'Point'], ['id1', 'id2'])
    *
-   * @param  {Array<Number>} bbox - A rectangle expressed in the map view’s coordinate system. For v10, this can be an empty array to query the visible map area.
+   * @param  {Array<Number>} bbox - A rectangle expressed in the map view’s coordinate system, density independent pixels and not map coordinates. This can be an empty array to query the visible map area.
    * @param  {Array=} filter - A set of strings that correspond to the names of layers defined in the current style. Only the features contained in these layers are included in the returned array.
    * @param  {Array=} layerIDs -  A array of layer id's to filter the features by
    * @return {FeatureCollection}

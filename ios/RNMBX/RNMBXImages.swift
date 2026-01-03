@@ -5,16 +5,10 @@ protocol RNMBXImageSetter : AnyObject {
 }
 
 func hasImage(style: Style, name: String) -> Bool {
-  #if RNMBX_11
   return style.imageExists(withId: name)
-  #else
-  return (style.styleManager.getStyleImage(forImageId: name) != nil)
-  #endif
 }
 
-#if RNMBX_11
 typealias StyleImageMissingPayload = StyleImageMissing
-#endif
 
 open class RNMBXImages : UIView, RNMBXMapComponent {
   
@@ -74,11 +68,8 @@ open class RNMBXImages : UIView, RNMBXMapComponent {
   }
   
   // MARK: - RNMBXMapComponent
+  // Uses default implementation from RNMBXMapComponentProtocol extension (returns false)
 
-  public func waitForStyleLoad() -> Bool {
-    return false
-  }
-  
   public func addToMap(_ map: RNMBXMapView, style: Style) {
     self.style = style
     imageManager = map.imageManager

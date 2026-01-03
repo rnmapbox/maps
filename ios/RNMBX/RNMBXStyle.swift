@@ -27,7 +27,7 @@ func fillLayer(layer: inout FillLayer, reactStyle:Dictionary<String, Any>, oldRe
 
     let styleValue = RNMBXStyleValue.make(reactStyle[prop])
 
-    if (prop == "fillSortKey") {
+      if (prop == "fillSortKey") {
       self.setFillSortKey(&layer, styleValue:styleValue);
     } else if (prop == "visibility") {
       self.setFillStyleLayerVisibility(&layer, styleValue:styleValue);
@@ -78,7 +78,7 @@ func fillLayer(layer: inout FillLayer, reactStyle:Dictionary<String, Any>, oldRe
     } else {
       Logger.log(level:.error, message: "Unexpected property \(prop) for layer: fill")
     }
-  }
+    }
 }
 
 func lineLayer(layer: inout LineLayer, reactStyle:Dictionary<String, Any>, oldReactStyle:Dictionary<String, Any>?, applyUpdater: @escaping  ((inout LineLayer)->Void)->Void, isValid: @escaping () -> Bool)
@@ -96,7 +96,7 @@ func lineLayer(layer: inout LineLayer, reactStyle:Dictionary<String, Any>, oldRe
 
     let styleValue = RNMBXStyleValue.make(reactStyle[prop])
 
-    if (prop == "lineCap") {
+      if (prop == "lineCap") {
       self.setLineCap(&layer, styleValue:styleValue);
     } else if (prop == "lineJoin") {
       self.setLineJoin(&layer, styleValue:styleValue);
@@ -187,7 +187,7 @@ func lineLayer(layer: inout LineLayer, reactStyle:Dictionary<String, Any>, oldRe
     } else {
       Logger.log(level:.error, message: "Unexpected property \(prop) for layer: line")
     }
-  }
+    }
 }
 
 func symbolLayer(layer: inout SymbolLayer, reactStyle:Dictionary<String, Any>, oldReactStyle:Dictionary<String, Any>?, applyUpdater: @escaping  ((inout SymbolLayer)->Void)->Void, isValid: @escaping () -> Bool)
@@ -205,7 +205,7 @@ func symbolLayer(layer: inout SymbolLayer, reactStyle:Dictionary<String, Any>, o
 
     let styleValue = RNMBXStyleValue.make(reactStyle[prop])
 
-    if (prop == "symbolPlacement") {
+      if (prop == "symbolPlacement") {
       self.setSymbolPlacement(&layer, styleValue:styleValue);
     } else if (prop == "symbolSpacing") {
       self.setSymbolSpacing(&layer, styleValue:styleValue);
@@ -388,7 +388,7 @@ func symbolLayer(layer: inout SymbolLayer, reactStyle:Dictionary<String, Any>, o
     } else {
       Logger.log(level:.error, message: "Unexpected property \(prop) for layer: symbol")
     }
-  }
+    }
 }
 
 func circleLayer(layer: inout CircleLayer, reactStyle:Dictionary<String, Any>, oldReactStyle:Dictionary<String, Any>?, applyUpdater: @escaping  ((inout CircleLayer)->Void)->Void, isValid: @escaping () -> Bool)
@@ -406,7 +406,7 @@ func circleLayer(layer: inout CircleLayer, reactStyle:Dictionary<String, Any>, o
 
     let styleValue = RNMBXStyleValue.make(reactStyle[prop])
 
-    if (prop == "circleSortKey") {
+      if (prop == "circleSortKey") {
       self.setCircleSortKey(&layer, styleValue:styleValue);
     } else if (prop == "visibility") {
       self.setCircleStyleLayerVisibility(&layer, styleValue:styleValue);
@@ -457,7 +457,7 @@ func circleLayer(layer: inout CircleLayer, reactStyle:Dictionary<String, Any>, o
     } else {
       Logger.log(level:.error, message: "Unexpected property \(prop) for layer: circle")
     }
-  }
+    }
 }
 
 func heatmapLayer(layer: inout HeatmapLayer, reactStyle:Dictionary<String, Any>, oldReactStyle:Dictionary<String, Any>?, applyUpdater: @escaping  ((inout HeatmapLayer)->Void)->Void, isValid: @escaping () -> Bool)
@@ -475,7 +475,7 @@ func heatmapLayer(layer: inout HeatmapLayer, reactStyle:Dictionary<String, Any>,
 
     let styleValue = RNMBXStyleValue.make(reactStyle[prop])
 
-    if (prop == "visibility") {
+      if (prop == "visibility") {
       self.setHeatmapStyleLayerVisibility(&layer, styleValue:styleValue);
     } else if (prop == "heatmapRadius") {
       self.setHeatmapRadius(&layer, styleValue:styleValue);
@@ -496,7 +496,7 @@ func heatmapLayer(layer: inout HeatmapLayer, reactStyle:Dictionary<String, Any>,
     } else {
       Logger.log(level:.error, message: "Unexpected property \(prop) for layer: heatmap")
     }
-  }
+    }
 }
 
 func fillExtrusionLayer(layer: inout FillExtrusionLayer, reactStyle:Dictionary<String, Any>, oldReactStyle:Dictionary<String, Any>?, applyUpdater: @escaping  ((inout FillExtrusionLayer)->Void)->Void, isValid: @escaping () -> Bool)
@@ -514,7 +514,7 @@ func fillExtrusionLayer(layer: inout FillExtrusionLayer, reactStyle:Dictionary<S
 
     let styleValue = RNMBXStyleValue.make(reactStyle[prop])
 
-    if (prop == "visibility") {
+      if (prop == "visibility") {
       self.setFillExtrusionStyleLayerVisibility(&layer, styleValue:styleValue);
     } else if (prop == "fillExtrusionEdgeRadius") {
       self.setFillExtrusionEdgeRadius(&layer, styleValue:styleValue);
@@ -625,7 +625,7 @@ func fillExtrusionLayer(layer: inout FillExtrusionLayer, reactStyle:Dictionary<S
     } else {
       Logger.log(level:.error, message: "Unexpected property \(prop) for layer: fill-extrusion")
     }
-  }
+    }
 }
 
 func rasterLayer(layer: inout RasterLayer, reactStyle:Dictionary<String, Any>, oldReactStyle:Dictionary<String, Any>?, applyUpdater: @escaping  ((inout RasterLayer)->Void)->Void, isValid: @escaping () -> Bool)
@@ -643,7 +643,7 @@ func rasterLayer(layer: inout RasterLayer, reactStyle:Dictionary<String, Any>, o
 
     let styleValue = RNMBXStyleValue.make(reactStyle[prop])
 
-    if (prop == "visibility") {
+      if (prop == "visibility") {
       self.setRasterStyleLayerVisibility(&layer, styleValue:styleValue);
     } else if (prop == "rasterOpacity") {
       self.setRasterOpacity(&layer, styleValue:styleValue);
@@ -696,7 +696,48 @@ func rasterLayer(layer: inout RasterLayer, reactStyle:Dictionary<String, Any>, o
     } else {
       Logger.log(level:.error, message: "Unexpected property \(prop) for layer: raster")
     }
+    }
+}
+
+func rasterParticleLayer(layer: inout RasterParticleLayer, reactStyle:Dictionary<String, Any>, oldReactStyle:Dictionary<String, Any>?, applyUpdater: @escaping  ((inout RasterParticleLayer)->Void)->Void, isValid: @escaping () -> Bool)
+{
+  guard self._hasReactStyle(reactStyle) else {
+    Logger.log(level:.error, message: "Invalid style: \(reactStyle)")
+    return
   }
+
+  let styleProps = reactStyle.keys
+  for prop in styleProps {
+    if (prop == "__MAPBOX_STYLESHEET__") {
+      continue;
+    }
+
+    let styleValue = RNMBXStyleValue.make(reactStyle[prop])
+
+      if (prop == "visibility") {
+      self.setRasterParticleStyleLayerVisibility(&layer, styleValue:styleValue);
+    } else if (prop == "rasterParticleArrayBand") {
+      self.setRasterParticleArrayBand(&layer, styleValue:styleValue);
+    } else if (prop == "rasterParticleCount") {
+      self.setRasterParticleCount(&layer, styleValue:styleValue);
+    } else if (prop == "rasterParticleColor") {
+      self.setRasterParticleColor(&layer, styleValue:styleValue);
+    } else if (prop == "rasterParticleMaxSpeed") {
+      self.setRasterParticleMaxSpeed(&layer, styleValue:styleValue);
+    } else if (prop == "rasterParticleSpeedFactor") {
+      self.setRasterParticleSpeedFactor(&layer, styleValue:styleValue);
+    } else if (prop == "rasterParticleSpeedFactorTransition") {
+      self.setRasterParticleSpeedFactorTransition(&layer, styleValue:styleValue);
+    } else if (prop == "rasterParticleFadeOpacityFactor") {
+      self.setRasterParticleFadeOpacityFactor(&layer, styleValue:styleValue);
+    } else if (prop == "rasterParticleFadeOpacityFactorTransition") {
+      self.setRasterParticleFadeOpacityFactorTransition(&layer, styleValue:styleValue);
+    } else if (prop == "rasterParticleResetRateFactor") {
+      self.setRasterParticleResetRateFactor(&layer, styleValue:styleValue);
+    } else {
+      Logger.log(level:.error, message: "Unexpected property \(prop) for layer: raster-particle")
+    }
+    }
 }
 
 func hillshadeLayer(layer: inout HillshadeLayer, reactStyle:Dictionary<String, Any>, oldReactStyle:Dictionary<String, Any>?, applyUpdater: @escaping  ((inout HillshadeLayer)->Void)->Void, isValid: @escaping () -> Bool)
@@ -714,7 +755,7 @@ func hillshadeLayer(layer: inout HillshadeLayer, reactStyle:Dictionary<String, A
 
     let styleValue = RNMBXStyleValue.make(reactStyle[prop])
 
-    if (prop == "visibility") {
+      if (prop == "visibility") {
       self.setHillshadeStyleLayerVisibility(&layer, styleValue:styleValue);
     } else if (prop == "hillshadeIlluminationDirection") {
       self.setHillshadeIlluminationDirection(&layer, styleValue:styleValue);
@@ -739,7 +780,7 @@ func hillshadeLayer(layer: inout HillshadeLayer, reactStyle:Dictionary<String, A
     } else {
       Logger.log(level:.error, message: "Unexpected property \(prop) for layer: hillshade")
     }
-  }
+    }
 }
 
 func modelLayer(layer: inout ModelLayer, reactStyle:Dictionary<String, Any>, oldReactStyle:Dictionary<String, Any>?, applyUpdater: @escaping  ((inout ModelLayer)->Void)->Void, isValid: @escaping () -> Bool)
@@ -757,7 +798,7 @@ func modelLayer(layer: inout ModelLayer, reactStyle:Dictionary<String, Any>, old
 
     let styleValue = RNMBXStyleValue.make(reactStyle[prop])
 
-    if (prop == "visibility") {
+      if (prop == "visibility") {
       self.setModelStyleLayerVisibility(&layer, styleValue:styleValue);
     } else if (prop == "modelId") {
       self.setModelId(&layer, styleValue:styleValue);
@@ -812,7 +853,7 @@ func modelLayer(layer: inout ModelLayer, reactStyle:Dictionary<String, Any>, old
     } else {
       Logger.log(level:.error, message: "Unexpected property \(prop) for layer: model")
     }
-  }
+    }
 }
 
 func backgroundLayer(layer: inout BackgroundLayer, reactStyle:Dictionary<String, Any>, oldReactStyle:Dictionary<String, Any>?, applyUpdater: @escaping  ((inout BackgroundLayer)->Void)->Void, isValid: @escaping () -> Bool)
@@ -830,7 +871,7 @@ func backgroundLayer(layer: inout BackgroundLayer, reactStyle:Dictionary<String,
 
     let styleValue = RNMBXStyleValue.make(reactStyle[prop])
 
-    if (prop == "visibility") {
+      if (prop == "visibility") {
       self.setBackgroundStyleLayerVisibility(&layer, styleValue:styleValue);
     } else if (prop == "backgroundColor") {
       self.setBackgroundColor(&layer, styleValue:styleValue);
@@ -859,7 +900,7 @@ func backgroundLayer(layer: inout BackgroundLayer, reactStyle:Dictionary<String,
     } else {
       Logger.log(level:.error, message: "Unexpected property \(prop) for layer: background")
     }
-  }
+    }
 }
 
 func skyLayer(layer: inout SkyLayer, reactStyle:Dictionary<String, Any>, oldReactStyle:Dictionary<String, Any>?, applyUpdater: @escaping  ((inout SkyLayer)->Void)->Void, isValid: @escaping () -> Bool)
@@ -877,7 +918,7 @@ func skyLayer(layer: inout SkyLayer, reactStyle:Dictionary<String, Any>, oldReac
 
     let styleValue = RNMBXStyleValue.make(reactStyle[prop])
 
-    if (prop == "visibility") {
+      if (prop == "visibility") {
       self.setSkyStyleLayerVisibility(&layer, styleValue:styleValue);
     } else if (prop == "skyType") {
       self.setSkyType(&layer, styleValue:styleValue);
@@ -902,7 +943,7 @@ func skyLayer(layer: inout SkyLayer, reactStyle:Dictionary<String, Any>, oldReac
     } else {
       Logger.log(level:.error, message: "Unexpected property \(prop) for layer: sky")
     }
-  }
+    }
 }
 
 func lightLayer(layer: inout Light, reactStyle:Dictionary<String, Any>, oldReactStyle:Dictionary<String, Any>?, applyUpdater: @escaping  ((inout Light)->Void)->Void, isValid: @escaping () -> Bool)
@@ -920,7 +961,7 @@ func lightLayer(layer: inout Light, reactStyle:Dictionary<String, Any>, oldReact
 
     let styleValue = RNMBXStyleValue.make(reactStyle[prop])
 
-    if (prop == "anchor") {
+      if (prop == "anchor") {
       self.setAnchor(&layer, styleValue:styleValue);
     } else if (prop == "position") {
       self.setPosition(&layer, styleValue:styleValue);
@@ -937,7 +978,7 @@ func lightLayer(layer: inout Light, reactStyle:Dictionary<String, Any>, oldReact
     } else {
       Logger.log(level:.error, message: "Unexpected property \(prop) for layer: light")
     }
-  }
+    }
 }
 
 func atmosphereLayer(layer: inout Atmosphere, reactStyle:Dictionary<String, Any>, oldReactStyle:Dictionary<String, Any>?, applyUpdater: @escaping  ((inout Atmosphere)->Void)->Void, isValid: @escaping () -> Bool)
@@ -955,7 +996,7 @@ func atmosphereLayer(layer: inout Atmosphere, reactStyle:Dictionary<String, Any>
 
     let styleValue = RNMBXStyleValue.make(reactStyle[prop])
 
-    if (prop == "range") {
+      if (prop == "range") {
       self.setRange(&layer, styleValue:styleValue);
     } else if (prop == "rangeTransition") {
       self.setRangeTransition(&layer, styleValue:styleValue);
@@ -986,7 +1027,7 @@ func atmosphereLayer(layer: inout Atmosphere, reactStyle:Dictionary<String, Any>
     } else {
       Logger.log(level:.error, message: "Unexpected property \(prop) for layer: atmosphere")
     }
-  }
+    }
 }
 
 func terrainLayer(layer: inout Terrain, reactStyle:Dictionary<String, Any>, oldReactStyle:Dictionary<String, Any>?, applyUpdater: @escaping  ((inout Terrain)->Void)->Void, isValid: @escaping () -> Bool)
@@ -1004,12 +1045,12 @@ func terrainLayer(layer: inout Terrain, reactStyle:Dictionary<String, Any>, oldR
 
     let styleValue = RNMBXStyleValue.make(reactStyle[prop])
 
-    if (prop == "exaggeration") {
+      if (prop == "exaggeration") {
       self.setExaggeration(&layer, styleValue:styleValue);
     } else {
       Logger.log(level:.error, message: "Unexpected property \(prop) for layer: terrain")
     }
-  }
+    }
 }
 
 
@@ -1085,7 +1126,7 @@ func setFillTranslate(_ layer: inout FillLayer, styleValue: RNMBXStyleValue)
       
         
           layer.fillTranslate = styleValue.mglStyleValueArrayNumber();
-         
+        
       
 }
 
@@ -1098,7 +1139,7 @@ func setFillTranslateAnchor(_ layer: inout FillLayer, styleValue: RNMBXStyleValu
 {
       
         
-          layer.fillTranslateAnchor = styleValue.mglStyleValueEnum(); 
+          layer.fillTranslateAnchor = styleValue.mglStyleValueEnum();
         
       
 }
@@ -1114,31 +1155,25 @@ func setFillPattern(_ layer: inout FillLayer, styleValue: RNMBXStyleValue)
 
 func setFillPatternCrossFade(_ layer: inout FillLayer, styleValue: RNMBXStyleValue)
 {
-      #if RNMBX_11
       
         
           layer.fillPatternCrossFade = styleValue.mglStyleValueNumber();
         
       
-      #endif
 }
 
 func setFillEmissiveStrength(_ layer: inout FillLayer, styleValue: RNMBXStyleValue)
 {
-      #if RNMBX_11
       
         
           layer.fillEmissiveStrength = styleValue.mglStyleValueNumber();
         
       
-      #endif
 }
 
 func setFillEmissiveStrengthTransition(_ layer: inout FillLayer, styleValue: RNMBXStyleValue)
 {
-      #if RNMBX_11
     layer.fillEmissiveStrengthTransition = styleValue.getTransition();
-      #endif
 }
 
 
@@ -1147,7 +1182,7 @@ func setLineCap(_ layer: inout LineLayer, styleValue: RNMBXStyleValue)
 {
       
         
-          layer.lineCap = styleValue.mglStyleValueEnum(); 
+          layer.lineCap = styleValue.mglStyleValueEnum();
         
       
 }
@@ -1156,7 +1191,7 @@ func setLineJoin(_ layer: inout LineLayer, styleValue: RNMBXStyleValue)
 {
       
         
-          layer.lineJoin = styleValue.mglStyleValueEnum(); 
+          layer.lineJoin = styleValue.mglStyleValueEnum();
         
       
 }
@@ -1226,7 +1261,7 @@ func setLineTranslate(_ layer: inout LineLayer, styleValue: RNMBXStyleValue)
       
         
           layer.lineTranslate = styleValue.mglStyleValueArrayNumber();
-         
+        
       
 }
 
@@ -1239,7 +1274,7 @@ func setLineTranslateAnchor(_ layer: inout LineLayer, styleValue: RNMBXStyleValu
 {
       
         
-          layer.lineTranslateAnchor = styleValue.mglStyleValueEnum(); 
+          layer.lineTranslateAnchor = styleValue.mglStyleValueEnum();
         
       
 }
@@ -1305,7 +1340,7 @@ func setLineDasharray(_ layer: inout LineLayer, styleValue: RNMBXStyleValue)
       
         
           layer.lineDasharray = styleValue.mglStyleValueArrayNumber();
-         
+        
       
 }
 
@@ -1332,117 +1367,95 @@ func setLineTrimOffset(_ layer: inout LineLayer, styleValue: RNMBXStyleValue)
       
         
           layer.lineTrimOffset = styleValue.mglStyleValueArrayNumber();
-         
+        
       
 }
 
 func setLineZOffset(_ layer: inout LineLayer, styleValue: RNMBXStyleValue)
 {
-      #if RNMBX_11
       
         
           layer.lineZOffset = styleValue.mglStyleValueNumber();
         
       
-      #endif
 }
 
 func setLineElevationReference(_ layer: inout LineLayer, styleValue: RNMBXStyleValue)
 {
-      #if RNMBX_11
       
         
-          layer.lineElevationReference = styleValue.mglStyleValueEnum(); 
+          layer.lineElevationReference = styleValue.mglStyleValueEnum();
         
       
-      #endif
 }
 
 func setLineCrossSlope(_ layer: inout LineLayer, styleValue: RNMBXStyleValue)
 {
-      #if RNMBX_11
       
         
           layer.lineCrossSlope = styleValue.mglStyleValueNumber();
         
       
-      #endif
 }
 
 func setLinePatternCrossFade(_ layer: inout LineLayer, styleValue: RNMBXStyleValue)
 {
-      #if RNMBX_11
       
         
           layer.linePatternCrossFade = styleValue.mglStyleValueNumber();
         
       
-      #endif
 }
 
 func setLineTrimFadeRange(_ layer: inout LineLayer, styleValue: RNMBXStyleValue)
 {
-      #if RNMBX_11
       
         
           layer.lineTrimFadeRange = styleValue.mglStyleValueArrayNumber();
-         
+        
       
-      #endif
 }
 
 func setLineTrimColor(_ layer: inout LineLayer, styleValue: RNMBXStyleValue)
 {
-      #if RNMBX_11
       
         
           layer.lineTrimColor = styleValue.mglStyleValueColor();
         
       
-      #endif
 }
 
 func setLineTrimColorTransition(_ layer: inout LineLayer, styleValue: RNMBXStyleValue)
 {
-      #if RNMBX_11
     layer.lineTrimColorTransition = styleValue.getTransition();
-      #endif
 }
 
 func setLineEmissiveStrength(_ layer: inout LineLayer, styleValue: RNMBXStyleValue)
 {
-      #if RNMBX_11
       
         
           layer.lineEmissiveStrength = styleValue.mglStyleValueNumber();
         
       
-      #endif
 }
 
 func setLineEmissiveStrengthTransition(_ layer: inout LineLayer, styleValue: RNMBXStyleValue)
 {
-      #if RNMBX_11
     layer.lineEmissiveStrengthTransition = styleValue.getTransition();
-      #endif
 }
 
 func setLineOcclusionOpacity(_ layer: inout LineLayer, styleValue: RNMBXStyleValue)
 {
-      #if RNMBX_11
       
         
           layer.lineOcclusionOpacity = styleValue.mglStyleValueNumber();
         
       
-      #endif
 }
 
 func setLineOcclusionOpacityTransition(_ layer: inout LineLayer, styleValue: RNMBXStyleValue)
 {
-      #if RNMBX_11
     layer.lineOcclusionOpacityTransition = styleValue.getTransition();
-      #endif
 }
 
 
@@ -1451,7 +1464,7 @@ func setSymbolPlacement(_ layer: inout SymbolLayer, styleValue: RNMBXStyleValue)
 {
       
         
-          layer.symbolPlacement = styleValue.mglStyleValueEnum(); 
+          layer.symbolPlacement = styleValue.mglStyleValueEnum();
         
       
 }
@@ -1487,7 +1500,7 @@ func setSymbolZOrder(_ layer: inout SymbolLayer, styleValue: RNMBXStyleValue)
 {
       
         
-          layer.symbolZOrder = styleValue.mglStyleValueEnum(); 
+          layer.symbolZOrder = styleValue.mglStyleValueEnum();
         
       
 }
@@ -1523,7 +1536,7 @@ func setIconRotationAlignment(_ layer: inout SymbolLayer, styleValue: RNMBXStyle
 {
       
         
-          layer.iconRotationAlignment = styleValue.mglStyleValueEnum(); 
+          layer.iconRotationAlignment = styleValue.mglStyleValueEnum();
         
       
 }
@@ -1541,7 +1554,7 @@ func setIconTextFit(_ layer: inout SymbolLayer, styleValue: RNMBXStyleValue)
 {
       
         
-          layer.iconTextFit = styleValue.mglStyleValueEnum(); 
+          layer.iconTextFit = styleValue.mglStyleValueEnum();
         
       
 }
@@ -1551,7 +1564,7 @@ func setIconTextFitPadding(_ layer: inout SymbolLayer, styleValue: RNMBXStyleVal
       
         
           layer.iconTextFitPadding = styleValue.mglStyleValueArrayNumber();
-         
+        
       
 }
 
@@ -1596,7 +1609,7 @@ func setIconOffset(_ layer: inout SymbolLayer, styleValue: RNMBXStyleValue)
       
         
           layer.iconOffset = styleValue.mglStyleValueArrayNumber();
-         
+        
       
 }
 
@@ -1604,7 +1617,7 @@ func setIconAnchor(_ layer: inout SymbolLayer, styleValue: RNMBXStyleValue)
 {
       
         
-          layer.iconAnchor = styleValue.mglStyleValueEnum(); 
+          layer.iconAnchor = styleValue.mglStyleValueEnum();
         
       
 }
@@ -1613,7 +1626,7 @@ func setIconPitchAlignment(_ layer: inout SymbolLayer, styleValue: RNMBXStyleVal
 {
       
         
-          layer.iconPitchAlignment = styleValue.mglStyleValueEnum(); 
+          layer.iconPitchAlignment = styleValue.mglStyleValueEnum();
         
       
 }
@@ -1622,7 +1635,7 @@ func setTextPitchAlignment(_ layer: inout SymbolLayer, styleValue: RNMBXStyleVal
 {
       
         
-          layer.textPitchAlignment = styleValue.mglStyleValueEnum(); 
+          layer.textPitchAlignment = styleValue.mglStyleValueEnum();
         
       
 }
@@ -1631,7 +1644,7 @@ func setTextRotationAlignment(_ layer: inout SymbolLayer, styleValue: RNMBXStyle
 {
       
         
-          layer.textRotationAlignment = styleValue.mglStyleValueEnum(); 
+          layer.textRotationAlignment = styleValue.mglStyleValueEnum();
         
       
 }
@@ -1650,7 +1663,7 @@ func setTextFont(_ layer: inout SymbolLayer, styleValue: RNMBXStyleValue)
       
         
           layer.textFont = styleValue.mglStyleValueArrayString();
-         
+        
       
 }
 
@@ -1694,7 +1707,7 @@ func setTextJustify(_ layer: inout SymbolLayer, styleValue: RNMBXStyleValue)
 {
       
         
-          layer.textJustify = styleValue.mglStyleValueEnum(); 
+          layer.textJustify = styleValue.mglStyleValueEnum();
         
       
 }
@@ -1713,7 +1726,7 @@ func setTextVariableAnchor(_ layer: inout SymbolLayer, styleValue: RNMBXStyleVal
       
         
           layer.textVariableAnchor = styleValue.mglStyleValueArrayTextVariableAnchor();
-         
+        
       
 }
 
@@ -1721,7 +1734,7 @@ func setTextAnchor(_ layer: inout SymbolLayer, styleValue: RNMBXStyleValue)
 {
       
         
-          layer.textAnchor = styleValue.mglStyleValueEnum(); 
+          layer.textAnchor = styleValue.mglStyleValueEnum();
         
       
 }
@@ -1740,7 +1753,7 @@ func setTextWritingMode(_ layer: inout SymbolLayer, styleValue: RNMBXStyleValue)
       
         
           layer.textWritingMode = styleValue.mglStyleValueArrayTextWritingMode();
-         
+        
       
 }
 
@@ -1775,7 +1788,7 @@ func setTextTransform(_ layer: inout SymbolLayer, styleValue: RNMBXStyleValue)
 {
       
         
-          layer.textTransform = styleValue.mglStyleValueEnum(); 
+          layer.textTransform = styleValue.mglStyleValueEnum();
         
       
 }
@@ -1785,7 +1798,7 @@ func setTextOffset(_ layer: inout SymbolLayer, styleValue: RNMBXStyleValue)
       
         
           layer.textOffset = styleValue.mglStyleValueArrayNumber();
-         
+        
       
 }
 
@@ -1896,7 +1909,7 @@ func setIconTranslate(_ layer: inout SymbolLayer, styleValue: RNMBXStyleValue)
       
         
           layer.iconTranslate = styleValue.mglStyleValueArrayNumber();
-         
+        
       
 }
 
@@ -1909,7 +1922,7 @@ func setIconTranslateAnchor(_ layer: inout SymbolLayer, styleValue: RNMBXStyleVa
 {
       
         
-          layer.iconTranslateAnchor = styleValue.mglStyleValueEnum(); 
+          layer.iconTranslateAnchor = styleValue.mglStyleValueEnum();
         
       
 }
@@ -1989,7 +2002,7 @@ func setTextTranslate(_ layer: inout SymbolLayer, styleValue: RNMBXStyleValue)
       
         
           layer.textTranslate = styleValue.mglStyleValueArrayNumber();
-         
+        
       
 }
 
@@ -2002,143 +2015,115 @@ func setTextTranslateAnchor(_ layer: inout SymbolLayer, styleValue: RNMBXStyleVa
 {
       
         
-          layer.textTranslateAnchor = styleValue.mglStyleValueEnum(); 
+          layer.textTranslateAnchor = styleValue.mglStyleValueEnum();
         
       
 }
 
 func setSymbolZElevate(_ layer: inout SymbolLayer, styleValue: RNMBXStyleValue)
 {
-      #if RNMBX_11
       
         
           layer.symbolZElevate = styleValue.mglStyleValueBoolean();
         
       
-      #endif
 }
 
 func setSymbolElevationReference(_ layer: inout SymbolLayer, styleValue: RNMBXStyleValue)
 {
-      #if RNMBX_11
       
         
-          layer.symbolElevationReference = styleValue.mglStyleValueEnum(); 
+          layer.symbolElevationReference = styleValue.mglStyleValueEnum();
         
       
-      #endif
 }
 
 func setIconOcclusionOpacity(_ layer: inout SymbolLayer, styleValue: RNMBXStyleValue)
 {
-      #if RNMBX_11
       
         
           layer.iconOcclusionOpacity = styleValue.mglStyleValueNumber();
         
       
-      #endif
 }
 
 func setIconOcclusionOpacityTransition(_ layer: inout SymbolLayer, styleValue: RNMBXStyleValue)
 {
-      #if RNMBX_11
     layer.iconOcclusionOpacityTransition = styleValue.getTransition();
-      #endif
 }
 
 func setIconEmissiveStrength(_ layer: inout SymbolLayer, styleValue: RNMBXStyleValue)
 {
-      #if RNMBX_11
       
         
           layer.iconEmissiveStrength = styleValue.mglStyleValueNumber();
         
       
-      #endif
 }
 
 func setIconEmissiveStrengthTransition(_ layer: inout SymbolLayer, styleValue: RNMBXStyleValue)
 {
-      #if RNMBX_11
     layer.iconEmissiveStrengthTransition = styleValue.getTransition();
-      #endif
 }
 
 func setTextEmissiveStrength(_ layer: inout SymbolLayer, styleValue: RNMBXStyleValue)
 {
-      #if RNMBX_11
       
         
           layer.textEmissiveStrength = styleValue.mglStyleValueNumber();
         
       
-      #endif
 }
 
 func setTextEmissiveStrengthTransition(_ layer: inout SymbolLayer, styleValue: RNMBXStyleValue)
 {
-      #if RNMBX_11
     layer.textEmissiveStrengthTransition = styleValue.getTransition();
-      #endif
 }
 
 func setIconImageCrossFade(_ layer: inout SymbolLayer, styleValue: RNMBXStyleValue)
 {
-      #if RNMBX_11
       
         
           layer.iconImageCrossFade = styleValue.mglStyleValueNumber();
         
       
-      #endif
 }
 
 func setTextOcclusionOpacity(_ layer: inout SymbolLayer, styleValue: RNMBXStyleValue)
 {
-      #if RNMBX_11
       
         
           layer.textOcclusionOpacity = styleValue.mglStyleValueNumber();
         
       
-      #endif
 }
 
 func setTextOcclusionOpacityTransition(_ layer: inout SymbolLayer, styleValue: RNMBXStyleValue)
 {
-      #if RNMBX_11
     layer.textOcclusionOpacityTransition = styleValue.getTransition();
-      #endif
 }
 
 func setIconColorSaturation(_ layer: inout SymbolLayer, styleValue: RNMBXStyleValue)
 {
-      #if RNMBX_11
       
         
           layer.iconColorSaturation = styleValue.mglStyleValueNumber();
         
       
-      #endif
 }
 
 func setSymbolZOffset(_ layer: inout SymbolLayer, styleValue: RNMBXStyleValue)
 {
-      #if RNMBX_11
       
         
           layer.symbolZOffset = styleValue.mglStyleValueNumber();
         
       
-      #endif
 }
 
 func setSymbolZOffsetTransition(_ layer: inout SymbolLayer, styleValue: RNMBXStyleValue)
 {
-      #if RNMBX_11
     layer.symbolZOffsetTransition = styleValue.getTransition();
-      #endif
 }
 
 
@@ -2218,7 +2203,7 @@ func setCircleTranslate(_ layer: inout CircleLayer, styleValue: RNMBXStyleValue)
       
         
           layer.circleTranslate = styleValue.mglStyleValueArrayNumber();
-         
+        
       
 }
 
@@ -2231,7 +2216,7 @@ func setCircleTranslateAnchor(_ layer: inout CircleLayer, styleValue: RNMBXStyle
 {
       
         
-          layer.circleTranslateAnchor = styleValue.mglStyleValueEnum(); 
+          layer.circleTranslateAnchor = styleValue.mglStyleValueEnum();
         
       
 }
@@ -2240,7 +2225,7 @@ func setCirclePitchScale(_ layer: inout CircleLayer, styleValue: RNMBXStyleValue
 {
       
         
-          layer.circlePitchScale = styleValue.mglStyleValueEnum(); 
+          layer.circlePitchScale = styleValue.mglStyleValueEnum();
         
       
 }
@@ -2249,7 +2234,7 @@ func setCirclePitchAlignment(_ layer: inout CircleLayer, styleValue: RNMBXStyleV
 {
       
         
-          layer.circlePitchAlignment = styleValue.mglStyleValueEnum(); 
+          layer.circlePitchAlignment = styleValue.mglStyleValueEnum();
         
       
 }
@@ -2298,31 +2283,25 @@ func setCircleStrokeOpacityTransition(_ layer: inout CircleLayer, styleValue: RN
 
 func setCircleElevationReference(_ layer: inout CircleLayer, styleValue: RNMBXStyleValue)
 {
-      #if RNMBX_11
       
         
-          layer.circleElevationReference = styleValue.mglStyleValueEnum(); 
+          layer.circleElevationReference = styleValue.mglStyleValueEnum();
         
       
-      #endif
 }
 
 func setCircleEmissiveStrength(_ layer: inout CircleLayer, styleValue: RNMBXStyleValue)
 {
-      #if RNMBX_11
       
         
           layer.circleEmissiveStrength = styleValue.mglStyleValueNumber();
         
       
-      #endif
 }
 
 func setCircleEmissiveStrengthTransition(_ layer: inout CircleLayer, styleValue: RNMBXStyleValue)
 {
-      #if RNMBX_11
     layer.circleEmissiveStrengthTransition = styleValue.getTransition();
-      #endif
 }
 
 
@@ -2401,13 +2380,11 @@ func setFillExtrusionStyleLayerVisibility(_ layer: inout FillExtrusionLayer, sty
 
 func setFillExtrusionEdgeRadius(_ layer: inout FillExtrusionLayer, styleValue: RNMBXStyleValue)
 {
-      #if RNMBX_11
       
         
           layer.fillExtrusionEdgeRadius = styleValue.mglStyleValueNumber();
         
       
-      #endif
 }
 
 func setFillExtrusionOpacity(_ layer: inout FillExtrusionLayer, styleValue: RNMBXStyleValue)
@@ -2443,7 +2420,7 @@ func setFillExtrusionTranslate(_ layer: inout FillExtrusionLayer, styleValue: RN
       
         
           layer.fillExtrusionTranslate = styleValue.mglStyleValueArrayNumber();
-         
+        
       
 }
 
@@ -2456,7 +2433,7 @@ func setFillExtrusionTranslateAnchor(_ layer: inout FillExtrusionLayer, styleVal
 {
       
         
-          layer.fillExtrusionTranslateAnchor = styleValue.mglStyleValueEnum(); 
+          layer.fillExtrusionTranslateAnchor = styleValue.mglStyleValueEnum();
         
       
 }
@@ -2537,255 +2514,201 @@ func setFillExtrusionAmbientOcclusionRadiusTransition(_ layer: inout FillExtrusi
 
 func setFillExtrusionRoundedRoof(_ layer: inout FillExtrusionLayer, styleValue: RNMBXStyleValue)
 {
-      #if RNMBX_11
       
         
           layer.fillExtrusionRoundedRoof = styleValue.mglStyleValueBoolean();
         
       
-      #endif
 }
 
 func setFillExtrusionPatternCrossFade(_ layer: inout FillExtrusionLayer, styleValue: RNMBXStyleValue)
 {
-      #if RNMBX_11
       
         
           layer.fillExtrusionPatternCrossFade = styleValue.mglStyleValueNumber();
         
       
-      #endif
 }
 
 func setFillExtrusionHeightAlignment(_ layer: inout FillExtrusionLayer, styleValue: RNMBXStyleValue)
 {
-      #if RNMBX_11
       
         
-          layer.fillExtrusionHeightAlignment = styleValue.mglStyleValueEnum(); 
+          layer.fillExtrusionHeightAlignment = styleValue.mglStyleValueEnum();
         
       
-      #endif
 }
 
 func setFillExtrusionBaseAlignment(_ layer: inout FillExtrusionLayer, styleValue: RNMBXStyleValue)
 {
-      #if RNMBX_11
       
         
-          layer.fillExtrusionBaseAlignment = styleValue.mglStyleValueEnum(); 
+          layer.fillExtrusionBaseAlignment = styleValue.mglStyleValueEnum();
         
       
-      #endif
 }
 
 func setFillExtrusionAmbientOcclusionWallRadius(_ layer: inout FillExtrusionLayer, styleValue: RNMBXStyleValue)
 {
-      #if RNMBX_11
       
         
           layer.fillExtrusionAmbientOcclusionWallRadius = styleValue.mglStyleValueNumber();
         
       
-      #endif
 }
 
 func setFillExtrusionAmbientOcclusionWallRadiusTransition(_ layer: inout FillExtrusionLayer, styleValue: RNMBXStyleValue)
 {
-      #if RNMBX_11
     layer.fillExtrusionAmbientOcclusionWallRadiusTransition = styleValue.getTransition();
-      #endif
 }
 
 func setFillExtrusionAmbientOcclusionGroundRadius(_ layer: inout FillExtrusionLayer, styleValue: RNMBXStyleValue)
 {
-      #if RNMBX_11
       
         
           layer.fillExtrusionAmbientOcclusionGroundRadius = styleValue.mglStyleValueNumber();
         
       
-      #endif
 }
 
 func setFillExtrusionAmbientOcclusionGroundRadiusTransition(_ layer: inout FillExtrusionLayer, styleValue: RNMBXStyleValue)
 {
-      #if RNMBX_11
     layer.fillExtrusionAmbientOcclusionGroundRadiusTransition = styleValue.getTransition();
-      #endif
 }
 
 func setFillExtrusionAmbientOcclusionGroundAttenuation(_ layer: inout FillExtrusionLayer, styleValue: RNMBXStyleValue)
 {
-      #if RNMBX_11
       
         
           layer.fillExtrusionAmbientOcclusionGroundAttenuation = styleValue.mglStyleValueNumber();
         
       
-      #endif
 }
 
 func setFillExtrusionAmbientOcclusionGroundAttenuationTransition(_ layer: inout FillExtrusionLayer, styleValue: RNMBXStyleValue)
 {
-      #if RNMBX_11
     layer.fillExtrusionAmbientOcclusionGroundAttenuationTransition = styleValue.getTransition();
-      #endif
 }
 
 func setFillExtrusionFloodLightColor(_ layer: inout FillExtrusionLayer, styleValue: RNMBXStyleValue)
 {
-      #if RNMBX_11
       
         
           layer.fillExtrusionFloodLightColor = styleValue.mglStyleValueColor();
         
       
-      #endif
 }
 
 func setFillExtrusionFloodLightColorTransition(_ layer: inout FillExtrusionLayer, styleValue: RNMBXStyleValue)
 {
-      #if RNMBX_11
     layer.fillExtrusionFloodLightColorTransition = styleValue.getTransition();
-      #endif
 }
 
 func setFillExtrusionFloodLightIntensity(_ layer: inout FillExtrusionLayer, styleValue: RNMBXStyleValue)
 {
-      #if RNMBX_11
       
         
           layer.fillExtrusionFloodLightIntensity = styleValue.mglStyleValueNumber();
         
       
-      #endif
 }
 
 func setFillExtrusionFloodLightIntensityTransition(_ layer: inout FillExtrusionLayer, styleValue: RNMBXStyleValue)
 {
-      #if RNMBX_11
     layer.fillExtrusionFloodLightIntensityTransition = styleValue.getTransition();
-      #endif
 }
 
 func setFillExtrusionFloodLightWallRadius(_ layer: inout FillExtrusionLayer, styleValue: RNMBXStyleValue)
 {
-      #if RNMBX_11
       
         
           layer.fillExtrusionFloodLightWallRadius = styleValue.mglStyleValueNumber();
         
       
-      #endif
 }
 
 func setFillExtrusionFloodLightWallRadiusTransition(_ layer: inout FillExtrusionLayer, styleValue: RNMBXStyleValue)
 {
-      #if RNMBX_11
     layer.fillExtrusionFloodLightWallRadiusTransition = styleValue.getTransition();
-      #endif
 }
 
 func setFillExtrusionFloodLightGroundRadius(_ layer: inout FillExtrusionLayer, styleValue: RNMBXStyleValue)
 {
-      #if RNMBX_11
       
         
           layer.fillExtrusionFloodLightGroundRadius = styleValue.mglStyleValueNumber();
         
       
-      #endif
 }
 
 func setFillExtrusionFloodLightGroundRadiusTransition(_ layer: inout FillExtrusionLayer, styleValue: RNMBXStyleValue)
 {
-      #if RNMBX_11
     layer.fillExtrusionFloodLightGroundRadiusTransition = styleValue.getTransition();
-      #endif
 }
 
 func setFillExtrusionFloodLightGroundAttenuation(_ layer: inout FillExtrusionLayer, styleValue: RNMBXStyleValue)
 {
-      #if RNMBX_11
       
         
           layer.fillExtrusionFloodLightGroundAttenuation = styleValue.mglStyleValueNumber();
         
       
-      #endif
 }
 
 func setFillExtrusionFloodLightGroundAttenuationTransition(_ layer: inout FillExtrusionLayer, styleValue: RNMBXStyleValue)
 {
-      #if RNMBX_11
     layer.fillExtrusionFloodLightGroundAttenuationTransition = styleValue.getTransition();
-      #endif
 }
 
 func setFillExtrusionVerticalScale(_ layer: inout FillExtrusionLayer, styleValue: RNMBXStyleValue)
 {
-      #if RNMBX_11
       
         
           layer.fillExtrusionVerticalScale = styleValue.mglStyleValueNumber();
         
       
-      #endif
 }
 
 func setFillExtrusionVerticalScaleTransition(_ layer: inout FillExtrusionLayer, styleValue: RNMBXStyleValue)
 {
-      #if RNMBX_11
     layer.fillExtrusionVerticalScaleTransition = styleValue.getTransition();
-      #endif
 }
 
 func setFillExtrusionCutoffFadeRange(_ layer: inout FillExtrusionLayer, styleValue: RNMBXStyleValue)
 {
-      #if RNMBX_11
       
         
           layer.fillExtrusionCutoffFadeRange = styleValue.mglStyleValueNumber();
         
       
-      #endif
 }
 
 func setFillExtrusionEmissiveStrength(_ layer: inout FillExtrusionLayer, styleValue: RNMBXStyleValue)
 {
-      #if RNMBX_11
       
         
           layer.fillExtrusionEmissiveStrength = styleValue.mglStyleValueNumber();
         
       
-      #endif
 }
 
 func setFillExtrusionEmissiveStrengthTransition(_ layer: inout FillExtrusionLayer, styleValue: RNMBXStyleValue)
 {
-      #if RNMBX_11
     layer.fillExtrusionEmissiveStrengthTransition = styleValue.getTransition();
-      #endif
 }
 
 func setFillExtrusionLineWidth(_ layer: inout FillExtrusionLayer, styleValue: RNMBXStyleValue)
 {
-      #if RNMBX_11
       
         
           layer.fillExtrusionLineWidth = styleValue.mglStyleValueNumber();
         
       
-      #endif
 }
 
 func setFillExtrusionLineWidthTransition(_ layer: inout FillExtrusionLayer, styleValue: RNMBXStyleValue)
 {
-      #if RNMBX_11
     layer.fillExtrusionLineWidthTransition = styleValue.getTransition();
-      #endif
 }
 
 
@@ -2883,7 +2806,7 @@ func setRasterResampling(_ layer: inout RasterLayer, styleValue: RNMBXStyleValue
 {
       
         
-          layer.rasterResampling = styleValue.mglStyleValueEnum(); 
+          layer.rasterResampling = styleValue.mglStyleValueEnum();
         
       
 }
@@ -2899,96 +2822,156 @@ func setRasterFadeDuration(_ layer: inout RasterLayer, styleValue: RNMBXStyleVal
 
 func setRasterColor(_ layer: inout RasterLayer, styleValue: RNMBXStyleValue)
 {
-      #if RNMBX_11
       
         
           layer.rasterColor = styleValue.mglStyleValueColor();
         
       
-      #endif
 }
 
 func setRasterColorMix(_ layer: inout RasterLayer, styleValue: RNMBXStyleValue)
 {
-      #if RNMBX_11
       
         
           layer.rasterColorMix = styleValue.mglStyleValueArrayNumber();
-         
+        
       
-      #endif
 }
 
 func setRasterColorMixTransition(_ layer: inout RasterLayer, styleValue: RNMBXStyleValue)
 {
-      #if RNMBX_11
     layer.rasterColorMixTransition = styleValue.getTransition();
-      #endif
 }
 
 func setRasterColorRange(_ layer: inout RasterLayer, styleValue: RNMBXStyleValue)
 {
-      #if RNMBX_11
       
         
           layer.rasterColorRange = styleValue.mglStyleValueArrayNumber();
-         
+        
       
-      #endif
 }
 
 func setRasterColorRangeTransition(_ layer: inout RasterLayer, styleValue: RNMBXStyleValue)
 {
-      #if RNMBX_11
     layer.rasterColorRangeTransition = styleValue.getTransition();
-      #endif
 }
 
 func setRasterEmissiveStrength(_ layer: inout RasterLayer, styleValue: RNMBXStyleValue)
 {
-      #if RNMBX_11
       
         
           layer.rasterEmissiveStrength = styleValue.mglStyleValueNumber();
         
       
-      #endif
 }
 
 func setRasterEmissiveStrengthTransition(_ layer: inout RasterLayer, styleValue: RNMBXStyleValue)
 {
-      #if RNMBX_11
     layer.rasterEmissiveStrengthTransition = styleValue.getTransition();
-      #endif
 }
 
 func setRasterArrayBand(_ layer: inout RasterLayer, styleValue: RNMBXStyleValue)
 {
-      #if RNMBX_11
       
         
           layer.rasterArrayBand = styleValue.mglStyleValueString();
         
       
-      #endif
 }
 
 func setRasterElevation(_ layer: inout RasterLayer, styleValue: RNMBXStyleValue)
 {
-      #if RNMBX_11
       
         
           layer.rasterElevation = styleValue.mglStyleValueNumber();
         
       
-      #endif
 }
 
 func setRasterElevationTransition(_ layer: inout RasterLayer, styleValue: RNMBXStyleValue)
 {
-      #if RNMBX_11
     layer.rasterElevationTransition = styleValue.getTransition();
-      #endif
+}
+
+
+
+func setRasterParticleStyleLayerVisibility(_ layer: inout RasterParticleLayer, styleValue: RNMBXStyleValue)
+{
+    layer.visibility = styleValue.isVisible();
+}
+
+func setRasterParticleArrayBand(_ layer: inout RasterParticleLayer, styleValue: RNMBXStyleValue)
+{
+      
+        
+          layer.rasterParticleArrayBand = styleValue.mglStyleValueString();
+        
+      
+}
+
+func setRasterParticleCount(_ layer: inout RasterParticleLayer, styleValue: RNMBXStyleValue)
+{
+      
+        
+          layer.rasterParticleCount = styleValue.mglStyleValueNumber();
+        
+      
+}
+
+func setRasterParticleColor(_ layer: inout RasterParticleLayer, styleValue: RNMBXStyleValue)
+{
+      
+        
+          layer.rasterParticleColor = styleValue.mglStyleValueColor();
+        
+      
+}
+
+func setRasterParticleMaxSpeed(_ layer: inout RasterParticleLayer, styleValue: RNMBXStyleValue)
+{
+      
+        
+          layer.rasterParticleMaxSpeed = styleValue.mglStyleValueNumber();
+        
+      
+}
+
+func setRasterParticleSpeedFactor(_ layer: inout RasterParticleLayer, styleValue: RNMBXStyleValue)
+{
+      
+        
+          layer.rasterParticleSpeedFactor = styleValue.mglStyleValueNumber();
+        
+      
+}
+
+func setRasterParticleSpeedFactorTransition(_ layer: inout RasterParticleLayer, styleValue: RNMBXStyleValue)
+{
+    layer.rasterParticleSpeedFactorTransition = styleValue.getTransition();
+}
+
+func setRasterParticleFadeOpacityFactor(_ layer: inout RasterParticleLayer, styleValue: RNMBXStyleValue)
+{
+      
+        
+          layer.rasterParticleFadeOpacityFactor = styleValue.mglStyleValueNumber();
+        
+      
+}
+
+func setRasterParticleFadeOpacityFactorTransition(_ layer: inout RasterParticleLayer, styleValue: RNMBXStyleValue)
+{
+    layer.rasterParticleFadeOpacityFactorTransition = styleValue.getTransition();
+}
+
+func setRasterParticleResetRateFactor(_ layer: inout RasterParticleLayer, styleValue: RNMBXStyleValue)
+{
+      
+        
+          layer.rasterParticleResetRateFactor = styleValue.mglStyleValueNumber();
+        
+      
 }
 
 
@@ -3011,7 +2994,7 @@ func setHillshadeIlluminationAnchor(_ layer: inout HillshadeLayer, styleValue: R
 {
       
         
-          layer.hillshadeIlluminationAnchor = styleValue.mglStyleValueEnum(); 
+          layer.hillshadeIlluminationAnchor = styleValue.mglStyleValueEnum();
         
       
 }
@@ -3076,9 +3059,7 @@ func setHillshadeAccentColorTransition(_ layer: inout HillshadeLayer, styleValue
 
 func setModelStyleLayerVisibility(_ layer: inout ModelLayer, styleValue: RNMBXStyleValue)
 {
-      #if RNMBX_11
     layer.visibility = styleValue.isVisible();
-      #endif
 }
 
 func setModelId(_ layer: inout ModelLayer, styleValue: RNMBXStyleValue)
@@ -3092,20 +3073,16 @@ func setModelId(_ layer: inout ModelLayer, styleValue: RNMBXStyleValue)
 
 func setModelOpacity(_ layer: inout ModelLayer, styleValue: RNMBXStyleValue)
 {
-      #if RNMBX_11
       
         
           layer.modelOpacity = styleValue.mglStyleValueNumber();
         
       
-      #endif
 }
 
 func setModelOpacityTransition(_ layer: inout ModelLayer, styleValue: RNMBXStyleValue)
 {
-      #if RNMBX_11
     layer.modelOpacityTransition = styleValue.getTransition();
-      #endif
 }
 
 func setModelRotation(_ layer: inout ModelLayer, styleValue: RNMBXStyleValue)
@@ -3113,7 +3090,7 @@ func setModelRotation(_ layer: inout ModelLayer, styleValue: RNMBXStyleValue)
       
         
           layer.modelRotation = styleValue.mglStyleValueArrayNumber();
-         
+        
       
 }
 
@@ -3127,7 +3104,7 @@ func setModelScale(_ layer: inout ModelLayer, styleValue: RNMBXStyleValue)
       
         
           layer.modelScale = styleValue.mglStyleValueArrayNumber();
-         
+        
       
 }
 
@@ -3138,172 +3115,136 @@ func setModelScaleTransition(_ layer: inout ModelLayer, styleValue: RNMBXStyleVa
 
 func setModelTranslation(_ layer: inout ModelLayer, styleValue: RNMBXStyleValue)
 {
-      #if RNMBX_11
       
         
           layer.modelTranslation = styleValue.mglStyleValueArrayNumber();
-         
+        
       
-      #endif
 }
 
 func setModelTranslationTransition(_ layer: inout ModelLayer, styleValue: RNMBXStyleValue)
 {
-      #if RNMBX_11
     layer.modelTranslationTransition = styleValue.getTransition();
-      #endif
 }
 
 func setModelColor(_ layer: inout ModelLayer, styleValue: RNMBXStyleValue)
 {
-      #if RNMBX_11
       
         
           layer.modelColor = styleValue.mglStyleValueColor();
         
       
-      #endif
 }
 
 func setModelColorTransition(_ layer: inout ModelLayer, styleValue: RNMBXStyleValue)
 {
-      #if RNMBX_11
     layer.modelColorTransition = styleValue.getTransition();
-      #endif
 }
 
 func setModelColorMixIntensity(_ layer: inout ModelLayer, styleValue: RNMBXStyleValue)
 {
-      #if RNMBX_11
       
         
           layer.modelColorMixIntensity = styleValue.mglStyleValueNumber();
         
       
-      #endif
 }
 
 func setModelColorMixIntensityTransition(_ layer: inout ModelLayer, styleValue: RNMBXStyleValue)
 {
-      #if RNMBX_11
     layer.modelColorMixIntensityTransition = styleValue.getTransition();
-      #endif
 }
 
 func setModelType(_ layer: inout ModelLayer, styleValue: RNMBXStyleValue)
 {
-      #if RNMBX_11
       
         
-          layer.modelType = styleValue.mglStyleValueEnum(); 
+          layer.modelType = styleValue.mglStyleValueEnum();
         
       
-      #endif
 }
 
 func setModelCastShadows(_ layer: inout ModelLayer, styleValue: RNMBXStyleValue)
 {
-      #if RNMBX_11
       
         
           layer.modelCastShadows = styleValue.mglStyleValueBoolean();
         
       
-      #endif
 }
 
 func setModelReceiveShadows(_ layer: inout ModelLayer, styleValue: RNMBXStyleValue)
 {
-      #if RNMBX_11
       
         
           layer.modelReceiveShadows = styleValue.mglStyleValueBoolean();
         
       
-      #endif
 }
 
 func setModelAmbientOcclusionIntensity(_ layer: inout ModelLayer, styleValue: RNMBXStyleValue)
 {
-      #if RNMBX_11
       
         
           layer.modelAmbientOcclusionIntensity = styleValue.mglStyleValueNumber();
         
       
-      #endif
 }
 
 func setModelAmbientOcclusionIntensityTransition(_ layer: inout ModelLayer, styleValue: RNMBXStyleValue)
 {
-      #if RNMBX_11
     layer.modelAmbientOcclusionIntensityTransition = styleValue.getTransition();
-      #endif
 }
 
 func setModelEmissiveStrength(_ layer: inout ModelLayer, styleValue: RNMBXStyleValue)
 {
-      #if RNMBX_11
       
         
           layer.modelEmissiveStrength = styleValue.mglStyleValueNumber();
         
       
-      #endif
 }
 
 func setModelEmissiveStrengthTransition(_ layer: inout ModelLayer, styleValue: RNMBXStyleValue)
 {
-      #if RNMBX_11
     layer.modelEmissiveStrengthTransition = styleValue.getTransition();
-      #endif
 }
 
 func setModelRoughness(_ layer: inout ModelLayer, styleValue: RNMBXStyleValue)
 {
-      #if RNMBX_11
       
         
           layer.modelRoughness = styleValue.mglStyleValueNumber();
         
       
-      #endif
 }
 
 func setModelRoughnessTransition(_ layer: inout ModelLayer, styleValue: RNMBXStyleValue)
 {
-      #if RNMBX_11
     layer.modelRoughnessTransition = styleValue.getTransition();
-      #endif
 }
 
 func setModelHeightBasedEmissiveStrengthMultiplier(_ layer: inout ModelLayer, styleValue: RNMBXStyleValue)
 {
-      #if RNMBX_11
       
         
           layer.modelHeightBasedEmissiveStrengthMultiplier = styleValue.mglStyleValueArrayNumber();
-         
+        
       
-      #endif
 }
 
 func setModelHeightBasedEmissiveStrengthMultiplierTransition(_ layer: inout ModelLayer, styleValue: RNMBXStyleValue)
 {
-      #if RNMBX_11
     layer.modelHeightBasedEmissiveStrengthMultiplierTransition = styleValue.getTransition();
-      #endif
 }
 
 func setModelCutoffFadeRange(_ layer: inout ModelLayer, styleValue: RNMBXStyleValue)
 {
-      #if RNMBX_11
       
         
           layer.modelCutoffFadeRange = styleValue.mglStyleValueNumber();
         
       
-      #endif
 }
 
 
@@ -3352,31 +3293,25 @@ func setBackgroundOpacityTransition(_ layer: inout BackgroundLayer, styleValue: 
 
 func setBackgroundPitchAlignment(_ layer: inout BackgroundLayer, styleValue: RNMBXStyleValue)
 {
-      #if RNMBX_11
       
         
-          layer.backgroundPitchAlignment = styleValue.mglStyleValueEnum(); 
+          layer.backgroundPitchAlignment = styleValue.mglStyleValueEnum();
         
       
-      #endif
 }
 
 func setBackgroundEmissiveStrength(_ layer: inout BackgroundLayer, styleValue: RNMBXStyleValue)
 {
-      #if RNMBX_11
       
         
           layer.backgroundEmissiveStrength = styleValue.mglStyleValueNumber();
         
       
-      #endif
 }
 
 func setBackgroundEmissiveStrengthTransition(_ layer: inout BackgroundLayer, styleValue: RNMBXStyleValue)
 {
-      #if RNMBX_11
     layer.backgroundEmissiveStrengthTransition = styleValue.getTransition();
-      #endif
 }
 
 
@@ -3390,7 +3325,7 @@ func setSkyType(_ layer: inout SkyLayer, styleValue: RNMBXStyleValue)
 {
       
         
-          layer.skyType = styleValue.mglStyleValueEnum(); 
+          layer.skyType = styleValue.mglStyleValueEnum();
         
       
 }
@@ -3400,7 +3335,7 @@ func setSkyAtmosphereSun(_ layer: inout SkyLayer, styleValue: RNMBXStyleValue)
       
         
           layer.skyAtmosphereSun = styleValue.mglStyleValueArrayNumber();
-         
+        
       
 }
 
@@ -3418,7 +3353,7 @@ func setSkyGradientCenter(_ layer: inout SkyLayer, styleValue: RNMBXStyleValue)
       
         
           layer.skyGradientCenter = styleValue.mglStyleValueArrayNumber();
-         
+        
       
 }
 
@@ -3478,7 +3413,7 @@ func setAnchor(_ layer: inout Light, styleValue: RNMBXStyleValue)
 {
       
         
-          layer.anchor = styleValue.mglStyleValueAnchorRaw(); 
+          layer.anchor = styleValue.mglStyleValueAnchorRaw();
         
       
 }
@@ -3528,7 +3463,7 @@ func setRange(_ layer: inout Atmosphere, styleValue: RNMBXStyleValue)
       
         
           layer.range = styleValue.mglStyleValueArrayNumber();
-         
+        
       
 }
 
@@ -3609,20 +3544,16 @@ func setStarIntensityTransition(_ layer: inout Atmosphere, styleValue: RNMBXStyl
 
 func setVerticalRange(_ layer: inout Atmosphere, styleValue: RNMBXStyleValue)
 {
-      #if RNMBX_11
       
         
           layer.verticalRange = styleValue.mglStyleValueArrayNumber();
-         
+        
       
-      #endif
 }
 
 func setVerticalRangeTransition(_ layer: inout Atmosphere, styleValue: RNMBXStyleValue)
 {
-      #if RNMBX_11
     layer.verticalRangeTransition = styleValue.getTransition();
-      #endif
 }
 
 

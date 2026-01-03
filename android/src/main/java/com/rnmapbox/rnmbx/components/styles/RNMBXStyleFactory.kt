@@ -13,6 +13,7 @@ import com.mapbox.maps.extension.style.layers.generated.SkyLayer
 // import com.mapbox.maps.extension.style.layers.generated.PropertyFactory
 // import com.mapbox.maps.extension.style.layers.generated.PropertyValue
 import com.mapbox.maps.extension.style.layers.generated.RasterLayer
+import com.mapbox.maps.extension.style.layers.generated.RasterParticleLayer
 import com.mapbox.maps.extension.style.layers.generated.SymbolLayer
 import com.mapbox.maps.extension.style.layers.generated.HeatmapLayer
 import com.mapbox.maps.extension.style.layers.generated.HillshadeLayer
@@ -28,7 +29,6 @@ import com.rnmapbox.rnmbx.utils.DownloadMapImageTask.OnAllImagesLoaded
 import com.rnmapbox.rnmbx.utils.Logger
 
 import com.rnmapbox.rnmbx.v11compat.light.*;
-import com.rnmapbox.rnmbx.v11compat.layers.*;
 import com.rnmapbox.rnmbx.v11compat.stylefactory.*;
 
 import java.util.List;
@@ -699,6 +699,44 @@ object RNMBXStyleFactory {
                 setRasterElevation(layer, styleValue)
                 "rasterElevationTransition" ->
                 setRasterElevationTransition(layer, styleValue)
+          }
+        } catch (e: MapboxStyleException) {
+          Logger.e(LOG_TAG, "Failed to update: $styleKey ${e.message}")
+        }
+      }
+    }
+    fun setRasterParticleLayerStyle(layer: RasterParticleLayer, style: RNMBXStyle ) {
+      val styleKeys = style.allStyleKeys
+
+      if (styleKeys.isEmpty()) {
+        return
+      }
+
+      for (styleKey in styleKeys) {
+        try {
+          val styleValue = style.getStyleValueForKey(styleKey)
+
+          when (styleKey) {
+              "visibility" ->
+                setVisibility(layer, styleValue)
+              "rasterParticleArrayBand" ->
+                setRasterParticleArrayBand(layer, styleValue)
+              "rasterParticleCount" ->
+                setRasterParticleCount(layer, styleValue)
+              "rasterParticleColor" ->
+                setRasterParticleColor(layer, styleValue)
+              "rasterParticleMaxSpeed" ->
+                setRasterParticleMaxSpeed(layer, styleValue)
+              "rasterParticleSpeedFactor" ->
+                setRasterParticleSpeedFactor(layer, styleValue)
+                "rasterParticleSpeedFactorTransition" ->
+                setRasterParticleSpeedFactorTransition(layer, styleValue)
+              "rasterParticleFadeOpacityFactor" ->
+                setRasterParticleFadeOpacityFactor(layer, styleValue)
+                "rasterParticleFadeOpacityFactorTransition" ->
+                setRasterParticleFadeOpacityFactorTransition(layer, styleValue)
+              "rasterParticleResetRateFactor" ->
+                setRasterParticleResetRateFactor(layer, styleValue)
           }
         } catch (e: MapboxStyleException) {
           Logger.e(LOG_TAG, "Failed to update: $styleKey ${e.message}")
@@ -4352,6 +4390,147 @@ object RNMBXStyleFactory {
       val transition = styleValue.transition
       if (transition != null) {
         layer.rasterElevationTransition(transition);
+      }
+    }
+
+    fun setVisibility(layer: RasterParticleLayer, styleValue: RNMBXStyleValue ) {
+        layer.visibility(Visibility.valueOf(styleValue.getEnumName()));
+    }
+
+    fun setRasterParticleArrayBand(layer: RasterParticleLayer, styleValue: RNMBXStyleValue ) {
+      if (styleValue.isExpression()) {
+        val expression = styleValue.getExpression()
+        if (expression != null) {
+          layer.rasterParticleArrayBand(expression)
+        } else {
+          Logger.e("RNMBXRasterParticle", "Expression for rasterParticleArrayBand is null")
+        }
+      } else {
+          val value = styleValue.getString(VALUE_KEY)
+          if (value != null) {
+            layer.rasterParticleArrayBand(value)
+          } else {
+            Logger.e("RNMBXRasterParticle", "value for rasterParticleArrayBand is null")
+          }
+      }
+    }
+
+    fun setRasterParticleCount(layer: RasterParticleLayer, styleValue: RNMBXStyleValue ) {
+      if (styleValue.isExpression()) {
+        val expression = styleValue.getExpression()
+        if (expression != null) {
+          layer.rasterParticleCount(expression)
+        } else {
+          Logger.e("RNMBXRasterParticle", "Expression for rasterParticleCount is null")
+        }
+      } else {
+          val value = styleValue.getLong(VALUE_KEY)
+          if (value != null) {
+            layer.rasterParticleCount(value)
+          } else {
+            Logger.e("RNMBXRasterParticle", "value for rasterParticleCount is null")
+          }
+      }
+    }
+
+    fun setRasterParticleColor(layer: RasterParticleLayer, styleValue: RNMBXStyleValue ) {
+      if (styleValue.isExpression()) {
+        val expression = styleValue.getExpression()
+        if (expression != null) {
+          layer.rasterParticleColor(expression)
+        } else {
+          Logger.e("RNMBXRasterParticle", "Expression for rasterParticleColor is null")
+        }
+      } else {
+          layer.rasterParticleColor(styleValue.getIntExpression(VALUE_KEY))
+      }
+    }
+
+    fun setRasterParticleMaxSpeed(layer: RasterParticleLayer, styleValue: RNMBXStyleValue ) {
+      if (styleValue.isExpression()) {
+        val expression = styleValue.getExpression()
+        if (expression != null) {
+          layer.rasterParticleMaxSpeed(expression)
+        } else {
+          Logger.e("RNMBXRasterParticle", "Expression for rasterParticleMaxSpeed is null")
+        }
+      } else {
+          val value = styleValue.getDouble(VALUE_KEY)
+          if (value != null) {
+            layer.rasterParticleMaxSpeed(value)
+          } else {
+            Logger.e("RNMBXRasterParticle", "value for rasterParticleMaxSpeed is null")
+          }
+      }
+    }
+
+    fun setRasterParticleSpeedFactor(layer: RasterParticleLayer, styleValue: RNMBXStyleValue ) {
+      if (styleValue.isExpression()) {
+        val expression = styleValue.getExpression()
+        if (expression != null) {
+          layer.rasterParticleSpeedFactor(expression)
+        } else {
+          Logger.e("RNMBXRasterParticle", "Expression for rasterParticleSpeedFactor is null")
+        }
+      } else {
+          val value = styleValue.getDouble(VALUE_KEY)
+          if (value != null) {
+            layer.rasterParticleSpeedFactor(value)
+          } else {
+            Logger.e("RNMBXRasterParticle", "value for rasterParticleSpeedFactor is null")
+          }
+      }
+    }
+
+
+    fun setRasterParticleSpeedFactorTransition(layer: RasterParticleLayer, styleValue: RNMBXStyleValue) {
+      val transition = styleValue.transition
+      if (transition != null) {
+        layer.rasterParticleSpeedFactorTransition(transition);
+      }
+    }
+
+    fun setRasterParticleFadeOpacityFactor(layer: RasterParticleLayer, styleValue: RNMBXStyleValue ) {
+      if (styleValue.isExpression()) {
+        val expression = styleValue.getExpression()
+        if (expression != null) {
+          layer.rasterParticleFadeOpacityFactor(expression)
+        } else {
+          Logger.e("RNMBXRasterParticle", "Expression for rasterParticleFadeOpacityFactor is null")
+        }
+      } else {
+          val value = styleValue.getDouble(VALUE_KEY)
+          if (value != null) {
+            layer.rasterParticleFadeOpacityFactor(value)
+          } else {
+            Logger.e("RNMBXRasterParticle", "value for rasterParticleFadeOpacityFactor is null")
+          }
+      }
+    }
+
+
+    fun setRasterParticleFadeOpacityFactorTransition(layer: RasterParticleLayer, styleValue: RNMBXStyleValue) {
+      val transition = styleValue.transition
+      if (transition != null) {
+        layer.rasterParticleFadeOpacityFactorTransition(transition);
+      }
+    }
+
+    fun setRasterParticleResetRateFactor(layer: RasterParticleLayer, styleValue: RNMBXStyleValue ) {
+      if (styleValue.isExpression()) {
+        val expression = styleValue.getExpression()
+        if (expression != null) {
+          layer.rasterParticleResetRateFactor(expression)
+        } else {
+          Logger.e("RNMBXRasterParticle", "Expression for rasterParticleResetRateFactor is null")
+        }
+      } else {
+          val value = styleValue.getDouble(VALUE_KEY)
+          if (value != null) {
+            layer.rasterParticleResetRateFactor(value)
+          } else {
+            Logger.e("RNMBXRasterParticle", "value for rasterParticleResetRateFactor is null")
+          }
       }
     }
 

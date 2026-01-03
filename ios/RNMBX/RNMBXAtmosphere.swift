@@ -1,8 +1,6 @@
 import MapboxMaps
 
-#if RNMBX_11
 public typealias Style = StyleManager
-#endif
 
 @objc(RNMBXAtmosphere)
 public class RNMBXAtmosphere : RNMBXSingletonLayer, RNMBXMapComponent, RNMBXSourceConsumer {

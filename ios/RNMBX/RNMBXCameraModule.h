@@ -1,5 +1,6 @@
 #import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
+#import "RNMBXViewResolver.h"
 
 #ifdef RCT_NEW_ARCH_ENABLED
 #import "rnmapbox_maps_specs.h"
@@ -9,9 +10,9 @@
 
 @interface RNMBXCameraModule : NSObject
 #ifdef RCT_NEW_ARCH_ENABLED
-<NativeRNMBXCameraModuleSpec>
+<NativeRNMBXCameraModuleSpec, RNMBXViewResolverDelegate>
 #else
-<RCTBridgeModule>
+<RCTBridgeModule, RNMBXViewResolverDelegate>
 #endif
 
 @end
