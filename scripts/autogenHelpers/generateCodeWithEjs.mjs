@@ -331,6 +331,12 @@ const UnsupportedProperties = [
   'raster-particle-elevation', // should be supported in v11 11.7.0 but it's not yet implemented in SDK
 ];
 
+// Properties marked as private in the style-spec but supported by native SDKs
+const AllowedPrivateProperties = [
+  'line-border-width',
+  'line-border-color',
+];
+
 /**
  *
  * @param {string[]|undefined} only
@@ -340,7 +346,7 @@ function isAttrSupported(name, attr, only) {
     return false;
   }
   const support = getAttributeSupport(attr['sdk-support']);
-  if (attr.private === true) {
+  if (attr.private === true && !AllowedPrivateProperties.includes(name)) {
     return false;
   }
   if (only != null) {
