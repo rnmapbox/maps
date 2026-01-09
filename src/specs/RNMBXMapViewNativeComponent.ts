@@ -1,14 +1,8 @@
 import type { HostComponent, ViewProps } from 'react-native';
-import codegenNativeComponent from 'react-native/Libraries/Utilities/codegenNativeComponent';
-import {
-  BubblingEventHandler,
-  DirectEventHandler,
-  Int32,
-  Double,
-  // @ts-ignore - CI environment type resolution issue for CodegenTypes
-} from 'react-native/Libraries/Types/CodegenTypes';
+import { codegenNativeComponent } from 'react-native';
 
 import type { Point, UnsafeMixed } from './codegenUtils';
+import type { CodegenTypes } from 'react-native';
 
 // see https://github.com/rnmapbox/maps/wiki/FabricOptionalProp
 type OptionalProp<T> = UnsafeMixed<T>;
@@ -44,7 +38,7 @@ export interface NativeProps extends ViewProps {
   compassEnabled?: OptionalProp<boolean>;
   compassFadeWhenNorth?: OptionalProp<boolean>;
   compassPosition?: UnsafeMixed<any>;
-  compassViewPosition?: OptionalProp<Int32>;
+  compassViewPosition?: OptionalProp<CodegenTypes.Int32>;
   compassViewMargins?: OptionalProp<Point>;
 
   scaleBarEnabled?: OptionalProp<boolean>;
@@ -54,7 +48,7 @@ export interface NativeProps extends ViewProps {
   scrollEnabled?: OptionalProp<boolean>;
   rotateEnabled?: OptionalProp<boolean>;
   pitchEnabled?: OptionalProp<boolean>;
-  maxPitch?: OptionalProp<Double>;
+  maxPitch?: OptionalProp<CodegenTypes.Double>;
 
   deselectAnnotationOnTap?: OptionalProp<boolean>;
 
@@ -76,13 +70,13 @@ export interface NativeProps extends ViewProps {
   // iOS only
   compassImage?: OptionalProp<string>;
 
-  onPress?: BubblingEventHandler<OnPressEventType>;
-  onLongPress?: DirectEventHandler<OnPressEventType>;
-  onMapChange?: DirectEventHandler<OnMapChangeEventType>;
-  onCameraChanged?: DirectEventHandler<OnCameraChangedEventType>;
+  onPress?: CodegenTypes.BubblingEventHandler<OnPressEventType>;
+  onLongPress?: CodegenTypes.DirectEventHandler<OnPressEventType>;
+  onMapChange?: CodegenTypes.DirectEventHandler<OnMapChangeEventType>;
+  onCameraChanged?: CodegenTypes.DirectEventHandler<OnCameraChangedEventType>;
 
   mapViewImpl?: OptionalProp<string>;
-  preferredFramesPerSecond?: OptionalProp<Int32>;
+  preferredFramesPerSecond?: OptionalProp<CodegenTypes.Int32>;
 }
 
 // @ts-ignore-error - Codegen requires single cast but TypeScript prefers double cast
@@ -137,9 +131,9 @@ type OnMapChangeEventTypeActual = {
 
 export type NativeMapViewActual = HostComponent<
   Omit<NativeProps, 'onCameraChanged' | 'onLongPress' | 'onMapChange'> & {
-    onCameraChanged?: DirectEventHandler<OnCameraChangedEventTypeActual>;
-    onLongPress?: DirectEventHandler<OnPressEventTypeActual>;
-    onPress?: DirectEventHandler<OnPressEventTypeActual>;
-    onMapChange?: DirectEventHandler<OnMapChangeEventTypeActual>;
+    onCameraChanged?: CodegenTypes.DirectEventHandler<OnCameraChangedEventTypeActual>;
+    onLongPress?: CodegenTypes.DirectEventHandler<OnPressEventTypeActual>;
+    onPress?: CodegenTypes.DirectEventHandler<OnPressEventTypeActual>;
+    onMapChange?: CodegenTypes.DirectEventHandler<OnMapChangeEventTypeActual>;
   }
 >;
