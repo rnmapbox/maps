@@ -12,6 +12,11 @@ RCT_EXTERN_METHOD(initMBTilesSourceFromAsset:(NSString *)assetName
                  resolver:(RCTPromiseResolveBlock)resolve
                  rejecter:(RCTPromiseRejectBlock)reject)
 
+RCT_EXTERN_METHOD(initMBTilesSourceFromURL:(NSString *)urlString
+                 sourceId:(NSString *)sourceId
+                 resolver:(RCTPromiseResolveBlock)resolve
+                 rejecter:(RCTPromiseRejectBlock)reject)
+
 RCT_EXTERN_METHOD(getMBTilesURL:(NSString *)sourceId
                  resolver:(RCTPromiseResolveBlock)resolve
                  rejecter:(RCTPromiseRejectBlock)reject)

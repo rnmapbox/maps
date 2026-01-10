@@ -1,5 +1,6 @@
 package com.rnmapbox.rnmbx.utils
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.database.sqlite.SQLiteDatabase
 import android.util.Log
@@ -141,18 +142,72 @@ class MBTilesSource(filePath: String, sourceId: String? = null) {
     }
 
     companion object {
+        private val TAG = "MBTilesSource"
         val validRasterFormats = listOf("jpg", "png")
         val validVectorFormats = listOf("pbf", "mvt")
 
-        fun readAsset(context: Context, asset: String): String =
-            context.assets.open(asset).use { inputStream ->
-                val path = context.getDatabasePath(asset).path
-                val outputFile = File(path)
-                FileOutputStream(outputFile).use { outputStream ->
-                    inputStream.copyTo(outputStream)
-                    outputStream.flush()
-                }
-                return path
+        @SuppressLint("DiscouragedApi")
+        fun readAsset(context: Context, asset: String): String {
+            // Generate a safe filename for the output
+            val outputFileName = asset.replace("/", "_").let {
+                if (!it.endsWith(".mbtiles")) "$it.mbtiles" else it
             }
+            val outputFile = File(context.getDatabasePath(outputFileName).path)
+            
+            // Ensure parent directory exists
+            outputFile.parentFile?.mkdirs()
+
+            // First, try to find it as a raw resource (for require() bundled assets in release mode)
+            val rawResourceId: Int = context.resources.getIdentifier(
+                asset.replace("-", "_").replace(".", "_"),
+                "raw",
+                context.packageName
+            )
+
+            if (rawResourceId != 0) {
+                // Found as a raw resource (bundled via require() in release mode)
+                Log.d(TAG, "Found asset as raw resource: $asset (id: $rawResourceId)")
+                context.resources.openRawResource(rawResourceId).use { inputStream ->
+                    FileOutputStream(outputFile).use { outputStream ->
+                        inputStream.copyTo(outputStream)
+                        outputStream.flush()
+                    }
+                }
+                return outputFile.path
+            }
+
+            // Try drawable as fallback (some assets end up here)
+            val drawableResourceId: Int = context.resources.getIdentifier(
+                asset.replace("-", "_").replace(".", "_"),
+                "drawable",
+                context.packageName
+            )
+
+            if (drawableResourceId != 0) {
+                Log.d(TAG, "Found asset as drawable resource: $asset (id: $drawableResourceId)")
+                context.resources.openRawResource(drawableResourceId).use { inputStream ->
+                    FileOutputStream(outputFile).use { outputStream ->
+                        inputStream.copyTo(outputStream)
+                        outputStream.flush()
+                    }
+                }
+                return outputFile.path
+            }
+
+            // Fall back to assets folder (for manually placed assets)
+            return try {
+                Log.d(TAG, "Trying to load asset from assets folder: $asset")
+                context.assets.open(asset).use { inputStream ->
+                    FileOutputStream(outputFile).use { outputStream ->
+                        inputStream.copyTo(outputStream)
+                        outputStream.flush()
+                    }
+                    outputFile.path
+                }
+            } catch (e: Exception) {
+                Log.e(TAG, "Failed to load asset: $asset - ${e.localizedMessage}")
+                throw MBTilesSourceException.CouldNotReadFileException()
+            }
+        }
     }
 }

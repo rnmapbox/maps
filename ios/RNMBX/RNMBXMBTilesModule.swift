@@ -102,6 +102,84 @@ class RNMBXMBTilesModule: NSObject {
     }
 
     /**
+     * Initialize an MBTiles source from a remote URL (downloads first)
+     */
+    @objc
+    func initMBTilesSourceFromURL(
+        _ urlString: String, sourceId: String, resolver: @escaping RCTPromiseResolveBlock,
+        rejecter: @escaping RCTPromiseRejectBlock
+    ) {
+        guard let url = URL(string: urlString) else {
+            rejecter("INVALID_URL", "Invalid URL: \(urlString)", nil)
+            return
+        }
+
+        // Generate a filename from the URL or sourceId
+        let fileName = sourceId.isEmpty
+            ? url.lastPathComponent
+            : "\(sourceId).mbtiles"
+
+        // Get the destination path in the documents directory
+        let documentsDirectory = NSSearchPathForDirectoriesInDomains(
+            .documentDirectory, .userDomainMask, true)[0]
+        let destinationPath = "\(documentsDirectory)/\(fileName)"
+
+        // Download the file
+        let task = URLSession.shared.downloadTask(with: url) { [weak self] tempURL, response, error in
+            guard let self = self else { return }
+
+            if let error = error {
+                rejecter("DOWNLOAD_ERROR", "Failed to download MBTiles file: \(error.localizedDescription)", nil)
+                return
+            }
+
+            guard let tempURL = tempURL else {
+                rejecter("DOWNLOAD_ERROR", "No data received from URL", nil)
+                return
+            }
+
+            do {
+                // Remove existing file if it exists
+                let fileManager = FileManager.default
+                if fileManager.fileExists(atPath: destinationPath) {
+                    try fileManager.removeItem(atPath: destinationPath)
+                }
+
+                // Move the downloaded file to the destination
+                try fileManager.moveItem(at: tempURL, to: URL(fileURLWithPath: destinationPath))
+
+                // Create and activate the MBTiles source
+                let mbSource = try MBTilesSource(
+                    filePath: destinationPath, sourceId: sourceId.isEmpty ? nil : sourceId)
+                mbSource.activate()
+                self.activeSources[mbSource.id] = mbSource
+
+                // Return source information
+                let resultDict: [String: Any] = [
+                    "id": mbSource.id,
+                    "url": mbSource.url,
+                    "isVector": mbSource.isVector,
+                    "format": mbSource.format,
+                    "minZoom": mbSource.minZoom as Any,
+                    "maxZoom": mbSource.maxZoom as Any,
+                ]
+
+                resolver(resultDict)
+            } catch MBTilesSourceError.couldNotReadFile {
+                rejecter("ERROR_READING_FILE", "Could not read the downloaded MBTiles file", nil)
+            } catch MBTilesSourceError.unsupportedFormat {
+                rejecter("UNSUPPORTED_FORMAT", "MBTiles format is not supported", nil)
+            } catch {
+                rejecter(
+                    "UNKNOWN_ERROR",
+                    "Error initializing MBTiles source from URL: \(error.localizedDescription)", nil)
+            }
+        }
+
+        task.resume()
+    }
+
+    /**
      * Get the HTTP URL for an active MBTiles source to use in style json
      */
     @objc

@@ -1,41 +1,25 @@
-import React, { useState, useEffect } from 'react';
-import {
-  View,
-  StyleSheet,
-  Text,
-  ActivityIndicator,
-  Button,
-  Platform,
-} from 'react-native';
+import { useState, useEffect } from 'react';
+import { View, StyleSheet, Text } from 'react-native';
 import Mapbox, {
   MapView,
   Camera,
-  StyleURL,
   VectorSource,
   FillLayer,
 } from '@rnmapbox/maps';
 import MBTiles, { MBTilesSource } from '../../../../src/modules/MBTiles';
 import type { ExampleWithMetadata } from '../common/ExampleMetadata';
-import RNFS from 'react-native-fs';
 
-//https://gist.github.com/typebrook/7d25be326f0e9afd58e0bbc333d2a175#file-mbtilessource-kt-L31-L34
+// Use require() to load the MBTiles file - works in both debug and release mode
+// In debug: Metro serves it over HTTP, which is downloaded automatically
+// In release: The file is bundled with the app as an asset
+const MBTILES_SOURCE = require('../../assets/ubombo.mbtiles');
 
 /**
  * Example demonstrating how to use MBTiles files with the map
  */
-const mbtilesPath =
-  Platform.OS === 'android'
-    ? `file:///${RNFS.DocumentDirectoryPath}/ubombo.mbtiles`
-    : `file://${RNFS.LibraryDirectoryPath}/ubombo.mbtiles`;
-
-console.log(RNFS.LibraryDirectoryPath);
-
 const MBTilesExample = () => {
   const [source, setSource] = useState<MBTilesSource | null>(null);
-
-  // This would be the path to your MBTiles file
-  // For a real app, you might want to use ReactNative's DocumentPicker
-  // to let users select their own MBTiles files
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     // Clean up the MBTiles source when unmounting
@@ -47,24 +31,33 @@ const MBTilesExample = () => {
     };
   }, [source]);
 
+  const handleStyleLoaded = async () => {
+    try {
+      console.log('Style loaded, initializing MBTiles');
+
+      // Initialize using the new unified init() method
+      // This handles require(), file paths, assets, and URLs automatically
+      const mbtilesSource = await MBTiles.init(
+        MBTILES_SOURCE,
+        'mbtiles-source',
+      );
+
+      console.log('MBTiles source initialized:', mbtilesSource);
+      setSource(mbtilesSource);
+    } catch (err) {
+      console.error('Failed to initialize MBTiles:', err);
+      setError(err instanceof Error ? err.message : 'Unknown error');
+    }
+  };
+
   return (
     <View style={styles.container}>
       <MapView
         style={styles.map}
         styleURL={Mapbox.StyleURL.Dark}
-        onDidFinishLoadingStyle={async () => {
-          console.log('Style loaded, initializing MBTiles');
-          const source = await MBTiles.initFromFile(
-            mbtilesPath,
-            'mbtiles-source',
-          );
-          setSource(source);
-        }}
+        onDidFinishLoadingStyle={handleStyleLoaded}
       >
         <Camera
-          // zoomLevel={minZoom}
-          // minZoomLevel={minZoom}
-          // maxZoomLevel={maxZoom || 16}
           animationMode="none"
           centerCoordinate={[31.9, -26.6]} // Approximate center for Ubombo region
         />
@@ -82,7 +75,19 @@ const MBTilesExample = () => {
       </MapView>
 
       <View style={styles.infoPanel}>
-        <Text style={styles.infoText}>Using MBTiles file: {mbtilesPath}</Text>
+        {error ? (
+          <Text style={styles.errorText}>Error: {error}</Text>
+        ) : source ? (
+          <>
+            <Text style={styles.infoText}>Source ID: {source.id}</Text>
+            <Text style={styles.infoText}>Format: {source.format}</Text>
+            <Text style={styles.infoText}>
+              Vector: {source.isVector ? 'Yes' : 'No'}
+            </Text>
+          </>
+        ) : (
+          <Text style={styles.infoText}>Loading MBTiles...</Text>
+        )}
       </View>
     </View>
   );
@@ -98,15 +103,9 @@ const styles = StyleSheet.create({
     flex: 1,
     width: '100%',
   },
-  text: {
-    marginTop: 10,
-    fontSize: 16,
-    textAlign: 'center',
-  },
   errorText: {
-    fontSize: 16,
+    fontSize: 14,
     color: 'red',
-    marginBottom: 10,
     textAlign: 'center',
   },
   infoText: {
@@ -124,9 +123,6 @@ const styles = StyleSheet.create({
     margin: 10,
     width: '90%',
   },
-  loader: {
-    marginTop: 5,
-  },
 });
 
 export default MBTilesExample;
@@ -136,11 +132,27 @@ const metadata: ExampleWithMetadata['metadata'] = {
   tags: ['MBTiles', 'Offline'],
   docs: `This example demonstrates how to use local MBTiles files with the map.
 
-It shows loading a vector MBTiles file from the device storage and displaying it on top of a base map.
+## Usage
 
-The MBTiles file is served through a local HTTP server that runs on the device.
+The simplest way to load an MBTiles file is using require():
 
-Note: This example requires an Android device and a valid MBTiles file at the specified path.`,
+\`\`\`typescript
+import MBTiles from '@rnmapbox/maps/src/modules/MBTiles';
+
+// Load from bundled asset (works in debug and release)
+const source = await MBTiles.init(require('./assets/map.mbtiles'));
+
+// Or load from a file path
+const source = await MBTiles.init({ filePath: 'file:///path/to/map.mbtiles' });
+
+// Or load from app bundle asset
+const source = await MBTiles.init({ asset: 'map.mbtiles' });
+
+// Or download from a URL
+const source = await MBTiles.init({ url: 'https://example.com/map.mbtiles' });
+\`\`\`
+
+The MBTiles file is served through a local HTTP server that runs on the device.`,
 };
 
 MBTilesExample.metadata = metadata;

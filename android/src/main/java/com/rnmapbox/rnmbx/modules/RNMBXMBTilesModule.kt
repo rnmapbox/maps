@@ -103,6 +103,66 @@ class RNMBXMBTilesModule(private val reactContext: ReactApplicationContext) :
     }
 
     /**
+     * Initialize an MBTiles source from a remote URL (downloads first)
+     */
+    @ReactMethod
+    fun initMBTilesSourceFromURL(urlString: String, sourceId: String, promise: Promise) {
+        Thread {
+            try {
+                val url = java.net.URL(urlString)
+
+                // Generate a filename from the URL or sourceId
+                val fileName = if (sourceId.isEmpty()) {
+                    url.path.substringAfterLast("/")
+                } else {
+                    "$sourceId.mbtiles"
+                }
+
+                // Get the destination path
+                val destinationFile = File(reactContext.filesDir, fileName)
+
+                // Download the file
+                url.openStream().use { input ->
+                    java.io.FileOutputStream(destinationFile).use { output ->
+                        input.copyTo(output)
+                    }
+                }
+
+                // Create and activate the MBTiles source
+                val effectiveSourceId = if (sourceId.isEmpty()) {
+                    fileName.substringBefore(".")
+                } else {
+                    sourceId
+                }
+                val mbSource = MBTilesSource(destinationFile.absolutePath, effectiveSourceId).apply { activate() }
+                activeSources[effectiveSourceId] = mbSource
+
+                // Return source information
+                val resultMap = Arguments.createMap().apply {
+                    putString("id", mbSource.id)
+                    putString("url", mbSource.url)
+                    putBoolean("isVector", mbSource.isVector)
+                    putString("format", mbSource.format)
+                    mbSource.minZoom?.let { putDouble("minZoom", it.toDouble()) }
+                    mbSource.maxZoom?.let { putDouble("maxZoom", it.toDouble()) }
+                }
+                promise.resolve(resultMap)
+
+            } catch (e: MBTilesSourceException.CouldNotReadFileException) {
+                promise.reject("ERROR_READING_FILE", "Could not read the downloaded MBTiles file")
+            } catch (e: MBTilesSourceException.UnsupportedFormatException) {
+                promise.reject("UNSUPPORTED_FORMAT", "MBTiles format is not supported")
+            } catch (e: java.net.MalformedURLException) {
+                promise.reject("INVALID_URL", "Invalid URL: $urlString")
+            } catch (e: java.io.IOException) {
+                promise.reject("DOWNLOAD_ERROR", "Failed to download MBTiles file: ${e.localizedMessage}")
+            } catch (e: Exception) {
+                promise.reject("UNKNOWN_ERROR", "Error initializing MBTiles source from URL: ${e.localizedMessage}")
+            }
+        }.start()
+    }
+
+    /**
      * Get the HTTP URL for an active MBTiles source to use in style json
      */
     @ReactMethod
