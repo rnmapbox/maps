@@ -153,7 +153,7 @@ class MBTilesSource(filePath: String, sourceId: String? = null) {
                 if (!it.endsWith(".mbtiles")) "$it.mbtiles" else it
             }
             val outputFile = File(context.getDatabasePath(outputFileName).path)
-            
+
             // Ensure parent directory exists
             outputFile.parentFile?.mkdirs()
 
@@ -195,19 +195,14 @@ class MBTilesSource(filePath: String, sourceId: String? = null) {
             }
 
             // Fall back to assets folder (for manually placed assets)
-            return try {
-                Log.d(TAG, "Trying to load asset from assets folder: $asset")
-                context.assets.open(asset).use { inputStream ->
-                    FileOutputStream(outputFile).use { outputStream ->
-                        inputStream.copyTo(outputStream)
-                        outputStream.flush()
-                    }
-                    outputFile.path
+            Log.d(TAG, "Trying to load asset from assets folder: $asset")
+            context.assets.open(asset).use { inputStream ->
+                FileOutputStream(outputFile).use { outputStream ->
+                    inputStream.copyTo(outputStream)
+                    outputStream.flush()
                 }
-            } catch (e: Exception) {
-                Log.e(TAG, "Failed to load asset: $asset - ${e.localizedMessage}")
-                throw MBTilesSourceException.CouldNotReadFileException()
             }
+            return outputFile.path
         }
     }
 }

@@ -21,9 +21,18 @@ class RNMBXMBTilesModule: NSObject {
     ) {
         // Handle file URL paths if provided
         var resolvedPath = filePath
-        if filePath.starts(with: "file://") {
-            resolvedPath = filePath.replacingOccurrences(of: "file://", with: "")
+        
+        // Remove file:// prefix
+        if resolvedPath.starts(with: "file://") {
+            resolvedPath = resolvedPath.replacingOccurrences(of: "file://", with: "")
         }
+        
+        // Decode URL encoding (e.g., %20 -> space)
+        if let decodedPath = resolvedPath.removingPercentEncoding {
+            resolvedPath = decodedPath
+        }
+        
+        RNMBXLogInfo("MBTiles: Attempting to load from path: \(resolvedPath)")
 
         // Check if file exists
         let fileManager = FileManager.default

@@ -407,30 +407,30 @@ public class MBTilesSource: MBTileProvider {
     // Read an asset from the bundle
     public static func readAsset(name: String) throws -> String {
         var bundlePath: String? = nil
-        
+
         RNMBXLogInfo("MBTiles: Attempting to load asset: \(name)")
-        
+
         // Try different strategies to find the asset
         // 1. Try with the name as-is (might include extension)
         bundlePath = Bundle.main.path(forResource: name, ofType: nil)
-        
+
         // 2. Try with .mbtiles extension explicitly
         if bundlePath == nil {
             bundlePath = Bundle.main.path(forResource: name, ofType: "mbtiles")
         }
-        
+
         // 3. Try without extension and add .mbtiles
         if bundlePath == nil {
             let nameWithoutExt = (name as NSString).deletingPathExtension
             bundlePath = Bundle.main.path(forResource: nameWithoutExt, ofType: "mbtiles")
         }
-        
+
         // 4. Try with underscores replaced (React Native asset naming convention)
         if bundlePath == nil {
             let underscoreName = name.replacingOccurrences(of: "-", with: "_")
             bundlePath = Bundle.main.path(forResource: underscoreName, ofType: "mbtiles")
         }
-        
+
         // 5. For require() bundled assets, they might use assets_ prefix
         // Try looking with the assets_ prefix stripped
         if bundlePath == nil {
@@ -438,25 +438,25 @@ public class MBTilesSource: MBTileProvider {
                 .replacingOccurrences(of: "_", with: "-")
             bundlePath = Bundle.main.path(forResource: assetName, ofType: "mbtiles")
         }
-        
+
         // 6. Try the original name with underscores converted to find ubombo1 style names
         if bundlePath == nil {
             // assets_ubombo1 -> ubombo1
             let cleanName = name.replacingOccurrences(of: "assets_", with: "")
             bundlePath = Bundle.main.path(forResource: cleanName, ofType: "mbtiles")
         }
-        
+
         guard let resolvedPath = bundlePath else {
             RNMBXLogError("MBTiles: Could not find asset: \(name) in bundle")
             throw MBTilesSourceError.couldNotReadFile
         }
-        
+
         RNMBXLogInfo("MBTiles: Found asset at: \(resolvedPath)")
 
         // Create directory if needed
         let documentsDirectory = NSSearchPathForDirectoriesInDomains(
             .documentDirectory, .userDomainMask, true)[0]
-        
+
         // Generate a safe output filename
         let outputFileName = name.replacingOccurrences(of: "/", with: "_")
             .appending(name.hasSuffix(".mbtiles") ? "" : ".mbtiles")
@@ -469,14 +469,9 @@ public class MBTilesSource: MBTileProvider {
         }
 
         // Copy file from bundle to documents directory
-        do {
-            try fileManager.copyItem(atPath: resolvedPath, toPath: destinationPath)
-            RNMBXLogInfo("MBTiles: Copied asset to: \(destinationPath)")
-            return destinationPath
-        } catch {
-            RNMBXLogError("MBTiles: Failed to copy asset to documents: \(error.localizedDescription)")
-            throw MBTilesSourceError.couldNotReadFile
-        }
+        try fileManager.copyItem(atPath: resolvedPath, toPath: destinationPath)
+        RNMBXLogInfo("MBTiles: Copied asset to: \(destinationPath)")
+        return destinationPath
     }
 
     public static let validRasterFormats = ["jpg", "png"]
