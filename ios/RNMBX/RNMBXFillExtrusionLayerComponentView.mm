@@ -1,4 +1,3 @@
-#ifdef RCT_NEW_ARCH_ENABLED
 
 #import "RNMBXFillExtrusionLayerComponentView.h"
 #import "RNMBXFabricHelpers.h"
@@ -74,4 +73,3 @@ Class<RCTComponentViewProtocol> RNMBXFillExtrusionLayerCls(void)
   return RNMBXFillExtrusionLayerComponentView.class;
 }
 
-#endif // RCT_NEW_ARCH_ENABLED

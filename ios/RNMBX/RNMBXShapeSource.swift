@@ -364,6 +364,65 @@ extension RNMBXShapeSource
       }
     }
   }
+
+  @objc public func getClusterChildren(
+    featureJSON: String,
+    resolver: @escaping RCTPromiseResolveBlock,
+    rejecter: @escaping RCTPromiseRejectBlock
+  ) {
+    getClusterChildren(featureJSON) { result in
+      switch result {
+      case .success(let features):
+        logged("getClusterChildren", rejecter: rejecter) {
+          let featuresJSON: Any = try features.features.toJSON()
+          resolver([
+            "data": ["type": "FeatureCollection", "features": featuresJSON]
+          ])
+        }
+      case .failure(let error):
+        rejecter(error.localizedDescription, "Error.getClusterChildren", error)
+      }
+    }
+  }
+
+  @objc public func getClusterLeaves(
+    featureJSON: String,
+    number: uint,
+    offset: uint,
+    resolver: @escaping RCTPromiseResolveBlock,
+    rejecter: @escaping RCTPromiseRejectBlock
+  ) {
+    getClusterLeaves(featureJSON, number: number, offset: offset) { result in
+      switch result {
+      case .success(let features):
+        logged("getClusterLeaves", rejecter: rejecter) {
+          let featuresJSON: Any = try features.features.toJSON()
+          resolver([
+            "data": ["type": "FeatureCollection", "features": featuresJSON]
+          ])
+        }
+      case .failure(let error):
+        rejecter(error.localizedDescription, "Error.getClusterLeaves", error)
+      }
+    }
+  }
+
+  @objc public func getClusterExpansionZoom(
+    featureJSON: String,
+    resolver: @escaping RCTPromiseResolveBlock,
+    rejecter: @escaping RCTPromiseRejectBlock
+  ) {
+    getClusterExpansionZoom(featureJSON) { result in
+      switch result {
+      case .success(let zoom):
+        resolver([
+          "data": NSNumber(value: zoom)
+        ])
+      case .failure(let error):
+        rejecter(error.localizedDescription, "Error.getClusterExpansionZoom", error)
+      }
+    }
+  }
 }
 
 // MARK: shape animation

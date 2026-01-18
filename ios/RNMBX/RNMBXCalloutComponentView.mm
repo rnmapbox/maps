@@ -1,4 +1,3 @@
-#ifdef RCT_NEW_ARCH_ENABLED
 
 #import "RNMBXCalloutComponentView.h"
 #import "RNMBXFabricHelpers.h"
@@ -60,4 +59,3 @@ Class<RCTComponentViewProtocol> RNMBXCalloutCls(void)
   return RNMBXCalloutComponentView.class;
 }
 
-#endif // RCT_NEW_ARCH_ENABLED

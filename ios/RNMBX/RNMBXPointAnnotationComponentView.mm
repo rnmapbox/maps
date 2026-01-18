@@ -1,4 +1,3 @@
-#ifdef RCT_NEW_ARCH_ENABLED
 
 #import "RNMBXPointAnnotationComponentView.h"
 #import "RNMBXFabricHelpers.h"
@@ -142,4 +141,3 @@ Class<RCTComponentViewProtocol> RNMBXPointAnnotationCls(void)
   return RNMBXPointAnnotationComponentView.class;
 }
 
-#endif // RCT_NEW_ARCH_ENABLED
