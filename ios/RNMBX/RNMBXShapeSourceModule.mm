@@ -37,21 +37,21 @@ RCT_EXPORT_MODULE();
 RCT_EXPORT_METHOD(getClusterChildren:(nonnull NSNumber *)viewRef featureJSON:(NSString *)featureJSON resolve:(RCTPromiseResolveBlock)resolve reject:(RCTPromiseRejectBlock)reject)
 {
     [self withShapeSource:viewRef block:^(RNMBXShapeSource *view) {
-        [RNMBXShapeSourceViewManager getClusterChildrenWithShapeSource:view featureJSON:featureJSON resolver:resolve rejecter:reject];
+        [view getClusterChildrenWithFeatureJSON:featureJSON resolver:resolve rejecter:reject];
     } reject:reject methodName:@"getClusterChildren"];
 }
-  
+
 RCT_EXPORT_METHOD(getClusterLeaves:(nonnull NSNumber *)viewRef featureJSON:(NSString *)featureJSON number:(NSInteger)number offset:(NSInteger)offset resolve:(RCTPromiseResolveBlock)resolve reject:(RCTPromiseRejectBlock)reject)
 {
  [self withShapeSource:viewRef block:^(RNMBXShapeSource *view) {
-     [RNMBXShapeSourceViewManager getClusterLeavesWithShapeSource:view featureJSON:featureJSON number:number offset:offset resolver:resolve rejecter:reject];
+     [view getClusterLeavesWithFeatureJSON:featureJSON number:number offset:offset resolver:resolve rejecter:reject];
  } reject:reject methodName:@"getClusterLeaves"];
 }
-     
+
 RCT_EXPORT_METHOD(getClusterExpansionZoom:(nonnull NSNumber *)viewRef featureJSON:(NSString *)featureJSON resolve:(RCTPromiseResolveBlock)resolve reject:(RCTPromiseRejectBlock)reject)
 {
  [self withShapeSource:viewRef block:^(RNMBXShapeSource *view) {
-     [RNMBXShapeSourceViewManager getClusterExpansionZoomWithShapeSource:view featureJSON:featureJSON resolver:resolve rejecter:reject];
+     [view getClusterExpansionZoomWithFeatureJSON:featureJSON resolver:resolve rejecter:reject];
  } reject:reject methodName:@"getClusterExpansionZoom"];
 }
 

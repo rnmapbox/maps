@@ -44,7 +44,7 @@ RCT_EXPORT_METHOD(getState:(nonnull NSNumber *)viewRef
                    reject:(RCTPromiseRejectBlock)reject)
 {
     [self withViewport:viewRef block:^(RNMBXViewport *view) {
-        [RNMBXViewportManager getState:view resolve:resolve reject:reject];
+        resolve([view getState]);
     } reject:reject methodName:@"getState"];
 }
      
@@ -53,7 +53,8 @@ RCT_EXPORT_METHOD(idle:(nonnull NSNumber *)viewRef
                     reject:(RCTPromiseRejectBlock)reject)
 {
    [self withViewport:viewRef block:^(RNMBXViewport *view) {
-       [RNMBXViewportManager idle:view resolve:resolve reject:reject];
+       [view idle];
+       resolve(nil);
    } reject:reject methodName:@"idle"];
 }
 
@@ -64,9 +65,8 @@ RCT_EXPORT_METHOD(transitionTo:(nonnull NSNumber *)viewRef
                   reject:(RCTPromiseRejectBlock)reject)
 {
   [self withViewport:viewRef block:^(RNMBXViewport *view) {
-      [RNMBXViewportManager transitionTo:view state:state transition:transition
-        resolve:resolve reject:reject];
-  } reject:reject methodName:@"idle"];
+    [view transitionToState:state transition:transition resolve:resolve];
+  } reject:reject methodName:@"transitionTo"];
 }
 
 @end
