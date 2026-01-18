@@ -1,3 +1,4 @@
+#ifdef __cplusplus
 
 #import <UIKit/UIKit.h>
 
@@ -13,4 +14,4 @@ NS_ASSUME_NONNULL_BEGIN
 @end
 
 NS_ASSUME_NONNULL_END
-
+#endif // __cplusplus
