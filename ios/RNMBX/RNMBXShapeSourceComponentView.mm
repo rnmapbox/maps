@@ -1,4 +1,3 @@
-#ifdef RCT_NEW_ARCH_ENABLED
 
 #import "RNMBXShapeSourceComponentView.h"
 #import "RNMBXFabricHelpers.h"
@@ -119,4 +118,3 @@ Class<RCTComponentViewProtocol> RNMBXShapeSourceCls(void)
   return RNMBXShapeSourceComponentView.class;
 }
 
-#endif // RCT_NEW_ARCH_ENABLED

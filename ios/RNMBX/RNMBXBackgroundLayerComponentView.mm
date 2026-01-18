@@ -1,4 +1,3 @@
-#ifdef RCT_NEW_ARCH_ENABLED
 
 #import "RNMBXBackgroundLayerComponentView.h"
 #import "RNMBXFabricHelpers.h"
@@ -74,4 +73,3 @@ Class<RCTComponentViewProtocol> RNMBXBackgroundLayerCls(void)
   return RNMBXBackgroundLayerComponentView.class;
 }
 
-#endif // RCT_NEW_ARCH_ENABLED

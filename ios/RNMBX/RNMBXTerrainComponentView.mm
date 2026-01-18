@@ -1,4 +1,3 @@
-#ifdef RCT_NEW_ARCH_ENABLED
 
 #import "RNMBXTerrainComponentView.h"
 #import "RNMBXFabricHelpers.h"
@@ -81,4 +80,3 @@ Class<RCTComponentViewProtocol> RNMBXTerrainCls(void)
   return RNMBXTerrainComponentView.class;
 }
 
-#endif // RCT_NEW_ARCH_ENABLED

@@ -1,5 +1,3 @@
-#ifdef RCT_NEW_ARCH_ENABLED
-
 #if __has_include(<react/utils/FollyConvert.h>)
   // static libs / header maps (no use_frameworks!)
   #import <react/utils/FollyConvert.h>
@@ -10,6 +8,4 @@
   #import "RCTFollyConvert.h"
 #else
   #error "FollyConvert.h not found. Ensure React-utils & RCT-Folly pods are installed."
-#endif
-
 #endif
