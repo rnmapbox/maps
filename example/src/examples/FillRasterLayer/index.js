@@ -8,6 +8,7 @@ export { default as QuerySourceFeatures } from './QuerySourceFeatures';
 export { default as QueryWithRect } from './QueryWithRect';
 export { default as RasterSource } from './RasterSource';
 export { default as WatercolorRasterTiles } from './WatercolorRasterTiles';
+export { default as HillshadeSource } from './HillshadeSource';
 
 export const metadata = {
   title: 'Fill/Raster Layer',

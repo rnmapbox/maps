@@ -711,6 +711,19 @@
       },
       {
         "metadata": {
+          "title": "Hillshade Layer",
+          "tags": [
+            "RasterDemSource",
+            "HillshadeLayer"
+          ],
+          "docs": "Renders terrain hillshading from a raster-dem source."
+        },
+        "fullPath": "example/src/examples/FillRasterLayer/HillshadeSource.tsx",
+        "relPath": "FillRasterLayer/HillshadeSource.tsx",
+        "name": "HillshadeSource"
+      },
+      {
+        "metadata": {
           "title": "Image Overlay",
           "tags": [
             "RasterLayer",
