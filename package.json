@@ -222,6 +222,9 @@
         "RNMBXHeatmapLayer": {
           "className": "RNMBXHeatmapLayerComponentView"
         },
+        "RNMBXHillshadeLayer": {
+          "className": "RNMBXHillshadeLayerComponentView"
+        },
         "RNMBXImage": {
           "className": "RNMBXImageComponentView"
         },
@@ -306,6 +309,7 @@
         "RNMBXFillExtrusionLayer": "RNMBXFillExtrusionLayerComponentView",
         "RNMBXFillLayer": "RNMBXFillLayerComponentView",
         "RNMBXHeatmapLayer": "RNMBXHeatmapLayerComponentView",
+        "RNMBXHillshadeLayer": "RNMBXHillshadeLayerComponentView",
         "RNMBXImage": "RNMBXImageComponentView",
         "RNMBXImageSource": "RNMBXImageSourceComponentView",
         "RNMBXImages": "RNMBXImagesComponentView",
