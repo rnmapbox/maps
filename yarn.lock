@@ -4809,7 +4809,7 @@ __metadata:
     babel-plugin-module-resolver: ^5.0.2
     babel-plugin-react-compiler: ^1.0.0
     debounce: ^2.2.0
-    detox: ^20.40.2
+    detox: ^20.47.0
     eslint: ^8.19.0
     eslint-plugin-react-hooks: latest
     expo: ~54.0.10
@@ -8658,9 +8658,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"detox@npm:^20.40.2":
-  version: 20.42.0
-  resolution: "detox@npm:20.42.0"
+"detox@npm:^20.47.0":
+  version: 20.47.0
+  resolution: "detox@npm:20.47.0"
   dependencies:
     "@wix-pilot/core": ^3.4.2
     "@wix-pilot/detox": ^1.0.13
@@ -8706,7 +8706,7 @@ __metadata:
       optional: true
   bin:
     detox: local-cli/cli.js
-  checksum: 9f76a028610b04a62f7f212579494294a1a5bafe5a17014a275e1c8f4eaa172b66f9877d3888546a4c73a02692327cf4c27e3742cdb7806ba0201eacb29f3863
+  checksum: 2063a66b7fcf915859a554395a5d6ad92d479a62f749b9fe4ba8daba8ccab6ea0a5a4ba6902a2b64704360535545b07e2d671e000653cb03b26636532d59e9d8
   languageName: node
   linkType: hard
 
