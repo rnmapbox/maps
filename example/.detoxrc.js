@@ -9,14 +9,14 @@ module.exports = {
     ios: {
       type: 'ios.app',
       build:
-        "xcodebuild -quiet -workspace ios/RNMapboxExample.xcworkspace -configuration Release -scheme RNMapboxExample -sdk iphonesimulator -derivedDataPath ios/build -destination 'platform=iOS Simulator,OS=16.4,name=iPhone SE (3rd generation)'",
+        "xcodebuild -quiet -workspace ios/RNMapboxExample.xcworkspace -configuration Release -scheme RNMapboxExample -sdk iphonesimulator -derivedDataPath ios/build -destination 'generic/platform=iOS Simulator'",
       binaryPath:
         'ios/build/Build/Products/Release-iphonesimulator/RNMapboxExample.app',
     },
     'ios.debug': {
       type: 'ios.app',
       build:
-        "FORCE_BUNDLING=1 xcodebuild -quiet -workspace ios/RNMapboxExample.xcworkspace -configuration Debug -scheme RNMapboxExample DISABLE_MANUAL_TARGET_ORDER_BUILD_WARNING=1 GCC_PREPROCESSOR_DEFINITIONS='$GCC_PREPROCESSOR_DEFINITIONS DEBUG_RCT_BUNDLE=1' -sdk iphonesimulator -derivedDataPath ios/build -destination 'platform=iOS Simulator,OS=16.4,name=iPhone SE (3rd generation)'",
+        "FORCE_BUNDLING=1 xcodebuild -quiet -workspace ios/RNMapboxExample.xcworkspace -configuration Debug -scheme RNMapboxExample DISABLE_MANUAL_TARGET_ORDER_BUILD_WARNING=1 GCC_PREPROCESSOR_DEFINITIONS='$GCC_PREPROCESSOR_DEFINITIONS DEBUG_RCT_BUNDLE=1' -sdk iphonesimulator -derivedDataPath ios/build -destination 'generic/platform=iOS Simulator'",
       binaryPath:
         'ios/build/Build/Products/Debug-iphonesimulator/RNMapboxExample.app',
     },
@@ -32,8 +32,7 @@ module.exports = {
     simulator: {
       type: 'ios.simulator',
       device: {
-        type: 'iPhone 14 Pro',
-        os: '16.4',
+        type: 'iPhone 16',
       },
     },
     'simulator.ci': {
