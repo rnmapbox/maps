@@ -31,6 +31,7 @@ import com.rnmapbox.rnmbx.components.styles.layers.RNMBXCircleLayerManager
 import com.rnmapbox.rnmbx.components.styles.layers.RNMBXFillExtrusionLayerManager
 import com.rnmapbox.rnmbx.components.styles.layers.RNMBXFillLayerManager
 import com.rnmapbox.rnmbx.components.styles.layers.RNMBXHeatmapLayerManager
+import com.rnmapbox.rnmbx.components.styles.layers.RNMBXHillshadeLayerManager
 import com.rnmapbox.rnmbx.components.styles.layers.RNMBXLineLayerManager
 import com.rnmapbox.rnmbx.components.styles.layers.RNMBXModelLayerManager
 import com.rnmapbox.rnmbx.components.styles.layers.RNMBXRasterLayerManager
@@ -161,6 +162,7 @@ class RNMBXPackage : TurboReactPackage() {
         managers.add(RNMBXCircleLayerManager())
         managers.add(RNMBXSymbolLayerManager())
         managers.add(RNMBXRasterLayerManager())
+        managers.add(RNMBXHillshadeLayerManager())
         if (RNMBXRasterParticleLayerManager.isImplemented) {
             managers.add(RNMBXRasterParticleLayerManager())
         }

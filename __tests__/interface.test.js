@@ -40,6 +40,7 @@ describe('Public Interface', () => {
       'BackgroundLayer',
       'RasterLayer',
       'RasterParticleLayer',
+      'HillshadeLayer',
       'SkyLayer',
       'Terrain',
       'Atmosphere',

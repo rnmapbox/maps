@@ -40,6 +40,7 @@ export { default as ModelLayer } from './components/ModelLayer';
 export { SymbolLayer } from './components/SymbolLayer';
 export { default as RasterLayer } from './components/RasterLayer';
 export { default as RasterParticleLayer } from './components/RasterParticleLayer';
+export { default as HillshadeLayer } from './components/HillshadeLayer';
 export { default as BackgroundLayer } from './components/BackgroundLayer';
 export { default as CustomLocationProvider } from './components/CustomLocationProvider';
 export { Terrain } from './components/Terrain';
