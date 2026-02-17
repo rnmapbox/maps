@@ -73,7 +73,7 @@ public class RNMBXHillshadeLayer: RNMBXLayer {
         styler.hillshadeLayer(
           layer: &styleLayer,
           reactStyle: reactStyle,
-          oldReactStyle: oldReatStyle,
+          oldReactStyle: oldReactStyle,
           applyUpdater:{ (updater) in logged("RNMBXHillshadeLayer.updateLayer") {
             try style.updateLayer(withId: self.id, type: LayerType.self) { (layer: inout LayerType) in updater(&layer) }
           }},
