@@ -1,7 +1,7 @@
 import { memo } from 'react';
 
 import RNMBXCustomLocationProvider from '../specs/RNMBXCustomLocationProviderNativeComponent';
-import { Position } from '../types/Position';
+import { type Position } from '../types/Position';
 
 export type Props = {
   /**

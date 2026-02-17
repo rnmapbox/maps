@@ -1,21 +1,21 @@
 import { CheckBox, Divider, Slider, Button } from '@rneui/base';
 import {
   Camera,
-  CameraAnimationMode,
-  CameraBounds,
+  type CameraAnimationMode,
+  type CameraBounds,
   CircleLayer,
   Logger,
   MapView,
   ShapeSource,
 } from '@rnmapbox/maps';
 import bbox from '@turf/bbox';
-import { Feature, Point, Position } from 'geojson';
+import { type Feature, type Point, type Position } from 'geojson';
 import { useCallback, useMemo, useState } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import colors from '../../styles/colors';
-import { ExampleWithMetadata } from '../common/ExampleMetadata'; // exclude-from-doc
+import { type ExampleWithMetadata } from '../common/ExampleMetadata'; // exclude-from-doc
 
 Logger.setLogLevel('verbose');
 

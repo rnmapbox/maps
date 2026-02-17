@@ -1,10 +1,10 @@
 import React from 'react';
-import { NativeModules, NativeSyntheticEvent } from 'react-native';
+import { NativeModules, type NativeSyntheticEvent } from 'react-native';
 
 import RNMBXVectorSourceNativeComponent from '../specs/RNMBXVectorSourceNativeComponent';
 import { cloneReactChildrenWithProps, isFunction } from '../utils';
 import { copyPropertiesAsDeprecated } from '../utils/deprecation';
-import { OnPressEvent } from '../types/OnPressEvent';
+import { type OnPressEvent } from '../types/OnPressEvent';
 
 import AbstractSource from './AbstractSource';
 

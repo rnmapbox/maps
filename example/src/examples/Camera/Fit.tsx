@@ -4,7 +4,7 @@ import isEqual from 'lodash.isequal';
 import { MapView, Camera, StyleURL, type CameraBounds } from '@rnmapbox/maps';
 
 import sheet from '../../styles/sheet';
-import { ExampleWithMetadata } from '../common/ExampleMetadata'; // exclude-from-doc
+import { type ExampleWithMetadata } from '../common/ExampleMetadata'; // exclude-from-doc
 
 // Assertion function to ensure camera is not null
 function assertCameraNotNull(camera: Camera | null): asserts camera is Camera {

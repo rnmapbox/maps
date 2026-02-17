@@ -1,10 +1,15 @@
 import { MapView, Camera, Images } from '@rnmapbox/maps';
 import { useState } from 'react';
-import { Button, ImageSourcePropType, StyleSheet, Text } from 'react-native';
+import {
+  Button,
+  type ImageSourcePropType,
+  StyleSheet,
+  Text,
+} from 'react-native';
 import { Divider } from '@rneui/base';
 
 import Bubble from '../common/Bubble';
-import { ExampleWithMetadata } from '../common/ExampleMetadata'; // exclude-from-doc
+import { type ExampleWithMetadata } from '../common/ExampleMetadata'; // exclude-from-doc
 
 type CompassImage = 'compass1' | 'compass2';
 const images: Record<CompassImage, ImageSourcePropType> = {

@@ -5,7 +5,7 @@ import type {
   FilterExpression,
   CircleLayerStyleProps,
 } from '../utils/MapboxStyles';
-import { StyleValue } from '../utils/StyleValue';
+import { type StyleValue } from '../utils/StyleValue';
 import RNMBXCircleLayerNativeComponent from '../specs/RNMBXCircleLayerNativeComponent';
 
 import AbstractLayer from './AbstractLayer';

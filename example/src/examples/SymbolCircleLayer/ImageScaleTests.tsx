@@ -6,8 +6,8 @@ import {
   Camera,
   CircleLayer,
 } from '@rnmapbox/maps';
-import { ComponentProps } from 'react';
-import { View, Image, Text, ImageSourcePropType } from 'react-native';
+import { type ComponentProps } from 'react';
+import { View, Image, Text, type ImageSourcePropType } from 'react-native';
 
 const styles = {
   mapView: { flex: 1 },

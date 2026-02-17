@@ -10,7 +10,7 @@ import {
   VectorSource,
 } from '@rnmapbox/maps';
 
-import { ExampleWithMetadata } from '../common/ExampleMetadata';
+import { type ExampleWithMetadata } from '../common/ExampleMetadata';
 
 const packName = 'map-with-3d-terrain-pack';
 const STYLE_URL = 'mapbox://styles/mapbox/satellite-streets-v11';

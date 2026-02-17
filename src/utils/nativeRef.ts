@@ -1,4 +1,4 @@
-import { RefObject, type Component, type MutableRefObject } from 'react';
+import { type RefObject, type Component, type MutableRefObject } from 'react';
 import { type NativeMethods, type HostComponent } from 'react-native';
 
 /**
