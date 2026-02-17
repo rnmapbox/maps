@@ -716,7 +716,8 @@
             "RasterLayer",
             "ImageSource"
           ],
-          "docs": ""
+          "docs": "",
+          "disableSync": true
         },
         "fullPath": "example/src/examples/FillRasterLayer/ImageOverlay.js",
         "relPath": "FillRasterLayer/ImageOverlay.js",

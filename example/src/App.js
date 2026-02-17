@@ -1,6 +1,6 @@
 import React from 'react';
 import Mapbox from '@rnmapbox/maps';
-import { StyleSheet, Text, View, LogBox } from 'react-native';
+import { StyleSheet, Text, View } from 'react-native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { NavigationContainer } from '@react-navigation/native';
 import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
@@ -12,11 +12,6 @@ import config from './utils/config';
 import { Group, Item } from './scenes/GroupAndItem';
 import { ScreenWithoutMap } from './scenes/ScreenWithoutMap';
 import MapInModal from './examples/Map/MapInModal';
-
-LogBox.ignoreLogs([
-  'Warning: isMounted(...) is deprecated',
-  'Module RCTImageLoader',
-]);
 
 const styles = StyleSheet.create({
   noPermissionsText: {
