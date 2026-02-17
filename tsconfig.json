@@ -27,8 +27,7 @@
     "skipLibCheck": true,
     "strict": true,
     "target": "ESNext",
-    // TODO: Re-enable verbatimModuleSyntax and fix type-only imports (217 errors)
-    // "verbatimModuleSyntax": true
+    "verbatimModuleSyntax": true
   },
   "exclude": [
     "**/*.codepart.ts"
