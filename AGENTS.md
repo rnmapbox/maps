@@ -127,6 +127,11 @@ RCT_NEW_ARCH_ENABLED=1 pod update MapboxMaps
 - Example app serves as integration testing ground
 - Use `yarn test` before committing
 
+### E2E / Doc Screenshots (Detox)
+- Detox tests in `example/e2e/docScreenshots.e2e.js` capture screenshots of every example for documentation
+- Examples with JS timers or animations that block Detox sync should set `disableSync: true` in their metadata
+- See CONTRIBUTING.md for build and run instructions
+
 ### Documentation
 - Component docs are auto-generated from JSDoc comments
 - Don't edit `.md` files in `docs/` directly - edit source files and run `yarn generate`
