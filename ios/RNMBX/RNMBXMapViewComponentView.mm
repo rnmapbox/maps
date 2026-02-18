@@ -120,6 +120,9 @@ using namespace facebook::react;
 }
 
 - (void)dispatchCameraChangedEvent:(NSDictionary*)event {
+    if (self->_eventEmitter == nullptr) {
+        return;
+    }
     const auto [type, json] = RNMBXStringifyEventData(event);
     std::dynamic_pointer_cast<const facebook::react::RNMBXMapViewEventEmitter>(self->_eventEmitter)->onCameraChanged({type, json});
 }
