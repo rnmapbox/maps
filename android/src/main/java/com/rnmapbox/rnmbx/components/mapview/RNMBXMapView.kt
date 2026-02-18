@@ -733,7 +733,6 @@ open class RNMBXMapView(private val mContext: Context, var mManager: RNMBXMapVie
         }
         val screenPointPx = mMap?.pixelForCoordinate(point)
         if (screenPointPx != null) {
-            /** Android Mapbox SDK returns screen coordinates in physical pixels, while JS expects density-independent pixels. */
             val screenPointDp = toDp(screenPointPx)
             val event = MapClickEvent(_this, LatLng(point), screenPointDp, EventTypes.MAP_LONG_CLICK)
             mManager.handleEvent(event)
@@ -935,7 +934,6 @@ open class RNMBXMapView(private val mContext: Context, var mManager: RNMBXMapVie
     }
 
     fun getCoordinateFromView(pointDp: ScreenCoordinate, response: CommandResponse) {
-        /** Android Mapbox SDK expects screen coordinates expressed as physical pixels, while JS specifies them as density-independent pixels. */
         val pointPx = toPx(pointDp)
 
         val coordinate = mMap!!.coordinateForPixel(pointPx)
@@ -946,7 +944,6 @@ open class RNMBXMapView(private val mContext: Context, var mManager: RNMBXMapVie
     }
 
     fun getPointInView(coordinates: Point, response: CommandResponse) {
-        /** Android Mapbox SDK returns screen coordinates in physical pixels, while JS expects density-independent pixels. */
         val pointDp = toDp(mMap!!.pixelForCoordinate(coordinates))
 
         response.success {
@@ -963,7 +960,6 @@ open class RNMBXMapView(private val mContext: Context, var mManager: RNMBXMapVie
             return
         }
 
-        /** Android Mapbox SDK expects screen coordinates expressed as physical pixels, while JS specifies them as density-independent pixels. */
         val pointPx = toPx(pointDp)
         val queryGeometry = RenderedQueryGeometry(pointPx)
         val layers = layerIDs?.takeUnless { it.isEmpty() } ?: null
@@ -986,7 +982,6 @@ open class RNMBXMapView(private val mContext: Context, var mManager: RNMBXMapVie
     fun queryRenderedFeaturesInRect(rectDp: ScreenBox?, filter: Expression?, layerIDs: List<String>?, response: CommandResponse) {
         val size = mMap.getMapOptions().size
 
-        /** Android Mapbox SDK expects screen coordinates expressed as physical pixels, while JS specifies them as density-independent pixels. */
         val rectPx: ScreenBox =
             rectDp?.let { toPx(it) }
                 ?: ScreenBox(
