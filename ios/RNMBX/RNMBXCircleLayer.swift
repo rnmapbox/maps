@@ -80,7 +80,7 @@ public class RNMBXCircleLayer: RNMBXVectorLayer {
         styler.circleLayer(
           layer: &styleLayer,
           reactStyle: reactStyle,
-          oldReactStyle: oldReatStyle,
+          oldReactStyle: oldReactStyle,
           applyUpdater: { (updater) in logged("RNMBXCircleLayer.updateLayer") {
             try style.updateLayer(withId: self.id, type: LayerType.self) { (layer: inout LayerType) in updater(&layer) }
           }},
