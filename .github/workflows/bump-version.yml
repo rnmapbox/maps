@@ -14,10 +14,11 @@ on:
         # Input has to be provided for the workflow to run
         required: true
         type: choice
-        options: 
+        options:
         - patch
         - minor
         - major
+        - preminor --preid=beta
         - prerelease --preid=beta
         - prerelease --preid=rc
 
