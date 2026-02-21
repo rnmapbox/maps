@@ -66,23 +66,6 @@ It's possible to overwrite the native SDK version with `RNMapboxMapsVersion`:
 }
 ```
 
-To use V11 just set the version to a 11 version, see [the ios guide](/ios/install.md):
-
-```json
-{
-  "expo": {
-    "plugins": [
-      [
-        "@rnmapbox/maps",
-        {
-          "RNMapboxMapsVersion": "11.18.2"
-        }
-      ]
-    ]
-  }
-}
-```
-
 ## Manual Setup
 
 For bare workflow projects, you can follow the manual setup guides:
