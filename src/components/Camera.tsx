@@ -9,7 +9,7 @@ import React, {
 } from 'react';
 import { NativeModules } from 'react-native';
 
-import { MapboxGLEvent } from '../types';
+import { type MapboxGLEvent } from '../types';
 import { type Position } from '../types/Position';
 import { makeLatLngBounds, makePoint } from '../utils/geoUtils';
 import { type NativeRefType } from '../utils/nativeRef';

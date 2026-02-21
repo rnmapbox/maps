@@ -1,11 +1,11 @@
-import React, { ReactElement } from 'react';
+import React, { type ReactElement } from 'react';
 import { Animated as RNAnimated, Easing } from 'react-native';
-import { Point } from 'geojson';
+import { type Point } from 'geojson';
 
 import Animated from '../utils/animated/Animated';
 import { AnimatedPoint } from '../classes';
-import { OnPressEvent } from '../types/OnPressEvent';
-import { SymbolLayerStyle } from '../Mapbox';
+import { type OnPressEvent } from '../types/OnPressEvent';
+import { type SymbolLayerStyle } from '../Mapbox';
 
 import { SymbolLayer } from './SymbolLayer';
 

@@ -1,4 +1,4 @@
-import React, { JSX } from 'react';
+import React, { type JSX } from 'react';
 import { View, NativeModules } from 'react-native';
 
 import type {
