@@ -175,6 +175,14 @@ object RNMBXStyleFactory {
                 setLineGradient(layer, styleValue)
               "lineTrimOffset" ->
                 setLineTrimOffset(layer, styleValue)
+              "lineBorderWidth" ->
+                setLineBorderWidth(layer, styleValue)
+                "lineBorderWidthTransition" ->
+                setLineBorderWidthTransition(layer, styleValue)
+              "lineBorderColor" ->
+                setLineBorderColor(layer, styleValue)
+                "lineBorderColorTransition" ->
+                setLineBorderColorTransition(layer, styleValue)
               "lineZOffset" ->
                 setLineZOffset(layer, styleValue)
               "lineElevationReference" ->
@@ -1616,6 +1624,58 @@ object RNMBXStyleFactory {
           } else {
             Logger.e("RNMBXLine", "value for lineTrimOffset is null")
           }
+      }
+    }
+
+    fun setLineBorderWidth(layer: LineLayer, styleValue: RNMBXStyleValue ) {
+      if (styleValue.isExpression()) {
+        val expression = styleValue.getExpression()
+        if (expression != null) {
+          layer.lineBorderWidth(expression)
+        } else {
+          Logger.e("RNMBXLine", "Expression for lineBorderWidth is null")
+        }
+      } else {
+          val value = styleValue.getDouble(VALUE_KEY)
+          if (value != null) {
+            layer.lineBorderWidth(value)
+          } else {
+            Logger.e("RNMBXLine", "value for lineBorderWidth is null")
+          }
+      }
+    }
+
+
+    fun setLineBorderWidthTransition(layer: LineLayer, styleValue: RNMBXStyleValue) {
+      val transition = styleValue.transition
+      if (transition != null) {
+        layer.lineBorderWidthTransition(transition);
+      }
+    }
+
+    fun setLineBorderColor(layer: LineLayer, styleValue: RNMBXStyleValue ) {
+      if (styleValue.isExpression()) {
+        val expression = styleValue.getExpression()
+        if (expression != null) {
+          layer.lineBorderColor(expression)
+        } else {
+          Logger.e("RNMBXLine", "Expression for lineBorderColor is null")
+        }
+      } else {
+          val value = styleValue.getInt(VALUE_KEY)
+          if (value != null) {
+            layer.lineBorderColor(value)
+          } else {
+            Logger.e("RNMBXLine", "value for lineBorderColor is null")
+          }
+      }
+    }
+
+
+    fun setLineBorderColorTransition(layer: LineLayer, styleValue: RNMBXStyleValue) {
+      val transition = styleValue.transition
+      if (transition != null) {
+        layer.lineBorderColorTransition(transition);
       }
     }
 
