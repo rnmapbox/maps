@@ -62,7 +62,7 @@ compatibility; the root `padding` prop should be used instead.
 ```tsx
 number
 ```
-The heading (orientation) of the map.
+Heading (bearing, orientation) of the map, measured in degrees clockwise from true north.
 
 
   
@@ -71,7 +71,7 @@ The heading (orientation) of the map.
 ```tsx
 number
 ```
-The pitch of the map.
+The pitch toward the horizon measured in degrees, with 0 degrees resulting in a top-down view for a two-dimensional map.
 
 
   
@@ -212,8 +212,8 @@ type DefaultSettings = {
   centerCoordinate: Position; /* The location on which the map should center. */
   bounds: intersection; /* The corners of a box around which the map should bound. Contains padding props for backwards
 compatibility; the root `padding` prop should be used instead. */
-  heading: number; /* The heading (orientation) of the map. */
-  pitch: number; /* The pitch of the map. */
+  heading: number; /* Heading (bearing, orientation) of the map, measured in degrees clockwise from true north. */
+  pitch: number; /* The pitch toward the horizon measured in degrees, with 0 degrees resulting in a top-down view for a two-dimensional map. */
   zoomLevel: number; /* The zoom level of the map. */
   padding: signature; /* The viewport padding in points. */
   animationDuration: number; /* The duration the map takes to animate to a new configuration. */

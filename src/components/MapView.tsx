@@ -65,6 +65,11 @@ export type RegionPayload = {
   pitch: number;
 };
 
+export type ScreenPointPayload = {
+  readonly screenPointX: number;
+  readonly screenPointY: number;
+};
+
 export type GestureSettings = {
   /**
    * Whether double tapping the map with one touch results in a zoom-in animation.
@@ -312,14 +317,18 @@ type Props = ViewProps & {
   gestureSettings?: GestureSettings;
 
   /**
-   * Map press listener, gets called when a user presses the map
+   * Map press listener, called when a user presses the map.
    */
-  onPress?: (feature: GeoJSON.Feature) => void;
+  onPress?: (
+    feature: GeoJSON.Feature<GeoJSON.Point, ScreenPointPayload>,
+  ) => void;
 
   /**
-   * Map long press listener, gets called when a user long presses the map
+   * Map long press listener, called when a user long presses the map.
    */
-  onLongPress?: (feature: GeoJSON.Feature) => void;
+  onLongPress?: (
+    feature: GeoJSON.Feature<GeoJSON.Point, ScreenPointPayload>,
+  ) => void;
 
   /**
    * <v10 only
@@ -470,7 +479,7 @@ const CallbablePropKeys = [
   'onCameraChanged',
 ] as const;
 
-type CallbablePropKeys = (typeof CallbablePropKeys)[number];
+type CallbablePropKeys = typeof CallbablePropKeys[number];
 
 type CallbablePropKeysWithoutOn = CallbablePropKeys extends `on${infer C}`
   ? C
@@ -671,13 +680,15 @@ class MapView extends NativeBridgeComponent(
   }
 
   /**
-   * Converts a geographic coordinate to a point in the given view’s coordinate system.
+   * Converts a geographic coordinate to a screen coordinate relative to the map view.
    *
    * @example
-   * const pointInView = await this._map.getPointInView([-37.817070, 144.949901]);
+   * const longitude = 144.949901;
+   * const latitude = -37.817070;
+   * const [x, y] = await this._map.getPointInView([longitude, latitude]);
    *
-   * @param {Array<number>} coordinate - A point expressed in the map view's coordinate system.
-   * @return {Array}
+   * @param {Position} coordinate - A point expressed in the map view's coordinate system `[longitude, latitude]`.
+   * @return {Position} A point expressed in screen coordinates relative to the map view `[x, y]`.
    */
   async getPointInView(coordinate: Position): Promise<Position> {
     const res = await this._runNative<{ pointInView: Position }>(
@@ -688,13 +699,14 @@ class MapView extends NativeBridgeComponent(
   }
 
   /**
-   * Converts a point in the given view’s coordinate system to a geographic coordinate.
+   * Converts a screen coordinate relative to the map view to a geographic coordinate.
    *
    * @example
-   * const coordinate = await this._map.getCoordinateFromView([100, 100]);
+   * const x = 100; const y = 100;
+   * const [longitude, latitude] = await this._map.getCoordinateFromView([x, y]);
    *
-   * @param {Array<number>} point - A point expressed in the given view’s coordinate system.
-   * @return {Array}
+   * @param {Position} point - A point expressed in screen coordinates relative to the map view `[x, y]`.
+   * @return {Position} A point expressed in the map view's coordinate system `[longitude, latitude]`.
    */
   async getCoordinateFromView(point: Position): Promise<Position> {
     const res = await this._runNative<{ coordinateFromView: Position }>(
@@ -705,12 +717,12 @@ class MapView extends NativeBridgeComponent(
   }
 
   /**
-   * The coordinate bounds (ne, sw) visible in the user’s viewport.
+   * The coordinate bounds of the map viewport.
    *
    * @example
-   * const visibleBounds = await this._map.getVisibleBounds();
+   * const [[rightLon, topLat], [leftLon, bottomLat]] = await this._map.getVisibleBounds();
    *
-   * @return {Array}
+   * @return {[Position, Position]} The geographic coordinate bounds of the map viewport `[[rightLon, topLat], [leftLon, bottomLat]]`.
    */
   async getVisibleBounds(): Promise<[Position, Position]> {
     const res = await this._runNative<{ visibleBounds: [Position, Position] }>(
@@ -723,12 +735,13 @@ class MapView extends NativeBridgeComponent(
    * Returns an array of rendered map features that intersect with a given point.
    *
    * @example
-   * this._map.queryRenderedFeaturesAtPoint([30, 40], ['==', 'type', 'Point'], ['id1', 'id2'])
+   * const x = 30; const y = 40;
+   * this._map.queryRenderedFeaturesAtPoint([x, y], ['==', 'type', 'Point'], ['id1', 'id2'])
    *
-   * @param  {Array<Number>} coordinate - A point expressed in the map view’s coordinate system.
-   * @param  {Array=} filter - A set of strings that correspond to the names of layers defined in the current style. Only the features contained in these layers are included in the returned array.
-   * @param  {Array=} layerIDs - A array of layer id's to filter the features by
-   * @return {FeatureCollection}
+   * @param  {Position} coordinate - A point expressed in the map view’s coordinate system `[x, y]`;
+   * @param  {FilterExpression | []} filter - A set of strings that correspond to the names of layers defined in the current style. Only the features contained in these layers are included in the returned array.
+   * @param  {string[]} layerIDs - A array of layer IDs by which to filter the features.
+   * @return {FeatureCollection}  A GeoJSON feature collection containing the query results.
    */
 
   async queryRenderedFeaturesAtPoint(
@@ -758,12 +771,14 @@ class MapView extends NativeBridgeComponent(
    * passing an empty array will query the entire visible bounds of the map.
    *
    * @example
-   * this._map.queryRenderedFeaturesInRect([30, 40, 20, 10], ['==', 'type', 'Point'], ['id1', 'id2'])
+   * const left = 40; const top = 30;
+   * const right = 10; const bottom = 20;
+   * this._map.queryRenderedFeaturesInRect([top, left, bottom, right], ['==', 'type', 'Point'], ['id1', 'id2'])
    *
-   * @param  {Array<Number>} bbox - A rectangle expressed in the map view’s coordinate system, density independent pixels and not map coordinates. This can be an empty array to query the visible map area.
-   * @param  {Array=} filter - A set of strings that correspond to the names of layers defined in the current style. Only the features contained in these layers are included in the returned array.
-   * @param  {Array=} layerIDs -  A array of layer id's to filter the features by
-   * @return {FeatureCollection}
+   * @param  {BBox | []} bbox - A rectangle expressed in density-independent screen coordinates relative to the map view `[top, left, bottom, right]` or `[minY, minX, maxY, maxX]` (not geographic coordinates). An empty array queries the visible map area.
+   * @param  {FilterExpression} filter - An array of strings that correspond to the names of layers defined in the current style. Only the features contained in these layers are included in the returned array.
+   * @param  {string[] | null} layerIDs -  A array of layer IDs by which to filter the features.
+   * @return {FeatureCollection} A GeoJSON feature collection containing the query results.
    */
   async queryRenderedFeaturesInRect(
     bbox: BBox | [],
@@ -786,7 +801,7 @@ class MapView extends NativeBridgeComponent(
       return res.data;
     } else {
       throw new Error(
-        'Must pass in a valid bounding box: [top, right, bottom, left]. An empty array [] is also acceptable in v10.',
+        'Must pass in a valid bounding box: [top, left, bottom, right]. An empty array [] is also acceptable in v10.',
       );
     }
   }
@@ -798,9 +813,9 @@ class MapView extends NativeBridgeComponent(
    * this._map.querySourceFeatures('your-source-id', [], ['your-source-layer'])
    *
    * @param  {String} sourceId - Style source identifier used to query for source features.
-   * @param  {Array=} filter - A filter to limit query results.
-   * @param  {Array=} sourceLayerIDs - The name of the source layers to query. For vector tile sources, this parameter is required. For GeoJSON sources, it is ignored.
-   * @return {FeatureCollection}
+   * @param  {FilterExpression | []} filter - A filter to limit query results.
+   * @param  {string[]} sourceLayerIDs - The name of the source layers to query. For vector tile sources, this parameter is required. For GeoJSON sources, it is ignored.
+   * @return {FeatureCollection} A GeoJSON feature collection.
    */
   async querySourceFeatures(
     sourceId: string,
@@ -844,9 +859,11 @@ class MapView extends NativeBridgeComponent(
   }
 
   /**
-   * Takes snapshot of map with current tiles and returns a URI to the image
-   * @param  {Boolean} writeToDisk If true will create a temp file, otherwise it is in base64
-   * @return {String}
+   * Takes snapshot of map with current tiles and returns a Base64-encoded PNG image,
+   * or an file-system URI to a temporary PNG file if `writeToDisk` is `true`.
+   *
+   * @param  {boolean} writeToDisk If `true`, creates a temporary PNG file and returns a file-system URI, otherwise returns a Base64-encoded PNG image. (Defaults to `false`)
+   * @return {string} A a Base64-encoded PNG image or a file-system URI to a temporary PNG file.
    */
   async takeSnap(writeToDisk = false): Promise<string> {
     const res = await this._runNative<{ uri: string }>('takeSnap', [
@@ -861,7 +878,7 @@ class MapView extends NativeBridgeComponent(
    * @example
    * const zoom = await this._map.getZoom();
    *
-   * @return {Number}
+   * @return {number} The current zoom of the map view.
    */
 
   async getZoom(): Promise<number> {
@@ -870,12 +887,12 @@ class MapView extends NativeBridgeComponent(
   }
 
   /**
-   * Returns the map's geographical centerpoint
+   * Returns the map's center point expressed as geographic coordinates `[longitude, latitude]`.
    *
    * @example
    * const center = await this._map.getCenter();
    *
-   * @return {Array<Number>} Coordinates
+   * @return {Position} The map's center point expressed as geographic coordinates `[longitude, latitude]`.
    */
   async getCenter(): Promise<Position> {
     const res = await this._runNative<{ center: Position }>('getCenter');
@@ -905,8 +922,8 @@ class MapView extends NativeBridgeComponent(
    * The elevation is returned in meters relative to mean sea-level.
    * Returns null if terrain is disabled or if terrain data for the location hasn't been loaded yet.
    *
-   * @param {Array<Number>} coordinate - the coordinates to query elevation at
-   * @return {Number}
+   * @param {Position} coordinate - The geographic coordinates `[longitude, latitude]` at which to query elevation.
+   * @return {number} Elevation in meters relative to mean sea-level.
    */
   async queryTerrainElevation(coordinate: Position): Promise<number> {
     const res = await this._runNative<{ data: number }>(
@@ -923,8 +940,8 @@ class MapView extends NativeBridgeComponent(
    * await this._map.setSourceVisibility(false, 'composite', 'building')
    *
    * @param {boolean} visible - Visibility of the layers
-   * @param {String} sourceId - Identifier of the target source (e.g. 'composite')
-   * @param {String=} sourceLayerId - Identifier of the target source-layer (e.g. 'building')
+   * @param {string} sourceId - Target source identifier (e.g. 'composite')
+   * @param {string | null} sourceLayerId - Target source-layer identifier (e.g. 'building'). If `null`, the change affects all layers in the target source.
    */
   setSourceVisibility(
     visible: boolean,
@@ -1036,13 +1053,21 @@ class MapView extends NativeBridgeComponent(
     }
   }
 
-  _onPress(e: NativeSyntheticEvent<{ payload: GeoJSON.Feature | string }>) {
+  _onPress(
+    e: NativeSyntheticEvent<{
+      payload: GeoJSON.Feature<GeoJSON.Point, ScreenPointPayload> | string;
+    }>,
+  ) {
     if (isFunction(this.props.onPress)) {
       this.props.onPress(this._decodePayload(e.nativeEvent.payload));
     }
   }
 
-  _onLongPress(e: NativeSyntheticEvent<{ payload: GeoJSON.Feature | string }>) {
+  _onLongPress(
+    e: NativeSyntheticEvent<{
+      payload: GeoJSON.Feature<GeoJSON.Point, ScreenPointPayload> | string;
+    }>,
+  ) {
     if (isFunction(this.props.onLongPress)) {
       this.props.onLongPress(this._decodePayload(e.nativeEvent.payload));
     }

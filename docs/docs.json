@@ -756,14 +756,14 @@
         "required": false,
         "type": "number",
         "default": "none",
-        "description": "The heading (orientation) of the map."
+        "description": "Heading (bearing, orientation) of the map, measured in degrees clockwise from true north."
       },
       {
         "name": "pitch",
         "required": false,
         "type": "number",
         "default": "none",
-        "description": "The pitch of the map."
+        "description": "The pitch toward the horizon measured in degrees, with 0 degrees resulting in a top-down view for a two-dimensional map."
       },
       {
         "name": "zoomLevel",
@@ -938,14 +938,14 @@
               "required": false,
               "type": "number",
               "default": "none",
-              "description": "The heading (orientation) of the map."
+              "description": "Heading (bearing, orientation) of the map, measured in degrees clockwise from true north."
             },
             {
               "name": "pitch",
               "required": false,
               "type": "number",
               "default": "none",
-              "description": "The pitch of the map."
+              "description": "The pitch toward the horizon measured in degrees, with 0 degrees resulting in a top-down view for a two-dimensional map."
             },
             {
               "name": "zoomLevel",
@@ -4491,14 +4491,14 @@
     "methods": [
       {
         "name": "getPointInView",
-        "docblock": "Converts a geographic coordinate to a point in the given view’s coordinate system.\n\n@example\nconst pointInView = await this._map.getPointInView([-37.817070, 144.949901]);\n\n@param {Array<number>} coordinate - A point expressed in the map view's coordinate system.\n@return {Array}",
+        "docblock": "Converts a geographic coordinate to a screen coordinate relative to the map view.\n\n@example\nconst longitude = 144.949901;\nconst latitude = -37.817070;\nconst [x, y] = await this._map.getPointInView([longitude, latitude]);\n\n@param {Position} coordinate - A point expressed in the map view's coordinate system `[longitude, latitude]`.\n@return {Position} A point expressed in screen coordinates relative to the map view `[x, y]`.",
         "modifiers": [
           "async"
         ],
         "params": [
           {
             "name": "coordinate",
-            "description": "A point expressed in the map view's coordinate system.",
+            "description": "A point expressed in the map view's coordinate system `[longitude, latitude]`.",
             "type": {
               "name": "Position"
             },
@@ -4506,6 +4506,7 @@
           }
         ],
         "returns": {
+          "description": "A point expressed in screen coordinates relative to the map view `[x, y]`.",
           "type": {
             "name": "Promise",
             "elements": [
@@ -4516,21 +4517,21 @@
             "raw": "Promise<Position>"
           }
         },
-        "description": "Converts a geographic coordinate to a point in the given view’s coordinate system.",
+        "description": "Converts a geographic coordinate to a screen coordinate relative to the map view.",
         "examples": [
-          "\nconst pointInView = await this._map.getPointInView([-37.817070, 144.949901]);\n\n"
+          "\nconst longitude = 144.949901;\nconst latitude = -37.817070;\nconst [x, y] = await this._map.getPointInView([longitude, latitude]);\n\n"
         ]
       },
       {
         "name": "getCoordinateFromView",
-        "docblock": "Converts a point in the given view’s coordinate system to a geographic coordinate.\n\n@example\nconst coordinate = await this._map.getCoordinateFromView([100, 100]);\n\n@param {Array<number>} point - A point expressed in the given view’s coordinate system.\n@return {Array}",
+        "docblock": "Converts a screen coordinate relative to the map view to a geographic coordinate.\n\n@example\nconst x = 100; const y = 100;\nconst [longitude, latitude] = await this._map.getCoordinateFromView([x, y]);\n\n@param {Position} point - A point expressed in screen coordinates relative to the map view `[x, y]`.\n@return {Position} A point expressed in the map view's coordinate system `[longitude, latitude]`.",
         "modifiers": [
           "async"
         ],
         "params": [
           {
             "name": "point",
-            "description": "A point expressed in the given view’s coordinate system.",
+            "description": "A point expressed in screen coordinates relative to the map view `[x, y]`.",
             "type": {
               "name": "Position"
             },
@@ -4538,6 +4539,7 @@
           }
         ],
         "returns": {
+          "description": "A point expressed in the map view's coordinate system `[longitude, latitude]`.",
           "type": {
             "name": "Promise",
             "elements": [
@@ -4548,19 +4550,20 @@
             "raw": "Promise<Position>"
           }
         },
-        "description": "Converts a point in the given view’s coordinate system to a geographic coordinate.",
+        "description": "Converts a screen coordinate relative to the map view to a geographic coordinate.",
         "examples": [
-          "\nconst coordinate = await this._map.getCoordinateFromView([100, 100]);\n\n"
+          "\nconst x = 100; const y = 100;\nconst [longitude, latitude] = await this._map.getCoordinateFromView([x, y]);\n\n"
         ]
       },
       {
         "name": "getVisibleBounds",
-        "docblock": "The coordinate bounds (ne, sw) visible in the user’s viewport.\n\n@example\nconst visibleBounds = await this._map.getVisibleBounds();\n\n@return {Array}",
+        "docblock": "The coordinate bounds of the map viewport.\n\n@example\nconst [[rightLon, topLat], [leftLon, bottomLat]] = await this._map.getVisibleBounds();\n\n@return {[Position, Position]} The geographic coordinate bounds of the map viewport `[[rightLon, topLat], [leftLon, bottomLat]]`.",
         "modifiers": [
           "async"
         ],
         "params": [],
         "returns": {
+          "description": "The geographic coordinate bounds of the map viewport `[[rightLon, topLat], [leftLon, bottomLat]]`.",
           "type": {
             "name": "Promise",
             "elements": [
@@ -4580,21 +4583,21 @@
             "raw": "Promise<[Position, Position]>"
           }
         },
-        "description": "The coordinate bounds (ne, sw) visible in the user’s viewport.",
+        "description": "The coordinate bounds of the map viewport.",
         "examples": [
-          "\nconst visibleBounds = await this._map.getVisibleBounds();\n\n"
+          "\nconst [[rightLon, topLat], [leftLon, bottomLat]] = await this._map.getVisibleBounds();\n\n"
         ]
       },
       {
         "name": "queryRenderedFeaturesAtPoint",
-        "docblock": "Returns an array of rendered map features that intersect with a given point.\n\n@example\nthis._map.queryRenderedFeaturesAtPoint([30, 40], ['==', 'type', 'Point'], ['id1', 'id2'])\n\n@param  {Array<Number>} coordinate - A point expressed in the map view’s coordinate system.\n@param  {Array=} filter - A set of strings that correspond to the names of layers defined in the current style. Only the features contained in these layers are included in the returned array.\n@param  {Array=} layerIDs - A array of layer id's to filter the features by\n@return {FeatureCollection}",
+        "docblock": "Returns an array of rendered map features that intersect with a given point.\n\n@example\nconst x = 30; const y = 40;\nthis._map.queryRenderedFeaturesAtPoint([x, y], ['==', 'type', 'Point'], ['id1', 'id2'])\n\n@param  {Position} coordinate - A point expressed in the map view’s coordinate system `[x, y]`;\n@param  {FilterExpression | []} filter - A set of strings that correspond to the names of layers defined in the current style. Only the features contained in these layers are included in the returned array.\n@param  {string[]} layerIDs - A array of layer IDs by which to filter the features.\n@return {FeatureCollection}  A GeoJSON feature collection containing the query results.",
         "modifiers": [
           "async"
         ],
         "params": [
           {
             "name": "coordinate",
-            "description": "A point expressed in the map view’s coordinate system.",
+            "description": "A point expressed in the map view’s coordinate system `[x, y]`;",
             "type": {
               "name": "Position"
             },
@@ -4604,13 +4607,13 @@
             "name": "filter",
             "description": "A set of strings that correspond to the names of layers defined in the current style. Only the features contained in these layers are included in the returned array.",
             "type": {
-              "name": "Array"
+              "name": "FilterExpression \\| tuple"
             },
             "optional": true
           },
           {
             "name": "layerIDs",
-            "description": "A array of layer id's to filter the features by",
+            "description": "A array of layer IDs by which to filter the features.",
             "type": {
               "name": "Array"
             },
@@ -4618,6 +4621,7 @@
           }
         ],
         "returns": {
+          "description": "A GeoJSON feature collection containing the query results.",
           "type": {
             "name": "Promise",
             "elements": [
@@ -4639,19 +4643,19 @@
         },
         "description": "Returns an array of rendered map features that intersect with a given point.",
         "examples": [
-          "\nthis._map.queryRenderedFeaturesAtPoint([30, 40], ['==', 'type', 'Point'], ['id1', 'id2'])\n\n"
+          "\nconst x = 30; const y = 40;\nthis._map.queryRenderedFeaturesAtPoint([x, y], ['==', 'type', 'Point'], ['id1', 'id2'])\n\n"
         ]
       },
       {
         "name": "queryRenderedFeaturesInRect",
-        "docblock": "Returns an array of rendered map features that intersect with the given rectangle,\nrestricted to the given style layers and filtered by the given predicate. In v10,\npassing an empty array will query the entire visible bounds of the map.\n\n@example\nthis._map.queryRenderedFeaturesInRect([30, 40, 20, 10], ['==', 'type', 'Point'], ['id1', 'id2'])\n\n@param  {Array<Number>} bbox - A rectangle expressed in the map view’s coordinate system, density independent pixels and not map coordinates. This can be an empty array to query the visible map area.\n@param  {Array=} filter - A set of strings that correspond to the names of layers defined in the current style. Only the features contained in these layers are included in the returned array.\n@param  {Array=} layerIDs -  A array of layer id's to filter the features by\n@return {FeatureCollection}",
+        "docblock": "Returns an array of rendered map features that intersect with the given rectangle,\nrestricted to the given style layers and filtered by the given predicate. In v10,\npassing an empty array will query the entire visible bounds of the map.\n\n@example\nconst left = 40; const top = 30;\nconst right = 10; const bottom = 20;\nthis._map.queryRenderedFeaturesInRect([top, left, bottom, right], ['==', 'type', 'Point'], ['id1', 'id2'])\n\n@param  {BBox | []} bbox - A rectangle expressed in density-independent screen coordinates relative to the map view `[top, left, bottom, right]` or `[minY, minX, maxY, maxX]` (not geographic coordinates). An empty array queries the visible map area.\n@param  {FilterExpression} filter - An array of strings that correspond to the names of layers defined in the current style. Only the features contained in these layers are included in the returned array.\n@param  {string[] | null} layerIDs -  A array of layer IDs by which to filter the features.\n@return {FeatureCollection} A GeoJSON feature collection containing the query results.",
         "modifiers": [
           "async"
         ],
         "params": [
           {
             "name": "bbox",
-            "description": "A rectangle expressed in the map view’s coordinate system, density independent pixels and not map coordinates. This can be an empty array to query the visible map area.",
+            "description": "A rectangle expressed in density-independent screen coordinates relative to the map view `[top, left, bottom, right]` or `[minY, minX, maxY, maxX]` (not geographic coordinates). An empty array queries the visible map area.",
             "type": {
               "name": "BBox \\| []"
             },
@@ -4659,15 +4663,15 @@
           },
           {
             "name": "filter",
-            "description": "A set of strings that correspond to the names of layers defined in the current style. Only the features contained in these layers are included in the returned array.",
+            "description": "An array of strings that correspond to the names of layers defined in the current style. Only the features contained in these layers are included in the returned array.",
             "type": {
-              "name": "Array"
+              "name": "FilterExpression"
             },
             "optional": true
           },
           {
             "name": "layerIDs",
-            "description": " A array of layer id's to filter the features by",
+            "description": " A array of layer IDs by which to filter the features.",
             "type": {
               "name": "Array"
             },
@@ -4675,6 +4679,7 @@
           }
         ],
         "returns": {
+          "description": "A GeoJSON feature collection containing the query results.",
           "type": {
             "name": "Promise",
             "elements": [
@@ -4696,12 +4701,12 @@
         },
         "description": "Returns an array of rendered map features that intersect with the given rectangle,\nrestricted to the given style layers and filtered by the given predicate. In v10,\npassing an empty array will query the entire visible bounds of the map.",
         "examples": [
-          "\nthis._map.queryRenderedFeaturesInRect([30, 40, 20, 10], ['==', 'type', 'Point'], ['id1', 'id2'])\n\n"
+          "\nconst left = 40; const top = 30;\nconst right = 10; const bottom = 20;\nthis._map.queryRenderedFeaturesInRect([top, left, bottom, right], ['==', 'type', 'Point'], ['id1', 'id2'])\n\n"
         ]
       },
       {
         "name": "querySourceFeatures",
-        "docblock": "Returns an array of GeoJSON Feature objects representing features within the specified vector tile or GeoJSON source that satisfy the query parameters.\n\n@example\nthis._map.querySourceFeatures('your-source-id', [], ['your-source-layer'])\n\n@param  {String} sourceId - Style source identifier used to query for source features.\n@param  {Array=} filter - A filter to limit query results.\n@param  {Array=} sourceLayerIDs - The name of the source layers to query. For vector tile sources, this parameter is required. For GeoJSON sources, it is ignored.\n@return {FeatureCollection}",
+        "docblock": "Returns an array of GeoJSON Feature objects representing features within the specified vector tile or GeoJSON source that satisfy the query parameters.\n\n@example\nthis._map.querySourceFeatures('your-source-id', [], ['your-source-layer'])\n\n@param  {String} sourceId - Style source identifier used to query for source features.\n@param  {FilterExpression | []} filter - A filter to limit query results.\n@param  {string[]} sourceLayerIDs - The name of the source layers to query. For vector tile sources, this parameter is required. For GeoJSON sources, it is ignored.\n@return {FeatureCollection} A GeoJSON feature collection.",
         "modifiers": [
           "async"
         ],
@@ -4718,7 +4723,7 @@
             "name": "filter",
             "description": "A filter to limit query results.",
             "type": {
-              "name": "Array"
+              "name": "FilterExpression \\| tuple"
             },
             "optional": true
           },
@@ -4732,6 +4737,7 @@
           }
         ],
         "returns": {
+          "description": "A GeoJSON feature collection.",
           "type": {
             "name": "Promise",
             "elements": [
@@ -4758,21 +4764,22 @@
       },
       {
         "name": "takeSnap",
-        "docblock": "Takes snapshot of map with current tiles and returns a URI to the image\n@param  {Boolean} writeToDisk If true will create a temp file, otherwise it is in base64\n@return {String}",
+        "docblock": "Takes snapshot of map with current tiles and returns a Base64-encoded PNG image,\nor an file-system URI to a temporary PNG file if `writeToDisk` is `true`.\n\n@param  {boolean} writeToDisk If `true`, creates a temporary PNG file and returns a file-system URI, otherwise returns a Base64-encoded PNG image. (Defaults to `false`)\n@return {string} A a Base64-encoded PNG image or a file-system URI to a temporary PNG file.",
         "modifiers": [
           "async"
         ],
         "params": [
           {
             "name": "writeToDisk",
-            "description": "If true will create a temp file, otherwise it is in base64",
+            "description": "If `true`, creates a temporary PNG file and returns a file-system URI, otherwise returns a Base64-encoded PNG image. (Defaults to `false`)",
             "type": {
-              "name": "Boolean"
+              "name": "boolean"
             },
             "optional": true
           }
         ],
         "returns": {
+          "description": "A a Base64-encoded PNG image or a file-system URI to a temporary PNG file.",
           "type": {
             "name": "Promise",
             "elements": [
@@ -4783,17 +4790,18 @@
             "raw": "Promise<string>"
           }
         },
-        "description": "Takes snapshot of map with current tiles and returns a URI to the image",
+        "description": "Takes snapshot of map with current tiles and returns a Base64-encoded PNG image,\nor an file-system URI to a temporary PNG file if `writeToDisk` is `true`.",
         "examples": []
       },
       {
         "name": "getZoom",
-        "docblock": "Returns the current zoom of the map view.\n\n@example\nconst zoom = await this._map.getZoom();\n\n@return {Number}",
+        "docblock": "Returns the current zoom of the map view.\n\n@example\nconst zoom = await this._map.getZoom();\n\n@return {number} The current zoom of the map view.",
         "modifiers": [
           "async"
         ],
         "params": [],
         "returns": {
+          "description": "The current zoom of the map view.",
           "type": {
             "name": "Promise",
             "elements": [
@@ -4811,13 +4819,13 @@
       },
       {
         "name": "getCenter",
-        "docblock": "Returns the map's geographical centerpoint\n\n@example\nconst center = await this._map.getCenter();\n\n@return {Array<Number>} Coordinates",
+        "docblock": "Returns the map's center point expressed as geographic coordinates `[longitude, latitude]`.\n\n@example\nconst center = await this._map.getCenter();\n\n@return {Position} The map's center point expressed as geographic coordinates `[longitude, latitude]`.",
         "modifiers": [
           "async"
         ],
         "params": [],
         "returns": {
-          "description": "Coordinates",
+          "description": "The map's center point expressed as geographic coordinates `[longitude, latitude]`.",
           "type": {
             "name": "Promise",
             "elements": [
@@ -4828,7 +4836,7 @@
             "raw": "Promise<Position>"
           }
         },
-        "description": "Returns the map's geographical centerpoint",
+        "description": "Returns the map's center point expressed as geographic coordinates `[longitude, latitude]`.",
         "examples": [
           "\nconst center = await this._map.getCenter();\n\n"
         ]
@@ -4856,14 +4864,14 @@
       },
       {
         "name": "queryTerrainElevation",
-        "docblock": "Queries the currently loaded data for elevation at a geographical location.\nThe elevation is returned in meters relative to mean sea-level.\nReturns null if terrain is disabled or if terrain data for the location hasn't been loaded yet.\n\n@param {Array<Number>} coordinate - the coordinates to query elevation at\n@return {Number}",
+        "docblock": "Queries the currently loaded data for elevation at a geographical location.\nThe elevation is returned in meters relative to mean sea-level.\nReturns null if terrain is disabled or if terrain data for the location hasn't been loaded yet.\n\n@param {Position} coordinate - The geographic coordinates `[longitude, latitude]` at which to query elevation.\n@return {number} Elevation in meters relative to mean sea-level.",
         "modifiers": [
           "async"
         ],
         "params": [
           {
             "name": "coordinate",
-            "description": "the coordinates to query elevation at",
+            "description": "The geographic coordinates `[longitude, latitude]` at which to query elevation.",
             "type": {
               "name": "Position"
             },
@@ -4871,6 +4879,7 @@
           }
         ],
         "returns": {
+          "description": "Elevation in meters relative to mean sea-level.",
           "type": {
             "name": "Promise",
             "elements": [
@@ -4886,7 +4895,7 @@
       },
       {
         "name": "setSourceVisibility",
-        "docblock": "Sets the visibility of all the layers referencing the specified `sourceLayerId` and/or `sourceId`\n\n@example\nawait this._map.setSourceVisibility(false, 'composite', 'building')\n\n@param {boolean} visible - Visibility of the layers\n@param {String} sourceId - Identifier of the target source (e.g. 'composite')\n@param {String=} sourceLayerId - Identifier of the target source-layer (e.g. 'building')",
+        "docblock": "Sets the visibility of all the layers referencing the specified `sourceLayerId` and/or `sourceId`\n\n@example\nawait this._map.setSourceVisibility(false, 'composite', 'building')\n\n@param {boolean} visible - Visibility of the layers\n@param {string} sourceId - Target source identifier (e.g. 'composite')\n@param {string | null} sourceLayerId - Target source-layer identifier (e.g. 'building'). If `null`, the change affects all layers in the target source.",
         "modifiers": [],
         "params": [
           {
@@ -4899,7 +4908,7 @@
           },
           {
             "name": "sourceId",
-            "description": "Identifier of the target source (e.g. 'composite')",
+            "description": "Target source identifier (e.g. 'composite')",
             "type": {
               "name": "string"
             },
@@ -4907,9 +4916,9 @@
           },
           {
             "name": "sourceLayerId",
-            "description": "Identifier of the target source-layer (e.g. 'building')",
+            "description": "Target source-layer identifier (e.g. 'building'). If `null`, the change affects all layers in the target source.",
             "type": {
-              "name": "String"
+              "name": "string"
             },
             "optional": true
           }
@@ -5398,7 +5407,7 @@
           "funcSignature": "(feature:GeoJSON.Feature) => void"
         },
         "default": "none",
-        "description": "Map press listener, gets called when a user presses the map\n*signature:*`(feature:GeoJSON.Feature) => void`"
+        "description": "Map press listener, called when a user presses the map.\n*signature:*`(feature:GeoJSON.Feature) => void`"
       },
       {
         "name": "onLongPress",
@@ -5408,7 +5417,7 @@
           "funcSignature": "(feature:GeoJSON.Feature) => void"
         },
         "default": "none",
-        "description": "Map long press listener, gets called when a user long presses the map\n*signature:*`(feature:GeoJSON.Feature) => void`"
+        "description": "Map long press listener, called when a user long presses the map.\n*signature:*`(feature:GeoJSON.Feature) => void`"
       },
       {
         "name": "onRegionWillChange",
