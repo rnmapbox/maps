@@ -1,6 +1,4 @@
-import type { TurboModule } from 'react-native/Libraries/TurboModule/RCTExport';
-// @ts-ignore - CI environment type resolution issue for CodegenTypes
-import { Int32 } from 'react-native/Libraries/Types/CodegenTypes';
+import type { TurboModule, CodegenTypes } from 'react-native';
 import { TurboModuleRegistry } from 'react-native';
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -11,7 +9,7 @@ type StringOr<_T> = string;
 
 type Domain = 'Maps' | 'Navigation' | 'Search' | 'ADAS';
 
-type Tag = Int32;
+type Tag = CodegenTypes.Int32;
 
 type Value = { value: string | number };
 

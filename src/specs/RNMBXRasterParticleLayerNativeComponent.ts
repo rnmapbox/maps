@@ -1,7 +1,5 @@
-import type { HostComponent, ViewProps } from 'react-native';
+import type { HostComponent, ViewProps, CodegenTypes } from 'react-native';
 import codegenNativeComponent from 'react-native/Libraries/Utilities/codegenNativeComponent';
-// @ts-ignore - CI environment type resolution issue for CodegenTypes
-import { Double, Int32 } from 'react-native/Libraries/Types/CodegenTypes';
 
 import type { FilterExpression } from '../utils/MapboxStyles';
 
@@ -19,10 +17,10 @@ type CommonProps = {
 
   aboveLayerID?: OptionalProp<string>;
   belowLayerID?: OptionalProp<string>;
-  layerIndex?: OptionalProp<Int32>;
+  layerIndex?: OptionalProp<CodegenTypes.Int32>;
 
-  maxZoomLevel?: OptionalProp<Double>;
-  minZoomLevel?: OptionalProp<Double>;
+  maxZoomLevel?: OptionalProp<CodegenTypes.Double>;
+  minZoomLevel?: OptionalProp<CodegenTypes.Double>;
   sourceLayerID?: OptionalProp<string>;
   slot?: OptionalProp<Slot>;
 };

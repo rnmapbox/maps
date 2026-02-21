@@ -1,21 +1,19 @@
-import type { TurboModule } from 'react-native/Libraries/TurboModule/RCTExport';
-// @ts-ignore - CI environment type resolution issue for CodegenTypes
-import { Int32 } from 'react-native/Libraries/Types/CodegenTypes';
+import type { TurboModule, CodegenTypes } from 'react-native';
 import { TurboModuleRegistry } from 'react-native';
 
 export interface Spec extends TurboModule {
   getClusterExpansionZoom: (
-    viewRef: Int32 | null,
+    viewRef: CodegenTypes.Int32 | null,
     featureJSON: string,
   ) => Promise<Object>;
   getClusterLeaves: (
-    viewRef: Int32 | null,
+    viewRef: CodegenTypes.Int32 | null,
     featureJSON: string,
-    number: Int32,
-    offset: Int32,
+    number: CodegenTypes.Int32,
+    offset: CodegenTypes.Int32,
   ) => Promise<Object>;
   getClusterChildren: (
-    viewRef: Int32 | null,
+    viewRef: CodegenTypes.Int32 | null,
     featureJSON: string,
   ) => Promise<Object>;
 }

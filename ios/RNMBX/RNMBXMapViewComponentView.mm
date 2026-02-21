@@ -189,7 +189,12 @@ using namespace facebook::react;
     RNMBX_REMAP_OPTIONAL_PROP_BOOL(rotateEnabled, reactRotateEnabled)
 
     RNMBX_REMAP_OPTIONAL_PROP_BOOL(pitchEnabled, reactPitchEnabled)
-  
+
+    id maxPitch = RNMBXConvertFollyDynamicToId(newViewProps.maxPitch);
+    if (maxPitch != nil) {
+        [_view setReactMaxPitch:[maxPitch isKindOfClass:[NSNull class]] ? nil : maxPitch];
+    }
+
     RNMBX_REMAP_OPTIONAL_PROP_NSDictionary(gestureSettings, reactGestureSettings)
 
     id preferredFramesPerSecond = RNMBXConvertFollyDynamicToId(newViewProps.preferredFramesPerSecond);
