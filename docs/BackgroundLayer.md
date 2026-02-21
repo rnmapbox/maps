@@ -201,7 +201,7 @@ The color with which the background will be drawn.
 
 #### Expression
 
-Parameters: `zoom`
+Parameters: `zoom, measure-light`
 ___
 
 ### backgroundColorTransition

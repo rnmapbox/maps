@@ -665,7 +665,7 @@ Name: `rasterElevation`
 Mapbox spec: [raster-elevation](https://docs.mapbox.com/style-spec/reference/layers/#paint-raster-raster-elevation)
 
 #### Description
-Specifies an uniform elevation from the ground, in meters.
+Defines an uniform elevation from the base specified in rasterElevationReference, in meters.
 
 #### Type
 `number`

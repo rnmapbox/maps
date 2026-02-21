@@ -74,8 +74,8 @@
   },
   "homepage": "https://github.com/rnmapbox/maps#readme",
   "mapbox": {
-    "ios": "~> 11.16.2",
-    "android": "11.16.2"
+    "ios": "~> 11.18.2",
+    "android": "11.18.2"
   },
   "publishConfig": {
     "registry": "https://registry.npmjs.org/",
