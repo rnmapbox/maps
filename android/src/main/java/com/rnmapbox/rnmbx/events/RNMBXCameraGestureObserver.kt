@@ -37,7 +37,6 @@ class RNMBXCameraGestureObserver(
     private var lastTransitionEndedAtMs: Double? = null
     private var quietRunnable: Runnable? = null
     private var timeoutRunnable: Runnable? = null
-    private var emittedForCurrentActivity: Boolean = false
 
     private val quietMs: Double get() = quietPeriodMs ?: 200.0
     private val maxMs: Double? get() = maxIntervalMs
@@ -84,9 +83,9 @@ class RNMBXCameraGestureObserver(
     }
 
     private fun scheduleQuietCheck() {
+        cancelQuietTimer()
         val delay = quietMs
         if (delay <= 0) {
-            cancelQuietTimer()
             maybeEmitSteady()
             return
         }
@@ -99,8 +98,10 @@ class RNMBXCameraGestureObserver(
     }
 
     private fun scheduleTimeout() {
+        if (timeoutRunnable != null) return
         val delay = maxMs ?: return
         val runnable = Runnable {
+            timeoutRunnable = null
             emitTimeout()
         }
         timeoutRunnable = scheduleTimer(delay, runnable)
@@ -108,7 +109,6 @@ class RNMBXCameraGestureObserver(
 
     private fun markActivity(gestureType: String? = null) {
         if (gestureType != null) lastGestureType = gestureType
-        emittedForCurrentActivity = false
         scheduleQuietCheck()
         scheduleTimeout()
     }
@@ -122,7 +122,6 @@ class RNMBXCameraGestureObserver(
     }
 
     private fun emitSteady(idleDurationMs: Double) {
-        if (emittedForCurrentActivity) return
         cancelQuietTimer()
         cancelTimeoutTimer()
         val gesture = lastGestureType
@@ -131,7 +130,6 @@ class RNMBXCameraGestureObserver(
             MapSteadyEvent.make(this, "steady", idleDurationMs, gesture)
         )
         lastGestureType = null
-        emittedForCurrentActivity = true
     }
 
     private fun emitTimeout() {
