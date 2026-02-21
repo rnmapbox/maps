@@ -2,8 +2,7 @@
 
 ## Supported mapbox libraries
 
-We're only supporting mapbox 10.16* and 11.*. The default is 10.16*.
-Next release will be 11.* only so we recommend updatign to 11.*
+We support Mapbox Maps SDK v11.
 
 ### Adding mapbox maven repo
 
@@ -27,39 +26,14 @@ allprojects {
 
 ### Using non default mapbox version
 
-*Warning*: If you set a custom version, make sure you revisit, any time you update @rnmapbox/maps. Setting it to earlier version than what we exepect will likely result in a build error.
+*Warning*: If you set a custom version, make sure you revisit any time you update @rnmapbox/maps. Setting it to an earlier version than what we expect will likely result in a build error.
 
 Set `RNMapboxMapsVersion` in `android/build.gradle > buildscript > ext` section
 
-
 ```groovy
 buildscript {
     ext {
-        RNMapboxMapsVersion = '11.4.1'
-    }
-}
-```
-
-you can also customize all the libraries, should it be neccesary
-
-```groovy
-buildscript {
-    ext {
-        // ...
-        RNMapboxMapsLibs = { // optional - only required if you want to customize it
-            implementation 'com.mapbox.maps:android:10.6.0'
-            implementation 'com.mapbox.mapboxsdk:mapbox-sdk-turf:5.4.1'
-        }
-    }
-}
-```
-
-### Using v11
-
-```groovy
-buildscript {
-    ext {
-        RNMapboxMapsVersion = '11.4.1'
+        RNMapboxMapsVersion = '11.16.2'
     }
 }
 ```
