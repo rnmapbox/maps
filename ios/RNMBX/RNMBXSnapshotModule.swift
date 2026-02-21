@@ -93,10 +93,12 @@ class RNMBXSnapshotModule : NSObject {
           let height = jsOptions["height"] as? NSNumber else {
       throw RNMBXError.paramError("width, height: is not a number")
     }
-    let mapSnapshotOptions = MapSnapshotOptions(
+    let showsLogo = jsOptions["withLogo"] as? Bool ?? true
+    var mapSnapshotOptions = MapSnapshotOptions(
       size: CGSize(width: width.doubleValue, height: height.doubleValue),
       pixelRatio: 1.0
     )
+    mapSnapshotOptions.showsLogo = showsLogo
 
     return mapSnapshotOptions
   }
