@@ -18,6 +18,7 @@ import com.mapbox.maps.MapboxMap
 import com.mapbox.maps.Style
 import com.mapbox.maps.plugin.LocationPuck2D
 import com.mapbox.maps.plugin.locationcomponent.LocationComponentConstants
+import com.mapbox.maps.plugin.locationcomponent.createDefault2DPuck
 import com.mapbox.maps.plugin.locationcomponent.location
 import com.mapbox.maps.plugin.locationcomponent.R as LR
 import com.rnmapbox.rnmbx.R
@@ -54,8 +55,22 @@ class RNMBXNativeUserLocation(context: Context) : AbstractMapFeature(context), O
 
     // region bearing
     var androidRenderMode: RenderMode? = null
+        set(value) {
+            field = value
+            _apply()
+        }
+
     var puckBearing: PuckBearing? = null
+        set(value) {
+            field = value
+            _apply()
+        }
+
     var puckBearingEnabled: Boolean? = null
+        set(value) {
+            field = value
+            _apply()
+        }
     // endregion
 
     enum class PuckImagePart {
@@ -124,28 +139,44 @@ class RNMBXNativeUserLocation(context: Context) : AbstractMapFeature(context), O
 
     private fun _apply(mapView: MapView) {
         val location2 = mapView.location2;
-
-        if (visible) {
-            if (images.isEmpty()) {
-                location2.locationPuck =
-                    makeDefaultLocationPuck2D(mContext, androidRenderMode ?: RenderMode.NORMAL)
-            } else {
-                location2.locationPuck = LocationPuck2D(
-                    topImage = images[PuckImagePart.TOP],
-                    bearingImage = images[PuckImagePart.BEARING],
-                    shadowImage = images[PuckImagePart.SHADOW],
-                    scaleExpression = scale?.toJson()
-                )
-            }
-        } else {
-            val empty =
-                AppCompatResourcesV11.getDrawableImageHolder(mContext, R.drawable.empty)
-            location2.locationPuck = LocationPuck2D(
-                topImage = empty,
-                bearingImage = empty,
-                shadowImage = empty
-            )
+        // Log a warning if both puckBearingEnabled and androidRenderMode are provided
+        if (puckBearingEnabled != null && androidRenderMode != null) {
+            Logger.w(LOG_TAG, "Both `puckBearingEnabled` and `androidRenderMode` are provided. `androidRenderMode` takes precedence, and `puckBearingEnabled` will be ignored.")
         }
+
+        val withBearing = androidRenderMode?.let { it != RenderMode.NORMAL } ?: (puckBearingEnabled == true)
+        val puck = createDefault2DPuck(withBearing = withBearing)
+
+        // Update the bearing image based on androidRenderMode
+        androidRenderMode?.let { renderMode ->
+            when (renderMode) {
+                RenderMode.GPS -> puck.bearingImage = AppCompatResourcesV11.getDrawableImageHolder(context, LR.drawable.mapbox_user_bearing_icon)
+                RenderMode.COMPASS -> puck.bearingImage = AppCompatResourcesV11.getDrawableImageHolder(context, LR.drawable.mapbox_user_puck_icon)
+                RenderMode.NORMAL -> puck.bearingImage = AppCompatResourcesV11.getDrawableImageHolder(context, LR.drawable.mapbox_user_stroke_icon)
+            }
+        }
+
+        // Overwrite images if custom ones are provided
+        if (images.isNotEmpty()) {
+            (puck as? LocationPuck2D)?.apply {
+                topImage = images[PuckImagePart.TOP] ?: topImage
+                bearingImage = images[PuckImagePart.BEARING] ?: bearingImage
+                shadowImage = images[PuckImagePart.SHADOW] ?: shadowImage
+                scaleExpression = scale?.toJson() ?: scaleExpression
+            }
+        }
+
+        // Handle visibility: use empty placeholders if not visible
+        if (!visible) {
+            val empty = AppCompatResourcesV11.getDrawableImageHolder(mContext, R.drawable.empty)
+            (puck as? LocationPuck2D)?.apply {
+                topImage = empty
+                bearingImage = empty
+                shadowImage = empty
+            }
+        }
+
+        location2.locationPuck = puck
 
         this.puckBearing?.let {
             location2.puckBearing = it
@@ -167,7 +198,7 @@ class RNMBXNativeUserLocation(context: Context) : AbstractMapFeature(context), O
                     ReadableType.Number ->
                         location2.pulsingColor = pulsing.getInt("color")
                     else ->
-                        Logger.e(LOG_TAG, "pusling.color should be either a map or a number, but was ${pulsing.getDynamic("color")}")
+                        Logger.e(LOG_TAG, "pulsing.color should be either a map or a number, but was ${pulsing.getDynamic("color")}")
                 }
             }
             pulsing.getAndLogIfNotBoolean("isEnabled")?.let { enabled ->
@@ -277,25 +308,4 @@ class RNMBXNativeUserLocation(context: Context) : AbstractMapFeature(context), O
     companion object {
         const val LOG_TAG = "RNMBXNativeUserLocation"
     }
-}
-
-fun makeDefaultLocationPuck2D(context: Context, renderMode: RenderMode): LocationPuck2D {
-    return LocationPuck2D(
-        topImage = AppCompatResourcesV11.getDrawableImageHolder(
-            context,
-            LR.drawable.mapbox_user_icon
-        ),
-        bearingImage = AppCompatResourcesV11.getDrawableImageHolder(
-            context,
-            when (renderMode) {
-                RenderMode.GPS -> LR.drawable.mapbox_user_bearing_icon
-                RenderMode.COMPASS -> LR.drawable.mapbox_user_puck_icon
-                RenderMode.NORMAL -> LR.drawable.mapbox_user_stroke_icon
-            }
-        ),
-        shadowImage = AppCompatResourcesV11.getDrawableImageHolder(
-            context,
-            LR.drawable.mapbox_user_icon_shadow
-        )
-    );
 }
