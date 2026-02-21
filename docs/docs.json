@@ -514,7 +514,8 @@
         "expression": {
           "interpolated": true,
           "parameters": [
-            "zoom"
+            "zoom",
+            "measure-light"
           ]
         },
         "transition": true,
@@ -3842,7 +3843,7 @@
         "type": "number",
         "values": [],
         "default": 0,
-        "description": "Vertical offset from ground, in meters. Defaults to 0. This is an experimental property with some known issues:\n * Not supported for globe projection at the moment \n * Elevated line discontinuity is possible on tile borders with terrain enabled \n * Rendering artifacts can happen near line joins and line caps depending on the line styling \n * Rendering artifacts relating to `lineOpacity` and `lineBlur` \n * Elevated line visibility is determined by layer order \n * ZFighting issues can happen with intersecting elevated lines \n * Elevated lines don't cast shadows",
+        "description": "Vertical offset from ground, in meters. Not supported for globe projection at the moment.",
         "requires": [
           "lineElevationReference"
         ],
@@ -5823,6 +5824,22 @@
         }
       },
       {
+        "name": "modelAllowDensityReduction",
+        "type": "boolean",
+        "values": [],
+        "default": true,
+        "description": "If true, the models will be reduced in density based on the zoom level. This is useful for large datasets that may be slow to render.",
+        "requires": [],
+        "disabledBy": [],
+        "allowedFunctionTypes": [],
+        "transition": false,
+        "mbx": {
+          "fullName": "layout-model-model-allow-density-reduction",
+          "name": "model-allow-density-reduction",
+          "namespace": "layout"
+        }
+      },
+      {
         "name": "modelOpacity",
         "type": "number",
         "values": [],
@@ -6164,6 +6181,38 @@
         "mbx": {
           "fullName": "paint-model-model-cutoff-fade-range",
           "name": "model-cutoff-fade-range",
+          "namespace": "paint"
+        }
+      },
+      {
+        "name": "modelElevationReference",
+        "type": "enum",
+        "values": [
+          {
+            "value": "sea",
+            "doc": "Elevated rendering is enabled. Use this mode to elevate models relative to the sea level."
+          },
+          {
+            "value": "ground",
+            "doc": "Elevated rendering is enabled. Use this mode to elevate models relative to the ground's height below them."
+          },
+          {
+            "value": "hd-road-markup",
+            "doc": "Elevated rendering is enabled. Use this mode to describe additive and stackable features that should exist only on top of road polygons."
+          }
+        ],
+        "default": "ground",
+        "description": "Selects the base of the model. Some modes might require precomputed elevation data in the tileset. When using vector tiled source as the model layer source and hdRoadMarkup elevation reference, this property acts as layout property and elevation is evaluated only in tile loading time.",
+        "requires": [],
+        "disabledBy": [],
+        "allowedFunctionTypes": [],
+        "expression": {
+          "interpolated": false
+        },
+        "transition": false,
+        "mbx": {
+          "fullName": "paint-model-model-elevation-reference",
+          "name": "model-elevation-reference",
           "namespace": "paint"
         }
       }
@@ -6931,7 +6980,7 @@
         "values": [],
         "minimum": 0,
         "default": 0,
-        "description": "Specifies an uniform elevation from the ground, in meters.",
+        "description": "Defines an uniform elevation from the base specified in rasterElevationReference, in meters.",
         "requires": [],
         "disabledBy": [],
         "allowedFunctionTypes": [],

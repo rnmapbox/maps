@@ -282,14 +282,7 @@ Name: `lineZOffset`
 Mapbox spec: [line-z-offset](https://docs.mapbox.com/style-spec/reference/layers/#layout-line-line-z-offset)
 
 #### Description
-Vertical offset from ground, in meters. Defaults to 0. This is an experimental property with some known issues:
- * Not supported for globe projection at the moment 
- * Elevated line discontinuity is possible on tile borders with terrain enabled 
- * Rendering artifacts can happen near line joins and line caps depending on the line styling 
- * Rendering artifacts relating to `lineOpacity` and `lineBlur` 
- * Elevated line visibility is determined by layer order 
- * ZFighting issues can happen with intersecting elevated lines 
- * Elevated lines don't cast shadows
+Vertical offset from ground, in meters. Not supported for globe projection at the moment.
 
 #### Type
 `number`

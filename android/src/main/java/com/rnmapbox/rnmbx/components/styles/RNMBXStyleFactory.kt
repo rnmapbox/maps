@@ -795,6 +795,8 @@ object RNMBXStyleFactory {
           val styleValue = style.getStyleValueForKey(styleKey)
 
           when (styleKey) {
+              "modelAllowDensityReduction" ->
+                setModelAllowDensityReduction(layer, styleValue)
               "visibility" ->
                 setVisibility(layer, styleValue)
               "modelId" ->
@@ -847,6 +849,8 @@ object RNMBXStyleFactory {
                 setModelHeightBasedEmissiveStrengthMultiplierTransition(layer, styleValue)
               "modelCutoffFadeRange" ->
                 setModelCutoffFadeRange(layer, styleValue)
+              "modelElevationReference" ->
+                setModelElevationReference(layer, styleValue)
           }
         } catch (e: MapboxStyleException) {
           Logger.e(LOG_TAG, "Failed to update: $styleKey ${e.message}")
@@ -4673,6 +4677,24 @@ object RNMBXStyleFactory {
       }
     }
 
+    fun setModelAllowDensityReduction(layer: ModelLayer, styleValue: RNMBXStyleValue ) {
+      if (styleValue.isExpression()) {
+        val expression = styleValue.getExpression()
+        if (expression != null) {
+          layer.modelAllowDensityReduction(expression)
+        } else {
+          Logger.e("RNMBXModel", "Expression for modelAllowDensityReduction is null")
+        }
+      } else {
+          val value = styleValue.getBoolean(VALUE_KEY)
+          if (value != null) {
+            layer.modelAllowDensityReduction(value)
+          } else {
+            Logger.e("RNMBXModel", "value for modelAllowDensityReduction is null")
+          }
+      }
+    }
+
     fun setVisibility(layer: ModelLayer, styleValue: RNMBXStyleValue ) {
         layer.visibility(Visibility.valueOf(styleValue.getEnumName()));
     }
@@ -5019,6 +5041,19 @@ object RNMBXStyleFactory {
           } else {
             Logger.e("RNMBXModel", "value for modelCutoffFadeRange is null")
           }
+      }
+    }
+
+    fun setModelElevationReference(layer: ModelLayer, styleValue: RNMBXStyleValue ) {
+      if (styleValue.isExpression()) {
+        val expression = styleValue.getExpression()
+        if (expression != null) {
+          layer.modelElevationReference(expression)
+        } else {
+          Logger.e("RNMBXModel", "Expression for modelElevationReference is null")
+        }
+      } else {
+          layer.modelElevationReference(ModelElevationReference.valueOf(styleValue.getEnumName()))
       }
     }
 

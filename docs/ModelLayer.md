@@ -138,6 +138,7 @@ Customizable style attributes
 
 * <a href="#visibility">visibility</a><br/>
 * <a href="#modelid">modelId</a><br/>
+* <a href="#modelallowdensityreduction">modelAllowDensityReduction</a><br/>
 * <a href="#modelopacity">modelOpacity</a><br/>
 * <a href="#modelrotation">modelRotation</a><br/>
 * <a href="#modelscale">modelScale</a><br/>
@@ -152,6 +153,7 @@ Customizable style attributes
 * <a href="#modelroughness">modelRoughness</a><br/>
 * <a href="#modelheightbasedemissivestrengthmultiplier">modelHeightBasedEmissiveStrengthMultiplier</a><br/>
 * <a href="#modelcutofffaderange">modelCutoffFadeRange</a><br/>
+* <a href="#modelelevationreference">modelElevationReference</a><br/>
 
 ___
 
@@ -196,6 +198,23 @@ Model to render. It can be either a string referencing an element to the models 
 #### Expression
 
 Parameters: `zoom, feature`
+
+___
+
+### modelAllowDensityReduction
+Name: `modelAllowDensityReduction`
+
+Mapbox spec: [model-allow-density-reduction](https://docs.mapbox.com/style-spec/reference/layers/#layout-model-model-allow-density-reduction)
+
+#### Description
+If true, the models will be reduced in density based on the zoom level. This is useful for large datasets that may be slow to render.
+
+#### Type
+`boolean`
+#### Default Value
+`true`
+
+
 
 ___
 
@@ -699,6 +718,31 @@ This parameter defines the range for the fadeOut effect before an automatic cont
 
 #### Maximum
 `1`
+
+#### Expression
+
+Parameters: ``
+
+___
+
+### modelElevationReference
+Name: `modelElevationReference`
+
+Mapbox spec: [model-elevation-reference](https://docs.mapbox.com/style-spec/reference/layers/#paint-model-model-elevation-reference)
+
+#### Description
+Selects the base of the model. Some modes might require precomputed elevation data in the tileset. When using vector tiled source as the model layer source and hdRoadMarkup elevation reference, this property acts as layout property and elevation is evaluated only in tile loading time.
+
+#### Type
+`enum`
+#### Default Value
+`ground`
+
+#### Supported Values
+**sea** - Elevated rendering is enabled. Use this mode to elevate models relative to the sea level.<br />
+**ground** - Elevated rendering is enabled. Use this mode to elevate models relative to the ground's height below them.<br />
+**hd-road-markup** - Elevated rendering is enabled. Use this mode to describe additive and stackable features that should exist only on top of road polygons.<br />
+
 
 #### Expression
 

@@ -20,7 +20,7 @@ After installing this package, add the [config plugin](https://docs.expo.io/guid
       [
         "@rnmapbox/maps",
         {
-          "RNMapboxMapsVersion": "11.13.4"
+          "RNMapboxMapsVersion": "11.18.2"
         }
       ]
     ]
@@ -58,7 +58,7 @@ It's possible to overwrite the native SDK version with `RNMapboxMapsVersion`:
       [
         "@rnmapbox/maps",
         {
-          "RNMapboxMapsVersion": "11.16.0"
+          "RNMapboxMapsVersion": "11.18.2"
         }
       ]
     ]

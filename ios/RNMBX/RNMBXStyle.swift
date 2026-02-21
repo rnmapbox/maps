@@ -798,7 +798,9 @@ func modelLayer(layer: inout ModelLayer, reactStyle:Dictionary<String, Any>, old
 
     let styleValue = RNMBXStyleValue.make(reactStyle[prop])
 
-      if (prop == "visibility") {
+      if (prop == "modelAllowDensityReduction") {
+      self.setModelAllowDensityReduction(&layer, styleValue:styleValue);
+    } else if (prop == "visibility") {
       self.setModelStyleLayerVisibility(&layer, styleValue:styleValue);
     } else if (prop == "modelId") {
       self.setModelId(&layer, styleValue:styleValue);
@@ -850,6 +852,8 @@ func modelLayer(layer: inout ModelLayer, reactStyle:Dictionary<String, Any>, old
       self.setModelHeightBasedEmissiveStrengthMultiplierTransition(&layer, styleValue:styleValue);
     } else if (prop == "modelCutoffFadeRange") {
       self.setModelCutoffFadeRange(&layer, styleValue:styleValue);
+    } else if (prop == "modelElevationReference") {
+      self.setModelElevationReference(&layer, styleValue:styleValue);
     } else {
       Logger.log(level:.error, message: "Unexpected property \(prop) for layer: model")
     }
@@ -3057,6 +3061,15 @@ func setHillshadeAccentColorTransition(_ layer: inout HillshadeLayer, styleValue
 
 
 
+func setModelAllowDensityReduction(_ layer: inout ModelLayer, styleValue: RNMBXStyleValue)
+{
+      
+        
+          layer.modelAllowDensityReduction = styleValue.mglStyleValueBoolean();
+        
+      
+}
+
 func setModelStyleLayerVisibility(_ layer: inout ModelLayer, styleValue: RNMBXStyleValue)
 {
     layer.visibility = styleValue.isVisible();
@@ -3243,6 +3256,15 @@ func setModelCutoffFadeRange(_ layer: inout ModelLayer, styleValue: RNMBXStyleVa
       
         
           layer.modelCutoffFadeRange = styleValue.mglStyleValueNumber();
+        
+      
+}
+
+func setModelElevationReference(_ layer: inout ModelLayer, styleValue: RNMBXStyleValue)
+{
+      
+        
+          layer.modelElevationReference = styleValue.mglStyleValueEnum();
         
       
 }
