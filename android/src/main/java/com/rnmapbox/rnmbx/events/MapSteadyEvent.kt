@@ -34,6 +34,12 @@ class MapSteadyEvent(
             putDouble("timestamp", System.currentTimeMillis().toDouble())
         }
 
+    override fun toJSON(): WritableMap {
+        val map = Arguments.createMap()
+        map.merge(payload)
+        return map
+    }
+
     override fun canCoalesce(): Boolean {
         // Do not coalesce - each steady/timeout event is significant
         return false
