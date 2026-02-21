@@ -16,18 +16,7 @@ Some notes about example app:
 
 ### Example app configurations:
 
-- V10: this build with V10 of mapbox
-  To build example in this mode on ios run:
-  ```
-  cd example/ios ; RNMBX10=1 pod update MapboxMaps
-  ```
-  To build example in this mode on android:
-  Change `RNMBX10=true` in `example/android/gradle.properties`
-- NewArchitecture/Fabric:
-  ```
-  cd example/ios ; RCT_NEW_ARCH_ENABLED=1 pod update MapboxMaps
-  ```
-  On android change `newArchEnabled=true` in `example/android/gradle.properties`
+The project uses Mapbox Maps SDK v11 and React Native's New Architecture (Fabric/TurboModules) exclusively.
 
 ### Running example app for Web
 
@@ -49,7 +38,7 @@ Run `yarn generate` to update generated code/documentation.
 We use the following code generators, but check yarn generate for more:
 - `style-spec/v8.json` download from mapbox.com describes properties of layers/sources etc. We generate the following files from it:
   - `MapboxStyles.d.ts` - typescript definitions for different Layer styles
-  - `RNMBXStyle.swift.ejs`/`RNMBXStyleFactoryV10.kt` - ios/android native style setters
+  - `RNMBXStyle.swift.ejs`/`RNMBXStyleFactory.kt` - ios/android native style setters
   - `docs.json` is generated both from style-spec and documentation in our typescript files
 - Document generation:
   - `docs/MapView.md` is generated from `src/components/MapView.tsx` with `react-docgen`

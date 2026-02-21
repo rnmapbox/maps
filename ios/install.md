@@ -50,23 +50,10 @@ Read on if you want to edit your Mapbox version or flavor.
 
 ## Using a custom version of the Mapbox SDK
 
-You can also override the version to use. *Warning:* if you set a version, then later update, the `rnamapbox/maps` library it's possible that you'll end up using Mapbox older version than supported. Make sure you revise this value with `@rnmapbox/maps` updates. Also note that for 11.0 or later versions you'll need to set `$RNMapboxMapsUseV11 = true`, see bellow
+You can override the version to use. *Warning:* if you set a version, then later update the `@rnmapbox/maps` library it's possible that you'll end up using an older Mapbox version than supported. Make sure you revise this value with `@rnmapbox/maps` updates.
 
 ```ruby
-# Warning: only for advanced use cases, only do this if you know what you're doing.
-# $RNMapboxMapsVersion = '~> 10.16.2'
-```
-
-<br/>
-
-## V11 support
-
-We have support for mapbox 11.
-
-Add the following to your Podfile:
-
-```ruby
-$RNMapboxMapsVersion = '= 11.13.4'
+$RNMapboxMapsVersion = '= 11.16.2'
 ```
 
 If using expo managed workflow, set the "RNMapboxMapsVersion" variable. See the [expo guide](/plugin/install.md)

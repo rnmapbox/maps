@@ -61,25 +61,7 @@ yarn generate
 
 ### Building for Different Configurations
 
-#### Mapbox v10 - deprecated
-```bash
-# iOS
-cd example/ios
-RNMBX10=1 pod update MapboxMaps
-
-# Android
-# Edit example/android/gradle.properties: RNMBX10=true
-```
-
-#### New Architecture/Fabric
-```bash
-# iOS
-cd example/ios
-RCT_NEW_ARCH_ENABLED=1 pod update MapboxMaps
-
-# Android
-# Edit example/android/gradle.properties: newArchEnabled=true
-```
+The project uses Mapbox Maps SDK v11 and React Native's New Architecture (Fabric/TurboModules) exclusively.
 
 ## Architecture Overview
 
@@ -91,7 +73,7 @@ RCT_NEW_ARCH_ENABLED=1 pod update MapboxMaps
   - Each component extends either `AbstractLayer` or `AbstractSource` for common functionality
 
 ### Native Bridge
-- **Specs** (`src/specs/`): TurboModule/Fabric component specs for new architecture
+- **Specs** (`src/specs/`): TurboModule/Fabric component specs
 - **Native Components**: Each component has corresponding native implementations:
   - iOS: `ios/RNMBX/RNMBX*.swift` and `RNMBX*ComponentView.mm`
   - Android: `android/src/main/java/` (generated from specs)
@@ -143,4 +125,4 @@ RCT_NEW_ARCH_ENABLED=1 pod update MapboxMaps
 - The example app is the primary way to test changes
 - Native changes require rebuilding the app
 - Web support is experimental and may have limited functionality
-- Support both old and new React Native architectures
+- Requires React Native 0.79+ with New Architecture (Fabric/TurboModules)

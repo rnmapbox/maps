@@ -10,35 +10,19 @@ body:
 
       ---
 
-      ⚠️ **Deprecation Notice** ⚠️
-
-      **v10.x and old architecture (Paper/bridge) issues are deprecated and will not receive attention.**
-
-      Please upgrade to v11+ with new architecture (Fabric/TurboModules) for active support.
+      **Requirements:** This library requires Mapbox Maps SDK v11 and React Native 0.79+ with New Architecture (Fabric/TurboModules).
 
       **For sponsors-only support and resources:** https://github.com/rnmapbox/maps/wiki/SponsorsRepo
       **Become a sponsor for special support:** https://github.com/sponsors/rnmapbox
 
       ---
-- type: dropdown
-  id: mapbox-implementation
-  attributes:
-    label: Mapbox Implementation
-    description: |-
-      Check `RNMapboxMapsImpl` in your Podfile/gradle files. Defaults to `Maplibre`.
-    options:
-      - Mapbox
-      - Mapbox GL
-      - Maplibre
-  validations:
-    required: true
 - type: input
   id: mapbox-version
   attributes:
     label: Mapbox Version
     description: |-
-      Check `RNMapboxMapsVersion` in your Podfile/gradle files, set to `default` if you don't cusomize the version
-    placeholder: 10.7.0
+      Check `RNMapboxMapsVersion` in your Podfile/gradle files, set to `default` if you don't customize the version
+    placeholder: 11.16.2
   validations:
     required: true
 - type: input
@@ -47,18 +31,7 @@ body:
     label: React Native Version
     description: |-
       The React Native version
-    placeholder: 0.73.2
-  validations:
-    required: true
-- type: dropdown
-  id: react-native-architecture
-  attributes:
-    label: React Native Architecture
-    description: |-
-      Select the React Native architecture you're using
-    options:
-      - New Architecture (Fabric/TurboModules)
-      - Old Architecture (Paper/bridge)
+    placeholder: 0.79.0
   validations:
     required: true
 - type: dropdown
@@ -78,8 +51,8 @@ body:
   attributes:
     label: "`@rnmapbox/maps` version"
     description: |-
-      The version of `@rnmapbox/maps`, such as `#main`, `10.0.0-beta.32`
-    value: 10.0.0-beta.11
+      The version of `@rnmapbox/maps`
+    placeholder: 10.3.0
   validations:
     required: true
 - type: textarea
