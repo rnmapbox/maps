@@ -466,6 +466,15 @@ enum ModelTypeEnum {
   LocationIndicator = 'location-indicator',
 }
 type ModelTypeEnumValues = 'common-3d' | 'location-indicator';
+enum ModelElevationReferenceEnum {
+  /** Elevated rendering is enabled. Use this mode to elevate models relative to the sea level. */
+  Sea = 'sea',
+  /** Elevated rendering is enabled. Use this mode to elevate models relative to the ground's height below them. */
+  Ground = 'ground',
+  /** Elevated rendering is enabled. Use this mode to describe additive and stackable features that should exist only on top of road polygons. */
+  HdRoadMarkup = 'hd-road-markup',
+}
+type ModelElevationReferenceEnumValues = 'sea' | 'ground' | 'hd-road-markup';
 enum BackgroundPitchAlignmentEnum {
   /** The background is aligned to the plane of the map. */
   Map = 'map',
@@ -721,14 +730,7 @@ export interface LineLayerStyleProps {
    */
   lineTrimOffset?: number[];
   /**
-   * Vertical offset from ground, in meters. Defaults to 0. This is an experimental property with some known issues:
-   * Not supported for globe projection at the moment
-   * Elevated line discontinuity is possible on tile borders with terrain enabled
-   * Rendering artifacts can happen near line joins and line caps depending on the line styling
-   * Rendering artifacts relating to `lineOpacity` and `lineBlur`
-   * Elevated line visibility is determined by layer order
-   * ZFighting issues can happen with intersecting elevated lines
-   * Elevated lines don't cast shadows
+   * Vertical offset from ground, in meters. Not supported for globe projection at the moment.
    *
    * @requires lineElevationReference
    */
@@ -1905,7 +1907,7 @@ export interface RasterLayerStyleProps {
    */
   rasterArrayBand?: string;
   /**
-   * Specifies an uniform elevation from the ground, in meters.
+   * Defines an uniform elevation from the base specified in rasterElevationReference, in meters.
    */
   rasterElevation?: Value<number, ['zoom']>;
 
@@ -2015,6 +2017,10 @@ export interface HillshadeLayerStyleProps {
   hillshadeAccentColorTransition?: Transition;
 }
 export interface ModelLayerStyleProps {
+  /**
+   * If true, the models will be reduced in density based on the zoom level. This is useful for large datasets that may be slow to render.
+   */
+  modelAllowDensityReduction?: boolean;
   /**
    * Whether this layer is displayed.
    */
@@ -2141,6 +2147,12 @@ export interface ModelLayerStyleProps {
    * This parameter defines the range for the fadeOut effect before an automatic content cutoff on pitched map views. The automatic cutoff range is calculated according to the minimum required zoom level of the source and layer. The fade range is expressed in relation to the height of the map view. A value of 1.0 indicates that the content is faded to the same extent as the map's height in pixels, while a value close to zero represents a sharp cutoff. When the value is set to 0.0, the cutoff is completely disabled. Note: The property has no effect on the map if terrain is enabled.
    */
   modelCutoffFadeRange?: Value<number>;
+  /**
+   * Selects the base of the model. Some modes might require precomputed elevation data in the tileset. When using vector tiled source as the model layer source and hdRoadMarkup elevation reference, this property acts as layout property and elevation is evaluated only in tile loading time.
+   */
+  modelElevationReference?: Value<
+    Enum<ModelElevationReferenceEnum, ModelElevationReferenceEnumValues>
+  >;
 }
 export interface BackgroundLayerStyleProps {
   /**
@@ -2152,7 +2164,7 @@ export interface BackgroundLayerStyleProps {
    *
    * @disabledBy backgroundPattern
    */
-  backgroundColor?: Value<string, ['zoom']>;
+  backgroundColor?: Value<string, ['zoom', 'measure-light']>;
 
   /**
    * The transition affecting any changes to this layer’s backgroundColor property.
