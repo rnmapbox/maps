@@ -53,8 +53,8 @@ RCT_EXPORT_METHOD(updateCameraStop:(nonnull NSNumber *)viewRef
 RCT_EXPORT_METHOD(moveBy:(nonnull NSNumber *)viewRef
                   x:(double)x
                   y:(double)y
-                  animationMode:(nonnull NSNumber *)animationMode
-                  animationDuration:(nonnull NSNumber *)animationDuration
+                  animationMode:(double)animationMode
+                  animationDuration:(double)animationDuration
                   resolve:(RCTPromiseResolveBlock)resolve
                   reject:(RCTPromiseRejectBlock)reject) {
         [self withCamera:viewRef block:^(RNMBXCamera *camera) {
@@ -65,9 +65,9 @@ RCT_EXPORT_METHOD(moveBy:(nonnull NSNumber *)viewRef
  RCT_EXPORT_METHOD(scaleBy:(nonnull NSNumber *)viewRef
                    x:(double)x
                    y:(double)y
-                   animationMode:(nonnull NSNumber *)animationMode
-                   animationDuration:(nonnull NSNumber *)animationDuration
-                   scaleFactor:(nonnull NSNumber *)scaleFactor
+                   animationMode:(double)animationMode
+                   animationDuration:(double)animationDuration
+                   scaleFactor:(double)scaleFactor
                    resolve:(RCTPromiseResolveBlock)resolve
                    reject:(RCTPromiseRejectBlock)reject) {
          [self withCamera:viewRef block:^(RNMBXCamera *camera) {
