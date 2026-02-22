@@ -34,7 +34,7 @@ public class RNMBXHeatmapLayer: RNMBXVectorLayer {
         styler.heatmapLayer(
           layer: &styleLayer,
           reactStyle: reactStyle,
-          oldReactStyle: oldReatStyle,
+          oldReactStyle: oldReactStyle,
           applyUpdater: { (updater) in logged("RNMBXHeatmapLayer.updateLayer") {
             try style.updateLayer(withId: self.id, type: LayerType.self) { (layer: inout HeatmapLayer) in updater(&layer) }
           }},

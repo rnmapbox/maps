@@ -19,10 +19,10 @@ public class RNMBXLayer : UIView, RNMBXMapComponent, RNMBXSourceConsumer {
     didSet { self.optionsChanged() }
   }
 
-  var oldReatStyle: Dictionary<String, Any>? = nil
+  var oldReactStyle: Dictionary<String, Any>? = nil
   @objc public var reactStyle : Dictionary<String, Any>? = nil {
     willSet {
-      oldReatStyle = reactStyle
+      oldReactStyle = reactStyle
     }
     didSet {
       DispatchQueue.main.async {

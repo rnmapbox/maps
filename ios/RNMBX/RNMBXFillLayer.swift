@@ -80,7 +80,7 @@ public class RNMBXFillLayer: RNMBXVectorLayer {
         styler.fillLayer(
           layer: &styleLayer,
           reactStyle: reactStyle,
-          oldReactStyle: oldReatStyle,
+          oldReactStyle: oldReactStyle,
           applyUpdater: { (updater) in logged("RNMBXFillLayer.updateLayer") {
             try style.updateLayer(withId: self.id, type: LayerType.self) { (layer: inout FillLayer) in updater(&layer) }
           }},
