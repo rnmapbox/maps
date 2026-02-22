@@ -54,7 +54,6 @@ class RNMBXSnapshotModule(private val mContext: ReactApplicationContext) :
                 snapshotter.setCamera(getCameraOptions(jsOptions, snapshotter))
             } catch (e: IllegalArgumentException) {
                 promise.reject(REACT_CLASS, e.message, e)
-                mSnapshotterMap.remove(snapshotterID)
                 return@runOnUiQueueThread
             }
             mSnapshotterMap[snapshotterID] = snapshotter
