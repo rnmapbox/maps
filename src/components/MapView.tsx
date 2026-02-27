@@ -75,6 +75,12 @@ export type GestureSettings = {
    */
   doubleTouchToZoomOutEnabled?: boolean;
   /**
+   * By default, gestures rotate and zoom around the center of the gesture. Set
+   * this property to rotate and zoom around a fixed point instead.
+  */
+ focalPoint?: Point;
+
+  /**
    * Whether pan/scroll is enabled for the pinch gesture.
    */
   pinchPanEnabled?: boolean;
