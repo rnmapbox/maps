@@ -77,8 +77,8 @@ export type GestureSettings = {
   /**
    * By default, gestures rotate and zoom around the center of the gesture. Set
    * this property to rotate and zoom around a fixed point instead.
-  */
- focalPoint?: Point;
+   */
+  focalPoint?: Point;
 
   /**
    * Whether pan/scroll is enabled for the pinch gesture.
