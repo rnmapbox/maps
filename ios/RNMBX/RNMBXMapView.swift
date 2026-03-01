@@ -236,7 +236,9 @@ open class RNMBXMapView: UIView, RCTInvalidating {
   }()
 
   lazy var calloutAnnotationManager : MapboxMaps.PointAnnotationManager = {
-    return mapView.annotations.makePointAnnotationManager(id: "RNMBX-mapview-callouts")
+    let manager = mapView.annotations.makePointAnnotationManager(id: "RNMBX-mapview-callouts")
+    manager.iconAllowOverlap = true
+    return manager
   }()
 
   var _mapView: MapView! = nil
@@ -1897,6 +1899,7 @@ class RNMBXPointAnnotationManager : AnnotationInteractionDelegate {
     if (selected != nil) {
       deselectCurrentlySelected(deselectAnnotationOnTap: false)
     }
+    pointAnnotation.doSelect()
     selected = pointAnnotation
   }
 

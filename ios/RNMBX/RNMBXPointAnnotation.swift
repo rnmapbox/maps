@@ -214,7 +214,7 @@ public class RNMBXPointAnnotation : RNMBXInteractiveElement {
     if let callout = callout,
        let calloutImage = _createViewSnapshot(view: callout),
        let point = point() {
-      
+
       var calloutPtAnnotation = PointAnnotation(point: point)
       calloutId = calloutPtAnnotation.id
       let name =  "rnviewcallout-\(gid())-\(calloutPtAnnotation.id)"
