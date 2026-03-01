@@ -1,15 +1,11 @@
 import React from 'react';
-import { NativeModules, Platform, type ViewProps } from 'react-native';
+import { type ViewProps } from 'react-native';
 
 import RNMBXMakerViewContentComponent from '../specs/RNMBXMarkerViewContentNativeComponent';
 import NativeMarkerViewComponent from '../specs/RNMBXMarkerViewNativeComponent';
 import { type Position } from '../types/Position';
 import { toJSONString } from '../utils';
 import { makePoint } from '../utils/geoUtils';
-
-import PointAnnotation from './PointAnnotation';
-
-const Mapbox = NativeModules.RNMBXModule;
 
 type Props = ViewProps & {
   /**
@@ -27,8 +23,6 @@ type Props = ViewProps & {
   };
 
   /**
-   * @v10
-   *
    * Whether or not nearby markers on the map should all be displayed. If false, adjacent
    * markers will 'collapse' and only one will be shown. Defaults to false.
    */
@@ -69,17 +63,6 @@ class MarkerView extends React.PureComponent<Props> {
     isSelected: false,
   };
 
-  static lastId = 0;
-  __idForPointAnnotation?: string;
-
-  _idForPointAnnotation(): string {
-    if (this.__idForPointAnnotation === undefined) {
-      MarkerView.lastId = MarkerView.lastId + 1;
-      this.__idForPointAnnotation = `MV-${MarkerView.lastId}`;
-    }
-    return this.__idForPointAnnotation;
-  }
-
   _getCoordinate(coordinate: Position): string | undefined {
     if (!coordinate) {
       return undefined;
@@ -96,12 +79,6 @@ class MarkerView extends React.PureComponent<Props> {
     ) {
       console.warn(
         `[MarkerView] Anchor with value (${this.props.anchor.x}, ${this.props.anchor.y}) should not be outside the range [(0, 0), (1, 1)]`,
-      );
-    }
-
-    if (Platform.OS === 'ios' && !Mapbox.MapboxV10) {
-      return (
-        <PointAnnotation id={this._idForPointAnnotation()} {...this.props} />
       );
     }
 

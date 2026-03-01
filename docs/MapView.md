@@ -253,7 +253,7 @@ boolean
 ```
 [Android only] Enable/Disable use of GLSurfaceView instead of TextureView.
 
-  _defaults to:_ `RNMBXModule.MapboxV10 ? true : false`
+  _defaults to:_ `true`
 
   
 ### requestDisallowInterceptTouchEvent

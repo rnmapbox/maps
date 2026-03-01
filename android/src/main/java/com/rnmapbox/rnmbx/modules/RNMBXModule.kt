@@ -114,6 +114,7 @@ class RNMBXModule(private val mReactContext: ReactApplicationContext) : ReactCon
         val locationModuleCallbackNames: MutableMap<String, String> = HashMap()
         locationModuleCallbackNames["Update"] = RNMBXLocationModule.LOCATION_UPDATE
         return MapBuilder.builder<String, Any>()
+            // Deprecated: means v10 or later, always true. Will be removed in next major version.
             .put("MapboxV10", true)
             .put("StyleURL", styleURLS)
             .put("EventTypes", eventTypes)
