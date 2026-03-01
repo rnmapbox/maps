@@ -5358,6 +5358,13 @@
               "description": "Whether single tapping the map with two touches results in a zoom-out animation."
             },
             {
+              "name": "focalPoint",
+              "required": false,
+              "type": "signature",
+              "default": "none",
+              "description": "By default, gestures rotate and zoom around the center of the gesture. Set\nthis property to rotate and zoom around a fixed point instead."
+            },
+            {
               "name": "pinchPanEnabled",
               "required": false,
               "type": "boolean",
