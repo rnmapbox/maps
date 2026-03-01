@@ -45,6 +45,16 @@ using namespace facebook::react;
   return concreteComponentDescriptorProvider<RNMBXCalloutComponentDescriptor>();
 }
 
+- (void)mountChildComponentView:(UIView<RCTComponentViewProtocol> *)childComponentView index:(NSInteger)index
+{
+    [_view insertSubview:childComponentView atIndex:index];
+}
+
+- (void)unmountChildComponentView:(UIView<RCTComponentViewProtocol> *)childComponentView index:(NSInteger)index
+{
+    [childComponentView removeFromSuperview];
+}
+
 - (void)updateProps:(const Props::Shared &)props oldProps:(const Props::Shared &)oldProps
 {
   const auto &newProps = static_cast<const RNMBXCalloutProps &>(*props);
