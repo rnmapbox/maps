@@ -80,11 +80,13 @@ class RNMBXPointAnnotationManager(reactApplicationContext: ReactApplicationConte
 
     override fun setSelected(
         annotation: RNMBXPointAnnotation,
-        value: Dynamic?
+        value: Dynamic
     ) {
-       value?.let {
-           annotation.isSelected = it.asBoolean()
-       }
+        if (value.isNull) {
+            Logger.e("RNMBXPointAnnotationManager", "selected value is null")
+            return
+        }
+        annotation.setReactSelected(value.asBoolean())
     }
 
     @ReactProp(name = "draggable")
