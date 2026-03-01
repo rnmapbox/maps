@@ -52,8 +52,6 @@ the view, and (1, 1) is the bottom-right corner. Defaults to the center at (0.5,
 ```tsx
 boolean
 ```
-@v10
-
 Whether or not nearby markers on the map should all be displayed. If false, adjacent
 markers will 'collapse' and only one will be shown. Defaults to false.
 

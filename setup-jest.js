@@ -99,8 +99,6 @@ NativeModules.RNMBXModule = {
   setTelemetryEnabled: jest.fn(),
   setConnected: jest.fn(),
   clearData: jest.fn(),
-
-  MapboxV10: true,
 };
 
 NativeModules.RNMBXOfflineModule = nativeModule({

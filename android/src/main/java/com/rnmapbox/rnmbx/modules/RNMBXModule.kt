@@ -114,7 +114,6 @@ class RNMBXModule(private val mReactContext: ReactApplicationContext) : ReactCon
         val locationModuleCallbackNames: MutableMap<String, String> = HashMap()
         locationModuleCallbackNames["Update"] = RNMBXLocationModule.LOCATION_UPDATE
         return MapBuilder.builder<String, Any>()
-            .put("MapboxV10", true)
             .put("StyleURL", styleURLS)
             .put("EventTypes", eventTypes)
             .put("StyleSource", styleSourceConsts)
