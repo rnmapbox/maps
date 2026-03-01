@@ -23,6 +23,8 @@ class RNMBXModule : NSObject {
   @objc
   func constantsToExport() -> [AnyHashable: Any]! {
     return [
+      // Deprecated: means v10 or later, always true. Will be removed in next major version.
+      "MapboxV10":true,
       "StyleURL":
         [
           "Street": StyleURI.streets.rawValue,
