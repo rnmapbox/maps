@@ -1893,6 +1893,19 @@ class RNMBXPointAnnotationManager : AnnotationInteractionDelegate {
     //   onTap(annotations: annotations)
   }
 
+  func selected(pointAnnotation: RNMBXPointAnnotation) {
+    if (selected != nil) {
+      deselectCurrentlySelected(deselectAnnotationOnTap: false)
+    }
+    selected = pointAnnotation
+  }
+
+  func unselected(pointAnnotation: RNMBXPointAnnotation) {
+    if (selected == pointAnnotation) {
+      deselectCurrentlySelected(deselectAnnotationOnTap: false)
+    }
+  }
+
   func deselectCurrentlySelected(deselectAnnotationOnTap: Bool = false) -> Bool {
     if let selected = selected {
       selected.doDeselect(deselectAnnotationOnMapTap: deselectAnnotationOnTap)
@@ -2120,6 +2133,7 @@ class RNMBXPointAnnotationManager : AnnotationInteractionDelegate {
     )
 
   func add(_ annotation: PointAnnotation, _ rnmbxPointAnnotation: RNMBXPointAnnotation) {
+    rnmbxPointAnnotation.manager = self
     manager.annotations.append(annotation)
     manager.refresh()
     annotations.setObject(rnmbxPointAnnotation, forKey: annotation.id as NSString)
