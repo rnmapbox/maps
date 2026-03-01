@@ -10,6 +10,8 @@ final class WeakRef<T: AnyObject> {
 }
 @objc
 public class RNMBXPointAnnotation : RNMBXInteractiveElement {
+  weak var manager: RNMBXPointAnnotationManager? = nil
+
   static let key = "RNMBXPointAnnotation"
   static var gid = 0;
   
@@ -31,7 +33,25 @@ public class RNMBXPointAnnotation : RNMBXInteractiveElement {
   @objc public var onDrag: RCTBubblingEventBlock? = nil
   @objc public var onDragEnd: RCTBubblingEventBlock? = nil
   @objc public var onSelected: RCTBubblingEventBlock? = nil
-  
+
+  private var selected: Bool? = nil {
+    didSet {
+      update { annotation in
+        if let selected = selected {
+          annotation.isSelected = selected
+        }
+      }
+    }
+  }
+
+  @objc public func setReactSelected(_ _selected: Bool) {
+    if (_selected == true && self.selected != true) {
+      manager?.selected(pointAnnotation: self)
+    } else if (_selected == false && self.selected == true) {
+      manager?.unselected(pointAnnotation: self)
+    }
+  }
+
   @objc public var coordinate : String? {
     didSet {
       _updateCoordinate()
@@ -173,14 +193,16 @@ public class RNMBXPointAnnotation : RNMBXInteractiveElement {
   }
   
   func doSelect() {
+    self.selected = true
     let event = makeEvent(isSelect: true)
     if let onSelected = onSelected {
       onSelected(event.toJSON())
     }
     onSelect()
   }
-  
+
   func doDeselect(deselectAnnotationOnMapTap: Bool = false) {
+    self.selected = false
     let event = makeEvent(isSelect: false, deselectAnnotationOnMapTap: deselectAnnotationOnMapTap)
     if let onDeselected = onDeselected {
       onDeselected(event.toJSON())
@@ -192,7 +214,7 @@ public class RNMBXPointAnnotation : RNMBXInteractiveElement {
     if let callout = callout,
        let calloutImage = _createViewSnapshot(view: callout),
        let point = point() {
-      
+
       var calloutPtAnnotation = PointAnnotation(point: point)
       calloutId = calloutPtAnnotation.id
       let name =  "rnviewcallout-\(gid())-\(calloutPtAnnotation.id)"

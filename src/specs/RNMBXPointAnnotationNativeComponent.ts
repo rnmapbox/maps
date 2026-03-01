@@ -28,6 +28,7 @@ export interface NativeProps extends ViewProps {
   draggable: UnsafeMixed<boolean>;
   id: UnsafeMixed<string>;
   anchor: UnsafeMixed<any>;
+  selected: UnsafeMixed<boolean>;
 
   onMapboxPointAnnotationDeselected: DirectEventHandler<OnMapboxPointAnnotationDeselectedEventType>;
   onMapboxPointAnnotationDrag: DirectEventHandler<OnMapboxPointAnnotationDragEventType>;

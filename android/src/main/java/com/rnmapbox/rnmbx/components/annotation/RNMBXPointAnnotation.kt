@@ -36,7 +36,7 @@ class RNMBXPointAnnotation(private val mContext: Context, private val mManager: 
     private val mTitle: String? = null
     private val mSnippet: String? = null
     private var mAnchor: Array<Float>? = null
-    private val mIsSelected = false
+    private var mIsSelected = false
     private var mDraggable = false
     private var mChildView: View? = null
     private var mChildBitmap: Bitmap? = null
@@ -187,7 +187,19 @@ class RNMBXPointAnnotation(private val mContext: Context, private val mManager: 
         }
     }
 
+    fun setReactSelected(selected: Boolean) {
+        if (selected && !mIsSelected) {
+            pointAnnotations?.let {
+                it.deselectSelectedAnnotation()
+                it.selectAnnotation(this)
+            }
+        } else if (!selected && mIsSelected) {
+            pointAnnotations?.deselectAnnotation(this)
+        }
+    }
+
     fun doSelect(shouldSendEvent: Boolean) {
+        mIsSelected = true
         if (calloutView != null) {
             makeCallout()
         }
@@ -197,6 +209,7 @@ class RNMBXPointAnnotation(private val mContext: Context, private val mManager: 
     }
 
     fun doDeselect() {
+        mIsSelected = false
         mManager.handleEvent(makeEvent(false))
         mCalloutSymbol?.let { mCalloutSymbol ->
             pointAnnotations?.delete(mCalloutSymbol)

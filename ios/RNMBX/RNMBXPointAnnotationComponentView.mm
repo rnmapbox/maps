@@ -130,6 +130,7 @@ using namespace facebook::react;
   RNMBX_OPTIONAL_PROP_BOOL(draggable)
   RNMBX_OPTIONAL_PROP_NSString(id)
   RNMBX_OPTIONAL_PROP_NSDictionary(anchor)
+  RNMBX_REMAP_OPTIONAL_PROP_BOOL(selected, reactSelected)
 
   [super updateProps:props oldProps:oldProps];
 }
