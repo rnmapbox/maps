@@ -5320,7 +5320,7 @@
         "name": "surfaceView",
         "required": false,
         "type": "boolean",
-        "default": "RNMBXModule.MapboxV10 ? true : false",
+        "default": "true",
         "description": "[Android only] Enable/Disable use of GLSurfaceView instead of TextureView."
       },
       {
@@ -5697,7 +5697,7 @@
         "required": false,
         "type": "boolean",
         "default": "false",
-        "description": "@v10\n\nWhether or not nearby markers on the map should all be displayed. If false, adjacent\nmarkers will 'collapse' and only one will be shown. Defaults to false."
+        "description": "Whether or not nearby markers on the map should all be displayed. If false, adjacent\nmarkers will 'collapse' and only one will be shown. Defaults to false."
       },
       {
         "name": "allowOverlapWithPuck",

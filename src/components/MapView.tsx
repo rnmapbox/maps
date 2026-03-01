@@ -37,11 +37,6 @@ if (RNMBXModule == null) {
     'Native part of Mapbox React Native libraries were not registered properly, double check our native installation guides.',
   );
 }
-if (!RNMBXModule.MapboxV10) {
-  console.warn(
-    '@rnmapbox/maps: Non v10 implementations are deprecated and will be removed in next version - see https://github.com/rnmapbox/maps/wiki/Deprecated-RNMapboxImpl-Maplibre',
-  );
-}
 
 const styles = StyleSheet.create({
   matchParent: { flex: 1 },
@@ -494,7 +489,7 @@ class MapView extends NativeBridgeComponent(
     compassFadeWhenNorth: false,
     logoEnabled: true,
     scaleBarEnabled: true,
-    surfaceView: RNMBXModule.MapboxV10 ? true : false,
+    surfaceView: true,
     requestDisallowInterceptTouchEvent: false,
     regionWillChangeDebounceTime: 10,
     regionDidChangeDebounceTime: 500,
@@ -591,83 +586,81 @@ class MapView extends NativeBridgeComponent(
   }
 
   _setHandledMapChangedEvents(props: Props) {
-    if (isAndroid() || RNMBXModule.MapboxV10) {
-      const events: string[] = [];
+    const events: string[] = [];
 
-      function addIfHasHandler(name: CallbablePropKeysWithoutOn) {
-        if (props[`on${name}`] != null) {
-          if (EventTypes[name] == null) {
-            if (name === 'DidFailLoadingMap') {
-              console.warn(
-                `rnmapbox maps: on${name} is deprecated, please use onMapLoadingError`,
-              );
-            } else {
-              console.warn(`rnmapbox maps: ${name} is not supported`);
-            }
+    function addIfHasHandler(name: CallbablePropKeysWithoutOn) {
+      if (props[`on${name}`] != null) {
+        if (EventTypes[name] == null) {
+          if (name === 'DidFailLoadingMap') {
+            console.warn(
+              `rnmapbox maps: on${name} is deprecated, please use onMapLoadingError`,
+            );
           } else {
-            events.push(EventTypes[name]);
-            return true;
+            console.warn(`rnmapbox maps: ${name} is not supported`);
           }
-        }
-        return false;
-      }
-
-      addIfHasHandler('RegionWillChange');
-      addIfHasHandler('RegionIsChanging');
-      addIfHasHandler('RegionDidChange');
-      addIfHasHandler('UserLocationUpdate');
-      addIfHasHandler('WillStartLoadingMap');
-      addIfHasHandler('DidFinishLoadingMap');
-      addIfHasHandler('MapLoadingError');
-      addIfHasHandler('DidFailLoadingMap');
-      addIfHasHandler('WillStartRenderingFrame');
-      addIfHasHandler('DidFinishRenderingFrame');
-      addIfHasHandler('DidFinishRenderingFrameFully');
-      addIfHasHandler('WillStartRenderingMap');
-      addIfHasHandler('DidFinishRenderingMap');
-      addIfHasHandler('DidFinishRenderingMapFully');
-      addIfHasHandler('DidFinishLoadingStyle');
-
-      addIfHasHandler('CameraChanged');
-      addIfHasHandler('MapIdle');
-
-      if (addIfHasHandler('RegionDidChange')) {
-        if (!this.deprecationLogged.regionDidChange) {
-          console.warn(
-            'onRegionDidChange is deprecated and will be removed in next release - please use onMapIdle. https://github.com/rnmapbox/maps/wiki/Deprecated-RegionIsDidChange',
-          );
-          this.deprecationLogged.regionDidChange = true;
-        }
-        if (props.onMapIdle) {
-          console.warn(
-            'rnmapbox/maps: only one of MapView.onRegionDidChange or onMapIdle is supported',
-          );
+        } else {
+          events.push(EventTypes[name]);
+          return true;
         }
       }
-      if (addIfHasHandler('RegionIsChanging')) {
-        if (!this.deprecationLogged.regionIsChanging) {
-          console.warn(
-            'onRegionIsChanging is deprecated and will be removed in next release - please use onCameraChanged. https://github.com/rnmapbox/maps/wiki/Deprecated-RegionIsDidChange',
-          );
-          this.deprecationLogged.regionIsChanging = true;
-        }
-        if (props.onCameraChanged) {
-          console.warn(
-            'rnmapbox/maps: only one of MapView.onRegionIsChanging or onCameraChanged is supported',
-          );
-        }
-      }
+      return false;
+    }
 
-      if (props.onRegionWillChange) {
+    addIfHasHandler('RegionWillChange');
+    addIfHasHandler('RegionIsChanging');
+    addIfHasHandler('RegionDidChange');
+    addIfHasHandler('UserLocationUpdate');
+    addIfHasHandler('WillStartLoadingMap');
+    addIfHasHandler('DidFinishLoadingMap');
+    addIfHasHandler('MapLoadingError');
+    addIfHasHandler('DidFailLoadingMap');
+    addIfHasHandler('WillStartRenderingFrame');
+    addIfHasHandler('DidFinishRenderingFrame');
+    addIfHasHandler('DidFinishRenderingFrameFully');
+    addIfHasHandler('WillStartRenderingMap');
+    addIfHasHandler('DidFinishRenderingMap');
+    addIfHasHandler('DidFinishRenderingMapFully');
+    addIfHasHandler('DidFinishLoadingStyle');
+
+    addIfHasHandler('CameraChanged');
+    addIfHasHandler('MapIdle');
+
+    if (addIfHasHandler('RegionDidChange')) {
+      if (!this.deprecationLogged.regionDidChange) {
         console.warn(
-          'onRegionWillChange is deprecated and will be removed in v10 - please use onRegionIsChanging',
+          'onRegionDidChange is deprecated and will be removed in next release - please use onMapIdle. https://github.com/rnmapbox/maps/wiki/Deprecated-RegionIsDidChange',
+        );
+        this.deprecationLogged.regionDidChange = true;
+      }
+      if (props.onMapIdle) {
+        console.warn(
+          'rnmapbox/maps: only one of MapView.onRegionDidChange or onMapIdle is supported',
         );
       }
-
-      this._runNativeMethod('setHandledMapChangedEvents', this._nativeRef, [
-        events,
-      ]);
     }
+    if (addIfHasHandler('RegionIsChanging')) {
+      if (!this.deprecationLogged.regionIsChanging) {
+        console.warn(
+          'onRegionIsChanging is deprecated and will be removed in next release - please use onCameraChanged. https://github.com/rnmapbox/maps/wiki/Deprecated-RegionIsDidChange',
+        );
+        this.deprecationLogged.regionIsChanging = true;
+      }
+      if (props.onCameraChanged) {
+        console.warn(
+          'rnmapbox/maps: only one of MapView.onRegionIsChanging or onCameraChanged is supported',
+        );
+      }
+    }
+
+    if (props.onRegionWillChange) {
+      console.warn(
+        'onRegionWillChange is deprecated and will be removed in v10 - please use onRegionIsChanging',
+      );
+    }
+
+    this._runNativeMethod('setHandledMapChangedEvents', this._nativeRef, [
+      events,
+    ]);
   }
 
   /**
@@ -770,10 +763,7 @@ class MapView extends NativeBridgeComponent(
     filter: FilterExpression | [] = [],
     layerIDs: string[] | null = null,
   ): Promise<GeoJSON.FeatureCollection | undefined> {
-    if (
-      bbox != null &&
-      (bbox.length === 4 || (RNMBXModule.MapboxV10 && bbox.length === 0))
-    ) {
+    if (bbox != null && (bbox.length === 4 || bbox.length === 0)) {
       const res = await this._runNative<{ data: GeoJSON.FeatureCollection }>(
         'queryRenderedFeaturesInRect',
         [bbox, getFilter(filter), layerIDs],
@@ -891,12 +881,6 @@ class MapView extends NativeBridgeComponent(
    * v10 only
    */
   async clearData(): Promise<void> {
-    if (!RNMBXModule.MapboxV10) {
-      console.warn(
-        'RNMapbox: clearData is only implemented in v10 implementation or later',
-      );
-      return;
-    }
     await this._runNative<void>('clearData');
   }
 
@@ -956,13 +940,6 @@ class MapView extends NativeBridgeComponent(
     sourceId: string,
     sourceLayerId: string | null = null,
   ): Promise<void> {
-    if (!RNMBXModule.MapboxV10) {
-      console.warn(
-        'RNMapbox: setFeatureState is only implemented in v10 implementation or later',
-      );
-      return;
-    }
-
     await this._runNative<void>('setFeatureState', [
       featureId,
       state,
@@ -983,13 +960,6 @@ class MapView extends NativeBridgeComponent(
     sourceId: string,
     sourceLayerId: string | null = null,
   ): Promise<Readonly<Record<string, unknown>>> {
-    if (!RNMBXModule.MapboxV10) {
-      console.warn(
-        'RNMapbox: setFeatureState is only implemented in v10 implementation or later',
-      );
-      return {};
-    }
-
     const res = await this._runNative<{
       featureState: Readonly<Record<string, unknown>>;
     }>('getFeatureState', [featureId, sourceId, sourceLayerId]);
@@ -1013,13 +983,6 @@ class MapView extends NativeBridgeComponent(
     sourceId: string,
     sourceLayerId: string | null = null,
   ): Promise<void> {
-    if (!RNMBXModule.MapboxV10) {
-      console.warn(
-        'RNMapbox: removeFeatureState is only implemented in v10 implementation or later',
-      );
-      return;
-    }
-
     await this._runNative<void>('removeFeatureState', [
       featureId,
       stateKey,
@@ -1187,13 +1150,11 @@ class MapView extends NativeBridgeComponent(
       return;
     }
 
-    if (RNMBXModule.MapboxV10) {
-      if (!this.deprecationLogged.contentInset) {
-        console.warn(
-          '@rnmapbox/maps: contentInset is deprecated, use Camera padding instead.',
-        );
-        this.deprecationLogged.contentInset = true;
-      }
+    if (!this.deprecationLogged.contentInset) {
+      console.warn(
+        '@rnmapbox/maps: contentInset is deprecated, use Camera padding instead.',
+      );
+      this.deprecationLogged.contentInset = true;
     }
 
     if (!Array.isArray(this.props.contentInset)) {
@@ -1235,9 +1196,6 @@ class MapView extends NativeBridgeComponent(
   }
 
   _setLocalizeLabels(props: Props) {
-    if (!RNMBXModule.MapboxV10) {
-      return;
-    }
     if (typeof props.localizeLabels === 'boolean') {
       props.localizeLabels = {
         locale: 'current',
