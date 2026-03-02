@@ -11,8 +11,11 @@ import com.google.gson.Gson
 import com.google.gson.stream.JsonWriter
 import com.mapbox.bindgen.Value
 import com.mapbox.maps.extension.style.expressions.generated.Expression
+import com.rnmapbox.rnmbx.components.location.RNMBXNativeUserLocationManager.Companion.TAG
 import com.rnmapbox.rnmbx.rncompat.dynamic.*
 import com.rnmapbox.rnmbx.utils.Logger
+import com.rnmapbox.rnmbx.utils.extensions.asBooleanOrNull
+import com.rnmapbox.rnmbx.utils.extensions.asStringOrNull
 import com.rnmapbox.rnmbx.utils.extensions.toJsonArray
 import java.io.StringWriter
 import javax.annotation.Nonnull
@@ -27,51 +30,50 @@ class RNMBXNativeUserLocationManager : ViewGroupManager<RNMBXNativeUserLocation>
 
     @ReactProp(name = "androidRenderMode")
     override fun setAndroidRenderMode(userLocation: RNMBXNativeUserLocation, mode: Dynamic) {
-        if (!mode.isNull) {
-            Logger.e("RNMBXNativeUserLocationManager", "androidRenderMode is deprecated, use puckBearing instead")
-        }
-        when (mode.asString()) {
-            "compass" -> userLocation.androidRenderMode = RenderMode.COMPASS
-            "gps" -> userLocation.androidRenderMode = RenderMode.GPS
-            "normal" -> userLocation.androidRenderMode = RenderMode.NORMAL
+        mode.asStringOrNull()?.let {
+            Logger.e(TAG, "androidRenderMode is deprecated, use puckBearing instead")
+
+            when (it) {
+                "compass" -> userLocation.androidRenderMode = RenderMode.COMPASS
+                "gps" -> userLocation.androidRenderMode = RenderMode.GPS
+                "normal" -> userLocation.androidRenderMode = RenderMode.NORMAL
+            }
         }
     }
 
     @ReactProp(name = "puckBearing")
     override fun setPuckBearing(view: RNMBXNativeUserLocation, value: Dynamic) {
-        when (value?.asString()) {
+        when (value.asStringOrNull()) {
             "heading" -> view.puckBearing = PuckBearing.HEADING
             "course" -> view.puckBearing = PuckBearing.COURSE
             null -> Unit
             else ->
-                Logger.e("RNMBXNativeUserLocationManager", "unexpected value for puckBearing: $value")
+                Logger.e(TAG, "unexpected value for puckBearing: $value")
         }
     }
 
     @ReactProp(name = "puckBearingEnabled")
     override fun setPuckBearingEnabled(view: RNMBXNativeUserLocation, value: Dynamic) {
-        if (!value.isNull) {
-            if (value.type == ReadableType.Boolean) {
-                view.puckBearingEnabled = value.asBoolean()
-            } else {
-                Logger.e("RNMBXNativeUserLocationManager", "unexpected value for puckBearingEnabled: $value")
-            }
+        value.asBooleanOrNull()?.let {
+            view.puckBearingEnabled = it
+        } ?: run {
+            Logger.e(TAG, "unexpected value for puckBearingEnabled: $value")
         }
     }
 
     @ReactProp(name = "topImage")
     override fun setTopImage(view: RNMBXNativeUserLocation, value: Dynamic?) {
-        view.topImage = value?.asString()
+        view.topImage = value?.asStringOrNull()
     }
 
     @ReactProp(name = "bearingImage")
     override fun setBearingImage(view: RNMBXNativeUserLocation, value: Dynamic?) {
-        view.bearingImage = value?.asString()
+        view.bearingImage = value?.asStringOrNull()
     }
 
     @ReactProp(name = "shadowImage")
     override fun setShadowImage(view: RNMBXNativeUserLocation, value: Dynamic?) {
-        view.shadowImage = value?.asString()
+        view.shadowImage = value?.asStringOrNull()
     }
 
     @ReactProp(name = "scale", defaultDouble = 1.0)
@@ -98,10 +100,9 @@ class RNMBXNativeUserLocationManager : ViewGroupManager<RNMBXNativeUserLocation>
 
     companion object {
         const val REACT_CLASS = "RNMBXNativeUserLocation"
+        const val TAG = "RNMBXNativeUserLocationManager"
     }
 }
-
-
 
 fun _convertToDoubleValueOrExpression(value: Dynamic?, name: String): Value? {
     if (value == null) {
@@ -111,7 +112,7 @@ fun _convertToDoubleValueOrExpression(value: Dynamic?, name: String): Value? {
         ReadableType.Array -> {
             val array = value.asArray()
             if (array == null) {
-                Logger.e("RNMBXNativeUserLocationManager", "_convertToDoubleValueOrExpression: array is null for $name")
+                Logger.e(TAG, "_convertToDoubleValueOrExpression: array is null for $name")
                 return null
             }
             Expression.fromRaw(Gson().toJson(array.toJsonArray()))
@@ -120,10 +121,10 @@ fun _convertToDoubleValueOrExpression(value: Dynamic?, name: String): Value? {
             Value.valueOf(value.asDouble())
         else -> {
             Logger.e(
-                "RNMBXNativeUserLocationmanager",
-                "_convertToExpressionString: cannot convert $name to a double or double exrpession. $value"
+                TAG,
+                "_convertToExpressionString: cannot convert $name to a double or double expression. $value"
             )
-            return null
+            null
         }
     }
 }
