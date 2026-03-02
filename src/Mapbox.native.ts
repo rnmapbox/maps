@@ -89,6 +89,7 @@ export type {
   AtmosphereLayerStyleProps as AtmosphereLayerStyle,
   TerrainLayerStyleProps as TerrainLayerStyle,
   ModelLayerStyleProps as ModelLayerStyle,
+  Expression,
 } from './utils/MapboxStyles';
 
 import { deprecatedClass } from './utils/deprecation';
