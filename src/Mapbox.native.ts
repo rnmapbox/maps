@@ -9,7 +9,11 @@ export {
   type CameraStop,
 } from './components/Camera';
 export { Atmosphere } from './components/Atmosphere';
-export { default as MapView, type MapState } from './components/MapView';
+export {
+  default as MapView,
+  type MapState,
+  type ScreenPointPayload,
+} from './components/MapView';
 export { default as Light } from './components/Light';
 export { default as PointAnnotation } from './components/PointAnnotation';
 export { default as Annotation } from './components/Annotation';
