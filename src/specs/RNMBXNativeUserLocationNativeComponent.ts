@@ -7,7 +7,7 @@ import codegenNativeComponent from 'react-native/Libraries/Utilities/codegenNati
 
 import type { Expression } from '../utils/MapboxStyles';
 
-import { UnsafeMixed } from './codegenUtils';
+import { type UnsafeMixed } from './codegenUtils';
 
 type Value<T> = T | Expression;
 

@@ -2,7 +2,7 @@ import { Camera, MapView } from '@rnmapbox/maps';
 
 const CENTER_COORD = [-74.00597, 40.71427];
 
-import { ExampleWithMetadata } from '../common/ExampleMetadata'; // exclude-from-doc
+import { type ExampleWithMetadata } from '../common/ExampleMetadata'; // exclude-from-doc
 
 const LocalizeLabels = () => {
   return (

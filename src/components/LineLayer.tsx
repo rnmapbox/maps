@@ -4,7 +4,7 @@ import type {
   FilterExpression,
   LineLayerStyleProps,
 } from '../utils/MapboxStyles';
-import { StyleValue } from '../utils/StyleValue';
+import { type StyleValue } from '../utils/StyleValue';
 import RNMBXLineLayerNativeComponent from '../specs/RNMBXLineLayerNativeComponent';
 
 import AbstractLayer from './AbstractLayer';

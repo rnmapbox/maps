@@ -1,7 +1,7 @@
-import { ComponentProps, useCallback, useRef } from 'react';
+import { type ComponentProps, useCallback, useRef } from 'react';
 import { Camera, FillLayer, MapView, ShapeSource } from '@rnmapbox/maps';
 
-import { ExampleWithMetadata } from '../common/ExampleMetadata';
+import { type ExampleWithMetadata } from '../common/ExampleMetadata';
 
 type CustomProperties = {
   normalColor: string;

@@ -2,11 +2,17 @@ import { useState } from 'react';
 import Mapbox, { type SymbolLayerStyle } from '@rnmapbox/maps';
 // @ts-ignore - @turf packages have type resolution issues with package.json exports
 import { Feature } from '@turf/helpers';
-import { StyleProp, Text, TextStyle, View, ViewStyle } from 'react-native';
+import {
+  type StyleProp,
+  Text,
+  type TextStyle,
+  View,
+  type ViewStyle,
+} from 'react-native';
 
 import exampleIcon from '../../assets/pin.png';
 import sheet from '../../styles/sheet';
-import { ExampleWithMetadata } from '../common/ExampleMetadata'; // exclude-from-doc
+import { type ExampleWithMetadata } from '../common/ExampleMetadata'; // exclude-from-doc
 
 const defaultCamera = {
   centerCoordinate: [12.338, 45.4385],

@@ -3,7 +3,7 @@ import { Alert } from 'react-native';
 import Mapbox from '@rnmapbox/maps';
 
 import sheet from '../../styles/sheet';
-import { ExampleWithMetadata } from '../common/ExampleMetadata'; // exclude-from-doc
+import { type ExampleWithMetadata } from '../common/ExampleMetadata'; // exclude-from-doc
 
 const style = JSON.stringify(require('../../assets/map-styleURL-style.json'));
 

@@ -3,11 +3,11 @@ import {
   View,
   StyleSheet,
   NativeModules,
-  ViewProps,
-  NativeSyntheticEvent,
-  NativeMethods,
-  HostComponent,
-  LayoutChangeEvent,
+  type ViewProps,
+  type NativeSyntheticEvent,
+  type NativeMethods,
+  type HostComponent,
+  type LayoutChangeEvent,
 } from 'react-native';
 import debounce from 'debounce';
 

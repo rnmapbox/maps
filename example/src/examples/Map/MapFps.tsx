@@ -3,7 +3,7 @@ import Mapbox from '@rnmapbox/maps';
 import { Button } from '@rneui/base';
 
 import sheet from '../../styles/sheet';
-import { ExampleWithMetadata } from '../common/ExampleMetadata'; // exclude-from-doc
+import { type ExampleWithMetadata } from '../common/ExampleMetadata'; // exclude-from-doc
 
 const MapFps = () => {
   const [frameRate, setFrameRate] = useState(60);
