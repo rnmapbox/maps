@@ -52,15 +52,14 @@ class RNMBXAtmosphere(context: Context?) : AbstractSourceConsumer(context) {
     }
 
     fun addStyles() {
-        mAtmosphere?.also {
-            RNMBXStyleFactory.setAtmosphereLayerStyle(
-                it, RNMBXStyle(
-                    context, mReactStyle!!,
-                    mMap!!
-                )
-            )
-        } ?: run {
+        val atmosphere = mAtmosphere ?: run {
             Logger.e("RNMBXAtmosphere", "mAtmosphere is null")
+            return
         }
+        val reactStyle = mReactStyle ?: return
+        val map = mMap ?: return
+        RNMBXStyleFactory.setAtmosphereLayerStyle(
+            atmosphere, RNMBXStyle(context, reactStyle, map)
+        )
     }
 }
