@@ -24,7 +24,9 @@ export class AnimatedPoint extends AnimatedWithChildren {
       this.latitude = new Animated.Value(this.latitude);
     }
 
-    this._listeners = {};
+    // RN 0.83+ expects _listeners to be a Set, not an object
+    // Keep our own listener tracking separate
+    this._pointListeners = {};
   }
 
   setValue(point = DEFAULT_POINT) {
@@ -61,7 +63,7 @@ export class AnimatedPoint extends AnimatedWithChildren {
       }
     };
 
-    this._listeners[id] = {
+    this._pointListeners[id] = {
       longitude: this.longitude.addListener(completeCB),
       latitude: this.latitude.addListener(completeCB),
     };
@@ -70,9 +72,11 @@ export class AnimatedPoint extends AnimatedWithChildren {
   }
 
   removeListener(id) {
-    this.longitude.removeListener(this._listeners[id].longitude);
-    this.latitude.removeListener(this._listeners[id].latitude);
-    delete this._listeners[id];
+    if (this._pointListeners[id]) {
+      this.longitude.removeListener(this._pointListeners[id].longitude);
+      this.latitude.removeListener(this._pointListeners[id].latitude);
+      delete this._pointListeners[id];
+    }
   }
 
   spring(config = { coordinates: DEFAULT_COORD }) {

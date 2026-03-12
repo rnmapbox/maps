@@ -66,22 +66,24 @@ public class MBTilesServer {
     }
 
     public func stop() {
+        listener?.stateUpdateHandler = nil
+        listener?.newConnectionHandler = nil
         listener?.cancel()
         listener = nil
         RNMBXLogInfo("MBTiles server stopped")
     }
 
     private func handleConnection(_ connection: NWConnection) {
-        connection.stateUpdateHandler = { state in
+        connection.stateUpdateHandler = { [weak self] state in
             switch state {
             case .ready:
-                // Ready to receive data
-                self.receiveRequest(on: connection)
+                self?.receiveRequest(on: connection)
             case .failed(let error):
                 RNMBXLogError("Connection failed: \(error.localizedDescription)")
+                connection.stateUpdateHandler = nil
                 connection.cancel()
             case .cancelled:
-                break
+                connection.stateUpdateHandler = nil
             default:
                 break
             }
@@ -94,6 +96,7 @@ public class MBTilesServer {
         connection.receive(minimumIncompleteLength: 1, maximumLength: 65536) {
             [weak self] data, _, isComplete, error in
             guard let self = self, let data = data, !data.isEmpty, error == nil else {
+                connection.stateUpdateHandler = nil
                 connection.cancel()
                 return
             }
@@ -152,7 +155,7 @@ public class MBTilesServer {
                                     // Send the tile data as response
                                     let contentType = self.mimeTypeFor(format: format)
                                     var headers =
-                                        "HTTP/1.1 200 OK\r\nContent-Type: \(contentType)\r\nContent-Length: \(tileData.count)\r\n"
+                                        "HTTP/1.1 200 OK\r\nContent-Type: \(contentType)\r\nContent-Length: \(tileData.count)\r\nConnection: close\r\n"
 
                                     if source.isVector {
                                         headers += "Content-Encoding: gzip\r\n"
@@ -161,20 +164,16 @@ public class MBTilesServer {
                                     headers += "\r\n"
 
                                     if let headerData = headers.data(using: .utf8) {
-                                        // Send headers
+                                        // Send headers then tile data, then clean up
                                         connection.send(
                                             content: headerData,
-                                            completion: .contentProcessed { error in
-                                                if error == nil {
-                                                    // Send the tile data
-                                                    connection.send(
-                                                        content: tileData,
-                                                        completion: .contentProcessed { error in
-                                                            connection.cancel()
-                                                        })
-                                                } else {
-                                                    connection.cancel()
-                                                }
+                                            completion: .contentProcessed { _ in
+                                                connection.send(
+                                                    content: tileData,
+                                                    completion: .contentProcessed { _ in
+                                                        connection.stateUpdateHandler = nil
+                                                        connection.cancel()
+                                                    })
                                             })
                                     } else {
                                         self.sendErrorResponse(connection, statusCode: 500)
@@ -214,14 +213,17 @@ public class MBTilesServer {
         default: break
         }
 
-        let response = "HTTP/1.1 \(statusCode) \(statusText)\r\nContent-Length: 0\r\n\r\n"
+        let response =
+            "HTTP/1.1 \(statusCode) \(statusText)\r\nContent-Length: 0\r\nConnection: close\r\n\r\n"
         if let data = response.data(using: .utf8) {
             connection.send(
                 content: data,
                 completion: .contentProcessed { _ in
+                    connection.stateUpdateHandler = nil
                     connection.cancel()
                 })
         } else {
+            connection.stateUpdateHandler = nil
             connection.cancel()
         }
     }
@@ -247,6 +249,8 @@ public class MBTilesSource: MBTileProvider {
     public let id: String
     public let url: String
     private var db: OpaquePointer?
+    private var tileStatement: OpaquePointer?
+    private let dbQueue = DispatchQueue(label: "com.rnmapbox.mbtiles.db")
 
     public var isVector: Bool = false
     public var format: String = ""
@@ -292,6 +296,13 @@ public class MBTilesSource: MBTileProvider {
 
         // Read additional metadata
         readMetadata()
+
+        // Prepare the tile query statement for reuse
+        let tileQuery =
+            "SELECT tile_data FROM tiles WHERE zoom_level = ? AND tile_column = ? AND tile_row = ?"
+        if sqlite3_prepare_v2(db, tileQuery, -1, &tileStatement, nil) != SQLITE_OK {
+            RNMBXLogError("Failed to prepare tile query statement")
+        }
     }
 
     private func readFormat() throws {
@@ -361,30 +372,26 @@ public class MBTilesSource: MBTileProvider {
     }
 
     public func getTile(z: Int, x: Int, y: Int) -> Data? {
-        let query =
-            "SELECT tile_data FROM tiles WHERE zoom_level = ? AND tile_column = ? AND tile_row = ?"
-        var statement: OpaquePointer?
+        return dbQueue.sync {
+            guard let statement = tileStatement else { return nil }
 
-        guard sqlite3_prepare_v2(db, query, -1, &statement, nil) == SQLITE_OK else {
+            defer { sqlite3_reset(statement) }
+
+            sqlite3_bind_int(statement, 1, Int32(z))
+            sqlite3_bind_int(statement, 2, Int32(x))
+            sqlite3_bind_int(statement, 3, Int32(y))
+
+            if sqlite3_step(statement) == SQLITE_ROW {
+                let dataSize = Int(sqlite3_column_bytes(statement, 0))
+                let dataPointer = sqlite3_column_blob(statement, 0)
+
+                if let dataPointer = dataPointer, dataSize > 0 {
+                    return Data(bytes: dataPointer, count: dataSize)
+                }
+            }
+
             return nil
         }
-
-        defer { sqlite3_finalize(statement) }
-
-        sqlite3_bind_int(statement, 1, Int32(z))
-        sqlite3_bind_int(statement, 2, Int32(x))
-        sqlite3_bind_int(statement, 3, Int32(y))
-
-        if sqlite3_step(statement) == SQLITE_ROW {
-            let dataSize = Int(sqlite3_column_bytes(statement, 0))
-            let dataPointer = sqlite3_column_blob(statement, 0)
-
-            if let dataPointer = dataPointer, dataSize > 0 {
-                return Data(bytes: dataPointer, count: dataSize)
-            }
-        }
-
-        return nil
     }
 
     public func activate() {
@@ -399,6 +406,9 @@ public class MBTilesSource: MBTileProvider {
     }
 
     deinit {
+        if let statement = tileStatement {
+            sqlite3_finalize(statement)
+        }
         if let db = db {
             sqlite3_close(db)
         }
