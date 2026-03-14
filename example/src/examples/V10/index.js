@@ -1,4 +1,5 @@
 export { default as CameraAnimation } from './CameraAnimation';
+export { default as AtmosphereRaceRepro } from './AtmosphereRaceRepro';
 export { default as GlobeProjection } from './GlobeProjection';
 export { default as MapHandlers } from './MapHandlers';
 export { default as Markers } from './Markers';
