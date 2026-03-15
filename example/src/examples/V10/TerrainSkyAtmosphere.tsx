@@ -1,5 +1,5 @@
-import { useRef } from 'react';
-import { Button } from 'react-native';
+import { useRef, useState } from 'react';
+import { Button, View } from 'react-native';
 import {
   MapView,
   SkyLayer,
@@ -14,30 +14,29 @@ Logger.setLogLevel('verbose');
 
 const TerrainSkyAtmosphere = () => {
   const cameraRef = useRef<Camera>(null);
+  const [showAtmosphere, setShowAtmosphere] = useState(true);
+  // Toggle between styled and no-props to reproduce the mReactStyle!! crash on Android new-arch
+  const [atmosphereStyled, setAtmosphereStyled] = useState(true);
 
   return (
     <>
-      <Button
-        title="Change"
-        onPress={() =>
-          cameraRef.current?.setCamera({
-            heading: 60,
-            zoomLevel: 13.5,
-            animationDuration: 20000,
-          })
-        }
-      />
+      <View style={{ flexDirection: 'row', flexWrap: 'wrap' }}>
+        <Button
+          title={showAtmosphere ? 'Remove Atmosphere' : 'Add Atmosphere'}
+          onPress={() => setShowAtmosphere((v) => !v)}
+        />
+        <Button
+          title={atmosphereStyled ? 'Atmosphere: no props' : 'Atmosphere: styled'}
+          onPress={() => setAtmosphereStyled((v) => !v)}
+        />
+      </View>
       <MapView
         style={{ flex: 1 }}
         styleURL={'mapbox://styles/mapbox-map-design/ckhqrf2tz0dt119ny6azh975y'}
       >
         <Camera
           ref={cameraRef}
-          centerCoordinate={[
-            // -74.00597, 40.71427
-            // -122.4189591, 37.6614238,
-            -114.34411, 32.6141,
-          ]}
+          centerCoordinate={[-114.34411, 32.6141]}
           zoomLevel={13.1}
           heading={80}
           pitch={85}
@@ -48,15 +47,21 @@ const TerrainSkyAtmosphere = () => {
           tileSize={514}
           maxZoomLevel={14}
         >
-          <Atmosphere
-            style={{
-              color: 'rgb(186, 210, 235)',
-              highColor: 'rgb(36, 92, 223)',
-              horizonBlend: 0.02,
-              spaceColor: 'rgb(11, 11, 25)',
-              starIntensity: 0.6,
-            }}
-          />
+          {showAtmosphere &&
+            (atmosphereStyled ? (
+              <Atmosphere
+                style={{
+                  color: 'rgb(186, 210, 235)',
+                  highColor: 'rgb(36, 92, 223)',
+                  horizonBlend: 0.02,
+                  spaceColor: 'rgb(11, 11, 25)',
+                  starIntensity: 0.6,
+                }}
+              />
+            ) : (
+              // No style prop — crashed on Android new-arch before the mReactStyle!! fix
+              <Atmosphere />
+            ))}
           <SkyLayer
             id="sky-layer"
             style={{
@@ -81,7 +86,11 @@ const metadata = {
   title: 'Terrain, Sky, & Atmosphere',
   tags: ['RasterDemSource', 'Terrain', 'Atmosphere', 'SkyLayer'],
   docs: `
-Demostrates use of Terrain, Atmosphere and SkyLayer.
+Demonstrates use of Terrain, Atmosphere and SkyLayer.
+
+Toggle buttons let you remove/re-add the atmosphere and switch between
+a styled atmosphere and one with no props (the no-props case crashed on
+Android new-arch before the mReactStyle!! fix).
 `,
 };
 TerrainSkyAtmosphere.metadata = metadata;
