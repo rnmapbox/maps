@@ -1,86 +1,52 @@
 import { useState } from 'react';
-import {
-  Camera,
-  CircleLayer,
-  Images,
-  MapView,
-  ShapeSource,
-  SymbolLayer,
-} from '@rnmapbox/maps';
-import { FeatureCollection } from 'geojson';
-import { Button } from 'react-native';
+import { Pressable, Text, View } from 'react-native';
+import { Camera, MapView, MarkerView } from '@rnmapbox/maps';
 
-const styles = {
-  mapView: { flex: 1 },
-  circleLayer: {
-    circleRadiusTransition: { duration: 5000, delay: 0 },
-    circleColor: '#ff0000',
-  },
-};
-
-const features: FeatureCollection = {
-  type: 'FeatureCollection',
-  features: [
-    {
-      type: 'Feature',
-      id: 'a-feature',
-      properties: {
-        icon: 'example',
-        text: 'example-icon-and-label',
-      },
-      geometry: {
-        type: 'Point',
-        coordinates: [-74.00597, 40.71427],
-      },
-    },
-    {
-      type: 'Feature',
-      id: 'b-feature',
-      properties: {
-        text: 'just-label',
-      },
-      geometry: {
-        type: 'Point',
-        coordinates: [-74.001097, 40.71527],
-      },
-    },
-    {
-      type: 'Feature',
-      id: 'c-feature',
-      properties: {
-        icon: 'example',
-      },
-      geometry: {
-        type: 'Point',
-        coordinates: [-74.00697, 40.72427],
-      },
-    },
-  ],
-};
+const MARKERS = [
+  { id: '1', coordinate: [0, 0] as [number, number] },
+  { id: '2', coordinate: [1, 1] as [number, number] },
+  { id: '3', coordinate: [-1, -1] as [number, number] },
+];
 
 const BugReportExample = () => {
-  const [radius, setRadius] = useState(20);
-
-  const circleLayerStyle = {
-    ...styles.circleLayer,
-    ...{ circleRadius: radius },
-  };
+  const [lastPressed, setLastPressed] = useState<string | null>(null);
 
   return (
     <>
-      <Button title="Grow" onPress={() => setRadius(radius + 20)} />
-      <MapView style={styles.mapView}>
-        <Camera centerCoordinate={[-74.00597, 40.71427]} zoomLevel={14} />
-        <Images images={{ example: require('../assets/example.png') }} />
-        <ShapeSource id={'shape-source-id-0'} shape={features}>
-          <CircleLayer id={'circle-layer'} style={circleLayerStyle} />
-          <SymbolLayer
-            id="symbol-id"
-            style={{
-              iconImage: ['get', 'icon'],
-            }}
-          />
-        </ShapeSource>
+      <View style={{ padding: 8, backgroundColor: '#eee' }}>
+        <Text>
+          Last pressed:{' '}
+          <Text style={{ fontWeight: 'bold' }}>
+            {lastPressed ?? '(none — tap a marker)'}
+          </Text>
+        </Text>
+      </View>
+      <MapView style={{ flex: 1 }} onPress={() => setLastPressed('MAP (not a marker)')}>
+        <Camera centerCoordinate={[0, 0]} zoomLevel={4} animationMode="none" />
+        {MARKERS.map((marker) => (
+          <MarkerView
+            key={marker.id}
+            id={marker.id}
+            coordinate={marker.coordinate}
+            allowOverlap
+          >
+            <Pressable
+              onPress={() => setLastPressed(`marker ${marker.id}`)}
+              style={{
+                width: 44,
+                height: 44,
+                borderRadius: 22,
+                backgroundColor: 'tomato',
+                alignItems: 'center',
+                justifyContent: 'center',
+              }}
+            >
+              <Text style={{ color: 'white', fontWeight: 'bold' }}>
+                {marker.id}
+              </Text>
+            </Pressable>
+          </MarkerView>
+        ))}
       </MapView>
     </>
   );

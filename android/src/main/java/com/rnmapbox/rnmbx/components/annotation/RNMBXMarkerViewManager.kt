@@ -3,7 +3,6 @@ package com.rnmapbox.rnmbx.components.annotation
 import android.view.View
 import android.widget.FrameLayout
 import com.facebook.react.bridge.Dynamic
-import com.rnmapbox.rnmbx.utils.GeoJSONUtils.toPointGeometry
 import com.facebook.react.bridge.ReactApplicationContext
 import com.rnmapbox.rnmbx.components.AbstractEventEmitter
 import com.facebook.react.uimanager.annotations.ReactProp
@@ -86,18 +85,35 @@ class RNMBXMarkerViewManager(reactApplicationContext: ReactApplicationContext) :
 
         fun markerViewContainerSizeFixer(mapView: RNMBXMapView, viewAnnotationManager: ViewAnnotationManager) {
             // see https://github.com/rnmapbox/maps/issues/2376
+            // Mapbox positions annotation views via translationX/Y inside a FrameLayout container.
+            // That container may still report 0x0 layout bounds until Android's layout pass runs,
+            // which prevents ViewGroup.dispatchTouchEvent from reaching the annotation view —
+            // so the map steals the gesture instead of the Pressable.  We force the container to
+            // full MapView size as soon as we learn the annotation has a real position/visibility.
             viewAnnotationManager.addOnViewAnnotationUpdatedListener(object :
                 OnViewAnnotationUpdatedListener() {
-                override fun onViewAnnotationVisibilityUpdated(view: View, visible: Boolean) {
+
+                private fun fixParentBounds(view: View) {
                     val parent = view.parent
                     if (parent is FrameLayout) {
                         if ((parent.width == 0 && parent.height == 0) && (mapView.width != 0 || mapView.height != 0)) {
-                            parent.layout(0,0,mapView.width, mapView.height)
+                            parent.layout(0, 0, mapView.width, mapView.height)
                         }
                     }
                 }
 
+                override fun onViewAnnotationVisibilityUpdated(view: View, visible: Boolean) {
+                    fixParentBounds(view)
+                }
 
+                override fun onViewAnnotationPositionUpdated(
+                    view: View,
+                    leftTopCoordinate: ScreenCoordinate,
+                    width: Double,
+                    height: Double
+                ) {
+                    fixParentBounds(view)
+                }
             })
         }
     }
