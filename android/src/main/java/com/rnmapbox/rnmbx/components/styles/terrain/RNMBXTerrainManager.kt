@@ -2,6 +2,7 @@ package com.rnmapbox.rnmbx.components.styles.terrain
 
 import com.facebook.react.bridge.Dynamic
 import com.facebook.react.uimanager.ThemedReactContext
+import com.rnmapbox.rnmbx.utils.extensions.asMapOrNull
 import com.facebook.react.uimanager.ViewGroupManager
 import com.facebook.react.uimanager.annotations.ReactProp
 import com.facebook.react.viewmanagers.RNMBXTerrainManagerInterface
@@ -23,7 +24,7 @@ class RNMBXTerrainManager : ViewGroupManager<RNMBXTerrain>(),
 
     @ReactProp(name = "reactStyle")
     override fun setReactStyle(terrain: RNMBXTerrain, reactStyle: Dynamic) {
-        terrain.setReactStyle(reactStyle.asMap())
+        terrain.setReactStyle(reactStyle.asMapOrNull())
     }
 
     companion object {
