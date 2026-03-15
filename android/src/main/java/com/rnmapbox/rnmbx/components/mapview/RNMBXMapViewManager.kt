@@ -10,25 +10,16 @@ import com.facebook.react.uimanager.LayoutShadowNode
 import com.facebook.react.uimanager.ThemedReactContext
 import com.facebook.react.uimanager.annotations.ReactProp
 import com.rnmapbox.rnmbx.events.constants.EventKeys
-import com.facebook.react.common.MapBuilder
 import com.facebook.react.uimanager.ViewManagerDelegate
 import com.facebook.react.viewmanagers.RNMBXMapViewManagerDelegate
 import com.facebook.react.viewmanagers.RNMBXMapViewManagerInterface
-import com.mapbox.maps.MapInitOptions
 import com.mapbox.maps.extension.style.layers.properties.generated.ProjectionName
 import com.mapbox.maps.plugin.gestures.gestures
-import com.mapbox.maps.plugin.logo.logo
-import com.rnmapbox.rnmbx.events.AndroidCallbackEvent
 import com.rnmapbox.rnmbx.events.constants.eventMapOf
-import com.rnmapbox.rnmbx.utils.ConvertUtils
-import com.rnmapbox.rnmbx.utils.ExpressionParser
 import com.rnmapbox.rnmbx.utils.Logger
 import com.rnmapbox.rnmbx.utils.ViewTagResolver
 import com.rnmapbox.rnmbx.utils.extensions.getAndLogIfNotBoolean
 import com.rnmapbox.rnmbx.utils.extensions.getAndLogIfNotDouble
-import com.rnmapbox.rnmbx.utils.extensions.toCoordinate
-import com.rnmapbox.rnmbx.utils.extensions.toRectF
-import com.rnmapbox.rnmbx.utils.extensions.toScreenCoordinate
 import java.lang.Exception
 import java.util.HashMap
 

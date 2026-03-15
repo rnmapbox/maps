@@ -15,6 +15,7 @@ export { default as TwoByTwo } from './TwoByTwo';
 export { default as MapAndRNNavigation } from './MapAndRNNavigation';
 export { default as DynamicUrl } from './DynamicUrl';
 export { default as LocalizeLabels } from './LocalizeLabels';
+export { default as ScreenCoordinates} from './ScreenCoordinates';
 
 export const metadata = {
   title: 'Map',

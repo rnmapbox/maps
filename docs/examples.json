@@ -380,6 +380,23 @@
       },
       {
         "metadata": {
+          "title": "Screen Coordinates",
+          "tags": [
+            "MapView#onPress",
+            "MapView#onLongPress",
+            "MapView#getCoordinateFromView",
+            "MapView#getPointInView",
+            "MapView#queryRenderedFeaturesAtPoint",
+            "MapView#queryRenderedFeaturesInRect"
+          ],
+          "docs": "\nTests conversion from screen to geographic coordinates and vice versa.        \n"
+        },
+        "fullPath": "example/src/examples/Map/ScreenCoordinates.tsx",
+        "relPath": "Map/ScreenCoordinates.tsx",
+        "name": "ScreenCoordinates"
+      },
+      {
+        "metadata": {
           "title": "Show and hide layer",
           "tags": [
             "FillLayer#existing",
