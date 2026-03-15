@@ -2,6 +2,7 @@ package com.rnmapbox.rnmbx.components.styles.light
 
 import com.facebook.react.bridge.Dynamic
 import com.facebook.react.uimanager.ThemedReactContext
+import com.rnmapbox.rnmbx.utils.extensions.asMapOrNull
 import com.facebook.react.uimanager.ViewGroupManager
 import com.facebook.react.uimanager.annotations.ReactProp
 import com.facebook.react.viewmanagers.RNMBXLightManagerInterface
@@ -18,7 +19,7 @@ class RNMBXLightManager : ViewGroupManager<RNMBXLight>(),
 
     @ReactProp(name = "reactStyle")
     override fun setReactStyle(light: RNMBXLight, reactStyle: Dynamic) {
-        light.setReactStyle(reactStyle.asMap())
+        light.setReactStyle(reactStyle.asMapOrNull())
     }
 
     companion object {
