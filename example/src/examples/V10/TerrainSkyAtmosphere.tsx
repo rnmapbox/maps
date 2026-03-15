@@ -1,4 +1,4 @@
-import { useRef } from 'react';
+import { useRef, useState } from 'react';
 import { Button } from 'react-native';
 import {
   MapView,
@@ -12,8 +12,34 @@ import {
 
 Logger.setLogLevel('verbose');
 
+const ATMOSPHERE_COLORS = [
+  {
+    label: 'Day',
+    color: 'rgb(186, 210, 235)',
+    highColor: 'rgb(36, 92, 223)',
+    spaceColor: 'rgb(11, 11, 25)',
+    starIntensity: 0.6,
+  },
+  {
+    label: 'Sunset',
+    color: 'rgb(255, 200, 150)',
+    highColor: 'rgb(200, 100, 50)',
+    spaceColor: 'rgb(20, 10, 30)',
+    starIntensity: 0.8,
+  },
+  {
+    label: 'Blue',
+    color: '#def',
+    highColor: '#def',
+    spaceColor: '#def',
+    starIntensity: 1.0,
+  },
+];
+
 const TerrainSkyAtmosphere = () => {
   const cameraRef = useRef<Camera>(null);
+  const [showAtmosphere, setShowAtmosphere] = useState(true);
+  const [colorIdx, setColorIdx] = useState(0);
 
   return (
     <>
@@ -26,6 +52,14 @@ const TerrainSkyAtmosphere = () => {
             animationDuration: 20000,
           })
         }
+      />
+      <Button
+        title={showAtmosphere ? 'Remove Atmosphere' : 'Add Atmosphere'}
+        onPress={() => setShowAtmosphere((v) => !v)}
+      />
+      <Button
+        title={`Atmosphere Color: ${ATMOSPHERE_COLORS[colorIdx].label}`}
+        onPress={() => setColorIdx((i) => (i + 1) % ATMOSPHERE_COLORS.length)}
       />
       <MapView
         style={{ flex: 1 }}
@@ -48,15 +82,17 @@ const TerrainSkyAtmosphere = () => {
           tileSize={514}
           maxZoomLevel={14}
         >
-          <Atmosphere
-            style={{
-              color: 'rgb(186, 210, 235)',
-              highColor: 'rgb(36, 92, 223)',
-              horizonBlend: 0.02,
-              spaceColor: 'rgb(11, 11, 25)',
-              starIntensity: 0.6,
-            }}
-          />
+          {showAtmosphere && (
+            <Atmosphere
+              style={{
+                color: ATMOSPHERE_COLORS[colorIdx].color,
+                highColor: ATMOSPHERE_COLORS[colorIdx].highColor,
+                horizonBlend: 0.02,
+                spaceColor: ATMOSPHERE_COLORS[colorIdx].spaceColor,
+                starIntensity: ATMOSPHERE_COLORS[colorIdx].starIntensity,
+              }}
+            />
+          )}
           <SkyLayer
             id="sky-layer"
             style={{

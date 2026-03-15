@@ -1,88 +1,73 @@
-import { useState } from 'react';
-import {
-  Camera,
-  CircleLayer,
-  Images,
-  MapView,
-  ShapeSource,
-  SymbolLayer,
-} from '@rnmapbox/maps';
-import { FeatureCollection } from 'geojson';
-import { Button } from 'react-native';
+import { useMemo, useState } from 'react';
+import { Button, StyleSheet, Text, View } from 'react-native';
+import { Atmosphere, Camera, MapView } from '@rnmapbox/maps';
 
-const styles = {
-  mapView: { flex: 1 },
-  circleLayer: {
-    circleRadiusTransition: { duration: 5000, delay: 0 },
-    circleColor: '#ff0000',
+const STYLE_DARK = 'mapbox://styles/mapbox/dark-v11';
+const STYLE_STANDARD = 'mapbox://styles/mapbox/standard';
+
+const styles = StyleSheet.create({
+  map: {
+    flex: 1,
   },
-};
-
-const features: FeatureCollection = {
-  type: 'FeatureCollection',
-  features: [
-    {
-      type: 'Feature',
-      id: 'a-feature',
-      properties: {
-        icon: 'example',
-        text: 'example-icon-and-label',
-      },
-      geometry: {
-        type: 'Point',
-        coordinates: [-74.00597, 40.71427],
-      },
-    },
-    {
-      type: 'Feature',
-      id: 'b-feature',
-      properties: {
-        text: 'just-label',
-      },
-      geometry: {
-        type: 'Point',
-        coordinates: [-74.001097, 40.71527],
-      },
-    },
-    {
-      type: 'Feature',
-      id: 'c-feature',
-      properties: {
-        icon: 'example',
-      },
-      geometry: {
-        type: 'Point',
-        coordinates: [-74.00697, 40.72427],
-      },
-    },
-  ],
-};
+  controls: {
+    position: 'absolute',
+    top: 50,
+    left: 16,
+    right: 16,
+    gap: 8,
+    backgroundColor: 'rgba(0,0,0,0.35)',
+    borderRadius: 10,
+    padding: 10,
+  },
+  text: {
+    color: 'white',
+  },
+});
 
 const BugReportExample = () => {
-  const [radius, setRadius] = useState(20);
+  const [styleURL, setStyleURL] = useState(STYLE_DARK);
+  const [showAtmosphere, setShowAtmosphere] = useState(true);
 
-  const circleLayerStyle = {
-    ...styles.circleLayer,
-    ...{ circleRadius: radius },
-  };
+  const atmosphereStyle = useMemo(() => {
+    const isDark = styleURL === STYLE_DARK;
+    return {
+      color: isDark ? 'rgba(29,44,62,1)' : 'rgba(255,255,255,1)',
+      highColor: isDark ? 'rgba(11,11,25,1)' : 'rgba(255,255,255,1)',
+      spaceColor: isDark ? 'rgba(11,11,25,1)' : 'rgba(255,255,255,1)',
+      horizonBlend: 0.03,
+      starIntensity: isDark ? 0.6 : 0,
+    };
+  }, [styleURL]);
+
+  function flipStyle() {
+    setStyleURL((prev) => (prev === STYLE_DARK ? STYLE_STANDARD : STYLE_DARK));
+  }
+
+  function remountAtmosphere() {
+    setShowAtmosphere(false);
+    requestAnimationFrame(() => setShowAtmosphere(true));
+  }
 
   return (
-    <>
-      <Button title="Grow" onPress={() => setRadius(radius + 20)} />
-      <MapView style={styles.mapView}>
-        <Camera centerCoordinate={[-74.00597, 40.71427]} zoomLevel={14} />
-        <Images images={{ example: require('../assets/example.png') }} />
-        <ShapeSource id={'shape-source-id-0'} shape={features}>
-          <CircleLayer id={'circle-layer'} style={circleLayerStyle} />
-          <SymbolLayer
-            id="symbol-id"
-            style={{
-              iconImage: ['get', 'icon'],
-            }}
-          />
-        </ShapeSource>
+    <View style={styles.map}>
+      <MapView style={styles.map} styleURL={styleURL} surfaceView={false}>
+        <Camera
+          centerCoordinate={[8.856142, 45.60942]}
+          zoomLevel={13}
+          pitch={45}
+          heading={0}
+        />
+        {showAtmosphere ? <Atmosphere style={atmosphereStyle} /> : null}
       </MapView>
-    </>
+
+      <View style={styles.controls}>
+        <Text style={styles.text}>
+          Repro: tap quickly to trigger Atmosphere mount/style race
+        </Text>
+        <Button title="Toggle style (dark - standard)" onPress={flipStyle} />
+        <Button title="Remount Atmosphere" onPress={remountAtmosphere} />
+      </View>
+    </View>
   );
 };
 

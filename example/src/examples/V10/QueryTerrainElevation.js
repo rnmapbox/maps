@@ -39,6 +39,12 @@ const styles = {
   }),
 };
 
+const ATMOSPHERE_COLORS = [
+  { color: '#def', highColor: '#def', spaceColor: '#def', label: 'Blue' },
+  { color: 'rgb(186, 210, 235)', highColor: 'rgb(36, 92, 223)', spaceColor: 'rgb(11, 11, 25)', label: 'Night' },
+  { color: 'rgb(255, 200, 150)', highColor: 'rgb(200, 100, 50)', spaceColor: 'rgb(20, 10, 30)', label: 'Sunset' },
+];
+
 const QueryTerrainElevation = () => {
   let [animatedRoute, setAnimatedRoute] = useState(null);
   let [actPoint, setActPoint] = useState(null);
@@ -46,6 +52,8 @@ const QueryTerrainElevation = () => {
   let [altitude, setAltitude] = useState(null);
   let updateAltitudeInterval = useRef();
   let map = useRef();
+  let [showAtmosphere, setShowAtmosphere] = useState(true);
+  let [atmosphereColorIdx, setAtmosphereColorIdx] = useState(0);
   useEffect(() => {
     return () => {
       clearInterval(updateAltitudeInterval.current);
@@ -106,6 +114,14 @@ const QueryTerrainElevation = () => {
   return (
     <>
       <Button title="Start" onPress={() => startAnimation(animatedRoute)} />
+      <Button
+        title={showAtmosphere ? 'Remove Atmosphere' : 'Add Atmosphere'}
+        onPress={() => setShowAtmosphere((v) => !v)}
+      />
+      <Button
+        title={`Atmosphere Color: ${ATMOSPHERE_COLORS[atmosphereColorIdx].label}`}
+        onPress={() => setAtmosphereColorIdx((i) => (i + 1) % ATMOSPHERE_COLORS.length)}
+      />
       <MapView
         style={styles.mapView}
         styleURL={'mapbox://styles/mapbox/satellite-streets-v11'}
@@ -134,15 +150,17 @@ const QueryTerrainElevation = () => {
           />
 
           <Terrain style={{ exaggeration: 1.5 }} />
-          <Atmosphere
-            style={{
-              starIntensity: 1.0,
-              range: [-0.7, 2.0],
-              spaceColor: '#def',
-              color: '#def',
-              highColor: '#def',
-            }}
-          />
+          {showAtmosphere && (
+            <Atmosphere
+              style={{
+                starIntensity: 1.0,
+                range: [-0.7, 2.0],
+                spaceColor: ATMOSPHERE_COLORS[atmosphereColorIdx].spaceColor,
+                color: ATMOSPHERE_COLORS[atmosphereColorIdx].color,
+                highColor: ATMOSPHERE_COLORS[atmosphereColorIdx].highColor,
+              }}
+            />
+          )}
         </RasterDemSource>
 
         {animatedRoute && (
