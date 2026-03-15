@@ -18,7 +18,7 @@ class RNMBXLightManager : ViewGroupManager<RNMBXLight>(),
 
     @ReactProp(name = "reactStyle")
     override fun setReactStyle(light: RNMBXLight, reactStyle: Dynamic) {
-        light.setReactStyle(reactStyle.asMap())
+        light.setReactStyle(if (reactStyle.isNull) null else reactStyle.asMap())
     }
 
     companion object {

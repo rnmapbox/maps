@@ -23,7 +23,7 @@ class RNMBXTerrainManager : ViewGroupManager<RNMBXTerrain>(),
 
     @ReactProp(name = "reactStyle")
     override fun setReactStyle(terrain: RNMBXTerrain, reactStyle: Dynamic) {
-        terrain.setReactStyle(reactStyle.asMap())
+        terrain.setReactStyle(if (reactStyle.isNull) null else reactStyle.asMap())
     }
 
     companion object {
