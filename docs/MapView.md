@@ -289,6 +289,8 @@ Set map's label locale, e.g. `{ "locale": "es" }` will localize labels to Spanis
 type GestureSettings = {
   doubleTapToZoomInEnabled: boolean; /* Whether double tapping the map with one touch results in a zoom-in animation. */
   doubleTouchToZoomOutEnabled: boolean; /* Whether single tapping the map with two touches results in a zoom-out animation. */
+  focalPoint: signature; /* By default, gestures rotate and zoom around the center of the gesture. Set
+this property to rotate and zoom around a fixed point instead. */
   pinchPanEnabled: boolean; /* Whether pan/scroll is enabled for the pinch gesture. */
   pinchZoomEnabled: boolean; /* Whether zoom is enabled for the pinch gesture. */
   pinchZoomDecelerationEnabled: boolean; /* Whether a deceleration animation following a pinch-zoom gesture is enabled. True by default.
