@@ -622,12 +622,15 @@ this._map.queryRenderedFeaturesAtPoint([x, y], ['==', 'type', 'Point'], ['id1', 
 Returns an array of rendered map features that intersect with the given rectangle,<br/>restricted to the given style layers and filtered by the given predicate. In v10,<br/>passing an empty array will query the entire visible bounds of the map.
 
 #### arguments
+
+> [!NOTE]  
+> Currently a BBox created from the map is not working, a workaround is to use the layout dimensions of the device and create a box from them.
+
 | Name | Type | Required | Description  |
 | ---- | :--: | :------: | :----------: |
 | `bbox` | `BBox \| []` | `Yes` | A rectangle expressed in density-independent screen coordinates relative to the map view `[top, left, bottom, right]` or `[minY, minX, maxY, maxX]` (not geographic coordinates). An empty array queries the visible map area. |
 | `filter` | `FilterExpression` | `No` | An array of strings that correspond to the names of layers defined in the current style. Only the features contained in these layers are included in the returned array. |
 | `layerIDs` | `Array` | `No` |  A array of layer IDs by which to filter the features. |
-
 
 
 ```javascript
