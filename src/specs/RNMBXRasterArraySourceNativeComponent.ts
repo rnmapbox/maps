@@ -3,7 +3,7 @@ import codegenNativeComponent from 'react-native/Libraries/Utilities/codegenNati
 // @ts-ignore - CI environment type resolution issue for CodegenTypes
 import { Double } from 'react-native/Libraries/Types/CodegenTypes';
 
-import { UnsafeMixed } from './codegenUtils';
+import { type UnsafeMixed } from './codegenUtils';
 
 export interface NativeProps extends ViewProps {
   id: UnsafeMixed<string>;

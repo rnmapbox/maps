@@ -5,7 +5,7 @@ import type {
   FilterExpression,
   RasterParticleLayerStyleProps,
 } from '../utils/MapboxStyles';
-import { StyleValue } from '../utils/StyleValue';
+import { type StyleValue } from '../utils/StyleValue';
 import RNMBXRasterParticleLayerNativeComponent from '../specs/RNMBXRasterParticleLayerNativeComponent';
 
 import AbstractLayer from './AbstractLayer';

@@ -1,6 +1,9 @@
-import React, { ReactNode, ReactElement } from 'react';
-import { Image as RNImage, ImageURISource } from 'react-native';
-import { ImageSourcePropType, ImageResolvedAssetSource } from 'react-native';
+import React, { type ReactNode, type ReactElement } from 'react';
+import { Image as RNImage, type ImageURISource } from 'react-native';
+import {
+  type ImageSourcePropType,
+  type ImageResolvedAssetSource,
+} from 'react-native';
 
 import RNMBXImagesNativeComponent from '../specs/RNMBXImagesNativeComponent';
 

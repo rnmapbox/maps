@@ -2,7 +2,7 @@ import { useCallback, useState } from 'react';
 import { View, StyleSheet, Text } from 'react-native';
 import { MapView, Camera, CameraGestureObserver, type OnMapSteadyEvent } from '@rnmapbox/maps';
 
-import { ExampleWithMetadata } from '../common/ExampleMetadata'; // exclude-from-doc
+import { type ExampleWithMetadata } from '../common/ExampleMetadata'; // exclude-from-doc
 
 const styles = StyleSheet.create({
   container: {

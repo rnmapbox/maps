@@ -1,7 +1,7 @@
 import {
   NativeModules,
   NativeEventEmitter,
-  EventSubscription,
+  type EventSubscription,
 } from 'react-native';
 
 import { isUndefined, isFunction, isAndroid } from '../../utils';

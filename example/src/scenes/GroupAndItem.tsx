@@ -12,7 +12,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import type { BaseExampleProps } from '../examples/common/BaseExamplePropTypes';
 
 import MapHeader from '../examples/common/MapHeader';
-import Page, { PageProps } from '../examples/common/Page';
+import Page, { type PageProps } from '../examples/common/Page';
 import sheet from '../styles/sheet';
 // ANIMATIONS
 import * as Animations from '../examples/Animations';
