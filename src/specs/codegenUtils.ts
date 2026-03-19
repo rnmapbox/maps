@@ -7,24 +7,23 @@ export type UnsafeMixed<T> = T;
 // https://github.com/rnmapbox/maps/pull/3082#discussion_r1339858750
 export type OptionalProp<T> = UnsafeMixed<T>;
 
-// @ts-ignore - CI environment type resolution issue for CodegenTypes
-import { Double, Int32 } from 'react-native/Libraries/Types/CodegenTypes';
+import type { CodegenTypes } from 'react-native';
 
 export type Point = {
-  x: Int32;
-  y: Int32;
+  x: CodegenTypes.Int32;
+  y: CodegenTypes.Int32;
 };
 
 export type NativeCameraStop = {
   centerCoordinate?: string;
   bounds?: string;
-  heading?: Double;
-  pitch?: Double;
-  zoom?: Double;
-  paddingLeft?: Double;
-  paddingRight?: Double;
-  paddingTop?: Double;
-  paddingBottom?: Double;
-  duration?: Double;
+  heading?: CodegenTypes.Double;
+  pitch?: CodegenTypes.Double;
+  zoom?: CodegenTypes.Double;
+  paddingLeft?: CodegenTypes.Double;
+  paddingRight?: CodegenTypes.Double;
+  paddingTop?: CodegenTypes.Double;
+  paddingBottom?: CodegenTypes.Double;
+  duration?: CodegenTypes.Double;
   mode?: number;
 } | null;
