@@ -2365,6 +2365,181 @@ export interface AtmosphereLayerStyleProps {
    */
   verticalRangeTransition?: Transition;
 }
+export interface SnowLayerStyleProps {
+  /**
+   * Snow particles density. Controls the overall particles number.
+   */
+  density?: Value<number, ['zoom', 'measure-light']>;
+
+  /**
+   * The transition affecting any changes to this layer’s density property.
+   */
+  densityTransition?: Transition;
+  /**
+   * Snow particles movement factor. Controls the overall particles movement speed.
+   */
+  intensity?: Value<number, ['zoom', 'measure-light']>;
+
+  /**
+   * The transition affecting any changes to this layer’s intensity property.
+   */
+  intensityTransition?: Transition;
+  /**
+   * Snow particles color.
+   */
+  color?: Value<string, ['zoom', 'measure-light']>;
+
+  /**
+   * The transition affecting any changes to this layer’s color property.
+   */
+  colorTransition?: Transition;
+  /**
+   * Snow particles opacity.
+   */
+  opacity?: Value<number, ['zoom', 'measure-light']>;
+
+  /**
+   * The transition affecting any changes to this layer’s opacity property.
+   */
+  opacityTransition?: Transition;
+  /**
+   * Snow vignette screenSpace effect. Adds snow tint to screen corners
+   */
+  vignette?: Value<number, ['zoom', 'measure-light']>;
+
+  /**
+   * The transition affecting any changes to this layer’s vignette property.
+   */
+  vignetteTransition?: Transition;
+  /**
+   * Snow vignette screenSpace corners tint color.
+   */
+  vignetteColor?: Value<string, ['zoom', 'measure-light']>;
+
+  /**
+   * The transition affecting any changes to this layer’s vignetteColor property.
+   */
+  vignetteColorTransition?: Transition;
+  /**
+   * Thinning factor of snow particles from center. 0  no thinning. 1  maximal central area thinning.
+   */
+  centerThinning?: Value<number, ['zoom', 'measure-light']>;
+
+  /**
+   * The transition affecting any changes to this layer’s centerThinning property.
+   */
+  centerThinningTransition?: Transition;
+  /**
+   * Main snow particles direction. Azimuth and polar angles
+   */
+  direction?: Value<number[], ['zoom', 'measure-light']>;
+
+  /**
+   * The transition affecting any changes to this layer’s direction property.
+   */
+  directionTransition?: Transition;
+  /**
+   * Snow flake particle size. Correlates with individual particle screen size
+   */
+  flakeSize?: Value<number, ['zoom', 'measure-light']>;
+
+  /**
+   * The transition affecting any changes to this layer’s flakeSize property.
+   */
+  flakeSizeTransition?: Transition;
+}
+export interface RainLayerStyleProps {
+  /**
+   * Rain particles density. Controls the overall screen density of the rain.
+   */
+  density?: Value<number, ['zoom', 'measure-light']>;
+
+  /**
+   * The transition affecting any changes to this layer’s density property.
+   */
+  densityTransition?: Transition;
+  /**
+   * Rain particles movement factor. Controls the overall rain particles speed
+   */
+  intensity?: Value<number, ['zoom', 'measure-light']>;
+
+  /**
+   * The transition affecting any changes to this layer’s intensity property.
+   */
+  intensityTransition?: Transition;
+  /**
+   * Individual rain particle dorplets color.
+   */
+  color?: Value<string, ['zoom', 'measure-light']>;
+
+  /**
+   * The transition affecting any changes to this layer’s color property.
+   */
+  colorTransition?: Transition;
+  /**
+   * Rain particles opacity.
+   */
+  opacity?: Value<number, ['zoom', 'measure-light']>;
+
+  /**
+   * The transition affecting any changes to this layer’s opacity property.
+   */
+  opacityTransition?: Transition;
+  /**
+   * ScreenSpace vignette rain tinting effect intensity.
+   */
+  vignette?: Value<number, ['zoom', 'measure-light']>;
+
+  /**
+   * The transition affecting any changes to this layer’s vignette property.
+   */
+  vignetteTransition?: Transition;
+  /**
+   * Rain vignette screenSpace corners tint color.
+   */
+  vignetteColor?: Value<string, ['zoom', 'measure-light']>;
+
+  /**
+   * The transition affecting any changes to this layer’s vignetteColor property.
+   */
+  vignetteColorTransition?: Transition;
+  /**
+   * Thinning factor of rain particles from center. 0  no thinning. 1  maximal central area thinning.
+   */
+  centerThinning?: Value<number, ['zoom', 'measure-light']>;
+
+  /**
+   * The transition affecting any changes to this layer’s centerThinning property.
+   */
+  centerThinningTransition?: Transition;
+  /**
+   * Main rain particles direction. Azimuth and polar angles.
+   */
+  direction?: Value<number[], ['zoom', 'measure-light']>;
+
+  /**
+   * The transition affecting any changes to this layer’s direction property.
+   */
+  directionTransition?: Transition;
+  /**
+   * Rain droplet size. x  normal to direction, y  along direction
+   */
+  dropletSize?: Value<number[], ['zoom', 'measure-light']>;
+
+  /**
+   * The transition affecting any changes to this layer’s dropletSize property.
+   */
+  dropletSizeTransition?: Transition;
+  /**
+   * Rain particles screenSpace distortion strength.
+   */
+  distortionStrength?: Value<number, ['zoom', 'measure-light']>;
+
+  /**
+   * The transition affecting any changes to this layer’s distortionStrength property.
+   */
+  distortionStrengthTransition?: Transition;
+}
 export interface TerrainLayerStyleProps {
   /**
    * Exaggerates the elevation of the terrain by multiplying the data from the DEM with this value.
@@ -2389,4 +2564,6 @@ export type AllLayerStyleProps =
   | SkyLayerStyleProps
   | LightLayerStyleProps
   | AtmosphereLayerStyleProps
+  | SnowLayerStyleProps
+  | RainLayerStyleProps
   | TerrainLayerStyleProps;

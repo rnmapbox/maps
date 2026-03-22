@@ -6457,6 +6457,23 @@
     "relPath": "src/components/PointAnnotation.tsx",
     "name": "PointAnnotation"
   },
+  "Rain": {
+    "description": "",
+    "displayName": "Rain",
+    "methods": [],
+    "props": [
+      {
+        "name": "style",
+        "required": false,
+        "type": "RainLayerStyleProps",
+        "default": "none",
+        "description": "FIX ME NO DESCRIPTION"
+      }
+    ],
+    "fileNameWithExt": "Rain.tsx",
+    "relPath": "src/components/Rain.tsx",
+    "name": "Rain"
+  },
   "RasterArraySource": {
     "description": "RasterArraySource is a map content source that supplies raster array image tiles to be shown on the map.\nThis is typically used for particle animations like wind or precipitation patterns.\nThe location of and metadata about the tiles are defined either by an option dictionary\nor by an external file that conforms to the TileJSON specification.\n\n@experimental This component requires Mapbox Maps SDK v11.4.0 or later",
     "displayName": "RasterArraySource",
@@ -7981,6 +7998,23 @@
         }
       }
     ]
+  },
+  "Snow": {
+    "description": "",
+    "displayName": "Snow",
+    "methods": [],
+    "props": [
+      {
+        "name": "style",
+        "required": false,
+        "type": "SnowLayerStyleProps",
+        "default": "none",
+        "description": "FIX ME NO DESCRIPTION"
+      }
+    ],
+    "fileNameWithExt": "Snow.tsx",
+    "relPath": "src/components/Snow.tsx",
+    "name": "Snow"
   },
   "Style": {
     "description": "Style is a component that automatically adds sources / layers to the map using Mapbox GL Style Spec.\nOnly [`sources`](https://docs.mapbox.com/mapbox-gl-js/style-spec/sources) & [`layers`](https://docs.mapbox.com/mapbox-gl-js/style-spec/layers/) are supported.\nOther fields such as `sprites`, `glyphs` etc. will be ignored. Not all layer / source attributes from the style spec are supported, in general the supported attributes will be mentioned under https://github.com/rnmapbox/maps/tree/main/docs.",

@@ -74,8 +74,8 @@
   },
   "homepage": "https://github.com/rnmapbox/maps#readme",
   "mapbox": {
-    "ios": "~> 11.18.2",
-    "android": "11.18.2"
+    "ios": "~> 11.20.1",
+    "android": "11.20.1"
   },
   "publishConfig": {
     "registry": "https://registry.npmjs.org/",
@@ -261,6 +261,9 @@
         "RNMBXPointAnnotation": {
           "className": "RNMBXPointAnnotationComponentView"
         },
+        "RNMBXRain": {
+          "className": "RNMBXRainComponentView"
+        },
         "RNMBXRasterArraySource": {
           "className": "RNMBXRasterArraySourceComponentView"
         },
@@ -281,6 +284,9 @@
         },
         "RNMBXSkyLayer": {
           "className": "RNMBXSkyLayerComponentView"
+        },
+        "RNMBXSnow": {
+          "className": "RNMBXSnowComponentView"
         },
         "RNMBXStyleImport": {
           "className": "RNMBXStyleImportComponentView"
@@ -322,6 +328,7 @@
         "RNMBXModels": "RNMBXModelsComponentView",
         "RNMBXNativeUserLocation": "RNMBXNativeUserLocationComponentView",
         "RNMBXPointAnnotation": "RNMBXPointAnnotationComponentView",
+        "RNMBXRain": "RNMBXRainComponentView",
         "RNMBXRasterArraySource": "RNMBXRasterArraySourceComponentView",
         "RNMBXRasterDemSource": "RNMBXRasterDemSourceComponentView",
         "RNMBXRasterLayer": "RNMBXRasterLayerComponentView",
@@ -329,6 +336,7 @@
         "RNMBXRasterSource": "RNMBXRasterSourceComponentView",
         "RNMBXShapeSource": "RNMBXShapeSourceComponentView",
         "RNMBXSkyLayer": "RNMBXSkyLayerComponentView",
+        "RNMBXSnow": "RNMBXSnowComponentView",
         "RNMBXStyleImport": "RNMBXStyleImportComponentView",
         "RNMBXSymbolLayer": "RNMBXSymbolLayerComponentView",
         "RNMBXTerrain": "RNMBXTerrainComponentView",

@@ -487,6 +487,26 @@ export function getLayers() {
     support: { v10: true },
   });
 
+  // add snow as a layer
+  layers.push({
+    name: 'snow',
+    properties: getPropertiesFor('snow'),
+    props: {
+      v11: getPropertiesFor('snow'),
+    },
+    support: { v11: true },
+  });
+
+  // add rain as a layer
+  layers.push({
+    name: 'rain',
+    properties: getPropertiesFor('rain'),
+    props: {
+      v11: getPropertiesFor('rain'),
+    },
+    support: { v11: true },
+  });
+
   // add terrain as a layer
   layers.push({
     name: 'terrain',
