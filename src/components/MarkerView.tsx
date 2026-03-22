@@ -1,6 +1,7 @@
-import React, { useCallback, useRef, useState } from 'react';
+import React, { useCallback, useMemo, useRef, useState } from 'react';
 import {
   PixelRatio,
+  StyleSheet,
   type NativeSyntheticEvent,
   type ViewProps,
 } from 'react-native';
@@ -11,6 +12,8 @@ import { type Position } from '../types/Position';
 
 // Device pixel ratio is constant for the lifetime of the app.
 const PIXEL_RATIO = PixelRatio.get();
+
+const DEFAULT_ANCHOR = { x: 0.5, y: 0.5 };
 
 type Props = ViewProps & {
   /**
@@ -63,7 +66,7 @@ type Props = ViewProps & {
  * etc. all work including their visual feedback (opacity, scale, etc.).
  */
 const MarkerView = ({
-  anchor = { x: 0.5, y: 0.5 },
+  anchor = DEFAULT_ANCHOR,
   allowOverlap = false,
   allowOverlapWithPuck = false,
   isSelected = false,
@@ -117,21 +120,32 @@ const MarkerView = ({
     );
   }
 
+  const nativeCoordinate = useMemo(
+    () => [Number(coordinate[0]), Number(coordinate[1])] as [number, number],
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [coordinate[0], coordinate[1]],
+  );
+
+  const nativeStyle = useMemo(
+    () => [
+      styles.absolutePosition,
+      style,
+      annotationTranslate != null
+        ? {
+            transform: [
+              { translateX: annotationTranslate.x },
+              { translateY: annotationTranslate.y },
+            ],
+          }
+        : undefined,
+    ],
+    [style, annotationTranslate],
+  );
+
   return (
     <RNMBXMarkerView
-      style={[
-        { position: 'absolute' },
-        style,
-        annotationTranslate != null
-          ? {
-              transform: [
-                { translateX: annotationTranslate.x },
-                { translateY: annotationTranslate.y },
-              ],
-            }
-          : undefined,
-      ]}
-      coordinate={[Number(coordinate[0]), Number(coordinate[1])]}
+      style={nativeStyle}
+      coordinate={nativeCoordinate}
       anchor={anchor}
       allowOverlap={allowOverlap}
       allowOverlapWithPuck={allowOverlapWithPuck}
@@ -140,7 +154,7 @@ const MarkerView = ({
     >
       <RNMBXMakerViewContentComponent
         collapsable={false}
-        style={{ flex: 0, alignSelf: 'flex-start' }}
+        style={styles.contentContainer}
         onAnnotationPosition={handleAnnotationPosition}
       >
         {children}
@@ -150,5 +164,10 @@ const MarkerView = ({
 };
 
 const RNMBXMarkerView = NativeMarkerViewComponent;
+
+const styles = StyleSheet.create({
+  absolutePosition: { position: 'absolute' },
+  contentContainer: { flex: 0, alignSelf: 'flex-start' },
+});
 
 export default MarkerView;
