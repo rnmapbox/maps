@@ -17,8 +17,9 @@ component for a maximum of around 100 views displayed at one time.
 This is implemented with view annotations on [Android](https://docs.mapbox.com/android/maps/guides/annotations/view-annotations/)
 and [iOS](https://docs.mapbox.com/ios/maps/guides/annotations/view-annotations).
 
-This component has no dedicated `onPress` method. Instead, you should handle gestures
-with the React views passed in as `children`.
+This component has no dedicated `onPress` method. Instead, handle gestures
+with the React views passed in as `children` — Pressable, TouchableOpacity,
+etc. all work including their visual feedback (opacity, scale, etc.).
 
 ## props
 
@@ -85,7 +86,8 @@ FIX ME NO DESCRIPTION
 ReactReactElement
 ```
 _required_
-One or more valid React Native views.
+One or more valid React Native views. You can use Pressable, TouchableOpacity,
+etc. directly as children — onPress and touch feedback work correctly.
 
 
   
