@@ -303,14 +303,14 @@ const ShowMarkerView = () => {
         </Mapbox.PointAnnotation>
 
         <Mapbox.MarkerView
-          coordinate={pointList[0]}
+          coordinate={pointList[0]!}
           allowOverlapWithPuck={allowOverlapWithPuck}
         >
           <AnnotationContent title={'this is a marker view'} />
         </Mapbox.MarkerView>
 
         <Mapbox.MarkerView
-          coordinate={INITIAL_COORDINATES[2]}
+          coordinate={INITIAL_COORDINATES[2]!}
           allowOverlap
           allowOverlapWithPuck={allowOverlapWithPuck}
         >

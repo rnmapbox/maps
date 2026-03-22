@@ -6,26 +6,9 @@ import android.view.View.MeasureSpec
 import android.view.ViewGroup
 import com.facebook.react.bridge.Arguments
 import com.facebook.react.bridge.ReactContext
-import com.facebook.react.bridge.WritableMap
 import com.facebook.react.uimanager.UIManagerHelper
-import com.facebook.react.uimanager.events.Event
 import com.facebook.react.views.view.ReactViewGroup
-
-private class AnnotationPositionEvent(
-    surfaceId: Int,
-    viewTag: Int,
-    translateX: Float,
-    translateY: Float,
-) : Event<AnnotationPositionEvent>(surfaceId, viewTag) {
-    private val mData: WritableMap = Arguments.createMap().apply {
-        putDouble("x", translateX.toDouble())
-        putDouble("y", translateY.toDouble())
-    }
-    override fun getEventName() = "topAnnotationPosition"
-    // Allow coalescing so rapid position updates don't flood the JS queue
-    override fun canCoalesce() = true
-    override fun getEventData(): WritableMap = mData
-}
+import com.rnmapbox.rnmbx.components.camera.BaseEvent
 
 class RNMBXMarkerViewContent(context: Context): ReactViewGroup(context) {
     var inAdd: Boolean = false
@@ -46,10 +29,13 @@ class RNMBXMarkerViewContent(context: Context): ReactViewGroup(context) {
     }
 
     override fun dispatchTouchEvent(ev: MotionEvent): Boolean {
-        // Prevent the parent MapView from intercepting subsequent MOVE/UP events
-        // for its own pan/zoom gesture recognition, which would send CANCEL to
-        // the Pressable and suppress onPress. See maplibre/maplibre-react-native#1289.
-        parent?.requestDisallowInterceptTouchEvent(true)
+        // On ACTION_DOWN, tell the parent MapView not to intercept subsequent MOVE/UP
+        // events for pan/zoom recognition — that would send CANCEL to child Pressables
+        // and suppress onPress. Android resets the disallow flag on each new DOWN, so
+        // calling this once per gesture is sufficient. See maplibre-react-native#1289.
+        if (ev.actionMasked == MotionEvent.ACTION_DOWN) {
+            parent?.requestDisallowInterceptTouchEvent(true)
+        }
         return super.dispatchTouchEvent(ev)
     }
 
@@ -76,7 +62,14 @@ class RNMBXMarkerViewContent(context: Context): ReactViewGroup(context) {
         val dispatcher = UIManagerHelper.getEventDispatcherForReactTag(reactContext, id) ?: return
         // Use getSurfaceId(view) — more reliable for Fabric than getSurfaceId(context)
         val surfaceId = UIManagerHelper.getSurfaceId(this)
-        dispatcher.dispatchEvent(AnnotationPositionEvent(surfaceId, id, tx, ty))
+        dispatcher.dispatchEvent(
+            BaseEvent(surfaceId, id, "topAnnotationPosition",
+                Arguments.createMap().apply {
+                    putDouble("x", tx.toDouble())
+                    putDouble("y", ty.toDouble())
+                },
+                canCoalesce = true)
+        )
     }
 
     private fun configureParentClipping() {
