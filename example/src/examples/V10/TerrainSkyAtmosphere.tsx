@@ -39,7 +39,7 @@ const TerrainSkyAtmosphere = () => {
       </View>
       <MapView
         style={styles.map}
-        styleURL={'mapbox://styles/mapbox-map-design/ckhqrf2tz0dt119ny6azh975y'}
+        styleURL={'mapbox://styles/mapbox/standard'}
       >
         <Camera
           ref={cameraRef}
@@ -79,17 +79,7 @@ const TerrainSkyAtmosphere = () => {
           <Snow style={{ density: 0.85, intensity: 0.8, color: '#ffffff', opacity: 1.0 }} />
         )}
         {weather === 'rain' && (
-          <Rain
-            style={{
-              density: 0.5,
-              intensity: 0.8,
-              opacity: 0.88,
-              // Explicit colors avoid the default measure-light(brightness) expressions
-              // which fail with "Brightness is unavailable in the current evaluation context"
-              color: '#a8adbc',
-              vignetteColor: '#464646',
-            }}
-          />
+          <Rain style={{ density: 0.5, intensity: 0.8, opacity: 0.88 }} />
         )}
       </MapView>
     </View>

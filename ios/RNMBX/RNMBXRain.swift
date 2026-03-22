@@ -15,13 +15,6 @@ public class RNMBXRain : RNMBXSingletonLayer, RNMBXMapComponent, RNMBXSourceCons
     let rain = self.makeRain()
     self.rain = rain
     addStylesAndUpdate()
-
-    // The Mapbox SDK's MapContentReconciler can reset programmatic rain after the style
-    // JSON loads (since the style JSON has no rain property). Re-applying asynchronously
-    // ensures Rain survives that reconciler pass.
-    DispatchQueue.main.async { [weak self] in
-      self?.addStylesAndUpdate()
-    }
   }
 
   public func removeFromMap(_ map: RNMBXMapView, reason _: RemovalReason) -> Bool {
