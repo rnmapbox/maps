@@ -36,6 +36,10 @@ const SnowAndRain = () => {
               density: 0.5,
               intensity: 0.8,
               opacity: 0.88,
+              // Explicit colors avoid the default measure-light(brightness) expressions
+              // which fail in some style contexts
+              color: '#a8adbc',
+              vignetteColor: '#464646',
             }}
           />
         )}

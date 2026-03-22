@@ -79,7 +79,17 @@ const TerrainSkyAtmosphere = () => {
           <Snow style={{ density: 0.85, intensity: 0.8, color: '#ffffff', opacity: 1.0 }} />
         )}
         {weather === 'rain' && (
-          <Rain style={{ density: 0.5, intensity: 0.8, opacity: 0.88 }} />
+          <Rain
+            style={{
+              density: 0.5,
+              intensity: 0.8,
+              opacity: 0.88,
+              // Explicit colors avoid the default measure-light(brightness) expressions
+              // which fail with "Brightness is unavailable in the current evaluation context"
+              color: '#a8adbc',
+              vignetteColor: '#464646',
+            }}
+          />
         )}
       </MapView>
     </View>
