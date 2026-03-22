@@ -96,8 +96,6 @@ class RNMBXMarkerViewManager(reactApplicationContext: ReactApplicationContext) :
                         }
                     }
                 }
-
-
             })
         }
     }
