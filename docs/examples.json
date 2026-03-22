@@ -648,9 +648,11 @@
           "title": "Marker View",
           "tags": [
             "PointAnnotation",
-            "MarkerView"
+            "MarkerView",
+            "Slider",
+            "Interactive"
           ],
-          "docs": "\nShows marker view and point annotations\n"
+          "docs": "\nShows marker view and point annotations, including an interactive marker with\nsliders, switch, counter, text input, and pressable button to verify complex\ntouch interactions inside a MarkerView.\n"
         },
         "fullPath": "example/src/examples/Annotations/MarkerView.tsx",
         "relPath": "Annotations/MarkerView.tsx",
