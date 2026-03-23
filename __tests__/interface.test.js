@@ -44,6 +44,8 @@ describe('Public Interface', () => {
       'SkyLayer',
       'Terrain',
       'Atmosphere',
+      'Snow',
+      'Rain',
 
       // sources
       'VectorSource',
