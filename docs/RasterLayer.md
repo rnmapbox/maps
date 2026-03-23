@@ -152,6 +152,7 @@ Customizable style attributes
 * <a href="#rasteremissivestrength">rasterEmissiveStrength</a><br/>
 * <a href="#rasterarrayband">rasterArrayBand</a><br/>
 * <a href="#rasterelevation">rasterElevation</a><br/>
+* <a href="#rasterelevationreference">rasterElevationReference</a><br/>
 
 ___
 
@@ -698,4 +699,28 @@ The transition affecting any changes to this layer’s rasterElevation property.
 #### Default Value
 `{duration: 300, delay: 0}`
 
+
+___
+
+### rasterElevationReference
+Name: `rasterElevationReference`
+
+Mapbox spec: [raster-elevation-reference](https://docs.mapbox.com/style-spec/reference/layers/#paint-raster-raster-elevation-reference)
+
+#### Description
+Selects the base of rasterElevation.
+
+#### Type
+`enum`
+#### Default Value
+`sea`
+
+#### Supported Values
+**sea** - Use this mode to elevate raster layers relative to the sea level.<br />
+**ground** - Use this mode to elevate raster layers relative to the ground's height below them.<br />
+
+
+#### Expression
+
+Parameters: ``
 

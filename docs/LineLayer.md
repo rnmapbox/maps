@@ -145,6 +145,7 @@ Customizable style attributes
 * <a href="#lineelevationreference">lineElevationReference</a><br/>
 * <a href="#linecrossslope">lineCrossSlope</a><br/>
 * <a href="#visibility">visibility</a><br/>
+* <a href="#lineelevationgroundscale">lineElevationGroundScale</a><br/>
 * <a href="#lineopacity">lineOpacity</a><br/>
 * <a href="#linecolor">lineColor</a><br/>
 * <a href="#linetranslate">lineTranslate</a><br/>
@@ -371,6 +372,54 @@ Whether this layer is displayed.
 #### Expression
 
 Parameters: ``
+
+___
+
+### lineElevationGroundScale
+Name: `lineElevationGroundScale`
+
+Mapbox spec: [line-elevation-ground-scale](https://docs.mapbox.com/style-spec/reference/layers/#layout-line-line-elevation-ground-scale)
+
+#### Description
+Controls how much the elevation of lines with `lineElevationReference` set to `sea` scales with terrain exaggeration. A value of 0 keeps the line at a fixed altitude above sea level. A value of 1 scales the elevation proportionally with terrain exaggeration.
+
+#### Type
+`number`
+#### Default Value
+`0`
+
+#### Minimum
+`0`
+
+
+#### Maximum
+`1`
+
+#### Requires
+`lineZOffset`
+
+#### Expression
+
+Parameters: `zoom, feature, line-progress`
+___
+
+### lineElevationGroundScaleTransition
+Name: `lineElevationGroundScaleTransition`
+
+#### Description
+
+The transition affecting any changes to this layer’s lineElevationGroundScale property.
+
+#### Type
+
+`{ duration, delay }`
+
+#### Units
+`milliseconds`
+
+#### Default Value
+`{duration: 300, delay: 0}`
+
 
 ___
 

@@ -3946,6 +3946,34 @@
         }
       },
       {
+        "name": "lineElevationGroundScale",
+        "type": "number",
+        "values": [],
+        "minimum": 0,
+        "maximum": 1,
+        "default": 0,
+        "description": "Controls how much the elevation of lines with `lineElevationReference` set to `sea` scales with terrain exaggeration. A value of 0 keeps the line at a fixed altitude above sea level. A value of 1 scales the elevation proportionally with terrain exaggeration.",
+        "requires": [
+          "lineZOffset"
+        ],
+        "disabledBy": [],
+        "allowedFunctionTypes": [],
+        "expression": {
+          "interpolated": true,
+          "parameters": [
+            "zoom",
+            "feature",
+            "line-progress"
+          ]
+        },
+        "transition": true,
+        "mbx": {
+          "fullName": "layout-line-line-elevation-ground-scale",
+          "name": "line-elevation-ground-scale",
+          "namespace": "layout"
+        }
+      },
+      {
         "name": "lineOpacity",
         "type": "number",
         "values": [],
@@ -6467,7 +6495,7 @@
         "required": false,
         "type": "RainLayerStyleProps",
         "default": "none",
-        "description": "FIX ME NO DESCRIPTION"
+        "description": "Rain particle effect style properties.\n\n@note The default `color` and `vignetteColor` values use `measure-light(\"brightness\")`\nexpressions that are only available in Mapbox Standard-based styles\n(`mapbox://styles/mapbox/standard`, `mapbox://styles/mapbox/standard-satellite`).\nWhen using legacy or custom styles, set `color` and `vignetteColor` explicitly to\navoid \"Brightness is unavailable in the current evaluation context\" warnings and\ninvisible rain. For example: `color=\"#a8adbc\" vignetteColor=\"#464646\"`."
       }
     ],
     "fileNameWithExt": "Rain.tsx",
@@ -7069,6 +7097,34 @@
         "mbx": {
           "fullName": "paint-raster-raster-elevation",
           "name": "raster-elevation",
+          "namespace": "paint"
+        }
+      },
+      {
+        "name": "rasterElevationReference",
+        "type": "enum",
+        "values": [
+          {
+            "value": "sea",
+            "doc": "Use this mode to elevate raster layers relative to the sea level."
+          },
+          {
+            "value": "ground",
+            "doc": "Use this mode to elevate raster layers relative to the ground's height below them."
+          }
+        ],
+        "default": "sea",
+        "description": "Selects the base of rasterElevation.",
+        "requires": [],
+        "disabledBy": [],
+        "allowedFunctionTypes": [],
+        "expression": {
+          "interpolated": false
+        },
+        "transition": false,
+        "mbx": {
+          "fullName": "paint-raster-raster-elevation-reference",
+          "name": "raster-elevation-reference",
           "namespace": "paint"
         }
       }

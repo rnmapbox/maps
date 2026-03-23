@@ -168,6 +168,10 @@ func lineLayer(layer: inout LineLayer, reactStyle:Dictionary<String, Any>, oldRe
       self.setLineElevationReference(&layer, styleValue:styleValue);
     } else if (prop == "lineCrossSlope") {
       self.setLineCrossSlope(&layer, styleValue:styleValue);
+    } else if (prop == "lineElevationGroundScale") {
+      self.setLineElevationGroundScale(&layer, styleValue:styleValue);
+    } else if (prop == "lineElevationGroundScaleTransition") {
+      self.setLineElevationGroundScaleTransition(&layer, styleValue:styleValue);
     } else if (prop == "linePatternCrossFade") {
       styleValue.setImage(
         bridge: bridge!,
@@ -701,6 +705,8 @@ func rasterLayer(layer: inout RasterLayer, reactStyle:Dictionary<String, Any>, o
       self.setRasterElevation(&layer, styleValue:styleValue);
     } else if (prop == "rasterElevationTransition") {
       self.setRasterElevationTransition(&layer, styleValue:styleValue);
+    } else if (prop == "rasterElevationReference") {
+      self.setRasterElevationReference(&layer, styleValue:styleValue);
     } else {
       Logger.log(level:.error, message: "Unexpected property \(prop) for layer: raster")
     }
@@ -1554,6 +1560,20 @@ func setLineCrossSlope(_ layer: inout LineLayer, styleValue: RNMBXStyleValue)
           layer.lineCrossSlope = styleValue.mglStyleValueNumber();
         
       
+}
+
+func setLineElevationGroundScale(_ layer: inout LineLayer, styleValue: RNMBXStyleValue)
+{
+      
+        
+          layer.lineElevationGroundScale = styleValue.mglStyleValueNumber();
+        
+      
+}
+
+func setLineElevationGroundScaleTransition(_ layer: inout LineLayer, styleValue: RNMBXStyleValue)
+{
+    layer.lineElevationGroundScaleTransition = styleValue.getTransition();
 }
 
 func setLinePatternCrossFade(_ layer: inout LineLayer, styleValue: RNMBXStyleValue)
@@ -3050,6 +3070,15 @@ func setRasterElevation(_ layer: inout RasterLayer, styleValue: RNMBXStyleValue)
 func setRasterElevationTransition(_ layer: inout RasterLayer, styleValue: RNMBXStyleValue)
 {
     layer.rasterElevationTransition = styleValue.getTransition();
+}
+
+func setRasterElevationReference(_ layer: inout RasterLayer, styleValue: RNMBXStyleValue)
+{
+      
+        
+          layer.rasterElevationReference = styleValue.mglStyleValueEnum();
+        
+      
 }
 
 

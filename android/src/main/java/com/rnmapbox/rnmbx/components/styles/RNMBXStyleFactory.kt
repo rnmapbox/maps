@@ -191,6 +191,10 @@ object RNMBXStyleFactory {
                 setLineElevationReference(layer, styleValue)
               "lineCrossSlope" ->
                 setLineCrossSlope(layer, styleValue)
+              "lineElevationGroundScale" ->
+                setLineElevationGroundScale(layer, styleValue)
+                "lineElevationGroundScaleTransition" ->
+                setLineElevationGroundScaleTransition(layer, styleValue)
               "linePatternCrossFade" ->
                 style.addImage(styleValue!!, styleKey, object : OnAllImagesLoaded {
                     override fun onAllImagesLoaded() {
@@ -709,6 +713,8 @@ object RNMBXStyleFactory {
                 setRasterElevation(layer, styleValue)
                 "rasterElevationTransition" ->
                 setRasterElevationTransition(layer, styleValue)
+              "rasterElevationReference" ->
+                setRasterElevationReference(layer, styleValue)
           }
         } catch (e: MapboxStyleException) {
           Logger.e(LOG_TAG, "Failed to update: $styleKey ${e.message}")
@@ -1843,6 +1849,32 @@ object RNMBXStyleFactory {
           } else {
             Logger.e("RNMBXLine", "value for lineCrossSlope is null")
           }
+      }
+    }
+
+    fun setLineElevationGroundScale(layer: LineLayer, styleValue: RNMBXStyleValue ) {
+      if (styleValue.isExpression()) {
+        val expression = styleValue.getExpression()
+        if (expression != null) {
+          layer.lineElevationGroundScale(expression)
+        } else {
+          Logger.e("RNMBXLine", "Expression for lineElevationGroundScale is null")
+        }
+      } else {
+          val value = styleValue.getDouble(VALUE_KEY)
+          if (value != null) {
+            layer.lineElevationGroundScale(value)
+          } else {
+            Logger.e("RNMBXLine", "value for lineElevationGroundScale is null")
+          }
+      }
+    }
+
+
+    fun setLineElevationGroundScaleTransition(layer: LineLayer, styleValue: RNMBXStyleValue) {
+      val transition = styleValue.transition
+      if (transition != null) {
+        layer.lineElevationGroundScaleTransition(transition);
       }
     }
 
@@ -4568,6 +4600,19 @@ object RNMBXStyleFactory {
       val transition = styleValue.transition
       if (transition != null) {
         layer.rasterElevationTransition(transition);
+      }
+    }
+
+    fun setRasterElevationReference(layer: RasterLayer, styleValue: RNMBXStyleValue ) {
+      if (styleValue.isExpression()) {
+        val expression = styleValue.getExpression()
+        if (expression != null) {
+          layer.rasterElevationReference(expression)
+        } else {
+          Logger.e("RNMBXRaster", "Expression for rasterElevationReference is null")
+        }
+      } else {
+          layer.rasterElevationReference(RasterElevationReference.valueOf(styleValue.getEnumName()))
       }
     }
 

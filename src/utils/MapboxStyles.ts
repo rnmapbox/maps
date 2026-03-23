@@ -452,6 +452,13 @@ enum RasterResamplingEnum {
   Nearest = 'nearest',
 }
 type RasterResamplingEnumValues = 'linear' | 'nearest';
+enum RasterElevationReferenceEnum {
+  /** Use this mode to elevate raster layers relative to the sea level. */
+  Sea = 'sea',
+  /** Use this mode to elevate raster layers relative to the ground's height below them. */
+  Ground = 'ground',
+}
+type RasterElevationReferenceEnumValues = 'sea' | 'ground';
 enum HillshadeIlluminationAnchorEnum {
   /** The hillshade illumination is relative to the north direction. */
   Map = 'map',
@@ -767,6 +774,20 @@ export interface LineLayerStyleProps {
    * @requires lineZOffset
    */
   lineCrossSlope?: Value<number>;
+  /**
+   * Controls how much the elevation of lines with `lineElevationReference` set to `sea` scales with terrain exaggeration. A value of 0 keeps the line at a fixed altitude above sea level. A value of 1 scales the elevation proportionally with terrain exaggeration.
+   *
+   * @requires lineZOffset
+   */
+  lineElevationGroundScale?: Value<
+    number,
+    ['zoom', 'feature', 'line-progress']
+  >;
+
+  /**
+   * The transition affecting any changes to this layer’s lineElevationGroundScale property.
+   */
+  lineElevationGroundScaleTransition?: Transition;
   /**
    * Controls the transition progress between the image variants of linePattern. Zero means the first variant is used, one is the second, and in between they are blended together. Both images should be the same size and have the same type (either raster or vector).
    *
@@ -1933,6 +1954,12 @@ export interface RasterLayerStyleProps {
    * The transition affecting any changes to this layer’s rasterElevation property.
    */
   rasterElevationTransition?: Transition;
+  /**
+   * Selects the base of rasterElevation.
+   */
+  rasterElevationReference?: Value<
+    Enum<RasterElevationReferenceEnum, RasterElevationReferenceEnumValues>
+  >;
 }
 export interface RasterParticleLayerStyleProps {
   /**
