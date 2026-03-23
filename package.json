@@ -48,6 +48,7 @@
     "generate": "node ./scripts/autogenerate.mjs",
     "unittest": "yarn jest",
     "unittest:single": "yarn jest --testNamePattern",
+    "precommit": "yarn lint && yarn typecheck",
     "lint:fix": "yarn eslint . --fix",
     "test:plugin": "yarn expo-module test plugin",
     "build:plugin": "yarn tsc --build plugin",
