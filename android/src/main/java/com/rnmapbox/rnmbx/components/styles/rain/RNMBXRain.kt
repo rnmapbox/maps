@@ -42,7 +42,7 @@ class RNMBXRain(context: Context?) : AbstractSourceConsumer(context) {
     }
 
     private fun warnIfMeasureLightUnavailable(style: com.mapbox.maps.Style) {
-        val hasLights = style.styleLights.isNotEmpty()
+        val hasLights = style.getStyleLights().isNotEmpty()
         if (hasLights) return
 
         val affectedProps = listOf("color", "opacity", "vignetteColor")
