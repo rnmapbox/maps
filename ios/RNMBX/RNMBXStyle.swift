@@ -705,8 +705,6 @@ func rasterLayer(layer: inout RasterLayer, reactStyle:Dictionary<String, Any>, o
       self.setRasterElevation(&layer, styleValue:styleValue);
     } else if (prop == "rasterElevationTransition") {
       self.setRasterElevationTransition(&layer, styleValue:styleValue);
-    } else if (prop == "rasterElevationReference") {
-      self.setRasterElevationReference(&layer, styleValue:styleValue);
     } else {
       Logger.log(level:.error, message: "Unexpected property \(prop) for layer: raster")
     }
@@ -3070,15 +3068,6 @@ func setRasterElevation(_ layer: inout RasterLayer, styleValue: RNMBXStyleValue)
 func setRasterElevationTransition(_ layer: inout RasterLayer, styleValue: RNMBXStyleValue)
 {
     layer.rasterElevationTransition = styleValue.getTransition();
-}
-
-func setRasterElevationReference(_ layer: inout RasterLayer, styleValue: RNMBXStyleValue)
-{
-      
-        
-          layer.rasterElevationReference = styleValue.mglStyleValueEnum();
-        
-      
 }
 
 

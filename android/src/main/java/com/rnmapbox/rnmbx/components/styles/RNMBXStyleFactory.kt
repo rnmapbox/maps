@@ -18,8 +18,8 @@ import com.mapbox.maps.extension.style.layers.generated.SymbolLayer
 import com.mapbox.maps.extension.style.layers.generated.HeatmapLayer
 import com.mapbox.maps.extension.style.layers.generated.HillshadeLayer
 import com.mapbox.maps.extension.style.atmosphere.generated.Atmosphere
-import com.mapbox.maps.extension.style.snow.generated.Snow
-import com.mapbox.maps.extension.style.rain.generated.Rain
+import com.mapbox.maps.extension.style.precipitations.generated.Snow
+import com.mapbox.maps.extension.style.precipitations.generated.Rain
 import com.mapbox.maps.extension.style.terrain.generated.Terrain
 import com.mapbox.maps.extension.style.layers.generated.ModelLayer
 // import com.mapbox.maps.extension.style.layers.properties.generated.Visibility
@@ -713,8 +713,6 @@ object RNMBXStyleFactory {
                 setRasterElevation(layer, styleValue)
                 "rasterElevationTransition" ->
                 setRasterElevationTransition(layer, styleValue)
-              "rasterElevationReference" ->
-                setRasterElevationReference(layer, styleValue)
           }
         } catch (e: MapboxStyleException) {
           Logger.e(LOG_TAG, "Failed to update: $styleKey ${e.message}")
@@ -4600,19 +4598,6 @@ object RNMBXStyleFactory {
       val transition = styleValue.transition
       if (transition != null) {
         layer.rasterElevationTransition(transition);
-      }
-    }
-
-    fun setRasterElevationReference(layer: RasterLayer, styleValue: RNMBXStyleValue ) {
-      if (styleValue.isExpression()) {
-        val expression = styleValue.getExpression()
-        if (expression != null) {
-          layer.rasterElevationReference(expression)
-        } else {
-          Logger.e("RNMBXRaster", "Expression for rasterElevationReference is null")
-        }
-      } else {
-          layer.rasterElevationReference(RasterElevationReference.valueOf(styleValue.getEnumName()))
       }
     }
 

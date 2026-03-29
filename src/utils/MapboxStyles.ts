@@ -452,13 +452,6 @@ enum RasterResamplingEnum {
   Nearest = 'nearest',
 }
 type RasterResamplingEnumValues = 'linear' | 'nearest';
-enum RasterElevationReferenceEnum {
-  /** Use this mode to elevate raster layers relative to the sea level. */
-  Sea = 'sea',
-  /** Use this mode to elevate raster layers relative to the ground's height below them. */
-  Ground = 'ground',
-}
-type RasterElevationReferenceEnumValues = 'sea' | 'ground';
 enum HillshadeIlluminationAnchorEnum {
   /** The hillshade illumination is relative to the north direction. */
   Map = 'map',
@@ -1954,12 +1947,6 @@ export interface RasterLayerStyleProps {
    * The transition affecting any changes to this layer’s rasterElevation property.
    */
   rasterElevationTransition?: Transition;
-  /**
-   * Selects the base of rasterElevation.
-   */
-  rasterElevationReference?: Value<
-    Enum<RasterElevationReferenceEnum, RasterElevationReferenceEnumValues>
-  >;
 }
 export interface RasterParticleLayerStyleProps {
   /**

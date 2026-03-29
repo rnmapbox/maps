@@ -270,7 +270,6 @@ const styleMap = {
   rasterArrayBand: StyleTypes.Constant,
   rasterElevation: StyleTypes.Constant,
   rasterElevationTransition: StyleTypes.Transition,
-  rasterElevationReference: StyleTypes.Enum,
 
   rasterParticleArrayBand: StyleTypes.Constant,
   rasterParticleCount: StyleTypes.Constant,

@@ -12,9 +12,25 @@ public class RNMBXRain : RNMBXSingletonLayer, RNMBXMapComponent, RNMBXSourceCons
     self.map = map
     self.style = style
 
+    warnIfMeasureLightUnavailable(style: style)
+
     let rain = self.makeRain()
     self.rain = rain
     addStylesAndUpdate()
+  }
+
+  private func warnIfMeasureLightUnavailable(style: Style) {
+    let hasLights = !style.allLightIdentifiers.isEmpty
+    if hasLights { return }
+
+    let affectedProps = ["color", "opacity", "vignetteColor"]
+    let missingProps = affectedProps.filter { reactStyle?[$0] == nil }
+    if missingProps.isEmpty { return }
+
+    Logger.log(level: .warn, message: "RNMBXRain: The current style has no 3D lights, so " +
+      "measure-light(\"brightness\") expressions used in default rain " +
+      "\(missingProps.joined(separator: ", ")) will fail. Use a Standard style or set " +
+      "explicit values for: \(missingProps.joined(separator: ", "))")
   }
 
   public func removeFromMap(_ map: RNMBXMapView, reason _: RemovalReason) -> Bool {

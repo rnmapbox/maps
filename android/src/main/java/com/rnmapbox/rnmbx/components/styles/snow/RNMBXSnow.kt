@@ -3,8 +3,8 @@ package com.rnmapbox.rnmbx.components.styles.snow
 import android.content.Context
 import com.facebook.react.bridge.ReadableMap
 import com.mapbox.maps.MapboxMap
-import com.mapbox.maps.extension.style.snow.generated.Snow
-import com.mapbox.maps.extension.style.snow.generated.removeSnow
+import com.mapbox.maps.extension.style.precipitations.generated.Snow
+import com.mapbox.maps.extension.style.precipitations.generated.removeSnow
 import com.rnmapbox.rnmbx.components.RemovalReason
 import com.rnmapbox.rnmbx.components.mapview.RNMBXMapView
 import com.rnmapbox.rnmbx.components.styles.RNMBXStyle

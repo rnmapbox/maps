@@ -7099,34 +7099,6 @@
           "name": "raster-elevation",
           "namespace": "paint"
         }
-      },
-      {
-        "name": "rasterElevationReference",
-        "type": "enum",
-        "values": [
-          {
-            "value": "sea",
-            "doc": "Use this mode to elevate raster layers relative to the sea level."
-          },
-          {
-            "value": "ground",
-            "doc": "Use this mode to elevate raster layers relative to the ground's height below them."
-          }
-        ],
-        "default": "sea",
-        "description": "Selects the base of rasterElevation.",
-        "requires": [],
-        "disabledBy": [],
-        "allowedFunctionTypes": [],
-        "expression": {
-          "interpolated": false
-        },
-        "transition": false,
-        "mbx": {
-          "fullName": "paint-raster-raster-elevation-reference",
-          "name": "raster-elevation-reference",
-          "namespace": "paint"
-        }
       }
     ]
   },
