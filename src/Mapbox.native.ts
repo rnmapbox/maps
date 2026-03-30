@@ -9,6 +9,8 @@ export {
   type CameraStop,
 } from './components/Camera';
 export { Atmosphere } from './components/Atmosphere';
+export { Snow } from './components/Snow';
+export { Rain } from './components/Rain';
 export {
   default as MapView,
   type MapState,

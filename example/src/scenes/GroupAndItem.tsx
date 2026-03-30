@@ -51,6 +51,7 @@ import TerrainSkyAtmosphere from '../examples/V10/TerrainSkyAtmosphere';
 // V11
 import StyleImportConfig from '../examples/V11/StyleImportConfig';
 import RasterParticle from '../examples/V11/RasterParticle';
+import SnowAndRain from '../examples/V11/SnowAndRain';
 
 const MostRecentExampleKey = '@recent_example';
 
@@ -293,6 +294,7 @@ const Examples = new ExampleGroup('React Native Mapbox', [
   new ExampleGroup('V11', [
     example(StyleImportConfig),
     example(RasterParticle),
+    example(SnowAndRain),
   ]),
   exampleGroup(Map),
   exampleGroup(Camera),

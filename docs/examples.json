@@ -602,9 +602,11 @@
             "RasterDemSource",
             "Terrain",
             "Atmosphere",
-            "SkyLayer"
+            "SkyLayer",
+            "Snow",
+            "Rain"
           ],
-          "docs": "\nDemostrates use of Terrain, Atmosphere and SkyLayer.\n"
+          "docs": "\nDemonstrates use of Terrain, Atmosphere and SkyLayer. Use the Snow/Rain buttons to toggle experimental particle weather effects.\n"
         },
         "fullPath": "example/src/examples/V10/TerrainSkyAtmosphere.tsx",
         "relPath": "V10/TerrainSkyAtmosphere.tsx",

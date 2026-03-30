@@ -3946,6 +3946,34 @@
         }
       },
       {
+        "name": "lineElevationGroundScale",
+        "type": "number",
+        "values": [],
+        "minimum": 0,
+        "maximum": 1,
+        "default": 0,
+        "description": "Controls how much the elevation of lines with `lineElevationReference` set to `sea` scales with terrain exaggeration. A value of 0 keeps the line at a fixed altitude above sea level. A value of 1 scales the elevation proportionally with terrain exaggeration.",
+        "requires": [
+          "lineZOffset"
+        ],
+        "disabledBy": [],
+        "allowedFunctionTypes": [],
+        "expression": {
+          "interpolated": true,
+          "parameters": [
+            "zoom",
+            "feature",
+            "line-progress"
+          ]
+        },
+        "transition": true,
+        "mbx": {
+          "fullName": "layout-line-line-elevation-ground-scale",
+          "name": "line-elevation-ground-scale",
+          "namespace": "layout"
+        }
+      },
+      {
         "name": "lineOpacity",
         "type": "number",
         "values": [],
@@ -6457,6 +6485,23 @@
     "relPath": "src/components/PointAnnotation.tsx",
     "name": "PointAnnotation"
   },
+  "Rain": {
+    "description": "",
+    "displayName": "Rain",
+    "methods": [],
+    "props": [
+      {
+        "name": "style",
+        "required": false,
+        "type": "RainLayerStyleProps",
+        "default": "none",
+        "description": "Rain particle effect style properties.\n\n@note The default `color` and `vignetteColor` values use `measure-light(\"brightness\")`\nexpressions that are only available in Mapbox Standard-based styles\n(`mapbox://styles/mapbox/standard`, `mapbox://styles/mapbox/standard-satellite`).\nWhen using legacy or custom styles, set `color` and `vignetteColor` explicitly to\navoid \"Brightness is unavailable in the current evaluation context\" warnings and\ninvisible rain. For example: `color=\"#a8adbc\" vignetteColor=\"#464646\"`."
+      }
+    ],
+    "fileNameWithExt": "Rain.tsx",
+    "relPath": "src/components/Rain.tsx",
+    "name": "Rain"
+  },
   "RasterArraySource": {
     "description": "RasterArraySource is a map content source that supplies raster array image tiles to be shown on the map.\nThis is typically used for particle animations like wind or precipitation patterns.\nThe location of and metadata about the tiles are defined either by an option dictionary\nor by an external file that conforms to the TileJSON specification.\n\n@experimental This component requires Mapbox Maps SDK v11.4.0 or later",
     "displayName": "RasterArraySource",
@@ -7981,6 +8026,23 @@
         }
       }
     ]
+  },
+  "Snow": {
+    "description": "",
+    "displayName": "Snow",
+    "methods": [],
+    "props": [
+      {
+        "name": "style",
+        "required": false,
+        "type": "SnowLayerStyleProps",
+        "default": "none",
+        "description": "FIX ME NO DESCRIPTION"
+      }
+    ],
+    "fileNameWithExt": "Snow.tsx",
+    "relPath": "src/components/Snow.tsx",
+    "name": "Snow"
   },
   "Style": {
     "description": "Style is a component that automatically adds sources / layers to the map using Mapbox GL Style Spec.\nOnly [`sources`](https://docs.mapbox.com/mapbox-gl-js/style-spec/sources) & [`layers`](https://docs.mapbox.com/mapbox-gl-js/style-spec/layers/) are supported.\nOther fields such as `sprites`, `glyphs` etc. will be ignored. Not all layer / source attributes from the style spec are supported, in general the supported attributes will be mentioned under https://github.com/rnmapbox/maps/tree/main/docs.",
