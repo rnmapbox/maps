@@ -102,12 +102,14 @@ number
 Maximum allowed pitch in degrees. Mirrors the Mapbox map option `maxPitch`.
 
 
+  
 ### minPitch
 
 ```tsx
 number
 ```
 Minimum allowed pitch in degrees. Mirrors the Mapbox map option `minPitch`.
+
 
   
 ### rotateEnabled
