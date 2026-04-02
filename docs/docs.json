@@ -5238,6 +5238,13 @@
         "description": "Maximum allowed pitch in degrees. Mirrors the Mapbox map option `maxPitch`."
       },
       {
+        "name": "minPitch",
+        "required": false,
+        "type": "number",
+        "default": "none",
+        "description": "Minimum allowed pitch in degrees. Mirrors the Mapbox map option `minPitch`."
+      },
+      {
         "name": "rotateEnabled",
         "required": false,
         "type": "boolean",
