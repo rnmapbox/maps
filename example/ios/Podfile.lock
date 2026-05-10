@@ -8,13 +8,13 @@ PODS:
   - hermes-engine (0.82.0):
     - hermes-engine/Pre-built (= 0.82.0)
   - hermes-engine/Pre-built (0.82.0)
-  - MapboxCommon (24.16.6):
+  - MapboxCommon (24.20.3):
     - Turf (= 4.0.0)
-  - MapboxCoreMaps (11.16.6):
-    - MapboxCommon (= 24.16.6)
-  - MapboxMaps (11.16.6):
-    - MapboxCommon (= 24.16.6)
-    - MapboxCoreMaps (= 11.16.6)
+  - MapboxCoreMaps (11.20.3):
+    - MapboxCommon (= 24.20.3)
+  - MapboxMaps (11.20.3):
+    - MapboxCommon (= 24.20.3)
+    - MapboxCoreMaps (= 11.20.3)
     - Turf (= 4.0.0)
   - RCT-Folly (2024.11.18.00):
     - boost
@@ -2445,7 +2445,7 @@ PODS:
     - SocketRocket
     - Yoga
   - rnmapbox-maps (10.3.0):
-    - MapboxMaps (~> 11.16.2)
+    - MapboxMaps (~> 11.20.1)
     - React
     - React-Core
     - rnmapbox-maps/DynamicLibrary (= 10.3.0)
@@ -2456,7 +2456,7 @@ PODS:
     - fast_float
     - fmt
     - hermes-engine
-    - MapboxMaps (~> 11.16.2)
+    - MapboxMaps (~> 11.20.1)
     - RCT-Folly
     - RCT-Folly/Fabric
     - RCTRequired
@@ -3011,9 +3011,9 @@ SPEC CHECKSUMS:
   fmt: a40bb5bd0294ea969aaaba240a927bd33d878cdd
   glog: 5683914934d5b6e4240e497e0f4a3b42d1854183
   hermes-engine: 8642d8f14a548ab718ec112e9bebdfdd154138b5
-  MapboxCommon: 10cbf74edb23c9abcfe2424899d804f288a47334
-  MapboxCoreMaps: f19680d20681797067268284b2292349de861730
-  MapboxMaps: 04c7bf46d66265ad0f4b98484a251777a926c423
+  MapboxCommon: bd1554a0c6e66ac04c9ecd3611f3b7d772eeac7e
+  MapboxCoreMaps: 821019cdd87447ecd895872f4095232723961627
+  MapboxMaps: 6191d857abe0da0f3bdfb5a71349c532d55d7d9d
   RCT-Folly: 846fda9475e61ec7bcbf8a3fe81edfcaeb090669
   RCTDeprecation: 22bf66112da540a7d40e536366ddd8557934fca1
   RCTRequired: a0ed4dc41b35f79fbb6d8ba320e06882a8c792cf
@@ -3081,7 +3081,7 @@ SPEC CHECKSUMS:
   ReactCodegen: 374f1c9242fbdd673b460d358b33860c0cc9d926
   ReactCommon: 25c7f94aee74ddd93a8287756a8ac0830a309544
   RNCAsyncStorage: 29f0230e1a25f36c20b05f65e2eb8958d6526e82
-  rnmapbox-maps: bf6182eaabb29ac87350635ece7f38fe85dc7364
+  rnmapbox-maps: b024dcb74d1eebd65b475770704d60fe7475ec54
   RNReanimated: 732e7d1662f8cc0e533fa32791800de5b5934726
   RNScreens: 0bbf16c074ae6bb1058a7bf2d1ae017f4306797c
   RNVectorIcons: 791f13226ec4a3fd13062eda9e892159f0981fae
