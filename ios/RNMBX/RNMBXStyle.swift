@@ -53,7 +53,7 @@ func fillLayer(layer: inout FillLayer, reactStyle:Dictionary<String, Any>, oldRe
       self.setFillTranslateAnchor(&layer, styleValue:styleValue);
     } else if (prop == "fillPattern") {
       styleValue.setImage(
-        bridge: bridge!,
+        bridge: bridge,
         style: style,
         oldValue: oldReactStyle?[prop],
         setImageOnLayer: { (_) in self.setFillPattern(&layer, styleValue:styleValue) },
@@ -63,7 +63,7 @@ func fillLayer(layer: inout FillLayer, reactStyle:Dictionary<String, Any>, oldRe
       )
     } else if (prop == "fillPatternCrossFade") {
       styleValue.setImage(
-        bridge: bridge!,
+        bridge: bridge,
         style: style,
         oldValue: oldReactStyle?[prop],
         setImageOnLayer: { (_) in self.setFillPatternCrossFade(&layer, styleValue:styleValue) },
@@ -142,7 +142,7 @@ func lineLayer(layer: inout LineLayer, reactStyle:Dictionary<String, Any>, oldRe
       self.setLineDasharray(&layer, styleValue:styleValue);
     } else if (prop == "linePattern") {
       styleValue.setImage(
-        bridge: bridge!,
+        bridge: bridge,
         style: style,
         oldValue: oldReactStyle?[prop],
         setImageOnLayer: { (_) in self.setLinePattern(&layer, styleValue:styleValue) },
@@ -174,7 +174,7 @@ func lineLayer(layer: inout LineLayer, reactStyle:Dictionary<String, Any>, oldRe
       self.setLineElevationGroundScaleTransition(&layer, styleValue:styleValue);
     } else if (prop == "linePatternCrossFade") {
       styleValue.setImage(
-        bridge: bridge!,
+        bridge: bridge,
         style: style,
         oldValue: oldReactStyle?[prop],
         setImageOnLayer: { (_) in self.setLinePatternCrossFade(&layer, styleValue:styleValue) },
@@ -243,7 +243,7 @@ func symbolLayer(layer: inout SymbolLayer, reactStyle:Dictionary<String, Any>, o
       self.setIconTextFitPadding(&layer, styleValue:styleValue);
     } else if (prop == "iconImage") {
       styleValue.setImage(
-        bridge: bridge!,
+        bridge: bridge,
         style: style,
         oldValue: oldReactStyle?[prop],
         setImageOnLayer: { (_) in self.setIconImage(&layer, styleValue:styleValue) },
@@ -379,7 +379,7 @@ func symbolLayer(layer: inout SymbolLayer, reactStyle:Dictionary<String, Any>, o
       self.setTextEmissiveStrengthTransition(&layer, styleValue:styleValue);
     } else if (prop == "iconImageCrossFade") {
       styleValue.setImage(
-        bridge: bridge!,
+        bridge: bridge,
         style: style,
         oldValue: oldReactStyle?[prop],
         setImageOnLayer: { (_) in self.setIconImageCrossFade(&layer, styleValue:styleValue) },
@@ -546,7 +546,7 @@ func fillExtrusionLayer(layer: inout FillExtrusionLayer, reactStyle:Dictionary<S
       self.setFillExtrusionTranslateAnchor(&layer, styleValue:styleValue);
     } else if (prop == "fillExtrusionPattern") {
       styleValue.setImage(
-        bridge: bridge!,
+        bridge: bridge,
         style: style,
         oldValue: oldReactStyle?[prop],
         setImageOnLayer: { (_) in self.setFillExtrusionPattern(&layer, styleValue:styleValue) },
@@ -576,7 +576,7 @@ func fillExtrusionLayer(layer: inout FillExtrusionLayer, reactStyle:Dictionary<S
       self.setFillExtrusionRoundedRoof(&layer, styleValue:styleValue);
     } else if (prop == "fillExtrusionPatternCrossFade") {
       styleValue.setImage(
-        bridge: bridge!,
+        bridge: bridge,
         style: style,
         oldValue: oldReactStyle?[prop],
         setImageOnLayer: { (_) in self.setFillExtrusionPatternCrossFade(&layer, styleValue:styleValue) },
@@ -895,7 +895,7 @@ func backgroundLayer(layer: inout BackgroundLayer, reactStyle:Dictionary<String,
       self.setBackgroundColorTransition(&layer, styleValue:styleValue);
     } else if (prop == "backgroundPattern") {
       styleValue.setImage(
-        bridge: bridge!,
+        bridge: bridge,
         style: style,
         oldValue: oldReactStyle?[prop],
         setImageOnLayer: { (_) in self.setBackgroundPattern(&layer, styleValue:styleValue) },

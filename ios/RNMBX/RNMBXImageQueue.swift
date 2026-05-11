@@ -67,7 +67,15 @@ class RNMBXImageQueueOperation : Operation {
     
     DispatchQueue.global(qos: .default).async {
       if let weakSelf = weakSelf {
-        let loader : RCTImageLoaderProtocol = weakSelf.bridge!.module(forName: "ImageLoader", lazilyLoadIfNecessary: true) as! RCTImageLoaderProtocol
+        guard let bridge = weakSelf.bridge else {
+          Logger.log(level: .error, message: "RNMBXImageQueue: bridge is nil, cannot load image")
+          if let completionHandler = weakSelf.completionHandler {
+            completionHandler(NSError(domain: "RNMBXImageQueue", code: 1, userInfo: [NSLocalizedDescriptionKey: "bridge is nil"]), nil)
+          }
+          _ = weakSelf.setState(state:.Finished, except:.Finished)
+          return
+        }
+        let loader : RCTImageLoaderProtocol = bridge.module(forName: "ImageLoader", lazilyLoadIfNecessary: true) as! RCTImageLoaderProtocol
         
         let cancellationBlock = loader.loadImage(with: weakSelf.urlRequest, size: .zero, scale: CGFloat(weakSelf.scale), clipped: true, resizeMode: .stretch, progressBlock: { _,_  in }, partialLoad: { _ in }) { error, image in
           if let completionHandler = weakSelf.completionHandler {

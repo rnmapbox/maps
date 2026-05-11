@@ -130,6 +130,10 @@ open class RNMBXImages : UIView, RNMBXMapComponent {
     }
     
     if missingImages.count > 0 {
+      guard let bridge = bridge else {
+        Logger.log(level: .error, message: "RNMBXImages: bridge is nil, cannot fetch images. Use nativeAssetImages instead.")
+        return
+      }
       RNMBXUtils.fetchImages(bridge, style: style, objects: missingImages, forceUpdate: true) { name, image in
         self.loadedImages.insert(name)
         self.imageManager?.resolve(name: name, image: image)
