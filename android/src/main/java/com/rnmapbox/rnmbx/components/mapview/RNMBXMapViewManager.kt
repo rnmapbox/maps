@@ -249,6 +249,12 @@ open class RNMBXMapViewManager(context: ReactApplicationContext, val viewTagReso
         map.setReactMaxPitch(if (maxPitch.type == ReadableType.Null) null else maxPitch.asDouble())
     }
 
+    @ReactProp(name = "minPitch")
+    override fun setMinPitch(map: RNMBXMapView, minPitch: Dynamic) {
+        // Allow clearing the limit by passing null from JS
+        map.setReactMinPitch(if (minPitch.type == ReadableType.Null) null else minPitch.asDouble())
+    }
+
     @ReactProp(name = "rotateEnabled")
     override fun setRotateEnabled(map: RNMBXMapView, rotateEnabled: Dynamic) {
         map.withMapView {
