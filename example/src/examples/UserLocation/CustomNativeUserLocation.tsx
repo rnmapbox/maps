@@ -9,7 +9,7 @@ import {
   Image,
 } from '@rnmapbox/maps';
 
-import { ExampleWithMetadata } from '../common/ExampleMetadata';
+import { type ExampleWithMetadata } from '../common/ExampleMetadata';
 
 const styles = { matchParent: { flex: 1 } };
 

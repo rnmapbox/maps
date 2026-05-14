@@ -5,7 +5,7 @@ import type {
   FilterExpression,
   SkyLayerStyleProps,
 } from '../utils/MapboxStyles';
-import { StyleValue } from '../utils/StyleValue';
+import { type StyleValue } from '../utils/StyleValue';
 import RNMBXSkyLayerNativeComponent from '../specs/RNMBXSkyLayerNativeComponent';
 
 import AbstractLayer from './AbstractLayer';

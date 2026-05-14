@@ -1,12 +1,17 @@
-import React, { SyntheticEvent, type Component } from 'react';
+import React, { type SyntheticEvent, type Component } from 'react';
 import { StyleSheet, type ViewProps } from 'react-native';
-import { Feature, GeoJsonProperties, Geometry, Point } from 'geojson';
+import {
+  type Feature,
+  type GeoJsonProperties,
+  type Geometry,
+  type Point,
+} from 'geojson';
 
 import { toJSONString, isFunction } from '../utils';
 import checkRequiredProps from '../utils/checkRequiredProps';
 import { makePoint } from '../utils/geoUtils';
 import { type BaseProps } from '../types/BaseProps';
-import { Position } from '../types/Position';
+import { type Position } from '../types/Position';
 import RNMBXPointAnnotationNativeComponent from '../specs/RNMBXPointAnnotationNativeComponent';
 import NativeRNMBXPointAnnotationModule from '../specs/NativeRNMBXPointAnnotationModule';
 

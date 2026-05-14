@@ -2,11 +2,11 @@ import {
   NativeModules,
   NativeEventEmitter,
   AppState,
-  NativeEventSubscription,
-  EmitterSubscription,
+  type NativeEventSubscription,
+  type EmitterSubscription,
   type AppStateStatus,
   Platform,
-  EventSubscription,
+  type EventSubscription,
 } from 'react-native';
 
 import NativeRNMBXLocationModule from '../../specs/NativeRNMBXLocationModule';

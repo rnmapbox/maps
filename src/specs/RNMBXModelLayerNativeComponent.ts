@@ -4,9 +4,9 @@ import codegenNativeComponent from 'react-native/Libraries/Utilities/codegenNati
 import { Double, Int32 } from 'react-native/Libraries/Types/CodegenTypes';
 
 import type { FilterExpression } from '../utils/MapboxStyles';
-import { StyleValue } from '../utils/StyleValue';
+import { type StyleValue } from '../utils/StyleValue';
 
-import { UnsafeMixed } from './codegenUtils';
+import { type UnsafeMixed } from './codegenUtils';
 
 // @{codepart-replace-start(CommonLayerNativeComponentsProps.codepart-ts)}
 // see https://github.com/rnmapbox/maps/wiki/FabricOptionalProp

@@ -12,9 +12,9 @@ import {
 import sheet from '../../styles/sheet';
 import { DEFAULT_CENTER_COORDINATE } from '../../utils';
 import BaseExamplePropTypes, {
-  BaseExampleProps,
+  type BaseExampleProps,
 } from '../common/BaseExamplePropTypes';
-import { ExampleWithMetadata } from '../common/ExampleMetadata';
+import { type ExampleWithMetadata } from '../common/ExampleMetadata';
 
 const styles = StyleSheet.create({
   button: {
