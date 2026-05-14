@@ -438,6 +438,16 @@ type Props = ViewProps & {
   regionDidChangeDebounceTime?: number;
 
   /**
+   * Native-side throttle interval for onCameraChanged emissions, in milliseconds.
+   *
+   * This is useful when camera changes trigger expensive JS work during gestures
+    * like pinch-zoom. The final camera state remains available through onMapIdle.
+    * Opt-in only: omitting this prop preserves the current behavior.
+    * Defaults to 0, which emits every native camera change event.
+   */
+  cameraChangedThrottleInterval?: number;
+
+  /**
    * Set to true to deselect any selected annotation when the map is tapped. If set to true you will not receive
    * the onPress event for the taps that deselect the annotation. Default is false.
    */
@@ -502,6 +512,7 @@ class MapView extends NativeBridgeComponent(
     requestDisallowInterceptTouchEvent: false,
     regionWillChangeDebounceTime: 10,
     regionDidChangeDebounceTime: 500,
+    cameraChangedThrottleInterval: 0,
   };
 
   deprecationLogged: {

@@ -83,6 +83,7 @@ export interface NativeProps extends ViewProps {
 
   mapViewImpl?: OptionalProp<string>;
   preferredFramesPerSecond?: OptionalProp<Int32>;
+  cameraChangedThrottleInterval?: OptionalProp<Int32>;
 }
 
 // @ts-ignore-error - Codegen requires single cast but TypeScript prefers double cast

@@ -1,6 +1,7 @@
 @_spi(Restricted) import MapboxMaps
 import Turf
 import MapKit
+import QuartzCore
 
 public typealias RNMBXMapViewFactoryFunc = (String, UIView) -> (MapView?)
 
@@ -218,6 +219,8 @@ open class RNMBXMapView: UIView, RCTInvalidating {
   private var isPendingInitialLayout = true
   private var wasGestureActive = false
   private var isGestureActive = false
+  private var cameraChangedThrottleInterval: TimeInterval = 0
+  private var lastCameraChangedEventAt: CFTimeInterval = 0
 
   var layerWaiters : [String:[(String) -> Void]] = [:]
 
@@ -226,6 +229,15 @@ open class RNMBXMapView: UIView, RCTInvalidating {
 
   @objc
   public var mapViewImpl : String? = nil
+
+  @objc public var reactCameraChangedThrottleInterval: NSNumber? {
+    didSet {
+      cameraChangedThrottleInterval = max(0.0, reactCameraChangedThrottleInterval?.doubleValue ?? 0.0) / 1000.0
+      if cameraChangedThrottleInterval == 0 {
+        resetCameraChangedThrottle()
+      }
+    }
+  }
 
   var cancelables = Set<AnyCancelable>()
 
@@ -1025,6 +1037,24 @@ open class RNMBXMapView: UIView, RCTInvalidating {
 // MARK: - event handlers
 
 extension RNMBXMapView {
+  private func resetCameraChangedThrottle() {
+    lastCameraChangedEventAt = 0
+  }
+
+  private func shouldEmitCameraChangedEvent() -> Bool {
+    guard cameraChangedThrottleInterval > 0 else {
+      return true
+    }
+
+    let now = CACurrentMediaTime()
+    guard now - lastCameraChangedEventAt >= cameraChangedThrottleInterval else {
+      return false
+    }
+
+    lastCameraChangedEventAt = now
+    return true
+  }
+
   private func onEvery<T>(event: MapEventType<T>, handler: @escaping (RNMBXMapView, T) -> Void) {
     let signal = event.method(self.mapView.mapboxMap)
     signal.observe { [weak self] (mapEvent) in
@@ -1055,6 +1085,7 @@ extension RNMBXMapView {
         let event = RNMBXEvent(type:.regionIsChanging, payload: self.buildRegionObject())
         self.fireEvent(event: event, callback: self.reactOnMapChange)
       } else if self.handleMapChangedEvents.contains(.cameraChanged) {
+        guard self.shouldEmitCameraChangedEvent() else { return }
         let event = RNMBXCameraChanged(type:.cameraChanged, payload: self.buildStateObject(), reactTag: self.reactTag)
         self.eventDispatcher.send(event)
       }
@@ -1070,6 +1101,7 @@ extension RNMBXMapView {
       }
 
       self.wasGestureActive = false
+      self.resetCameraChangedThrottle()
     })
   }
 

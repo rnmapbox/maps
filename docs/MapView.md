@@ -378,6 +378,8 @@ func
 v10 only, replaces onRegionIsChanging
 *signature:*`(state:{properties: {center: GeoJSON.Position, bounds: {ne: GeoJSON.Position, sw: GeoJSON.Position}, zoom: number, heading: number, pitch: number}, gestures: {isGestureActive: boolean}, timestamp: number}) =&gt; void`
 
+[Map Handlers](../examples/V10/MapHandlers)
+
 
   
 ### onMapIdle
@@ -529,6 +531,23 @@ number
 The emitted frequency of regiondidchange events
 
   _defaults to:_ `500`
+
+  
+### cameraChangedThrottleInterval
+
+```tsx
+number
+```
+Native-side throttle interval for onCameraChanged emissions, in milliseconds.
+
+This is useful when camera changes trigger expensive JS work during gestures
+like pinch-zoom. The final camera state remains available through onMapIdle.
+Opt-in only: omitting this prop preserves the current behavior.
+Defaults to 0, which emits every native camera change event.
+
+  _defaults to:_ `0`
+
+[Map Handlers](../examples/V10/MapHandlers)
 
   
 ### deselectAnnotationOnTap

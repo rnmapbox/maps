@@ -200,6 +200,10 @@ using namespace facebook::react;
         _view.reactPreferredFramesPerSecond = [preferredFramesPerSecond integerValue];
     }
 
+    if (!oldProps.get() || oldViewProps.cameraChangedThrottleInterval != newViewProps.cameraChangedThrottleInterval) {
+        _view.reactCameraChangedThrottleInterval = RNMBXPropConvert_Optional_NSNumber(newViewProps.cameraChangedThrottleInterval, @"cameraChangedThrottleInterval");
+    }
+
     id projection = RNMBXConvertFollyDynamicToId(newViewProps.projection);
     if (projection != nil) {
         _view.reactProjection = projection;
