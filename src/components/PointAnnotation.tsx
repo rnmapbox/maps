@@ -1,5 +1,5 @@
-import React, { SyntheticEvent, type Component } from 'react';
-import { StyleSheet, type ViewProps } from 'react-native';
+import React, { SyntheticEvent } from 'react';
+import { StyleSheet, type HostInstance, type ViewProps } from 'react-native';
 import { Feature, GeoJsonProperties, Geometry, Point } from 'geojson';
 
 import { toJSONString, isFunction } from '../utils';
@@ -239,10 +239,6 @@ class PointAnnotation extends NativeBridgeComponent(
   }
 }
 
-type NativeProps = Omit<Props, 'coordinate'> & {
-  coordinate: string | undefined;
-};
-
-type NativePointAnnotationRef = Component<NativeProps>;
+type NativePointAnnotationRef = HostInstance;
 
 export default PointAnnotation;

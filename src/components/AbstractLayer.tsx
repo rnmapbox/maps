@@ -1,5 +1,5 @@
 import React from 'react';
-import { NativeMethods, processColor } from 'react-native';
+import { type HostInstance, processColor } from 'react-native';
 
 import { getFilter } from '../utils/filterUtils';
 import type {
@@ -46,12 +46,12 @@ class AbstractLayer<
   }
 
   nativeLayer:
-    | (React.Component<NativePropsType> & Readonly<NativeMethods>)
+    | (HostInstance & { readonly __nativeProps?: NativePropsType })
     | null = null;
 
   setNativeLayer = (
     instance:
-      | (React.Component<NativePropsType> & Readonly<NativeMethods>)
+      | (HostInstance & { readonly __nativeProps?: NativePropsType })
       | null,
   ) => {
     this.nativeLayer = instance;

@@ -1,6 +1,6 @@
 import React from 'react';
 import {
-  NativeMethods,
+  type HostInstance,
   NativeModules,
   NativeSyntheticEvent,
 } from 'react-native';
@@ -162,9 +162,7 @@ export class ShapeSource extends NativeBridgeComponent(
     super(props);
   }
 
-  _setNativeRef(
-    nativeRef: React.Component<NativeProps> & Readonly<NativeMethods>,
-  ) {
+  _setNativeRef(nativeRef: HostInstance) {
     this.setNativeRef(nativeRef);
     super._runPendingNativeMethods(nativeRef);
   }
@@ -316,9 +314,7 @@ export class ShapeSource extends NativeBridgeComponent(
       tolerance: this.props.tolerance,
       lineMetrics: this.props.lineMetrics,
       onPress: undefined,
-      ref: (
-        nativeRef: React.Component<NativeProps> & Readonly<NativeMethods>,
-      ) => this._setNativeRef(nativeRef),
+      ref: (nativeRef: HostInstance) => this._setNativeRef(nativeRef),
     };
 
     return (

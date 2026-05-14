@@ -1,11 +1,11 @@
-import React, { Component } from 'react';
+import React from 'react';
 import {
   View,
   StyleSheet,
   NativeModules,
   ViewProps,
   NativeSyntheticEvent,
-  NativeMethods,
+  type HostInstance,
   HostComponent,
   LayoutChangeEvent,
 } from 'react-native';
@@ -474,7 +474,7 @@ const CallbablePropKeys = [
   'onCameraChanged',
 ] as const;
 
-type CallbablePropKeys = typeof CallbablePropKeys[number];
+type CallbablePropKeys = (typeof CallbablePropKeys)[number];
 
 type CallbablePropKeysWithoutOn = CallbablePropKeys extends `on${infer C}`
   ? C
@@ -1291,7 +1291,7 @@ type NativeProps = Omit<
   ) => void;
 };
 
-type RNMBXMapViewRefType = Component<NativeProps> & Readonly<NativeMethods>;
+type RNMBXMapViewRefType = HostInstance;
 
 const RNMBXMapView = NativeMapView as NativeMapViewActual;
 

@@ -53,7 +53,7 @@ Read on if you want to edit your Mapbox version or flavor.
 You can override the version to use. *Warning:* if you set a version, then later update the `@rnmapbox/maps` library it's possible that you'll end up using an older Mapbox version than supported. Make sure you revise this value with `@rnmapbox/maps` updates.
 
 ```ruby
-$RNMapboxMapsVersion = '= 11.16.2'
+$RNMapboxMapsVersion = '= 11.23.1'
 ```
 
 If using expo managed workflow, set the "RNMapboxMapsVersion" variable. See the [expo guide](/plugin/install.md)

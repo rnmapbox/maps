@@ -330,7 +330,7 @@ const UnsupportedProperties = [
 
   'raster-particle-elevation', // should be supported in v11 11.7.0 but it's not yet implemented in SDK
 
-  'raster-elevation-reference', // spec says ios 11.19.0 but not present in SDK 11.20.1
+  'raster-elevation-reference', // spec says ios 11.19.0 but not present in native SDKs yet
 ];
 
 // Properties marked as private in the style-spec but supported by native SDKs

@@ -1,5 +1,5 @@
 import React from 'react';
-import { NativeMethods } from 'react-native';
+import { type HostInstance } from 'react-native';
 
 import type { BaseProps } from '../types/BaseProps';
 
@@ -7,7 +7,7 @@ class AbstractSource<
   PropsType,
   NativePropsType extends object,
 > extends React.PureComponent<PropsType & BaseProps> {
-  _nativeRef?: React.Component<NativePropsType> & Readonly<NativeMethods>;
+  _nativeRef?: HostInstance;
 
   setNativeProps(props: NativePropsType) {
     if (this._nativeRef) {
@@ -15,9 +15,7 @@ class AbstractSource<
     }
   }
 
-  setNativeRef: (
-    instance: React.Component<NativePropsType> & Readonly<NativeMethods>,
-  ) => void = (instance) => {
+  setNativeRef: (instance: HostInstance) => void = (instance) => {
     this._nativeRef = instance;
   };
 }

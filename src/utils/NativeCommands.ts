@@ -1,4 +1,4 @@
-import { findNodeHandle } from 'react-native';
+import { findNodeHandle, type HostInstance } from 'react-native';
 
 export type NativeArg =
   | string
@@ -15,7 +15,7 @@ type FunctionKeys<T> = keyof {
   [K in keyof T as T[K] extends Function ? K : never]: T[K];
 };
 
-type RefType = React.Component;
+type RefType = React.Component | HostInstance;
 
 export class NativeCommands<Spec extends object> {
   module: Spec;
