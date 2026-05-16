@@ -22,7 +22,7 @@ body:
     label: Mapbox Version
     description: |-
       Check `RNMapboxMapsVersion` in your Podfile/gradle files, set to `default` if you don't customize the version
-    placeholder: 11.16.2
+    placeholder: 11.23.1
   validations:
     required: true
 - type: input

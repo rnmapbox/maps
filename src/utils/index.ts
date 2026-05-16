@@ -4,8 +4,8 @@ import {
   Platform,
   Image,
   ImageSourcePropType,
-  TurboModule,
 } from 'react-native';
+import type { TurboModule } from 'react-native/Libraries/TurboModule/RCTExport';
 
 export function isAndroid(): boolean {
   return Platform.OS === 'android';

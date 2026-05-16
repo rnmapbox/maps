@@ -8,5 +8,8 @@
   "include": [
     "src/**/*.ts",
     "global.d.ts"
+  ],
+  "exclude": [
+    "**/*.codepart.ts"
   ]
 }

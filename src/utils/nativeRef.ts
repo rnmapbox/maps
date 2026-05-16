@@ -1,5 +1,5 @@
-import { RefObject, type Component, type MutableRefObject } from 'react';
-import { type NativeMethods, type HostComponent } from 'react-native';
+import { RefObject, type MutableRefObject } from 'react';
+import { type HostInstance } from 'react-native';
 
 /**
  * Helper for useRef and requireNativeComponent:
@@ -10,7 +10,7 @@ import { type NativeMethods, type HostComponent } from 'react-native';
  * <RNMBXCamera ref={ref} ... />
  */
 export type NativeRefType<P> = MutableRefObject<
-  (Component<P> & Readonly<NativeMethods>) | null
+  (HostInstance & { readonly __nativeProps?: P }) | null
 >;
 
 /**
@@ -22,7 +22,7 @@ export type NativeRefType<P> = MutableRefObject<
  * <RNMBXCamera ref={ref} ... />
  */
 export default function nativeRef<P extends {}>(
-  c: RefObject<HostComponent<P> | null>,
-): MutableRefObject<(Component<P> & Readonly<NativeMethods>) | null> {
+  c: RefObject<unknown>,
+): NativeRefType<P> {
   return c as NativeRefType<P>;
 }

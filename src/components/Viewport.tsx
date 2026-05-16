@@ -1,5 +1,4 @@
 import React, {
-  Component,
   forwardRef,
   memo,
   useEffect,
@@ -7,7 +6,7 @@ import React, {
   useMemo,
   useRef,
 } from 'react';
-import { type NativeMethods, type NativeSyntheticEvent } from 'react-native';
+import { type HostInstance, type NativeSyntheticEvent } from 'react-native';
 
 import NativeViewport, {
   type NativeViewportReal,
@@ -225,16 +224,6 @@ export const Viewport = memo(
 );
 export type Viewport = Ref;
 
-type NativeProps = Omit<Props, 'onStatusChanged'> & {
-  hasStatusChanged: boolean;
-  onStatusChanged?: (
-    event: NativeSyntheticEvent<{
-      type: string;
-      payload: ViewportStatusChangedEvent;
-    }>,
-  ) => void;
-};
-
-type RNMBXViewportRefType = Component<NativeProps> & Readonly<NativeMethods>;
+type RNMBXViewportRefType = HostInstance;
 
 const RNMBXViewport = NativeViewport as NativeViewportReal;
