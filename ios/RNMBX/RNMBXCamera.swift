@@ -331,8 +331,9 @@ open class RNMBXCamera : RNMBXMapAndMapViewComponentBase {
   
   func _updateMaxBounds() {
     withMapView { map in
+      let current = map.mapboxMap.cameraBounds
       var options = CameraBoundsOptions()
-      
+
       if let maxBounds = self.maxBoundsFeature {
         logged("RNMBXCamera._updateMaxBounds._toCoordinateBounds") {
           options.bounds = try self._toCoordinateBounds(maxBounds)
@@ -342,7 +343,9 @@ open class RNMBXCamera : RNMBXMapAndMapViewComponentBase {
       }
       options.minZoom = self.minZoomLevel?.CGFloat
       options.maxZoom = self.maxZoomLevel?.CGFloat
-      
+      options.minPitch = current.minPitch
+      options.maxPitch = current.maxPitch
+
       logged("RNMBXCamera._updateMaxBounds") {
         try map.mapboxMap.setCameraBounds(with: options)
       }
