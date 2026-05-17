@@ -8126,22 +8126,9 @@
       {
         "name": "config",
         "required": true,
-        "type": {
-          "name": "shape",
-          "value": [
-            {
-              "name": {
-                "name": "string"
-              },
-              "required": true,
-              "type": "string",
-              "default": "none",
-              "description": "FIX ME NO DESCRIPTION"
-            }
-          ]
-        },
+        "type": "intersection",
         "default": "none",
-        "description": "config is a dictionary of configuration options for the style import.\n\nSee https://github.com/mapbox/mapbox-maps-ios/blob/main/Sources/MapboxMaps/Documentation.docc/Migrate%20to%20v11.md#21-the-mapbox-standard-style"
+        "description": "config is a dictionary of configuration options for the style import.\n\nWhen using the Mapbox Standard style with `id=\"basemap\"`, use {@link StandardStyleConfig}\nkeys for autocomplete. Arbitrary keys are also accepted for forward compatibility.\n\nSee https://github.com/mapbox/mapbox-maps-ios/blob/main/Sources/MapboxMaps/Documentation.docc/Migrate%20to%20v11.md#21-the-mapbox-standard-style"
       }
     ],
     "fileNameWithExt": "StyleImport.tsx",
