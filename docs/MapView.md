@@ -246,6 +246,15 @@ OrnamentPositonProp
 
 [Ornaments](../examples/Map/Ornaments)
   
+### scaleBarUnits
+
+```tsx
+'metric' | 'imperial' | 'nautical'
+```
+Set the scale bar distance units. Defaults to metric.
+
+
+  
 ### surfaceView
 
 ```tsx

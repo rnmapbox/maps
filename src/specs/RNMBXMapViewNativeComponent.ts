@@ -49,6 +49,7 @@ export interface NativeProps extends ViewProps {
 
   scaleBarEnabled?: OptionalProp<boolean>;
   scaleBarPosition?: UnsafeMixed<any>;
+  scaleBarUnits?: OptionalProp<string>;
 
   zoomEnabled?: OptionalProp<boolean>;
   scrollEnabled?: OptionalProp<boolean>;

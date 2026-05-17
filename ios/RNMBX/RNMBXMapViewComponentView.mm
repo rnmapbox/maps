@@ -185,6 +185,11 @@ using namespace facebook::react;
         _view.reactScaleBarPosition = scaleBarPosition;
     }
 
+    id scaleBarUnits = RNMBXConvertFollyDynamicToId(newViewProps.scaleBarUnits);
+    if (scaleBarUnits != nil) {
+        [_view setReactScaleBarUnits:scaleBarUnits];
+    }
+
     RNMBX_REMAP_OPTIONAL_PROP_BOOL(zoomEnabled, reactZoomEnabled)
 
     RNMBX_REMAP_OPTIONAL_PROP_BOOL(scrollEnabled, reactScrollEnabled)

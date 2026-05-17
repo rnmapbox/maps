@@ -5398,6 +5398,13 @@
         "description": "[`mapbox` (v10) implementation only] Adds scale bar offset, e.g. `{top: 8, left: 8}` will put the scale bar in top-left corner of the map"
       },
       {
+        "name": "scaleBarUnits",
+        "required": false,
+        "type": "'metric' \\| 'imperial' \\| 'nautical'",
+        "default": "none",
+        "description": "Set the scale bar distance units. Defaults to metric."
+      },
+      {
         "name": "surfaceView",
         "required": false,
         "type": "boolean",
