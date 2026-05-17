@@ -3497,9 +3497,7 @@
           "name": "shape",
           "value": [
             {
-              "name": {
-                "name": "string"
-              },
+              "name": "[key: string]",
               "required": true,
               "type": "string \\| ImageSourcePropType \\| ImageEntryData",
               "default": "none",
@@ -6378,9 +6376,7 @@
           "name": "shape",
           "value": [
             {
-              "name": {
-                "name": "string"
-              },
+              "name": "[key: string]",
               "required": true,
               "type": "string \\| number",
               "default": "none",

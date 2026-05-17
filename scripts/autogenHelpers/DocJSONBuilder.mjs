@@ -220,9 +220,13 @@ class DocJSONBuilder {
         const { properties } = tsType.signature;
         if (properties) {
           const value = properties.map((kv) => {
+            const key =
+              typeof kv.key === 'object'
+                ? `[key: ${kv.key.name}]`
+                : kv.key;
             return mapProp(
               mapNestedProp({ ...kv.value, description: kv.description }),
-              kv.key,
+              key,
               false,
             );
           });

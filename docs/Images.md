@@ -17,7 +17,7 @@ Images defines the images used in Symbol etc. layers.
 
 ```tsx
 type Images = {
-  [object Object]: string \| ImageSourcePropType \| ImageEntryData; /* FIX ME NO DESCRIPTION */
+  [key: string]: string \| ImageSourcePropType \| ImageEntryData; /* FIX ME NO DESCRIPTION */
 }
 ```
 Specifies the external images in key-value pairs required for the shape source.
