@@ -125,7 +125,9 @@ The easing or path the camera uses to animate to a new configuration.
 ```tsx
 boolean
 ```
-Whether the map orientation follows the user location.
+Whether the map camera follows the user's location. When enabled, the camera centers
+on the user's position and `centerCoordinate` is ignored.
+For more advanced location tracking, consider using {@link Viewport} with `followPuck` state instead.
 
 
   
@@ -134,7 +136,10 @@ Whether the map orientation follows the user location.
 ```tsx
 UserTrackingMode
 ```
-The mode used to track the user location on the map.
+The mode used to track the user location on the map. Only takes effect when `followUserLocation` is true.
+ - `normal`: the camera follows the user's position without rotating the map
+ - `compass`: the camera rotates to match the device's compass heading (direction the device is facing)
+ - `course`: the camera rotates to match the user's direction of travel
 
 
   
@@ -143,7 +148,8 @@ The mode used to track the user location on the map.
 ```tsx
 number
 ```
-The zoom level used when following the user location.
+The zoom level used when following the user location. If not specified,
+the current zoom level is preserved.
 
 [Show Map](../examples/Map/ShowMap)
   
@@ -152,7 +158,8 @@ The zoom level used when following the user location.
 ```tsx
 number
 ```
-The pitch used when following the user location.
+The pitch (tilt) used when following the user location, in degrees. If not specified,
+the current pitch is preserved.
 
 
   
@@ -161,7 +168,8 @@ The pitch used when following the user location.
 ```tsx
 number
 ```
-The heading used when following the user location.
+The heading (bearing) used when following the user location, in degrees. If not specified,
+the heading is determined by `followUserMode`.
 
 
   
@@ -170,7 +178,8 @@ The heading used when following the user location.
 ```tsx
 Partial
 ```
-The padding used to position the user location when following.
+Padding in points that offsets the user's centered position from the edges of the map view.
+Useful for keeping the user location visible when UI elements overlap the map.
 
 
   

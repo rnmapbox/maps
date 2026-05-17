@@ -830,42 +830,42 @@
         "required": false,
         "type": "boolean",
         "default": "none",
-        "description": "Whether the map orientation follows the user location."
+        "description": "Whether the map camera follows the user's location. When enabled, the camera centers\non the user's position and `centerCoordinate` is ignored.\nFor more advanced location tracking, consider using {@link Viewport} with `followPuck` state instead."
       },
       {
         "name": "followUserMode",
         "required": false,
         "type": "UserTrackingMode",
         "default": "none",
-        "description": "The mode used to track the user location on the map."
+        "description": "The mode used to track the user location on the map. Only takes effect when `followUserLocation` is true.\n - `normal`: the camera follows the user's position without rotating the map\n - `compass`: the camera rotates to match the device's compass heading (direction the device is facing)\n - `course`: the camera rotates to match the user's direction of travel"
       },
       {
         "name": "followZoomLevel",
         "required": false,
         "type": "number",
         "default": "none",
-        "description": "The zoom level used when following the user location."
+        "description": "The zoom level used when following the user location. If not specified,\nthe current zoom level is preserved."
       },
       {
         "name": "followPitch",
         "required": false,
         "type": "number",
         "default": "none",
-        "description": "The pitch used when following the user location."
+        "description": "The pitch (tilt) used when following the user location, in degrees. If not specified,\nthe current pitch is preserved."
       },
       {
         "name": "followHeading",
         "required": false,
         "type": "number",
         "default": "none",
-        "description": "The heading used when following the user location."
+        "description": "The heading (bearing) used when following the user location, in degrees. If not specified,\nthe heading is determined by `followUserMode`."
       },
       {
         "name": "followPadding",
         "required": false,
         "type": "Partial",
         "default": "none",
-        "description": "The padding used to position the user location when following."
+        "description": "Padding in points that offsets the user's centered position from the edges of the map view.\nUseful for keeping the user location visible when UI elements overlap the map."
       },
       {
         "name": "minZoomLevel",
@@ -1546,7 +1546,7 @@
     ]
   },
   "CustomLocationProvider": {
-    "description": "",
+    "description": "Overrides the native location provider with custom coordinates and heading.\n\nUseful for simulating locations during development, integrating an external\npositioning sensor, or writing tests. Must be a child of `MapView`.\nUse together with `LocationPuck` to display the custom position on the map.\n\n@example\n&lt;MapView&gt;\n  <CustomLocationProvider coordinate={[-73.9857, 40.7484]} heading={90} />\n  <LocationPuck puckBearingEnabled={true} puckBearing=\"heading\" />\n</MapView>",
     "displayName": "CustomLocationProvider",
     "methods": [],
     "props": [
@@ -1555,14 +1555,14 @@
         "required": false,
         "type": "Position",
         "default": "none",
-        "description": "longitude and latitude to use for the custom location provider that gets applied to the NativeUserLocation"
+        "description": "The position as a `[longitude, latitude]` pair, transmitted to the native puck as the current location."
       },
       {
         "name": "heading",
         "required": false,
         "type": "number",
         "default": "none",
-        "description": "heading/bearing to use for custom location provider that gets applied to the NativeUserLocation"
+        "description": "Heading in degrees (0 = north, 90 = east, 180 = south, 270 = west).\nControls the rotation of the location puck when `puckBearingEnabled` is true on the `LocationPuck`."
       }
     ],
     "fileNameWithExt": "CustomLocationProvider.tsx",
@@ -4527,7 +4527,7 @@
     ]
   },
   "LocationPuck": {
-    "description": "Renders a puck on the map that shows the device's current location.",
+    "description": "Renders the native Mapbox location puck on the map to show the device's current location.\n\nThis is the recommended way to display user location, as it leverages the native\nMapbox location indicator with smooth animations and built-in bearing tracking.\nMust be a child of `MapView`.",
     "displayName": "LocationPuck",
     "methods": [],
     "props": [
@@ -4590,9 +4590,9 @@
       {
         "name": "pulsing",
         "required": false,
-        "type": "\\| {\n    /**\n     * Flag determining whether the pulsing circle animation.\n     */\n    isEnabled?: boolean;\n\n    /**\n     * The color of the pulsing circle.\n     */\n    color?: number \\| ColorValue;\n\n    /**\n     * Circle radius configuration for the pulsing circle animation.\n     *  - accuracy:  Pulsing circle animates with the `horizontalAccuracy` form the latest puck location.\n     *  - number: Pulsing circle should animate with the constant radius.\n     */\n    radius?: 'accuracy' \\| number;\n  }\n\\| 'default'",
+        "type": "\\| {\n    /**\n     * Flag determining whether the pulsing circle animation is enabled.\n     */\n    isEnabled?: boolean;\n\n    /**\n     * The color of the pulsing circle.\n     */\n    color?: number \\| ColorValue;\n\n    /**\n     * Circle radius configuration for the pulsing circle animation.\n     *  - `'accuracy'`: Pulsing circle radius is based on the `horizontalAccuracy` from the latest\n     *    location, providing a visual representation of GPS precision.\n     *  - `number`: Pulsing circle uses a constant radius in screen points.\n     */\n    radius?: 'accuracy' \\| number;\n  }\n\\| 'default'",
         "default": "none",
-        "description": "The configration parameters for sonar-like pulsing circle animation shown around the 2D puck."
+        "description": "The configuration parameters for sonar-like pulsing circle animation shown around the 2D puck.\nSet to `'default'` to enable pulsing with platform default settings. Pass an object to customize.\nOmit or set to `undefined` to disable pulsing."
       },
       {
         "name": "visible",
@@ -10275,7 +10275,7 @@
     ]
   },
   "UserLocation": {
-    "description": "",
+    "description": "Displays the user's current location on the map with a customizable appearance.\n\nBy default, renders a blue circle indicator. Provide children (layer components) to\ncustomize the appearance. Uses `locationManager` internally to subscribe to location\nupdates, with automatic start/stop on mount/unmount and background/foreground transitions.\n\nFor a simpler native-rendered location indicator, consider using {@link LocationPuck} directly.",
     "displayName": "UserLocation",
     "methods": [
       {
@@ -10347,7 +10347,7 @@
         "required": false,
         "type": "number",
         "default": "0",
-        "description": "Minimum amount of movement before GPS location is updated in meters"
+        "description": "Minimum distance in meters the device must move before a location update is generated.\nMaps to `distanceFilter` on iOS and `displacement` on Android. Defaults to 0."
       },
       {
         "name": "onPress",
@@ -10367,7 +10367,7 @@
           "funcSignature": "(location:Location) => void"
         },
         "default": "none",
-        "description": "Callback that is triggered on location update\n*signature:*`(location:Location) => void`"
+        "description": "Callback that is triggered on each location update. Receives a {@link Location} object\ncontaining `coords` (latitude, longitude, altitude, accuracy, heading, course, speed)\nand `timestamp`.\n*signature:*`(location:Location) => void`"
       },
       {
         "name": "renderMode",
@@ -10381,7 +10381,7 @@
         "required": false,
         "type": "boolean",
         "default": "false",
-        "description": "Request the always location permission, and listen to the location even when the app is in background\n\n@platform ios"
+        "description": "Request the always location permission, and listen to the location even when the app is in background.\n\n**Note:** This is not implemented in Mapbox Maps SDK v11 and is currently a no-op\non both iOS and Android.\n\n@platform ios"
       },
       {
         "name": "showsUserHeadingIndicator",
@@ -10527,46 +10527,74 @@
     "name": "VectorSource"
   },
   "Viewport": {
-    "description": "provides a structured approach to organizing camera management logic into states and transitions between them.\n\nAt any given time, the viewport is either:\n - idle\n - in a state (camera is being managed by a ViewportState)\n - transitioning between states\n\nSee [android](https://docs.mapbox.com/android/maps/api/${ANDROID_SDK_VERSION}/mapbox-maps-android/com.mapbox.maps.plugin.viewport/viewport.html),\n[ios](https://docs.mapbox.com/ios/maps/api/${IOS_SDK_VERSION}/Viewport.html#/s:10MapboxMaps8ViewportC)",
+    "description": "Provides a structured approach to organizing camera management logic into states and transitions between them.\n\nViewport is the modern alternative to Camera's `followUserLocation` for tracking the user's position.\nIt supports two built-in states:\n - `followPuck`: tracks the user's location with configurable zoom, pitch, and bearing\n - `overview`: frames a given geometry with configurable padding, bearing, and pitch\n\nAt any given time, the viewport is either:\n - idle (not managing the camera)\n - in a state (camera is actively managed by a ViewportState)\n - transitioning between states\n\nSee [Android Viewport](https://docs.mapbox.com/android/maps/api/11.0.0/mapbox-maps-android/com.mapbox.maps.plugin.viewport/viewport.html),\n[iOS Viewport](https://docs.mapbox.com/ios/maps/api/11.0.0/Viewport.html)",
     "displayName": "Viewport",
     "methods": [
       {
         "name": "getState",
-        "docblock": null,
+        "docblock": "Returns the current state of the viewport as a JSON string.\n@return {Promise<string>} The current viewport state.",
         "modifiers": [],
         "params": [],
-        "returns": null
+        "returns": {
+          "description": "The current viewport state.",
+          "type": {
+            "name": "Promise",
+            "elements": [
+              {
+                "name": "string"
+              }
+            ]
+          }
+        },
+        "description": "Returns the current state of the viewport as a JSON string.",
+        "examples": []
       },
       {
         "name": "idle",
-        "docblock": null,
+        "docblock": "Sets the viewport to idle, stopping any active state or transition.",
         "modifiers": [
           "async"
         ],
         "params": [],
-        "returns": null
+        "returns": null,
+        "description": "Sets the viewport to idle, stopping any active state or transition.",
+        "examples": []
       },
       {
         "name": "transitionTo",
-        "docblock": null,
+        "docblock": "Transitions the viewport to a new state with an optional transition animation.\n@param {ViewportState} state The target state (followPuck or overview).\n@param {ViewportTransition} transition The transition to use (immediate or default).\n@return {Promise<boolean>} true if completed, false if interrupted.",
         "modifiers": [],
         "params": [
           {
             "name": "state",
-            "optional": false,
+            "description": "The target state (followPuck or overview).",
             "type": {
-              "name": null
-            }
+              "name": "ViewportState"
+            },
+            "optional": false
           },
           {
             "name": "transition",
-            "optional": false,
+            "description": "The transition to use (immediate or default).",
             "type": {
-              "name": null
-            }
+              "name": "ViewportTransition"
+            },
+            "optional": false
           }
         ],
-        "returns": null
+        "returns": {
+          "description": "true if completed, false if interrupted.",
+          "type": {
+            "name": "Promise",
+            "elements": [
+              {
+                "name": "boolean"
+              }
+            ]
+          }
+        },
+        "description": "Transitions the viewport to a new state with an optional transition animation.",
+        "examples": []
       }
     ],
     "props": [
@@ -10596,7 +10624,7 @@
     "name": "coordinates",
     "fileNameWithExt": "locationManager.ts",
     "relPath": "src/modules/location/locationManager.ts",
-    "description": "Coorinates sent by locationManager",
+    "description": "Geographic coordinates sent by locationManager. Includes latitude and longitude in degrees, optional altitude in meters above sea level, optional accuracy as the horizontal radius of uncertainty in meters, heading and course in degrees, and the instantaneous speed in meters per second. Heading is the compass direction the device is facing and course is the direction of travel; these are distinct values, but on Android both currently return the same value because the Mapbox SDK does not expose a public compass engine API (see rnmapbox/maps issues 4063, 3391, and 3041 for context).",
     "props": [],
     "styles": [],
     "methods": []
@@ -10605,7 +10633,7 @@
     "name": "location",
     "fileNameWithExt": "locationManager.ts",
     "relPath": "src/modules/location/locationManager.ts",
-    "description": "Location sent by locationManager",
+    "description": "Location object sent by locationManager, containing geographic coordinates (a Coordinates object with latitude, longitude, altitude, accuracy, heading, course, and speed) and a Unix timestamp in milliseconds indicating when the location was determined.\nThe native SDK requests location with high accuracy by default: iOS uses kCLLocationAccuracyBest (the 2nd highest of 6 accuracy levels), and Android uses AccuracyLevel.HIGH (the 2nd highest of 5 levels) with a 1000ms update interval. These accuracy settings are not configurable from the React Native side.",
     "props": [],
     "styles": [],
     "methods": []
@@ -10614,19 +10642,135 @@
     "name": "locationManager",
     "fileNameWithExt": "locationManager.ts",
     "relPath": "src/modules/location/locationManager.ts",
-    "description": "LocationManager is a singleton, see ",
+    "description": "Singleton class that wraps the native Mapbox location manager.\nManages GPS location updates and distributes them to registered listeners, automatically pausing updates when the app moves to the background and resuming when it returns to the foreground (unless requestsAlwaysUse is enabled), and caches the last known location for immediate access.\nUse the default export locationManager rather than instantiating this class directly.",
     "props": [],
     "styles": [],
     "methods": [
       {
+        "name": "getLastKnownLocation",
+        "description": "Returns the last known location from the cache. If no cached location is available,\nqueries the native location manager for the most recent location.This method does not activate GPS or start location updates. To receive\ncontinuous location updates, use addListener instead.",
+        "params": [],
+        "examples": [
+          "const location = await locationManager.getLastKnownLocation();\nif (location) {\n  console.log(location.coords.latitude, location.coords.longitude);\n}"
+        ],
+        "returns": {
+          "description": "The last known location, or null if unavailable.",
+          "type": {
+            "name": "Promise"
+          }
+        }
+      },
+      {
+        "name": "addListener",
+        "description": "Registers a callback to receive location updates. Automatically starts\nlocation updates if not already listening.If a cached location is available, the listener is called immediately\nwith the cached value.",
+        "params": [
+          {
+            "name": "listener",
+            "description": "Callback that receives a Location object on each update.",
+            "type": {
+              "name": "Function"
+            },
+            "optional": false
+          }
+        ],
+        "examples": [
+          "const onLocation = (location) => {\n  console.log(location.coords.latitude, location.coords.longitude);\n};\nlocationManager.addListener(onLocation);"
+        ],
+        "returns": null
+      },
+      {
+        "name": "removeListener",
+        "description": "Removes a previously registered location listener. If no listeners remain,\nlocation updates are automatically stopped.",
+        "params": [
+          {
+            "name": "listener",
+            "description": "The listener callback to remove.",
+            "type": {
+              "name": "Function"
+            },
+            "optional": false
+          }
+        ],
+        "examples": [
+          "locationManager.removeListener(onLocation);"
+        ],
+        "returns": null
+      },
+      {
+        "name": "removeAllListeners",
+        "description": "Removes all registered location listeners and stops location updates.",
+        "params": [],
+        "examples": [
+          "locationManager.removeAllListeners();"
+        ],
+        "returns": null
+      },
+      {
+        "name": "start",
+        "description": "Starts listening for native location updates. This is called automatically\nby addListener when the first listener is registered, so you\ntypically do not need to call it directly.",
+        "params": [
+          {
+            "name": "displacement",
+            "description": "Minimum distance in meters the device must move\nbefore a location update is generated. Defaults to the value set by\nsetMinDisplacement, or -1 (no minimum) if not set.",
+            "type": {
+              "name": "number"
+            },
+            "optional": false
+          }
+        ],
+        "examples": [],
+        "returns": null
+      },
+      {
+        "name": "stop",
+        "description": "Stops listening for native location updates. Called automatically when\nall listeners are removed or when the app moves to the background\n(unless requestsAlwaysUse is enabled).",
+        "params": [],
+        "examples": [],
+        "returns": null
+      },
+      {
+        "name": "setMinDisplacement",
+        "description": "Sets the minimum distance in meters the device must move before a location\nupdate is generated. Defaults to 0 (no minimum, updates on every change).Maps to distanceFilter on iOS and displacement on Android.",
+        "params": [
+          {
+            "name": "minDisplacement",
+            "description": "The minimum displacement in meters.",
+            "type": {
+              "name": "number"
+            },
+            "optional": false
+          }
+        ],
+        "examples": [
+          "locationManager.setMinDisplacement(10); // Only update after moving 10 meters"
+        ],
+        "returns": null
+      },
+      {
+        "name": "setRequestsAlwaysUse",
+        "description": "Sets whether the app should request \"always\" location permission and continue\nreceiving updates in the background.Note: This is not implemented in Mapbox Maps SDK v11 and is currently a no-op\non both iOS and Android.",
+        "params": [
+          {
+            "name": "requestsAlwaysUse",
+            "description": "Whether to request always-on location.",
+            "type": {
+              "name": "boolean"
+            },
+            "optional": false
+          }
+        ],
+        "examples": [],
+        "returns": null
+      },
+      {
         "name": "setLocationEventThrottle",
-        "description": "Sets the period at which location events will be sent over the React Native bridge.\nThe default is 0, aka no limit. [V10, iOS only]",
+        "description": "Sets the period at which location events will be sent over the React Native bridge.\nThe default is 0, which means no throttling (every update is sent immediately).",
         "params": [
           {
             "name": "throttleValue",
-            "description": "event throttle value in ms.",
+            "description": "Event throttle value in milliseconds. Set to 0 to disable throttling.",
             "type": {
-              "name": "Number"
+              "name": "number"
             },
             "optional": false
           }
