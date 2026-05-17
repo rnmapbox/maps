@@ -133,6 +133,9 @@ class DocJSONBuilder {
       if (propMeta.value) {
         result.type.value = propMeta.value;
       }
+      if (propMeta.raw) {
+        result.type.raw = propMeta.raw;
+      }
       return result;
     }
 
@@ -233,6 +236,14 @@ class DocJSONBuilder {
         }
       } else if (tsType.name === 'signature' && tsType.type === 'function') {
         return { name: 'func', funcSignature: tsTypeDump(tsType) };
+      } else if (tsType.name === 'intersection' && tsType.elements) {
+        const objectElement = tsType.elements.find(
+          (e) => e.name === 'signature' && e.type === 'object',
+        );
+        if (objectElement) {
+          return tsTypeDescType(objectElement);
+        }
+        return tsType.raw?.replace(/\|/g, '\\|') || tsType.name;
       } else if (tsType.name === 'union') {
         if (tsType.raw) {
           // Props
@@ -259,16 +270,28 @@ class DocJSONBuilder {
       return result;
     }
 
+    function resolveType(propMeta) {
+      if (propMeta.type?.name === 'union' && propMeta.type?.raw) {
+        return propMeta.type.raw
+          .replace(/\n\s*/g, ' ')
+          .replace(/^\s*\|\s*/, '')
+          .replace(/\|/g, '\\|')
+          .trim();
+      }
+      return (
+        propMeta.type?.name ||
+        tsTypeDescType(propMeta.tsType) ||
+        'FIX ME UNKNOWN TYPE'
+      );
+    }
+
     function mapProp(propMeta, propName, array) {
       let result = {};
       if (!array) {
         result = {
           name: propName || 'FIX ME NO NAME',
           required: propMeta.required || false,
-          type:
-            propMeta.type?.name ||
-            tsTypeDescType(propMeta.tsType) ||
-            'FIX ME UNKNOWN TYPE',
+          type: resolveType(propMeta),
           default: !propMeta.defaultValue
             ? 'none'
             : propMeta.defaultValue.value.replace(/\n/g, ''),

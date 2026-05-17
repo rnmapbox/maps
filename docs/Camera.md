@@ -50,7 +50,10 @@ The location on which the map should center.
 ### bounds
 
 ```tsx
-intersection
+type Bounds = {
+  ne: Position; /* FIX ME NO DESCRIPTION */
+  sw: Position; /* FIX ME NO DESCRIPTION */
+}
 ```
 The corners of a box around which the map should bound. Contains padding props for backwards
 compatibility; the root `padding` prop should be used instead.
@@ -217,7 +220,7 @@ compatibility; the root `padding` prop should be used instead. */
   zoomLevel: number; /* The zoom level of the map. */
   padding: signature; /* The viewport padding in points. */
   animationDuration: number; /* The duration the map takes to animate to a new configuration. */
-  animationMode: union; /* The easing or path the camera uses to animate to a new configuration. */
+  animationMode: 'flyTo' \| 'easeTo' \| 'linearTo' \| 'moveTo' \| 'none'; /* The easing or path the camera uses to animate to a new configuration. */
 }
 ```
 The configuration that the camera falls back on, if no other values are specified.

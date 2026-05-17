@@ -17,7 +17,7 @@ Name of 3D model assets to be used in the map
 
 ```tsx
 type Models = {
-  [object Object]: union; /* FIX ME NO DESCRIPTION */
+  [object Object]: string \| number; /* FIX ME NO DESCRIPTION */
 }
 ```
 _required_

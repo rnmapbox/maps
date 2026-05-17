@@ -105,7 +105,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/core@npm:^7.11.6, @babel/core@npm:^7.12.3, @babel/core@npm:^7.18.10, @babel/core@npm:^7.18.9, @babel/core@npm:^7.20.0, @babel/core@npm:^7.23.9, @babel/core@npm:^7.25.2, @babel/core@npm:^7.27.4, @babel/core@npm:^7.28.3":
+"@babel/core@npm:^7.11.6, @babel/core@npm:^7.12.3, @babel/core@npm:^7.18.10, @babel/core@npm:^7.20.0, @babel/core@npm:^7.23.9, @babel/core@npm:^7.25.2, @babel/core@npm:^7.27.4, @babel/core@npm:^7.28.3":
   version: 7.28.4
   resolution: "@babel/core@npm:7.28.4"
   dependencies:
@@ -128,7 +128,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/core@npm:^7.24.4":
+"@babel/core@npm:^7.24.4, @babel/core@npm:^7.28.0":
   version: 7.29.0
   resolution: "@babel/core@npm:7.29.0"
   dependencies:
@@ -1808,7 +1808,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/traverse--for-generate-function-map@npm:@babel/traverse@^7.25.3, @babel/traverse@npm:^7.10.5, @babel/traverse@npm:^7.18.11, @babel/traverse@npm:^7.18.9, @babel/traverse@npm:^7.25.3, @babel/traverse@npm:^7.27.1, @babel/traverse@npm:^7.28.0, @babel/traverse@npm:^7.28.3, @babel/traverse@npm:^7.28.4":
+"@babel/traverse--for-generate-function-map@npm:@babel/traverse@^7.25.3, @babel/traverse@npm:^7.10.5, @babel/traverse@npm:^7.18.11, @babel/traverse@npm:^7.25.3, @babel/traverse@npm:^7.27.1, @babel/traverse@npm:^7.28.0, @babel/traverse@npm:^7.28.3, @babel/traverse@npm:^7.28.4":
   version: 7.28.4
   resolution: "@babel/traverse@npm:7.28.4"
   dependencies:
@@ -1838,7 +1838,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/types@npm:^7.0.0, @babel/types@npm:^7.18.10, @babel/types@npm:^7.18.9, @babel/types@npm:^7.20.7, @babel/types@npm:^7.25.2, @babel/types@npm:^7.26.0, @babel/types@npm:^7.27.1, @babel/types@npm:^7.27.3, @babel/types@npm:^7.28.2, @babel/types@npm:^7.28.4, @babel/types@npm:^7.3.3, @babel/types@npm:^7.4.4":
+"@babel/types@npm:^7.0.0, @babel/types@npm:^7.18.10, @babel/types@npm:^7.20.7, @babel/types@npm:^7.25.2, @babel/types@npm:^7.26.0, @babel/types@npm:^7.27.1, @babel/types@npm:^7.27.3, @babel/types@npm:^7.28.2, @babel/types@npm:^7.28.4, @babel/types@npm:^7.3.3, @babel/types@npm:^7.4.4":
   version: 7.28.4
   resolution: "@babel/types@npm:7.28.4"
   dependencies:
@@ -4989,7 +4989,7 @@ __metadata:
     node-dir: 0.1.17
     prettier: ^3.6.2
     react: 19.1.0
-    react-docgen: "rnmapbox/react-docgen#rnmapbox-dist-react-docgen-v6"
+    react-docgen: "rnmapbox/react-docgen#rnmapbox-dist-react-docgen-v8"
     react-native: 0.81.1
     react-native-builder-bob: ^0.40.13
     react-test-renderer: 19.1.0
@@ -5375,7 +5375,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/babel__core@npm:^7.1.14, @types/babel__core@npm:^7.18.0, @types/babel__core@npm:^7.20.5":
+"@types/babel__core@npm:^7.1.14, @types/babel__core@npm:^7.20.5":
   version: 7.20.5
   resolution: "@types/babel__core@npm:7.20.5"
   dependencies:
@@ -5407,7 +5407,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/babel__traverse@npm:*, @types/babel__traverse@npm:^7.0.6, @types/babel__traverse@npm:^7.18.0":
+"@types/babel__traverse@npm:*, @types/babel__traverse@npm:^7.0.6, @types/babel__traverse@npm:^7.20.7":
   version: 7.28.0
   resolution: "@types/babel__traverse@npm:7.28.0"
   dependencies:
@@ -5444,10 +5444,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/doctrine@npm:^0.0.7":
-  version: 0.0.7
-  resolution: "@types/doctrine@npm:0.0.7"
-  checksum: 7d34920ea10a785aafb55a93e30ed8f71dfc05952441550f838e89e47d6af9717909e728bc795d49ff802f03fb88f21b139730a82f91015176680cb67ab9c5b4
+"@types/doctrine@npm:^0.0.9":
+  version: 0.0.9
+  resolution: "@types/doctrine@npm:0.0.9"
+  checksum: 3909eaca42e7386b2ab866f082b78da3e00718d2fa323597e254feb0556c678b41f2c490729067433630083ac9c806ec6ae1e146754f7f8ba7d3e43ed68d6500
   languageName: node
   linkType: hard
 
@@ -18397,21 +18397,21 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-docgen@rnmapbox/react-docgen#rnmapbox-dist-react-docgen-v6":
-  version: 6.0.4
-  resolution: "react-docgen@https://github.com/rnmapbox/react-docgen.git#commit=6eb6a672cfd8fe2cb2c3f507bf1c48d1c20b4eed"
+"react-docgen@rnmapbox/react-docgen#rnmapbox-dist-react-docgen-v8":
+  version: 8.0.3
+  resolution: "react-docgen@https://github.com/rnmapbox/react-docgen.git#commit=444f1b499bb5db2c07fb11eecefdbeb1252bea14"
   dependencies:
-    "@babel/core": ^7.18.9
-    "@babel/traverse": ^7.18.9
-    "@babel/types": ^7.18.9
-    "@types/babel__core": ^7.18.0
-    "@types/babel__traverse": ^7.18.0
-    "@types/doctrine": ^0.0.7
+    "@babel/core": ^7.28.0
+    "@babel/traverse": ^7.28.0
+    "@babel/types": ^7.28.2
+    "@types/babel__core": ^7.20.5
+    "@types/babel__traverse": ^7.20.7
+    "@types/doctrine": ^0.0.9
     "@types/resolve": ^1.20.2
     doctrine: ^3.0.0
     resolve: ^1.22.1
     strip-indent: ^4.0.0
-  checksum: f63d2a1e8dd0eae787281da9372c234059cfdbced797ead0e5493bb350d0ee5d67323feabdf734210b62ce7478355a1e7747ce4a1531373b727e17e1f74fb2d2
+  checksum: 0265fa8ee37d36c9c503f0fce3f9b5555308059f40f1bc814ce3135cf4661395972b449ca8c45dec78d692fbdd593bf2cbdeb1aa57001a523f5ad324b65c6c06
   languageName: node
   linkType: hard
 
