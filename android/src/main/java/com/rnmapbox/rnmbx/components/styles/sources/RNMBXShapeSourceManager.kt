@@ -154,6 +154,11 @@ class RNMBXShapeSourceManager(private val mContext: ReactApplicationContext, val
         source.setMaxZoom(maxZoom.asInt().toLong())
     }
 
+    @ReactProp(name = "minZoomLevel")
+    override fun setMinZoomLevel(source: RNMBXShapeSource, minZoom: Dynamic) {
+        source.setMinZoom(minZoom.asInt().toLong())
+    }
+
     @ReactProp(name = "buffer")
     override fun setBuffer(source: RNMBXShapeSource, buffer: Dynamic) {
         source.setBuffer(buffer.asInt().toLong())

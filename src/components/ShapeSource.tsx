@@ -94,6 +94,12 @@ export type Props = {
   maxZoomLevel?: number;
 
   /**
+   * Specifies the minimum zoom level at which to create vector tiles.
+   * The default value is 0.
+   */
+  minZoomLevel?: number;
+
+  /**
    * Specifies the size of the tile buffer on each side.
    * A value of 0 produces no buffer. A value of 512 produces a buffer as wide as the tile itself.
    * Larger values produce fewer rendering artifacts near tile edges and slower performance.
@@ -312,6 +318,7 @@ export class ShapeSource extends NativeBridgeComponent(
       clusterMaxZoomLevel: this.props.clusterMaxZoomLevel,
       clusterProperties: this.props.clusterProperties,
       maxZoomLevel: this.props.maxZoomLevel,
+      minZoomLevel: this.props.minZoomLevel,
       buffer: this.props.buffer,
       tolerance: this.props.tolerance,
       lineMetrics: this.props.lineMetrics,

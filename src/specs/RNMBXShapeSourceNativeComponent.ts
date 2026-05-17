@@ -21,6 +21,7 @@ export interface NativeProps extends ViewProps {
   clusterMaxZoomLevel: UnsafeMixed<Double>;
   clusterProperties: UnsafeMixed<any>;
   maxZoomLevel: UnsafeMixed<Double>;
+  minZoomLevel: UnsafeMixed<Double>;
   buffer: UnsafeMixed<Double>;
   tolerance: UnsafeMixed<Double>;
   lineMetrics: UnsafeMixed<boolean>;

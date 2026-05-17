@@ -85,6 +85,7 @@ public class RNMBXShapeSource : RNMBXSource {
   @objc public var clusterProperties : [String: [Any]]?;
 
   @objc public var maxZoomLevel : NSNumber?
+  @objc public var minZoomLevel : NSNumber?
   @objc public var buffer : NSNumber?
   @objc public var tolerance : NSNumber?
   @objc public var lineMetrics : Bool = false
@@ -134,6 +135,10 @@ public class RNMBXShapeSource : RNMBXSource {
 
     if let maxZoomLevel = maxZoomLevel {
       result.maxzoom = maxZoomLevel.doubleValue
+    }
+
+    if let minZoomLevel = minZoomLevel {
+      result.minzoom = minZoomLevel.doubleValue
     }
 
     if let buffer = buffer {
