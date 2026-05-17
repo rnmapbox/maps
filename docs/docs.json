@@ -7680,6 +7680,13 @@
         "description": "Specifies the maximum zoom level at which to create vector tiles.\nA greater value produces greater detail at high zoom levels.\nThe default value is 18."
       },
       {
+        "name": "minZoomLevel",
+        "required": false,
+        "type": "number",
+        "default": "none",
+        "description": "Specifies the minimum zoom level at which to create vector tiles.\nThe default value is 0."
+      },
+      {
         "name": "buffer",
         "required": false,
         "type": "number",
