@@ -259,6 +259,9 @@
         "RNMBXNativeUserLocation": {
           "className": "RNMBXNativeUserLocationComponentView"
         },
+        "RNMBXPointAnnotationManager": {
+          "className": "RNMBXPointAnnotationManagerComponentView"
+        },
         "RNMBXPointAnnotation": {
           "className": "RNMBXPointAnnotationComponentView"
         },
@@ -328,6 +331,7 @@
         "RNMBXModelLayer": "RNMBXModelLayerComponentView",
         "RNMBXModels": "RNMBXModelsComponentView",
         "RNMBXNativeUserLocation": "RNMBXNativeUserLocationComponentView",
+        "RNMBXPointAnnotationManager": "RNMBXPointAnnotationManagerComponentView",
         "RNMBXPointAnnotation": "RNMBXPointAnnotationComponentView",
         "RNMBXRain": "RNMBXRainComponentView",
         "RNMBXRasterArraySource": "RNMBXRasterArraySourceComponentView",
