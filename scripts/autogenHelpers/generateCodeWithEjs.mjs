@@ -319,18 +319,9 @@ function isTranslate(attrName) {
 }
 
 const UnsupportedProperties = [
-  'hillshade-emissive-strength', // should be supported in v11 according to specs but it's not on ios 11.0.0.rc2
-
-  'icon-color-contrast', // should be supported in v11 11.15.2 but it's not on android
-
-  'icon-color-brightness-min', // should be supported in v11 11.15.0 but it's not on android
-  'icon-color-brightness-max', // should be supported in v11 11.15.0 but it's not on android
-
-  'fill-extrusion-cast-shadows', // should be supported in v11 11.8.0 but it's not on android
-
   'raster-particle-elevation', // should be supported in v11 11.7.0 but it's not yet implemented in SDK
 
-  'raster-elevation-reference', // spec says ios 11.19.0 but not present in SDK 11.20.1
+  'raster-elevation-reference', // spec says ios 11.19.0 but not present in SDK 11.23.1
 ];
 
 // Properties marked as private in the style-spec but supported by native SDKs
