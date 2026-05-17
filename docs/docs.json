@@ -2370,6 +2370,22 @@
           "name": "fill-extrusion-line-width",
           "namespace": "paint"
         }
+      },
+      {
+        "name": "fillExtrusionCastShadows",
+        "type": "boolean",
+        "values": [],
+        "default": true,
+        "description": "Enable/Disable shadow casting for this layer",
+        "requires": [],
+        "disabledBy": [],
+        "allowedFunctionTypes": [],
+        "transition": false,
+        "mbx": {
+          "fullName": "paint-fill-extrusion-fill-extrusion-cast-shadows",
+          "name": "fill-extrusion-cast-shadows",
+          "namespace": "paint"
+        }
       }
     ]
   },
@@ -3307,6 +3323,33 @@
         "mbx": {
           "fullName": "paint-hillshade-hillshade-accent-color",
           "name": "hillshade-accent-color",
+          "namespace": "paint"
+        }
+      },
+      {
+        "name": "hillshadeEmissiveStrength",
+        "type": "number",
+        "values": [],
+        "minimum": 0,
+        "units": "intensity",
+        "default": 0,
+        "description": "Controls the intensity of light emitted on the source features.",
+        "requires": [
+          "lights"
+        ],
+        "disabledBy": [],
+        "allowedFunctionTypes": [],
+        "expression": {
+          "interpolated": true,
+          "parameters": [
+            "zoom",
+            "measure-light"
+          ]
+        },
+        "transition": true,
+        "mbx": {
+          "fullName": "paint-hillshade-hillshade-emissive-strength",
+          "name": "hillshade-emissive-strength",
           "namespace": "paint"
         }
       }
@@ -4397,7 +4440,8 @@
           "interpolated": true,
           "parameters": [
             "zoom",
-            "measure-light"
+            "measure-light",
+            "line-progress"
           ]
         },
         "transition": true,
@@ -10048,6 +10092,69 @@
         "mbx": {
           "fullName": "paint-symbol-icon-color-saturation",
           "name": "icon-color-saturation",
+          "namespace": "paint"
+        }
+      },
+      {
+        "name": "iconColorContrast",
+        "type": "number",
+        "values": [],
+        "minimum": -1,
+        "maximum": 1,
+        "default": 0,
+        "description": "Increase or reduce the contrast of the symbol icon.",
+        "requires": [],
+        "disabledBy": [],
+        "allowedFunctionTypes": [],
+        "expression": {
+          "interpolated": false
+        },
+        "transition": false,
+        "mbx": {
+          "fullName": "paint-symbol-icon-color-contrast",
+          "name": "icon-color-contrast",
+          "namespace": "paint"
+        }
+      },
+      {
+        "name": "iconColorBrightnessMin",
+        "type": "number",
+        "values": [],
+        "minimum": 0,
+        "maximum": 1,
+        "default": 0,
+        "description": "Increase or reduce the brightness of the symbols. The value is the minimum brightness.",
+        "requires": [],
+        "disabledBy": [],
+        "allowedFunctionTypes": [],
+        "expression": {
+          "interpolated": false
+        },
+        "transition": false,
+        "mbx": {
+          "fullName": "paint-symbol-icon-color-brightness-min",
+          "name": "icon-color-brightness-min",
+          "namespace": "paint"
+        }
+      },
+      {
+        "name": "iconColorBrightnessMax",
+        "type": "number",
+        "values": [],
+        "minimum": 0,
+        "maximum": 1,
+        "default": 1,
+        "description": "Increase or reduce the brightness of the symbols. The value is the maximum brightness.",
+        "requires": [],
+        "disabledBy": [],
+        "allowedFunctionTypes": [],
+        "expression": {
+          "interpolated": false
+        },
+        "transition": false,
+        "mbx": {
+          "fullName": "paint-symbol-icon-color-brightness-max",
+          "name": "icon-color-brightness-max",
           "namespace": "paint"
         }
       },

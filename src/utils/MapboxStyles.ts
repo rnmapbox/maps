@@ -809,7 +809,10 @@ export interface LineLayerStyleProps {
    *
    * @requires lights
    */
-  lineEmissiveStrength?: Value<number, ['zoom', 'measure-light']>;
+  lineEmissiveStrength?: Value<
+    number,
+    ['zoom', 'measure-light', 'line-progress']
+  >;
 
   /**
    * The transition affecting any changes to this layer’s lineEmissiveStrength property.
@@ -1363,6 +1366,18 @@ export interface SymbolLayerStyleProps {
    */
   iconColorSaturation?: Value<number>;
   /**
+   * Increase or reduce the contrast of the symbol icon.
+   */
+  iconColorContrast?: Value<number>;
+  /**
+   * Increase or reduce the brightness of the symbols. The value is the minimum brightness.
+   */
+  iconColorBrightnessMin?: Value<number>;
+  /**
+   * Increase or reduce the brightness of the symbols. The value is the maximum brightness.
+   */
+  iconColorBrightnessMax?: Value<number>;
+  /**
    * Specifies an uniform elevation from the ground, in meters.
    */
   symbolZOffset?: Value<number, ['zoom', 'feature']>;
@@ -1826,6 +1841,10 @@ export interface FillExtrusionLayerStyleProps {
    * The transition affecting any changes to this layer’s fillExtrusionLineWidth property.
    */
   fillExtrusionLineWidthTransition?: Transition;
+  /**
+   * Enable/Disable shadow casting for this layer
+   */
+  fillExtrusionCastShadows?: boolean;
 }
 export interface RasterLayerStyleProps {
   /**
@@ -2047,6 +2066,17 @@ export interface HillshadeLayerStyleProps {
    * The transition affecting any changes to this layer’s hillshadeAccentColor property.
    */
   hillshadeAccentColorTransition?: Transition;
+  /**
+   * Controls the intensity of light emitted on the source features.
+   *
+   * @requires lights
+   */
+  hillshadeEmissiveStrength?: Value<number, ['zoom', 'measure-light']>;
+
+  /**
+   * The transition affecting any changes to this layer’s hillshadeEmissiveStrength property.
+   */
+  hillshadeEmissiveStrengthTransition?: Transition;
 }
 export interface ModelLayerStyleProps {
   /**

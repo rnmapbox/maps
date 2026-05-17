@@ -393,6 +393,12 @@ func symbolLayer(layer: inout SymbolLayer, reactStyle:Dictionary<String, Any>, o
       self.setTextOcclusionOpacityTransition(&layer, styleValue:styleValue);
     } else if (prop == "iconColorSaturation") {
       self.setIconColorSaturation(&layer, styleValue:styleValue);
+    } else if (prop == "iconColorContrast") {
+      self.setIconColorContrast(&layer, styleValue:styleValue);
+    } else if (prop == "iconColorBrightnessMin") {
+      self.setIconColorBrightnessMin(&layer, styleValue:styleValue);
+    } else if (prop == "iconColorBrightnessMax") {
+      self.setIconColorBrightnessMax(&layer, styleValue:styleValue);
     } else if (prop == "symbolZOffset") {
       self.setSymbolZOffset(&layer, styleValue:styleValue);
     } else if (prop == "symbolZOffsetTransition") {
@@ -634,6 +640,8 @@ func fillExtrusionLayer(layer: inout FillExtrusionLayer, reactStyle:Dictionary<S
       self.setFillExtrusionLineWidth(&layer, styleValue:styleValue);
     } else if (prop == "fillExtrusionLineWidthTransition") {
       self.setFillExtrusionLineWidthTransition(&layer, styleValue:styleValue);
+    } else if (prop == "fillExtrusionCastShadows") {
+      self.setFillExtrusionCastShadows(&layer, styleValue:styleValue);
     } else {
       Logger.log(level:.error, message: "Unexpected property \(prop) for layer: fill-extrusion")
     }
@@ -789,6 +797,10 @@ func hillshadeLayer(layer: inout HillshadeLayer, reactStyle:Dictionary<String, A
       self.setHillshadeAccentColor(&layer, styleValue:styleValue);
     } else if (prop == "hillshadeAccentColorTransition") {
       self.setHillshadeAccentColorTransition(&layer, styleValue:styleValue);
+    } else if (prop == "hillshadeEmissiveStrength") {
+      self.setHillshadeEmissiveStrength(&layer, styleValue:styleValue);
+    } else if (prop == "hillshadeEmissiveStrengthTransition") {
+      self.setHillshadeEmissiveStrengthTransition(&layer, styleValue:styleValue);
     } else {
       Logger.log(level:.error, message: "Unexpected property \(prop) for layer: hillshade")
     }
@@ -2288,6 +2300,33 @@ func setIconColorSaturation(_ layer: inout SymbolLayer, styleValue: RNMBXStyleVa
       
 }
 
+func setIconColorContrast(_ layer: inout SymbolLayer, styleValue: RNMBXStyleValue)
+{
+      
+        
+          layer.iconColorContrast = styleValue.mglStyleValueNumber();
+        
+      
+}
+
+func setIconColorBrightnessMin(_ layer: inout SymbolLayer, styleValue: RNMBXStyleValue)
+{
+      
+        
+          layer.iconColorBrightnessMin = styleValue.mglStyleValueNumber();
+        
+      
+}
+
+func setIconColorBrightnessMax(_ layer: inout SymbolLayer, styleValue: RNMBXStyleValue)
+{
+      
+        
+          layer.iconColorBrightnessMax = styleValue.mglStyleValueNumber();
+        
+      
+}
+
 func setSymbolZOffset(_ layer: inout SymbolLayer, styleValue: RNMBXStyleValue)
 {
       
@@ -2887,6 +2926,15 @@ func setFillExtrusionLineWidthTransition(_ layer: inout FillExtrusionLayer, styl
     layer.fillExtrusionLineWidthTransition = styleValue.getTransition();
 }
 
+func setFillExtrusionCastShadows(_ layer: inout FillExtrusionLayer, styleValue: RNMBXStyleValue)
+{
+      
+        
+          layer.fillExtrusionCastShadows = styleValue.mglStyleValueBoolean();
+        
+      
+}
+
 
 
 func setRasterStyleLayerVisibility(_ layer: inout RasterLayer, styleValue: RNMBXStyleValue)
@@ -3229,6 +3277,20 @@ func setHillshadeAccentColor(_ layer: inout HillshadeLayer, styleValue: RNMBXSty
 func setHillshadeAccentColorTransition(_ layer: inout HillshadeLayer, styleValue: RNMBXStyleValue)
 {
     layer.hillshadeAccentColorTransition = styleValue.getTransition();
+}
+
+func setHillshadeEmissiveStrength(_ layer: inout HillshadeLayer, styleValue: RNMBXStyleValue)
+{
+      
+        
+          layer.hillshadeEmissiveStrength = styleValue.mglStyleValueNumber();
+        
+      
+}
+
+func setHillshadeEmissiveStrengthTransition(_ layer: inout HillshadeLayer, styleValue: RNMBXStyleValue)
+{
+    layer.hillshadeEmissiveStrengthTransition = styleValue.getTransition();
 }
 
 

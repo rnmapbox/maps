@@ -972,7 +972,7 @@ Controls the intensity of light emitted on the source features.
 
 #### Expression
 
-Parameters: `zoom, measure-light`
+Parameters: `zoom, measure-light, line-progress`
 ___
 
 ### lineEmissiveStrengthTransition
