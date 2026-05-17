@@ -21,6 +21,7 @@ export { default as PointAnnotation } from './components/PointAnnotation';
 export { default as Annotation } from './components/Annotation';
 export { default as Callout } from './components/Callout';
 export { default as StyleImport } from './components/StyleImport';
+export type { StandardStyleConfig } from './components/StyleImport';
 export {
   default as UserLocation,
   UserLocationRenderMode,
