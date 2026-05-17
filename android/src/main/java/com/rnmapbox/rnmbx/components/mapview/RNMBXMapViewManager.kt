@@ -326,6 +326,11 @@ open class RNMBXMapViewManager(context: ReactApplicationContext, val viewTagReso
         mapView.setReactScaleBarPosition(mapValue)
     }
 
+    @ReactProp(name = "scaleBarUnits")
+    override fun setScaleBarUnits(mapView: RNMBXMapView, scaleBarUnits: Dynamic) {
+        mapView.setReactScaleBarUnits(scaleBarUnits.asString())
+    }
+
     @ReactProp(name = "compassEnabled")
     override fun setCompassEnabled(mapView: RNMBXMapView, compassEnabled: Dynamic) {
         mapView.setReactCompassEnabled(compassEnabled.asBoolean())

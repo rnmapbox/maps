@@ -1357,6 +1357,7 @@ open class RNMBXMapView(private val mContext: Context, var mManager: RNMBXMapVie
     }
 
     var mScaleBarSettings = OrnamentSettings(enabled = false)
+    var mScaleBarUnits: String? = null
 
     fun setReactScaleBarEnabled(scaleBarEnabled: Boolean) {
         mScaleBarSettings.enabled = scaleBarEnabled
@@ -1378,9 +1379,21 @@ open class RNMBXMapView(private val mContext: Context, var mManager: RNMBXMapVie
         changes.add(Property.SCALEBAR)
     }
 
+    fun setReactScaleBarUnits(units: String?) {
+        mScaleBarUnits = units
+        changes.add(Property.SCALEBAR)
+    }
+
     private fun applyScaleBar() {
         mapView.scalebar.updateSettings {
             updateOrnament("scaleBar", mScaleBarSettings, this.toGenericOrnamentSettings())
+            mScaleBarUnits?.let { units ->
+                distanceUnits = when (units) {
+                    "imperial" -> com.mapbox.maps.plugin.DistanceUnits.IMPERIAL
+                    "nautical" -> com.mapbox.maps.plugin.DistanceUnits.NAUTICAL
+                    else -> com.mapbox.maps.plugin.DistanceUnits.METRIC
+                }
+            }
         }
         workaroundToRelayoutChildOfMapView()
     }

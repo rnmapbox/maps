@@ -290,6 +290,11 @@ type Props = ViewProps & {
   scaleBarPosition?: OrnamentPositonProp;
 
   /**
+   * Set the scale bar distance units. Defaults to metric.
+   */
+  scaleBarUnits?: 'metric' | 'imperial' | 'nautical';
+
+  /**
    * [Android only] Enable/Disable use of GLSurfaceView instead of TextureView.
    */
   surfaceView?: boolean;
