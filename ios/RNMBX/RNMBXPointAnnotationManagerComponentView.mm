@@ -1,6 +1,7 @@
 
 #import "RNMBXPointAnnotationManagerComponentView.h"
 #import "RNMBXFabricHelpers.h"
+#import "RNMBXFabricPropConvert.h"
 
 #import <React/RCTConversions.h>
 #import <React/RCTFabricComponentsPlugins.h>
@@ -51,7 +52,8 @@ using namespace facebook::react;
 
 - (void)updateProps:(const Props::Shared &)props
            oldProps:(const Props::Shared &)oldProps {
-  const auto &newProps = static_cast<const RNMBXPointAnnotationManagerProps &>(*props);
+  const auto &oldViewProps = static_cast<const RNMBXPointAnnotationManagerProps &>(*_props);
+  const auto &newViewProps = static_cast<const RNMBXPointAnnotationManagerProps &>(*props);
 
   RNMBX_OPTIONAL_PROP_NSString(slot)
 
