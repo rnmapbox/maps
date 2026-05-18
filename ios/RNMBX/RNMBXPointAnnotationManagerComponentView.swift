@@ -10,11 +10,7 @@ open class RNMBXPointAnnotationManagerView: RNMBXMapComponentBase {
 
   private func applySlot() {
     withRNMBXMapView { map in
-      if let slot = self.slot {
-        map.pointAnnotationManager.manager.slot = Slot(rawValue: slot)
-      } else {
-        map.pointAnnotationManager.manager.slot = nil
-      }
+      map.pointAnnotationManager.manager.slot = self.slot
     }
   }
 
