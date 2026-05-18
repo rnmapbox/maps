@@ -20,9 +20,10 @@ type Props = {
  */
 const PointAnnotationManager = (props: Props) => {
   return (
-    <NativePointAnnotationManager slot={props.slot as Slot | undefined}>
+    <>
+      <NativePointAnnotationManager slot={props.slot as Slot | undefined} />
       {props.children}
-    </NativePointAnnotationManager>
+    </>
   );
 };
 
