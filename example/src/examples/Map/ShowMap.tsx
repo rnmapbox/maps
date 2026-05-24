@@ -5,7 +5,7 @@ import { ButtonGroup } from '@rneui/base';
 
 import sheet from '../../styles/sheet';
 import { onSortOptions } from '../../utils';
-import { ExampleWithMetadata } from '../common/ExampleMetadata'; // exclude-from-doc
+import { type ExampleWithMetadata } from '../common/ExampleMetadata'; // exclude-from-doc
 
 const ShowMap = () => {
   const _mapOptions = Object.keys(Mapbox.StyleURL)

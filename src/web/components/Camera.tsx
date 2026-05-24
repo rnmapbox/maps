@@ -1,7 +1,11 @@
-import { Component, ContextType } from 'react';
+import { Component, type ContextType } from 'react';
 
-import { CameraProps, CameraStop, CameraRef } from '../../components/Camera';
-import { Position } from '../../types/Position';
+import {
+  type CameraProps,
+  type CameraStop,
+  type CameraRef,
+} from '../../components/Camera';
+import { type Position } from '../../types/Position';
 import MapContext from '../MapContext';
 
 function isArray<T>(value: T | ArrayLike<T>): value is ArrayLike<T> {

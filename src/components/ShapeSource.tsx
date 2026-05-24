@@ -1,8 +1,8 @@
 import React from 'react';
 import {
-  NativeMethods,
+  type NativeMethods,
   NativeModules,
-  NativeSyntheticEvent,
+  type NativeSyntheticEvent,
 } from 'react-native';
 
 import RNMBXShapeSourceNativeComponent from '../specs/RNMBXShapeSourceNativeComponent';
@@ -14,8 +14,8 @@ import {
   isAndroid,
 } from '../utils';
 import { copyPropertiesAsDeprecated } from '../utils/deprecation';
-import { OnPressEvent } from '../types/OnPressEvent';
-import { ShapeAnimatorInterface } from '../shapeAnimators';
+import { type OnPressEvent } from '../types/OnPressEvent';
+import { type ShapeAnimatorInterface } from '../shapeAnimators';
 
 import AbstractSource from './AbstractSource';
 import NativeBridgeComponent from './NativeBridgeComponent';

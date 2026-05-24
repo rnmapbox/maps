@@ -9,7 +9,7 @@ import {
 } from '@rnmapbox/maps';
 
 import Bubble from '../common/Bubble';
-import { ExampleWithMetadata } from '../common/ExampleMetadata'; // exclude-from-doc
+import { type ExampleWithMetadata } from '../common/ExampleMetadata'; // exclude-from-doc
 
 const randomCountries = [
   {

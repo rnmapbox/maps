@@ -9,11 +9,11 @@ import {
   ShapeSource,
   getAnnotationsLayerID,
 } from '@rnmapbox/maps';
-import { Point, Position } from 'geojson';
+import { type Point, type Position } from 'geojson';
 import { Button } from '@rneui/base';
 
 import Bubble from '../common/Bubble';
-import { ExampleWithMetadata } from '../common/ExampleMetadata'; // exclude-from-doc
+import { type ExampleWithMetadata } from '../common/ExampleMetadata'; // exclude-from-doc
 
 const ANNOTATION_SIZE = 40;
 

@@ -7,7 +7,7 @@ import {
   ShapeSource,
   SymbolLayer,
 } from '@rnmapbox/maps';
-import { FeatureCollection } from 'geojson';
+import { type FeatureCollection } from 'geojson';
 import { Button } from 'react-native';
 
 const styles = {

@@ -1,5 +1,5 @@
 import React from 'react';
-import { TurboModule } from 'react-native';
+import { type TurboModule } from 'react-native';
 
 import { type NativeArg, runNativeMethod } from '../utils';
 

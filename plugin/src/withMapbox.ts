@@ -2,7 +2,7 @@ import { promises } from 'fs';
 import path from 'path';
 
 import {
-  ConfigPlugin,
+  type ConfigPlugin,
   createRunOncePlugin,
   withDangerousMod,
   withGradleProperties,
@@ -15,7 +15,7 @@ import {
   mergeContents,
   createGeneratedHeaderComment,
   removeGeneratedContents,
-  MergeResults,
+  type MergeResults,
 } from './generateCode';
 
 let pkg: { name: string; version?: string } = {
