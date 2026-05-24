@@ -182,14 +182,7 @@ class OfflineManager {
    * @return {void}
    */
   async invalidateAmbientCache(): Promise<void> {
-    if (RNMBXModule.MapboxV10) {
-      console.warn(
-        'RNMapbox: invalidateAmbientCache is not implemented on v10',
-      );
-      return;
-    }
-    await this._initialize();
-    await MapboxOfflineManager.invalidateAmbientCache();
+    console.warn('RNMapbox: invalidateAmbientCache is not implemented on v10');
   }
 
   /**
@@ -204,12 +197,7 @@ class OfflineManager {
    * @return {void}
    */
   async clearAmbientCache(): Promise<void> {
-    if (RNMBXModule.MapboxV10) {
-      console.warn('RNMapbox: clearAmbientCache is not implemented on v10');
-      return;
-    }
-    await this._initialize();
-    await MapboxOfflineManager.clearAmbientCache();
+    console.warn('RNMapbox: clearAmbientCache is not implemented on v10');
   }
 
   /**

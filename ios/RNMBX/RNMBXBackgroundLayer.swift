@@ -6,10 +6,6 @@ public class RNMBXBackgroundLayer: RNMBXLayer {
 
   override func makeLayer(style: Style) throws -> Layer {
     var layer = LayerType(id: self.id!)
-    #if !RNMBX_11
-    layer.sourceLayer = self.sourceLayerID
-    layer.source = sourceID
-    #endif
     return layer
   }
 
@@ -34,7 +30,7 @@ public class RNMBXBackgroundLayer: RNMBXLayer {
         styler.backgroundLayer(
           layer: &styleLayer,
           reactStyle: reactStyle,
-          oldReactStyle: oldReatStyle,
+          oldReactStyle: oldReactStyle,
           applyUpdater: { (updater) in logged("RNMBXBackgroundLayer.addStyles") {
             try style.updateLayer(withId: self.id, type: LayerType.self) { (layer: inout LayerType) in updater(&layer) }
           }},

@@ -1,4 +1,3 @@
-#ifdef RCT_NEW_ARCH_ENABLED
 
 #import "RNMBXShapeSourceComponentView.h"
 #import "RNMBXFabricHelpers.h"
@@ -103,6 +102,7 @@ using namespace facebook::react;
   RNMBX_OPTIONAL_PROP_NSNumber(clusterMaxZoomLevel)
   RNMBX_OPTIONAL_PROP_NSDictionary(clusterProperties)
   RNMBX_OPTIONAL_PROP_NSNumber(maxZoomLevel)
+  RNMBX_OPTIONAL_PROP_NSNumber(minZoomLevel)
   RNMBX_OPTIONAL_PROP_NSNumber(buffer)
   RNMBX_OPTIONAL_PROP_NSNumber(tolerance)
   RNMBX_OPTIONAL_PROP_BOOL(lineMetrics)
@@ -119,4 +119,3 @@ Class<RCTComponentViewProtocol> RNMBXShapeSourceCls(void)
   return RNMBXShapeSourceComponentView.class;
 }
 
-#endif // RCT_NEW_ARCH_ENABLED

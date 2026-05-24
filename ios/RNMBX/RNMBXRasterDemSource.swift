@@ -30,11 +30,7 @@ public class RNMBXRasterDemSource : RNMBXSource {
 
   override func makeSource() -> Source
   {
-    #if RNMBX_11
     var result = SourceType(id: self.id)
-    #else
-    var result = SourceType()
-    #endif
     if let url = url {
       result.url = url
     } else if let tileUrlTemplates = tileUrlTemplates {

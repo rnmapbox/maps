@@ -1,4 +1,3 @@
-#ifdef RCT_NEW_ARCH_ENABLED
 
 #import "RNMBXMapViewComponentView.h"
 #import "RNMBXFabricHelpers.h"
@@ -121,6 +120,9 @@ using namespace facebook::react;
 }
 
 - (void)dispatchCameraChangedEvent:(NSDictionary*)event {
+    if (self->_eventEmitter == nullptr) {
+        return;
+    }
     const auto [type, json] = RNMBXStringifyEventData(event);
     std::dynamic_pointer_cast<const facebook::react::RNMBXMapViewEventEmitter>(self->_eventEmitter)->onCameraChanged({type, json});
 }
@@ -183,6 +185,11 @@ using namespace facebook::react;
         _view.reactScaleBarPosition = scaleBarPosition;
     }
 
+    id scaleBarUnits = RNMBXConvertFollyDynamicToId(newViewProps.scaleBarUnits);
+    if (scaleBarUnits != nil) {
+        [_view setReactScaleBarUnits:scaleBarUnits];
+    }
+
     RNMBX_REMAP_OPTIONAL_PROP_BOOL(zoomEnabled, reactZoomEnabled)
 
     RNMBX_REMAP_OPTIONAL_PROP_BOOL(scrollEnabled, reactScrollEnabled)
@@ -190,6 +197,13 @@ using namespace facebook::react;
     RNMBX_REMAP_OPTIONAL_PROP_BOOL(rotateEnabled, reactRotateEnabled)
 
     RNMBX_REMAP_OPTIONAL_PROP_BOOL(pitchEnabled, reactPitchEnabled)
+
+    id maxPitch = RNMBXConvertFollyDynamicToId(newViewProps.maxPitch);
+    if (maxPitch != nil) {
+        _view.reactMaxPitch = maxPitch;
+    }
+  
+    RNMBX_REMAP_OPTIONAL_PROP_NSDictionary(gestureSettings, reactGestureSettings)
 
     id preferredFramesPerSecond = RNMBXConvertFollyDynamicToId(newViewProps.preferredFramesPerSecond);
     if (preferredFramesPerSecond != nil) {
@@ -224,6 +238,7 @@ using namespace facebook::react;
 - (void)prepareForRecycle
 {
     [super prepareForRecycle];
+    _lastStyleURL = nil;
     [self prepareView];
 }
 
@@ -234,4 +249,3 @@ Class<RCTComponentViewProtocol> RNMBXMapViewCls(void)
   return RNMBXMapViewComponentView.class;
 }
 
-#endif // RCT_NEW_ARCH_ENABLED

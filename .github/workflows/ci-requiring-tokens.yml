@@ -24,77 +24,31 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  call_android_workflow:
-    name: "Android/Mapbox"
-    uses: ./.github/workflows/android-actions.yml
-    with:
-      env_name: ${{ inputs.env_name }}
-      ref: ${{ inputs.ref }}
-      NVMRC: ${{ inputs.NVMRC }}
-      MAP_IMPL: mapbox
-    secrets:
-      MAPBOX_ACCESS_TOKEN: ${{ secrets.MAPBOX_ACCESS_TOKEN }}
-      ENV_MAPBOX_ACCESS_TOKEN: ${{ secrets.ENV_MAPBOX_ACCESS_TOKEN }}
+  # Note: As of 10.3.0, only Mapbox v11 + New Architecture (Fabric) is supported
+  # v10 and old architecture configurations have been removed
 
-  call_android_workflow_fabric:
-    name: "Android/Mapbox/Fabric"
-    uses: ./.github/workflows/android-actions.yml
-    with:
-      env_name: ${{ inputs.env_name }}
-      ref: ${{ inputs.ref }}
-      NVMRC: ${{ inputs.NVMRC }}
-      MAP_IMPL: mapbox
-      NEW_ARCH: true
-    secrets:
-      MAPBOX_ACCESS_TOKEN: ${{ secrets.MAPBOX_ACCESS_TOKEN }}
-      ENV_MAPBOX_ACCESS_TOKEN: ${{ secrets.ENV_MAPBOX_ACCESS_TOKEN }}
-
-
-  call_android_workflow_11:
-    name: "Android/Mapbox11"
+  call_android_workflow_11_fabric:
+    name: "Android/Mapbox11/Fabric"
     uses: ./.github/workflows/android-actions.yml
     with:
       env_name: ${{ inputs.env_name }}
       ref: ${{ inputs.ref }}
       NVMRC: ${{ inputs.NVMRC }}
       MAP_IMPL: mapbox11
-    secrets:
-      MAPBOX_ACCESS_TOKEN: ${{ secrets.MAPBOX_ACCESS_TOKEN }}
-      ENV_MAPBOX_ACCESS_TOKEN: ${{ secrets.ENV_MAPBOX_ACCESS_TOKEN }}
-
-  call_ios_workflow:
-    name: "iOS/Mapbox"
-    uses: ./.github/workflows/ios-actions.yml
-    with:
-      env_name: ${{ inputs.env_name }}
-      ref: ${{ inputs.ref }}
-      NVMRC: ${{ inputs.NVMRC }}
-      MAP_IMPL: mapbox
-    secrets:
-      MAPBOX_ACCESS_TOKEN: ${{ secrets.MAPBOX_ACCESS_TOKEN }}
-      ENV_MAPBOX_ACCESS_TOKEN: ${{ secrets.ENV_MAPBOX_ACCESS_TOKEN }}
-
-  call_ios_workflow_fabric:
-    name: "iOS/Mapbox/Fabric"
-    uses: ./.github/workflows/ios-actions.yml
-    with:
-      env_name: ${{ inputs.env_name }}
-      ref: ${{ inputs.ref }}
-      NVMRC: ${{ inputs.NVMRC }}
-      MAP_IMPL: mapbox
       NEW_ARCH: true
     secrets:
       MAPBOX_ACCESS_TOKEN: ${{ secrets.MAPBOX_ACCESS_TOKEN }}
       ENV_MAPBOX_ACCESS_TOKEN: ${{ secrets.ENV_MAPBOX_ACCESS_TOKEN }}
 
-  call_ios_workflow_11:
-    name: "iOS/Mapbox11"
+  call_ios_workflow_11_fabric:
+    name: "iOS/Mapbox11/Fabric"
     uses: ./.github/workflows/ios-actions.yml
     with:
       env_name: ${{ inputs.env_name }}
       ref: ${{ inputs.ref }}
       NVMRC: ${{ inputs.NVMRC }}
       MAP_IMPL: mapbox11
+      NEW_ARCH: true
     secrets:
       MAPBOX_ACCESS_TOKEN: ${{ secrets.MAPBOX_ACCESS_TOKEN }}
       ENV_MAPBOX_ACCESS_TOKEN: ${{ secrets.ENV_MAPBOX_ACCESS_TOKEN }}

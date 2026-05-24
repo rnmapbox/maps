@@ -5,16 +5,10 @@ protocol RNMBXImageSetter : AnyObject {
 }
 
 func hasImage(style: Style, name: String) -> Bool {
-  #if RNMBX_11
   return style.imageExists(withId: name)
-  #else
-  return (style.styleManager.getStyleImage(forImageId: name) != nil)
-  #endif
 }
 
-#if RNMBX_11
 typealias StyleImageMissingPayload = StyleImageMissing
-#endif
 
 open class RNMBXImages : UIView, RNMBXMapComponent {
   
@@ -74,11 +68,8 @@ open class RNMBXImages : UIView, RNMBXMapComponent {
   }
   
   // MARK: - RNMBXMapComponent
+  // Uses default implementation from RNMBXMapComponentProtocol extension (returns false)
 
-  public func waitForStyleLoad() -> Bool {
-    return false
-  }
-  
   public func addToMap(_ map: RNMBXMapView, style: Style) {
     self.style = style
     imageManager = map.imageManager
@@ -139,6 +130,10 @@ open class RNMBXImages : UIView, RNMBXMapComponent {
     }
     
     if missingImages.count > 0 {
+      guard let bridge = bridge else {
+        Logger.log(level: .error, message: "RNMBXImages: bridge is nil, cannot fetch images. Use nativeAssetImages instead.")
+        return
+      }
       RNMBXUtils.fetchImages(bridge, style: style, objects: missingImages, forceUpdate: true) { name, image in
         self.loadedImages.insert(name)
         self.imageManager?.resolve(name: name, image: image)

@@ -15,11 +15,7 @@ public class RNMBXVectorSource : RNMBXTileSource {
 
   override func makeSource() -> Source
   {
-    #if RNMBX_11
     var result = VectorSource(id: self.id)
-    #else
-    var result = VectorSource()
-    #endif
     if let url = url {
       result.url = url
     } else {

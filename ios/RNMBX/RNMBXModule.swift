@@ -13,15 +13,9 @@ class RNMBXModule : NSObject {
   
   public static var accessToken : String? {
     didSet {
-#if RNMBX_11
       if let token = accessToken {
         MapboxOptions.accessToken = token
       }
-#else
-      if let token = accessToken {
-        ResourceOptionsManager.default.resourceOptions.accessToken = token
-      }
-#endif
     }
   }
 
@@ -29,6 +23,7 @@ class RNMBXModule : NSObject {
   @objc
   func constantsToExport() -> [AnyHashable: Any]! {
     return [
+      // Deprecated: means v10 or later, always true. Will be removed in next major version.
       "MapboxV10":true,
       "StyleURL":
         [
@@ -98,9 +93,23 @@ class RNMBXModule : NSObject {
       RNMBXModule.accessToken = token
       resolver(token)
   }
+  
+  @objc func addCustomHeader(_ headerName: String, forHeaderValue headerValue: String) {
+    addCustomHeaderWithOptions(headerName, forHeaderValue: headerValue, forOptions: nil)
+  }
 
-  @objc func addCustomHeader(_ headerName: String, forHeaderValue headerValue: String ) {
-    CustomHttpHeaders.shared.customHeaders[headerName] = headerValue
+  @objc func addCustomHeaderWithOptions(_ headerName: String, forHeaderValue headerValue: String, forOptions options: NSDictionary?) {
+    var urlRegexp: NSRegularExpression? = nil
+    if let pattern = options?.value(forKey: "urlRegexp") as? String {
+      do {
+        urlRegexp = try NSRegularExpression(pattern: pattern)
+      }
+      catch {
+        Logger.log(level: .error, message: "Invalid regex pattern: \(error.localizedDescription)")
+      }
+    }
+    
+    CustomHttpHeaders.shared.customHeaders[headerName] = CustomHttpHeadersMapValue(headerValue: headerValue, options: CustomHttpHeadersOptions(urlRegexp: urlRegexp))
   }
 
   @objc func removeCustomHeader(_ headerName: String) {
@@ -119,9 +128,8 @@ class RNMBXModule : NSObject {
 
   @objc func clearData(_ resolver: @escaping RCTPromiseResolveBlock,
     rejecter: @escaping RCTPromiseRejectBlock) {
-    
+
     DispatchQueue.main.async {
-      #if RNMBX_11
       MapboxMap.clearData { error in
         if let error = error {
           rejecter("error", error.localizedDescription, error)
@@ -129,15 +137,6 @@ class RNMBXModule : NSObject {
           resolver(nil)
         }
       }
-      #else
-      MapboxMap.clearData(for: ResourceOptions(accessToken: RNMBXModule.accessToken ?? "")) { error in
-        if let error = error {
-          rejecter("error", error.localizedDescription, error)
-        } else {
-          resolver(nil)
-        }
-      }
-      #endif
     }
   }
 }

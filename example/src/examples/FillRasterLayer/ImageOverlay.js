@@ -120,5 +120,6 @@ const metadata = {
   title: 'Image Overlay',
   tags: ['RasterLayer', 'ImageSource'],
   docs: '',
+  disableSync: true,
 };
 ImageOverlay.metadata = metadata;

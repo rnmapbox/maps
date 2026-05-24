@@ -27,7 +27,7 @@ class RNMBXStyleValueTest {
     fun `getEnumName returns correct enum name`() {
         Mockito.`when`(mockPayload.getString("value")).thenReturn("test-value")
 
-        val styleValue = RNMBXStyleValue(mockConfig)
+        val styleValue = RNMBXStyleValue('foo', mockConfig)
 
         assertEquals("TEST_VALUE", styleValue.getEnumName())
     }
@@ -36,7 +36,7 @@ class RNMBXStyleValueTest {
     fun `getEnumName handles Turkish locale correctly`() {
         Mockito.`when`(mockPayload.getString("value")).thenReturn("miter")
 
-        val styleValue = RNMBXStyleValue(mockConfig)
+        val styleValue = RNMBXStyleValue('foo', mockConfig)
 
         Locale.setDefault(Locale("tr", "TR"))
 

@@ -1,38 +1,43 @@
 import MapboxMaps
 
 @objc
-public class RNMBXInteractiveElement : UIView, RNMBXMapComponent {
+public class RNMBXInteractiveElement : UIView, RNMBXMapAndMapViewComponent {
   weak var map : RNMBXMapView? = nil
+  weak var mapView : MapView? = nil
 
   static let hitboxDefault = 44.0
 
   @objc public var draggable: Bool = false
-  
+
   @objc public var hasPressListener: Bool = false
-  
+
   @objc public var hitbox : [String:NSNumber] = [
     "width": NSNumber(value: hitboxDefault),
     "height": NSNumber(value: hitboxDefault)
   ]
-  
+
   @objc public var id: String! = nil {
     willSet {
       if id != nil && newValue != id {
         Logger.log(level:.warn, message: "Changing id from: \(optional: id) to \(optional: newValue), changing of id is not supported")
-        if let map = map { removeFromMap(map, reason: .ComponentChange) }
+        if let map = map, let mapView = mapView {
+          removeFromMap(map, mapView: mapView, reason: .ComponentChange)
+        }
       }
     }
     didSet {
       if oldValue != nil && oldValue != id {
-        if let map = map { addToMap(map, style: map.mapboxMap.style) }
+        if let map = map, let mapView = mapView {
+          addToMap(map, mapView: mapView, style: mapView.mapboxMap.style)
+        }
       }
     }
   }
-  
+
   @objc public var onDragStart: RCTBubblingEventBlock? = nil
-  
+
   @objc public var onPress: RCTBubblingEventBlock? = nil
-  
+
   func getLayerIDs() -> [String] {
     return []
   }
@@ -40,24 +45,26 @@ public class RNMBXInteractiveElement : UIView, RNMBXMapComponent {
   func isDraggable() -> Bool {
     return draggable
   }
-  
+
   func isTouchable() -> Bool {
     return hasPressListener
   }
-  
-  // MARK: - RNMBXMapComponent
-  public func addToMap(_ map: RNMBXMapView, style: Style) {
+
+  // MARK: - RNMBXMapAndMapViewComponent
+  public func addToMap(_ map: RNMBXMapView, mapView: MapView, style: Style) {
     if (self.id == nil) {
       Logger.log(level: .error, message: "id is required on \(self) but not specified")
     }
     self.map = map
+    self.mapView = mapView
   }
 
-  public func removeFromMap(_ map: RNMBXMapView, reason: RemovalReason) -> Bool {
+  public func removeFromMap(_ map: RNMBXMapView, mapView: MapView, reason: RemovalReason) -> Bool {
     self.map = nil
+    self.mapView = nil
     return true
   }
-  
+
   public func waitForStyleLoad() -> Bool {
     return true
   }

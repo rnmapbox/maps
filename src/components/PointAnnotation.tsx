@@ -206,7 +206,7 @@ class PointAnnotation extends NativeBridgeComponent(
     this._runNativeMethod('refresh', this._nativeRef, []);
   }
 
-  _setNativeRef(nativeRef: NativePointAnnotationRef | null) {
+  _setNativeRef(nativeRef: NativePointAnnotationRef) {
     this._nativeRef = nativeRef;
     super._runPendingNativeMethods(nativeRef);
   }
@@ -214,7 +214,7 @@ class PointAnnotation extends NativeBridgeComponent(
   render() {
     const props = {
       ...this.props,
-      ref: (nativeRef: NativePointAnnotationRef | null) =>
+      ref: (nativeRef: NativePointAnnotationRef) =>
         this._setNativeRef(nativeRef),
       id: this.props.id,
       title: this.props.title,

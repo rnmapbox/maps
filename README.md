@@ -56,11 +56,8 @@ _A community-supported, open-source React Native library for building maps with 
 
 ---
 
-### Supported Implementations 
-At the moment we support Mapbox (v10) and Mapbox (v11) beta.
-We default to Mapbox (v10).
-
-_See [iOS](ios/install.md) & [Android](android/install.md) setup guide for using v11 beta_
+### Supported Implementations
+We support Mapbox Maps SDK v11. See [iOS](ios/install.md) & [Android](android/install.md) setup guides.
 
 
 
@@ -74,7 +71,7 @@ _See [iOS](ios/install.md) & [Android](android/install.md) setup guide for using
 
 - [node](https://nodejs.org)
 - [npm](https://www.npmjs.com/)
-- [React Native](https://facebook.github.io/react-native/) (0.70+, older versions from 0.64+ might or might not work)
+- [React Native](https://facebook.github.io/react-native/) (0.79+)
 
 
 ## Installation

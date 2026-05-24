@@ -44,7 +44,7 @@
             "offlineManager#getPack",
             "offlineManager#getPacks"
           ],
-          "docs": "\nDemonstates basic use of offlineManager api.\n"
+          "docs": "\nDemonstrates basic use of offlineManager api.\n"
         },
         "fullPath": "example/src/examples/CacheOffline/OfflineExample.tsx",
         "relPath": "CacheOffline/OfflineExample.tsx",
@@ -78,7 +78,7 @@
             "Images",
             "SymbolLayer#iconImage"
           ],
-          "docs": "\nRenders a symbol layer with custom icon defined using the Images component. Clicking a location on a map add a new icon.\n"
+          "docs": "\nRenders a symbol layer with custom icon defined using the Images component. Clicking a location on a map adds a new icon.\n"
         },
         "fullPath": "example/src/examples/SymbolCircleLayer/CustomIcon.tsx",
         "relPath": "SymbolCircleLayer/CustomIcon.tsx",
@@ -94,7 +94,7 @@
             "Images",
             "SymbolLayer#iconImage"
           ],
-          "docs": "\nRenders a symbol layer with custom icon (native asset) defined using the Images component. Clicking a location on a map add a new icon.\n"
+          "docs": "\nRenders a symbol layer with custom icon (native asset) defined using the Images component. Clicking a location on a map adds a new icon.\n"
         },
         "fullPath": "example/src/examples/SymbolCircleLayer/CustomIconNativeAsset.tsx",
         "relPath": "SymbolCircleLayer/CustomIconNativeAsset.tsx",
@@ -127,7 +127,7 @@
             "CircleLayer#clusterProperties",
             "expressions"
           ],
-          "docs": "\nRenders earthqueke with clustering.\n\nClick a cluster to show list of contents in the cluster `getClusterLeaves`.\n"
+          "docs": "\nRenders earthquake with clustering.\n\nClick a cluster to show list of contents in the cluster `getClusterLeaves`.\n"
         },
         "fullPath": "example/src/examples/SymbolCircleLayer/Earthquakes.tsx",
         "relPath": "SymbolCircleLayer/Earthquakes.tsx",
@@ -142,7 +142,7 @@
             "Images#stretchY",
             "Images#content"
           ],
-          "docs": "\nDemonstates Scalable images.\n\nYou can use strachX, stretchY and content to scale a bitmap image - keep parts of it fixed while only scale specific parts.\n"
+          "docs": "\nDemonstrates Scalable images.\n\nYou can use stretchX, stretchY and content to scale a bitmap image - keep parts of it fixed while only scale specific parts.\n"
         },
         "fullPath": "example/src/examples/SymbolCircleLayer/ScalableImages.tsx",
         "relPath": "SymbolCircleLayer/ScalableImages.tsx",
@@ -220,7 +220,7 @@
             "Images#stretchY",
             "Images#content"
           ],
-          "docs": "\nDemonstates Scalable images.\n\nYou can use strachX, stretchY and content to scale a bitmap image - keep parts of it fixed while only scale specific parts.\n"
+          "docs": "\nDemonstrates Scalable images.\n\nYou can use stretchX, stretchY and content to scale a bitmap image - keep parts of it fixed while only scale specific parts.\n"
         },
         "fullPath": "example/src/examples/UserLocation/UserLocationPadding.tsx",
         "relPath": "UserLocation/UserLocationPadding.tsx",
@@ -235,7 +235,7 @@
             "UserLocation#visible",
             "UserLocation#onUserTrackingModeChange"
           ],
-          "docs": "\nDemonstates UserLocation render modes, follow modes\n"
+          "docs": "\nDemonstrates UserLocation render modes, follow modes\n"
         },
         "fullPath": "example/src/examples/UserLocation/UserLocationRenderMode.tsx",
         "relPath": "UserLocation/UserLocationRenderMode.tsx",
@@ -248,7 +248,7 @@
             "UserLocation",
             "UserLocation#onUpdate"
           ],
-          "docs": "\nRetrieves and shows location updates from UserLocation componen via the `onUpdate` callback\n"
+          "docs": "\nRetrieves and shows location updates from UserLocation component via the `onUpdate` callback\n"
         },
         "fullPath": "example/src/examples/UserLocation/UserLocationUpdates.tsx",
         "relPath": "UserLocation/UserLocationUpdates.tsx",
@@ -262,6 +262,20 @@
       "title": "Map"
     },
     "examples": [
+      {
+        "metadata": {
+          "title": "Camera Gesture Observer",
+          "tags": [
+            "CameraGestureObserver#onMapSteady",
+            "CameraGestureObserver#quietPeriodMs",
+            "CameraGestureObserver#maxIntervalMs"
+          ],
+          "docs": "\nDemonstrates how to detect when the map becomes steady after user gestures (pan, zoom, rotate). The CameraGestureObserver component fires the onMapSteady event after a configurable quiet period, providing information about the last gesture type and idle duration.\n"
+        },
+        "fullPath": "example/src/examples/Map/CameraGestureObserver.tsx",
+        "relPath": "Map/CameraGestureObserver.tsx",
+        "name": "CameraGestureObserver"
+      },
       {
         "metadata": {
           "title": "Change Layer Color",
@@ -305,7 +319,7 @@
           "tags": [
             "MapView"
           ],
-          "docs": "\nDemonstrates various ways to embedd map via (Navigation, Page, modal, etc)\n"
+          "docs": "\nDemonstrates various ways to embed map via (Navigation, Page, modal, etc)\n"
         },
         "fullPath": "example/src/examples/Map/MapAndRNNavigation.js",
         "relPath": "Map/MapAndRNNavigation.js",
@@ -366,6 +380,23 @@
       },
       {
         "metadata": {
+          "title": "Screen Coordinates",
+          "tags": [
+            "MapView#onPress",
+            "MapView#onLongPress",
+            "MapView#getCoordinateFromView",
+            "MapView#getPointInView",
+            "MapView#queryRenderedFeaturesAtPoint",
+            "MapView#queryRenderedFeaturesInRect"
+          ],
+          "docs": "\nTests conversion from screen to geographic coordinates and vice versa.        \n"
+        },
+        "fullPath": "example/src/examples/Map/ScreenCoordinates.tsx",
+        "relPath": "Map/ScreenCoordinates.tsx",
+        "name": "ScreenCoordinates"
+      },
+      {
+        "metadata": {
           "title": "Show and hide layer",
           "tags": [
             "FillLayer#existing",
@@ -385,7 +416,7 @@
           "tags": [
             "MapView#onPress"
           ],
-          "docs": "\nDemonstates onPress event and how to get the screen point of the click.\n"
+          "docs": "\nDemonstrates onPress event and how to get the screen point of the click.\n"
         },
         "fullPath": "example/src/examples/Map/ShowClick.js",
         "relPath": "Map/ShowClick.js",
@@ -422,7 +453,7 @@
             "MapView#onRegionIsChanging",
             "MapView#onRegionDidChange"
           ],
-          "docs": "\nDemonstates MapView region change events.\n"
+          "docs": "\nDemonstrates MapView region change events.\n"
         },
         "fullPath": "example/src/examples/Map/ShowRegionDidChange.js",
         "relPath": "Map/ShowRegionDidChange.js",
@@ -545,7 +576,7 @@
             "AnimatedRouteCoordinatesArray",
             "AnimatedExtractCoordinateFromArray"
           ],
-          "docs": "\nThis is a fairly complex example demonstraing the use of AnimatedShape, Camera animation, queryTerrainElevation and AnimatedMarkerView\n"
+          "docs": "\nThis is a fairly complex example demonstrating the use of AnimatedShape, Camera animation, queryTerrainElevation and AnimatedMarkerView\n"
         },
         "fullPath": "example/src/examples/V10/QueryTerrainElevation.js",
         "relPath": "V10/QueryTerrainElevation.js",
@@ -558,7 +589,7 @@
             "Models",
             "ModelLayer"
           ],
-          "docs": "\nDeomnstrate the use of ModelLayer to render, and Models to associate 3D models with names.\n"
+          "docs": "\nDemonstrate the use of ModelLayer to render, and Models to associate 3D models with names.\n"
         },
         "fullPath": "example/src/examples/V10/SimpleModelLayer.js",
         "relPath": "V10/SimpleModelLayer.js",
@@ -571,9 +602,11 @@
             "RasterDemSource",
             "Terrain",
             "Atmosphere",
-            "SkyLayer"
+            "SkyLayer",
+            "Snow",
+            "Rain"
           ],
-          "docs": "\nDemostrates use of Terran, Atmosphere and SkyLayer.\n"
+          "docs": "\nDemonstrates use of Terrain, Atmosphere and SkyLayer. Use the Snow/Rain buttons to toggle experimental particle weather effects.\n"
         },
         "fullPath": "example/src/examples/V10/TerrainSkyAtmosphere.tsx",
         "relPath": "V10/TerrainSkyAtmosphere.tsx",
@@ -617,9 +650,11 @@
           "title": "Marker View",
           "tags": [
             "PointAnnotation",
-            "MarkerView"
+            "MarkerView",
+            "Slider",
+            "Interactive"
           ],
-          "docs": "\nShows marker view and poitn annotations\n"
+          "docs": "\nShows marker view and point annotations, including an interactive marker with\nsliders, switch, counter, text input, and pressable button to verify complex\ntouch interactions inside a MarkerView.\n"
         },
         "fullPath": "example/src/examples/Annotations/MarkerView.tsx",
         "relPath": "Annotations/MarkerView.tsx",
@@ -697,12 +732,26 @@
       },
       {
         "metadata": {
+          "title": "Hillshade Layer",
+          "tags": [
+            "RasterDemSource",
+            "HillshadeLayer"
+          ],
+          "docs": "Renders terrain hillshading from a raster-dem source."
+        },
+        "fullPath": "example/src/examples/FillRasterLayer/HillshadeSource.tsx",
+        "relPath": "FillRasterLayer/HillshadeSource.tsx",
+        "name": "HillshadeSource"
+      },
+      {
+        "metadata": {
           "title": "Image Overlay",
           "tags": [
             "RasterLayer",
             "ImageSource"
           ],
-          "docs": ""
+          "docs": "",
+          "disableSync": true
         },
         "fullPath": "example/src/examples/FillRasterLayer/ImageOverlay.js",
         "relPath": "FillRasterLayer/ImageOverlay.js",
@@ -744,7 +793,9 @@
       {
         "metadata": {
           "title": "Query Features Bounding Box",
-          "tags": [],
+          "tags": [
+            "queryRenderedFeaturesInRect"
+          ],
           "docs": ""
         },
         "fullPath": "example/src/examples/FillRasterLayer/QueryWithRect.js",

@@ -4,11 +4,7 @@ import com.facebook.react.bridge.Promise
 import com.facebook.react.bridge.ReactApplicationContext
 import com.facebook.react.bridge.ReactMethod
 import com.facebook.react.module.annotations.ReactModule
-import com.facebook.react.uimanager.UIManagerHelper
-import com.facebook.react.uimanager.common.UIManagerType
-import com.rnmapbox.rnmbx.BuildConfig
 import com.rnmapbox.rnmbx.NativeRNMBXShapeSourceModuleSpec
-import com.rnmapbox.rnmbx.components.mapview.RNMBXMapView
 import com.rnmapbox.rnmbx.utils.ViewRefTag
 import com.rnmapbox.rnmbx.utils.ViewTagResolver
 

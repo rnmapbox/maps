@@ -1,7 +1,7 @@
 import React from 'react';
 import { NativeModules } from 'react-native';
 
-import {
+import type {
   FilterExpression,
   FillExtrusionLayerStyleProps,
 } from '../utils/MapboxStyles';
@@ -19,7 +19,7 @@ export type Props = {
   id: string;
 
   /**
-   * The id refers to en existing layer in the style. Does not create a new layer.
+   * The id refers to an existing layer in the style. Does not create a new layer.
    */
   existing?: boolean;
 

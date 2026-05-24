@@ -125,6 +125,7 @@
     },
     "indoor": {
       "type": "indoor",
+      "private": true,
       "experimental": true,
       "doc": "Controls the behaviour of indoor features."
     },
@@ -592,6 +593,19 @@
           "ios": "11.0.0"
         }
       }
+    },
+    "shadow-draw-before-layer": {
+      "type": "string",
+      "property-type": "data-constant",
+      "doc": "Specify a layer before which shadows are drawn on the ground. If not specified, shadows are drawn after the last 3D layer. This property does not affect shadows on terrain.",
+      "sdk-support": {
+        "basic functionality": {
+          "js": "3.18.0",
+          "android": "11.18.0",
+          "ios": "11.18.0"
+        }
+      },
+      "experimental": true
     }
   },
   "properties_light_ambient": {
@@ -845,7 +859,6 @@
         "length": 4,
         "doc": "An array containing the longitude and latitude of the southwest and northeast corners of the source's bounding box in the following order: `[sw.lng, sw.lat, ne.lng, ne.lat]`."
       },
-      "experimental": true,
       "doc": "An array of additional discrete geographic regions where tiles are available. When used alongside the `bounds` property, these regions act as an additional filter - Mapbox GL will only request tiles that are both within the `bounds` and any of the regions defined in `extra_bounds`. When used independently (without `bounds`), Mapbox GL will request tiles that fall within any of the regions in `extra_bounds`. This allows for more fine-grained control over tile requests, particularly when dealing with sparse data coverage."
     },
     "scheme": {
@@ -877,7 +890,7 @@
     },
     "promoteId": {
       "type": "promoteId",
-      "doc": "A property to use as a feature id (for feature state). Either a property name, or an object of the form `{<sourceLayer>: <propertyName>}`. If specified as a string for a vector tile source, the same property is used across all its source layers. If specified as an object only specified source layers will have id overriden, others will fallback to original feature id"
+      "doc": "A property to use as a feature id (for feature state). It can be a property name, or an expression to evaluate as the ID, or an object of the form `{<sourceLayer>: <propertyName/expression>}`. The expression can only be feature dependent if it is used. If specified as a string for a vector tile source, the same property is used across all its source layers. If specified as an object only specified source layers will have id overriden, others will fallback to original feature id"
     },
     "volatile": {
       "type": "boolean",
@@ -935,7 +948,6 @@
         "length": 4,
         "doc": "An array containing the longitude and latitude of the southwest and northeast corners of the source's bounding box in the following order: `[sw.lng, sw.lat, ne.lng, ne.lat]`."
       },
-      "experimental": true,
       "doc": "An array of additional discrete geographic regions where tiles are available. When used alongside the `bounds` property, these regions act as an additional filter - Mapbox GL will only request tiles that are both within the `bounds` and any of the regions defined in `extra_bounds`. When used independently (without `bounds`), Mapbox GL will request tiles that fall within any of the regions in `extra_bounds`. This allows for more fine-grained control over tile requests, particularly when dealing with sparse data coverage."
     },
     "minzoom": {
@@ -1027,7 +1039,6 @@
         "length": 4,
         "doc": "An array containing the longitude and latitude of the southwest and northeast corners of the source's bounding box in the following order: `[sw.lng, sw.lat, ne.lng, ne.lat]`."
       },
-      "experimental": true,
       "doc": "An array of additional discrete geographic regions where tiles are available. When used alongside the `bounds` property, these regions act as an additional filter - Mapbox GL will only request tiles that are both within the `bounds` and any of the regions defined in `extra_bounds`. When used independently (without `bounds`), Mapbox GL will request tiles that fall within any of the regions in `extra_bounds`. This allows for more fine-grained control over tile requests, particularly when dealing with sparse data coverage."
     },
     "minzoom": {
@@ -1120,7 +1131,6 @@
         "length": 4,
         "doc": "An array containing the longitude and latitude of the southwest and northeast corners of the source's bounding box in the following order: `[sw.lng, sw.lat, ne.lng, ne.lat]`."
       },
-      "experimental": true,
       "doc": "An array of additional discrete geographic regions where tiles are available. When used alongside the `bounds` property, these regions act as an additional filter - Mapbox GL will only request tiles that are both within the `bounds` and any of the regions defined in `extra_bounds`. When used independently (without `bounds`), Mapbox GL will request tiles that fall within any of the regions in `extra_bounds`. This allows for more fine-grained control over tile requests, particularly when dealing with sparse data coverage."
     },
     "minzoom": {
@@ -1243,7 +1253,7 @@
     },
     "promoteId": {
       "type": "promoteId",
-      "doc": "A property to use as a feature id (for feature state). Either a property name, or an object of the form `{<sourceLayer>: <propertyName>}`."
+      "doc": "A property to use as a feature id (for feature state). Either a property name, an expression to evaluate as the ID, or an object of the form `{<sourceLayer>: <propertyName/expression>}`. The expression can only be feature dependent if it is used."
     },
     "dynamic": {
       "type": "boolean",
@@ -1431,6 +1441,10 @@
        },
       "doc": "Type of model source to be added. From single models to represent 2D layers to 3D tiled models covering a wide area."
     },
+    "url": {
+      "type": "string",
+      "doc": "A URL to a TileJSON resource. Supported protocols are `http:`, `https:`, and `mapbox://<Tileset ID>`. Required if `tiles` is not provided."
+    },
     "maxzoom": {
       "type": "number",
       "default": 18,
@@ -1527,7 +1541,6 @@
             "android": "11.16.0",
             "ios": "11.16.0"
           },
-          "experimental": true,
           "private": true
         },
         "raster": {
@@ -1563,7 +1576,6 @@
         },
         "model": {
           "doc": "A 3D model",
-          "experimental": true,
           "sdk-support": {
             "basic functionality": {
               "js": "3.0.0",
@@ -1667,8 +1679,8 @@
       "type": "array",
       "value": "appearance",
       "supported-layer-types": ["symbol"],
-      "private": true,
-      "doc": "Conditional styling applied to layer features based on dynamic conditions. If multiple conditions are true, only the first matching appearance will be applied. Only properties marked with 'Can be used in appearances' are supported."
+      "experimental": true,
+      "doc": "Conditional styling applied to symbol layer features based on dynamic conditions. If multiple conditions are true, only the first matching appearance will be applied. Only properties marked with 'Works with appearances' are supported."
     }
   },
   "appearance": {
@@ -1676,7 +1688,7 @@
       "type": "boolean",
       "doc": "A boolean expression that determines when this appearance should be applied.",
       "expression": {
-        "interpolated": false,
+        "interpolated": true,
         "parameters": [
           "zoom",
           "pitch",
@@ -1833,6 +1845,21 @@
             "vector"
           ]
         }]
+    },
+    "model-allow-density-reduction": {
+      "type": "boolean",
+      "default": true,
+      "transition": false,
+      "experimental": true,
+      "doc": "If true, the models will be reduced in density based on the zoom level. This is useful for large datasets that may be slow to render.",
+      "sdk-support": {
+        "basic functionality": {
+          "js": "0.10.0",
+          "android": "2.0.1",
+          "ios": "2.0.0"
+        }
+      },
+      "property-type": "data-constant"
     }
   },
   "layout_clip": {
@@ -1871,6 +1898,30 @@
           "js": "3.6.0",
           "android": "11.7.0",
           "ios": "11.7.0"
+        }
+      },
+      "expression": {
+        "interpolated": false
+      },
+      "property-type": "data-constant"
+    },
+    "visibility": {
+      "type": "enum",
+      "values": {
+        "visible": {
+          "doc": "The layer is shown."
+        },
+        "none": {
+          "doc": "The layer is not shown."
+        }
+      },
+      "default": "visible",
+      "doc": "Whether this layer is displayed.",
+      "sdk-support": {
+        "basic functionality": {
+          "js": "3.18.0",
+          "android": "11.18.0",
+          "ios": "11.18.0"
         }
       },
       "expression": {
@@ -2156,6 +2207,22 @@
         "interpolated": false
       },
       "property-type": "constant"
+    },
+    "source-max-zoom": {
+      "type": "number",
+      "minimum": 0,
+      "maximum": 24,
+      "private": true,
+      "experimental": true,
+      "doc": "The maximum zoom level at which to load and parse source tiles for this layer. When set, tiles are never loaded or re-parsed above this zoom level. At higher zoom levels, the renderer reuses tiles from this zoom level without creating overscaled variants. This reduces the number of tiles parsed and prevents tile-border artifacts for layers like fill-extrusion.",
+      "sdk-support": {
+        "basic functionality": {
+          "js": "3.21.0",
+          "android": "11.21.0",
+          "ios": "11.21.0"
+        }
+      },
+      "property-type": "constant"
     }
   },
   "layout_building": {
@@ -2171,6 +2238,7 @@
       },
       "default": "visible",
       "doc": "Whether this layer is displayed.",
+      "private": true,
       "sdk-support": {
         "basic functionality": {
           "js": "3.16.0",
@@ -2187,7 +2255,6 @@
       "type": "boolean",
       "default": false,
       "doc": "Whether to render facade details on the buildings.",
-      "experimental": true,
       "private": true,
       "sdk-support": {
         "basic functionality": {
@@ -2215,7 +2282,7 @@
       "maximum": 200,
       "default": 3,
       "doc": "Number of floors created when building-facade is enabled.",
-      "experimental": true,
+      "private": true,
       "property-type": "data-driven",
       "sdk-support": {
         "basic functionality": {
@@ -2245,7 +2312,7 @@
       "maximum": 20.0,
       "default": 3.1,
       "doc": "Width of a floor. Think of this as measure how wide each unit should be. This effectively determines the number of units per each floor. Note that this does not affect the ground level facades (i.e. number of windows).",
-      "experimental": true,
+      "private": true,
       "property-type": "data-driven",
       "sdk-support": {
         "basic functionality": {
@@ -2277,7 +2344,7 @@
       "maximum": 1.0,
       "default": [0.9, 0.9],
       "doc": "Given as fractions, specifies the percentage of unit area covered by windows when building-facade is enabled. Note that the area of a unit is ultimately determined by `building-facade-unit-width` and `building-facade-floors`.",
-      "experimental": true,
+      "private": true,
       "property-type": "data-driven",
       "sdk-support": {
         "basic functionality": {
@@ -2328,7 +2395,6 @@
       },
       "default": "flat",
       "doc": "Roof type to use for the procedural buildings.",
-      "experimental": true,
       "private": true,
       "sdk-support": {
         "basic functionality": {
@@ -2357,7 +2423,6 @@
       "units": "meters",
       "doc": "The height of the procedural buildings.",
       "transition": true,
-      "experimental": true,
       "private": true,
       "sdk-support": {
         "basic functionality": {
@@ -2386,7 +2451,6 @@
       "requires": [
         "building-height"
       ],
-      "experimental": true,
       "private": true,
       "sdk-support": {
         "basic functionality": {
@@ -2408,7 +2472,7 @@
     "building-flood-light-wall-radius": {
       "property-type": "data-driven",
       "type": "number",
-      "experimental": true,
+      "private": true,
       "units": "meters",
       "default": 0,
       "minimum": 0,
@@ -2440,7 +2504,7 @@
     "building-flood-light-ground-radius": {
       "property-type": "data-driven",
       "type": "number",
-      "experimental": true,
+      "private": true,
       "units": "meters",
       "default": 0,
       "doc": "The extent of the flood light effect on the ground beneath the buildings in meters.",
@@ -2471,7 +2535,7 @@
     "building-flip-roof-orientation": {
       "property-type": "data-driven",
       "type": "boolean",
-      "experimental": true,
+      "private": true,
       "units": "meters",
       "default": false,
       "doc": "Flips the orientation of the roofs for the buildings. This only affects simple geometries. Namely buildings whose footprints form a quadrilateral. By default (false), the roof ridge takes the direction of the longer edge of the quadrilateral.",
@@ -2653,8 +2717,7 @@
     },
     "line-z-offset": {
       "type": "number",
-      "experimental": true,
-      "doc": "Vertical offset from ground, in meters. Defaults to 0. This is an experimental property with some known issues:\n * Not supported for globe projection at the moment \n * Elevated line discontinuity is possible on tile borders with terrain enabled \n * Rendering artifacts can happen near line joins and line caps depending on the line styling \n * Rendering artifacts relating to `line-opacity` and `line-blur` \n * Elevated line visibility is determined by layer order \n * Z-fighting issues can happen with intersecting elevated lines \n * Elevated lines don't cast shadows",
+      "doc": "Vertical offset from ground, in meters. Not supported for globe projection at the moment.",
       "default": 0,
       "requires": [
         "line-elevation-reference"
@@ -2699,7 +2762,6 @@
         }
       },
       "default": "none",
-      "experimental": true,
       "transition": false,
       "sdk-support": {
         "basic functionality": {
@@ -2790,6 +2852,38 @@
         ]
       },
       "property-type": "data-constant"
+    },
+    "line-elevation-ground-scale": {
+      "type": "number",
+      "default": 0,
+      "minimum": 0,
+      "maximum": 1,
+      "doc": "Controls how much the elevation of lines with `line-elevation-reference` set to `sea` scales with terrain exaggeration. A value of 0 keeps the line at a fixed altitude above sea level. A value of 1 scales the elevation proportionally with terrain exaggeration.",
+      "sdk-support": {
+        "basic functionality": {
+          "js": "3.19.0",
+          "android": "11.19.0",
+          "ios": "11.19.0"
+        },
+        "data-driven styling": {
+          "js": "3.19.0",
+          "android": "11.19.0",
+          "ios": "11.19.0"
+        }
+      },
+      "expression": {
+        "interpolated": true,
+        "parameters": [
+          "zoom",
+          "feature",
+          "line-progress"
+        ]
+      },
+      "requires": [
+        "line-z-offset"
+      ],
+      "transition": true,
+      "property-type": "data-driven"
     }
   },
   "layout_symbol": {
@@ -3141,7 +3235,6 @@
       "minimum": [0.1, 0.1],
       "maximum": [10, 10],
       "experimental": true,
-      "private": true,
       "expression": {
         "interpolated": false
       },
@@ -3624,6 +3717,7 @@
       "requires": [
         "text-field"
       ],
+      "appearance": true,
       "sdk-support": {
         "basic functionality": {
           "js": "0.10.0",
@@ -3657,7 +3751,6 @@
       "minimum": [0.1, 0.1],
       "maximum": [10, 10],
       "experimental": true,
-      "private": true,
       "expression": {
         "interpolated": false
       },
@@ -4021,6 +4114,7 @@
       "requires": [
         "text-field"
       ],
+      "appearance": true,
       "sdk-support": {
         "basic functionality": {
           "js": "0.10.0",
@@ -4152,6 +4246,7 @@
           "!": "text-radial-offset"
         }
       ],
+      "appearance": true,
       "sdk-support": {
         "basic functionality": {
           "js": "0.10.0",
@@ -5746,6 +5841,19 @@
           }
         }
       },
+      "is-active-floor": {
+        "doc": "Experimental. Returns `true` if the input floor id belongs to one of the active indoor floors, `false` otherwise. In case of array of strings, returns `true` if any of the input floor ids belongs to one of the active indoor floors, `false` otherwise. Only supported in filters.",
+        "group": "Indoor",
+        "experimental": true,
+        "private": true,
+        "sdk-support": {
+          "basic functionality": {
+            "js": "3.16.0",
+            "android": "11.16.0",
+            "ios": "11.16.0"
+          }
+        }
+      },
       "random": {
         "doc": "Returns a random value in the specified range (first two input numbers) based on a supplied seed (third input). The seed can be an expression or a constant number or string value.",
         "group": "Math",
@@ -6574,26 +6682,31 @@
       }
     }
   },
-  "indoor": {
-    "floorplanFeaturesetId": {
+  "indoor_source": {
+    "sourceId": {
       "type": "string",
-      "doc": "An ID of a featureset to be used to query indoor floorplans.",
+      "doc": "Source ID of a source to be used to retrieve indoor data.",
       "experimental": true,
+      "private": true,
       "transition": false,
-      "property-type": "data-constant",
-      "expression": {
-        "interpolated": false
-      }
+      "property-type": "data-constant"
     },
-    "buildingFeaturesetId": {
-      "type": "string",
-      "doc": "An ID of a featureset to be used to add interactivity for building selection.",
+    "sourceLayers": {
+      "type": "array",
+      "value": "string",
+      "doc": "An array of source layers to be used to retrieve indoor data.",
       "experimental": true,
+      "private": true,
       "transition": false,
-      "property-type": "data-constant",
-      "expression": {
-        "interpolated": false
-      }
+      "property-type": "data-constant"
+    }
+  },
+  "indoor": {
+    "*": {
+      "type": "indoor_source",
+      "private": true,
+      "experimental": true,
+      "doc": "Specification of an indoor source - sourceId and sourceLayer required for vector source, for GeoJSON sourceLayers should be omitted."
     }
   },
   "light": {
@@ -7811,6 +7924,30 @@
       },
       "property-type": "data-constant"
     },
+    "fill-extrusion-front-cutoff": {
+      "type": "array",
+      "private": true,
+      "experimental": true,
+      "value": "number",
+      "property-type": "data-constant",
+      "transition": false,
+      "expression": {
+        "interpolated": true,
+        "parameters": ["zoom"]
+      },
+      "length": 3,
+      "default": [0.0, 0.0, 1.0],
+      "minimum": [0.0, 0.0, 0.0],
+      "maximum": [1.0, 1.0, 1.0],
+      "doc": "An array for configuring the fade-out effect for the front cutoff of content on pitched map views. It contains three values: start, range and final opacity. The start parameter defines the point at which the fade-out effect begins, with smaller values causing the effect to start earlier. The range parameter specifies how long the fade-out effect will last. A value of 0.0 for range makes content disappear immediately without a fade-out effect. The final opacity determines content opacity at the end of the fade-out effect. A value of 1.0 for final opacity means that the cutoff is completely disabled. Note: The property has no effect on the map if terrain or globe projection is enabled.",
+      "sdk-support": {
+        "basic functionality": {
+          "js": "3.21.0",
+          "android": "11.21.0",
+          "ios": "11.21.0"
+        }
+      }
+    },
     "fill-extrusion-emissive-strength": {
       "type": "number",
       "default": 0,
@@ -7898,7 +8035,6 @@
       "maximum": 1,
       "doc": "The opacity of the entire procedural buildings layer. This is rendered on a per-layer, not per-feature, basis, and data-driven styling is not available.",
       "transition": true,
-      "experimental": true,
       "private": true,
       "sdk-support": {
         "basic functionality": {
@@ -7921,7 +8057,6 @@
       "default": 0,
       "minimum": 0,
       "maximum": 1,
-      "experimental": true,
       "private": true,
       "expression": {
         "interpolated": false,
@@ -7944,7 +8079,6 @@
       "default": 0,
       "minimum": 0,
       "maximum": 1,
-      "experimental": true,
       "private": true,
       "expression": {
         "interpolated": true,
@@ -7965,7 +8099,6 @@
     "building-ambient-occlusion-ground-radius": {
       "property-type": "data-constant",
       "type": "number",
-      "experimental": true,
       "private": true,
       "default": 3.0,
       "minimum": 0,
@@ -7988,7 +8121,6 @@
     "building-ambient-occlusion-ground-attenuation": {
       "property-type": "data-constant",
       "type": "number",
-      "experimental": true,
       "private": true,
       "default": 0.69,
       "minimum": 0.0,
@@ -8012,7 +8144,6 @@
     "building-vertical-scale": {
       "property-type": "data-constant",
       "type": "number",
-      "experimental": true,
       "private": true,
       "default": 1.0,
       "minimum": 0.0,
@@ -8037,7 +8168,6 @@
       "default": true,
       "doc": "Enable/Disable shadow casting for this layer",
       "transition": false,
-      "experimental": true,
       "private": true,
       "sdk-support": {
         "basic functionality": {
@@ -8052,7 +8182,6 @@
       "type": "color",
       "default": "rgba(193, 154, 127, 1)",
       "doc": "Color buildings. This can be styled using different building parts (e.g. window, wall, roof).",
-      "experimental": true,
       "private": true,
       "use-theme": true,
       "transition": false,
@@ -8085,7 +8214,6 @@
       "maximum": 5,
       "units": "intensity",
       "doc": "Controls the intensity of light emitted on the source features. There is no emission for value 0. For value 1.0, only emissive component (no shading) is displayed and values above 1.0 produce light contribution to surrounding area, for some of the parts (e.g. doors).",
-      "experimental": true,
       "private": true,
       "sdk-support": {
         "basic functionality": {
@@ -8115,7 +8243,7 @@
       "minimum": 0,
       "maximum": 1,
       "doc": "Given as a fraction specifies the likelihood for the facades to be emissive when building-facade is enabled. A value of 0.0 means the window will never be emissive, while a value of 1.0 means the window will always be emissive. This can be used to create variations on a building where some windows are lit and some are not.",
-      "experimental": true,
+      "private": true,
       "property-type": "data-constant",
       "sdk-support": {
         "basic functionality": {
@@ -8134,6 +8262,7 @@
     },
     "building-cutoff-fade-range": {
       "type": "number",
+      "private": true,
       "default": 0.0,
       "minimum": 0.0,
       "maximum": 1.0,
@@ -8151,10 +8280,34 @@
       },
       "property-type": "data-constant"
     },
+    "building-front-cutoff": {
+      "type": "array",
+      "private": true,
+      "experimental": true,
+      "value": "number",
+      "property-type": "data-constant",
+      "transition": false,
+      "expression": {
+        "interpolated": true,
+        "parameters": ["zoom"]
+      },
+      "length": 3,
+      "default": [0.0, 0.0, 1.0],
+      "minimum": [0.0, 0.0, 0.0],
+      "maximum": [1.0, 1.0, 1.0],
+      "doc": "An array for configuring the fade-out effect for the front cutoff of content on pitched map views. It contains three values: start, range and final opacity. The start parameter defines the point at which the fade-out effect begins, with smaller values causing the effect to start earlier. The range parameter specifies how long the fade-out effect will last. A value of 0.0 for range makes content disappear immediately without a fade-out effect. The final opacity determines content opacity at the end of the fade-out effect. A value of 1.0 for final opacity means that the cutoff is completely disabled. Note: The property has no effect on the map if terrain or globe projection is enabled.",
+      "sdk-support": {
+        "basic functionality": {
+          "js": "3.21.0",
+          "android": "11.21.0",
+          "ios": "11.21.0"
+        }
+      }
+    },
     "building-flood-light-color": {
       "property-type": "data-constant",
       "type": "color",
-      "experimental": true,
+      "private": true,
       "default": "#ffffff",
       "doc": "The color of the flood light effect on the walls of the buildings.",
       "requires": [
@@ -8180,7 +8333,7 @@
     "building-flood-light-intensity": {
       "property-type": "data-constant",
       "type": "number",
-      "experimental": true,
+      "private": true,
       "default": 0.0,
       "minimum": 0.0,
       "maximum": 1.0,
@@ -8207,7 +8360,7 @@
     "building-flood-light-ground-attenuation": {
       "property-type": "data-constant",
       "type": "number",
-      "experimental": true,
+      "private": true,
       "default": 0.69,
       "minimum": 0.0,
       "maximum": 1.0,
@@ -8710,16 +8863,22 @@
           "js": "3.0.0",
           "android": "11.0.0",
           "ios": "11.0.0"
+        },
+        "data-driven styling": {
+          "js": "3.17.0",
+          "android": "11.17.0",
+          "ios": "11.17.0"
         }
       },
       "expression": {
         "interpolated": true,
         "parameters": [
           "zoom",
-          "measure-light"
+          "measure-light",
+          "line-progress"
         ]
       },
-      "property-type": "data-constant"
+      "property-type": "data-driven"
     },
     "line-border-width": {
       "type": "number",
@@ -8799,6 +8958,50 @@
         ]
       },
       "transition": true,
+      "property-type": "data-constant"
+    },
+    "line-blend-mode": {
+      "type": "enum",
+      "values": {
+        "default": { "doc": "Normal non-blended rendering mode." },
+        "multiply": { "doc": "Line features are composited using multiply blending." },
+        "additive": { "doc": "Line features are composited using additive density accumulation with tone mapping." }
+      },
+      "doc": "Controls the blend mode used for rendering line features.",
+      "default": "default",
+      "experimental": true,
+      "private": true,
+      "sdk-support": {
+        "basic functionality": {
+          "js": "3.21.0"
+        }
+      },
+      "expression": {
+        "interpolated": false,
+        "parameters": [
+          "zoom"
+        ]
+      },
+      "property-type": "data-constant"
+    },
+    "line-blend-additive-clamp": {
+      "type": "number",
+      "default": 0,
+      "minimum": 0,
+      "doc": "Controls the brightness of lines in additive blend mode. When set to 0 (the default), brightness is adjusted automatically based on the density of lines visible on screen. Increase this value if the lines appear too bright, or decrease it if they appear too faint.",
+      "experimental": true,
+      "private": true,
+      "sdk-support": {
+        "basic functionality": {
+          "js": "3.21.0"
+        }
+      },
+      "expression": {
+        "interpolated": true,
+        "parameters": [
+          "zoom"
+        ]
+      },
       "property-type": "data-constant"
     }
   },
@@ -9324,6 +9527,7 @@
           "measure-light"
         ]
       },
+      "appearance": true,
       "property-type": "data-driven"
     },
     "icon-occlusion-opacity": {
@@ -9357,6 +9561,7 @@
           "measure-light"
         ]
       },
+      "appearance": true,
       "property-type": "data-driven"
     },
     "icon-emissive-strength": {
@@ -9389,6 +9594,7 @@
           "feature-state"
         ]
       },
+      "appearance": true,
       "property-type": "data-driven"
     },
     "text-emissive-strength": {
@@ -9421,6 +9627,7 @@
           "feature-state"
         ]
       },
+      "appearance": true,
       "property-type": "data-driven"
     },
     "icon-color": {
@@ -9453,6 +9660,7 @@
           "measure-light"
         ]
       },
+      "appearance": true,
       "property-type": "data-driven"
     },
     "icon-halo-color": {
@@ -9485,6 +9693,7 @@
           "measure-light"
         ]
       },
+      "appearance": true,
       "property-type": "data-driven"
     },
     "icon-halo-width": {
@@ -9518,6 +9727,7 @@
           "measure-light"
         ]
       },
+      "appearance": true,
       "property-type": "data-driven"
     },
     "icon-halo-blur": {
@@ -9551,6 +9761,7 @@
           "measure-light"
         ]
       },
+      "appearance": true,
       "property-type": "data-driven"
     },
     "icon-translate": {
@@ -9562,6 +9773,7 @@
         0
       ],
       "transition": true,
+      "appearance": true,
       "units": "pixels",
       "doc": "Distance that the icon's anchor is moved from its original placement. Positive values indicate right and down, while negative values indicate left and up.",
       "requires": [
@@ -9669,6 +9881,7 @@
           "measure-light"
         ]
       },
+      "appearance": true,
       "property-type": "data-driven"
     },
     "text-occlusion-opacity": {
@@ -9702,6 +9915,7 @@
           "measure-light"
         ]
       },
+      "appearance": true,
       "property-type": "data-driven"
     },
     "text-color": {
@@ -9735,6 +9949,7 @@
           "measure-light"
         ]
       },
+      "appearance": true,
       "property-type": "data-driven"
     },
     "text-halo-color": {
@@ -9767,6 +9982,7 @@
           "measure-light"
         ]
       },
+      "appearance": true,
       "property-type": "data-driven"
     },
     "text-halo-width": {
@@ -9800,6 +10016,7 @@
           "measure-light"
         ]
       },
+      "appearance": true,
       "property-type": "data-driven"
     },
     "text-halo-blur": {
@@ -9833,6 +10050,7 @@
           "measure-light"
         ]
       },
+      "appearance": true,
       "property-type": "data-driven"
     },
     "text-translate": {
@@ -9844,6 +10062,7 @@
         0
       ],
       "transition": true,
+      "appearance": true,
       "units": "pixels",
       "doc": "Distance that the text's anchor is moved from its original placement. Positive values indicate right and down, while negative values indicate left and up.",
       "requires": [
@@ -9978,6 +10197,7 @@
       "minimum": 0,
       "transition": true,
       "experimental": true,
+      "appearance": true,
       "sdk-support": {
         "basic functionality": {
           "js": "3.7.0",
@@ -10321,7 +10541,7 @@
     },
     "raster-elevation": {
       "type": "number",
-      "doc": "Specifies an uniform elevation from the ground, in meters.",
+      "doc": "Defines an uniform elevation from the base specified in raster-elevation-reference, in meters.",
       "default": 0,
       "minimum": 0,
       "transition": true,
@@ -10338,6 +10558,32 @@
         "parameters": [
           "zoom"
         ]
+      },
+      "property-type": "data-constant"
+    },
+    "raster-elevation-reference": {
+      "type": "enum",
+      "doc": "Selects the base of raster-elevation.",
+      "values": {
+        "sea": {
+          "doc": "Use this mode to elevate raster layers relative to the sea level."
+        },
+        "ground": {
+          "doc": "Use this mode to elevate raster layers relative to the ground's height below them."
+        }
+      },
+      "default": "sea",
+      "transition": false,
+      "experimental": true,
+      "sdk-support": {
+        "basic functionality": {
+          "js": "3.19.0",
+          "android": "11.19.0",
+          "ios": "11.19.0"
+        }
+      },
+      "expression": {
+        "interpolated": false
       },
       "property-type": "data-constant"
     }
@@ -10471,7 +10717,7 @@
     },
     "raster-particle-elevation": {
       "type": "number",
-      "doc": "Specifies an uniform elevation from the ground, in meters.",
+      "doc": "Defines an uniform elevation from sea level, in meters.",
       "default": 0,
       "minimum": 0,
       "transition": true,
@@ -10704,7 +10950,8 @@
       "expression": {
         "interpolated": true,
         "parameters": [
-          "zoom"
+          "zoom",
+          "measure-light"
         ]
       },
       "property-type": "data-constant"
@@ -11169,6 +11416,27 @@
       },
       "transition": true
     },
+    "model-lightmap-intensity": {
+      "type": "number",
+      "default": 0.0,
+      "minimum": 0,
+      "doc": "Controls the intensity of the model lightmap contribution. Values less than or equal to 0.001 are treated as off.",
+      "private": true,
+      "experimental": true,
+      "expression": {
+        "interpolated": true,
+        "parameters": ["zoom"]
+      },
+      "sdk-support": {
+          "basic functionality": {
+          "js": "3.25.0",
+          "android": "11.25.0",
+          "ios": "11.25.0"
+        }
+      },
+      "property-type": "data-constant",
+      "transition": true
+    },
     "model-type": {
       "type": "enum",
       "values": {
@@ -11353,7 +11621,7 @@
       "default": [0.0, 0.0, 1.0],
       "minimum": [0.0, 0.0, 0.0],
       "maximum": [1.0, 1.0, 1.0],
-      "doc": "An array for configuring the fade-out effect for the front cutoff of content on pitched map views. It contains three values: start, range and final opacity. The start parameter defines the point at which the fade-out effect begins, with smaller values causing the effect to start earlier. The range parameter specifies how long the fade-out effect will last. A value of 0.0 for range makes content disappear immediately without a fade-out effect. The final opacity determines content opacity at the end of the fade-out effect. A value of 1.0 for final opacity means that the cutoff is completely disabled.",
+      "doc": "An array for configuring the fade-out effect for the front cutoff of content on pitched map views. It contains three values: start, range and final opacity. The start parameter defines the point at which the fade-out effect begins, with smaller values causing the effect to start earlier. The range parameter specifies how long the fade-out effect will last. A value of 0.0 for range makes content disappear immediately without a fade-out effect. The final opacity determines content opacity at the end of the fade-out effect. A value of 1.0 for final opacity means that the cutoff is completely disabled. Note: The property has no effect on the map if terrain or globe projection is enabled.",
       "sdk-support": {
         "basic functionality": {
           "js": "3.5.0"
@@ -11362,7 +11630,7 @@
     },
     "model-elevation-reference": {
       "type": "enum",
-      "doc": "Selects the base of the model. Some modes might require precomputed elevation data in the tileset.",
+      "doc": "Selects the base of the model. Some modes might require precomputed elevation data in the tileset. When using vector tiled source as the model layer source and hd-road-markup elevation reference, this property acts as layout property and elevation is evaluated only in tile loading time.",
       "values": {
         "sea": {
           "doc": "Elevated rendering is enabled. Use this mode to elevate models relative to the sea level."
@@ -11380,9 +11648,29 @@
         "interpolated": false
       },
       "property-type": "data-constant",
-      "experimental": true,
       "sdk-support": {
         "basic functionality": {
+          "js": "3.17.0",
+          "android": "11.10.0",
+          "ios": "11.10.0"
+        }
+      }
+    },
+    "model-ignore-line-cutout": {
+      "type": "boolean",
+      "doc": "When set to true, the layer is not going to be affected by the line cutout effect.",
+      "default": false,
+      "transition": false,
+      "expression": {
+        "interpolated": false
+      },
+      "property-type": "data-constant",
+      "experimental": true,
+      "private": true,
+      "sdk-support": {
+        "basic functionality": {
+          "android": "11.21.0",
+          "ios": "11.21.0"
         }
       }
     }
@@ -11424,7 +11712,7 @@
   "promoteId": {
     "*": {
       "type": "*",
-      "doc": "A feature property name to use as the ID, or an expression to evaluate as the ID for feature state."
+      "doc": "A feature property name to use as the ID, or an expression to evaluate as the ID for feature state. The expression can only be feature dependent if it is used."
     }
   },
   "$doc": {

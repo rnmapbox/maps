@@ -259,9 +259,10 @@ class UserLocation extends React.Component<Props, UserLocationState> {
   _renderNative() {
     const { androidRenderMode, showsUserHeadingIndicator } = this.props;
 
-    const props = {
+    const props: React.ComponentProps<typeof LocationPuck> = {
       androidRenderMode,
-      iosShowsUserHeadingIndicator: showsUserHeadingIndicator,
+      puckBearingEnabled: showsUserHeadingIndicator,
+      puckBearing: showsUserHeadingIndicator ? 'heading' : undefined,
     };
     return <LocationPuck {...props} />;
   }

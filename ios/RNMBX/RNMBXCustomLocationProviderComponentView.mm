@@ -1,4 +1,3 @@
-#ifdef RCT_NEW_ARCH_ENABLED
 
 #import "RNMBXCustomLocationProviderComponentView.h"
 #import "RNMBXFabricHelpers.h"
@@ -11,6 +10,8 @@
 #import <react/renderer/components/rnmapbox_maps_specs/EventEmitters.h>
 #import <react/renderer/components/rnmapbox_maps_specs/Props.h>
 #import <react/renderer/components/rnmapbox_maps_specs/RCTComponentViewHelpers.h>
+
+#import "RNMBXFabricPropConvert.h"
 
 using namespace facebook::react;
 
@@ -30,7 +31,7 @@ using namespace facebook::react;
 - (instancetype)initWithFrame:(CGRect)frame
 {
   if (self = [super initWithFrame:frame]) {
-    static const auto defaultProps = std::make_shared<const RNMBXCircleLayerProps>();
+    static const auto defaultProps = std::make_shared<const RNMBXCustomLocationProviderProps>();
     _props = defaultProps;
       [self prepareView];
   }
@@ -49,12 +50,20 @@ using namespace facebook::react;
 
 + (ComponentDescriptorProvider)componentDescriptorProvider
 {
-  return concreteComponentDescriptorProvider<RNMBXCircleLayerComponentDescriptor>();
+  return concreteComponentDescriptorProvider<RNMBXCustomLocationProviderComponentDescriptor>();
 }
 
 - (void)updateProps:(const Props::Shared &)props oldProps:(const Props::Shared &)oldProps
 {
+  const auto &oldViewProps = static_cast<const RNMBXCustomLocationProviderProps &>(*oldProps);
+  const auto &newViewProps = static_cast<const RNMBXCustomLocationProviderProps &>(*props);
+
+  RNMBX_OPTIONAL_PROP_NumberArray(coordinate)
+  RNMBX_OPTIONAL_PROP_NSNumber(heading)
+
   [super updateProps:props oldProps:oldProps];
+
+  [_view didSetProps:@[]];
 }
 
 - (void)prepareForRecycle
@@ -70,4 +79,3 @@ Class<RCTComponentViewProtocol> RNMBXCustomLocationProviderCls(void)
   return RNMBXCustomLocationProviderComponentView.class;
 }
 
-#endif // RCT_NEW_ARCH_ENABLED

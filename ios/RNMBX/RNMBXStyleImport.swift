@@ -36,13 +36,9 @@ open class RNMBXStyleImport: UIView, RNMBXMapComponent {
 
   func apply(mapView: MapView) {
     if let config = config, let id = id {
-      #if RNMBX_11
-        logged("RNMBXStyleImport.setStyleImportConfigProperties id=\(id)") {
-          try mapView.mapboxMap.setStyleImportConfigProperties(for: id, configs: config)
-        }
-      #else
-        Logger.error("RNMBXStyleImport.setStyleImportConfigProperties is only implemented on v11")
-      #endif
+      logged("RNMBXStyleImport.setStyleImportConfigProperties id=\(id)") {
+        try mapView.mapboxMap.setStyleImportConfigProperties(for: id, configs: config)
+      }
     }
   }
 

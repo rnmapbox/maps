@@ -1,4 +1,3 @@
-#ifdef RCT_NEW_ARCH_ENABLED
 
 #import "RNMBXPointAnnotationComponentView.h"
 #import "RNMBXFabricHelpers.h"
@@ -10,6 +9,8 @@
 #import <react/renderer/components/rnmapbox_maps_specs/EventEmitters.h>
 #import <react/renderer/components/rnmapbox_maps_specs/Props.h>
 #import <react/renderer/components/rnmapbox_maps_specs/RCTComponentViewHelpers.h>
+
+#import "RNMBXFabricPropConvert.h"
 
 using namespace facebook::react;
 
@@ -40,9 +41,9 @@ using namespace facebook::react;
 - (void)prepareView
 {
     _view = [[RNMBXPointAnnotation alloc] init];
-      
+
     self.contentView = _view;
-      
+
     // capture weak self reference to prevent retain cycle
     __weak __typeof__(self) weakSelf = self;
 
@@ -122,24 +123,15 @@ using namespace facebook::react;
 
 - (void)updateProps:(const Props::Shared &)props oldProps:(const Props::Shared &)oldProps
 {
-  const auto &newProps = static_cast<const RNMBXPointAnnotationProps &>(*props);
-    id coordinate = RNMBXConvertFollyDynamicToId(newProps.coordinate);
-    if (coordinate != nil) {
-        _view.coordinate = coordinate;
-    }
-    id draggable = RNMBXConvertFollyDynamicToId(newProps.draggable);
-    if (draggable != nil) {
-        _view.draggable = draggable;
-    }
-    id idx = RNMBXConvertFollyDynamicToId(newProps.id);
-    if (idx != nil) {
-        _view.id = idx;
-    }
-    id anchor = RNMBXConvertFollyDynamicToId(newProps.anchor);
-    if (anchor != nil) {
-        _view.anchor = anchor;
-    }
-    
+  const auto &oldViewProps = static_cast<const RNMBXPointAnnotationProps &>(*oldProps);
+  const auto &newViewProps = static_cast<const RNMBXPointAnnotationProps &>(*props);
+
+  RNMBX_OPTIONAL_PROP_NSString(coordinate)
+  RNMBX_OPTIONAL_PROP_BOOL(draggable)
+  RNMBX_OPTIONAL_PROP_NSString(id)
+  RNMBX_OPTIONAL_PROP_NSDictionary(anchor)
+  RNMBX_REMAP_OPTIONAL_PROP_BOOL(selected, reactSelected)
+
   [super updateProps:props oldProps:oldProps];
 }
 
@@ -150,4 +142,3 @@ Class<RCTComponentViewProtocol> RNMBXPointAnnotationCls(void)
   return RNMBXPointAnnotationComponentView.class;
 }
 
-#endif // RCT_NEW_ARCH_ENABLED

@@ -20,11 +20,7 @@ public class RNMBXRasterSource : RNMBXSource {
 
   override func makeSource() -> Source
   {
-    #if RNMBX_11
     var result = RasterSource(id: self.id)
-    #else
-    var result = RasterSource()
-    #endif
     if let url = url {
       result.url = url
     } else {

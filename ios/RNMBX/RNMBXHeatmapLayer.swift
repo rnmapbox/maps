@@ -6,13 +6,9 @@ public class RNMBXHeatmapLayer: RNMBXVectorLayer {
 
   override func makeLayer(style: Style) throws -> Layer {
     let _ : VectorSource = try self.layerWithSourceID(in: style)
-    #if RNMBX_11
     var layer: Layer = LayerType(id: self.id!, source: self.sourceID!)
-    #else
-    var layer: Layer = LayerType(id: self.id!)
-    #endif
     setOptions(&layer)
-    
+
     return layer
   }
 
@@ -38,7 +34,7 @@ public class RNMBXHeatmapLayer: RNMBXVectorLayer {
         styler.heatmapLayer(
           layer: &styleLayer,
           reactStyle: reactStyle,
-          oldReactStyle: oldReatStyle,
+          oldReactStyle: oldReactStyle,
           applyUpdater: { (updater) in logged("RNMBXHeatmapLayer.updateLayer") {
             try style.updateLayer(withId: self.id, type: LayerType.self) { (layer: inout HeatmapLayer) in updater(&layer) }
           }},

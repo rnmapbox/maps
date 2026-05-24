@@ -1,7 +1,7 @@
 import React, { forwardRef, memo, useImperativeHandle, useRef } from 'react';
 
 import RNMBXLightNativeComponent from '../specs/RNMBXLightNativeComponent';
-import { LightLayerStyleProps } from '../utils/MapboxStyles';
+import type { LightLayerStyleProps } from '../utils/MapboxStyles';
 import { type BaseProps } from '../types/BaseProps';
 import { transformStyle } from '../utils/StyleValue';
 import nativeRef from '../utils/nativeRef';

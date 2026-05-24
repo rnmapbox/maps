@@ -55,15 +55,16 @@ public class RNMBXShapeSource : RNMBXSource {
     }
   }
   
-  public override func addToMap(_ map: RNMBXMapView, style: Style) {
-    super.addToMap(map, style: style)
+  
+  public override func addToMap(_ map: RNMBXMapView, mapView: MapView, style: Style) {
+    super.addToMap(map, mapView:mapView, style: style)
   }
   
-  public override func removeFromMap(_ map: RNMBXMapView, reason: RemovalReason) -> Bool {
+  public override func removeFromMap(_ map: RNMBXMapView, mapView: MapView, reason: RemovalReason) -> Bool {
     if (reason == .ViewRemoval) {
       shapeAnimator?.unsubscribe(consumer: self)
     }
-    return super.removeFromMap(map, reason: reason)
+    return super.removeFromMap(map, mapView:mapView, reason: reason)
   }
 
   @objc public var cluster : NSNumber?
@@ -84,6 +85,7 @@ public class RNMBXShapeSource : RNMBXSource {
   @objc public var clusterProperties : [String: [Any]]?;
 
   @objc public var maxZoomLevel : NSNumber?
+  @objc public var minZoomLevel : NSNumber?
   @objc public var buffer : NSNumber?
   @objc public var tolerance : NSNumber?
   @objc public var lineMetrics : Bool = false
@@ -94,11 +96,7 @@ public class RNMBXShapeSource : RNMBXSource {
 
   override func makeSource() -> Source
   {
-    #if RNMBX_11
     var result =  GeoJSONSource(id: id)
-    #else
-    var result =  GeoJSONSource()
-    #endif
 
     if let shapeObject = shapeObject {
       result.data = toGeoJSONSourceData(shapeObject)
@@ -137,6 +135,10 @@ public class RNMBXShapeSource : RNMBXSource {
 
     if let maxZoomLevel = maxZoomLevel {
       result.maxzoom = maxZoomLevel.doubleValue
+    }
+
+    if let minZoomLevel = minZoomLevel {
+      result.minzoom = minZoomLevel.doubleValue
     }
 
     if let buffer = buffer {
@@ -254,14 +256,8 @@ extension RNMBXShapeSource
       return .featureCollection(featureCollection)
     case .geometry(let geometry):
       return .geometry(geometry)
-    #if RNMBX_11
     case .string(_):
-      // RNMBX_11_TODO
       throw RNMBXError.parseError("url as shape is not supported when updating a ShapeSource")
-    #else
-    case .url(_):
-      throw RNMBXError.parseError("url as shape is not supported when updating a ShapeSource")
-      #endif
     }
   }
 
@@ -291,56 +287,6 @@ extension RNMBXShapeSource
     return objs
   }
 }
-
-#if !RNMBX_11
-class DummyCancellable : Cancelable {
-  func cancel() {}
-}
-
-#if false
-extension MapboxMap {
-  @discardableResult
-  public func getGeoJsonClusterExpansionZoom(forSourceId sourceId: String,
-                                             feature: Feature,
-                                             completion: @escaping (Result<FeatureExtensionValue, Error>) -> Void) -> Cancelable {
-    self.queryFeatureExtension(for: sourceId,
-                               feature: feature,
-                               extension: "supercluster",
-                               extensionField: "expansion-zoom",
-                               args: nil,
-                               completion: completion)
-    return DummyCancellable()
-  }
-  @discardableResult
-  public func getGeoJsonClusterChildren(forSourceId sourceId: String,
-                                        feature: Feature,
-                                        completion: @escaping (Result<FeatureExtensionValue, Error>) -> Void) -> Cancelable {
-    self.queryFeatureExtension(for: sourceId,
-                                   feature: feature,
-                                   extension: "supercluster",
-                                   extensionField: "children",
-                                   args: nil,
-                                   completion: completion)
-    return DummyCancellable()
-  }
-
-  @discardableResult
-  public func getGeoJsonClusterLeaves(forSourceId sourceId: String,
-                                      feature: Feature,
-                                      limit: UInt64 = 10,
-                                      offset: UInt64 = 0,
-                                      completion: @escaping (Result<FeatureExtensionValue, Error>) -> Void) -> Cancelable {
-      self.queryFeatureExtension(for: sourceId,
-                                   feature: /*MapboxCommon.Feature(*/feature/*)*/,
-                                   extension: "supercluster",
-                                   extensionField: "leaves",
-                                   args: ["limit": limit, "offset": offset],
-                                   completion: completion)
-    return DummyCancellable()
-  }
-}
-#endif
-#endif
 
 // MARK: - getClusterExpansionZoom/getClusterLeaves
 
@@ -420,6 +366,65 @@ extension RNMBXShapeSource
         case .failure(let error):
           completion(.failure(error))
         }
+      }
+    }
+  }
+
+  @objc public func getClusterChildren(
+    featureJSON: String,
+    resolver: @escaping RCTPromiseResolveBlock,
+    rejecter: @escaping RCTPromiseRejectBlock
+  ) {
+    getClusterChildren(featureJSON) { result in
+      switch result {
+      case .success(let features):
+        logged("getClusterChildren", rejecter: rejecter) {
+          let featuresJSON: Any = try features.features.toJSON()
+          resolver([
+            "data": ["type": "FeatureCollection", "features": featuresJSON]
+          ])
+        }
+      case .failure(let error):
+        rejecter(error.localizedDescription, "Error.getClusterChildren", error)
+      }
+    }
+  }
+
+  @objc public func getClusterLeaves(
+    featureJSON: String,
+    number: uint,
+    offset: uint,
+    resolver: @escaping RCTPromiseResolveBlock,
+    rejecter: @escaping RCTPromiseRejectBlock
+  ) {
+    getClusterLeaves(featureJSON, number: number, offset: offset) { result in
+      switch result {
+      case .success(let features):
+        logged("getClusterLeaves", rejecter: rejecter) {
+          let featuresJSON: Any = try features.features.toJSON()
+          resolver([
+            "data": ["type": "FeatureCollection", "features": featuresJSON]
+          ])
+        }
+      case .failure(let error):
+        rejecter(error.localizedDescription, "Error.getClusterLeaves", error)
+      }
+    }
+  }
+
+  @objc public func getClusterExpansionZoom(
+    featureJSON: String,
+    resolver: @escaping RCTPromiseResolveBlock,
+    rejecter: @escaping RCTPromiseRejectBlock
+  ) {
+    getClusterExpansionZoom(featureJSON) { result in
+      switch result {
+      case .success(let zoom):
+        resolver([
+          "data": NSNumber(value: zoom)
+        ])
+      case .failure(let error):
+        rejecter(error.localizedDescription, "Error.getClusterExpansionZoom", error)
       }
     }
   }

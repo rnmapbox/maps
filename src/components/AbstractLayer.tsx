@@ -2,7 +2,10 @@ import React from 'react';
 import { NativeMethods, processColor } from 'react-native';
 
 import { getFilter } from '../utils/filterUtils';
-import { AllLayerStyleProps, FilterExpression } from '../utils/MapboxStyles';
+import type {
+  AllLayerStyleProps,
+  FilterExpression,
+} from '../utils/MapboxStyles';
 import { StyleValue, transformStyle } from '../utils/StyleValue';
 import type { BaseProps } from '../types/BaseProps';
 

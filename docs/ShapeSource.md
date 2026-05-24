@@ -29,7 +29,7 @@ A string that uniquely identifies the source.
 ```tsx
 boolean
 ```
-The id refers to en existing source in the style. Does not create a new source.
+The id refers to an existing source in the style. Does not create a new source.
 
 
   
@@ -112,6 +112,16 @@ number
 Specifies the maximum zoom level at which to create vector tiles.
 A greater value produces greater detail at high zoom levels.
 The default value is 18.
+
+
+  
+### minZoomLevel
+
+```tsx
+number
+```
+Specifies the minimum zoom level at which to create vector tiles.
+The default value is 0.
 
 
   

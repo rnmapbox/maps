@@ -6,11 +6,7 @@ class RNMBXOfflineModuleLegacy: RCTEventEmitter {
   final let CompleteRegionDownloadState = 2
   
   lazy var offlineRegionManager: OfflineRegionManager = {
-    #if RNMBX_11
     return OfflineRegionManager()
-    #else
-    return OfflineRegionManager(resourceOptions: .init(accessToken: RNMBXModule.accessToken!))
-    #endif
   }()
 
   @objc
@@ -361,6 +357,11 @@ func getRegionByName(name: String, offlineRegions: [OfflineRegion]) -> OfflineRe
         }
       }
     }
+  }
+
+  @objc
+  func setTileCountLimit(_ limit: NSNumber) {
+    self.offlineRegionManager.setOfflineMapboxTileCountLimitForLimit(limit.uint64Value)
   }
 
   @objc

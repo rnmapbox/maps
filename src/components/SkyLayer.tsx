@@ -1,7 +1,10 @@
 import React from 'react';
 import { NativeModules } from 'react-native';
 
-import { FilterExpression, SkyLayerStyleProps } from '../utils/MapboxStyles';
+import type {
+  FilterExpression,
+  SkyLayerStyleProps,
+} from '../utils/MapboxStyles';
 import { StyleValue } from '../utils/StyleValue';
 import RNMBXSkyLayerNativeComponent from '../specs/RNMBXSkyLayerNativeComponent';
 
@@ -16,7 +19,7 @@ export type Props = {
   id: string;
 
   /**
-   * The id refers to en existing layer in the style. Does not create a new layer.
+   * The id refers to an existing layer in the style. Does not create a new layer.
    */
   existing?: boolean;
 

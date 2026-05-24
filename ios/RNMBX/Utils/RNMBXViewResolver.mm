@@ -1,10 +1,16 @@
 //
 //  RNMBXViewResolver.mm
 //
-//  Implementation of cross-architecture view resolver utility
+//  Implementation of view resolver utility
 //
 
 #import "RNMBXViewResolver.h"
+
+// View resolution timeout and delay constants
+static const NSTimeInterval MAX_TIMEOUT = 10.0; // 10 seconds
+static const int64_t DELAY_ON_FIRST_ATTEMPT = (NSEC_PER_MSEC/5); // 0.2ms
+static const int64_t DELAY_ON_NEXT_5_ATTEMPTS = 10 * NSEC_PER_MSEC; // 10ms
+static const int64_t DELAY_ON_FURTHER_ATTEMPTS = 200 * NSEC_PER_MSEC; // 200ms
 
 @implementation RNMBXViewResolver
 
@@ -30,7 +36,6 @@
         return;
     }
 
-#ifdef RCT_NEW_ARCH_ENABLED
     [delegate.viewRegistry_DEPRECATED addUIBlock:^(RCTViewRegistry *viewRegistry) {
         [self resolveViewWithPolling:viewRef
                             delegate:delegate
@@ -41,18 +46,6 @@
                          attemptCount:0
                            startTime:nil];
     }];
-#else
-    [delegate.bridge.uiManager addUIBlock:^(RCTUIManager *uiManager, NSDictionary<NSNumber *, UIView *> *viewRegistry) {
-        [self resolveViewWithPolling:viewRef
-                            delegate:delegate
-                       expectedClass:expectedClass
-                               block:block
-                              reject:reject
-                          methodName:methodName
-                         attemptCount:0
-                           startTime:nil];
-    }];
-#endif
 }
 
 + (void)resolveViewWithPolling:(NSNumber *)viewRef
@@ -84,7 +77,7 @@
     }
 
     NSTimeInterval elapsed = [[NSDate date] timeIntervalSinceDate:startTime];
-    if (elapsed >= 0.2) { // 200ms timeout
+    if (elapsed >= MAX_TIMEOUT) {
         NSString *errorMsg = [NSString stringWithFormat:@"Could not find view with tag %@ in %@ after %d attempts over %.1fms",
                       viewRef, methodName, (int)attemptCount + 1, elapsed * 1000];
         NSLog(@"%@", errorMsg);
@@ -92,7 +85,14 @@
         return;
     }
 
-    int64_t delay = (attemptCount == 0) ? (NSEC_PER_MSEC/5) : 10 * NSEC_PER_MSEC;
+    int64_t delay;
+    if (attemptCount == 0) {
+        delay = DELAY_ON_FIRST_ATTEMPT;
+    } else if (attemptCount <= 5) {
+        delay = DELAY_ON_NEXT_5_ATTEMPTS;
+    } else {
+        delay = DELAY_ON_FURTHER_ATTEMPTS;
+    }
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, delay), dispatch_get_main_queue(), ^{
         [self resolveViewWithPolling:viewRef
                             delegate:delegate
@@ -108,7 +108,6 @@
 #pragma mark - Private Methods
 
 + (UIView *)resolveView:(NSNumber *)viewRef delegate:(id<RNMBXViewResolverDelegate>)delegate {
-#ifdef RCT_NEW_ARCH_ENABLED
     if (delegate.viewRegistry_DEPRECATED) {
         UIView *componentView = [delegate.viewRegistry_DEPRECATED viewForReactTag:viewRef];
         if (componentView) {
@@ -122,11 +121,6 @@
     if (delegate.bridge) {
         return [delegate.bridge.uiManager viewForReactTag:viewRef];
     }
-#else
-    if (delegate.bridge) {
-        return [delegate.bridge.uiManager viewForReactTag:viewRef];
-    }
-#endif
 
     return nil;
 }

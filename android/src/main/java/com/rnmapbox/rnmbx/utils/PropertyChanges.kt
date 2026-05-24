@@ -2,7 +2,7 @@ package com.rnmapbox.rnmbx.utils
 
 /**
  * This mechanism allows to separate property updates from application of property updates. Usefull for delaying the propery updates
- * because the object is not yet created for example. Or to apply multiple propery changes at once.
+ * because the object is not yet created for example. Or to apply multiple property changes at once.
  *
  * @sample
  *

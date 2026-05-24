@@ -33,7 +33,7 @@ export type Props = {
   id: string;
 
   /**
-   * The id refers to en existing source in the style. Does not create a new source.
+   * The id refers to an existing source in the style. Does not create a new source.
    */
   existing?: boolean;
 
@@ -92,6 +92,12 @@ export type Props = {
    * The default value is 18.
    */
   maxZoomLevel?: number;
+
+  /**
+   * Specifies the minimum zoom level at which to create vector tiles.
+   * The default value is 0.
+   */
+  minZoomLevel?: number;
 
   /**
    * Specifies the size of the tile buffer on each side.
@@ -312,6 +318,7 @@ export class ShapeSource extends NativeBridgeComponent(
       clusterMaxZoomLevel: this.props.clusterMaxZoomLevel,
       clusterProperties: this.props.clusterProperties,
       maxZoomLevel: this.props.maxZoomLevel,
+      minZoomLevel: this.props.minZoomLevel,
       buffer: this.props.buffer,
       tolerance: this.props.tolerance,
       lineMetrics: this.props.lineMetrics,

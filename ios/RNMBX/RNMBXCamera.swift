@@ -2,24 +2,57 @@ import Foundation
 import MapboxMaps
 import Turf
 
-#if RNMBX_11
 extension NSNumber {
   /// Converts an `NSNumber` to a `CGFloat` value from its `Double` representation.
   internal var CGFloat: CGFloat {
     CoreGraphics.CGFloat(doubleValue)
   }
 }
-#endif
 
 public enum RemovalReason {
     case ViewRemoval, StyleChange, OnDestroy, ComponentChange, Reorder
 }
 
-public protocol RNMBXMapComponent: AnyObject {
+/// Base protocol for all map components
+public protocol RNMBXMapComponentProtocol: AnyObject {
+  func waitForStyleLoad() -> Bool
+}
+
+/// Default implementation: most components don't need to wait for style load
+extension RNMBXMapComponentProtocol {
+  public func waitForStyleLoad() -> Bool {
+    return false
+  }
+}
+
+/// Protocol for components that can work without direct MapView access
+public protocol RNMBXMapComponent: RNMBXMapComponentProtocol {
   func addToMap(_ map: RNMBXMapView, style: Style)
   func removeFromMap(_ map: RNMBXMapView, reason: RemovalReason) -> Bool
-  
-  func waitForStyleLoad() -> Bool
+}
+
+/// Protocol for components that require a valid MapView instance for both add and remove operations.
+/// Use this protocol when your component needs to interact with the native MapView directly.
+/// The MapView parameter is guaranteed to be non-nil when these methods are called.
+///
+/// This protocol inherits from RNMBXMapComponent to ensure compatibility with existing code,
+/// but provides default implementations of the base protocol methods that throw errors,
+/// forcing implementers to use the mapView-aware versions.
+public protocol RNMBXMapAndMapViewComponent: RNMBXMapComponent {
+  func addToMap(_ map: RNMBXMapView, mapView: MapView, style: Style)
+  func removeFromMap(_ map: RNMBXMapView, mapView: MapView, reason: RemovalReason) -> Bool
+}
+
+/// Default implementations for RNMBXMapAndMapViewComponent that prevent accidental use of base protocol methods
+extension RNMBXMapAndMapViewComponent {
+  public func addToMap(_ map: RNMBXMapView, style: Style) {
+    Logger.error("CRITICAL: addToMap(_:style:) called on RNMBXMapAndMapViewComponent. Use addToMap(_:mapView:style:) instead. Component: \(type(of: self))")
+  }
+
+  public func removeFromMap(_ map: RNMBXMapView, reason: RemovalReason) -> Bool {
+    Logger.error("CRITICAL: removeFromMap(_:reason:) called on RNMBXMapAndMapViewComponent. Use removeFromMap(_:mapView:reason:) instead. Component: \(type(of: self))")
+    return false
+  }
 }
 
 enum CameraMode: Int {
@@ -85,7 +118,7 @@ class CameraUpdateQueue {
 open class RNMBXMapComponentBase : UIView, RNMBXMapComponent {
   private weak var _map: RNMBXMapView! = nil
   private var _mapCallbacks: [(RNMBXMapView) -> Void] = []
-  
+
   weak var map : RNMBXMapView? {
     return _map;
   }
@@ -103,11 +136,7 @@ open class RNMBXMapComponentBase : UIView, RNMBXMapComponent {
       _mapCallbacks.append(callback)
     }
   }
-  
-  public func waitForStyleLoad() -> Bool {
-    return false
-  }
-  
+
   public func addToMap(_ map: RNMBXMapView, style: Style) {
     _mapCallbacks.forEach { callback in
         callback(map)
@@ -115,7 +144,7 @@ open class RNMBXMapComponentBase : UIView, RNMBXMapComponent {
     _mapCallbacks = []
     _map = map
   }
-  
+
   public func removeFromMap(_ map: RNMBXMapView, reason: RemovalReason) -> Bool {
     _mapCallbacks = []
     _map = nil
@@ -123,8 +152,48 @@ open class RNMBXMapComponentBase : UIView, RNMBXMapComponent {
   }
 }
 
+/// Base class for components that require MapView to be non-nil
+open class RNMBXMapAndMapViewComponentBase : UIView, RNMBXMapAndMapViewComponent {
+  private weak var _map: RNMBXMapView! = nil
+  private var _mapCallbacks: [(RNMBXMapView) -> Void] = []
+
+  weak var map : RNMBXMapView? {
+    return _map;
+  }
+
+  func withMapView(_ callback: @escaping (_ mapView: MapView) -> Void) {
+    withRNMBXMapView { mapView in
+      callback(mapView.mapView)
+    }
+  }
+
+  func withRNMBXMapView(_ callback: @escaping (_ map: RNMBXMapView) -> Void) {
+    if let map = _map {
+      callback(map)
+    } else {
+      _mapCallbacks.append(callback)
+    }
+  }
+
+  // Uses default implementation from RNMBXMapComponentProtocol extension
+
+  public func addToMap(_ map: RNMBXMapView, mapView: MapView, style: Style) {
+    _mapCallbacks.forEach { callback in
+        callback(map)
+    }
+    _mapCallbacks = []
+    _map = map
+  }
+
+  public func removeFromMap(_ map: RNMBXMapView, mapView: MapView, reason: RemovalReason) -> Bool {
+    _mapCallbacks = []
+    _map = nil
+    return true
+  }
+}
+
 @objc(RNMBXCamera)
-open class RNMBXCamera : RNMBXMapComponentBase {
+open class RNMBXCamera : RNMBXMapAndMapViewComponentBase {
   var cameraAnimator: BasicCameraAnimator?
   let cameraUpdateQueue = CameraUpdateQueue()
   
@@ -262,8 +331,9 @@ open class RNMBXCamera : RNMBXMapComponentBase {
   
   func _updateMaxBounds() {
     withMapView { map in
+      let current = map.mapboxMap.cameraBounds
       var options = CameraBoundsOptions()
-      
+
       if let maxBounds = self.maxBoundsFeature {
         logged("RNMBXCamera._updateMaxBounds._toCoordinateBounds") {
           options.bounds = try self._toCoordinateBounds(maxBounds)
@@ -273,7 +343,9 @@ open class RNMBXCamera : RNMBXMapComponentBase {
       }
       options.minZoom = self.minZoomLevel?.CGFloat
       options.maxZoom = self.maxZoomLevel?.CGFloat
-      
+      options.minPitch = current.minPitch
+      options.maxPitch = current.maxPitch
+
       logged("RNMBXCamera._updateMaxBounds") {
         try map.mapboxMap.setCameraBounds(with: options)
       }
@@ -297,9 +369,6 @@ open class RNMBXCamera : RNMBXMapComponentBase {
       if let locationModule = RNMBXLocationModule.shared {
         locationModule.override(for: map.location)
       }
-      #if !RNMBX_11
-      map.location.locationProvider.requestWhenInUseAuthorization()
-      #endif
       var trackingModeChanged = false
       var followOptions = FollowPuckViewportStateOptions()
       switch userTrackingMode {
@@ -447,11 +516,7 @@ open class RNMBXCamera : RNMBXMapComponentBase {
       }
       
       withMapView { map in
-        #if RNMBX_11
         let bounds = [sw, ne]
-        #else
-        let bounds = CoordinateBounds(southwest: sw, northeast: ne)
-        #endif
 
         camera = map.mapboxMap.camera(
           for: bounds,
@@ -519,28 +584,28 @@ open class RNMBXCamera : RNMBXMapComponentBase {
     _updateCamera()
   }
   
-  public override func addToMap(_ map: RNMBXMapView, style: Style) {
-    super.addToMap(map, style: style)
+  public override func addToMap(_ map: RNMBXMapView, mapView: MapView, style: Style) {
+    super.addToMap(map, mapView: mapView, style: style)
     map.reactCamera = self
   }
-  
-  public override func removeFromMap(_ map: RNMBXMapView, reason: RemovalReason) -> Bool {
+
+  public override func removeFromMap(_ map: RNMBXMapView, mapView: MapView, reason: RemovalReason) -> Bool {
     if (reason == .StyleChange) {
       return false
     }
 
-    map.mapView.viewport.removeStatusObserver(self)
-    return super.removeFromMap(map, reason:reason)
+    mapView.viewport.removeStatusObserver(self)
+    return super.removeFromMap(map, mapView: mapView, reason: reason)
   }
 
-  @objc public func moveBy(x: Double, y: Double, animationMode: NSNumber?, animationDuration: NSNumber?, resolve: @escaping RCTPromiseResolveBlock, reject: @escaping RCTPromiseRejectBlock) {
+  @objc public func moveBy(x: Double, y: Double, animationMode: Double, animationDuration: Double, resolve: @escaping RCTPromiseResolveBlock, reject: @escaping RCTPromiseRejectBlock) {
     withMapView { mapView in
       let contentFrame = mapView.bounds.inset(by: mapView.safeAreaInsets)
       let centerPoint = CGPoint(x: contentFrame.midX, y: contentFrame.midY)
       let endCameraPoint = CGPoint(x: centerPoint.x + x, y: centerPoint.y + y)
       let cameraOptions = mapView.mapboxMap.dragCameraOptions(from: centerPoint, to: endCameraPoint)
       
-      let duration = (animationDuration?.doubleValue ?? 0.0) / 1000
+      let duration = animationDuration / 1000
 
       if (duration == 0.0) {
         mapView.mapboxMap.setCamera(to: cameraOptions)
@@ -549,7 +614,7 @@ open class RNMBXCamera : RNMBXMapComponentBase {
       }
         
       var curve: UIView.AnimationCurve = .linear
-      if let m = animationMode?.intValue, let m = CameraMode(rawValue: m) {
+      if let m = CameraMode(rawValue: Int(animationMode)) {
           curve = m == CameraMode.ease ? .easeInOut : .linear
       }
 
@@ -560,18 +625,18 @@ open class RNMBXCamera : RNMBXMapComponentBase {
   @objc public func scaleBy(
     x: Double,
     y: Double,
-    scaleFactor: NSNumber,
-    animationMode: NSNumber?,
-    animationDuration: NSNumber?,
+    scaleFactor: Double,
+    animationMode: Double,
+    animationDuration: Double,
     resolve: @escaping RCTPromiseResolveBlock,
     reject: @escaping RCTPromiseRejectBlock
   ) {
     withMapView { mapView in
       let currentZoom = mapView.cameraState.zoom
-      let newZoom = currentZoom + log2(scaleFactor.doubleValue)
+      let newZoom = currentZoom + log2(scaleFactor)
       let anchor = CGPoint(x: x, y: y)
       let cameraOptions = CameraOptions(anchor: anchor, zoom: newZoom)
-      let duration = (animationDuration?.doubleValue ?? 0.0) / 1000
+      let duration = animationDuration / 1000
         
       if (duration == 0.0) {
         mapView.mapboxMap.setCamera(to: cameraOptions)
@@ -580,7 +645,7 @@ open class RNMBXCamera : RNMBXMapComponentBase {
       }
         
       var curve: UIView.AnimationCurve = .linear
-      if let m = animationMode?.intValue, let m = CameraMode(rawValue: m) {
+      if let m = CameraMode(rawValue: Int(animationMode)) {
           curve = m == CameraMode.ease ? .easeInOut : .linear
       }
 

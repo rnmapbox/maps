@@ -23,7 +23,7 @@ fun ViewAnnotationOptions.Builder.geometry(point: Geometry): ViewAnnotationOptio
 
 fun ViewAnnotationOptions.Builder.offsets(x: Double, y: Double) {
   this.variableAnchors(listOf(
-    ViewAnnotationAnchorConfig.Builder().anchor(ViewAnnotationAnchor.CENTER).offsetY(x).offsetY(y).build()
+    ViewAnnotationAnchorConfig.Builder().anchor(ViewAnnotationAnchor.CENTER).offsetX(x).offsetY(y).build()
   ))
 }
 

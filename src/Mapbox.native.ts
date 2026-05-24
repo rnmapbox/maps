@@ -9,7 +9,13 @@ export {
   type CameraStop,
 } from './components/Camera';
 export { Atmosphere } from './components/Atmosphere';
-export { default as MapView, type MapState } from './components/MapView';
+export { Snow } from './components/Snow';
+export { Rain } from './components/Rain';
+export {
+  default as MapView,
+  type MapState,
+  type ScreenPointPayload,
+} from './components/MapView';
 export { default as Light } from './components/Light';
 export { default as PointAnnotation } from './components/PointAnnotation';
 export { default as Annotation } from './components/Annotation';
@@ -23,6 +29,7 @@ export { default as LocationPuck } from './components/LocationPuck';
 export { default as VectorSource } from './components/VectorSource';
 export { ShapeSource } from './components/ShapeSource';
 export { default as RasterSource } from './components/RasterSource';
+export { default as RasterArraySource } from './components/RasterArraySource';
 export { default as RasterDemSource } from './components/RasterDemSource';
 export { default as ImageSource } from './components/ImageSource';
 export { Viewport } from './components/Viewport';
@@ -38,9 +45,13 @@ export { default as SkyLayer } from './components/SkyLayer';
 export { default as ModelLayer } from './components/ModelLayer';
 export { SymbolLayer } from './components/SymbolLayer';
 export { default as RasterLayer } from './components/RasterLayer';
+export { default as RasterParticleLayer } from './components/RasterParticleLayer';
+export { default as HillshadeLayer } from './components/HillshadeLayer';
 export { default as BackgroundLayer } from './components/BackgroundLayer';
 export { default as CustomLocationProvider } from './components/CustomLocationProvider';
 export { Terrain } from './components/Terrain';
+export { default as CameraGestureObserver } from './components/CameraGestureObserver';
+export { OnMapSteadyEvent } from './specs/RNMBXCameraGestureObserverNativeComponent';
 export {
   default as locationManager,
   type Location,
@@ -76,6 +87,7 @@ export type {
   HeatmapLayerStyleProps as HeatmapLayerStyle,
   FillExtrusionLayerStyleProps as FillExtrusionLayerStyle,
   RasterLayerStyleProps as RasterLayerStyle,
+  RasterParticleLayerStyleProps as RasterParticleLayerStyle,
   HillshadeLayerStyleProps as HillshadeLayerStyle,
   BackgroundLayerStyleProps as BackgroundLayerStyle,
   SkyLayerStyleProps as SkyLayerStyle,
