@@ -5,11 +5,11 @@ import {
   StyleSheet,
   Text,
   TouchableOpacity,
-  TouchableOpacityProps,
+  type TouchableOpacityProps,
   View,
 } from 'react-native';
 import Mapbox, { CircleLayer, FillLayer, ShapeSource } from '@rnmapbox/maps';
-import { ExampleWithMetadata } from '../common/ExampleMetadata';
+import { type ExampleWithMetadata } from '../common/ExampleMetadata';
 import sheet from '../../styles/sheet';
 
 const INSTRUCTIONS = `
