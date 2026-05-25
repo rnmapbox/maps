@@ -25,7 +25,7 @@ type FollowPuckOptions = {
 
   /**
    * The value to use for setting pitch. If 'keep', pitch will not be modified by the FollowPuckViewportState.
-   * @default 0 degrees (top-down view)
+   * @default 45 degrees (DEFAULT_FOLLOW_PUCK_VIEWPORT_STATE_PITCH)
    */
   pitch?: number | 'keep';
 
