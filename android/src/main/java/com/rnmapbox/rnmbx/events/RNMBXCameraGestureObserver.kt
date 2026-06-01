@@ -4,6 +4,7 @@ import android.content.Context
 import android.util.Log
 import com.rnmapbox.rnmbx.components.AbstractMapFeature
 import com.rnmapbox.rnmbx.components.RemovalReason
+import com.rnmapbox.rnmbx.components.mapview.MapGestureType
 import com.rnmapbox.rnmbx.components.mapview.RNMBXMapView
 import com.rnmapbox.rnmbx.components.mapview.helpers.MapSteadyDetector
 
@@ -27,14 +28,13 @@ class RNMBXCameraGestureObserver(
         )
     }
 
-    private fun normalizeGestureType(type: String?): String? {
-        return when (type) {
-            "move" -> "pan"
-            "scale" -> "pinch"
-            "rotate" -> "rotate"
-            "shove" -> "pitch"
-            else -> type
-        }
+    private fun normalizeGestureType(type: MapGestureType?): String? = when (type) {
+        MapGestureType.Move -> "pan"
+        MapGestureType.Scale -> "pinch"
+        MapGestureType.Rotate -> "rotate"
+        MapGestureType.Shove -> "pitch"
+        MapGestureType.Fling -> "fling"
+        null -> null
     }
 
     override fun addToMap(mapView: RNMBXMapView) {

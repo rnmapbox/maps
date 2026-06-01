@@ -14,21 +14,22 @@ import com.mapbox.maps.plugin.gestures.OnMoveListener
 import com.mapbox.maps.plugin.gestures.OnRotateListener
 import com.mapbox.maps.plugin.gestures.OnScaleListener
 import com.mapbox.maps.plugin.gestures.OnShoveListener
+import com.rnmapbox.rnmbx.components.mapview.MapGestureType
 
 class MapSteadyDetector(
     private val mapboxMap: MapboxMap,
     var quietPeriodMs: Double = 200.0,
     var maxIntervalMs: Double? = null,
 ) {
-    var onSteady: ((idleDurationMs: Double, lastGestureType: String?) -> Unit)? = null
-    var onTimeout: ((lastGestureType: String?) -> Unit)? = null
+    var onSteady: ((idleDurationMs: Double, lastGestureType: MapGestureType?) -> Unit)? = null
+    var onTimeout: ((lastGestureType: MapGestureType?) -> Unit)? = null
 
     private val handler = Handler(Looper.getMainLooper())
     var activeAnimations: Int = 0
         private set
     var isGestureActive: Boolean = false
         private set
-    private var lastGestureType: String? = null
+    private var lastGestureType: MapGestureType? = null
     var lastTransitionEndedAtMs: Double? = null
         private set
     private var quietRunnable: Runnable? = null
@@ -71,24 +72,24 @@ class MapSteadyDetector(
 
         mapboxMap.gesturesPlugin {
             addOnMoveListener(object : OnMoveListener {
-                override fun onMoveBegin(detector: MoveGestureDetector) { handleGestureBegin("move") }
+                override fun onMoveBegin(detector: MoveGestureDetector) { handleGestureBegin(MapGestureType.Move) }
                 override fun onMove(detector: MoveGestureDetector): Boolean = false
-                override fun onMoveEnd(detector: MoveGestureDetector) { handleGestureEnd("move") }
+                override fun onMoveEnd(detector: MoveGestureDetector) { handleGestureEnd(MapGestureType.Move) }
             })
             addOnScaleListener(object : OnScaleListener {
-                override fun onScaleBegin(detector: StandardScaleGestureDetector) { handleGestureBegin("scale") }
+                override fun onScaleBegin(detector: StandardScaleGestureDetector) { handleGestureBegin(MapGestureType.Scale) }
                 override fun onScale(detector: StandardScaleGestureDetector) {}
-                override fun onScaleEnd(detector: StandardScaleGestureDetector) { handleGestureEnd("scale") }
+                override fun onScaleEnd(detector: StandardScaleGestureDetector) { handleGestureEnd(MapGestureType.Scale) }
             })
             addOnRotateListener(object : OnRotateListener {
-                override fun onRotateBegin(detector: RotateGestureDetector) { handleGestureBegin("rotate") }
+                override fun onRotateBegin(detector: RotateGestureDetector) { handleGestureBegin(MapGestureType.Rotate) }
                 override fun onRotate(detector: RotateGestureDetector) {}
-                override fun onRotateEnd(detector: RotateGestureDetector) { handleGestureEnd("rotate") }
+                override fun onRotateEnd(detector: RotateGestureDetector) { handleGestureEnd(MapGestureType.Rotate) }
             })
             addOnShoveListener(object : OnShoveListener {
-                override fun onShoveBegin(detector: ShoveGestureDetector) { handleGestureBegin("shove") }
+                override fun onShoveBegin(detector: ShoveGestureDetector) { handleGestureBegin(MapGestureType.Shove) }
                 override fun onShove(detector: ShoveGestureDetector) {}
-                override fun onShoveEnd(detector: ShoveGestureDetector) { handleGestureEnd("shove") }
+                override fun onShoveEnd(detector: ShoveGestureDetector) { handleGestureEnd(MapGestureType.Shove) }
             })
         }
     }
@@ -132,7 +133,7 @@ class MapSteadyDetector(
         timeoutRunnable = runnable
     }
 
-    private fun markActivity(gestureType: String? = null) {
+    private fun markActivity(gestureType: MapGestureType? = null) {
         if (gestureType != null) lastGestureType = gestureType
         scheduleQuietCheck()
         scheduleTimeoutTimer()
@@ -157,14 +158,14 @@ class MapSteadyDetector(
         scheduleQuietCheck()
     }
 
-    private fun handleGestureBegin(type: String) {
+    private fun handleGestureBegin(type: MapGestureType) {
         isGestureActive = true
         lastGestureType = type
         lastTransitionEndedAtMs = null
         markActivity(lastGestureType)
     }
 
-    private fun handleGestureEnd(type: String) {
+    private fun handleGestureEnd(type: MapGestureType) {
         lastGestureType = type
         isGestureActive = false
         lastTransitionEndedAtMs = nowMs()
