@@ -47,6 +47,7 @@ import com.rnmapbox.rnmbx.components.location.LocationComponentManager
 import com.rnmapbox.rnmbx.components.location.RNMBXNativeUserLocation
 import com.rnmapbox.rnmbx.components.mapview.helpers.CameraChangeReason
 import com.rnmapbox.rnmbx.components.mapview.helpers.CameraChangeTracker
+import com.rnmapbox.rnmbx.components.mapview.helpers.MapSteadyDetector
 import com.rnmapbox.rnmbx.components.styles.layers.RNMBXLayer
 import com.rnmapbox.rnmbx.components.styles.light.RNMBXLight
 import com.rnmapbox.rnmbx.components.styles.sources.RNMBXSource
@@ -156,6 +157,7 @@ open class RNMBXMapView(private val mContext: Context, var mManager: RNMBXMapVie
     private val mFeatures = mutableListOf<FeatureEntry>()
     private var mQueuedFeatures: MutableList<AbstractMapFeature>? = ArrayList()
     private val mCameraChangeTracker = CameraChangeTracker()
+    private var mMapSteadyDetector: MapSteadyDetector? = null
     private var mPreferredFrameRate: Int? = null
     private var mMaxPitch: Double? = null
     private lateinit var mMap: MapboxMap
@@ -239,6 +241,13 @@ open class RNMBXMapView(private val mContext: Context, var mManager: RNMBXMapVie
             sendRegionDidChangeEvent()
             handleMapChangedEvent(EventTypes.MAP_IDLE);
         })
+
+        mMapSteadyDetector = MapSteadyDetector(map).apply {
+            onSteady = { idleDurationMs, lastGestureType ->
+                mCameraChangeTracker.clear()
+            }
+            attach()
+        }
 
         val gesturesPlugin: GesturesPlugin = mapView.gestures
         gesturesPlugin.addOnMapLongClickListener(_this)
