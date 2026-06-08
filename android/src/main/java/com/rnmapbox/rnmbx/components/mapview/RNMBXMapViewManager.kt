@@ -433,7 +433,7 @@ open class RNMBXMapViewManager(context: ReactApplicationContext, val viewTagReso
          * onDropViewInstance.
          */
         private fun diposeNativeMapView() {
-            val mapView = mViewManager.getByReactTag(reactTag)
+            val mapView = mViewManager.getByReactTag(getReactTag())
             if (mapView != null) {
                 UiThreadUtil.runOnUiThread {
                     try {
