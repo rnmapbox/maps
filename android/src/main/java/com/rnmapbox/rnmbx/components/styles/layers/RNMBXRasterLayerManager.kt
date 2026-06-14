@@ -5,9 +5,15 @@ import com.facebook.react.uimanager.ThemedReactContext
 import com.facebook.react.uimanager.ViewGroupManager
 import com.facebook.react.uimanager.annotations.ReactProp
 import com.facebook.react.viewmanagers.RNMBXRasterLayerManagerInterface
+import com.facebook.react.uimanager.ViewManagerDelegate
+import com.facebook.react.viewmanagers.RNMBXRasterLayerManagerDelegate
 
 class RNMBXRasterLayerManager : ViewGroupManager<RNMBXRasterLayer>(),
     RNMBXRasterLayerManagerInterface<RNMBXRasterLayer> {
+
+    private val delegate = RNMBXRasterLayerManagerDelegate<RNMBXRasterLayer, RNMBXRasterLayerManager>(this)
+
+    override fun getDelegate(): ViewManagerDelegate<RNMBXRasterLayer> = delegate
     override fun getName(): String {
         return REACT_CLASS
     }

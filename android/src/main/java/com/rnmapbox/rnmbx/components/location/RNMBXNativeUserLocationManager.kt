@@ -20,9 +20,15 @@ import com.rnmapbox.rnmbx.utils.extensions.toJsonArray
 import java.io.StringWriter
 import javax.annotation.Nonnull
 import com.rnmapbox.rnmbx.v11compat.location.*
+import com.facebook.react.uimanager.ViewManagerDelegate
+import com.facebook.react.viewmanagers.RNMBXNativeUserLocationManagerDelegate
 
 class RNMBXNativeUserLocationManager : ViewGroupManager<RNMBXNativeUserLocation>(),
     RNMBXNativeUserLocationManagerInterface<RNMBXNativeUserLocation> {
+
+    private val delegate = RNMBXNativeUserLocationManagerDelegate<RNMBXNativeUserLocation, RNMBXNativeUserLocationManager>(this)
+
+    override fun getDelegate(): ViewManagerDelegate<RNMBXNativeUserLocation> = delegate
     @Nonnull
     override fun getName(): String {
         return REACT_CLASS

@@ -20,11 +20,17 @@ import com.rnmapbox.rnmbx.utils.ResourceUtils
 import com.rnmapbox.rnmbx.utils.extensions.forEach
 import com.rnmapbox.rnmbx.utils.extensions.getIfDouble
 import java.util.*
+import com.facebook.react.uimanager.ViewManagerDelegate
+import com.facebook.react.viewmanagers.RNMBXImagesManagerDelegate
 
 class RNMBXImagesManager(private val mContext: ReactApplicationContext) :
     AbstractEventEmitter<RNMBXImages>(
         mContext
     ), RNMBXImagesManagerInterface<RNMBXImages> {
+
+    private val delegate = RNMBXImagesManagerDelegate<RNMBXImages, RNMBXImagesManager>(this)
+
+    override fun getDelegate(): ViewManagerDelegate<RNMBXImages> = delegate
     override fun getName(): String {
         return "RNMBXImages"
     }

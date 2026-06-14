@@ -6,9 +6,15 @@ import com.rnmapbox.rnmbx.utils.extensions.asMapOrNull
 import com.facebook.react.uimanager.ViewGroupManager
 import com.facebook.react.uimanager.annotations.ReactProp
 import com.facebook.react.viewmanagers.RNMBXLightManagerInterface
+import com.facebook.react.uimanager.ViewManagerDelegate
+import com.facebook.react.viewmanagers.RNMBXLightManagerDelegate
 
 class RNMBXLightManager : ViewGroupManager<RNMBXLight>(),
     RNMBXLightManagerInterface<RNMBXLight> {
+
+    private val delegate = RNMBXLightManagerDelegate<RNMBXLight, RNMBXLightManager>(this)
+
+    override fun getDelegate(): ViewManagerDelegate<RNMBXLight> = delegate
     override fun getName(): String {
         return REACT_CLASS
     }

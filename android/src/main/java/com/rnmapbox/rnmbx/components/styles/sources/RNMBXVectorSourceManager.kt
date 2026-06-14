@@ -10,10 +10,16 @@ import com.rnmapbox.rnmbx.events.constants.EventKeys
 import com.rnmapbox.rnmbx.events.constants.eventMapOf
 import com.rnmapbox.rnmbx.utils.Logger
 import javax.annotation.Nonnull
+import com.facebook.react.uimanager.ViewManagerDelegate
+import com.facebook.react.viewmanagers.RNMBXVectorSourceManagerDelegate
 
 class RNMBXVectorSourceManager(reactApplicationContext: ReactApplicationContext) :
     RNMBXTileSourceManager<RNMBXVectorSource>(reactApplicationContext),
     RNMBXVectorSourceManagerInterface<RNMBXVectorSource> {
+
+    private val delegate = RNMBXVectorSourceManagerDelegate<RNMBXVectorSource, RNMBXVectorSourceManager>(this)
+
+    override fun getDelegate(): ViewManagerDelegate<RNMBXVectorSource> = delegate
     @Nonnull
     override fun getName(): String {
         return REACT_CLASS

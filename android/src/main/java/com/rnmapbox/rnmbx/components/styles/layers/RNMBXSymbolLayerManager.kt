@@ -5,9 +5,15 @@ import com.facebook.react.uimanager.ThemedReactContext
 import com.facebook.react.uimanager.ViewGroupManager
 import com.facebook.react.uimanager.annotations.ReactProp
 import com.facebook.react.viewmanagers.RNMBXSymbolLayerManagerInterface
+import com.facebook.react.uimanager.ViewManagerDelegate
+import com.facebook.react.viewmanagers.RNMBXSymbolLayerManagerDelegate
 
 class RNMBXSymbolLayerManager : ViewGroupManager<RNMBXSymbolLayer>(),
     RNMBXSymbolLayerManagerInterface<RNMBXSymbolLayer> {
+
+    private val delegate = RNMBXSymbolLayerManagerDelegate<RNMBXSymbolLayer, RNMBXSymbolLayerManager>(this)
+
+    override fun getDelegate(): ViewManagerDelegate<RNMBXSymbolLayer> = delegate
     override fun getName(): String {
         return REACT_CLASS
     }

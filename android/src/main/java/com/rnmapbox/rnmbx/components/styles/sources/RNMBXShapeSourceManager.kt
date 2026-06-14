@@ -20,12 +20,18 @@ import java.net.MalformedURLException
 import java.net.URL
 import java.util.ArrayList
 import java.util.HashMap
+import com.facebook.react.uimanager.ViewManagerDelegate
+import com.facebook.react.viewmanagers.RNMBXShapeSourceManagerDelegate
 
 
 class RNMBXShapeSourceManager(private val mContext: ReactApplicationContext, val viewTagResolver: ViewTagResolver, val shapeAnimatorManager: ShapeAnimatorManager) :
     AbstractEventEmitter<RNMBXShapeSource>(
         mContext
     ), RNMBXShapeSourceManagerInterface<RNMBXShapeSource> {
+
+    private val delegate = RNMBXShapeSourceManagerDelegate<RNMBXShapeSource, RNMBXShapeSourceManager>(this)
+
+    override fun getDelegate(): ViewManagerDelegate<RNMBXShapeSource> = delegate
     override fun getName(): String {
         return REACT_CLASS
     }
