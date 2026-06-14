@@ -11,9 +11,15 @@ import com.facebook.react.viewmanagers.RNMBXModelsManagerInterface
 import com.rnmapbox.rnmbx.components.styles.terrain.RNMBXTerrainManager
 import com.rnmapbox.rnmbx.utils.Logger
 import com.rnmapbox.rnmbx.utils.extensions.forEach
+import com.facebook.react.uimanager.ViewManagerDelegate
+import com.facebook.react.viewmanagers.RNMBXModelsManagerDelegate
 
 class RNMBXModelsManager(private val mContext: ReactApplicationContext) : ViewGroupManager<RNMBXModels>(),
     RNMBXModelsManagerInterface<RNMBXModels> {
+
+    private val delegate = RNMBXModelsManagerDelegate<RNMBXModels, RNMBXModelsManager>(this)
+
+    override fun getDelegate(): ViewManagerDelegate<RNMBXModels> = delegate
     override fun getName(): String {
         return REACT_CLASS
     }

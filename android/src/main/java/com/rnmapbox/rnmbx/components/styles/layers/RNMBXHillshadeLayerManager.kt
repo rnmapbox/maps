@@ -5,9 +5,15 @@ import com.facebook.react.uimanager.ThemedReactContext
 import com.facebook.react.uimanager.ViewGroupManager
 import com.facebook.react.uimanager.annotations.ReactProp
 import com.facebook.react.viewmanagers.RNMBXHillshadeLayerManagerInterface
+import com.facebook.react.uimanager.ViewManagerDelegate
+import com.facebook.react.viewmanagers.RNMBXHillshadeLayerManagerDelegate
 
 class RNMBXHillshadeLayerManager : ViewGroupManager<RNMBXHillshadeLayer>(),
     RNMBXHillshadeLayerManagerInterface<RNMBXHillshadeLayer> {
+
+    private val delegate = RNMBXHillshadeLayerManagerDelegate<RNMBXHillshadeLayer, RNMBXHillshadeLayerManager>(this)
+
+    override fun getDelegate(): ViewManagerDelegate<RNMBXHillshadeLayer> = delegate
     override fun getName(): String {
         return REACT_CLASS
     }

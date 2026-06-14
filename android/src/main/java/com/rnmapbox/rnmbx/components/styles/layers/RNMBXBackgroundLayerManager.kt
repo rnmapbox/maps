@@ -5,9 +5,15 @@ import com.facebook.react.uimanager.ThemedReactContext
 import com.facebook.react.uimanager.ViewGroupManager
 import com.facebook.react.uimanager.annotations.ReactProp
 import com.facebook.react.viewmanagers.RNMBXBackgroundLayerManagerInterface
+import com.facebook.react.uimanager.ViewManagerDelegate
+import com.facebook.react.viewmanagers.RNMBXBackgroundLayerManagerDelegate
 
 class RNMBXBackgroundLayerManager : ViewGroupManager<RNMBXBackgroundLayer>(),
     RNMBXBackgroundLayerManagerInterface<RNMBXBackgroundLayer> {
+
+    private val delegate = RNMBXBackgroundLayerManagerDelegate<RNMBXBackgroundLayer, RNMBXBackgroundLayerManager>(this)
+
+    override fun getDelegate(): ViewManagerDelegate<RNMBXBackgroundLayer> = delegate
     override fun getName(): String {
         return REACT_CLASS
     }
