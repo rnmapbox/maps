@@ -55,7 +55,7 @@ import java.util.concurrent.TimeUnit
 
 class TimeoutHandler(
         private val name: String,
-        private val timeoutDuration: Long = TimeUnit.SECONDS.toMillis(30L),
+        private val timeoutDuration: Long = TimeUnit.SECONDS.toMillis(60L),
         private val onTimeout: (String, Long) -> Unit
 ) {
     private val handler = Handler(Looper.getMainLooper())
@@ -112,7 +112,7 @@ class RNMBXOfflineModuleLegacy(private val mReactContext: ReactApplicationContex
             var lastSentState: State?
     )
 
-    private var defaultTimeoutInterval: Long = TimeUnit.SECONDS.toMillis(30L)
+    private var defaultTimeoutInterval: Long = TimeUnit.SECONDS.toMillis(60L)
 
     override fun getName(): String {
         return REACT_CLASS
