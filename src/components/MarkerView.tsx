@@ -72,6 +72,7 @@ const MarkerView = ({
   isSelected = false,
   coordinate,
   style,
+  pointerEvents,
   children,
 }: Props) => {
   // Android new-arch (Fabric) fix: UIManager.measure reads from the Fabric shadow
@@ -98,9 +99,14 @@ const MarkerView = ({
   // we don't trigger a re-render for no-op native position re-applications.
   const lastTranslateRef = useRef<{ x: number; y: number } | null>(null);
 
-  const handleTouchEnd = useCallback((e: { stopPropagation: () => void }) => {
-    e.stopPropagation();
-  }, []);
+  const handleTouchEnd = useCallback(
+    (e: { stopPropagation: () => void }) => {
+      if (pointerEvents !== 'none' && pointerEvents !== 'box-none') {
+        e.stopPropagation();
+      }
+    },
+    [pointerEvents],
+  );
 
   const handleAnnotationPosition = useCallback(
     (e: NativeSyntheticEvent<{ x: number; y: number }>) => {
@@ -150,6 +156,7 @@ const MarkerView = ({
       allowOverlap={allowOverlap}
       allowOverlapWithPuck={allowOverlapWithPuck}
       isSelected={isSelected}
+      pointerEvents={pointerEvents}
       onTouchEnd={handleTouchEnd}
     >
       <RNMBXMakerViewContentComponent
