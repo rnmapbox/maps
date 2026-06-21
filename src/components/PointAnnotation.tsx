@@ -1,5 +1,5 @@
 import React, { type SyntheticEvent, type Component } from 'react';
-import { StyleSheet, type ViewProps } from 'react-native';
+import { StyleSheet, View, type ViewProps } from 'react-native';
 import {
   type Feature,
   type GeoJsonProperties,
@@ -16,6 +16,7 @@ import RNMBXPointAnnotationNativeComponent from '../specs/RNMBXPointAnnotationNa
 import NativeRNMBXPointAnnotationModule from '../specs/NativeRNMBXPointAnnotationModule';
 
 import NativeBridgeComponent, { type RNMBEvent } from './NativeBridgeComponent';
+import Callout from './Callout';
 
 export const NATIVE_MODULE_NAME = 'RNMBXPointAnnotation';
 
@@ -235,10 +236,21 @@ class PointAnnotation extends NativeBridgeComponent(
       onMapboxPointAnnotationDragEnd: this._onDragEnd,
       coordinate: this._getCoordinate(),
     };
+    const childArray = React.Children.toArray(this.props.children);
+    const calloutIndex = childArray.findIndex(
+      (child) => React.isValidElement(child) && child.type === Callout,
+    );
+    const callout = calloutIndex !== -1 ? childArray[calloutIndex] : null;
+    const content =
+      calloutIndex !== -1
+        ? childArray.filter((_, i) => i !== calloutIndex)
+        : childArray;
+
     return (
       // @ts-expect-error just codegen stuff
       <RNMBXPointAnnotationNativeComponent {...props}>
-        {this.props.children}
+        <View collapsable={false}>{content}</View>
+        {callout}
       </RNMBXPointAnnotationNativeComponent>
     );
   }
