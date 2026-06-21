@@ -236,15 +236,11 @@ class PointAnnotation extends NativeBridgeComponent(
       onMapboxPointAnnotationDragEnd: this._onDragEnd,
       coordinate: this._getCoordinate(),
     };
-    const childArray = React.Children.toArray(this.props.children);
-    const calloutIndex = childArray.findIndex(
-      (child) => React.isValidElement(child) && child.type === Callout,
+    const children = React.Children.toArray(this.props.children);
+    const callout = children.find(
+      (c) => React.isValidElement(c) && c.type === Callout,
     );
-    const callout = calloutIndex !== -1 ? childArray[calloutIndex] : null;
-    const content =
-      calloutIndex !== -1
-        ? childArray.filter((_, i) => i !== calloutIndex)
-        : childArray;
+    const content = children.filter((c) => c !== callout);
 
     return (
       // @ts-expect-error just codegen stuff
