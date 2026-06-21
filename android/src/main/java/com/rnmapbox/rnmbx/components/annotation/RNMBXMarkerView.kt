@@ -65,15 +65,14 @@ class RNMBXMarkerView(context: Context?, private val mManager: RNMBXMarkerViewMa
 
     // region View methods
 
-    override fun setPointerEvents(pointerEvents: PointerEvents) {
-        super.setPointerEvents(pointerEvents)
+    fun setContentPointerEvents(pointerEvents: PointerEvents) {
         mPointerEvents = pointerEvents
         (mView as? RNMBXMarkerViewContent)?.setExternalPointerEvents(pointerEvents)
     }
 
     override fun addView(childView: View, childPosition: Int) {
         mView = childView
-        (mView as? RNMBXMarkerViewContent)?.setExternalPointerEvents(mPointerEvents)
+        (childView as? RNMBXMarkerViewContent)?.setExternalPointerEvents(mPointerEvents)
         // Note: Do not call this method on `super`. The view is added manually.
     }
 
