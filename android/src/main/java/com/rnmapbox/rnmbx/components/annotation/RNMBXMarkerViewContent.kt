@@ -6,12 +6,18 @@ import android.view.View.MeasureSpec
 import android.view.ViewGroup
 import com.facebook.react.bridge.Arguments
 import com.facebook.react.bridge.ReactContext
+import com.facebook.react.uimanager.PointerEvents
 import com.facebook.react.uimanager.UIManagerHelper
 import com.facebook.react.views.view.ReactViewGroup
 import com.rnmapbox.rnmbx.components.camera.BaseEvent
 
 class RNMBXMarkerViewContent(context: Context): ReactViewGroup(context) {
     var inAdd: Boolean = false
+    private var externalPointerEvents: PointerEvents = PointerEvents.AUTO
+
+    fun setExternalPointerEvents(pointerEvents: PointerEvents) {
+        externalPointerEvents = pointerEvents
+    }
 
     // Track last reported translation to avoid feedback loop:
     // Mapbox sets setTranslationX(512) → we fire event → JS sets transform:[{translateX:512}]
@@ -29,6 +35,9 @@ class RNMBXMarkerViewContent(context: Context): ReactViewGroup(context) {
     }
 
     override fun dispatchTouchEvent(ev: MotionEvent): Boolean {
+        if (externalPointerEvents == PointerEvents.NONE) {
+            return false
+        }
         // On ACTION_DOWN, tell the parent MapView not to intercept subsequent MOVE/UP
         // events for pan/zoom recognition — that would send CANCEL to child Pressables
         // and suppress onPress. Android resets the disallow flag on each new DOWN, so
