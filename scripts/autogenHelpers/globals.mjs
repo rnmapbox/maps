@@ -608,7 +608,8 @@ export function exampleMethodLinks(method, component) {
       .map(({ groupName, name, title }) => {
         return `[${title}](../examples/${groupName}/${name})`;
       })
-      .join(', ');
+      .join(', ')
+      .concat('\n\n');
   }
   return '';
 }
