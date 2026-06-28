@@ -1,5 +1,6 @@
 package com.rnmapbox.rnmbx.components.annotation
 
+import com.facebook.react.bridge.Dynamic
 import com.facebook.react.bridge.ReactApplicationContext
 import com.facebook.react.common.MapBuilder
 import com.facebook.react.uimanager.ThemedReactContext
@@ -27,7 +28,7 @@ class RNMBXPointAnnotationManagerViewManager(context: ReactApplicationContext) :
     }
 
     @ReactProp(name = "slot")
-    override fun setSlot(view: RNMBXPointAnnotationManagerView, value: String?) {
-        view.slot = value
+    override fun setSlot(view: RNMBXPointAnnotationManagerView, value: Dynamic) {
+        view.slot = if (value.isNull) null else value.asString()
     }
 }
