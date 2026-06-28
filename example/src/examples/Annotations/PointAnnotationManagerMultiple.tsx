@@ -21,19 +21,24 @@ const styles = StyleSheet.create({
 });
 
 const TOP_COORDS: [number, number][] = [
-  [-74.00597, 40.71427],
-  [-74.0065, 40.7128],
+  [-74.0105, 40.7155],
+  [-74.0015, 40.7155],
 ];
 
 const BOTTOM_COORDS: [number, number][] = [
-  [-74.0045, 40.7155],
-  [-74.0035, 40.7138],
+  [-74.0105, 40.7115],
+  [-74.0015, 40.7115],
 ];
 
-const pin = (id: string, coord: [number, number], color: string, n: number) => (
+const pin = (
+  id: string,
+  coord: [number, number],
+  color: string,
+  label: string,
+) => (
   <PointAnnotation key={id} id={id} coordinate={coord}>
     <View style={[styles.pin, { backgroundColor: color }]}>
-      <Text style={styles.label}>{n}</Text>
+      <Text style={styles.label}>{label}</Text>
     </View>
   </PointAnnotation>
 );
@@ -43,25 +48,27 @@ const PointAnnotationManagerMultiple = () => {
     <MapView style={styles.map} styleURL="mapbox://styles/mapbox/standard">
       <Camera
         defaultSettings={{
-          centerCoordinate: [-74.00597, 40.71427],
-          zoomLevel: 15,
-          pitch: 45,
+          centerCoordinate: [-74.006, 40.7135],
+          zoomLevel: 14,
+          pitch: 0,
         }}
       />
 
       {/* Default manager: configures the slot used by bare annotations below. */}
       <PointAnnotationManager default slot="middle" />
 
-      {/* Bare annotation - attaches to the default manager above. */}
-      {pin('bare', [-74.00597, 40.71427], 'dimgray', 0)}
+      {/* Bare annotation (gray "D") - attaches to the default manager above. */}
+      {pin('bare', [-74.006, 40.7135], 'dimgray', 'D')}
 
       {/* Two managers in different slots, each with its own layer. */}
       <PointAnnotationManager slot="top" iconAllowOverlap>
-        {TOP_COORDS.map((c, i) => pin(`top-${i}`, c, 'tomato', i + 1))}
+        {TOP_COORDS.map((c, i) => pin(`top-${i}`, c, 'tomato', `T${i + 1}`))}
       </PointAnnotationManager>
 
       <PointAnnotationManager slot="bottom">
-        {BOTTOM_COORDS.map((c, i) => pin(`bottom-${i}`, c, 'dodgerblue', i + 1))}
+        {BOTTOM_COORDS.map((c, i) =>
+          pin(`bottom-${i}`, c, 'dodgerblue', `B${i + 1}`),
+        )}
       </PointAnnotationManager>
     </MapView>
   );
