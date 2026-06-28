@@ -43,6 +43,24 @@ using namespace facebook::react;
   self.contentView = _view;
 }
 
+- (void)mountChildComponentView:(UIView<RCTComponentViewProtocol> *)childComponentView index:(NSInteger)index
+{
+  if ([childComponentView isKindOfClass:[RCTViewComponentView class]] && ((RCTViewComponentView *)childComponentView).contentView != nil) {
+    [_view insertReactSubviewInternal:((RCTViewComponentView *)childComponentView).contentView at:index];
+  } else {
+    [_view insertReactSubviewInternal:childComponentView at:index];
+  }
+}
+
+- (void)unmountChildComponentView:(UIView<RCTComponentViewProtocol> *)childComponentView index:(NSInteger)index
+{
+  if ([childComponentView isKindOfClass:[RCTViewComponentView class]] && ((RCTViewComponentView *)childComponentView).contentView != nil) {
+    [_view removeReactSubviewInternal:((RCTViewComponentView *)childComponentView).contentView];
+  } else {
+    [_view removeReactSubviewInternal:childComponentView];
+  }
+}
+
 #pragma mark - RCTComponentViewProtocol
 
 + (ComponentDescriptorProvider)componentDescriptorProvider {
@@ -55,7 +73,15 @@ using namespace facebook::react;
   const auto &oldViewProps = static_cast<const RNMBXPointAnnotationManagerProps &>(*_props);
   const auto &newViewProps = static_cast<const RNMBXPointAnnotationManagerProps &>(*props);
 
+  RNMBX_OPTIONAL_PROP_NSString(id)
+  RNMBX_OPTIONAL_PROP_BOOL(isDefault)
   RNMBX_OPTIONAL_PROP_NSString(slot)
+  RNMBX_OPTIONAL_PROP_BOOL_NSNumber(iconAllowOverlap)
+  RNMBX_OPTIONAL_PROP_BOOL_NSNumber(iconIgnorePlacement)
+  RNMBX_OPTIONAL_PROP_BOOL_NSNumber(iconOptional)
+  RNMBX_OPTIONAL_PROP_BOOL_NSNumber(textAllowOverlap)
+  RNMBX_OPTIONAL_PROP_BOOL_NSNumber(textIgnorePlacement)
+  RNMBX_OPTIONAL_PROP_BOOL_NSNumber(textOptional)
 
   [super updateProps:props oldProps:oldProps];
 }

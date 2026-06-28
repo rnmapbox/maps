@@ -27,6 +27,11 @@ import com.rnmapbox.rnmbx.v11compat.annotation.*;
 class RNMBXPointAnnotation(private val mContext: Context, private val mManager: RNMBXPointAnnotationManager) : AbstractMapFeature(mContext), View.OnLayoutChangeListener {
 
     var pointAnnotations: RNMBXPointAnnotationCoordinator? = null
+
+    /** Set by the enclosing `<PointAnnotationManager>` when this annotation is its
+     * child. When null (bare annotation) we fall back to the map's default coordinator. */
+    var parentCoordinator: RNMBXPointAnnotationCoordinator? = null
+
     var annotation: PointAnnotation? = null
         private set
     private var mMap: MapboxMap? = null
@@ -97,7 +102,7 @@ class RNMBXPointAnnotation(private val mContext: Context, private val mManager: 
     override fun addToMap(mapView: RNMBXMapView) {
         super.addToMap(mapView)
         mMap = mapView.getMapboxMap()
-        pointAnnotations = mapView.pointAnnotations
+        pointAnnotations = parentCoordinator ?: mapView.pointAnnotations
         makeMarker()
         if (mChildView != null) {
             if (!mChildView!!.isAttachedToWindow) {
@@ -117,7 +122,8 @@ class RNMBXPointAnnotation(private val mContext: Context, private val mManager: 
     override fun removeFromMap(mapView: RNMBXMapView, reason: RemovalReason): Boolean {
         val map = mMapView ?: mapView
 
-        annotation?.let { map.pointAnnotations?.delete(it) }
+        val coordinator = pointAnnotations ?: map.pointAnnotations
+        annotation?.let { coordinator.delete(it) }
 
         mChildView?.let { map.offscreenAnnotationViewContainer?.removeView(it) }
         calloutView?.let { map.offscreenAnnotationViewContainer?.removeView(it)}

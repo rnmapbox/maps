@@ -12,6 +12,14 @@ final class WeakRef<T: AnyObject> {
 public class RNMBXPointAnnotation : RNMBXInteractiveElement {
   weak var manager: RNMBXPointAnnotationManager? = nil
 
+  /// Set by the enclosing `<PointAnnotationManager>` when this annotation is its
+  /// child. When nil (bare annotation) we fall back to the map's default manager.
+  weak var ownerManager: RNMBXPointAnnotationManager? = nil
+
+  var resolvedManager: RNMBXPointAnnotationManager? {
+    return ownerManager ?? map?.pointAnnotationManager
+  }
+
   static let key = "RNMBXPointAnnotation"
   static var gid = 0;
   
@@ -293,28 +301,28 @@ public class RNMBXPointAnnotation : RNMBXInteractiveElement {
 
 extension RNMBXPointAnnotation {
   func removeIfAdded() {
-    if added, let pointAnnotationManager = map?.pointAnnotationManager {
+    if added, let pointAnnotationManager = resolvedManager {
       pointAnnotationManager.remove(annotation)
       added = false
     }
   }
-  
+
   @discardableResult
   func addIfPossible() -> Bool {
     if !added
         && annotation.point.coordinates.isValid()
         && (logged("PointAnnotation: missing id attribute") { return id }) != nil,
-        let pointAnnotationManager = map?.pointAnnotationManager {
+        let pointAnnotationManager = resolvedManager {
       pointAnnotationManager.add(annotation, self)
       added = true
       return true
     }
     return false
   }
-  
+
   func update(callback: (_ annotation: inout PointAnnotation) -> Void) {
     callback(&annotation)
-    if let pointAnnotationManager = map?.pointAnnotationManager {
+    if let pointAnnotationManager = resolvedManager {
       if added {
         pointAnnotationManager.update(annotation)
       } else if !added {

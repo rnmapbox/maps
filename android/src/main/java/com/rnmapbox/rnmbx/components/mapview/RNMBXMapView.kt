@@ -61,6 +61,7 @@ import com.rnmapbox.rnmbx.utils.extensions.toReadableArray
 import java.util.*
 
 import com.rnmapbox.rnmbx.components.annotation.RNMBXPointAnnotationCoordinator
+import com.rnmapbox.rnmbx.components.annotation.RNMBXPointAnnotationManagerView
 import com.rnmapbox.rnmbx.components.images.ImageManager
 import com.rnmapbox.rnmbx.utils.extensions.toStringKeyPairs
 
@@ -135,16 +136,37 @@ open class RNMBXMapView(private val mContext: Context, var mManager: RNMBXMapVie
 
     private val mSources: MutableMap<String, RNMBXSource<*>>
     private val mImages: MutableList<RNMBXImages>
-    public val pointAnnotations: RNMBXPointAnnotationCoordinator by lazy {
+    /** All point annotation coordinators: the lazy default plus one per
+     * `<PointAnnotationManager>` component. Clicks/drags are routed across all of them. */
+    val pointAnnotationCoordinators = mutableListOf<RNMBXPointAnnotationCoordinator>()
+    private var pointAnnotationGesturesInited = false
+
+    var defaultPointAnnotationManagerView: RNMBXPointAnnotationManagerView? = null
+
+    private fun ensurePointAnnotationGestures() {
+        if (pointAnnotationGesturesInited) return
         val gesturesPlugin: GesturesPlugin = mapView.gestures
         gesturesPlugin.removeOnMapClickListener(this)
         gesturesPlugin.removeOnMapLongClickListener(this)
-
-        val result = RNMBXPointAnnotationCoordinator(mapView)
-
         gesturesPlugin.addOnMapClickListener(this)
         gesturesPlugin.addOnMapLongClickListener(this)
+        pointAnnotationGesturesInited = true
+    }
 
+    fun registerPointAnnotationCoordinator(coordinator: RNMBXPointAnnotationCoordinator) {
+        ensurePointAnnotationGestures()
+        if (!pointAnnotationCoordinators.contains(coordinator)) {
+            pointAnnotationCoordinators.add(coordinator)
+        }
+    }
+
+    fun unregisterPointAnnotationCoordinator(coordinator: RNMBXPointAnnotationCoordinator) {
+        pointAnnotationCoordinators.remove(coordinator)
+    }
+
+    public val pointAnnotations: RNMBXPointAnnotationCoordinator by lazy {
+        val result = RNMBXPointAnnotationCoordinator(mapView)
+        registerPointAnnotationCoordinator(result)
         result
     }
     private var mProjection: ProjectionName = ProjectionName.MERCATOR
@@ -690,11 +712,17 @@ open class RNMBXMapView(private val mContext: Context, var mManager: RNMBXMapVie
 
     override fun onMapClick(point: Point): Boolean {
         val _this = this
-        if (pointAnnotations.getAndClearAnnotationClicked()) {
+        if (pointAnnotationCoordinators.any { it.getAndClearAnnotationClicked() }) {
             return true
         }
         if (deselectAnnotationOnTap) {
-            if (pointAnnotations.deselectSelectedAnnotation()) {
+            var deselected = false
+            for (coordinator in pointAnnotationCoordinators) {
+                if (coordinator.deselectSelectedAnnotation()) {
+                    deselected = true
+                }
+            }
+            if (deselected) {
                 return true
             }
         }
@@ -728,7 +756,7 @@ open class RNMBXMapView(private val mContext: Context, var mManager: RNMBXMapVie
 
     override fun onMapLongClick(point: Point): Boolean {
         val _this = this
-        if (pointAnnotations.getAndClearAnnotationDragged()) {
+        if (pointAnnotationCoordinators.any { it.getAndClearAnnotationDragged() }) {
             return true
         }
         val screenPointPx = mMap?.pixelForCoordinate(point)
