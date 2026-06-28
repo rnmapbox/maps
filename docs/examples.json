@@ -652,9 +652,10 @@
             "PointAnnotation",
             "MarkerView",
             "Slider",
-            "Interactive"
+            "Interactive",
+            "pointerEvents"
           ],
-          "docs": "\nShows marker view and point annotations, including an interactive marker with\nsliders, switch, counter, text input, and pressable button to verify complex\ntouch interactions inside a MarkerView.\n"
+          "docs": "\nShows marker view and point annotations, including an interactive marker with\nsliders, switch, counter, text input, and pressable button to verify complex\ntouch interactions inside a MarkerView. Toggle pointerEvents=\"none\" to make\nthe marker transparent to all touch events, passing them through to the map.\n"
         },
         "fullPath": "example/src/examples/Annotations/MarkerView.tsx",
         "relPath": "Annotations/MarkerView.tsx",

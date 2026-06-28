@@ -11,6 +11,7 @@ import com.mapbox.geojson.Point
 import com.mapbox.maps.ViewAnnotationAnchor
 import com.mapbox.maps.ViewAnnotationOptions
 import com.mapbox.maps.viewannotation.viewAnnotationOptions
+import com.facebook.react.uimanager.PointerEvents
 import com.rnmapbox.rnmbx.components.AbstractMapFeature
 import com.rnmapbox.rnmbx.components.RemovalReason
 import com.rnmapbox.rnmbx.components.mapview.RNMBXMapView
@@ -33,6 +34,7 @@ class RNMBXMarkerView(context: Context?, private val mManager: RNMBXMarkerViewMa
     private var mAllowOverlap = false
     private var mAllowOverlapWithPuck = false
     private var mIsSelected = false
+    private var mPointerEvents: PointerEvents = PointerEvents.AUTO
 
     fun setCoordinate(point: Point?) {
         mCoordinate = point
@@ -63,8 +65,14 @@ class RNMBXMarkerView(context: Context?, private val mManager: RNMBXMarkerViewMa
 
     // region View methods
 
+    fun setContentPointerEvents(pointerEvents: PointerEvents) {
+        mPointerEvents = pointerEvents
+        (mView as? RNMBXMarkerViewContent)?.setExternalPointerEvents(pointerEvents)
+    }
+
     override fun addView(childView: View, childPosition: Int) {
         mView = childView
+        (childView as? RNMBXMarkerViewContent)?.setExternalPointerEvents(mPointerEvents)
         // Note: Do not call this method on `super`. The view is added manually.
     }
 
