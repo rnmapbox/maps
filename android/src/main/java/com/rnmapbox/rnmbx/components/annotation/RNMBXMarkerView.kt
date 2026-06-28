@@ -127,7 +127,13 @@ class RNMBXMarkerView(context: Context?, private val mManager: RNMBXMarkerViewMa
             mMapView?.offscreenAnnotationViewContainer?.addView(view)
             mMapView?.offscreenAnnotationViewContainer?.removeView(view)
         }
-
+        
+        if (view.width == 0 || view.height == 0) {
+            // Fixes https://github.com/rnmapbox/maps/issues/4206
+            // Wait for the next layout via onLayoutChange
+            return
+        }
+        
         val options = getOptions()
 
         val content = view as? RNMBXMarkerViewContent;
