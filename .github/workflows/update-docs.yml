@@ -61,13 +61,26 @@ jobs:
         run: |
           git config --global user.name "github-actions[bot]"
           git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git stash --include-untracked
-          git pull --rebase origin main
-          git stash pop || true
-          git log -1
           git add .
+          git log -1
+          if git diff --cached --quiet; then
+            echo "No changes to commit"
+            exit 0
+          fi
           git commit -m "Update docs from maps  rnmapbox/maps@${GITHUB_SHA::7}"
-          git push origin main
+          PUSHED=false
+          for i in 1 2 3; do
+            if git pull --rebase -X ours origin main && git push origin main; then
+              PUSHED=true
+              break
+            fi
+            echo "Attempt $i failed, retrying in $((i * 10))s..."
+            sleep $((i * 10))
+          done
+          if [ "$PUSHED" != "true" ]; then
+            echo "All push attempts failed"
+            exit 1
+          fi
         working-directory: maps-docs
         env:
           GITHUB_SHA: ${{ github.sha }}
