@@ -675,6 +675,21 @@
       },
       {
         "metadata": {
+          "title": "PointAnnotationManager Multiple",
+          "tags": [
+            "PointAnnotationManager",
+            "PointAnnotation",
+            "slot",
+            "default"
+          ],
+          "docs": "\nDemonstrates multiple PointAnnotationManager instances, each owning its own\nannotation layer in a different slot, a `default` manager that configures the\nslot used by bare PointAnnotations, and a bare PointAnnotation attaching to it.\n  "
+        },
+        "fullPath": "example/src/examples/Annotations/PointAnnotationManagerMultiple.tsx",
+        "relPath": "Annotations/PointAnnotationManagerMultiple.tsx",
+        "name": "PointAnnotationManagerMultiple"
+      },
+      {
+        "metadata": {
           "title": "PointAnnotationManager Slot",
           "tags": [
             "PointAnnotationManager",
