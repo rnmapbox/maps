@@ -68,7 +68,7 @@ type Config = {
 _required_
 config is a dictionary of configuration options for the style import.
 
-When using the Mapbox Standard style with `id="basemap"`, use {@link StandardStyleConfig}
+When using the Mapbox Standard style with `id="basemap"`, use `StandardStyleConfig`
 keys for autocomplete. Arbitrary keys are also accepted for forward compatibility.
 
 See https://github.com/mapbox/mapbox-maps-ios/blob/main/Sources/MapboxMaps/Documentation.docc/Migrate%20to%20v11.md#21-the-mapbox-standard-style
