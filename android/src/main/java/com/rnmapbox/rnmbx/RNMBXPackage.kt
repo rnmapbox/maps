@@ -11,6 +11,7 @@ import com.rnmapbox.rnmbx.components.annotation.RNMBXCalloutManager
 import com.rnmapbox.rnmbx.components.annotation.RNMBXMarkerViewContentManager
 import com.rnmapbox.rnmbx.components.annotation.RNMBXMarkerViewManager
 import com.rnmapbox.rnmbx.components.annotation.RNMBXPointAnnotationManager
+import com.rnmapbox.rnmbx.components.annotation.RNMBXPointAnnotationManagerViewManager
 import com.rnmapbox.rnmbx.components.annotation.RNMBXPointAnnotationModule
 import com.rnmapbox.rnmbx.components.camera.RNMBXCameraManager
 import com.rnmapbox.rnmbx.components.camera.RNMBXCameraModule
@@ -135,6 +136,7 @@ class RNMBXPackage : TurboReactPackage() {
         managers.add(RNMBXMarkerViewManager(reactApplicationContext))
         managers.add(RNMBXMarkerViewContentManager(reactApplicationContext))
         managers.add(RNMBXPointAnnotationManager(reactApplicationContext, getViewTagResolver(reactApplicationContext, "RNMBXPointAnnotationManager")))
+        managers.add(RNMBXPointAnnotationManagerViewManager(reactApplicationContext))
         managers.add(RNMBXCalloutManager())
         managers.add(RNMBXNativeUserLocationManager())
         managers.add(RNMBXCustomLocationProviderManager())

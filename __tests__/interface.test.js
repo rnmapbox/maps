@@ -9,6 +9,7 @@ describe('Public Interface', () => {
       'StyleSheet',
       'Light',
       'PointAnnotation',
+      'PointAnnotationManager',
       'MarkerView',
       'Annotation',
       'Callout',

@@ -6550,6 +6550,30 @@
     "relPath": "src/components/PointAnnotation.tsx",
     "name": "PointAnnotation"
   },
+  "PointAnnotationManager": {
+    "description": "Configures the shared PointAnnotation manager for the parent MapView.\nWrap PointAnnotation components as children.",
+    "displayName": "PointAnnotationManager",
+    "methods": [],
+    "props": [
+      {
+        "name": "slot",
+        "required": false,
+        "type": "Slot \\| (string & {})",
+        "default": "none",
+        "description": "The slot in the style layer stack to position the annotation layer.\nUse with Mapbox Standard style to control layer ordering."
+      },
+      {
+        "name": "children",
+        "required": false,
+        "type": "ReactNode",
+        "default": "none",
+        "description": "FIX ME NO DESCRIPTION"
+      }
+    ],
+    "fileNameWithExt": "PointAnnotationManager.tsx",
+    "relPath": "src/components/PointAnnotationManager.tsx",
+    "name": "PointAnnotationManager"
+  },
   "Rain": {
     "description": "",
     "displayName": "Rain",

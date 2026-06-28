@@ -675,6 +675,20 @@
       },
       {
         "metadata": {
+          "title": "PointAnnotationManager Slot",
+          "tags": [
+            "PointAnnotationManager",
+            "PointAnnotation",
+            "slot"
+          ],
+          "docs": "\nDemonstrates using PointAnnotationManager to position annotations\nin different slots of the Mapbox Standard style.\n  "
+        },
+        "fullPath": "example/src/examples/Annotations/PointAnnotationManagerSlot.tsx",
+        "relPath": "Annotations/PointAnnotationManagerSlot.tsx",
+        "name": "PointAnnotationManagerSlot"
+      },
+      {
+        "metadata": {
           "title": "Show Point Annotations",
           "tags": [
             "PointAnnotation",
