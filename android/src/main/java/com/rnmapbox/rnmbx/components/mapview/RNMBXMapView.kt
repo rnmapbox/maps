@@ -136,8 +136,8 @@ open class RNMBXMapView(private val mContext: Context, var mManager: RNMBXMapVie
 
     private val mSources: MutableMap<String, RNMBXSource<*>>
     private val mImages: MutableList<RNMBXImages>
-    /** All point annotation coordinators: the lazy default plus one per
-     * `<PointAnnotationManager>` component. Clicks/drags are routed across all of them. */
+    /** The lazy default plus one per `<PointAnnotationManager>`; clicks and drags are
+     * routed across all of them. */
     val pointAnnotationCoordinators = mutableListOf<RNMBXPointAnnotationCoordinator>()
     private var pointAnnotationGesturesInited = false
 

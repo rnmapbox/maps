@@ -229,11 +229,10 @@ open class RNMBXMapView: UIView, RCTInvalidating {
 
   var cancelables = Set<AnyCancelable>()
 
-  /// All point annotation managers attached to this map: the lazy default plus one
-  /// per `<PointAnnotationManager>` component. Taps/drags are routed across all of them.
+  /// The lazy default plus one per `<PointAnnotationManager>`; taps and drags are
+  /// routed across all of them.
   var pointAnnotationManagers: [RNMBXPointAnnotationManager] = []
 
-  /// The manager-view that claimed `default` — used to warn on duplicates.
   weak var defaultPointAnnotationManagerView: RNMBXPointAnnotationManagerView? = nil
 
   lazy var pointAnnotationManager : RNMBXPointAnnotationManager = {
@@ -1411,9 +1410,6 @@ extension RNMBXMapView: GestureManagerDelegate {
     return event
   }
 
-  /// Routes a tap through every registered point annotation manager in turn. Each
-  /// manager calls `noAnnotationFound` only when it has no hit, so we advance to the
-  /// next; `noneFound` runs only when none of them consumed the tap.
   private func handleTapAcrossPointAnnotationManagers(_ sender: UITapGestureRecognizer, index: Int, noneFound: @escaping () -> Void) {
     if index >= pointAnnotationManagers.count {
       noneFound()

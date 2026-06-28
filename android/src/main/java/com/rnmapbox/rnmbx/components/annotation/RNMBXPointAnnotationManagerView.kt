@@ -29,8 +29,6 @@ class RNMBXPointAnnotationManagerView(context: Context) : AbstractMapFeature(con
     private val annotations = mutableListOf<RNMBXPointAnnotation>()
     private var coordinator: RNMBXPointAnnotationCoordinator? = null
 
-    // MARK: - children
-
     fun addAnnotation(childView: View, childPosition: Int) {
         if (childView !is RNMBXPointAnnotation) {
             Logger.w(LOG_TAG, "PointAnnotationManager: only PointAnnotation children are supported")
@@ -68,8 +66,6 @@ class RNMBXPointAnnotationManagerView(context: Context) : AbstractMapFeature(con
         coordinator.add(annotation)
         annotation.addToMap(mapView)
     }
-
-    // MARK: - lifecycle
 
     private fun ensureCoordinator(mapView: RNMBXMapView) {
         if (coordinator != null) return
