@@ -1,23 +1,33 @@
 package com.rnmapbox.rnmbx.components.mapview.helpers
 
+import com.rnmapbox.rnmbx.components.mapview.MapGestureType
+
 enum class CameraChangeReason {
-    NONE,
     USER_GESTURE,
     DEVELOPER_ANIMATION,
     SDK_ANIMATION
 }
 
 class CameraChangeTracker {
-    private var reason : CameraChangeReason = CameraChangeReason.NONE
+    private val reasonByGesture = mutableMapOf<MapGestureType, CameraChangeReason>()
     var isAnimating = false
-    fun setReason(reason: CameraChangeReason) {
-        this.reason = reason
+
+    fun setReason(type: MapGestureType, reason: CameraChangeReason) {
+        reasonByGesture[type] = reason
+    }
+
+    fun clear() {
+        reasonByGesture.clear()
+    }
+
+    fun clearReason(type: MapGestureType) {
+        reasonByGesture.remove(type)
     }
 
     val isUserInteraction: Boolean
-        get() = reason == CameraChangeReason.USER_GESTURE || reason == CameraChangeReason.DEVELOPER_ANIMATION
+        get() = reasonByGesture.values.any { it == CameraChangeReason.USER_GESTURE }
     val isAnimated: Boolean
-        get() = reason == CameraChangeReason.DEVELOPER_ANIMATION || reason == CameraChangeReason.SDK_ANIMATION
+        get() = reasonByGesture.values.any { it == CameraChangeReason.DEVELOPER_ANIMATION || it == CameraChangeReason.SDK_ANIMATION }
     val isEmpty: Boolean
-        get() = reason == CameraChangeReason.NONE
+        get() = reasonByGesture.isEmpty()
 }
