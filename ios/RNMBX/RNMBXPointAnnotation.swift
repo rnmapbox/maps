@@ -12,8 +12,6 @@ final class WeakRef<T: AnyObject> {
 public class RNMBXPointAnnotation : RNMBXInteractiveElement {
   weak var manager: RNMBXPointAnnotationManager? = nil
 
-  /// Set by the enclosing `<PointAnnotationManager>` when this annotation is its
-  /// child. When nil (bare annotation) we fall back to the map's default manager.
   weak var ownerManager: RNMBXPointAnnotationManager? = nil
 
   var resolvedManager: RNMBXPointAnnotationManager? {

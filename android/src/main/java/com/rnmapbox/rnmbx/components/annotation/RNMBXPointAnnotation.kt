@@ -28,8 +28,6 @@ class RNMBXPointAnnotation(private val mContext: Context, private val mManager: 
 
     var pointAnnotations: RNMBXPointAnnotationCoordinator? = null
 
-    /** Set by the enclosing `<PointAnnotationManager>` when this annotation is its
-     * child. When null (bare annotation) we fall back to the map's default coordinator. */
     var parentCoordinator: RNMBXPointAnnotationCoordinator? = null
 
     var annotation: PointAnnotation? = null
