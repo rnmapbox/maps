@@ -229,8 +229,6 @@ open class RNMBXMapView: UIView, RCTInvalidating {
 
   var cancelables = Set<AnyCancelable>()
 
-  /// The lazy default plus one per `<PointAnnotationManager>`; taps and drags are
-  /// routed across all of them.
   var pointAnnotationManagers: [RNMBXPointAnnotationManager] = []
 
   weak var defaultPointAnnotationManagerView: RNMBXPointAnnotationManagerView? = nil
