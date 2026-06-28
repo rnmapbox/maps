@@ -747,7 +747,25 @@
       {
         "name": "bounds",
         "required": false,
-        "type": "intersection",
+        "type": {
+          "name": "shape",
+          "value": [
+            {
+              "name": "ne",
+              "required": true,
+              "type": "Position",
+              "default": "none",
+              "description": "FIX ME NO DESCRIPTION"
+            },
+            {
+              "name": "sw",
+              "required": true,
+              "type": "Position",
+              "default": "none",
+              "description": "FIX ME NO DESCRIPTION"
+            }
+          ]
+        },
         "default": "none",
         "description": "The corners of a box around which the map should bound. Contains padding props for backwards\ncompatibility; the root `padding` prop should be used instead."
       },
@@ -971,7 +989,7 @@
             {
               "name": "animationMode",
               "required": false,
-              "type": "union",
+              "type": "'flyTo' \\| 'easeTo' \\| 'linearTo' \\| 'moveTo' \\| 'none'",
               "default": "none",
               "description": "The easing or path the camera uses to animate to a new configuration."
             }
@@ -3479,11 +3497,9 @@
           "name": "shape",
           "value": [
             {
-              "name": {
-                "name": "string"
-              },
+              "name": "[key: string]",
               "required": true,
-              "type": "union",
+              "type": "string \\| ImageSourcePropType \\| ImageEntryData",
               "default": "none",
               "description": "FIX ME NO DESCRIPTION"
             }
@@ -6367,11 +6383,9 @@
           "name": "shape",
           "value": [
             {
-              "name": {
-                "name": "string"
-              },
+              "name": "[key: string]",
               "required": true,
-              "type": "union",
+              "type": "string \\| number",
               "default": "none",
               "description": "FIX ME NO DESCRIPTION"
             }
@@ -8144,18 +8158,177 @@
           "name": "shape",
           "value": [
             {
-              "name": {
-                "name": "string"
-              },
-              "required": true,
+              "name": "lightPreset",
+              "required": false,
+              "type": "'dawn' \\| 'day' \\| 'dusk' \\| 'night'",
+              "default": "none",
+              "description": "Light preset: controls time-of-day lighting"
+            },
+            {
+              "name": "theme",
+              "required": false,
+              "type": "'default' \\| 'faded' \\| 'monochrome'",
+              "default": "none",
+              "description": "Color theme"
+            },
+            {
+              "name": "font",
+              "required": false,
               "type": "string",
               "default": "none",
-              "description": "FIX ME NO DESCRIPTION"
+              "description": "Font family for labels (e.g., 'Montserrat')"
+            },
+            {
+              "name": "show3dObjects",
+              "required": false,
+              "type": "boolean",
+              "default": "none",
+              "description": "Show generic 3D objects"
+            },
+            {
+              "name": "show3dBuildings",
+              "required": false,
+              "type": "boolean",
+              "default": "none",
+              "description": "Show extruded 3D buildings"
+            },
+            {
+              "name": "show3dFacades",
+              "required": false,
+              "type": "boolean",
+              "default": "none",
+              "description": "Show 3D building facades (v11.16+)"
+            },
+            {
+              "name": "show3dLandmarks",
+              "required": false,
+              "type": "boolean",
+              "default": "none",
+              "description": "Show 3D landmarks (v11.16+)"
+            },
+            {
+              "name": "show3dTrees",
+              "required": false,
+              "type": "boolean",
+              "default": "none",
+              "description": "Show 3D trees (v11.17+)"
+            },
+            {
+              "name": "showPointOfInterestLabels",
+              "required": false,
+              "type": "boolean",
+              "default": "none",
+              "description": "Show point of interest labels"
+            },
+            {
+              "name": "showTransitLabels",
+              "required": false,
+              "type": "boolean",
+              "default": "none",
+              "description": "Show transit labels"
+            },
+            {
+              "name": "showPlaceLabels",
+              "required": false,
+              "type": "boolean",
+              "default": "none",
+              "description": "Show place labels"
+            },
+            {
+              "name": "showRoadLabels",
+              "required": false,
+              "type": "boolean",
+              "default": "none",
+              "description": "Show road labels"
+            },
+            {
+              "name": "showPedestrianRoads",
+              "required": false,
+              "type": "boolean",
+              "default": "none",
+              "description": "Show pedestrian roads"
+            },
+            {
+              "name": "colorBuildings",
+              "required": false,
+              "type": "string",
+              "default": "none",
+              "description": "Color override for buildings (v11.18+)"
+            },
+            {
+              "name": "colorCommercial",
+              "required": false,
+              "type": "string",
+              "default": "none",
+              "description": "Color override for commercial areas (v11.18+)"
+            },
+            {
+              "name": "colorEducation",
+              "required": false,
+              "type": "string",
+              "default": "none",
+              "description": "Color override for education areas (v11.18+)"
+            },
+            {
+              "name": "colorIndustrial",
+              "required": false,
+              "type": "string",
+              "default": "none",
+              "description": "Color override for industrial areas (v11.18+)"
+            },
+            {
+              "name": "colorLand",
+              "required": false,
+              "type": "string",
+              "default": "none",
+              "description": "Color override for land (v11.18+)"
+            },
+            {
+              "name": "colorMedical",
+              "required": false,
+              "type": "string",
+              "default": "none",
+              "description": "Color override for medical areas (v11.18+)"
+            },
+            {
+              "name": "colorRoads",
+              "required": false,
+              "type": "string",
+              "default": "none",
+              "description": "Color override for roads (v11.18+)"
+            },
+            {
+              "name": "colorMotorways",
+              "required": false,
+              "type": "string",
+              "default": "none",
+              "description": "Color override for motorways (v11.18+)"
+            },
+            {
+              "name": "colorWater",
+              "required": false,
+              "type": "string",
+              "default": "none",
+              "description": "Color override for water (v11.18+)"
+            },
+            {
+              "name": "colorGreenspaces",
+              "required": false,
+              "type": "string",
+              "default": "none",
+              "description": "Color override for greenspaces (v11.18+)"
+            },
+            {
+              "name": "colorBoundaries",
+              "required": false,
+              "type": "string",
+              "default": "none",
+              "description": "Color override for boundaries (v11.18+)"
             }
           ]
         },
         "default": "none",
-        "description": "config is a dictionary of configuration options for the style import.\n\nSee https://github.com/mapbox/mapbox-maps-ios/blob/main/Sources/MapboxMaps/Documentation.docc/Migrate%20to%20v11.md#21-the-mapbox-standard-style"
+        "description": "config is a dictionary of configuration options for the style import.\n\nWhen using the Mapbox Standard style with `id=\"basemap\"`, use {@link StandardStyleConfig}\nkeys for autocomplete. Arbitrary keys are also accepted for forward compatibility.\n\nSee https://github.com/mapbox/mapbox-maps-ios/blob/main/Sources/MapboxMaps/Documentation.docc/Migrate%20to%20v11.md#21-the-mapbox-standard-style"
       }
     ],
     "fileNameWithExt": "StyleImport.tsx",
