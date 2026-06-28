@@ -18,4 +18,9 @@ open class RNMBXPointAnnotationManagerView: RNMBXMapComponentBase {
     super.addToMap(map, style: style)
     applySlot()
   }
+
+  public override func removeFromMap(_ map: RNMBXMapView, reason: RNMBXMapComponentBase.RemovalReason) -> Bool {
+    map.pointAnnotationManager.manager.slot = nil
+    return super.removeFromMap(map, reason: reason)
+  }
 }

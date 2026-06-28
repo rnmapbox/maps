@@ -6537,7 +6537,7 @@
       {
         "name": "slot",
         "required": false,
-        "type": "'bottom' \\| 'middle' \\| 'top' \\| (string & {})",
+        "type": "Slot \\| (string & {})",
         "default": "none",
         "description": "The slot in the style layer stack to position the annotation layer.\nUse with Mapbox Standard style to control layer ordering."
       },

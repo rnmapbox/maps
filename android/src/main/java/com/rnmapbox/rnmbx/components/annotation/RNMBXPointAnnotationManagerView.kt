@@ -14,13 +14,17 @@ class RNMBXPointAnnotationManagerView(context: Context) : AbstractMapFeature(con
 
     private fun applySlot() {
         withMapView { mapView ->
-            slot?.let { mapView.pointAnnotations?.manager?.slot = it }
-                ?: run { mapView.pointAnnotations?.manager?.slot = null }
+            mapView.pointAnnotations?.manager?.slot = slot
         }
     }
 
     override fun addToMap(mapView: RNMBXMapView) {
         super.addToMap(mapView)
         applySlot()
+    }
+
+    override fun removeFromMap(mapView: RNMBXMapView, reason: RemovalReason): Boolean {
+        mapView.pointAnnotations?.manager?.slot = null
+        return super.removeFromMap(mapView, reason)
     }
 }
