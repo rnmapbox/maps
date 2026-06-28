@@ -679,10 +679,9 @@
           "tags": [
             "PointAnnotationManager",
             "PointAnnotation",
-            "slot",
-            "default"
+            "slot"
           ],
-          "docs": "\nDemonstrates multiple PointAnnotationManager instances, each owning its own\nannotation layer in a different slot, a `default` manager that configures the\nslot used by bare PointAnnotations, and a bare PointAnnotation attaching to it.\n  "
+          "docs": "\nDemonstrates multiple PointAnnotationManager instances, each owning its own\nannotation layer in a different slot of the Mapbox Standard style. The bottom-slot\npins (B) render behind the 3D buildings while the top-slot pins (T) render in front.\n  "
         },
         "fullPath": "example/src/examples/Annotations/PointAnnotationManagerMultiple.tsx",
         "relPath": "Annotations/PointAnnotationManagerMultiple.tsx",
