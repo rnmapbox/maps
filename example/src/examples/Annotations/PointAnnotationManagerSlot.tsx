@@ -8,7 +8,7 @@ import {
 } from '@rnmapbox/maps';
 import { Button } from '@rneui/base';
 
-import { ExampleWithMetadata } from '../common/ExampleMetadata'; // exclude-from-doc
+import type { ExampleWithMetadata } from '../common/ExampleMetadata'; // exclude-from-doc
 
 const styles = StyleSheet.create({
   map: { flex: 1 },
