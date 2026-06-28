@@ -65,7 +65,7 @@ class RNMBXCameraGestureObserverManager(private val mContext: ReactApplicationCo
 
     // Map the native event name to the JS registration name for direct events
     override fun customEvents(): Map<String, String> = mapOf(
-        "topOnMapSteady" to "onMapSteady"
+        "onMapSteady" to "onMapSteady"
     )
 
     companion object {

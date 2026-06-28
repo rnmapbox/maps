@@ -8,10 +8,6 @@ import generateCodeWithEjs, {
   getLayers,
 } from './autogenHelpers/generateCodeWithEjs.mjs';
 import { codepartReplace } from './codepart-replace.mjs';
-import {
-  generateCodegenJavaOldArch,
-  javaOldArchDir,
-} from './codegen-old-arch.js';
 import { updatePackageJsonWithIOSComponents } from './autogenHelpers/generateIOSComponents.mjs';
 
 // process style spec json into json
@@ -85,10 +81,6 @@ async function generate() {
   if (updatedComponents.length > 0) {
     outputPaths.push('package.json');
   }
-
-  // rn new arch codegen
-  await generateCodegenJavaOldArch();
-  outputPaths.push(javaOldArchDir());
 
   // Check if any generated files changed
   try {

@@ -53,7 +53,7 @@ func fillLayer(layer: inout FillLayer, reactStyle:Dictionary<String, Any>, oldRe
       self.setFillTranslateAnchor(&layer, styleValue:styleValue);
     } else if (prop == "fillPattern") {
       styleValue.setImage(
-        bridge: bridge!,
+        bridge: bridge,
         style: style,
         oldValue: oldReactStyle?[prop],
         setImageOnLayer: { (_) in self.setFillPattern(&layer, styleValue:styleValue) },
@@ -63,7 +63,7 @@ func fillLayer(layer: inout FillLayer, reactStyle:Dictionary<String, Any>, oldRe
       )
     } else if (prop == "fillPatternCrossFade") {
       styleValue.setImage(
-        bridge: bridge!,
+        bridge: bridge,
         style: style,
         oldValue: oldReactStyle?[prop],
         setImageOnLayer: { (_) in self.setFillPatternCrossFade(&layer, styleValue:styleValue) },
@@ -142,7 +142,7 @@ func lineLayer(layer: inout LineLayer, reactStyle:Dictionary<String, Any>, oldRe
       self.setLineDasharray(&layer, styleValue:styleValue);
     } else if (prop == "linePattern") {
       styleValue.setImage(
-        bridge: bridge!,
+        bridge: bridge,
         style: style,
         oldValue: oldReactStyle?[prop],
         setImageOnLayer: { (_) in self.setLinePattern(&layer, styleValue:styleValue) },
@@ -154,15 +154,27 @@ func lineLayer(layer: inout LineLayer, reactStyle:Dictionary<String, Any>, oldRe
       self.setLineGradient(&layer, styleValue:styleValue);
     } else if (prop == "lineTrimOffset") {
       self.setLineTrimOffset(&layer, styleValue:styleValue);
+    } else if (prop == "lineBorderWidth") {
+      self.setLineBorderWidth(&layer, styleValue:styleValue);
+    } else if (prop == "lineBorderWidthTransition") {
+      self.setLineBorderWidthTransition(&layer, styleValue:styleValue);
+    } else if (prop == "lineBorderColor") {
+      self.setLineBorderColor(&layer, styleValue:styleValue);
+    } else if (prop == "lineBorderColorTransition") {
+      self.setLineBorderColorTransition(&layer, styleValue:styleValue);
     } else if (prop == "lineZOffset") {
       self.setLineZOffset(&layer, styleValue:styleValue);
     } else if (prop == "lineElevationReference") {
       self.setLineElevationReference(&layer, styleValue:styleValue);
     } else if (prop == "lineCrossSlope") {
       self.setLineCrossSlope(&layer, styleValue:styleValue);
+    } else if (prop == "lineElevationGroundScale") {
+      self.setLineElevationGroundScale(&layer, styleValue:styleValue);
+    } else if (prop == "lineElevationGroundScaleTransition") {
+      self.setLineElevationGroundScaleTransition(&layer, styleValue:styleValue);
     } else if (prop == "linePatternCrossFade") {
       styleValue.setImage(
-        bridge: bridge!,
+        bridge: bridge,
         style: style,
         oldValue: oldReactStyle?[prop],
         setImageOnLayer: { (_) in self.setLinePatternCrossFade(&layer, styleValue:styleValue) },
@@ -231,7 +243,7 @@ func symbolLayer(layer: inout SymbolLayer, reactStyle:Dictionary<String, Any>, o
       self.setIconTextFitPadding(&layer, styleValue:styleValue);
     } else if (prop == "iconImage") {
       styleValue.setImage(
-        bridge: bridge!,
+        bridge: bridge,
         style: style,
         oldValue: oldReactStyle?[prop],
         setImageOnLayer: { (_) in self.setIconImage(&layer, styleValue:styleValue) },
@@ -367,7 +379,7 @@ func symbolLayer(layer: inout SymbolLayer, reactStyle:Dictionary<String, Any>, o
       self.setTextEmissiveStrengthTransition(&layer, styleValue:styleValue);
     } else if (prop == "iconImageCrossFade") {
       styleValue.setImage(
-        bridge: bridge!,
+        bridge: bridge,
         style: style,
         oldValue: oldReactStyle?[prop],
         setImageOnLayer: { (_) in self.setIconImageCrossFade(&layer, styleValue:styleValue) },
@@ -381,6 +393,12 @@ func symbolLayer(layer: inout SymbolLayer, reactStyle:Dictionary<String, Any>, o
       self.setTextOcclusionOpacityTransition(&layer, styleValue:styleValue);
     } else if (prop == "iconColorSaturation") {
       self.setIconColorSaturation(&layer, styleValue:styleValue);
+    } else if (prop == "iconColorContrast") {
+      self.setIconColorContrast(&layer, styleValue:styleValue);
+    } else if (prop == "iconColorBrightnessMin") {
+      self.setIconColorBrightnessMin(&layer, styleValue:styleValue);
+    } else if (prop == "iconColorBrightnessMax") {
+      self.setIconColorBrightnessMax(&layer, styleValue:styleValue);
     } else if (prop == "symbolZOffset") {
       self.setSymbolZOffset(&layer, styleValue:styleValue);
     } else if (prop == "symbolZOffsetTransition") {
@@ -534,7 +552,7 @@ func fillExtrusionLayer(layer: inout FillExtrusionLayer, reactStyle:Dictionary<S
       self.setFillExtrusionTranslateAnchor(&layer, styleValue:styleValue);
     } else if (prop == "fillExtrusionPattern") {
       styleValue.setImage(
-        bridge: bridge!,
+        bridge: bridge,
         style: style,
         oldValue: oldReactStyle?[prop],
         setImageOnLayer: { (_) in self.setFillExtrusionPattern(&layer, styleValue:styleValue) },
@@ -564,7 +582,7 @@ func fillExtrusionLayer(layer: inout FillExtrusionLayer, reactStyle:Dictionary<S
       self.setFillExtrusionRoundedRoof(&layer, styleValue:styleValue);
     } else if (prop == "fillExtrusionPatternCrossFade") {
       styleValue.setImage(
-        bridge: bridge!,
+        bridge: bridge,
         style: style,
         oldValue: oldReactStyle?[prop],
         setImageOnLayer: { (_) in self.setFillExtrusionPatternCrossFade(&layer, styleValue:styleValue) },
@@ -622,6 +640,8 @@ func fillExtrusionLayer(layer: inout FillExtrusionLayer, reactStyle:Dictionary<S
       self.setFillExtrusionLineWidth(&layer, styleValue:styleValue);
     } else if (prop == "fillExtrusionLineWidthTransition") {
       self.setFillExtrusionLineWidthTransition(&layer, styleValue:styleValue);
+    } else if (prop == "fillExtrusionCastShadows") {
+      self.setFillExtrusionCastShadows(&layer, styleValue:styleValue);
     } else {
       Logger.log(level:.error, message: "Unexpected property \(prop) for layer: fill-extrusion")
     }
@@ -777,6 +797,10 @@ func hillshadeLayer(layer: inout HillshadeLayer, reactStyle:Dictionary<String, A
       self.setHillshadeAccentColor(&layer, styleValue:styleValue);
     } else if (prop == "hillshadeAccentColorTransition") {
       self.setHillshadeAccentColorTransition(&layer, styleValue:styleValue);
+    } else if (prop == "hillshadeEmissiveStrength") {
+      self.setHillshadeEmissiveStrength(&layer, styleValue:styleValue);
+    } else if (prop == "hillshadeEmissiveStrengthTransition") {
+      self.setHillshadeEmissiveStrengthTransition(&layer, styleValue:styleValue);
     } else {
       Logger.log(level:.error, message: "Unexpected property \(prop) for layer: hillshade")
     }
@@ -798,7 +822,9 @@ func modelLayer(layer: inout ModelLayer, reactStyle:Dictionary<String, Any>, old
 
     let styleValue = RNMBXStyleValue.make(reactStyle[prop])
 
-      if (prop == "visibility") {
+      if (prop == "modelAllowDensityReduction") {
+      self.setModelAllowDensityReduction(&layer, styleValue:styleValue);
+    } else if (prop == "visibility") {
       self.setModelStyleLayerVisibility(&layer, styleValue:styleValue);
     } else if (prop == "modelId") {
       self.setModelId(&layer, styleValue:styleValue);
@@ -850,6 +876,8 @@ func modelLayer(layer: inout ModelLayer, reactStyle:Dictionary<String, Any>, old
       self.setModelHeightBasedEmissiveStrengthMultiplierTransition(&layer, styleValue:styleValue);
     } else if (prop == "modelCutoffFadeRange") {
       self.setModelCutoffFadeRange(&layer, styleValue:styleValue);
+    } else if (prop == "modelElevationReference") {
+      self.setModelElevationReference(&layer, styleValue:styleValue);
     } else {
       Logger.log(level:.error, message: "Unexpected property \(prop) for layer: model")
     }
@@ -879,7 +907,7 @@ func backgroundLayer(layer: inout BackgroundLayer, reactStyle:Dictionary<String,
       self.setBackgroundColorTransition(&layer, styleValue:styleValue);
     } else if (prop == "backgroundPattern") {
       styleValue.setImage(
-        bridge: bridge!,
+        bridge: bridge,
         style: style,
         oldValue: oldReactStyle?[prop],
         setImageOnLayer: { (_) in self.setBackgroundPattern(&layer, styleValue:styleValue) },
@@ -1026,6 +1054,124 @@ func atmosphereLayer(layer: inout Atmosphere, reactStyle:Dictionary<String, Any>
       self.setVerticalRangeTransition(&layer, styleValue:styleValue);
     } else {
       Logger.log(level:.error, message: "Unexpected property \(prop) for layer: atmosphere")
+    }
+    }
+}
+
+func snowLayer(layer: inout Snow, reactStyle:Dictionary<String, Any>, oldReactStyle:Dictionary<String, Any>?, applyUpdater: @escaping  ((inout Snow)->Void)->Void, isValid: @escaping () -> Bool)
+{
+  guard self._hasReactStyle(reactStyle) else {
+    Logger.log(level:.error, message: "Invalid style: \(reactStyle)")
+    return
+  }
+
+  let styleProps = reactStyle.keys
+  for prop in styleProps {
+    if (prop == "__MAPBOX_STYLESHEET__") {
+      continue;
+    }
+
+    let styleValue = RNMBXStyleValue.make(reactStyle[prop])
+
+      if (prop == "density") {
+      self.setDensity(&layer, styleValue:styleValue);
+    } else if (prop == "densityTransition") {
+      self.setDensityTransition(&layer, styleValue:styleValue);
+    } else if (prop == "intensity") {
+      self.setIntensity(&layer, styleValue:styleValue);
+    } else if (prop == "intensityTransition") {
+      self.setIntensityTransition(&layer, styleValue:styleValue);
+    } else if (prop == "color") {
+      self.setColor(&layer, styleValue:styleValue);
+    } else if (prop == "colorTransition") {
+      self.setColorTransition(&layer, styleValue:styleValue);
+    } else if (prop == "opacity") {
+      self.setOpacity(&layer, styleValue:styleValue);
+    } else if (prop == "opacityTransition") {
+      self.setOpacityTransition(&layer, styleValue:styleValue);
+    } else if (prop == "vignette") {
+      self.setVignette(&layer, styleValue:styleValue);
+    } else if (prop == "vignetteTransition") {
+      self.setVignetteTransition(&layer, styleValue:styleValue);
+    } else if (prop == "vignetteColor") {
+      self.setVignetteColor(&layer, styleValue:styleValue);
+    } else if (prop == "vignetteColorTransition") {
+      self.setVignetteColorTransition(&layer, styleValue:styleValue);
+    } else if (prop == "centerThinning") {
+      self.setCenterThinning(&layer, styleValue:styleValue);
+    } else if (prop == "centerThinningTransition") {
+      self.setCenterThinningTransition(&layer, styleValue:styleValue);
+    } else if (prop == "direction") {
+      self.setDirection(&layer, styleValue:styleValue);
+    } else if (prop == "directionTransition") {
+      self.setDirectionTransition(&layer, styleValue:styleValue);
+    } else if (prop == "flakeSize") {
+      self.setFlakeSize(&layer, styleValue:styleValue);
+    } else if (prop == "flakeSizeTransition") {
+      self.setFlakeSizeTransition(&layer, styleValue:styleValue);
+    } else {
+      Logger.log(level:.error, message: "Unexpected property \(prop) for layer: snow")
+    }
+    }
+}
+
+func rainLayer(layer: inout Rain, reactStyle:Dictionary<String, Any>, oldReactStyle:Dictionary<String, Any>?, applyUpdater: @escaping  ((inout Rain)->Void)->Void, isValid: @escaping () -> Bool)
+{
+  guard self._hasReactStyle(reactStyle) else {
+    Logger.log(level:.error, message: "Invalid style: \(reactStyle)")
+    return
+  }
+
+  let styleProps = reactStyle.keys
+  for prop in styleProps {
+    if (prop == "__MAPBOX_STYLESHEET__") {
+      continue;
+    }
+
+    let styleValue = RNMBXStyleValue.make(reactStyle[prop])
+
+      if (prop == "density") {
+      self.setDensity(&layer, styleValue:styleValue);
+    } else if (prop == "densityTransition") {
+      self.setDensityTransition(&layer, styleValue:styleValue);
+    } else if (prop == "intensity") {
+      self.setIntensity(&layer, styleValue:styleValue);
+    } else if (prop == "intensityTransition") {
+      self.setIntensityTransition(&layer, styleValue:styleValue);
+    } else if (prop == "color") {
+      self.setColor(&layer, styleValue:styleValue);
+    } else if (prop == "colorTransition") {
+      self.setColorTransition(&layer, styleValue:styleValue);
+    } else if (prop == "opacity") {
+      self.setOpacity(&layer, styleValue:styleValue);
+    } else if (prop == "opacityTransition") {
+      self.setOpacityTransition(&layer, styleValue:styleValue);
+    } else if (prop == "vignette") {
+      self.setVignette(&layer, styleValue:styleValue);
+    } else if (prop == "vignetteTransition") {
+      self.setVignetteTransition(&layer, styleValue:styleValue);
+    } else if (prop == "vignetteColor") {
+      self.setVignetteColor(&layer, styleValue:styleValue);
+    } else if (prop == "vignetteColorTransition") {
+      self.setVignetteColorTransition(&layer, styleValue:styleValue);
+    } else if (prop == "centerThinning") {
+      self.setCenterThinning(&layer, styleValue:styleValue);
+    } else if (prop == "centerThinningTransition") {
+      self.setCenterThinningTransition(&layer, styleValue:styleValue);
+    } else if (prop == "direction") {
+      self.setDirection(&layer, styleValue:styleValue);
+    } else if (prop == "directionTransition") {
+      self.setDirectionTransition(&layer, styleValue:styleValue);
+    } else if (prop == "dropletSize") {
+      self.setDropletSize(&layer, styleValue:styleValue);
+    } else if (prop == "dropletSizeTransition") {
+      self.setDropletSizeTransition(&layer, styleValue:styleValue);
+    } else if (prop == "distortionStrength") {
+      self.setDistortionStrength(&layer, styleValue:styleValue);
+    } else if (prop == "distortionStrengthTransition") {
+      self.setDistortionStrengthTransition(&layer, styleValue:styleValue);
+    } else {
+      Logger.log(level:.error, message: "Unexpected property \(prop) for layer: rain")
     }
     }
 }
@@ -1371,6 +1517,34 @@ func setLineTrimOffset(_ layer: inout LineLayer, styleValue: RNMBXStyleValue)
       
 }
 
+func setLineBorderWidth(_ layer: inout LineLayer, styleValue: RNMBXStyleValue)
+{
+      
+        
+          layer.lineBorderWidth = styleValue.mglStyleValueNumber();
+        
+      
+}
+
+func setLineBorderWidthTransition(_ layer: inout LineLayer, styleValue: RNMBXStyleValue)
+{
+    layer.lineBorderWidthTransition = styleValue.getTransition();
+}
+
+func setLineBorderColor(_ layer: inout LineLayer, styleValue: RNMBXStyleValue)
+{
+      
+        
+          layer.lineBorderColor = styleValue.mglStyleValueColor();
+        
+      
+}
+
+func setLineBorderColorTransition(_ layer: inout LineLayer, styleValue: RNMBXStyleValue)
+{
+    layer.lineBorderColorTransition = styleValue.getTransition();
+}
+
 func setLineZOffset(_ layer: inout LineLayer, styleValue: RNMBXStyleValue)
 {
       
@@ -1396,6 +1570,20 @@ func setLineCrossSlope(_ layer: inout LineLayer, styleValue: RNMBXStyleValue)
           layer.lineCrossSlope = styleValue.mglStyleValueNumber();
         
       
+}
+
+func setLineElevationGroundScale(_ layer: inout LineLayer, styleValue: RNMBXStyleValue)
+{
+      
+        
+          layer.lineElevationGroundScale = styleValue.mglStyleValueNumber();
+        
+      
+}
+
+func setLineElevationGroundScaleTransition(_ layer: inout LineLayer, styleValue: RNMBXStyleValue)
+{
+    layer.lineElevationGroundScaleTransition = styleValue.getTransition();
 }
 
 func setLinePatternCrossFade(_ layer: inout LineLayer, styleValue: RNMBXStyleValue)
@@ -2112,6 +2300,33 @@ func setIconColorSaturation(_ layer: inout SymbolLayer, styleValue: RNMBXStyleVa
       
 }
 
+func setIconColorContrast(_ layer: inout SymbolLayer, styleValue: RNMBXStyleValue)
+{
+      
+        
+          layer.iconColorContrast = styleValue.mglStyleValueNumber();
+        
+      
+}
+
+func setIconColorBrightnessMin(_ layer: inout SymbolLayer, styleValue: RNMBXStyleValue)
+{
+      
+        
+          layer.iconColorBrightnessMin = styleValue.mglStyleValueNumber();
+        
+      
+}
+
+func setIconColorBrightnessMax(_ layer: inout SymbolLayer, styleValue: RNMBXStyleValue)
+{
+      
+        
+          layer.iconColorBrightnessMax = styleValue.mglStyleValueNumber();
+        
+      
+}
+
 func setSymbolZOffset(_ layer: inout SymbolLayer, styleValue: RNMBXStyleValue)
 {
       
@@ -2711,6 +2926,15 @@ func setFillExtrusionLineWidthTransition(_ layer: inout FillExtrusionLayer, styl
     layer.fillExtrusionLineWidthTransition = styleValue.getTransition();
 }
 
+func setFillExtrusionCastShadows(_ layer: inout FillExtrusionLayer, styleValue: RNMBXStyleValue)
+{
+      
+        
+          layer.fillExtrusionCastShadows = styleValue.mglStyleValueBoolean();
+        
+      
+}
+
 
 
 func setRasterStyleLayerVisibility(_ layer: inout RasterLayer, styleValue: RNMBXStyleValue)
@@ -3055,7 +3279,30 @@ func setHillshadeAccentColorTransition(_ layer: inout HillshadeLayer, styleValue
     layer.hillshadeAccentColorTransition = styleValue.getTransition();
 }
 
+func setHillshadeEmissiveStrength(_ layer: inout HillshadeLayer, styleValue: RNMBXStyleValue)
+{
+      
+        
+          layer.hillshadeEmissiveStrength = styleValue.mglStyleValueNumber();
+        
+      
+}
 
+func setHillshadeEmissiveStrengthTransition(_ layer: inout HillshadeLayer, styleValue: RNMBXStyleValue)
+{
+    layer.hillshadeEmissiveStrengthTransition = styleValue.getTransition();
+}
+
+
+
+func setModelAllowDensityReduction(_ layer: inout ModelLayer, styleValue: RNMBXStyleValue)
+{
+      
+        
+          layer.modelAllowDensityReduction = styleValue.mglStyleValueBoolean();
+        
+      
+}
 
 func setModelStyleLayerVisibility(_ layer: inout ModelLayer, styleValue: RNMBXStyleValue)
 {
@@ -3243,6 +3490,15 @@ func setModelCutoffFadeRange(_ layer: inout ModelLayer, styleValue: RNMBXStyleVa
       
         
           layer.modelCutoffFadeRange = styleValue.mglStyleValueNumber();
+        
+      
+}
+
+func setModelElevationReference(_ layer: inout ModelLayer, styleValue: RNMBXStyleValue)
+{
+      
+        
+          layer.modelElevationReference = styleValue.mglStyleValueEnum();
         
       
 }
@@ -3554,6 +3810,276 @@ func setVerticalRange(_ layer: inout Atmosphere, styleValue: RNMBXStyleValue)
 func setVerticalRangeTransition(_ layer: inout Atmosphere, styleValue: RNMBXStyleValue)
 {
     layer.verticalRangeTransition = styleValue.getTransition();
+}
+
+
+
+func setDensity(_ layer: inout Snow, styleValue: RNMBXStyleValue)
+{
+      
+        
+          layer.density = styleValue.mglStyleValueNumber();
+        
+      
+}
+
+func setDensityTransition(_ layer: inout Snow, styleValue: RNMBXStyleValue)
+{
+    layer.densityTransition = styleValue.getTransition();
+}
+
+func setIntensity(_ layer: inout Snow, styleValue: RNMBXStyleValue)
+{
+      
+        
+          layer.intensity = styleValue.mglStyleValueNumber();
+        
+      
+}
+
+func setIntensityTransition(_ layer: inout Snow, styleValue: RNMBXStyleValue)
+{
+    layer.intensityTransition = styleValue.getTransition();
+}
+
+func setColor(_ layer: inout Snow, styleValue: RNMBXStyleValue)
+{
+      
+        
+          layer.color = styleValue.mglStyleValueColor();
+        
+      
+}
+
+func setColorTransition(_ layer: inout Snow, styleValue: RNMBXStyleValue)
+{
+    layer.colorTransition = styleValue.getTransition();
+}
+
+func setOpacity(_ layer: inout Snow, styleValue: RNMBXStyleValue)
+{
+      
+        
+          layer.opacity = styleValue.mglStyleValueNumber();
+        
+      
+}
+
+func setOpacityTransition(_ layer: inout Snow, styleValue: RNMBXStyleValue)
+{
+    layer.opacityTransition = styleValue.getTransition();
+}
+
+func setVignette(_ layer: inout Snow, styleValue: RNMBXStyleValue)
+{
+      
+        
+          layer.vignette = styleValue.mglStyleValueNumber();
+        
+      
+}
+
+func setVignetteTransition(_ layer: inout Snow, styleValue: RNMBXStyleValue)
+{
+    layer.vignetteTransition = styleValue.getTransition();
+}
+
+func setVignetteColor(_ layer: inout Snow, styleValue: RNMBXStyleValue)
+{
+      
+        
+          layer.vignetteColor = styleValue.mglStyleValueColor();
+        
+      
+}
+
+func setVignetteColorTransition(_ layer: inout Snow, styleValue: RNMBXStyleValue)
+{
+    layer.vignetteColorTransition = styleValue.getTransition();
+}
+
+func setCenterThinning(_ layer: inout Snow, styleValue: RNMBXStyleValue)
+{
+      
+        
+          layer.centerThinning = styleValue.mglStyleValueNumber();
+        
+      
+}
+
+func setCenterThinningTransition(_ layer: inout Snow, styleValue: RNMBXStyleValue)
+{
+    layer.centerThinningTransition = styleValue.getTransition();
+}
+
+func setDirection(_ layer: inout Snow, styleValue: RNMBXStyleValue)
+{
+      
+        
+          layer.direction = styleValue.mglStyleValueArrayNumber();
+        
+      
+}
+
+func setDirectionTransition(_ layer: inout Snow, styleValue: RNMBXStyleValue)
+{
+    layer.directionTransition = styleValue.getTransition();
+}
+
+func setFlakeSize(_ layer: inout Snow, styleValue: RNMBXStyleValue)
+{
+      
+        
+          layer.flakeSize = styleValue.mglStyleValueNumber();
+        
+      
+}
+
+func setFlakeSizeTransition(_ layer: inout Snow, styleValue: RNMBXStyleValue)
+{
+    layer.flakeSizeTransition = styleValue.getTransition();
+}
+
+
+
+func setDensity(_ layer: inout Rain, styleValue: RNMBXStyleValue)
+{
+      
+        
+          layer.density = styleValue.mglStyleValueNumber();
+        
+      
+}
+
+func setDensityTransition(_ layer: inout Rain, styleValue: RNMBXStyleValue)
+{
+    layer.densityTransition = styleValue.getTransition();
+}
+
+func setIntensity(_ layer: inout Rain, styleValue: RNMBXStyleValue)
+{
+      
+        
+          layer.intensity = styleValue.mglStyleValueNumber();
+        
+      
+}
+
+func setIntensityTransition(_ layer: inout Rain, styleValue: RNMBXStyleValue)
+{
+    layer.intensityTransition = styleValue.getTransition();
+}
+
+func setColor(_ layer: inout Rain, styleValue: RNMBXStyleValue)
+{
+      
+        
+          layer.color = styleValue.mglStyleValueColor();
+        
+      
+}
+
+func setColorTransition(_ layer: inout Rain, styleValue: RNMBXStyleValue)
+{
+    layer.colorTransition = styleValue.getTransition();
+}
+
+func setOpacity(_ layer: inout Rain, styleValue: RNMBXStyleValue)
+{
+      
+        
+          layer.opacity = styleValue.mglStyleValueNumber();
+        
+      
+}
+
+func setOpacityTransition(_ layer: inout Rain, styleValue: RNMBXStyleValue)
+{
+    layer.opacityTransition = styleValue.getTransition();
+}
+
+func setVignette(_ layer: inout Rain, styleValue: RNMBXStyleValue)
+{
+      
+        
+          layer.vignette = styleValue.mglStyleValueNumber();
+        
+      
+}
+
+func setVignetteTransition(_ layer: inout Rain, styleValue: RNMBXStyleValue)
+{
+    layer.vignetteTransition = styleValue.getTransition();
+}
+
+func setVignetteColor(_ layer: inout Rain, styleValue: RNMBXStyleValue)
+{
+      
+        
+          layer.vignetteColor = styleValue.mglStyleValueColor();
+        
+      
+}
+
+func setVignetteColorTransition(_ layer: inout Rain, styleValue: RNMBXStyleValue)
+{
+    layer.vignetteColorTransition = styleValue.getTransition();
+}
+
+func setCenterThinning(_ layer: inout Rain, styleValue: RNMBXStyleValue)
+{
+      
+        
+          layer.centerThinning = styleValue.mglStyleValueNumber();
+        
+      
+}
+
+func setCenterThinningTransition(_ layer: inout Rain, styleValue: RNMBXStyleValue)
+{
+    layer.centerThinningTransition = styleValue.getTransition();
+}
+
+func setDirection(_ layer: inout Rain, styleValue: RNMBXStyleValue)
+{
+      
+        
+          layer.direction = styleValue.mglStyleValueArrayNumber();
+        
+      
+}
+
+func setDirectionTransition(_ layer: inout Rain, styleValue: RNMBXStyleValue)
+{
+    layer.directionTransition = styleValue.getTransition();
+}
+
+func setDropletSize(_ layer: inout Rain, styleValue: RNMBXStyleValue)
+{
+      
+        
+          layer.dropletSize = styleValue.mglStyleValueArrayNumber();
+        
+      
+}
+
+func setDropletSizeTransition(_ layer: inout Rain, styleValue: RNMBXStyleValue)
+{
+    layer.dropletSizeTransition = styleValue.getTransition();
+}
+
+func setDistortionStrength(_ layer: inout Rain, styleValue: RNMBXStyleValue)
+{
+      
+        
+          layer.distortionStrength = styleValue.mglStyleValueNumber();
+        
+      
+}
+
+func setDistortionStrengthTransition(_ layer: inout Rain, styleValue: RNMBXStyleValue)
+{
+    layer.distortionStrengthTransition = styleValue.getTransition();
 }
 
 

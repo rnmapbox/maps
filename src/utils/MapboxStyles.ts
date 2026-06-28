@@ -466,6 +466,15 @@ enum ModelTypeEnum {
   LocationIndicator = 'location-indicator',
 }
 type ModelTypeEnumValues = 'common-3d' | 'location-indicator';
+enum ModelElevationReferenceEnum {
+  /** Elevated rendering is enabled. Use this mode to elevate models relative to the sea level. */
+  Sea = 'sea',
+  /** Elevated rendering is enabled. Use this mode to elevate models relative to the ground's height below them. */
+  Ground = 'ground',
+  /** Elevated rendering is enabled. Use this mode to describe additive and stackable features that should exist only on top of road polygons. */
+  HdRoadMarkup = 'hd-road-markup',
+}
+type ModelElevationReferenceEnumValues = 'sea' | 'ground' | 'hd-road-markup';
 enum BackgroundPitchAlignmentEnum {
   /** The background is aligned to the plane of the map. */
   Map = 'map',
@@ -721,14 +730,25 @@ export interface LineLayerStyleProps {
    */
   lineTrimOffset?: number[];
   /**
-   * Vertical offset from ground, in meters. Defaults to 0. This is an experimental property with some known issues:
-   * Not supported for globe projection at the moment
-   * Elevated line discontinuity is possible on tile borders with terrain enabled
-   * Rendering artifacts can happen near line joins and line caps depending on the line styling
-   * Rendering artifacts relating to `lineOpacity` and `lineBlur`
-   * Elevated line visibility is determined by layer order
-   * ZFighting issues can happen with intersecting elevated lines
-   * Elevated lines don't cast shadows
+   * The width of the line border. A value of zero means no border.
+   */
+  lineBorderWidth?: Value<number, ['zoom', 'feature', 'feature-state']>;
+
+  /**
+   * The transition affecting any changes to this layer’s lineBorderWidth property.
+   */
+  lineBorderWidthTransition?: Transition;
+  /**
+   * The color of the line border. If lineBorderWidth is greater than zero and the alpha value of this color is 0 (default), the color for the border will be selected automatically based on the line color.
+   */
+  lineBorderColor?: Value<string, ['zoom', 'feature', 'feature-state']>;
+
+  /**
+   * The transition affecting any changes to this layer’s lineBorderColor property.
+   */
+  lineBorderColorTransition?: Transition;
+  /**
+   * Vertical offset from ground, in meters. Not supported for globe projection at the moment.
    *
    * @requires lineElevationReference
    */
@@ -747,6 +767,20 @@ export interface LineLayerStyleProps {
    * @requires lineZOffset
    */
   lineCrossSlope?: Value<number>;
+  /**
+   * Controls how much the elevation of lines with `lineElevationReference` set to `sea` scales with terrain exaggeration. A value of 0 keeps the line at a fixed altitude above sea level. A value of 1 scales the elevation proportionally with terrain exaggeration.
+   *
+   * @requires lineZOffset
+   */
+  lineElevationGroundScale?: Value<
+    number,
+    ['zoom', 'feature', 'line-progress']
+  >;
+
+  /**
+   * The transition affecting any changes to this layer’s lineElevationGroundScale property.
+   */
+  lineElevationGroundScaleTransition?: Transition;
   /**
    * Controls the transition progress between the image variants of linePattern. Zero means the first variant is used, one is the second, and in between they are blended together. Both images should be the same size and have the same type (either raster or vector).
    *
@@ -775,7 +809,10 @@ export interface LineLayerStyleProps {
    *
    * @requires lights
    */
-  lineEmissiveStrength?: Value<number, ['zoom', 'measure-light']>;
+  lineEmissiveStrength?: Value<
+    number,
+    ['zoom', 'measure-light', 'line-progress']
+  >;
 
   /**
    * The transition affecting any changes to this layer’s lineEmissiveStrength property.
@@ -1329,6 +1366,18 @@ export interface SymbolLayerStyleProps {
    */
   iconColorSaturation?: Value<number>;
   /**
+   * Increase or reduce the contrast of the symbol icon.
+   */
+  iconColorContrast?: Value<number>;
+  /**
+   * Increase or reduce the brightness of the symbols. The value is the minimum brightness.
+   */
+  iconColorBrightnessMin?: Value<number>;
+  /**
+   * Increase or reduce the brightness of the symbols. The value is the maximum brightness.
+   */
+  iconColorBrightnessMax?: Value<number>;
+  /**
    * Specifies an uniform elevation from the ground, in meters.
    */
   symbolZOffset?: Value<number, ['zoom', 'feature']>;
@@ -1792,6 +1841,10 @@ export interface FillExtrusionLayerStyleProps {
    * The transition affecting any changes to this layer’s fillExtrusionLineWidth property.
    */
   fillExtrusionLineWidthTransition?: Transition;
+  /**
+   * Enable/Disable shadow casting for this layer
+   */
+  fillExtrusionCastShadows?: boolean;
 }
 export interface RasterLayerStyleProps {
   /**
@@ -1905,7 +1958,7 @@ export interface RasterLayerStyleProps {
    */
   rasterArrayBand?: string;
   /**
-   * Specifies an uniform elevation from the ground, in meters.
+   * Defines an uniform elevation from the base specified in rasterElevationReference, in meters.
    */
   rasterElevation?: Value<number, ['zoom']>;
 
@@ -2013,8 +2066,23 @@ export interface HillshadeLayerStyleProps {
    * The transition affecting any changes to this layer’s hillshadeAccentColor property.
    */
   hillshadeAccentColorTransition?: Transition;
+  /**
+   * Controls the intensity of light emitted on the source features.
+   *
+   * @requires lights
+   */
+  hillshadeEmissiveStrength?: Value<number, ['zoom', 'measure-light']>;
+
+  /**
+   * The transition affecting any changes to this layer’s hillshadeEmissiveStrength property.
+   */
+  hillshadeEmissiveStrengthTransition?: Transition;
 }
 export interface ModelLayerStyleProps {
+  /**
+   * If true, the models will be reduced in density based on the zoom level. This is useful for large datasets that may be slow to render.
+   */
+  modelAllowDensityReduction?: boolean;
   /**
    * Whether this layer is displayed.
    */
@@ -2141,6 +2209,12 @@ export interface ModelLayerStyleProps {
    * This parameter defines the range for the fadeOut effect before an automatic content cutoff on pitched map views. The automatic cutoff range is calculated according to the minimum required zoom level of the source and layer. The fade range is expressed in relation to the height of the map view. A value of 1.0 indicates that the content is faded to the same extent as the map's height in pixels, while a value close to zero represents a sharp cutoff. When the value is set to 0.0, the cutoff is completely disabled. Note: The property has no effect on the map if terrain is enabled.
    */
   modelCutoffFadeRange?: Value<number>;
+  /**
+   * Selects the base of the model. Some modes might require precomputed elevation data in the tileset. When using vector tiled source as the model layer source and hdRoadMarkup elevation reference, this property acts as layout property and elevation is evaluated only in tile loading time.
+   */
+  modelElevationReference?: Value<
+    Enum<ModelElevationReferenceEnum, ModelElevationReferenceEnumValues>
+  >;
 }
 export interface BackgroundLayerStyleProps {
   /**
@@ -2152,7 +2226,7 @@ export interface BackgroundLayerStyleProps {
    *
    * @disabledBy backgroundPattern
    */
-  backgroundColor?: Value<string, ['zoom']>;
+  backgroundColor?: Value<string, ['zoom', 'measure-light']>;
 
   /**
    * The transition affecting any changes to this layer’s backgroundColor property.
@@ -2335,6 +2409,181 @@ export interface AtmosphereLayerStyleProps {
    */
   verticalRangeTransition?: Transition;
 }
+export interface SnowLayerStyleProps {
+  /**
+   * Snow particles density. Controls the overall particles number.
+   */
+  density?: Value<number, ['zoom', 'measure-light']>;
+
+  /**
+   * The transition affecting any changes to this layer’s density property.
+   */
+  densityTransition?: Transition;
+  /**
+   * Snow particles movement factor. Controls the overall particles movement speed.
+   */
+  intensity?: Value<number, ['zoom', 'measure-light']>;
+
+  /**
+   * The transition affecting any changes to this layer’s intensity property.
+   */
+  intensityTransition?: Transition;
+  /**
+   * Snow particles color.
+   */
+  color?: Value<string, ['zoom', 'measure-light']>;
+
+  /**
+   * The transition affecting any changes to this layer’s color property.
+   */
+  colorTransition?: Transition;
+  /**
+   * Snow particles opacity.
+   */
+  opacity?: Value<number, ['zoom', 'measure-light']>;
+
+  /**
+   * The transition affecting any changes to this layer’s opacity property.
+   */
+  opacityTransition?: Transition;
+  /**
+   * Snow vignette screenSpace effect. Adds snow tint to screen corners
+   */
+  vignette?: Value<number, ['zoom', 'measure-light']>;
+
+  /**
+   * The transition affecting any changes to this layer’s vignette property.
+   */
+  vignetteTransition?: Transition;
+  /**
+   * Snow vignette screenSpace corners tint color.
+   */
+  vignetteColor?: Value<string, ['zoom', 'measure-light']>;
+
+  /**
+   * The transition affecting any changes to this layer’s vignetteColor property.
+   */
+  vignetteColorTransition?: Transition;
+  /**
+   * Thinning factor of snow particles from center. 0  no thinning. 1  maximal central area thinning.
+   */
+  centerThinning?: Value<number, ['zoom', 'measure-light']>;
+
+  /**
+   * The transition affecting any changes to this layer’s centerThinning property.
+   */
+  centerThinningTransition?: Transition;
+  /**
+   * Main snow particles direction. Azimuth and polar angles
+   */
+  direction?: Value<number[], ['zoom', 'measure-light']>;
+
+  /**
+   * The transition affecting any changes to this layer’s direction property.
+   */
+  directionTransition?: Transition;
+  /**
+   * Snow flake particle size. Correlates with individual particle screen size
+   */
+  flakeSize?: Value<number, ['zoom', 'measure-light']>;
+
+  /**
+   * The transition affecting any changes to this layer’s flakeSize property.
+   */
+  flakeSizeTransition?: Transition;
+}
+export interface RainLayerStyleProps {
+  /**
+   * Rain particles density. Controls the overall screen density of the rain.
+   */
+  density?: Value<number, ['zoom', 'measure-light']>;
+
+  /**
+   * The transition affecting any changes to this layer’s density property.
+   */
+  densityTransition?: Transition;
+  /**
+   * Rain particles movement factor. Controls the overall rain particles speed
+   */
+  intensity?: Value<number, ['zoom', 'measure-light']>;
+
+  /**
+   * The transition affecting any changes to this layer’s intensity property.
+   */
+  intensityTransition?: Transition;
+  /**
+   * Individual rain particle dorplets color.
+   */
+  color?: Value<string, ['zoom', 'measure-light']>;
+
+  /**
+   * The transition affecting any changes to this layer’s color property.
+   */
+  colorTransition?: Transition;
+  /**
+   * Rain particles opacity.
+   */
+  opacity?: Value<number, ['zoom', 'measure-light']>;
+
+  /**
+   * The transition affecting any changes to this layer’s opacity property.
+   */
+  opacityTransition?: Transition;
+  /**
+   * ScreenSpace vignette rain tinting effect intensity.
+   */
+  vignette?: Value<number, ['zoom', 'measure-light']>;
+
+  /**
+   * The transition affecting any changes to this layer’s vignette property.
+   */
+  vignetteTransition?: Transition;
+  /**
+   * Rain vignette screenSpace corners tint color.
+   */
+  vignetteColor?: Value<string, ['zoom', 'measure-light']>;
+
+  /**
+   * The transition affecting any changes to this layer’s vignetteColor property.
+   */
+  vignetteColorTransition?: Transition;
+  /**
+   * Thinning factor of rain particles from center. 0  no thinning. 1  maximal central area thinning.
+   */
+  centerThinning?: Value<number, ['zoom', 'measure-light']>;
+
+  /**
+   * The transition affecting any changes to this layer’s centerThinning property.
+   */
+  centerThinningTransition?: Transition;
+  /**
+   * Main rain particles direction. Azimuth and polar angles.
+   */
+  direction?: Value<number[], ['zoom', 'measure-light']>;
+
+  /**
+   * The transition affecting any changes to this layer’s direction property.
+   */
+  directionTransition?: Transition;
+  /**
+   * Rain droplet size. x  normal to direction, y  along direction
+   */
+  dropletSize?: Value<number[], ['zoom', 'measure-light']>;
+
+  /**
+   * The transition affecting any changes to this layer’s dropletSize property.
+   */
+  dropletSizeTransition?: Transition;
+  /**
+   * Rain particles screenSpace distortion strength.
+   */
+  distortionStrength?: Value<number, ['zoom', 'measure-light']>;
+
+  /**
+   * The transition affecting any changes to this layer’s distortionStrength property.
+   */
+  distortionStrengthTransition?: Transition;
+}
 export interface TerrainLayerStyleProps {
   /**
    * Exaggerates the elevation of the terrain by multiplying the data from the DEM with this value.
@@ -2359,4 +2608,6 @@ export type AllLayerStyleProps =
   | SkyLayerStyleProps
   | LightLayerStyleProps
   | AtmosphereLayerStyleProps
+  | SnowLayerStyleProps
+  | RainLayerStyleProps
   | TerrainLayerStyleProps;

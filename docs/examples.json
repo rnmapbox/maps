@@ -380,6 +380,23 @@
       },
       {
         "metadata": {
+          "title": "Screen Coordinates",
+          "tags": [
+            "MapView#onPress",
+            "MapView#onLongPress",
+            "MapView#getCoordinateFromView",
+            "MapView#getPointInView",
+            "MapView#queryRenderedFeaturesAtPoint",
+            "MapView#queryRenderedFeaturesInRect"
+          ],
+          "docs": "\nTests conversion from screen to geographic coordinates and vice versa.        \n"
+        },
+        "fullPath": "example/src/examples/Map/ScreenCoordinates.tsx",
+        "relPath": "Map/ScreenCoordinates.tsx",
+        "name": "ScreenCoordinates"
+      },
+      {
+        "metadata": {
           "title": "Show and hide layer",
           "tags": [
             "FillLayer#existing",
@@ -585,9 +602,11 @@
             "RasterDemSource",
             "Terrain",
             "Atmosphere",
-            "SkyLayer"
+            "SkyLayer",
+            "Snow",
+            "Rain"
           ],
-          "docs": "\nDemostrates use of Terrain, Atmosphere and SkyLayer.\n"
+          "docs": "\nDemonstrates use of Terrain, Atmosphere and SkyLayer. Use the Snow/Rain buttons to toggle experimental particle weather effects.\n"
         },
         "fullPath": "example/src/examples/V10/TerrainSkyAtmosphere.tsx",
         "relPath": "V10/TerrainSkyAtmosphere.tsx",
@@ -631,9 +650,12 @@
           "title": "Marker View",
           "tags": [
             "PointAnnotation",
-            "MarkerView"
+            "MarkerView",
+            "Slider",
+            "Interactive",
+            "pointerEvents"
           ],
-          "docs": "\nShows marker view and point annotations\n"
+          "docs": "\nShows marker view and point annotations, including an interactive marker with\nsliders, switch, counter, text input, and pressable button to verify complex\ntouch interactions inside a MarkerView. Toggle pointerEvents=\"none\" to make\nthe marker transparent to all touch events, passing them through to the map.\n"
         },
         "fullPath": "example/src/examples/Annotations/MarkerView.tsx",
         "relPath": "Annotations/MarkerView.tsx",
@@ -650,6 +672,20 @@
         "fullPath": "example/src/examples/Annotations/PointAnnotationAnchors.js",
         "relPath": "Annotations/PointAnnotationAnchors.js",
         "name": "PointAnnotationAnchors"
+      },
+      {
+        "metadata": {
+          "title": "PointAnnotationManager Slot",
+          "tags": [
+            "PointAnnotationManager",
+            "PointAnnotation",
+            "slot"
+          ],
+          "docs": "\nDemonstrates using PointAnnotationManager to position annotations\nin different slots of the Mapbox Standard style.\n  "
+        },
+        "fullPath": "example/src/examples/Annotations/PointAnnotationManagerSlot.tsx",
+        "relPath": "Annotations/PointAnnotationManagerSlot.tsx",
+        "name": "PointAnnotationManagerSlot"
       },
       {
         "metadata": {
@@ -711,12 +747,26 @@
       },
       {
         "metadata": {
+          "title": "Hillshade Layer",
+          "tags": [
+            "RasterDemSource",
+            "HillshadeLayer"
+          ],
+          "docs": "Renders terrain hillshading from a raster-dem source."
+        },
+        "fullPath": "example/src/examples/FillRasterLayer/HillshadeSource.tsx",
+        "relPath": "FillRasterLayer/HillshadeSource.tsx",
+        "name": "HillshadeSource"
+      },
+      {
+        "metadata": {
           "title": "Image Overlay",
           "tags": [
             "RasterLayer",
             "ImageSource"
           ],
-          "docs": ""
+          "docs": "",
+          "disableSync": true
         },
         "fullPath": "example/src/examples/FillRasterLayer/ImageOverlay.js",
         "relPath": "FillRasterLayer/ImageOverlay.js",

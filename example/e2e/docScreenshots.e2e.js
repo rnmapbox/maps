@@ -170,6 +170,10 @@ if (['true', 1, '1'].includes(process.env.SKIP_TESTS_NO_METAL)) {
       if (shouldRestartAppBetweenTests) {
         await device.launchApp({ permissions: { location: 'always' } });
       }
+      await device.setURLBlacklist([
+        '.*tile.openstreetmap.org.*',
+        '.*mapbox.com.*',
+      ]);
       await device.reloadReactNative();
     });
     afterEach(async () => {
@@ -198,15 +202,19 @@ if (['true', 1, '1'].includes(process.env.SKIP_TESTS_NO_METAL)) {
                 });
                 await setSampleLocation();
 
-                await expect(
-                  element(by.text(groupMetadata.title)),
-                ).toBeVisible();
+                await waitFor(element(by.text(groupMetadata.title)))
+                  .toBeVisible()
+                  .whileElement(by.id('example-list'))
+                  .scroll(200, 'down');
                 await element(by.text(groupMetadata.title)).tap();
 
                 await waitFor(element(by.text(metadata.title)))
                   .toBeVisible()
                   .whileElement(by.id('example-list'))
                   .scroll(50, 'down');
+                if (metadata.disableSync) {
+                  await device.disableSynchronization();
+                }
                 await element(by.text(metadata.title)).tap();
 
                 let shots = new ExampleScreenshots(
@@ -214,8 +222,7 @@ if (['true', 1, '1'].includes(process.env.SKIP_TESTS_NO_METAL)) {
                   screenshots,
                 );
 
-                await wait(1000);
-
+                await wait(metadata.disableSync ? 3000 : 1000);
                 await shots.screenshot();
               });
             }

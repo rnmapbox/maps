@@ -1,7 +1,7 @@
 import React from 'react';
 
 import headingIcon from '../assets/heading.png';
-import { BaseProps } from '../types/BaseProps';
+import { type BaseProps } from '../types/BaseProps';
 
 import { SymbolLayer } from './SymbolLayer';
 import Images from './Images';

@@ -6,10 +6,16 @@ import com.facebook.react.uimanager.ViewGroupManager
 import com.facebook.react.uimanager.annotations.ReactProp
 import com.facebook.react.viewmanagers.RNMBXModelLayerManagerInterface
 import com.rnmapbox.rnmbx.utils.Logger
+import com.facebook.react.uimanager.ViewManagerDelegate
+import com.facebook.react.viewmanagers.RNMBXModelLayerManagerDelegate
 
 
 class RNMBXModelLayerManager : ViewGroupManager<RNMBXModelLayer>(),
     RNMBXModelLayerManagerInterface<RNMBXModelLayer> {
+
+    private val delegate = RNMBXModelLayerManagerDelegate<RNMBXModelLayer, RNMBXModelLayerManager>(this)
+
+    override fun getDelegate(): ViewManagerDelegate<RNMBXModelLayer> = delegate
     override fun getName(): String {
         return REACT_CLASS
     }

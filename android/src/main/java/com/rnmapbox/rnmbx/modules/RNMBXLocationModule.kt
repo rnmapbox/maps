@@ -6,7 +6,6 @@ import com.facebook.react.module.annotations.ReactModule
 import com.rnmapbox.rnmbx.NativeRNMBXLocationModuleSpec
 import com.rnmapbox.rnmbx.location.LocationManager.OnUserLocationChange
 import com.rnmapbox.rnmbx.events.LocationEvent
-import com.rnmapbox.rnmbx.events.EventEmitter
 import com.rnmapbox.rnmbx.location.LocationManager.Companion.getInstance
 import java.lang.Exception
 
@@ -58,14 +57,7 @@ class RNMBXLocationModule(reactContext: ReactApplicationContext) :
             mLastLocation = location
             if (changed && (location != null) && shouldSendLocationEvent()) {
                 val locationEvent = LocationEvent(location)
-
-                if(mEventEmitterCallback != null){
-                    emitOnLocationUpdate(locationEvent.toJSON())
-                }else {
-                    // Emmit event for old architecture
-                    val emitter = EventEmitter.getModuleEmitter(reactApplicationContext)
-                    emitter?.emit(LOCATION_UPDATE, locationEvent.payload)
-                }
+                emitOnLocationUpdate(locationEvent.toJSON())
             }
         }
     }

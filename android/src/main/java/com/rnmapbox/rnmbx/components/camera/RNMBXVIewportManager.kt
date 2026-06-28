@@ -13,10 +13,16 @@ import com.rnmapbox.rnmbx.components.AbstractEventEmitter
 import com.rnmapbox.rnmbx.events.constants.EventKeys
 import com.rnmapbox.rnmbx.events.constants.eventMapOf
 import com.rnmapbox.rnmbx.utils.ViewTagResolver
+import com.facebook.react.uimanager.ViewManagerDelegate
+import com.facebook.react.viewmanagers.RNMBXViewportManagerDelegate
 
 class RNMBXViewportManager(private val mContext: ReactApplicationContext, val viewTagResolver: ViewTagResolver) : AbstractEventEmitter<RNMBXViewport>(
         mContext
     ), RNMBXViewportManagerInterface<RNMBXViewport> {
+
+    private val delegate = RNMBXViewportManagerDelegate<RNMBXViewport, RNMBXViewportManager>(this)
+
+    override fun getDelegate(): ViewManagerDelegate<RNMBXViewport> = delegate
 
     override fun getName(): String {
         return REACT_CLASS

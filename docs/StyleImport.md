@@ -39,11 +39,37 @@ existing is now always required as true
 
 ```tsx
 type Config = {
-  [object Object]: string; /* FIX ME NO DESCRIPTION */
+  lightPreset: 'dawn' \| 'day' \| 'dusk' \| 'night'; /* Light preset: controls time-of-day lighting */
+  theme: 'default' \| 'faded' \| 'monochrome'; /* Color theme */
+  font: string; /* Font family for labels (e.g., 'Montserrat') */
+  show3dObjects: boolean; /* Show generic 3D objects */
+  show3dBuildings: boolean; /* Show extruded 3D buildings */
+  show3dFacades: boolean; /* Show 3D building facades (v11.16+) */
+  show3dLandmarks: boolean; /* Show 3D landmarks (v11.16+) */
+  show3dTrees: boolean; /* Show 3D trees (v11.17+) */
+  showPointOfInterestLabels: boolean; /* Show point of interest labels */
+  showTransitLabels: boolean; /* Show transit labels */
+  showPlaceLabels: boolean; /* Show place labels */
+  showRoadLabels: boolean; /* Show road labels */
+  showPedestrianRoads: boolean; /* Show pedestrian roads */
+  colorBuildings: string; /* Color override for buildings (v11.18+) */
+  colorCommercial: string; /* Color override for commercial areas (v11.18+) */
+  colorEducation: string; /* Color override for education areas (v11.18+) */
+  colorIndustrial: string; /* Color override for industrial areas (v11.18+) */
+  colorLand: string; /* Color override for land (v11.18+) */
+  colorMedical: string; /* Color override for medical areas (v11.18+) */
+  colorRoads: string; /* Color override for roads (v11.18+) */
+  colorMotorways: string; /* Color override for motorways (v11.18+) */
+  colorWater: string; /* Color override for water (v11.18+) */
+  colorGreenspaces: string; /* Color override for greenspaces (v11.18+) */
+  colorBoundaries: string; /* Color override for boundaries (v11.18+) */
 }
 ```
 _required_
 config is a dictionary of configuration options for the style import.
+
+When using the Mapbox Standard style with `id="basemap"`, use `StandardStyleConfig`
+keys for autocomplete. Arbitrary keys are also accepted for forward compatibility.
 
 See https://github.com/mapbox/mapbox-maps-ios/blob/main/Sources/MapboxMaps/Documentation.docc/Migrate%20to%20v11.md#21-the-mapbox-standard-style
 

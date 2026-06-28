@@ -1,8 +1,8 @@
 import React from 'react';
 import {
-  NativeMethods,
+  type NativeMethods,
   NativeModules,
-  NativeSyntheticEvent,
+  type NativeSyntheticEvent,
 } from 'react-native';
 
 import RNMBXShapeSourceNativeComponent from '../specs/RNMBXShapeSourceNativeComponent';
@@ -14,8 +14,8 @@ import {
   isAndroid,
 } from '../utils';
 import { copyPropertiesAsDeprecated } from '../utils/deprecation';
-import { OnPressEvent } from '../types/OnPressEvent';
-import { ShapeAnimatorInterface } from '../shapeAnimators';
+import { type OnPressEvent } from '../types/OnPressEvent';
+import { type ShapeAnimatorInterface } from '../shapeAnimators';
 
 import AbstractSource from './AbstractSource';
 import NativeBridgeComponent from './NativeBridgeComponent';
@@ -92,6 +92,12 @@ export type Props = {
    * The default value is 18.
    */
   maxZoomLevel?: number;
+
+  /**
+   * Specifies the minimum zoom level at which to create vector tiles.
+   * The default value is 0.
+   */
+  minZoomLevel?: number;
 
   /**
    * Specifies the size of the tile buffer on each side.
@@ -312,6 +318,7 @@ export class ShapeSource extends NativeBridgeComponent(
       clusterMaxZoomLevel: this.props.clusterMaxZoomLevel,
       clusterProperties: this.props.clusterProperties,
       maxZoomLevel: this.props.maxZoomLevel,
+      minZoomLevel: this.props.minZoomLevel,
       buffer: this.props.buffer,
       tolerance: this.props.tolerance,
       lineMetrics: this.props.lineMetrics,

@@ -1,5 +1,5 @@
 import { memo, useRef, useState, useMemo, useCallback } from 'react';
-import { Button, StyleProp, View, ViewStyle } from 'react-native';
+import { Button, type StyleProp, View, type ViewStyle } from 'react-native';
 import {
   Camera,
   Logger,
@@ -8,7 +8,7 @@ import {
   __experimental,
   LineLayer,
 } from '@rnmapbox/maps';
-import { Position } from 'geojson';
+import { type Position } from 'geojson';
 import { Divider, Slider, Text } from '@rneui/base';
 import { SafeAreaView } from 'react-native-safe-area-context';
 // @ts-ignore - @turf packages have type resolution issues with package.json exports

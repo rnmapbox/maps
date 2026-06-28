@@ -1,16 +1,22 @@
-import React, { SyntheticEvent, type Component } from 'react';
-import { StyleSheet, type ViewProps } from 'react-native';
-import { Feature, GeoJsonProperties, Geometry, Point } from 'geojson';
+import React, { type SyntheticEvent, type Component } from 'react';
+import { StyleSheet, View, type ViewProps } from 'react-native';
+import {
+  type Feature,
+  type GeoJsonProperties,
+  type Geometry,
+  type Point,
+} from 'geojson';
 
 import { toJSONString, isFunction } from '../utils';
 import checkRequiredProps from '../utils/checkRequiredProps';
 import { makePoint } from '../utils/geoUtils';
 import { type BaseProps } from '../types/BaseProps';
-import { Position } from '../types/Position';
+import { type Position } from '../types/Position';
 import RNMBXPointAnnotationNativeComponent from '../specs/RNMBXPointAnnotationNativeComponent';
 import NativeRNMBXPointAnnotationModule from '../specs/NativeRNMBXPointAnnotationModule';
 
 import NativeBridgeComponent, { type RNMBEvent } from './NativeBridgeComponent';
+import Callout from './Callout';
 
 export const NATIVE_MODULE_NAME = 'RNMBXPointAnnotation';
 
@@ -230,10 +236,17 @@ class PointAnnotation extends NativeBridgeComponent(
       onMapboxPointAnnotationDragEnd: this._onDragEnd,
       coordinate: this._getCoordinate(),
     };
+    const children = React.Children.toArray(this.props.children);
+    const callout = children.find(
+      (c) => React.isValidElement(c) && c.type === Callout,
+    );
+    const content = children.filter((c) => c !== callout);
+
     return (
       // @ts-expect-error just codegen stuff
       <RNMBXPointAnnotationNativeComponent {...props}>
-        {this.props.children}
+        <View collapsable={false}>{content}</View>
+        {callout}
       </RNMBXPointAnnotationNativeComponent>
     );
   }

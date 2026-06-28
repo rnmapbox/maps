@@ -7,27 +7,16 @@
 
 #import "rnmapbox_maps-Swift.pre.h"
 
-#ifdef RCT_NEW_ARCH_ENABLED
 #import "rnmapbox_maps_specs.h"
-#else
-#import <React/RCTBridge.h>
-#endif
 
-@interface RNMBXChangeLineOffsetsShapeAnimatorModule: NSObject
-#ifdef RCT_NEW_ARCH_ENABLED
-<NativeRNMBXChangeLineOffsetsShapeAnimatorModuleSpec>
-#else
-<RCTBridgeModule>
-#endif
+@interface RNMBXChangeLineOffsetsShapeAnimatorModule: NSObject <NativeRNMBXChangeLineOffsetsShapeAnimatorModuleSpec>
 @end
 
 @implementation RNMBXChangeLineOffsetsShapeAnimatorModule
 
 RCT_EXPORT_MODULE();
 
-#ifdef RCT_NEW_ARCH_ENABLED
 @synthesize viewRegistry_DEPRECATED = _viewRegistry_DEPRECATED;
-#endif // RCT_NEW_ARCH_ENABLED
 @synthesize bridge = _bridge;
 
 - (dispatch_queue_t)methodQueue {
@@ -52,13 +41,10 @@ RCT_EXPORT_METHOD(setEndOffset:(nonnull NSNumber*)tag offset: (nonnull NSNumber*
   [ChangeLineOffsetsShapeAnimator setEndOffsetWithTag:tag offset:offset durationMs:durationMs resolve:resolve reject:reject];
 }
 
-// Thanks to this guard, we won't compile this code when we build for the old architecture.
-#ifdef RCT_NEW_ARCH_ENABLED
 - (std::shared_ptr<facebook::react::TurboModule>)getTurboModule:
     (const facebook::react::ObjCTurboModule::InitParams &)params
 {
     return std::make_shared<facebook::react::NativeRNMBXShapeSourceModuleSpecJSI>(params);
 }
-#endif // RCT_NEW_ARCH_ENABLED
 
 @end

@@ -8,7 +8,7 @@ import Mapbox, {
 } from '@rnmapbox/maps';
 import { Button, Dimensions, TextInput } from 'react-native';
 
-import { ExampleWithMetadata } from '../common/ExampleMetadata'; // exclude-from-doc
+import { type ExampleWithMetadata } from '../common/ExampleMetadata'; // exclude-from-doc
 
 const CENTER_COORD: [number, number] = [-73.970895, 40.723279];
 const MAPBOX_VECTOR_TILE_SIZE = 512;

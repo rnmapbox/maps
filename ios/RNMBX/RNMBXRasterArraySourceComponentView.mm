@@ -1,4 +1,3 @@
-#ifdef RCT_NEW_ARCH_ENABLED
 
 #import "RNMBXRasterArraySourceComponentView.h"
 #import "RNMBXFabricHelpers.h"
@@ -121,4 +120,3 @@ Class<RCTComponentViewProtocol> RNMBXRasterArraySourceCls(void)
 }
 
 
-#endif // RCT_NEW_ARCH_ENABLED

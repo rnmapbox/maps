@@ -108,3 +108,5 @@ fun Dynamic.asStringOrNull(): String? {
         asString()
     }
 }
+
+fun Dynamic.asMapOrNull(): ReadableMap? = if (isNull) null else asMap()

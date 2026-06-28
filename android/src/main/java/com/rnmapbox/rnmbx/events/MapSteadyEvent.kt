@@ -7,7 +7,7 @@ import com.facebook.react.bridge.WritableMap
 /**
  * Direct event for CameraGestureObserver -> onMapSteady
  * JS registrationName: onMapSteady
- * Native event name (key): topOnMapSteady
+ * Native event name (key): onMapSteady
  */
 class MapSteadyEvent(
     view: View?,
@@ -16,7 +16,7 @@ class MapSteadyEvent(
     private val lastGestureType: String?
 ) : AbstractEvent(view, "mapSteady") {
     override val key: String
-        get() = "topOnMapSteady"
+        get() = "onMapSteady"
 
     override val payload: WritableMap
         get() = Arguments.createMap().apply {
@@ -33,6 +33,12 @@ class MapSteadyEvent(
             }
             putDouble("timestamp", System.currentTimeMillis().toDouble())
         }
+
+    override fun toJSON(): WritableMap {
+        val map = Arguments.createMap()
+        map.merge(payload)
+        return map
+    }
 
     override fun canCoalesce(): Boolean {
         // Do not coalesce - each steady/timeout event is significant

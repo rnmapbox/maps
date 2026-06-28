@@ -7,7 +7,6 @@ import com.facebook.react.bridge.UIManager
 import com.facebook.react.uimanager.IllegalViewOperationException
 import com.facebook.react.uimanager.UIManagerHelper
 import com.facebook.react.uimanager.common.UIManagerType
-import com.rnmapbox.rnmbx.BuildConfig
 
 data class ViewTagWaiter<V>(
     val fn: (V) -> Unit,
@@ -59,12 +58,7 @@ open class ViewTagResolver(val context: ReactApplicationContext) {
     }
 
     private val manager : UIManager
-        get() =
-            if (BuildConfig.IS_NEW_ARCHITECTURE_ENABLED) {
-                UIManagerHelper.getUIManager(context, UIManagerType.FABRIC)!!
-            } else {
-                UIManagerHelper.getUIManager(context, UIManagerType.DEFAULT)!!
-            }
+        get() = UIManagerHelper.getUIManager(context, UIManagerType.FABRIC)!!
 
     // calls on UiQueueThread with resolved view
     fun <V>withViewResolved(viewTag: Int, reject: Promise? = null, fn: (V) -> Unit) {

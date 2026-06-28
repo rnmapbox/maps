@@ -7,13 +7,13 @@ import {
   SymbolLayer,
   ShapeSource,
 } from '@rnmapbox/maps';
-import { StyleProp, Text, ViewStyle } from 'react-native';
-import { FeatureCollection } from 'geojson';
+import { type StyleProp, Text, type ViewStyle } from 'react-native';
+import { type FeatureCollection } from 'geojson';
 
 import exampleIcon from '../../assets/example.png';
 import pinIcon from '../../assets/pin.png';
-import { SymbolLayerStyleProps } from '../../../../src/utils/MapboxStyles';
-import { ExampleWithMetadata } from '../common/ExampleMetadata';
+import { type SymbolLayerStyleProps } from '../../../../src/utils/MapboxStyles';
+import { type ExampleWithMetadata } from '../common/ExampleMetadata';
 
 const styles: {
   icon: SymbolLayerStyleProps;

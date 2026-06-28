@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react';
 import { Button } from 'react-native';
 
 import sheet from '../../styles/sheet';
-import { ExampleWithMetadata } from '../common/ExampleMetadata'; // exclude-from-doc
+import { type ExampleWithMetadata } from '../common/ExampleMetadata'; // exclude-from-doc
 
 const MapUnMount = () => {
   const [isMounted, setIsMounted] = useState(true);

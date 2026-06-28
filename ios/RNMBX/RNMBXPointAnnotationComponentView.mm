@@ -1,4 +1,3 @@
-#ifdef RCT_NEW_ARCH_ENABLED
 
 #import "RNMBXPointAnnotationComponentView.h"
 #import "RNMBXFabricHelpers.h"
@@ -131,6 +130,7 @@ using namespace facebook::react;
   RNMBX_OPTIONAL_PROP_BOOL(draggable)
   RNMBX_OPTIONAL_PROP_NSString(id)
   RNMBX_OPTIONAL_PROP_NSDictionary(anchor)
+  RNMBX_REMAP_OPTIONAL_PROP_BOOL(selected, reactSelected)
 
   [super updateProps:props oldProps:oldProps];
 }
@@ -142,4 +142,3 @@ Class<RCTComponentViewProtocol> RNMBXPointAnnotationCls(void)
   return RNMBXPointAnnotationComponentView.class;
 }
 
-#endif // RCT_NEW_ARCH_ENABLED

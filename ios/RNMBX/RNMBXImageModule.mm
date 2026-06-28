@@ -3,20 +3,29 @@
 #import <React/RCTUIManagerUtils.h>
 
 #import "RNMBXImageModule.h"
-#ifdef RCT_NEW_ARCH_ENABLED
 #import "RNMBXImageComponentView.h"
-#endif // RCT_NEW_ARCH_ENABLED
+#import "RNMBXBridgeManager.h"
 
 #import "rnmapbox_maps-Swift.pre.h"
 
-@implementation RNMBXImageModule
+@implementation RNMBXImageModule {
+    id _bridgeBacking;
+}
 
 RCT_EXPORT_MODULE();
 
-#ifdef RCT_NEW_ARCH_ENABLED
 @synthesize viewRegistry_DEPRECATED = _viewRegistry_DEPRECATED;
-#endif // RCT_NEW_ARCH_ENABLED
-@synthesize bridge = _bridge;
+
+- (void)setBridge:(RCTBridge *)bridge {
+    _bridgeBacking = bridge;
+    if (bridge != nil) {
+        [RNMBXBridgeManager setBridge:bridge];
+    }
+}
+
+- (RCTBridge *)bridge {
+    return _bridgeBacking;
+}
 
 - (dispatch_queue_t)methodQueue
 {
@@ -47,13 +56,10 @@ RCT_EXPORT_METHOD(refresh:(nonnull NSNumber*)viewRef resolve:(RCTPromiseResolveB
 }
 
 
-// Thanks to this guard, we won't compile this code when we build for the old architecture.
-#ifdef RCT_NEW_ARCH_ENABLED
 - (std::shared_ptr<facebook::react::TurboModule>)getTurboModule:
     (const facebook::react::ObjCTurboModule::InitParams &)params
 {
     return std::make_shared<facebook::react::NativeRNMBXImageModuleSpecJSI>(params);
 }
-#endif // RCT_NEW_ARCH_ENABLED
 
 @end

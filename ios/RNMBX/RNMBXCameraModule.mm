@@ -3,9 +3,7 @@
 #import <React/RCTUIManagerUtils.h>
 
 #import "RNMBXCameraModule.h"
-#ifdef RCT_NEW_ARCH_ENABLED
 #import "RNMBXCameraComponentView.h"
-#endif // RCT_NEW_ARCH_ENABLED
 
 #import "rnmapbox_maps-Swift.pre.h"
 
@@ -13,9 +11,7 @@
 
 RCT_EXPORT_MODULE();
 
-#ifdef RCT_NEW_ARCH_ENABLED
 @synthesize viewRegistry_DEPRECATED = _viewRegistry_DEPRECATED;
-#endif // RCT_NEW_ARCH_ENABLED
 @synthesize bridge = _bridge;
 
 - (dispatch_queue_t)methodQueue
@@ -25,14 +21,11 @@ RCT_EXPORT_MODULE();
   return RCTGetUIManagerQueue();
 }
 
-// Thanks to this guard, we won't compile this code when we build for the old architecture.
-#ifdef RCT_NEW_ARCH_ENABLED
 - (std::shared_ptr<facebook::react::TurboModule>)getTurboModule:
     (const facebook::react::ObjCTurboModule::InitParams &)params
 {
     return std::make_shared<facebook::react::NativeRNMBXCameraModuleSpecJSI>(params);
 }
-#endif // RCT_NEW_ARCH_ENABLED
 
 - (void)withCamera:(nonnull NSNumber*)viewRef block:(void (^)(RNMBXCamera *))block reject:(RCTPromiseRejectBlock)reject methodName:(NSString *)methodName
 {
@@ -60,8 +53,8 @@ RCT_EXPORT_METHOD(updateCameraStop:(nonnull NSNumber *)viewRef
 RCT_EXPORT_METHOD(moveBy:(nonnull NSNumber *)viewRef
                   x:(double)x
                   y:(double)y
-                  animationMode:(nonnull NSNumber *)animationMode
-                  animationDuration:(nonnull NSNumber *)animationDuration
+                  animationMode:(double)animationMode
+                  animationDuration:(double)animationDuration
                   resolve:(RCTPromiseResolveBlock)resolve
                   reject:(RCTPromiseRejectBlock)reject) {
         [self withCamera:viewRef block:^(RNMBXCamera *camera) {
@@ -72,9 +65,9 @@ RCT_EXPORT_METHOD(moveBy:(nonnull NSNumber *)viewRef
  RCT_EXPORT_METHOD(scaleBy:(nonnull NSNumber *)viewRef
                    x:(double)x
                    y:(double)y
-                   animationMode:(nonnull NSNumber *)animationMode
-                   animationDuration:(nonnull NSNumber *)animationDuration
-                   scaleFactor:(nonnull NSNumber *)scaleFactor
+                   animationMode:(double)animationMode
+                   animationDuration:(double)animationDuration
+                   scaleFactor:(double)scaleFactor
                    resolve:(RCTPromiseResolveBlock)resolve
                    reject:(RCTPromiseRejectBlock)reject) {
          [self withCamera:viewRef block:^(RNMBXCamera *camera) {

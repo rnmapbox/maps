@@ -8,10 +8,16 @@ import com.facebook.react.uimanager.annotations.ReactProp
 import com.facebook.react.viewmanagers.RNMBXCustomLocationProviderManagerInterface
 import com.rnmapbox.rnmbx.rncompat.dynamic.*
 import com.rnmapbox.rnmbx.utils.Logger
+import com.facebook.react.uimanager.ViewManagerDelegate
+import com.facebook.react.viewmanagers.RNMBXCustomLocationProviderManagerDelegate
 
 
 class RNMBXCustomLocationProviderManager : ViewGroupManager<RNMBXCustomLocationProvider>(),
     RNMBXCustomLocationProviderManagerInterface<RNMBXCustomLocationProvider> {
+
+    private val delegate = RNMBXCustomLocationProviderManagerDelegate<RNMBXCustomLocationProvider, RNMBXCustomLocationProviderManager>(this)
+
+    override fun getDelegate(): ViewManagerDelegate<RNMBXCustomLocationProvider> = delegate
     override fun getName(): String {
         return  REACT_CLASS
     }

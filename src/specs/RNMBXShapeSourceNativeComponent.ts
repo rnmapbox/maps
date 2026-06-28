@@ -1,9 +1,9 @@
 import type { HostComponent, ViewProps } from 'react-native';
 import codegenNativeComponent from 'react-native/Libraries/Utilities/codegenNativeComponent';
 import {
-  DirectEventHandler,
-  Double,
-  Int32,
+  type DirectEventHandler,
+  type Double,
+  type Int32,
   // @ts-ignore - CI environment type resolution issue for CodegenTypes
 } from 'react-native/Libraries/Types/CodegenTypes';
 
@@ -21,6 +21,7 @@ export interface NativeProps extends ViewProps {
   clusterMaxZoomLevel: UnsafeMixed<Double>;
   clusterProperties: UnsafeMixed<any>;
   maxZoomLevel: UnsafeMixed<Double>;
+  minZoomLevel: UnsafeMixed<Double>;
   buffer: UnsafeMixed<Double>;
   tolerance: UnsafeMixed<Double>;
   lineMetrics: UnsafeMixed<boolean>;

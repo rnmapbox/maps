@@ -5,9 +5,15 @@ import com.facebook.react.uimanager.ThemedReactContext
 import com.facebook.react.uimanager.ViewGroupManager
 import com.facebook.react.uimanager.annotations.ReactProp
 import com.facebook.react.viewmanagers.RNMBXCircleLayerManagerInterface
+import com.facebook.react.uimanager.ViewManagerDelegate
+import com.facebook.react.viewmanagers.RNMBXCircleLayerManagerDelegate
 
 class RNMBXCircleLayerManager : ViewGroupManager<RNMBXCircleLayer>(),
     RNMBXCircleLayerManagerInterface<RNMBXCircleLayer> {
+
+    private val delegate = RNMBXCircleLayerManagerDelegate<RNMBXCircleLayer, RNMBXCircleLayerManager>(this)
+
+    override fun getDelegate(): ViewManagerDelegate<RNMBXCircleLayer> = delegate
 
     override fun getName(): String {
         return REACT_CLASS

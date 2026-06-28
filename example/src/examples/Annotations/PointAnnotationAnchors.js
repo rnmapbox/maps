@@ -81,7 +81,7 @@ const PointAnnotationAnchors = (props) => {
           coordinate={p.coordinate}
           anchor={p.anchor}
         >
-          <View style={styles.small} collapsable={false}>
+          <View style={styles.small}>
             <Text style={[styles.text, { color: 'white' }]}>
               x={p.anchor.x.toPrecision(2)}, y={p.anchor.y.toPrecision(2)}
             </Text>
@@ -103,7 +103,7 @@ const PointAnnotationAnchors = (props) => {
             coordinate={p.coordinate}
             anchor={p.anchor}
           >
-            <View style={[styles.large, p.containerStyle]} collapsable={false}>
+            <View style={[styles.large, p.containerStyle]}>
               <View
                 style={{
                   height: ANNOTATION_SIZE * 2,
