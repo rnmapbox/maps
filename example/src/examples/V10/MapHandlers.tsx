@@ -1,4 +1,4 @@
-import { Divider, Text } from '@rneui/base';
+import { Button, Divider, Text } from '@rneui/base';
 import {
   Camera,
   CircleLayer,
@@ -32,6 +32,9 @@ const styles = {
     flex: 0,
     padding: 10,
   },
+  controls: {
+    gap: 8,
+  },
   divider: {
     marginVertical: 6,
   },
@@ -40,8 +43,14 @@ const styles = {
   },
 };
 
+const CAMERA_CHANGED_THROTTLE_MS = 250;
+
 const MapHandlers = () => {
   const [lastCallback, setLastCallback] = useState('');
+  const [cameraChangedThrottleInterval, setCameraChangedThrottleInterval] =
+    useState(0);
+  const [cameraChangedCount, setCameraChangedCount] = useState(0);
+  const [mapIdleCount, setMapIdleCount] = useState(0);
   const [mapState, setMapState] = useState<MapState>({
     properties: {
       center: [0, 0],
@@ -64,6 +73,15 @@ const MapHandlers = () => {
   const bounds = properties?.bounds;
   const heading = properties?.heading;
   const gestures = mapState?.gestures;
+
+  const toggleCameraChangedThrottle = () => {
+    setCameraChangedThrottleInterval((current) =>
+      current > 0 ? 0 : CAMERA_CHANGED_THROTTLE_MS,
+    );
+    setCameraChangedCount(0);
+    setMapIdleCount(0);
+    setLastCallback('');
+  };
 
   const buildShape = (feature: Feature<Geometry>): Geometry => {
     return {
@@ -91,6 +109,7 @@ const MapHandlers = () => {
     <>
       <MapView
         style={styles.map}
+        cameraChangedThrottleInterval={cameraChangedThrottleInterval}
         onPress={(_feature: Feature<Geometry, GeoJsonProperties>) => {
           addFeature(_feature, 'press');
         }}
@@ -99,10 +118,12 @@ const MapHandlers = () => {
         }}
         onCameraChanged={(_state) => {
           setLastCallback('onCameraChanged');
+          setCameraChangedCount((count) => count + 1);
           setMapState(_state);
         }}
         onMapIdle={(_state) => {
           setLastCallback('onMapIdle');
+          setMapIdleCount((count) => count + 1);
           setMapState(_state);
         }}
       >
@@ -136,8 +157,26 @@ const MapHandlers = () => {
       <SafeAreaView>
         <View style={styles.info}>
           <Text style={styles.fadedText}>
-            Tap or long-press to create a marker.
+            Tap or long-press to create a marker. Pan or pinch-zoom the map to
+            compare event volume with and without throttling.
           </Text>
+
+          <Divider style={styles.divider} />
+
+          <View style={styles.controls}>
+            <Button
+              title={
+                cameraChangedThrottleInterval > 0
+                  ? 'Disable onCameraChanged throttle'
+                  : 'Enable onCameraChanged throttle'
+              }
+              type="outline"
+              onPress={toggleCameraChangedThrottle}
+            />
+
+            <Text style={styles.fadedText}>cameraChangedThrottleInterval</Text>
+            <Text>{cameraChangedThrottleInterval} ms</Text>
+          </View>
 
           <Divider style={styles.divider} />
 
@@ -159,6 +198,16 @@ const MapHandlers = () => {
 
           <Text style={styles.fadedText}>lastCallback</Text>
           <Text>{lastCallback}</Text>
+
+          <Divider style={styles.divider} />
+
+          <Text style={styles.fadedText}>onCameraChanged count</Text>
+          <Text>{cameraChangedCount}</Text>
+
+          <Divider style={styles.divider} />
+
+          <Text style={styles.fadedText}>onMapIdle count</Text>
+          <Text>{mapIdleCount}</Text>
 
           <Divider style={styles.divider} />
 
@@ -186,9 +235,13 @@ export default MapHandlers;
 
 const metadata: ExampleWithMetadata['metadata'] = {
   title: 'Map Handlers',
-  tags: ['MapView#onMapIdle'],
+  tags: [
+    'MapView#onCameraChanged',
+    'MapView#onMapIdle',
+    'MapView#cameraChangedThrottleInterval',
+  ],
   docs: `
-Map Handlers
+Map Handlers and cameraChangedThrottleInterval
 `,
 };
 MapHandlers.metadata = metadata;

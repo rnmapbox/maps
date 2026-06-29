@@ -4,6 +4,7 @@ import android.content.Context
 import android.graphics.BitmapFactory
 import android.os.Handler
 import android.os.Looper
+import android.os.SystemClock
 import android.view.Gravity
 import android.view.View
 import android.view.View.OnLayoutChangeListener
@@ -176,6 +177,8 @@ open class RNMBXMapView(private val mContext: Context, var mManager: RNMBXMapVie
 
     private var wasGestureActive = false
     private var isGestureActive = false
+    private var mCameraChangedThrottleInterval: Long = 0
+    private var mLastCameraChangedEventTimestamp: Long = 0
 
     var mapViewImpl: String? = null
 
@@ -581,6 +584,32 @@ open class RNMBXMapView(private val mContext: Context, var mManager: RNMBXMapVie
         }
     }
 
+    fun setReactCameraChangedThrottleInterval(cameraChangedThrottleInterval: Int) {
+        mCameraChangedThrottleInterval = cameraChangedThrottleInterval.toLong().coerceAtLeast(0L)
+        if (mCameraChangedThrottleInterval == 0L) {
+            resetCameraChangedThrottle()
+        }
+    }
+
+    private fun resetCameraChangedThrottle() {
+        mLastCameraChangedEventTimestamp = 0L
+    }
+
+    private fun shouldEmitCameraChangedEvent(): Boolean {
+        val interval = mCameraChangedThrottleInterval
+        if (interval <= 0L) {
+            return true
+        }
+
+        val now = SystemClock.elapsedRealtime()
+        if (now - mLastCameraChangedEventTimestamp < interval) {
+            return false
+        }
+
+        mLastCameraChangedEventTimestamp = now
+        return true
+    }
+
     fun setReactMaxPitch(maxPitch: Double?) {
         mMaxPitch = maxPitch
         changes.add(Property.MAX_PITCH)
@@ -782,11 +811,13 @@ open class RNMBXMapView(private val mContext: Context, var mManager: RNMBXMapVie
     fun sendRegionDidChangeEvent() {
         handleMapChangedEvent(EventTypes.REGION_DID_CHANGE)
         mCameraChangeTracker.setReason(CameraChangeReason.NONE)
+        resetCameraChangedThrottle()
     }
 
     private fun handleMapChangedEvent(eventType: String) {
         this.wasGestureActive = isGestureActive
         if (!canHandleEvent(eventType)) return
+        if (eventType == EventTypes.CAMERA_CHANGED && !shouldEmitCameraChangedEvent()) return
 
         val event: IEvent
         event = when (eventType) {
