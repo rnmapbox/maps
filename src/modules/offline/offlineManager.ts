@@ -22,16 +22,23 @@ export const OfflineModuleEventEmitter = new NativeEventEmitter(
   MapboxOfflineManager,
 );
 
-export type OfflineProgressStatus = {
-  name: string;
-  state: number;
-  percentage: number;
-  completedResourceSize: number;
-  completedTileCount: number;
-  completedResourceCount: number;
-  requiredResourceCount: number;
-  completedTileSize: number;
-};
+export type OfflineProgressStatus =
+  | {
+      name: string;
+      state: 'invalid' | 'inactive' | 'active' | 'complete' | 'unknown';
+      percentage: number;
+      completedResourceCount: number;
+      completedResourceSize: number;
+      erroredResourceCount: number;
+      loadedResourceSize: number;
+      loadedResourceCount: number;
+      requiredResourceCount: number;
+    }
+  | {
+      name: string;
+      state: 'invalid' | 'inactive' | 'active' | 'complete' | 'unknown';
+      percentage: null;
+    };
 
 export type OfflinePackError = {
   name: string;
