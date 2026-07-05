@@ -6,13 +6,22 @@ import com.facebook.react.bridge.ReactApplicationContext
 import com.facebook.react.bridge.ReadableType
 import com.facebook.react.common.MapBuilder
 import com.facebook.react.uimanager.ThemedReactContext
+import com.facebook.react.uimanager.ViewManagerDelegate
 import com.facebook.react.uimanager.annotations.ReactProp
+import com.facebook.react.viewmanagers.RNMBXPointAnnotationManagerManagerDelegate
 import com.facebook.react.viewmanagers.RNMBXPointAnnotationManagerManagerInterface
 import com.rnmapbox.rnmbx.components.AbstractEventEmitter
 
 class RNMBXPointAnnotationManagerViewManager(context: ReactApplicationContext) :
     AbstractEventEmitter<RNMBXPointAnnotationManagerView>(context),
     RNMBXPointAnnotationManagerManagerInterface<RNMBXPointAnnotationManagerView> {
+    private val mDelegate: ViewManagerDelegate<RNMBXPointAnnotationManagerView> =
+        RNMBXPointAnnotationManagerManagerDelegate(this)
+
+    override fun getDelegate(): ViewManagerDelegate<RNMBXPointAnnotationManagerView> {
+        return mDelegate
+    }
+
     override fun customEvents(): Map<String, String>? {
         return MapBuilder.builder<String, String>().build()
     }
