@@ -675,6 +675,20 @@
       },
       {
         "metadata": {
+          "title": "PointAnnotationManager Multiple",
+          "tags": [
+            "PointAnnotationManager",
+            "PointAnnotation",
+            "slot"
+          ],
+          "docs": "\nDemonstrates multiple PointAnnotationManager instances, each owning its own\nannotation layer in a different slot of the Mapbox Standard style. The bottom-slot\npins (B) render behind the 3D buildings while the top-slot pins (T) render in front.\n  "
+        },
+        "fullPath": "example/src/examples/Annotations/PointAnnotationManagerMultiple.tsx",
+        "relPath": "Annotations/PointAnnotationManagerMultiple.tsx",
+        "name": "PointAnnotationManagerMultiple"
+      },
+      {
+        "metadata": {
           "title": "PointAnnotationManager Slot",
           "tags": [
             "PointAnnotationManager",

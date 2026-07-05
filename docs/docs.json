@@ -6551,16 +6551,72 @@
     "name": "PointAnnotation"
   },
   "PointAnnotationManager": {
-    "description": "Configures the shared PointAnnotation manager for the parent MapView.\nWrap PointAnnotation components as children.",
+    "description": "Configures a PointAnnotation manager. Each PointAnnotationManager owns its own\nannotation layer, so multiple managers can be placed in different `slot`s of the\nMapbox Standard style. Wrap PointAnnotation components as children.\n\nPointAnnotations that are not wrapped in a PointAnnotationManager attach to a\ndefault manager. Use `default` to configure that manager.",
     "displayName": "PointAnnotationManager",
     "methods": [],
     "props": [
+      {
+        "name": "id",
+        "required": false,
+        "type": "string",
+        "default": "none",
+        "description": "A stable Mapbox layer id for this manager's annotation layer.\nWhen omitted, the SDK generates a unique id automatically."
+      },
+      {
+        "name": "default",
+        "required": false,
+        "type": "boolean",
+        "default": "none",
+        "description": "Marks this as the default manager. PointAnnotations that are not wrapped in a\nPointAnnotationManager attach to the default manager, so this lets you configure\nthe slot and properties used by those bare annotations. Only one default manager\nis allowed per MapView."
+      },
       {
         "name": "slot",
         "required": false,
         "type": "Slot \\| (string & {})",
         "default": "none",
         "description": "The slot in the style layer stack to position the annotation layer.\nUse with Mapbox Standard style to control layer ordering."
+      },
+      {
+        "name": "iconAllowOverlap",
+        "required": false,
+        "type": "boolean",
+        "default": "none",
+        "description": "If true, the icon will be visible even if it collides with other previously drawn symbols."
+      },
+      {
+        "name": "iconIgnorePlacement",
+        "required": false,
+        "type": "boolean",
+        "default": "none",
+        "description": "If true, other symbols can be visible even if they collide with the icon."
+      },
+      {
+        "name": "iconOptional",
+        "required": false,
+        "type": "boolean",
+        "default": "none",
+        "description": "If true, text will display without their corresponding icons when the icon collides\nwith other symbols and the text does not."
+      },
+      {
+        "name": "textAllowOverlap",
+        "required": false,
+        "type": "boolean",
+        "default": "none",
+        "description": "If true, the text will be visible even if it collides with other previously drawn symbols."
+      },
+      {
+        "name": "textIgnorePlacement",
+        "required": false,
+        "type": "boolean",
+        "default": "none",
+        "description": "If true, other symbols can be visible even if they collide with the text."
+      },
+      {
+        "name": "textOptional",
+        "required": false,
+        "type": "boolean",
+        "default": "none",
+        "description": "If true, icons will display without their corresponding text when the text collides\nwith other symbols and the icon does not."
       },
       {
         "name": "children",
