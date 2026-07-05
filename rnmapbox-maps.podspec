@@ -199,7 +199,19 @@ end
 
 $rnMapboxMapsTargetsToChangeToDynamic = rnMapboxMapsTargetsToChangeToDynamic
 
+def $RNMapboxMaps._expo_precompiled_pipeline?
+  # Expo SDK 56+ precompiled iOS pipeline (prebuilt React core) downgrades every
+  # framework-style pod back to a static library after the podspec is evaluated.
+  # Flipping the Mapbox pods to dynamic here fights that and leaves an inconsistent
+  # graph (MapboxMaps stays dynamic while its deps get forced static). See #4242.
+  ENV['EXPO_USE_PRECOMPILED_MODULES'] == '1'
+end
+
 def $RNMapboxMaps.pre_install(installer)
+  if $RNMapboxMaps._expo_precompiled_pipeline?
+    Pod::UI.puts "[RNMapbox] Expo precompiled modules pipeline detected (EXPO_USE_PRECOMPILED_MODULES=1) — skipping the Mapbox dynamic-framework flip so all Mapbox pods stay consistently static."
+    return
+  end
   installer.aggregate_targets.each do |target|
     target.pod_targets.select { |p| $rnMapboxMapsTargetsToChangeToDynamic.include?(p.name) }.each do |mobile_events_target|
       mobile_events_target.instance_variable_set(:@build_type,Pod::BuildType.dynamic_framework)
@@ -285,9 +297,6 @@ Pod::Spec.new do |s|
         if $RNMapobxMaps._rn_72_or_earlier()
           $RNMapboxMaps._add_compiler_flags(sp, "-DRNMBX_RN_72=1")
         end
-      end
-      if ENV['USE_FRAMEWORKS'] || $RNMapboxMapsUseFrameworks
-        $RNMapboxMaps._add_compiler_flags(sp, "-DRNMBX_USE_FRAMEWORKS=1")
       end
     else
       fail "$RNMapboxMapsImpl should be mapbox but was: $RNMapboxMapsImpl"
