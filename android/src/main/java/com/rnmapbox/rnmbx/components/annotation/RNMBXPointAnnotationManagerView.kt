@@ -125,12 +125,16 @@ class RNMBXPointAnnotationManagerView(context: Context) : AbstractMapFeature(con
     private fun applyProps() {
         val manager = coordinator?.manager ?: return
         manager.slot = slot
-        manager.iconAllowOverlap = iconAllowOverlap
-        manager.iconIgnorePlacement = iconIgnorePlacement
-        manager.iconOptional = iconOptional
-        manager.textAllowOverlap = textAllowOverlap
-        manager.textIgnorePlacement = textIgnorePlacement
-        manager.textOptional = textOptional
+        // Only write when the prop is set. The annotation plugin defaults
+        // iconAllowOverlap/iconIgnorePlacement to true so annotations always show;
+        // writing null here would clobber that back to the style default (false) and
+        // cull colliding pins.
+        iconAllowOverlap?.let { manager.iconAllowOverlap = it }
+        iconIgnorePlacement?.let { manager.iconIgnorePlacement = it }
+        iconOptional?.let { manager.iconOptional = it }
+        textAllowOverlap?.let { manager.textAllowOverlap = it }
+        textIgnorePlacement?.let { manager.textIgnorePlacement = it }
+        textOptional?.let { manager.textOptional = it }
     }
 
     companion object {
