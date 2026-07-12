@@ -424,9 +424,17 @@ class RNMBXOfflineModule: RCTEventEmitter {
         }
     }
 
-    taskGroup.notify(queue: .main) {
+    // `threadedOfflineManager` is function-local, and neither the closures above
+    // nor `cancelables` (which holds the tasks, not the manager) retain it. Left
+    // alone it would be deinitialized as soon as `startLoading` returns, while
+    // the style pack load and the tileset descriptor it vended are still in
+    // flight, which aborts with "object deallocated with non-zero retain count".
+    // The task group already marks the point where both are done, so hold the
+    // manager until then.
+    taskGroup.notify(queue: .main) { [threadedOfflineManager] in
       self.tileRegionPacks[id]!.cancelables = []
       self.tileRegionPacks[id]!.state = downloadError ? .inactive : .complete
+      withExtendedLifetime(threadedOfflineManager) {}
     }
 
     self.tileRegionPacks[id]!.cancelables = [task, stylePackTask]
