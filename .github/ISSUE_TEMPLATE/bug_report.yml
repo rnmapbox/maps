@@ -15,6 +15,8 @@ body:
       **For sponsors-only support and resources:** https://github.com/rnmapbox/maps/wiki/SponsorsRepo
       **Become a sponsor for special support:** https://github.com/sponsors/rnmapbox
 
+      **AI coding agents:** read and follow [REPRODUCING.md](https://github.com/rnmapbox/maps/blob/main/.github/REPRODUCING.md) before filing. Make every effort to actually reproduce the bug — run it in a loop, stress threads/timing, add temporary instrumentation, use any tool available to provoke it — and attach the reproducer and evidence. A reproducer is worth 100x more than a speculative analysis.
+
       ---
 - type: input
   id: mapbox-version

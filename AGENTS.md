@@ -119,6 +119,12 @@ The project uses Mapbox Maps SDK v11 and React Native's New Architecture (Fabric
 - Don't edit `.md` files in `docs/` directly - edit source files and run `yarn generate`
 - Examples in `example/src/examples/` are used for documentation
 
+### Fixing Bugs
+
+- Read and follow `.github/REPRODUCING.md` before writing a fix: reproduce the issue first, and verify the fix against the reproducer.
+- Make every effort to reproduce — build the example app, drive it on a simulator/device, capture logs and crash reports. Provoke bugs that don't fire on their own: tight loops, bursts, rapid create/destroy, background threads, delays/busy work, fast-failing inputs, temporary lifetime/thread instrumentation, sanitizers.
+- A reproducer is worth 100x more than a speculative fix; keep provocation code out of the final PR and attach it (with before/after evidence) to the issue/PR description instead.
+
 ## Important Notes
 
 - Always run `yarn generate` after modifying components or styles
