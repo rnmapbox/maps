@@ -50,8 +50,7 @@ RCT_EXPORT_MODULE();
 RCT_EXPORT_METHOD(refresh:(nonnull NSNumber*)viewRef resolve:(RCTPromiseResolveBlock)resolve reject:(RCTPromiseRejectBlock)reject)
 {
     [self withImage:viewRef block:^(RNMBXImage *view) {
-        // TODO: implement refresh on iOS
-//        [view refresh];
+        [view refresh];
     } reject:reject methodName:@"refresh"];
 }
 
