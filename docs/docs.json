@@ -5818,6 +5818,13 @@
         "description": "FIX ME NO DESCRIPTION"
       },
       {
+        "name": "stopGesturePropagation",
+        "required": false,
+        "type": "boolean",
+        "default": "false",
+        "description": "Keep pan/pinch/drag gestures that start on this marker inside the marker instead of\nletting them reach the map. Enable this for markers whose children handle their own\ndrags in JavaScript (e.g. a PanResponder-based slider), which otherwise race the map's\npan/zoom recogniser and can be taken over by the map. By default the marker is smart:\ntaps and native scrollables are kept, but a pan/pinch that merely starts on the marker\nmoves the map. Defaults to false.\n\n@platform android — on iOS the map's gesture recognisers already coexist with marker\ncontent, so this has no effect."
+      },
+      {
         "name": "children",
         "required": true,
         "type": "ReactReactElement",
