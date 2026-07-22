@@ -211,6 +211,18 @@ Please upgrade to Mapbox v11.x or use @rnmapbox/maps 10.2.x
                     }
                 }
 
+                // AGP 8.9+ (bundled with RN 0.86 / Gradle 8.x) no longer feeds
+                // extra java.srcDirs into the Kotlin compile task. The compat
+                // directories appended above (mapbox-v11-compat, rn-compat and the
+                // selected lifecycle-compat variant) contain only Kotlin sources,
+                // so without this they are silently skipped and their packages
+                // (e.g. com.rnmapbox.rnmbx.v11compat) fail to resolve. Mirror the
+                // Java source dirs onto the Kotlin source set to keep them compiled.
+                // Guarded by the same impl check as the `kotlin-android` plugin
+                // above, since only that impl registers the `kotlin` source set.
+                if (safeExtGet("RNMapboxMapsImpl", defaultMapboxMapsImpl) == "mapbox") {
+                    kotlin.srcDirs(java.srcDirs)
+                }
             }
         }
 
