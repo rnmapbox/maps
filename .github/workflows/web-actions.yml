@@ -7,9 +7,6 @@ on:
         required: true
         default: default
         type: string
-      ref:
-        required: false
-        type: string
       NVMRC:
         required: true
         type: string
@@ -27,20 +24,20 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-        if: ${{ inputs.ref == '' }}
-
-      - name: Checkout fork
-        uses: actions/checkout@v4
-        if: ${{ inputs.ref != '' }}
-        with:
-          ref: ${{ inputs.ref }}
 
       - name: Setup node ${{ inputs.NVMRC }}
         uses: actions/setup-node@v3.5.1
         with:
           node-version: ${{ inputs.NVMRC }}
 
-      - run: echo $MAPBOX_ACCESS_TOKEN > ./accesstoken
+      # Fork PRs get no secrets; fall back to the public rotated CI token (see rnmapbox/ci-config)
+      - name: Access token
+        run: |
+          if [ -n "$MAPBOX_ACCESS_TOKEN" ]; then
+            echo "$MAPBOX_ACCESS_TOKEN" > ./accesstoken
+          else
+            curl -fsSL https://raw.githubusercontent.com/rnmapbox/ci-config/main/mapbox-ci-token > ./accesstoken
+          fi
         working-directory: example
         env:
           MAPBOX_ACCESS_TOKEN: ${{ secrets.MAPBOX_ACCESS_TOKEN || secrets.ENV_MAPBOX_ACCESS_TOKEN }}
