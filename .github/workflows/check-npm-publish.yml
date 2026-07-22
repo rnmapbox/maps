@@ -1,0 +1,33 @@
+name: Check NPM Publish
+on:
+  schedule:
+    - cron: '30 6 * * *'
+  workflow_dispatch:
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      issues: write
+    steps:
+      - name: Verify latest GitHub release is on npm
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          tag=$(gh api "repos/$GITHUB_REPOSITORY/releases/latest" --jq .tag_name)
+          version=${tag#v}
+          if npm view "@rnmapbox/maps@$version" version > /dev/null 2>&1; then
+            echo "npm has @rnmapbox/maps@$version"
+            exit 0
+          fi
+          echo "::error::Release $tag exists on GitHub but @rnmapbox/maps@$version is not on npm"
+          title="npm publish missing for $tag"
+          existing=$(gh issue list --repo "$GITHUB_REPOSITORY" --state open --search "\"$title\" in:title" --json number --jq '.[0].number')
+          if [ -n "$existing" ]; then
+            echo "Issue #$existing already open"
+          else
+            gh issue create --repo "$GITHUB_REPOSITORY" \
+              --title "$title" \
+              --body "The latest GitHub release [\`$tag\`](${{ github.server_url }}/$GITHUB_REPOSITORY/releases/tag/$tag) is not published on npm (\`npm view @rnmapbox/maps@$version\` finds nothing). The publish workflow may have failed or never run. Detected by the scheduled Check NPM Publish workflow."
+          fi
+          exit 1
