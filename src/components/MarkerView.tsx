@@ -45,6 +45,19 @@ type Props = ViewProps & {
   isSelected?: boolean;
 
   /**
+   * Keep pan/pinch/drag gestures that start on this marker inside the marker instead of
+   * letting them reach the map. Enable this for markers whose children handle their own
+   * drags in JavaScript (e.g. a PanResponder-based slider), which otherwise race the map's
+   * pan/zoom recogniser and can be taken over by the map. By default the marker is smart:
+   * taps and native scrollables are kept, but a pan/pinch that merely starts on the marker
+   * moves the map. Defaults to false.
+   *
+   * @platform android — on iOS the map's gesture recognisers already coexist with marker
+   * content, so this has no effect.
+   */
+  stopGesturePropagation?: boolean;
+
+  /**
    * One or more valid React Native views. You can use Pressable, TouchableOpacity,
    * etc. directly as children — onPress and touch feedback work correctly.
    */
@@ -73,6 +86,7 @@ const MarkerView = ({
   coordinate,
   style,
   pointerEvents,
+  stopGesturePropagation = false,
   children,
 }: Props) => {
   // Android new-arch (Fabric) fix: UIManager.measure reads from the Fabric shadow
@@ -157,6 +171,7 @@ const MarkerView = ({
       allowOverlapWithPuck={allowOverlapWithPuck}
       isSelected={isSelected}
       pointerEvents={pointerEvents}
+      stopGesturePropagation={stopGesturePropagation}
       onTouchEnd={handleTouchEnd}
     >
       <RNMBXMakerViewContentComponent

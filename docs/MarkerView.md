@@ -80,6 +80,24 @@ FIX ME NO DESCRIPTION
   _defaults to:_ `false`
 
   
+### stopGesturePropagation
+
+```tsx
+boolean
+```
+Keep pan/pinch/drag gestures that start on this marker inside the marker instead of
+letting them reach the map. Enable this for markers whose children handle their own
+drags in JavaScript (e.g. a PanResponder-based slider), which otherwise race the map's
+pan/zoom recogniser and can be taken over by the map. By default the marker is smart:
+taps and native scrollables are kept, but a pan/pinch that merely starts on the marker
+moves the map. Defaults to false.
+
+@platform android — on iOS the map's gesture recognisers already coexist with marker
+content, so this has no effect.
+
+  _defaults to:_ `false`
+
+  
 ### children
 
 ```tsx

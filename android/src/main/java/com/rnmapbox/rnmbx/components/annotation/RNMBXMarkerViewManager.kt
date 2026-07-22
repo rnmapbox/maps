@@ -75,6 +75,11 @@ class RNMBXMarkerViewManager(reactApplicationContext: ReactApplicationContext) :
         markerView.setIsSelected(isSelected.asBoolean())
     }
 
+    @ReactProp(name = "stopGesturePropagation")
+    override fun setStopGesturePropagation(markerView: RNMBXMarkerView, value: Dynamic) {
+        markerView.setStopGesturePropagation(!value.isNull && value.asBoolean())
+    }
+
     override fun updateProperties(viewToUpdate: RNMBXMarkerView, props: ReactStylesDiffMap) {
         super.updateProperties(viewToUpdate, props)
         // The codegen delegate does not forward the standard `pointerEvents` ViewProp — it falls

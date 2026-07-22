@@ -18,6 +18,7 @@ export interface NativeProps extends ViewProps {
   allowOverlap: UnsafeMixed<boolean>;
   allowOverlapWithPuck: UnsafeMixed<boolean>;
   isSelected: UnsafeMixed<boolean>;
+  stopGesturePropagation: UnsafeMixed<boolean>;
 }
 
 // @ts-ignore-error - Codegen requires single cast but TypeScript prefers double cast

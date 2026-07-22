@@ -725,6 +725,12 @@ open class RNMBXMapView(private val mContext: Context, var mManager: RNMBXMapVie
             }
         }
         val screenPointPx = mMap?.pixelForCoordinate(point)
+        // A tap that reaches the map but lands within a MarkerView (e.g. on a non-interactive
+        // part of it) should be absorbed by the marker, not fall through to touchable sources
+        // (symbol/shape layers) or pins underneath it. See #4255 discussion.
+        if (screenPointPx != null && isPointOnMarkerView(screenPointPx)) {
+            return true
+        }
         val touchableSources = allTouchableSources
         val hits = HashMap<String?, List<Feature?>?>()
         if (screenPointPx != null) {
@@ -750,6 +756,23 @@ open class RNMBXMapView(private val mContext: Context, var mManager: RNMBXMapVie
             })
         }
         return false
+    }
+
+    /**
+     * Whether the given map-surface coordinate (physical pixels, from `pixelForCoordinate`) lands
+     * within any `MarkerView` currently on the map. Converts to absolute screen coordinates so it
+     * can be compared against each marker view's `getLocationOnScreen` bounds.
+     */
+    private fun isPointOnMarkerView(screenPointPx: ScreenCoordinate): Boolean {
+        val markerViews = mFeatures.mapNotNull { it.feature as? RNMBXMarkerView }
+        if (markerViews.isEmpty()) {
+            return false
+        }
+        val mapLoc = IntArray(2)
+        mapView.getLocationOnScreen(mapLoc)
+        val absX = mapLoc[0] + screenPointPx.x.toFloat()
+        val absY = mapLoc[1] + screenPointPx.y.toFloat()
+        return markerViews.any { it.containsScreenPoint(absX, absY) }
     }
 
     override fun onMapLongClick(point: Point): Boolean {

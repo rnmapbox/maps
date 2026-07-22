@@ -2,6 +2,7 @@ import React from 'react';
 import {
   Button,
   Pressable,
+  ScrollView,
   StyleSheet,
   Switch,
   Text,
@@ -278,6 +279,9 @@ const ShowMarkerView = () => {
     React.useState<boolean>(false);
 
   const [mapMoveCount, setMapMoveCount] = React.useState(0);
+  const [featurePressCount, setFeaturePressCount] = React.useState(0);
+  const [scrollCount, setScrollCount] = React.useState(0);
+  const [stopGesture, setStopGesture] = React.useState(false);
 
   const onPressMap = (e: GeoJSON.Feature) => {
     const geometry = e.geometry as GeoJSON.Point;
@@ -287,6 +291,22 @@ const ShowMarkerView = () => {
   const onRegionDidChange = React.useCallback(() => {
     setMapMoveCount((c) => c + 1);
   }, []);
+
+  // A tappable circle sitting directly under the first MarkerView, to demonstrate that a tap on
+  // the marker does not fall through and select the feature beneath it (#4255).
+  const underMarkerShape = React.useMemo<GeoJSON.FeatureCollection>(
+    () => ({
+      type: 'FeatureCollection',
+      features: [
+        {
+          type: 'Feature',
+          properties: {},
+          geometry: { type: 'Point', coordinates: pointList[0]! },
+        },
+      ],
+    }),
+    [pointList],
+  );
 
   return (
     <>
@@ -306,7 +326,19 @@ const ShowMarkerView = () => {
         }
         onPress={() => setPointerEventsNone((prev) => !prev)}
       />
-      <Mapbox.MapView onPress={onPressMap} onRegionDidChange={onRegionDidChange} style={styles.matchParent}>
+      <Button
+        title={
+          stopGesture
+            ? 'stopGesturePropagation ON – slider marker keeps gestures'
+            : 'stopGesturePropagation OFF – slider drag may pan map'
+        }
+        onPress={() => setStopGesture((prev) => !prev)}
+      />
+      <Mapbox.MapView
+        onPress={onPressMap}
+        onRegionDidChange={onRegionDidChange}
+        style={styles.matchParent}
+      >
         <Mapbox.Camera
           defaultSettings={{
             zoomLevel: 16,
@@ -318,6 +350,17 @@ const ShowMarkerView = () => {
           <AnnotationContent title={'this is a point annotation'} />
         </Mapbox.PointAnnotation>
 
+        <Mapbox.ShapeSource
+          id="under-marker-src"
+          shape={underMarkerShape}
+          onPress={() => setFeaturePressCount((c) => c + 1)}
+        >
+          <Mapbox.CircleLayer
+            id="under-marker-circle"
+            style={{ circleRadius: 44, circleColor: 'rgba(255,0,0,0.35)' }}
+          />
+        </Mapbox.ShapeSource>
+
         <Mapbox.MarkerView
           coordinate={pointList[0]!}
           allowOverlapWithPuck={allowOverlapWithPuck}
@@ -327,9 +370,54 @@ const ShowMarkerView = () => {
         </Mapbox.MarkerView>
 
         <Mapbox.MarkerView
+          coordinate={pointList[1]!}
+          anchor={{ x: 0.5, y: 1.3 }}
+          allowOverlap
+        >
+          <View
+            collapsable={false}
+            style={{
+              width: 180,
+              height: 54,
+              backgroundColor: 'white',
+              borderRadius: 8,
+              borderWidth: 1,
+              borderColor: '#333',
+            }}
+          >
+            <ScrollView
+              horizontal
+              onScroll={() => setScrollCount((c) => c + 1)}
+              scrollEventThrottle={16}
+              showsHorizontalScrollIndicator
+            >
+              {Array.from({ length: 12 }).map((_, i) => (
+                <View
+                  key={i}
+                  style={{
+                    width: 50,
+                    height: 50,
+                    margin: 2,
+                    borderRadius: 6,
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    backgroundColor: `hsl(${i * 30}, 70%, 60%)`,
+                  }}
+                >
+                  <Text style={{ color: 'white', fontWeight: 'bold' }}>
+                    {i}
+                  </Text>
+                </View>
+              ))}
+            </ScrollView>
+          </View>
+        </Mapbox.MarkerView>
+
+        <Mapbox.MarkerView
           coordinate={INITIAL_COORDINATES[2]!}
           allowOverlap
           allowOverlapWithPuck={allowOverlapWithPuck}
+          stopGesturePropagation={stopGesture}
         >
           <InteractiveMarkerContent />
         </Mapbox.MarkerView>
@@ -349,6 +437,8 @@ const ShowMarkerView = () => {
 
       <Bubble>
         <Text>Map moved: {mapMoveCount} times</Text>
+        <Text>Feature (under marker) pressed: {featurePressCount} times</Text>
+        <Text>ScrollView scrolled: {scrollCount} events</Text>
         <Text>Tap on map to add a point annotation</Text>
       </Bubble>
     </>
@@ -362,7 +452,13 @@ export default ShowMarkerView;
 /** @type ExampleWithMetadata['metadata'] */
 const metadata = {
   title: 'Marker View',
-  tags: ['PointAnnotation', 'MarkerView', 'Slider', 'Interactive', 'pointerEvents'],
+  tags: [
+    'PointAnnotation',
+    'MarkerView',
+    'Slider',
+    'Interactive',
+    'pointerEvents',
+  ],
   docs: `
 Shows marker view and point annotations, including an interactive marker with
 sliders, switch, counter, text input, and pressable button to verify complex
