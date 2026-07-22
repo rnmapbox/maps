@@ -47,7 +47,7 @@ jobs:
           if [ -n "$MAPBOX_ACCESS_TOKEN" ]; then
             echo "$MAPBOX_ACCESS_TOKEN" > ./accesstoken
           else
-            curl -fsSL https://raw.githubusercontent.com/rnmapbox/ci-config/main/mapbox-ci-token > ./accesstoken
+            "$GITHUB_WORKSPACE/scripts/ci/fetch-mapbox-token.sh" > ./accesstoken
           fi
         env:
           MAPBOX_ACCESS_TOKEN: ${{ secrets.MAPBOX_ACCESS_TOKEN || secrets.ENV_MAPBOX_ACCESS_TOKEN }}
