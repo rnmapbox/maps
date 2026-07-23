@@ -1,11 +1,13 @@
 export * from './RNMBXModule';
 
+export type { OnPressEvent } from './types';
 export {
   Camera,
   UserTrackingMode,
   type CameraPadding,
   type CameraAnimationMode,
   type CameraBounds,
+  type CameraBoundsWithPadding,
   type CameraStop,
 } from './components/Camera';
 export { Atmosphere } from './components/Atmosphere';
