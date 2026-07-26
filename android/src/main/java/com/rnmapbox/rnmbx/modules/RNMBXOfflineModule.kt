@@ -43,7 +43,7 @@ enum class TileRegionPackState(val rawValue: String) {
     INACTIVE("inactive"),
     ACTIVE("active"),
     COMPLETE("complete"),
-    UNKNOWN("unkown")
+    UNKNOWN("unknown")
 }
 class TileRegionPack(var name: String, var state: TileRegionPackState = TileRegionPackState.UNKNOWN, var progress: TileRegionLoadProgress? = null, var metadata: JSONObject) {
     var cancelable: Cancelable? = null

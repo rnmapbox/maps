@@ -10,10 +10,10 @@ interface RNMBXModule {
     SatelliteStreet: URL;
   };
   OfflinePackDownloadState: {
-    Inactive: string | number;
-    Active: string | number;
-    Complete: string | number;
-    Unknown?: string | number;
+    Inactive: string;
+    Active: string;
+    Complete: string;
+    Unknown?: string;
   };
   LineJoin: {
     Bevel: string | number;
