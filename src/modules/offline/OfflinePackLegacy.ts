@@ -13,6 +13,7 @@ type OfflinePackStatus = {
   completedTileSize: number;
   completedTileCount: number;
   requiredResourceCount: number;
+  requiredTileCount: number;
 };
 
 class OfflinePackLegacy {
