@@ -6454,7 +6454,7 @@
         "required": false,
         "type": "boolean",
         "default": "false",
-        "description": "Enable or disable dragging. Defaults to false."
+        "description": "Enable or disable dragging. Defaults to false.\nWhen enabled, a long press is required to begin dragging (iOS and Android)."
       },
       {
         "name": "coordinate",
