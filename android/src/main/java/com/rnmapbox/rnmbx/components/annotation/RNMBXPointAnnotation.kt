@@ -183,12 +183,12 @@ class RNMBXPointAnnotation(private val mContext: Context, private val mManager: 
         }
     }
 
+    val isDraggable: Boolean
+        get() = mDraggable
+
     fun setDraggable(draggable: Boolean) {
+        // Mapbox isDraggable stays false (set in makeMarker)
         mDraggable = draggable
-        annotation?.let { annotation ->
-            annotation.isDraggable = draggable
-            pointAnnotations?.update(annotation)
-        }
     }
 
     fun setReactSelected(selected: Boolean) {
@@ -239,7 +239,8 @@ class RNMBXPointAnnotation(private val mContext: Context, private val mManager: 
         val options = mCoordinate?.let {
             PointAnnotationOptions()
                 .withPoint(it)
-                .withDraggable(mDraggable)
+                // SDK drag is disabled, long-press drag is handled by RNMBXPointAnnotationCoordinator
+                .withDraggable(false)
                 .withIconSize(1.0)
                 .withSymbolSortKey(10.0)
         }

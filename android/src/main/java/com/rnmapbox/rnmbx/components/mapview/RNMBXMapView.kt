@@ -5,6 +5,7 @@ import android.graphics.BitmapFactory
 import android.os.Handler
 import android.os.Looper
 import android.view.Gravity
+import android.view.MotionEvent
 import android.view.View
 import android.view.View.OnLayoutChangeListener
 import android.view.ViewGroup
@@ -310,14 +311,27 @@ open class RNMBXMapView(private val mContext: Context, var mManager: RNMBXMapVie
 
         gesturesPlugin.addOnMoveListener(object : OnMoveListener {
             override fun onMoveBegin(moveGestureDetector: MoveGestureDetector) {
+                if (pointAnnotationCoordinators.any { it.isDragging }) {
+                    return
+                }
                 mapGestureBegin(MapGestureType.Move, moveGestureDetector)
             }
 
             override fun onMove(moveGestureDetector: MoveGestureDetector): Boolean {
+                val focalPoint = ScreenCoordinate(
+                    moveGestureDetector.focalPoint.x.toDouble(),
+                    moveGestureDetector.focalPoint.y.toDouble()
+                )
+                if (pointAnnotationCoordinators.any { it.handleDragMove(focalPoint) }) {
+                    return true
+                }
                 return mapGesture(MapGestureType.Move, moveGestureDetector)
             }
 
             override fun onMoveEnd(moveGestureDetector: MoveGestureDetector) {
+                if (pointAnnotationCoordinators.any { it.handleDragEnd() }) {
+                    return
+                }
                 mapGestureEnd(MapGestureType.Move, moveGestureDetector)
             }
         })
@@ -776,17 +790,14 @@ open class RNMBXMapView(private val mContext: Context, var mManager: RNMBXMapVie
     }
 
     override fun onMapLongClick(point: Point): Boolean {
-        val _this = this
-        if (pointAnnotationCoordinators.any { it.getAndClearAnnotationDragged() }) {
+        val screenPointPx = mMap?.pixelForCoordinate(point) ?: return false
+        // Long-press on a draggable PointAnnotation starts custom drag (iOS parity)
+        if (pointAnnotationCoordinators.any { it.handleLongPress(screenPointPx) }) {
             return true
         }
-        val screenPointPx = mMap?.pixelForCoordinate(point)
-        if (screenPointPx != null) {
-            val screenPointDp = toDp(screenPointPx)
-            val event = MapClickEvent(_this, LatLng(point), screenPointDp, EventTypes.MAP_LONG_CLICK)
-            mManager.handleEvent(event)
-        }
-
+        val screenPointDp = toDp(screenPointPx)
+        val event = MapClickEvent(this, LatLng(point), screenPointDp, EventTypes.MAP_LONG_CLICK)
+        mManager.handleEvent(event)
         return false
     }
 
@@ -1277,6 +1288,7 @@ open class RNMBXMapView(private val mContext: Context, var mManager: RNMBXMapVie
             mapView.setLayoutParams(matchParent)
             addView(mapView)
         }
+        installMapTouchListener()
         this.addOnLayoutChangeListener(this)
 
         val map = mapView.getMapboxMap()
@@ -1620,26 +1632,34 @@ open class RNMBXMapView(private val mContext: Context, var mManager: RNMBXMapVie
     // endregion
 }
 
-// region requestDisallowInterceptTouchEvent
+// region map touch (PointAnnotation drag + requestDisallowInterceptTouchEvent)
+fun RNMBXMapView.installMapTouchListener() {
+    withMapView { map ->
+        map.setOnTouchListener { _, event ->
+            when (event.actionMasked) {
+                MotionEvent.ACTION_UP, MotionEvent.ACTION_CANCEL -> {
+                    // End long-press drag even when the finger lifts without a move gesture
+                    pointAnnotationCoordinators.any { it.handleDragEnd() }
+                }
+            }
+            if (requestDisallowInterceptTouchEvent) {
+                // Preserve pre-drag behavior: disallow parent intercept, forward, consume
+                this.requestDisallowInterceptTouchEvent(true)
+                map.onTouchEvent(event)
+                true
+            } else {
+                // Observe only, do not consume or manually forward
+                false
+            }
+        }
+    }
+}
+
 fun RNMBXMapView.updateRequestDisallowInterceptTouchEvent(oldValue: Boolean, value: Boolean) {
     if (oldValue == value) {
         return
     }
-    if (value) {
-        withMapView {
-            it.setOnTouchListener { view, event ->
-                this.requestDisallowInterceptTouchEvent(true)
-                mapView.onTouchEvent(event)
-                true
-            }
-        }
-    } else {
-        withMapView {
-            it.setOnTouchListener { view, event ->
-                mapView.onTouchEvent(event)
-            }
-        }
-    }
+    installMapTouchListener()
 }
 // endregion
 
