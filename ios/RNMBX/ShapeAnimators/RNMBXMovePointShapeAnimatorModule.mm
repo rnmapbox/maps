@@ -25,18 +25,38 @@ RCT_EXPORT_MODULE();
   return RCTGetUIManagerQueue();
 }
 
-RCT_EXPORT_METHOD(generate:(nonnull NSNumber*)tag startCoordinate: (nonnull NSArray*)startCoordinate resolve:(RCTPromiseResolveBlock)resolve reject:(RCTPromiseRejectBlock)reject) {
-  resolve([[MovePointShapeAnimator generateWithTag:tag startCoordinate:startCoordinate] getTag]);
+// Must match NativeRNMBXMovePointShapeAnimatorModuleSpec exactly (codegen uses NSInteger/double).
+- (void)generate:(NSInteger)tag
+      coordinate:(NSArray *)coordinate
+         resolve:(RCTPromiseResolveBlock)resolve
+          reject:(RCTPromiseRejectBlock)reject
+{
+  MovePointShapeAnimator *animator =
+      [MovePointShapeAnimator generateWithTag:@(tag) startCoordinate:coordinate];
+  if (animator == nil) {
+    reject(@"RNMBXMovePointShapeAnimatorModule", @"Failed to generate animator", nil);
+    return;
+  }
+  resolve([animator getTag]);
 }
 
-RCT_EXPORT_METHOD(moveTo:(nonnull NSNumber*)tag coordinate: (nonnull NSArray*)coordinate durationMs: (nonnull NSNumber*)durationMs resolve:(RCTPromiseResolveBlock)resolve reject:(RCTPromiseRejectBlock)reject) {
-  [MovePointShapeAnimator moveToTag:tag coordinate:coordinate durationMs:durationMs resolve:resolve reject:reject];
+- (void)moveTo:(NSInteger)tag
+    coordinate:(NSArray *)coordinate
+      duration:(double)duration
+       resolve:(RCTPromiseResolveBlock)resolve
+        reject:(RCTPromiseRejectBlock)reject
+{
+  [MovePointShapeAnimator moveToTag:@(tag)
+                         coordinate:coordinate
+                         durationMs:@(duration)
+                            resolve:resolve
+                             reject:reject];
 }
 
 - (std::shared_ptr<facebook::react::TurboModule>)getTurboModule:
     (const facebook::react::ObjCTurboModule::InitParams &)params
 {
-    return std::make_shared<facebook::react::NativeRNMBXPointAnnotationModuleSpecJSI>(params);
+    return std::make_shared<facebook::react::NativeRNMBXMovePointShapeAnimatorModuleSpecJSI>(params);
 }
 
 @end
