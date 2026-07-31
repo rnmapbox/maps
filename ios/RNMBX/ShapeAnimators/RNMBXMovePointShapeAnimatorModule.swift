@@ -93,23 +93,28 @@ extension MovePointShapeAnimator {
   }
 
   @objc
-  public static func moveTo(tag: NSNumber, coordinate: NSArray, durationMs: NSNumber, resolve: RCTPromiseResolveBlock, reject: @escaping (_ code: String, _ message: String, _ error: NSError) -> Void) {
-    guard let lng = coordinate[0] as? Double, let lat = coordinate[1] as? Double else {
-      reject("\(LOG_TAG): moveTo", "Unable to find animator with tag \(tag)", NSError())
-      return
+  public static func moveTo(tag: NSNumber, coordinate: NSArray, durationMs: NSNumber, resolve: @escaping RCTPromiseResolveBlock, reject: @escaping (_ code: String, _ message: String, _ error: NSError) -> Void) {
+    DispatchQueue.main.async {
+      // RN arrays often bridge as NSNumber; `as? Double` fails for NSNumber.
+      let lngValue = (coordinate[0] as? NSNumber)?.doubleValue ?? (coordinate[0] as? Double)
+      let latValue = (coordinate[1] as? NSNumber)?.doubleValue ?? (coordinate[1] as? Double)
+      guard let lng = lngValue, let lat = latValue else {
+        reject("\(LOG_TAG): moveTo", "Invalid coordinate for tag \(tag)", NSError())
+        return
+      }
+
+      guard let animator = getAnimator(tag: tag) else {
+        reject("\(LOG_TAG): moveTo", "Unable to find animator with tag \(tag)", NSError())
+        return
+      }
+
+      let targetCoord = LocationCoordinate2D(
+        latitude: lat,
+        longitude: lng
+      )
+    
+      animator.moveTo(coordinate: targetCoord, durationSec: durationMs.doubleValue / 1000)
+      resolve(tag)
     }
-    
-    guard let animator = getAnimator(tag: tag) else {
-      reject("\(LOG_TAG): moveTo", "Unable to find animator with tag \(tag)", NSError())
-      return
-    }
-    
-    let targetCoord = LocationCoordinate2D(
-      latitude: lat,
-      longitude: lng
-    )
-    
-    animator.moveTo(coordinate: targetCoord, durationSec: durationMs.doubleValue / 1000)
-    resolve(tag)
   }
 }

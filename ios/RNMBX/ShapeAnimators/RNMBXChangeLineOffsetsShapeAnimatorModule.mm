@@ -25,26 +25,71 @@ RCT_EXPORT_MODULE();
   return RCTGetUIManagerQueue();
 }
 
-RCT_EXPORT_METHOD(create:(nonnull NSNumber*)tag lineString: (nonnull NSArray*)coordinates  startOffset: (nonnull NSNumber*)startOffset endOffset: (nonnull NSNumber*)endOffset resolve:(RCTPromiseResolveBlock)resolve reject:(RCTPromiseRejectBlock)reject) {
-  resolve([[ChangeLineOffsetsShapeAnimator createWithTag:tag coordinates:coordinates startOffset:startOffset endOffset:endOffset] getTag]);
+// Must match NativeRNMBXChangeLineOffsetsShapeAnimatorModuleSpec exactly (codegen uses NSInteger/double).
+- (void)generate:(NSInteger)tag
+     coordinates:(NSArray *)coordinates
+     startOffset:(double)startOffset
+       endOffset:(double)endOffset
+         resolve:(RCTPromiseResolveBlock)resolve
+          reject:(RCTPromiseRejectBlock)reject
+{
+  ChangeLineOffsetsShapeAnimator *animator =
+      [ChangeLineOffsetsShapeAnimator createWithTag:@(tag)
+                                        coordinates:coordinates
+                                        startOffset:@(startOffset)
+                                          endOffset:@(endOffset)];
+  if (animator == nil) {
+    reject(@"RNMBXChangeLineOffsetsShapeAnimatorModule", @"Failed to generate animator", nil);
+    return;
+  }
+  resolve([animator getTag]);
 }
 
-RCT_EXPORT_METHOD(setLineString:(nonnull NSNumber*)tag coordinates: (nonnull NSArray*)coordinates startOffset: (nonnull NSNumber*)startOffset endOffset: (nonnull NSNumber*)endOffset resolve:(RCTPromiseResolveBlock)resolve reject:(RCTPromiseRejectBlock)reject) {
-  [ChangeLineOffsetsShapeAnimator setLineStringWithTag:tag coordinates:coordinates startOffset:startOffset endOffset:endOffset resolve:resolve reject:reject];
+- (void)setLineString:(NSInteger)tag
+          coordinates:(NSArray *)coordinates
+          startOffset:(double)startOffset
+            endOffset:(double)endOffset
+              resolve:(RCTPromiseResolveBlock)resolve
+               reject:(RCTPromiseRejectBlock)reject
+{
+  [ChangeLineOffsetsShapeAnimator setLineStringWithTag:@(tag)
+                                           coordinates:coordinates
+                                           startOffset:@(startOffset)
+                                             endOffset:@(endOffset)
+                                               resolve:resolve
+                                                reject:reject];
 }
 
-RCT_EXPORT_METHOD(setStartOffset:(nonnull NSNumber*)tag offset: (nonnull NSNumber*)offset durationMs: (nonnull NSNumber*)durationMs resolve:(RCTPromiseResolveBlock)resolve reject:(RCTPromiseRejectBlock)reject) {
-  [ChangeLineOffsetsShapeAnimator setStartOffsetWithTag:tag offset:offset durationMs:durationMs resolve:resolve reject:reject];
+- (void)setStartOffset:(NSInteger)tag
+                offset:(double)offset
+              duration:(double)duration
+               resolve:(RCTPromiseResolveBlock)resolve
+                reject:(RCTPromiseRejectBlock)reject
+{
+  [ChangeLineOffsetsShapeAnimator setStartOffsetWithTag:@(tag)
+                                                 offset:@(offset)
+                                             durationMs:@(duration)
+                                                resolve:resolve
+                                                 reject:reject];
 }
 
-RCT_EXPORT_METHOD(setEndOffset:(nonnull NSNumber*)tag offset: (nonnull NSNumber*)offset durationMs: (nonnull NSNumber*)durationMs resolve:(RCTPromiseResolveBlock)resolve reject:(RCTPromiseRejectBlock)reject) {
-  [ChangeLineOffsetsShapeAnimator setEndOffsetWithTag:tag offset:offset durationMs:durationMs resolve:resolve reject:reject];
+- (void)setEndOffset:(NSInteger)tag
+              offset:(double)offset
+            duration:(double)duration
+             resolve:(RCTPromiseResolveBlock)resolve
+              reject:(RCTPromiseRejectBlock)reject
+{
+  [ChangeLineOffsetsShapeAnimator setEndOffsetWithTag:@(tag)
+                                               offset:@(offset)
+                                           durationMs:@(duration)
+                                              resolve:resolve
+                                               reject:reject];
 }
 
 - (std::shared_ptr<facebook::react::TurboModule>)getTurboModule:
     (const facebook::react::ObjCTurboModule::InitParams &)params
 {
-    return std::make_shared<facebook::react::NativeRNMBXShapeSourceModuleSpecJSI>(params);
+    return std::make_shared<facebook::react::NativeRNMBXChangeLineOffsetsShapeAnimatorModuleSpecJSI>(params);
 }
 
 @end
