@@ -128,7 +128,11 @@ class RNMBXNativeUserLocation(context: Context) : AbstractMapFeature(context), O
         if (visible) {
             if (images.isEmpty()) {
                 location2.locationPuck =
-                    makeDefaultLocationPuck2D(mContext, androidRenderMode ?: RenderMode.NORMAL)
+                    makeDefaultLocationPuck2D(
+                        mContext,
+                        androidRenderMode ?: RenderMode.NORMAL,
+                        scale?.toJson()
+                    )
             } else {
                 location2.locationPuck = LocationPuck2D(
                     topImage = images[PuckImagePart.TOP],
@@ -279,7 +283,11 @@ class RNMBXNativeUserLocation(context: Context) : AbstractMapFeature(context), O
     }
 }
 
-fun makeDefaultLocationPuck2D(context: Context, renderMode: RenderMode): LocationPuck2D {
+fun makeDefaultLocationPuck2D(
+    context: Context,
+    renderMode: RenderMode,
+    scaleExpression: String? = null
+): LocationPuck2D {
     return LocationPuck2D(
         topImage = AppCompatResourcesV11.getDrawableImageHolder(
             context,
@@ -296,6 +304,7 @@ fun makeDefaultLocationPuck2D(context: Context, renderMode: RenderMode): Locatio
         shadowImage = AppCompatResourcesV11.getDrawableImageHolder(
             context,
             LR.drawable.mapbox_user_icon_shadow
-        )
+        ),
+        scaleExpression = scaleExpression
     );
 }
