@@ -672,9 +672,11 @@ class MapView extends NativeBridgeComponent(
       );
     }
 
-    this._runNativeMethod('setHandledMapChangedEvents', this._nativeRef, [
-      events,
-    ]);
+    this._runNativeMethodDetached(
+      'setHandledMapChangedEvents',
+      this._nativeRef,
+      [events],
+    );
   }
 
   /**
@@ -937,7 +939,7 @@ class MapView extends NativeBridgeComponent(
     sourceId: string,
     sourceLayerId: string | null = null,
   ) {
-    this._runNative<void>('setSourceVisibility', [
+    this._runNativeMethodDetached('setSourceVisibility', this._nativeRef, [
       visible,
       sourceId,
       sourceLayerId,
