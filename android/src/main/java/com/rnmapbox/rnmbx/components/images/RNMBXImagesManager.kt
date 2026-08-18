@@ -239,6 +239,7 @@ class RNMBXImagesManager(private val mContext: ReactApplicationContext) :
 
         parent.mImageViews.add(childPosition, childView)
         childView.nativeImageUpdater = parent
+        parent.attachImageViewIfOnMap(childView)
     }
 
     override fun removeView(parent: RNMBXImages, view: View) {
