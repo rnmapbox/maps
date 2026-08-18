@@ -177,6 +177,17 @@ class RNMBXImages(context: Context, private val mManager: RNMBXImagesManager) : 
         return style != null && imageId?.let { style.getStyleImage(it) } != null
     }
 
+    /**
+     * Give the map to an image view that was mounted after this component was added to the map.
+     *
+     * addToMap only visits the views present at that moment, and the view manager does not pass
+     * the map to a later child, so such a child would never place its own child view and never
+     * register an image.
+     */
+    fun attachImageViewIfOnMap(image: RNMBXImage) {
+        mMapView?.let { image.addToMap(it) }
+    }
+
     override fun addToMap(mapView: RNMBXMapView) {
         super.addToMap(mapView)
 
