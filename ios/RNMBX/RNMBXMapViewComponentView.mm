@@ -222,6 +222,12 @@ using namespace facebook::react;
 
     RNMBX_OPTIONAL_PROP_BOOL(deselectAnnotationOnTap);
 
+    // Has to be set before -didSetProps: below, which is where the MapView is created.
+    id mapViewImpl = RNMBXConvertFollyDynamicToId(newViewProps.mapViewImpl);
+    if (mapViewImpl != nil) {
+        _view.mapViewImpl = mapViewImpl;
+    }
+
     id styleURL = RNMBXConvertFollyDynamicToId(newViewProps.styleURL);
     if (styleURL != nil) {
         if (_lastStyleURL == nil || ![_lastStyleURL isEqual:styleURL]) {
