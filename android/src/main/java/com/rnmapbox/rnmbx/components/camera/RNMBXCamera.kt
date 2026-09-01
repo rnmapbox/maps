@@ -488,13 +488,12 @@ class RNMBXCamera(private val mContext: Context, private val mManager: RNMBXCame
                     followOptions.bearing(FollowPuckViewportStateBearing.SyncWithLocationPuck)
                 }
                 "normal" -> {
-                    location.puckBearingEnabled = false
                     when(val it=mFollowHeading) {
                         null -> followOptions.bearing( FollowPuckViewportStateBearing.Constant(
                             cameraState.bearing
                         ))
                         else -> followOptions.bearing( FollowPuckViewportStateBearing.Constant(
-                            cameraState.bearing
+                            it
                         ))
                     }
                 }
