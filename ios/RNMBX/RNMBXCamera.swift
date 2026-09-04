@@ -339,7 +339,12 @@ open class RNMBXCamera : RNMBXMapAndMapViewComponentBase {
           options.bounds = try self._toCoordinateBounds(maxBounds)
         }
       } else {
-        options.bounds = nil
+        // Passing nil does not reset this value, so reset to the SDK default (infinite world bounds).
+        options.bounds = CoordinateBounds(
+          southwest: CLLocationCoordinate2D(latitude: -90, longitude: -180),
+          northeast: CLLocationCoordinate2D(latitude: 90, longitude: 180),
+          infiniteBounds: true
+        )
       }
       options.minZoom = self.minZoomLevel?.CGFloat
       options.maxZoom = self.maxZoomLevel?.CGFloat
