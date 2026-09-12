@@ -77,7 +77,7 @@ class DownloadMapImageTask(context: Context, map: MapboxMap, imageManager: Image
             result = DataSources.waitForFinalResult(dataSource)
             result?.get()?.let { image ->
                 if (image is CloseableStaticBitmap) {
-                    val bitmap = image.underlyingBitmap.copy(Bitmap.Config.ARGB_8888, true)
+                    val bitmap = image.underlyingBitmap!!.copy(Bitmap.Config.ARGB_8888, true)
                     bitmap.density = DisplayMetrics.DENSITY_DEFAULT
 
                     CoroutineScope(Dispatchers.Main).launch {
