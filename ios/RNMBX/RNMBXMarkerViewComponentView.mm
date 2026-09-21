@@ -108,6 +108,7 @@ using namespace facebook::react;
         layoutMetrics.layoutDirection,
         layoutMetrics.wasLeftAndRightSwapped,
         layoutMetrics.pointScaleFactor,
+        layoutMetrics.fontSizeMultiplier, // RN087
         layoutMetrics.overflowInset
     };
 
