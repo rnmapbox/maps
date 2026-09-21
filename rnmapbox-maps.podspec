@@ -257,7 +257,7 @@ Pod::Spec.new do |s|
   s.source      	= { :git => "https://github.com/rnmapbox/maps.git" }
   s.license     	= "MIT"
   if $RNMapboxMapsUseV11Imp
-    s.platform    	= :ios, "12.4"
+    s.platform    	= :ios, "14.0"
   else
     s.platform    	= :ios, "11.0"
   end
