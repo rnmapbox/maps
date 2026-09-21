@@ -147,8 +147,8 @@ export type CameraStop = {
   pitch?: number;
   /** The zoom level of the map. */
   zoomLevel?: number;
-  /** The viewport padding in points. */
-  padding?: CameraPadding;
+  /** The viewport padding in points. Individual edges may be omitted. */
+  padding?: Partial<CameraPadding>;
   /** The duration the map takes to animate to a new configuration. */
   animationDuration?: number;
   /** The easing or path the camera uses to animate to a new configuration. */
