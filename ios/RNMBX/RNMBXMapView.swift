@@ -401,7 +401,10 @@ open class RNMBXMapView: UIView, RCTInvalidating {
   }
 
   func layerAdded (_ layer: Layer) {
-    // TODO
+    let callbacks = layerWaiters.removeValue(forKey: layer.id) ?? []
+    callbacks.forEach { callback in
+      callback(layer.id)
+    }
   }
 
   func waitForLayerWithID(_ layerId: String, _  callback: @escaping (_ layerId: String) -> Void) {
