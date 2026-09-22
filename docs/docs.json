@@ -1054,6 +1054,16 @@
         },
         "default": "none",
         "description": "Callback when the map reaches a steady state (no active gestures or animations).\n*signature:*`(event:{nativeEvent: OnMapSteadyEvent}) => void`"
+      },
+      {
+        "name": "onMapCameraChange",
+        "required": false,
+        "type": {
+          "name": "func",
+          "funcSignature": "(event:{nativeEvent: OnMapCameraChangeEvent}) => void"
+        },
+        "default": "none",
+        "description": "Callback when the camera changes (due to gestures or animations).\n*signature:*`(event:{nativeEvent: OnMapCameraChangeEvent}) => void`"
       }
     ],
     "fileNameWithExt": "CameraGestureObserver.tsx",

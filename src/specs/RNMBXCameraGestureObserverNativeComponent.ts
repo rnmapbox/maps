@@ -15,12 +15,34 @@ export type OnMapSteadyEvent = {
   timestamp: Double;
 };
 
+export type OnMapCameraChangeEvent = {
+  properties: {
+    // [longitude, latitude]
+    center: Double[];
+    bounds: {
+      // northeast corner [longitude, latitude]
+      ne: Double[];
+      // southwest corner [longitude, latitude]
+      sw: Double[];
+    };
+    zoom: Double;
+    heading: Double;
+    pitch: Double;
+  };
+  // true if the camera change was initiated by user interaction (e.g., gesture)
+  isUserInteraction: boolean;
+  // Unix epoch in milliseconds
+  timestamp?: Double;
+};
+
 export interface NativeProps extends ViewProps {
   quietPeriodMs?: UnsafeMixed<number>;
   maxIntervalMs?: UnsafeMixed<number>;
 
   hasOnMapSteady: UnsafeMixed<boolean>;
   onMapSteady?: DirectEventHandler<OnMapSteadyEvent>;
+  hasOnMapCameraChange: UnsafeMixed<boolean>;
+  onMapCameraChange?: DirectEventHandler<OnMapCameraChangeEvent>;
 }
 
 export default codegenNativeComponent<NativeProps>(
