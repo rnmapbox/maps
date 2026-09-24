@@ -8,15 +8,20 @@ import { Viewport } from '@rnmapbox/maps';
 Viewport
 
 ```
-provides a structured approach to organizing camera management logic into states and transitions between them.
+Provides a structured approach to organizing camera management logic into states and transitions between them.
+
+Viewport is the modern alternative to Camera's `followUserLocation` for tracking the user's position.
+It supports two built-in states:
+ - `followPuck`: tracks the user's location with configurable zoom, pitch, and bearing
+ - `overview`: frames a given geometry with configurable padding, bearing, and pitch
 
 At any given time, the viewport is either:
- - idle
- - in a state (camera is being managed by a ViewportState)
+ - idle (not managing the camera)
+ - in a state (camera is actively managed by a ViewportState)
  - transitioning between states
 
-See [android](https://docs.mapbox.com/android/maps/api/${ANDROID_SDK_VERSION}/mapbox-maps-android/com.mapbox.maps.plugin.viewport/viewport.html),
-[ios](https://docs.mapbox.com/ios/maps/api/${IOS_SDK_VERSION}/Viewport.html#/s:10MapboxMaps8ViewportC)
+See [Android Viewport](https://docs.mapbox.com/android/maps/api/11.0.0/mapbox-maps-android/com.mapbox.maps.plugin.viewport/viewport.html),
+[iOS Viewport](https://docs.mapbox.com/ios/maps/api/11.0.0/Viewport.html)
 
 ## props
 
@@ -57,7 +62,7 @@ delivery of status changed notifications.
 ## methods
 ### getState()
 
-
+Returns the current state of the viewport as a JSON string.
 
 #### arguments
 | Name | Type | Required | Description  |
@@ -67,7 +72,7 @@ delivery of status changed notifications.
 
 ### idle()
 
-
+Sets the viewport to idle, stopping any active state or transition.
 
 #### arguments
 | Name | Type | Required | Description  |
@@ -77,13 +82,13 @@ delivery of status changed notifications.
 
 ### transitionTo(state, transition)
 
-
+Transitions the viewport to a new state with an optional transition animation.
 
 #### arguments
 | Name | Type | Required | Description  |
 | ---- | :--: | :------: | :----------: |
-| `state` | `n/a` | `Yes` | undefined |
-| `transition` | `n/a` | `Yes` | undefined |
+| `state` | `ViewportState` | `Yes` | The target state (followPuck or overview). |
+| `transition` | `ViewportTransition` | `Yes` | The transition to use (immediate or default). |
 
 
 
