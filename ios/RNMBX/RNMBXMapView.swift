@@ -443,6 +443,7 @@ open class RNMBXMapView: UIView, RCTInvalidating {
     case rotateEnabled
     case pitchEnabled
     case maxPitch
+    case minPitch
     case onMapChange
     case styleURL
     case gestureSettings
@@ -481,6 +482,8 @@ open class RNMBXMapView: UIView, RCTInvalidating {
         map.applyPitchEnabled()
       case .maxPitch:
         map.applyMaxPitch()
+      case .minPitch:
+        map.applyMinPitch()
       case .gestureSettings:
         map.applyGestureSettings()
       case .preferredFramesPerSecond:
@@ -562,6 +565,30 @@ open class RNMBXMapView: UIView, RCTInvalidating {
         options.minZoom = current.minZoom
         options.minPitch = current.minPitch
         options.maxPitch = maxPitch
+        try mapboxMap.setCameraBounds(with: options)
+      }
+    }
+  }
+
+  var minPitch: Double? = nil
+
+  @objc public func setReactMinPitch(_ value: NSNumber?) {
+    minPitch = value?.doubleValue
+    changed(.minPitch)
+  }
+
+  func applyMinPitch() {
+    guard let minPitch = minPitch else { return }
+
+    withMapboxMap { mapboxMap in
+      logged("RNMBXMapView.applyMinPitch") {
+        let current = mapboxMap.cameraBounds
+        var options = CameraBoundsOptions()
+        options.bounds = current.bounds
+        options.maxZoom = current.maxZoom
+        options.minZoom = current.minZoom
+        options.minPitch = minPitch
+        options.maxPitch = current.maxPitch
         try mapboxMap.setCameraBounds(with: options)
       }
     }
