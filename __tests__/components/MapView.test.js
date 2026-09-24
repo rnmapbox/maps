@@ -13,4 +13,8 @@ describe('MapView', () => {
       getByTestId(expectedTestId);
     }).not.toThrow();
   });
+
+  test('defaults cameraChangedThrottleInterval to zero', () => {
+    expect(MapView.defaultProps.cameraChangedThrottleInterval).toBe(0);
+  });
 });

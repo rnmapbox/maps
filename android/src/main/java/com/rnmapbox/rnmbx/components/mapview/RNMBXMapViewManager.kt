@@ -220,6 +220,15 @@ open class RNMBXMapViewManager(context: ReactApplicationContext, val viewTagReso
         mapView.setReactPreferredFramesPerSecond(preferredFramesPerSecond.asInt())
     }
 
+    @ReactProp(name = "cameraChangedThrottleInterval")
+    override fun setCameraChangedThrottleInterval(mapView: RNMBXMapView, cameraChangedThrottleInterval: Dynamic) {
+        if (cameraChangedThrottleInterval.type == ReadableType.Null) {
+            mapView.setReactCameraChangedThrottleInterval(0)
+            return
+        }
+        mapView.setReactCameraChangedThrottleInterval(cameraChangedThrottleInterval.asInt())
+    }
+
     @ReactProp(name = "zoomEnabled")
     override fun setZoomEnabled(map: RNMBXMapView, zoomEnabled: Dynamic) {
         map.withMapView {
