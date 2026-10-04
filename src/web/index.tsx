@@ -7,6 +7,8 @@ import UnimplementedComponent, {
 import Camera from './components/Camera';
 import MapView from './components/MapView';
 import MarkerView from './components/MarkerView';
+import ShapeSource from './components/ShapeSource';
+import { CircleLayer, LineLayer } from './components/layers';
 import Logger from './utils/Logger';
 import {
   AnimatedCoordinatesArray,
@@ -32,7 +34,6 @@ const StyleImport = UnimplementedComponent('StyleImport');
 const UserLocation = UnimplementedComponent('UserLocation');
 const LocationPuck = UnimplementedComponent('LocationPuck');
 const VectorSource = UnimplementedComponent('VectorSource');
-const ShapeSource = UnimplementedComponent('ShapeSource');
 const RasterSource = UnimplementedComponent('RasterSource');
 const RasterArraySource = UnimplementedComponent('RasterArraySource');
 const RasterDemSource = UnimplementedComponent('RasterDemSource');
@@ -44,8 +45,6 @@ const Image = UnimplementedComponent('Image');
 const FillLayer = UnimplementedComponent('FillLayer');
 const FillExtrusionLayer = UnimplementedComponent('FillExtrusionLayer');
 const HeatmapLayer = UnimplementedComponent('HeatmapLayer');
-const LineLayer = UnimplementedComponent('LineLayer');
-const CircleLayer = UnimplementedComponent('CircleLayer');
 const SkyLayer = UnimplementedComponent('SkyLayer');
 const ModelLayer = UnimplementedComponent('ModelLayer');
 const SymbolLayer = UnimplementedComponent('SymbolLayer');
