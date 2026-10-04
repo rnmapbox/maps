@@ -1,6 +1,4 @@
-// Hand-written for now; should be generated from style-spec/v8.json like the
-// native style setters.
-const layoutProps = new Set([
+const handWrittenLayoutProps = new Set([
   'visibility',
   'circleSortKey',
   'lineCap',
@@ -19,11 +17,6 @@ export type GLStyle = {
   layout: { [key: string]: unknown };
 };
 
-/**
- * Splits rnmapbox camelCase layer style props into mapbox-gl paint and layout
- * properties. Values (constants, expressions, colors, transitions) are
- * passed through unchanged.
- */
 export function toGLStyle(style: { [key: string]: unknown } = {}): GLStyle {
   const result: GLStyle = { paint: {}, layout: {} };
   for (const [name, value] of Object.entries(style)) {
@@ -33,7 +26,7 @@ export function toGLStyle(style: { [key: string]: unknown } = {}): GLStyle {
     if (name.endsWith('Transition')) {
       const base = name.slice(0, -'Transition'.length);
       result.paint[`${kebabCase(base)}-transition`] = value;
-    } else if (layoutProps.has(name)) {
+    } else if (handWrittenLayoutProps.has(name)) {
       result.layout[kebabCase(name)] = value;
     } else {
       result.paint[kebabCase(name)] = value;
@@ -42,7 +35,6 @@ export function toGLStyle(style: { [key: string]: unknown } = {}): GLStyle {
   return result;
 }
 
-/** mapbox-gl's style validation rejects keys that are present but undefined. */
 export function omitUndefined<T extends object>(object: T): T {
   return Object.fromEntries(
     Object.entries(object).filter(([, value]) => value !== undefined),

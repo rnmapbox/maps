@@ -13,6 +13,10 @@ type Props = {
   children?: ReactNode;
 };
 
+const reloadWholeStyle = { diff: false } as Parameters<
+  mapboxgl.Map['setStyle']
+>[1];
+
 function styleFromProps({ styleURL, styleJSON }: Props) {
   if (styleURL) {
     return styleURL;
@@ -23,9 +27,6 @@ function styleFromProps({ styleURL, styleJSON }: Props) {
   return defaultStyleURL;
 }
 
-/**
- * MapView backed by Mapbox GL JS
- */
 class MapView extends React.Component<
   Props,
   { map?: mapboxgl.Map; styleGeneration: number }
@@ -48,8 +49,6 @@ class MapView extends React.Component<
     });
     this.map = map;
     this.setState({ map });
-    // setStyle drops every source and layer; styleGeneration tells sources
-    // to add themselves (and their layers) again.
     map.on('style.load', () => {
       this.setState(({ styleGeneration }) => ({
         styleGeneration: styleGeneration + 1,
@@ -63,12 +62,7 @@ class MapView extends React.Component<
       (prevProps.styleURL !== this.props.styleURL ||
         prevProps.styleJSON !== this.props.styleJSON)
     ) {
-      // Without diff: false, setStyle patches the style in place, removes
-      // our sources and layers, and never fires style.load.
-      // (The typings wrongly require the font options.)
-      this.map.setStyle(styleFromProps(this.props), {
-        diff: false,
-      } as Parameters<mapboxgl.Map['setStyle']>[1]);
+      this.map.setStyle(styleFromProps(this.props), reloadWholeStyle);
     }
   }
 

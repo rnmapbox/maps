@@ -36,23 +36,22 @@ function beforeId(
   return undefined;
 }
 
-function updateProperties(
+function isSameValue(a: unknown, b: unknown) {
+  return JSON.stringify(a) === JSON.stringify(b);
+}
+
+function applyChangedProperties(
   current: { [key: string]: unknown },
   next: { [key: string]: unknown },
   set: (name: string, value: unknown) => void,
 ) {
   for (const name of new Set([...Object.keys(current), ...Object.keys(next)])) {
-    // Expressions are new arrays on every render, so compare by value.
-    if (JSON.stringify(current[name]) !== JSON.stringify(next[name])) {
+    if (!isSameValue(current[name], next[name])) {
       set(name, next[name]);
     }
   }
 }
 
-/**
- * Adds a mapbox-gl layer of the given type for the lifetime of the component
- * and keeps its style, filter and zoom range in sync with the props.
- */
 export function useLayer(type: LayerSpecification['type'], props: LayerProps) {
   const { map, styleGeneration = 0 } = useContext(MapContext);
   const contextSourceID = useContext(SourceContext);
@@ -84,7 +83,6 @@ export function useLayer(type: LayerSpecification['type'], props: LayerProps) {
         map.removeLayer(props.id);
       }
     };
-    // Other props are applied in place below.
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [map, styleGeneration, props.id, sourceID, props.sourceLayerID]);
 
@@ -92,12 +90,17 @@ export function useLayer(type: LayerSpecification['type'], props: LayerProps) {
     if (!map?.getLayer(props.id)) {
       return;
     }
-    // Property names are only known at runtime until they are generated.
-    updateProperties(applied.current.paint, glStyle.paint, (name, value) =>
-      map.setPaintProperty(props.id, name as never, value as never),
+    applyChangedProperties(
+      applied.current.paint,
+      glStyle.paint,
+      (name, value) =>
+        map.setPaintProperty(props.id, name as never, value as never),
     );
-    updateProperties(applied.current.layout, glStyle.layout, (name, value) =>
-      map.setLayoutProperty(props.id, name as never, value as never),
+    applyChangedProperties(
+      applied.current.layout,
+      glStyle.layout,
+      (name, value) =>
+        map.setLayoutProperty(props.id, name as never, value as never),
     );
     applied.current = glStyle;
   });

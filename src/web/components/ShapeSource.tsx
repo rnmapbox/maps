@@ -29,16 +29,24 @@ function sourceData({ url, shape }: Props) {
   return url ?? shape ?? emptyCollection;
 }
 
-/**
- * GeoJSON source. Child layers get its id as their default sourceID.
- */
+function removeSourceAndItsLayers(map: mapboxgl.Map, id: string) {
+  for (const layer of map.getStyle()?.layers ?? []) {
+    if ('source' in layer && layer.source === id) {
+      map.removeLayer(layer.id);
+    }
+  }
+  if (map.getSource(id)) {
+    map.removeSource(id);
+  }
+}
+
 export function ShapeSource(props: Props) {
   const { map, styleGeneration = 0 } = useContext(MapContext);
   const { id } = props;
-  // Children render only after the source exists, because their effects run
-  // before ours. `count` remounts them whenever the source is re-created,
-  // since that removes its layers.
-  const [added, setAdded] = useState<{ generation: number; count: number }>();
+  const [addedSource, setAddedSource] = useState<{
+    styleGeneration: number;
+    instance: number;
+  }>();
 
   useEffect(() => {
     if (!map || styleGeneration === 0) {
@@ -59,32 +67,16 @@ export function ShapeSource(props: Props) {
         lineMetrics: props.lineMetrics,
       } as GeoJSONSourceSpecification),
     );
-    setAdded((prev) => ({
-      generation: styleGeneration,
-      count: (prev?.count ?? 0) + 1,
+    setAddedSource((previous) => ({
+      styleGeneration,
+      instance: (previous?.instance ?? 0) + 1,
     }));
 
     return () => {
-      // MapView removes the map before our cleanup runs on unmount.
-      if (map._removed) {
-        return;
-      }
-      // Parent effects are cleaned up before children's, and a source can't
-      // be removed while layers use it.
-      const style = map.getStyle();
-      if (!style) {
-        return;
-      }
-      for (const layer of style.layers) {
-        if ('source' in layer && layer.source === id) {
-          map.removeLayer(layer.id);
-        }
-      }
-      if (map.getSource(id)) {
-        map.removeSource(id);
+      if (!map._removed) {
+        removeSourceAndItsLayers(map, id);
       }
     };
-    // Changing cluster options needs a new source, other props update below.
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
     map,
@@ -96,7 +88,7 @@ export function ShapeSource(props: Props) {
   ]);
 
   useEffect(() => {
-    if (map && added?.generation === styleGeneration) {
+    if (map && addedSource?.styleGeneration === styleGeneration) {
       (map.getSource(id) as GeoJSONSource | undefined)?.setData(
         sourceData(props),
       );
@@ -104,11 +96,11 @@ export function ShapeSource(props: Props) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [props.shape, props.url]);
 
-  if (added?.generation !== styleGeneration) {
+  if (addedSource?.styleGeneration !== styleGeneration) {
     return null;
   }
   return (
-    <SourceContext.Provider value={id} key={added.count}>
+    <SourceContext.Provider value={id} key={addedSource.instance}>
       {props.children}
     </SourceContext.Provider>
   );
