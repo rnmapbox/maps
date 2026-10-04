@@ -53,7 +53,11 @@ class Camera
   extends Component<
     Pick<
       CameraProps,
-      'centerCoordinate' | 'zoomLevel' | 'minZoomLevel' | 'maxZoomLevel'
+      | 'centerCoordinate'
+      | 'zoomLevel'
+      | 'minZoomLevel'
+      | 'maxZoomLevel'
+      | 'defaultSettings'
     >
   >
   implements Omit<CameraRef, 'setCamera' | 'moveBy' | 'scaleBy'>
@@ -78,6 +82,10 @@ class Camera
     // maxZoomLevel
     if (this.props.maxZoomLevel !== undefined) {
       map.setMaxZoom(this.props.maxZoomLevel);
+    }
+
+    if (this.props.defaultSettings) {
+      this.setCamera({ ...this.props.defaultSettings, animationMode: 'none' });
     }
 
     // zoomLevel
