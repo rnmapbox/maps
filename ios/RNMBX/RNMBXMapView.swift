@@ -1578,13 +1578,13 @@ extension RNMBXMapView
   @objc public func takeSnap(
     writeToDisk:Bool) -> URL
   {
-    UIGraphicsBeginImageContextWithOptions(self.bounds.size, true, 0);
+    let format = UIGraphicsImageRendererFormat(for: self.traitCollection)
+    format.opaque = true
+    let snapshot = UIGraphicsImageRenderer(bounds: self.bounds, format: format).image { _ in
+      self.drawHierarchy(in: self.bounds, afterScreenUpdates: true)
+    }
 
-    self.drawHierarchy(in: self.bounds, afterScreenUpdates: true)
-    let snapshot = UIGraphicsGetImageFromCurrentImageContext();
-    UIGraphicsEndImageContext();
-
-    return writeToDisk ? RNMBImageUtils.createTempFile(snapshot!) :  RNMBImageUtils.createBase64(snapshot!)
+    return writeToDisk ? RNMBImageUtils.createTempFile(snapshot) :  RNMBImageUtils.createBase64(snapshot)
   }
 }
 

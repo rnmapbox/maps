@@ -74,7 +74,9 @@ jobs:
     uses: ./.github/workflows/ci-requiring-tokens.yml
     with:
       NVMRC: ${{ needs.lint_test_generate.outputs.NVMRC }}
-    if: needs.has_mapbox_token.outputs.has-mapbox-token == 'true'
+    # Fork PRs have no secrets but can still build with the public rotated CI token,
+    # so always run in rnmapbox/maps; forks of the repo still need their own token.
+    if: needs.has_mapbox_token.outputs.has-mapbox-token == 'true' || github.repository == 'rnmapbox/maps'
     secrets:
       MAPBOX_ACCESS_TOKEN: ${{ secrets.MAPBOX_ACCESS_TOKEN }}
 
