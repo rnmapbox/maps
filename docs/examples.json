@@ -547,9 +547,11 @@
         "metadata": {
           "title": "Map Handlers",
           "tags": [
-            "MapView#onMapIdle"
+            "MapView#onCameraChanged",
+            "MapView#onMapIdle",
+            "MapView#cameraChangedThrottleInterval"
           ],
-          "docs": "\nMap Handlers\n"
+          "docs": "\nMap Handlers and cameraChangedThrottleInterval\n"
         },
         "fullPath": "example/src/examples/V10/MapHandlers.tsx",
         "relPath": "V10/MapHandlers.tsx",
