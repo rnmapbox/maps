@@ -1,21 +1,11 @@
-const handWrittenLayoutProps = new Set([
-  'visibility',
-  'circleSortKey',
-  'lineCap',
-  'lineJoin',
-  'lineMiterLimit',
-  'lineRoundLimit',
-  'lineSortKey',
-]);
-
-function kebabCase(name: string) {
-  return name.replace(/[A-Z]/g, (c) => `-${c.toLowerCase()}`);
-}
+import { layerStyleProps } from './webStyleMap';
 
 export type GLStyle = {
   paint: { [key: string]: unknown };
   layout: { [key: string]: unknown };
 };
+
+const transitionSuffix = 'Transition';
 
 export function toGLStyle(style: { [key: string]: unknown } = {}): GLStyle {
   const result: GLStyle = { paint: {}, layout: {} };
@@ -23,13 +13,19 @@ export function toGLStyle(style: { [key: string]: unknown } = {}): GLStyle {
     if (value === undefined) {
       continue;
     }
-    if (name.endsWith('Transition')) {
-      const base = name.slice(0, -'Transition'.length);
-      result.paint[`${kebabCase(base)}-transition`] = value;
-    } else if (handWrittenLayoutProps.has(name)) {
-      result.layout[kebabCase(name)] = value;
+    const isTransition = name.endsWith(transitionSuffix);
+    const prop =
+      layerStyleProps[
+        isTransition ? name.slice(0, -transitionSuffix.length) : name
+      ];
+    if (!prop) {
+      console.warn(`@rnmapbox/maps: unknown layer style property ${name}`);
+      continue;
+    }
+    if (isTransition) {
+      result.paint[`${prop.name}-transition`] = value;
     } else {
-      result.paint[kebabCase(name)] = value;
+      result[prop.kind][prop.name] = value;
     }
   }
   return result;
