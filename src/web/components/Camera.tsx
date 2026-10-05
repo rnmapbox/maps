@@ -1,214 +1,292 @@
-import { Component, type ContextType } from 'react';
+import {
+  forwardRef,
+  memo,
+  useContext,
+  useEffect,
+  useImperativeHandle,
+  useRef,
+} from 'react';
 
 import {
+  type CameraAnimationMode,
+  type CameraPadding,
   type CameraProps,
-  type CameraStop,
   type CameraRef,
+  type CameraStop,
+  type CameraStops,
 } from '../../components/Camera';
 import { type Position } from '../../types/Position';
 import MapContext from '../MapContext';
+import { warnUnimplemented } from '../UnimplementedComponent';
+import { useOnChange } from '../useOnChange';
+import { omitUndefined } from '../utils/styleProps';
 
-function isArray<T>(value: T | ArrayLike<T>): value is ArrayLike<T> {
-  return (value as ArrayLike<T>).length !== undefined;
+function toLngLat(position: Position): [number, number] {
+  return [position[0]!, position[1]!];
 }
 
-function buildMapboxGlPadding(
-  padding?: number | number[],
-): number | mapboxgl.PaddingOptions | undefined {
-  if (padding === undefined) {
-    // undefined
+function toGLPadding(
+  padding: Partial<CameraPadding> | undefined,
+): mapboxgl.PaddingOptions | undefined {
+  if (!padding) {
     return undefined;
-  } else if (!isArray(padding)) {
-    // padding
-    return padding;
-  } else {
-    // Array
-    if (padding.length === 0) {
-      // []
-      return undefined;
-    } else if (padding.length < 2) {
-      // [padding]
-      return padding[0];
-    } else if (padding.length < 4) {
-      // [vertical, horizontal]
-      return {
-        left: padding[0],
-        right: padding[0],
-        top: padding[1],
-        bottom: padding[1],
-      };
-    } else {
-      // [top, right, bottom, left]
-      return {
-        top: padding[0],
-        right: padding[1],
-        bottom: padding[2],
-        left: padding[3],
-      };
-    }
+  }
+  return {
+    top: padding.paddingTop ?? 0,
+    right: padding.paddingRight ?? 0,
+    bottom: padding.paddingBottom ?? 0,
+    left: padding.paddingLeft ?? 0,
+  };
+}
+
+function paddingFromConfig(paddingConfig: number | number[]): CameraPadding {
+  const [top = 0, right = top, bottom = top, left = right] =
+    typeof paddingConfig === 'number' ? [paddingConfig] : paddingConfig;
+  return {
+    paddingTop: top,
+    paddingRight: right,
+    paddingBottom: bottom,
+    paddingLeft: left,
+  };
+}
+
+function hasBounds(
+  bounds: CameraStop['bounds'],
+): bounds is NonNullable<CameraStop['bounds']> {
+  return !!bounds?.ne && !!bounds?.sw;
+}
+
+function toCameraOptions(
+  map: mapboxgl.Map,
+  stop: CameraStop,
+): mapboxgl.CameraOptions {
+  const padding = toGLPadding(
+    stop.padding ?? (hasBounds(stop.bounds) ? stop.bounds : undefined),
+  );
+  const options: mapboxgl.CameraOptions = omitUndefined({
+    center: stop.centerCoordinate && toLngLat(stop.centerCoordinate),
+    zoom: stop.zoomLevel,
+    bearing: stop.heading,
+    pitch: stop.pitch,
+    padding,
+  });
+  if (hasBounds(stop.bounds)) {
+    const boundsCamera = map.cameraForBounds(
+      [toLngLat(stop.bounds.sw), toLngLat(stop.bounds.ne)],
+      {
+        padding,
+        bearing: stop.heading ?? map.getBearing(),
+        pitch: stop.pitch ?? map.getPitch(),
+      },
+    );
+    return omitUndefined({
+      ...options,
+      ...boundsCamera,
+      zoom: stop.zoomLevel ?? boundsCamera?.zoom,
+    });
+  }
+  return options;
+}
+
+function moveCamera(
+  map: mapboxgl.Map,
+  options: mapboxgl.CameraOptions,
+  mode: CameraAnimationMode | undefined,
+  duration: number | undefined,
+) {
+  switch (mode) {
+    case 'easeTo':
+      map.easeTo({ ...options, duration: duration ?? 0 });
+      break;
+    case 'linearTo':
+      map.easeTo({
+        ...options,
+        duration: duration ?? 0,
+        easing: (progress) => progress,
+      });
+      break;
+    case 'moveTo':
+    case 'none':
+      map.jumpTo(options);
+      break;
+    case 'flyTo':
+    default:
+      map.flyTo({ ...options, duration });
+      break;
   }
 }
 
-class Camera
-  extends Component<
-    Pick<
-      CameraProps,
-      'centerCoordinate' | 'zoomLevel' | 'minZoomLevel' | 'maxZoomLevel'
-    >
-  >
-  implements Omit<CameraRef, 'setCamera' | 'moveBy' | 'scaleBy'>
-{
-  // @ts-ignore - context is provided by React.Component with contextType
-  context: ContextType<typeof MapContext>;
+function applyStop(map: mapboxgl.Map, stop: CameraStop) {
+  moveCamera(
+    map,
+    toCameraOptions(map, stop),
+    stop.animationMode,
+    stop.animationDuration,
+  );
+}
 
-  static contextType = MapContext;
-  static UserTrackingModes = [];
-
-  componentDidMount() {
-    const { map } = this.context;
-    if (!map) {
-      return;
-    }
-
-    // minZoomLevel
-    if (this.props.minZoomLevel !== undefined) {
-      map.setMinZoom(this.props.minZoomLevel);
-    }
-
-    // maxZoomLevel
-    if (this.props.maxZoomLevel !== undefined) {
-      map.setMaxZoom(this.props.maxZoomLevel);
-    }
-
-    // zoomLevel
-    if (this.props.zoomLevel !== undefined) {
-      map.setZoom(this.props.zoomLevel);
-    }
-
-    // centerCoordinate
-    if (this.props.centerCoordinate !== undefined) {
-      map.flyTo({
-        center: this.props.centerCoordinate.slice(0, 2) as [number, number],
-        duration: 0,
-      });
-    }
+function applyStops(map: mapboxgl.Map, stops: CameraStop[]) {
+  const [first, ...rest] = stops;
+  if (!first) {
+    return;
   }
+  if (rest.length > 0) {
+    map.once('moveend', () => applyStops(map, rest));
+  }
+  applyStop(map, first);
+}
 
-  fitBounds(
-    northEastCoordinates: Position,
-    southWestCoordinates: Position,
-    padding: number | number[] = 0,
-    animationDuration = 0,
+function isCameraStops(
+  config: CameraStop | CameraStops,
+): config is CameraStops {
+  return 'stops' in config && Array.isArray(config.stops);
+}
+
+function propsStop(props: CameraProps): CameraStop | undefined {
+  const { centerCoordinate, bounds, heading, pitch, zoomLevel, padding } =
+    props;
+  if (
+    centerCoordinate === undefined &&
+    bounds === undefined &&
+    heading === undefined &&
+    pitch === undefined &&
+    zoomLevel === undefined &&
+    padding === undefined
   ) {
-    const { map } = this.context;
-    if (map) {
-      map.fitBounds(
-        [
-          northEastCoordinates.slice(0, 2) as [number, number],
-          southWestCoordinates.slice(0, 2) as [number, number],
-        ],
-        {
-          padding: buildMapboxGlPadding(padding),
-          duration: animationDuration,
-        },
-      );
-    }
+    return undefined;
   }
+  return {
+    centerCoordinate,
+    bounds,
+    heading,
+    pitch,
+    zoomLevel,
+    padding,
+    animationDuration: props.animationDuration,
+    animationMode: props.animationMode,
+  };
+}
 
-  flyTo(centerCoordinate: Position, animationDuration = 2000) {
-    const { map } = this.context;
-    if (map) {
-      map.flyTo({
-        center: centerCoordinate.slice(0, 2) as [number, number],
-        duration: animationDuration,
-      });
-    }
-  }
+function applyZoomAndBoundsLimits(map: mapboxgl.Map, props: CameraProps) {
+  map.setMinZoom(props.minZoomLevel ?? null);
+  map.setMaxZoom(props.maxZoomLevel ?? null);
+  const maxBounds: mapboxgl.LngLatBoundsLike | null =
+    props.maxBounds?.ne && props.maxBounds?.sw
+      ? [toLngLat(props.maxBounds.sw), toLngLat(props.maxBounds.ne)]
+      : null;
+  map.setMaxBounds(maxBounds as mapboxgl.LngLatBoundsLike);
+}
 
-  moveTo(centerCoordinate: Position, animationDuration = 0) {
-    const { map } = this.context;
-    if (map) {
-      map.easeTo({
-        center: centerCoordinate.slice(0, 2) as [number, number],
-        duration: animationDuration,
-      });
-    }
-  }
+const Camera = memo(
+  forwardRef<CameraRef, CameraProps>((props, ref) => {
+    const { map } = useContext(MapContext);
+    const { allowUpdates = true } = props;
+    const stop = propsStop(props);
 
-  zoomTo(zoomLevel: number, animationDuration = 2000) {
-    const { map } = this.context;
-    if (map) {
-      map.flyTo({
-        zoom: zoomLevel,
-        duration: animationDuration,
-      });
-    }
-  }
-
-  setCamera(props: CameraStop) {
-    const { map } = this.context;
-    if (!map) {
-      return;
-    }
-    const {
-      centerCoordinate,
-      bounds,
-      zoomLevel,
-      heading,
-      pitch,
-      padding,
-      animationDuration = 2000,
-    } = props;
-
-    let options: mapboxgl.CameraOptions = {
-      center: centerCoordinate?.slice(0, 2) as [number, number],
-      zoom: zoomLevel ?? map.getZoom(),
-      bearing: heading ?? map.getBearing(),
-      pitch: pitch ?? map.getPitch(),
+    const setCamera: CameraRef['setCamera'] = (config) => {
+      if (!map || !allowUpdates) {
+        return;
+      }
+      if (isCameraStops(config)) {
+        applyStops(map, config.stops);
+      } else {
+        applyStop(map, config);
+      }
     };
 
-    if (
-      padding?.paddingTop &&
-      padding?.paddingRight &&
-      padding?.paddingBottom &&
-      padding?.paddingLeft
-    ) {
-      options.padding = buildMapboxGlPadding([
-        padding.paddingTop,
-        padding.paddingRight,
-        padding.paddingBottom,
-        padding.paddingLeft,
-      ]);
+    useImperativeHandle(ref, () => ({
+      setCamera,
+      fitBounds(ne, sw, paddingConfig = 0, animationDuration = 0) {
+        setCamera({
+          bounds: { ne, sw },
+          padding: paddingFromConfig(paddingConfig),
+          animationDuration,
+          animationMode: 'easeTo',
+        });
+      },
+      flyTo(centerCoordinate, animationDuration = 2000) {
+        setCamera({ centerCoordinate, animationDuration });
+      },
+      moveTo(centerCoordinate, animationDuration = 0) {
+        setCamera({
+          centerCoordinate,
+          animationDuration,
+          animationMode: 'easeTo',
+        });
+      },
+      zoomTo(zoomLevel, animationDuration = 2000) {
+        setCamera({ zoomLevel, animationDuration, animationMode: 'flyTo' });
+      },
+      moveBy(moveProps) {
+        const animation = 'animationMode' in moveProps ? moveProps : undefined;
+        map?.panBy([moveProps.x, moveProps.y], {
+          duration: animation?.animationDuration ?? 0,
+          easing:
+            animation?.animationMode === 'easeTo'
+              ? undefined
+              : (progress) => progress,
+        });
+      },
+      scaleBy(scaleProps) {
+        if (!map) {
+          return;
+        }
+        const animation =
+          'animationMode' in scaleProps ? scaleProps : undefined;
+        map.easeTo({
+          zoom: map.getZoom() + Math.log2(scaleProps.scaleFactor),
+          around: map.unproject([scaleProps.x, scaleProps.y]),
+          duration: animation?.animationDuration ?? 0,
+          easing:
+            animation?.animationMode === 'easeTo'
+              ? undefined
+              : (progress) => progress,
+        });
+      },
+    }));
+
+    const latestProps = useRef(props);
+    latestProps.current = props;
+
+    useEffect(() => {
+      if (!map) {
+        return;
+      }
+      const current = latestProps.current;
+      applyZoomAndBoundsLimits(map, current);
+      if (current.defaultSettings) {
+        applyStop(map, { ...current.defaultSettings, animationMode: 'none' });
+      }
+      const initialStop = propsStop(current);
+      if (initialStop) {
+        applyStop(map, {
+          ...initialStop,
+          animationMode: initialStop.animationMode ?? 'none',
+        });
+      }
+    }, [map]);
+
+    useOnChange(
+      `${props.minZoomLevel}-${props.maxZoomLevel}-${JSON.stringify(
+        props.maxBounds,
+      )}`,
+      () => map && applyZoomAndBoundsLimits(map, props),
+    );
+
+    useOnChange(`${JSON.stringify(stop)}-${props.triggerKey}`, () => {
+      if (map && stop && allowUpdates) {
+        applyStop(map, stop);
+      }
+    });
+
+    if (props.followUserLocation) {
+      warnUnimplemented('Camera.followUserLocation');
     }
 
-    if (bounds?.ne && bounds?.sw) {
-      const newCameraTransform = map.cameraForBounds(
-        [bounds.ne as mapboxgl.LngLatLike, bounds.sw as mapboxgl.LngLatLike],
-        options,
-      );
-      options = { ...options, ...newCameraTransform };
-    }
-
-    switch (props.animationMode) {
-      default:
-      case 'easeTo':
-      case 'linearTo':
-        map.easeTo({ ...options, duration: animationDuration });
-        break;
-      case 'flyTo':
-        map.flyTo({ ...options, duration: animationDuration });
-        break;
-      case 'moveTo':
-      case 'none':
-        map.jumpTo(options);
-        break;
-    }
-  }
-
-  render() {
-    return <></>;
-  }
-}
+    return null;
+  }),
+);
+Camera.displayName = 'Camera';
 
 export { Camera };
 export default Camera;

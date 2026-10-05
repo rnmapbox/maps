@@ -197,3 +197,36 @@ describe('AnimatedShapeSource', () => {
     // process.env.NODE_ENV = 'TEST';
   });
 });
+
+describe('AnimatedCoordinatesArray', () => {
+  test('testDecay', () => {
+    const coordinates = new AnimatedCoordinatesArray([
+      [1, 1],
+      [10, 10],
+    ]);
+    const decay = jest.spyOn(Animated, 'decay');
+
+    const animation = coordinates.decay({
+      toValue: [
+        [21, 21],
+        [30, 30],
+      ],
+      velocity: 0.001,
+      deceleration: 0.997,
+      useNativeDriver: false,
+    });
+
+    // decay has to drive the same progress value that animate() subscribes to
+    expect(decay.mock.calls[0][0]).toBeInstanceOf(Animated.Value);
+
+    animation.start();
+    clock.tick(16);
+    clock.fireRequestAnimationFrames();
+
+    const [firstCoordinate] = coordinates.__getValue();
+    expect(firstCoordinate[0]).toBeGreaterThan(1);
+    expect(firstCoordinate[0]).toBeLessThan(21);
+
+    decay.mockRestore();
+  });
+});
