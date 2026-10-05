@@ -30,7 +30,7 @@ const LocationPuck3D = () => {
           puckBearing="course"
           model={{
             uri: require('../../assets/sportcar.glb'),
-            scale: [1.5, 1.5, 1.5],
+            scale: [10, 10, 10],
           }}
         />
       </MapView>
