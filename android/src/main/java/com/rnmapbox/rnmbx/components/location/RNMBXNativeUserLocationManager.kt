@@ -99,6 +99,11 @@ class RNMBXNativeUserLocationManager : ViewGroupManager<RNMBXNativeUserLocation>
         }
     }
 
+    @ReactProp(name = "model")
+    override fun setModel(view: RNMBXNativeUserLocation, value: Dynamic) {
+        view.model = if (value.isNull) null else value.asMap()
+    }
+
     @Nonnull
     override fun createViewInstance(@Nonnull reactContext: ThemedReactContext): RNMBXNativeUserLocation {
         return RNMBXNativeUserLocation(reactContext)

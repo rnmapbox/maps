@@ -8,8 +8,10 @@ import android.graphics.BitmapFactory
 import android.graphics.drawable.BitmapDrawable
 import android.graphics.drawable.Drawable
 import com.facebook.react.bridge.ColorPropConverter
+import com.facebook.react.bridge.ReadableArray
 import com.facebook.react.bridge.ReadableMap
 import com.facebook.react.bridge.ReadableType
+import com.google.gson.Gson
 import com.mapbox.android.core.permissions.PermissionsManager
 import com.mapbox.bindgen.Value
 import com.mapbox.maps.Image
@@ -17,6 +19,7 @@ import com.mapbox.maps.MapView
 import com.mapbox.maps.MapboxMap
 import com.mapbox.maps.Style
 import com.mapbox.maps.plugin.LocationPuck2D
+import com.mapbox.maps.plugin.LocationPuck3D
 import com.mapbox.maps.plugin.locationcomponent.LocationComponentConstants
 import com.mapbox.maps.plugin.locationcomponent.location
 import com.mapbox.maps.plugin.locationcomponent.R as LR
@@ -30,8 +33,10 @@ import com.rnmapbox.rnmbx.components.mapview.OnMapReadyCallback
 import com.rnmapbox.rnmbx.components.mapview.RNMBXMapView
 import com.rnmapbox.rnmbx.utils.BitmapUtils
 import com.rnmapbox.rnmbx.utils.Logger
+import com.rnmapbox.rnmbx.utils.extensions.getAndLogIfNotArray
 import com.rnmapbox.rnmbx.utils.extensions.getAndLogIfNotBoolean
 import com.rnmapbox.rnmbx.utils.extensions.getAndLogIfNotString
+import com.rnmapbox.rnmbx.utils.extensions.toJsonArray
 import com.rnmapbox.rnmbx.v11compat.image.AppCompatResourcesV11
 import com.rnmapbox.rnmbx.v11compat.image.ImageHolder
 import com.rnmapbox.rnmbx.v11compat.image.toDrawable
@@ -98,6 +103,12 @@ class RNMBXNativeUserLocation(context: Context) : AbstractMapFeature(context), O
             _apply()
         }
 
+    var model: ReadableMap? = null
+        set(value) {
+            field = value
+            _apply()
+        }
+
     private fun imageNameUpdated(image: PuckImagePart, name: String?) {
         imageNames[image] = name
         mMBXMapView?.let {
@@ -125,7 +136,10 @@ class RNMBXNativeUserLocation(context: Context) : AbstractMapFeature(context), O
     private fun _apply(mapView: MapView) {
         val location2 = mapView.location2;
 
-        if (visible) {
+        val locationPuck3D = model?.let { makeLocationPuck3D(it) }
+        if (visible && locationPuck3D != null) {
+            location2.locationPuck = locationPuck3D
+        } else if (visible) {
             if (images.isEmpty()) {
                 location2.locationPuck =
                     makeDefaultLocationPuck2D(mContext, androidRenderMode ?: RenderMode.NORMAL)
@@ -188,6 +202,24 @@ class RNMBXNativeUserLocation(context: Context) : AbstractMapFeature(context), O
                 }
             }
         }
+    }
+
+    private fun makeLocationPuck3D(model: ReadableMap): LocationPuck3D? {
+        val uri = model.getAndLogIfNotString("uri", LOG_TAG) ?: return null
+        val scale = model.getAndLogIfNotArray("scale", LOG_TAG)
+        val rotation = model.getAndLogIfNotArray("rotation", LOG_TAG)
+        val opacity = if (model.hasKey("opacity")) model.getDynamic("opacity") else null
+        val opacityExpression = opacity?.takeIf { it.type == ReadableType.Array }?.asArray()
+
+        return LocationPuck3D(
+            modelUri = uri,
+            modelScale = scale?.toFloatListOrNull() ?: listOf(1f, 1f, 1f),
+            modelScaleExpression = scale?.toExpressionJsonOrNull(),
+            modelRotation = rotation?.toFloatListOrNull() ?: listOf(0f, 0f, 0f),
+            modelRotationExpression = rotation?.toExpressionJsonOrNull(),
+            modelOpacity = opacity?.takeIf { it.type == ReadableType.Number }?.asDouble()?.toFloat() ?: 1f,
+            modelOpacityExpression = opacityExpression?.toExpressionJsonOrNull()
+        )
     }
 
     override fun addToMap(mapView: RNMBXMapView) {
@@ -278,6 +310,14 @@ class RNMBXNativeUserLocation(context: Context) : AbstractMapFeature(context), O
         const val LOG_TAG = "RNMBXNativeUserLocation"
     }
 }
+
+private fun ReadableArray.isExpression() = size() > 0 && getType(0) == ReadableType.String
+
+private fun ReadableArray.toFloatListOrNull(): List<Float>? =
+    if (isExpression()) null else (0 until size()).map { getDouble(it).toFloat() }
+
+private fun ReadableArray.toExpressionJsonOrNull(): String? =
+    if (isExpression()) Gson().toJson(toJsonArray()) else null
 
 fun makeDefaultLocationPuck2D(context: Context, renderMode: RenderMode): LocationPuck2D {
     return LocationPuck2D(
