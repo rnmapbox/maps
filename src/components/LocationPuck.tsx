@@ -1,5 +1,5 @@
 import { memo } from 'react';
-import { processColor, type ColorValue } from 'react-native';
+import { Image, processColor, type ColorValue } from 'react-native';
 
 import RNMBXNativeUserLocation, {
   type NativeProps,
@@ -92,6 +92,34 @@ export type Props = {
     | 'default';
 
   /**
+   * Renders the puck as a 3D model instead of the 2D images. When set, `topImage`, `bearingImage`, `shadowImage`, `scale`, `pulsing` and `androidRenderMode` are ignored.
+   *
+   * @example
+   * { uri: require('./car.glb'), scale: [1, 1, 1], rotation: [0, 0, 90] }
+   */
+  model?: {
+    /**
+     * URL of a glTF/glb model, or an asset reference from `require`.
+     */
+    uri: string | number;
+
+    /**
+     * Scale of the model in x, y, z. Supports expressions based on zoom.
+     */
+    scale?: Value<number[]>;
+
+    /**
+     * Rotation of the model in degrees around x, y, z.
+     */
+    rotation?: Value<number[]>;
+
+    /**
+     * Opacity of the model, between 0 and 1.
+     */
+    opacity?: Value<number>;
+  };
+
+  /**
    * Whether location icon is visible, defaults to true
    */
   visible?: boolean;
@@ -105,9 +133,14 @@ const defaultProps = {
  * Renders a puck on the map that shows the device's current location.
  */
 const LocationPuck = memo((props: Props) => {
-  const { iosShowsUserHeadingIndicator, pulsing, ...rest } = props;
+  const { iosShowsUserHeadingIndicator, pulsing, model, ...rest } = props;
   const nativePulsing = pulsing ? _pulsingToNative(pulsing) : undefined;
-  let baseProps: NativeProps = { ...defaultProps, pulsing: nativePulsing };
+  const nativeModel = model ? _modelToNative(model) : undefined;
+  let baseProps: NativeProps = {
+    ...defaultProps,
+    pulsing: nativePulsing,
+    model: nativeModel,
+  };
   if (iosShowsUserHeadingIndicator) {
     console.warn(
       'LocationPuck: iosShowsUserHeadingIndicator is deprecated, use puckBearingEnabled={true} puckBearing="heading" instead',
@@ -138,6 +171,28 @@ function _pulsingToNative(
     isEnabled,
     radius,
   };
+}
+
+function _modelToNative(
+  model: NonNullable<Props['model']>,
+): NativeProps['model'] {
+  const { uri, ...rest } = model;
+  return { ...rest, uri: _resolveModelUri(uri) };
+}
+
+function _resolveModelUri(uri: string | number): string {
+  if (typeof uri === 'string') {
+    return uri;
+  }
+  const asset = Image.resolveAssetSource(uri);
+  if (!asset?.uri) {
+    throw new Error(`LocationPuck: could not resolve model asset: ${uri}`);
+  }
+  return _withoutPackagerQuery(asset.uri);
+}
+
+function _withoutPackagerQuery(uri: string): string {
+  return uri.split('?')[0]!;
 }
 
 export default LocationPuck;

@@ -130,6 +130,23 @@ The configration parameters for sonar-like pulsing circle animation shown around
 
 
   
+### model
+
+```tsx
+type Model = {
+  uri: string \| number; /* URL of a glTF/glb model, or an asset reference from `require`. */
+  scale: T \| Expression; /* Scale of the model in x, y, z. Supports expressions based on zoom. */
+  rotation: T \| Expression; /* Rotation of the model in degrees around x, y, z. */
+  opacity: T \| Expression; /* Opacity of the model, between 0 and 1. */
+}
+```
+Renders the puck as a 3D model instead of the 2D images. When set, `topImage`, `bearingImage`, `shadowImage`, `scale`, `pulsing` and `androidRenderMode` are ignored.
+
+@example
+{ uri: require('./car.glb'), scale: [1, 1, 1], rotation: [0, 0, 90] }
+
+
+  
 ### visible
 
 ```tsx
