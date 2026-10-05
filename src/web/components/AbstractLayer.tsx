@@ -15,6 +15,11 @@ import { omitUndefined, toGLStyle, type GLStyle } from '../utils/styleProps';
 
 const defaultSourceID = 'composite';
 
+const layerTypesWithoutSource: LayerSpecification['type'][] = [
+  'background',
+  'sky',
+];
+
 export type LayerProps = {
   id: string;
   existing?: boolean;
@@ -154,7 +159,9 @@ export function useLayer(type: LayerSpecification['type'], props: LayerProps) {
           omitUndefined({
             id: current.id,
             type,
-            source: sourceID,
+            source: layerTypesWithoutSource.includes(type)
+              ? undefined
+              : sourceID,
             'source-layer': current.sourceLayerID,
             filter: nonEmptyFilter(current.filter),
             minzoom: current.minZoomLevel,
@@ -220,7 +227,10 @@ export function useLayer(type: LayerSpecification['type'], props: LayerProps) {
   });
 }
 
-export function createLayer(type: LayerSpecification['type']) {
+export function createLayer(
+  type: LayerSpecification['type'],
+  displayName: string,
+) {
   const Layer = forwardRef<LayerRef, LayerProps>((props, ref) => {
     const [nativeProps, setNativeProps] = useState<Partial<LayerProps>>({});
     useImperativeHandle(ref, () => ({
@@ -230,6 +240,6 @@ export function createLayer(type: LayerSpecification['type']) {
     useLayer(type, { ...props, ...nativeProps });
     return null;
   });
-  Layer.displayName = `${type}Layer`;
+  Layer.displayName = displayName;
   return Layer;
 }

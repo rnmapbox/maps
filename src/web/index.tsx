@@ -8,7 +8,20 @@ import Camera from './components/Camera';
 import MapView from './components/MapView';
 import MarkerView from './components/MarkerView';
 import ShapeSource from './components/ShapeSource';
-import { CircleLayer, LineLayer } from './components/layers';
+import {
+  BackgroundLayer,
+  CircleLayer,
+  FillExtrusionLayer,
+  FillLayer,
+  HeatmapLayer,
+  HillshadeLayer,
+  LineLayer,
+  ModelLayer,
+  RasterLayer,
+  RasterParticleLayer,
+  SkyLayer,
+  SymbolLayer,
+} from './components/layers';
 import Logger from './utils/Logger';
 import {
   AnimatedCoordinatesArray,
@@ -42,16 +55,6 @@ const Viewport = UnimplementedComponent('Viewport');
 const Models = UnimplementedComponent('Models');
 const Images = UnimplementedComponent('Images');
 const Image = UnimplementedComponent('Image');
-const FillLayer = UnimplementedComponent('FillLayer');
-const FillExtrusionLayer = UnimplementedComponent('FillExtrusionLayer');
-const HeatmapLayer = UnimplementedComponent('HeatmapLayer');
-const SkyLayer = UnimplementedComponent('SkyLayer');
-const ModelLayer = UnimplementedComponent('ModelLayer');
-const SymbolLayer = UnimplementedComponent('SymbolLayer');
-const RasterLayer = UnimplementedComponent('RasterLayer');
-const RasterParticleLayer = UnimplementedComponent('RasterParticleLayer');
-const HillshadeLayer = UnimplementedComponent('HillshadeLayer');
-const BackgroundLayer = UnimplementedComponent('BackgroundLayer');
 const CustomLocationProvider = UnimplementedComponent('CustomLocationProvider');
 const Terrain = UnimplementedComponent('Terrain');
 const CameraGestureObserver = UnimplementedComponent('CameraGestureObserver');
