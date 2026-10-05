@@ -12,9 +12,7 @@ class ShapeAnimatorManager {
     return get(tag: tag)
   }
 
-  // Keep registration synchronous: ShapeSource.shape looks up by tag in didSet.
-  // Hopping to main.async races that lookup and can leave the source unbound.
-  // Lock instead so generate (UIManager queue) and get (main) stay consistent.
+  // generate registers on the UIManager queue while ShapeSource looks up on main.
   func register(tag: Tag, animator: ShapeAnimator) {
     lock.lock()
     animatorByTags[tag] = animator
@@ -44,9 +42,6 @@ class ShapeAnimatorManager {
         if let json = try JSONSerialization.jsonObject(with: data) as? [String: Any] {
           if let tag = json["__nativeTag"] as? Int {
             return get(tag: tag)
-          }
-          if let tagNumber = json["__nativeTag"] as? NSNumber {
-            return get(tag: tagNumber.intValue)
           }
         }
       } catch {
