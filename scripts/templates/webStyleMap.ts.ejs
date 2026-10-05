@@ -18,3 +18,15 @@ export const layerStyleProps: {
   <%_ } _%>
   <%_ } _%>
 };
+
+export const styleObjectProps: {
+  [object: string]: { [name: string]: string };
+} = {
+  <%_ for (let layer of layers.filter((l) => nonLayerNames.includes(l.name))) { _%>
+  <%= layer.name %>: {
+    <%_ for (let prop of layer.properties) { _%>
+    <%= prop.name %>: '<%= prop.mbx.name %>',
+    <%_ } _%>
+  },
+  <%_ } _%>
+};

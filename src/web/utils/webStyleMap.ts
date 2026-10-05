@@ -328,3 +328,49 @@ export const layerStyleProps: {
   skyAtmosphereColor: { name: 'sky-atmosphere-color', kind: 'paint' },
   skyOpacity: { name: 'sky-opacity', kind: 'paint' },
 };
+
+export const styleObjectProps: {
+  [object: string]: { [name: string]: string };
+} = {
+  light: {
+    anchor: 'anchor',
+    position: 'position',
+    color: 'color',
+    intensity: 'intensity',
+  },
+  atmosphere: {
+    range: 'range',
+    color: 'color',
+    highColor: 'high-color',
+    spaceColor: 'space-color',
+    horizonBlend: 'horizon-blend',
+    starIntensity: 'star-intensity',
+    verticalRange: 'vertical-range',
+  },
+  snow: {
+    density: 'density',
+    intensity: 'intensity',
+    color: 'color',
+    opacity: 'opacity',
+    vignette: 'vignette',
+    vignetteColor: 'vignette-color',
+    centerThinning: 'center-thinning',
+    direction: 'direction',
+    flakeSize: 'flake-size',
+  },
+  rain: {
+    density: 'density',
+    intensity: 'intensity',
+    color: 'color',
+    opacity: 'opacity',
+    vignette: 'vignette',
+    vignetteColor: 'vignette-color',
+    centerThinning: 'center-thinning',
+    direction: 'direction',
+    dropletSize: 'droplet-size',
+    distortionStrength: 'distortion-strength',
+  },
+  terrain: {
+    exaggeration: 'exaggeration',
+  },
+};

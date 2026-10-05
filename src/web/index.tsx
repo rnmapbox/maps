@@ -9,6 +9,14 @@ import MapView from './components/MapView';
 import MarkerView from './components/MarkerView';
 import ImageSource from './components/ImageSource';
 import ShapeSource from './components/ShapeSource';
+import StyleImport from './components/StyleImport';
+import {
+  Atmosphere,
+  Light,
+  Rain,
+  Snow,
+  Terrain,
+} from './components/styleObjects';
 import {
   RasterArraySource,
   RasterDemSource,
@@ -42,15 +50,10 @@ import { requestAndroidLocationPermissions } from '../requestAndroidLocationPerm
 
 // Components without a web implementation yet. They render nothing, so
 // screens using them still show the map.
-const Atmosphere = UnimplementedComponent('Atmosphere');
-const Snow = UnimplementedComponent('Snow');
-const Rain = UnimplementedComponent('Rain');
-const Light = UnimplementedComponent('Light');
 const PointAnnotation = UnimplementedComponent('PointAnnotation');
 const PointAnnotationManager = UnimplementedComponent('PointAnnotationManager');
 const Annotation = UnimplementedComponent('Annotation');
 const Callout = UnimplementedComponent('Callout');
-const StyleImport = UnimplementedComponent('StyleImport');
 const UserLocation = UnimplementedComponent('UserLocation');
 const LocationPuck = UnimplementedComponent('LocationPuck');
 const Viewport = UnimplementedComponent('Viewport');
@@ -58,7 +61,6 @@ const Models = UnimplementedComponent('Models');
 const Images = UnimplementedComponent('Images');
 const Image = UnimplementedComponent('Image');
 const CustomLocationProvider = UnimplementedComponent('CustomLocationProvider');
-const Terrain = UnimplementedComponent('Terrain');
 const CameraGestureObserver = UnimplementedComponent('CameraGestureObserver');
 const Style = UnimplementedComponent('Style');
 const NativeUserLocation = LocationPuck;

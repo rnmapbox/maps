@@ -18,6 +18,9 @@ function removeSourceAndItsLayers(map: mapboxgl.Map, id: string) {
       map.removeLayer(layer.id);
     }
   }
+  if (map.getTerrain()?.source === id) {
+    map.setTerrain(null);
+  }
   if (map.getSource(id)) {
     map.removeSource(id);
   }
