@@ -11,6 +11,7 @@ import type { FilterSpecification, LayerSpecification } from 'mapbox-gl';
 import MapContext from '../MapContext';
 import SourceContext from '../SourceContext';
 import { notifyLayerAdded, whenLayerExists } from '../layerWaiters';
+import { useOnChange } from '../useOnChange';
 import { omitUndefined, toGLStyle, type GLStyle } from '../utils/styleProps';
 
 const defaultSourceID = 'composite';
@@ -123,16 +124,6 @@ function adoptExistingLayer(
   if (props.slot) {
     map.setSlot(props.id, props.slot);
   }
-}
-
-function useOnChange(value: unknown, onChange: () => void) {
-  const previous = useRef(value);
-  useEffect(() => {
-    if (previous.current !== value) {
-      previous.current = value;
-      onChange();
-    }
-  });
 }
 
 export function useLayer(type: LayerSpecification['type'], props: LayerProps) {
