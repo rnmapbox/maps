@@ -209,7 +209,7 @@ class PointAnnotation extends NativeBridgeComponent(
    * Call this for example from Image#onLoad.
    */
   refresh() {
-    this._runNativeMethod('refresh', this._nativeRef, []);
+    this._runNativeMethodDetached('refresh', this._nativeRef, []);
   }
 
   _setNativeRef(nativeRef: NativePointAnnotationRef) {
