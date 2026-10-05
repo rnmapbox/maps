@@ -126,17 +126,16 @@ class RNMBXNativeUserLocation(context: Context) : AbstractMapFeature(context), O
         val location2 = mapView.location2;
 
         if (visible) {
-            if (images.isEmpty()) {
-                location2.locationPuck =
-                    makeDefaultLocationPuck2D(mContext, androidRenderMode ?: RenderMode.NORMAL)
+            val puck = if (images.isEmpty()) {
+                makeDefaultLocationPuck2D(mContext, androidRenderMode ?: RenderMode.NORMAL)
             } else {
-                location2.locationPuck = LocationPuck2D(
+                LocationPuck2D(
                     topImage = images[PuckImagePart.TOP],
                     bearingImage = images[PuckImagePart.BEARING],
                     shadowImage = images[PuckImagePart.SHADOW],
-                    scaleExpression = scale?.toJson()
                 )
             }
+            location2.locationPuck = scale?.let { puck.copy(scaleExpression = it.toJson()) } ?: puck
         } else {
             val empty =
                 AppCompatResourcesV11.getDrawableImageHolder(mContext, R.drawable.empty)
