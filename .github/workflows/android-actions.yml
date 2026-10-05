@@ -20,6 +20,11 @@ on:
         default: false
         required: false
         type: boolean
+      SKIP:
+        description: "Report the build as skipped, e.g. when only the web implementation changed"
+        default: false
+        required: false
+        type: boolean
     secrets:
       MAPBOX_ACCESS_TOKEN:
         required: true
@@ -29,6 +34,7 @@ on:
 jobs:
   build_example:
     name: Android Example Build ${{ inputs.NEW_ARCH && 'Fabric' || 'Paper' }} ${{ inputs.MAP_IMPL }}
+    if: ${{ !inputs.SKIP }}
     runs-on: ubuntu-latest
     environment: ${{ inputs.env_name }}
     steps:
