@@ -1,4 +1,4 @@
-import { layerStyleProps } from './webStyleMap';
+import { layerStyleProps, styleObjectProps } from './webStyleMap';
 
 export type GLStyle = {
   paint: { [key: string]: unknown };
@@ -35,4 +35,28 @@ export function omitUndefined<T extends object>(object: T): T {
   return Object.fromEntries(
     Object.entries(object).filter(([, value]) => value !== undefined),
   ) as T;
+}
+
+export type StyleObject = 'light' | 'atmosphere' | 'terrain' | 'rain' | 'snow';
+
+export function toGLStyleObject(
+  object: StyleObject,
+  style: { [key: string]: unknown } = {},
+): { [key: string]: unknown } {
+  const props = styleObjectProps[object] ?? {};
+  const result: { [key: string]: unknown } = {};
+  for (const [name, value] of Object.entries(style)) {
+    if (value === undefined) {
+      continue;
+    }
+    const isTransition = name.endsWith(transitionSuffix);
+    const glName =
+      props[isTransition ? name.slice(0, -transitionSuffix.length) : name];
+    if (!glName) {
+      console.warn(`@rnmapbox/maps: unknown ${object} style property ${name}`);
+      continue;
+    }
+    result[isTransition ? `${glName}-transition` : glName] = value;
+  }
+  return result;
 }
