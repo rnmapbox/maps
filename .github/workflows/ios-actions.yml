@@ -32,6 +32,13 @@ on:
         required: false
 
 jobs:
+  report_skipped_build:
+    name: iOS Example Build ${{ inputs.NEW_ARCH && 'Fabric' || 'Paper' }} ${{ inputs.MAP_IMPL }}
+    if: ${{ inputs.SKIP }}
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo "Only src/web changed, so the iOS build is not needed"
+
   build:
     name: iOS Example Build ${{ inputs.NEW_ARCH && 'Fabric' || 'Paper' }} ${{ inputs.MAP_IMPL }}
     if: ${{ !inputs.SKIP }}
