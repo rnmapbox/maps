@@ -33,11 +33,13 @@ export type OfflineProgressStatus =
       loadedResourceSize: number;
       loadedResourceCount: number;
       requiredResourceCount: number;
+      metadata?: Record<string, unknown>;
     }
   | {
       name: string;
       state: 'invalid' | 'inactive' | 'active' | 'complete' | 'unknown';
       percentage: null;
+      metadata?: Record<string, unknown>;
     };
 
 export type OfflinePackError = {
