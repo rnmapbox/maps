@@ -7,7 +7,14 @@ import UnimplementedComponent, {
 import Camera from './components/Camera';
 import MapView from './components/MapView';
 import MarkerView from './components/MarkerView';
+import ImageSource from './components/ImageSource';
 import ShapeSource from './components/ShapeSource';
+import {
+  RasterArraySource,
+  RasterDemSource,
+  RasterSource,
+  VectorSource,
+} from './components/tileSources';
 import {
   BackgroundLayer,
   CircleLayer,
@@ -46,11 +53,6 @@ const Callout = UnimplementedComponent('Callout');
 const StyleImport = UnimplementedComponent('StyleImport');
 const UserLocation = UnimplementedComponent('UserLocation');
 const LocationPuck = UnimplementedComponent('LocationPuck');
-const VectorSource = UnimplementedComponent('VectorSource');
-const RasterSource = UnimplementedComponent('RasterSource');
-const RasterArraySource = UnimplementedComponent('RasterArraySource');
-const RasterDemSource = UnimplementedComponent('RasterDemSource');
-const ImageSource = UnimplementedComponent('ImageSource');
 const Viewport = UnimplementedComponent('Viewport');
 const Models = UnimplementedComponent('Models');
 const Images = UnimplementedComponent('Images');
