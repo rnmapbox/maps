@@ -72,6 +72,14 @@ const ANDROID_V10_OUTPUT_PATH = path.join(
 
 const JS_OUTPUT_PATH = path.join(__dirname, ...OUTPUT_PREFIX, 'src', 'utils');
 
+const WEB_OUTPUT_PATH = path.join(
+  __dirname,
+  ...OUTPUT_PREFIX,
+  'src',
+  'web',
+  'utils',
+);
+
 /**
  * @param {string[]|undefined} only
  */
@@ -539,6 +547,11 @@ export default async function generateCodeWithEjs(layers) {
     {
       input: path.join(TMPL_PATH, 'styleMap.ts.ejs'),
       output: path.join(JS_OUTPUT_PATH, 'styleMap.ts'),
+      only: ['v10', 'v11'],
+    },
+    {
+      input: path.join(TMPL_PATH, 'webStyleMap.ts.ejs'),
+      output: path.join(WEB_OUTPUT_PATH, 'webStyleMap.ts'),
       only: ['v10', 'v11'],
     },
   ];
