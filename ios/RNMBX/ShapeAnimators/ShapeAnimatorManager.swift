@@ -12,7 +12,6 @@ class ShapeAnimatorManager {
     return get(tag: tag)
   }
 
-  // generate registers on the UIManager queue while ShapeSource looks up on main.
   func register(tag: Tag, animator: ShapeAnimator) {
     lock.lock()
     animatorByTags[tag] = animator

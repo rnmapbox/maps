@@ -25,7 +25,6 @@ RCT_EXPORT_MODULE();
   return RCTGetUIManagerQueue();
 }
 
-// Must match NativeRNMBXMovePointShapeAnimatorModuleSpec exactly (codegen uses NSInteger/double).
 - (void)generate:(NSInteger)tag
       coordinate:(NSArray *)coordinate
          resolve:(RCTPromiseResolveBlock)resolve

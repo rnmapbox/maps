@@ -25,7 +25,6 @@ RCT_EXPORT_MODULE();
   return RCTGetUIManagerQueue();
 }
 
-// Must match NativeRNMBXChangeLineOffsetsShapeAnimatorModuleSpec exactly (codegen uses NSInteger/double).
 - (void)generate:(NSInteger)tag
      coordinates:(NSArray *)coordinates
      startOffset:(double)startOffset
