@@ -7,8 +7,36 @@ import UnimplementedComponent, {
 import Camera from './components/Camera';
 import MapView from './components/MapView';
 import MarkerView from './components/MarkerView';
+import ImageSource from './components/ImageSource';
 import ShapeSource from './components/ShapeSource';
-import { CircleLayer, LineLayer } from './components/layers';
+import StyleImport from './components/StyleImport';
+import {
+  Atmosphere,
+  Light,
+  Rain,
+  Snow,
+  Terrain,
+} from './components/styleObjects';
+import {
+  RasterArraySource,
+  RasterDemSource,
+  RasterSource,
+  VectorSource,
+} from './components/tileSources';
+import {
+  BackgroundLayer,
+  CircleLayer,
+  FillExtrusionLayer,
+  FillLayer,
+  HeatmapLayer,
+  HillshadeLayer,
+  LineLayer,
+  ModelLayer,
+  RasterLayer,
+  RasterParticleLayer,
+  SkyLayer,
+  SymbolLayer,
+} from './components/layers';
 import Logger from './utils/Logger';
 import {
   AnimatedCoordinatesArray,
@@ -22,38 +50,17 @@ import { requestAndroidLocationPermissions } from '../requestAndroidLocationPerm
 
 // Components without a web implementation yet. They render nothing, so
 // screens using them still show the map.
-const Atmosphere = UnimplementedComponent('Atmosphere');
-const Snow = UnimplementedComponent('Snow');
-const Rain = UnimplementedComponent('Rain');
-const Light = UnimplementedComponent('Light');
 const PointAnnotation = UnimplementedComponent('PointAnnotation');
 const PointAnnotationManager = UnimplementedComponent('PointAnnotationManager');
 const Annotation = UnimplementedComponent('Annotation');
 const Callout = UnimplementedComponent('Callout');
-const StyleImport = UnimplementedComponent('StyleImport');
 const UserLocation = UnimplementedComponent('UserLocation');
 const LocationPuck = UnimplementedComponent('LocationPuck');
-const VectorSource = UnimplementedComponent('VectorSource');
-const RasterSource = UnimplementedComponent('RasterSource');
-const RasterArraySource = UnimplementedComponent('RasterArraySource');
-const RasterDemSource = UnimplementedComponent('RasterDemSource');
-const ImageSource = UnimplementedComponent('ImageSource');
 const Viewport = UnimplementedComponent('Viewport');
 const Models = UnimplementedComponent('Models');
 const Images = UnimplementedComponent('Images');
 const Image = UnimplementedComponent('Image');
-const FillLayer = UnimplementedComponent('FillLayer');
-const FillExtrusionLayer = UnimplementedComponent('FillExtrusionLayer');
-const HeatmapLayer = UnimplementedComponent('HeatmapLayer');
-const SkyLayer = UnimplementedComponent('SkyLayer');
-const ModelLayer = UnimplementedComponent('ModelLayer');
-const SymbolLayer = UnimplementedComponent('SymbolLayer');
-const RasterLayer = UnimplementedComponent('RasterLayer');
-const RasterParticleLayer = UnimplementedComponent('RasterParticleLayer');
-const HillshadeLayer = UnimplementedComponent('HillshadeLayer');
-const BackgroundLayer = UnimplementedComponent('BackgroundLayer');
 const CustomLocationProvider = UnimplementedComponent('CustomLocationProvider');
-const Terrain = UnimplementedComponent('Terrain');
 const CameraGestureObserver = UnimplementedComponent('CameraGestureObserver');
 const Style = UnimplementedComponent('Style');
 const NativeUserLocation = LocationPuck;

@@ -20,6 +20,11 @@ on:
         default: false
         required: false
         type: boolean
+      SKIP:
+        description: "Report the build as skipped, e.g. when only the web implementation changed"
+        default: false
+        required: false
+        type: boolean
     secrets:
       MAPBOX_ACCESS_TOKEN:
         required: true
@@ -27,8 +32,16 @@ on:
         required: false
 
 jobs:
+  report_skipped_build:
+    name: Android Example Build ${{ inputs.NEW_ARCH && 'Fabric' || 'Paper' }} ${{ inputs.MAP_IMPL }}
+    if: ${{ inputs.SKIP }}
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo "Only src/web changed, so the Android build is not needed"
+
   build_example:
     name: Android Example Build ${{ inputs.NEW_ARCH && 'Fabric' || 'Paper' }} ${{ inputs.MAP_IMPL }}
+    if: ${{ !inputs.SKIP }}
     runs-on: ubuntu-latest
     environment: ${{ inputs.env_name }}
     steps:

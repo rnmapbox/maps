@@ -4611,6 +4611,45 @@
         "description": "The configration parameters for sonar-like pulsing circle animation shown around the 2D puck."
       },
       {
+        "name": "model",
+        "required": false,
+        "type": {
+          "name": "shape",
+          "value": [
+            {
+              "name": "uri",
+              "required": true,
+              "type": "string \\| number",
+              "default": "none",
+              "description": "URL of a glTF/glb model, or an asset reference from `require`."
+            },
+            {
+              "name": "scale",
+              "required": false,
+              "type": "T \\| Expression",
+              "default": "none",
+              "description": "Scale of the model in x, y, z. Supports expressions based on zoom."
+            },
+            {
+              "name": "rotation",
+              "required": false,
+              "type": "T \\| Expression",
+              "default": "none",
+              "description": "Rotation of the model in degrees around x, y, z."
+            },
+            {
+              "name": "opacity",
+              "required": false,
+              "type": "T \\| Expression",
+              "default": "none",
+              "description": "Opacity of the model, between 0 and 1."
+            }
+          ]
+        },
+        "default": "none",
+        "description": "Renders the puck as a 3D model instead of the 2D images. When set, `topImage`, `bearingImage`, `shadowImage`, `scale`, `pulsing` and `androidRenderMode` are ignored.\n\n@example\n{ uri: require('./car.glb'), scale: [1, 1, 1], rotation: [0, 0, 90] }"
+      },
+      {
         "name": "visible",
         "required": false,
         "type": "boolean",

@@ -10,6 +10,10 @@ on:
         required: false
         type: string
         default: default
+      SKIP_NATIVE:
+        required: false
+        type: boolean
+        default: false
     secrets:
       MAPBOX_ACCESS_TOKEN:
         required: false
@@ -32,6 +36,7 @@ jobs:
       NVMRC: ${{ inputs.NVMRC }}
       MAP_IMPL: mapbox11
       NEW_ARCH: true
+      SKIP: ${{ inputs.SKIP_NATIVE }}
     secrets:
       MAPBOX_ACCESS_TOKEN: ${{ secrets.MAPBOX_ACCESS_TOKEN }}
       ENV_MAPBOX_ACCESS_TOKEN: ${{ secrets.ENV_MAPBOX_ACCESS_TOKEN }}
@@ -44,6 +49,7 @@ jobs:
       NVMRC: ${{ inputs.NVMRC }}
       MAP_IMPL: mapbox11
       NEW_ARCH: true
+      SKIP: ${{ inputs.SKIP_NATIVE }}
     secrets:
       MAPBOX_ACCESS_TOKEN: ${{ secrets.MAPBOX_ACCESS_TOKEN }}
       ENV_MAPBOX_ACCESS_TOKEN: ${{ secrets.ENV_MAPBOX_ACCESS_TOKEN }}
