@@ -1183,6 +1183,15 @@ extension RNMBXMapView {
       if let sourceId = eventPayload.sourceId {
         payload["sourceId"] = sourceId
       }
+      // the SDK's own error kind, as on Android
+      switch eventPayload.type {
+      case .style: payload["type"] = "style"
+      case .sprite: payload["type"] = "sprite"
+      case .source: payload["type"] = "source"
+      case .glyphs: payload["type"] = "glyphs"
+      case .tile: payload["type"] = "tile"
+      @unknown default: break
+      }
       let RNMBXEvent = RNMBXEvent(type: .mapLoadingError, payload: payload);
       self.fireEvent(event: RNMBXEvent, callback: self.reactOnMapChange)
 
