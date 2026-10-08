@@ -22,6 +22,13 @@ type Pulsing =
     }
   | { kind: 'default' };
 
+type Model = {
+  uri: string;
+  scale?: Value<number[]>;
+  rotation?: Value<number[]>;
+  opacity?: Value<number>;
+};
+
 export interface NativeProps extends ViewProps {
   androidRenderMode?: OptionalProp<string>;
   puckBearing?: OptionalProp<'heading' | 'course'>;
@@ -32,6 +39,7 @@ export interface NativeProps extends ViewProps {
   scale?: UnsafeMixed<Value<number>>;
   visible?: boolean;
   pulsing?: UnsafeMixed<Pulsing>;
+  model?: UnsafeMixed<Model>;
 }
 
 // @ts-ignore-error - Codegen requires single cast but TypeScript prefers double cast

@@ -68,7 +68,10 @@ open class RNMBXImages : UIView, RNMBXMapComponent {
   }
   
   // MARK: - RNMBXMapComponent
-  // Uses default implementation from RNMBXMapComponentProtocol extension (returns false)
+
+  public func waitForStyleLoad() -> Bool {
+    return true
+  }
 
   public func addToMap(_ map: RNMBXMapView, style: Style) {
     self.style = style
@@ -271,10 +274,7 @@ open class RNMBXImages : UIView, RNMBXMapComponent {
   }
   
   lazy var placeholderImage : UIImage = {
-    UIGraphicsBeginImageContextWithOptions(CGSize(width: 1, height: 1), false, 0.0)
-    let result = UIGraphicsGetImageFromCurrentImageContext()!
-    UIGraphicsEndImageContext()
-    return result
+    UIGraphicsImageRenderer(size: CGSize(width: 1, height: 1)).image { _ in }
   }()
 }
 

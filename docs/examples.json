@@ -188,6 +188,19 @@
       },
       {
         "metadata": {
+          "title": "Location Puck 3D",
+          "tags": [
+            "LocationPuck",
+            "LocationPuck#model"
+          ],
+          "docs": "\n  Renders the user location as a 3D model that rotates with the course\n  "
+        },
+        "fullPath": "example/src/examples/UserLocation/LocationPuck3D.tsx",
+        "relPath": "UserLocation/LocationPuck3D.tsx",
+        "name": "LocationPuck3D"
+      },
+      {
+        "metadata": {
           "title": "Set Displacement",
           "tags": [
             "UserLocation",

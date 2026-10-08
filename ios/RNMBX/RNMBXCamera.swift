@@ -78,6 +78,13 @@ struct CameraUpdateItem {
         try center.validate()
       }
 
+      // Mapbox cancels camera animations immediately while the map view has no window
+      // (e.g. an inactive navigator screen), so jump to the target instead of dropping it.
+      if map.mapView.window == nil {
+        map.mapboxMap.setCamera(to: camera)
+        return
+      }
+
       switch mode {
       case .flight:
         map.mapView.camera.fly(to: camera, duration: duration)
