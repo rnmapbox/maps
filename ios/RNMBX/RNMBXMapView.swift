@@ -1189,10 +1189,12 @@ extension RNMBXMapView {
       let RNMBXEvent = RNMBXEvent(type: .mapLoadingError, payload: payload);
       self.fireEvent(event: RNMBXEvent, callback: self.reactOnMapChange)
 
-      if let message = error.errorDescription {
-        Logger.log(level: .error, message: "MapLoad error \(message)")
+      let message = error.errorDescription ?? "\(event)"
+      if let sourceId = eventPayload.sourceId,
+         let source = self.sources.first(where: { $0.id == sourceId }) {
+        Logger.log(level: .error, message: "MapLoad error in \(type(of: source)) '\(sourceId)': \(message)")
       } else {
-        Logger.log(level: .error, message: "MapLoad error \(event)")
+        Logger.log(level: .error, message: "MapLoad error \(message)")
       }
     })
 
