@@ -25,6 +25,6 @@ config.resolver.unstable_enablePackageExports = true;
 if (config.resolver.assetExts == null) {
   config.resolver.assetExts = [];
 }
-config.resolver.assetExts.push('gltf', 'glb', 'png');
+config.resolver.assetExts.push('gltf', 'glb', 'png', 'mbtiles');
 
 module.exports = config;
