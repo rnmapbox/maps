@@ -142,8 +142,7 @@ type Model = {
 ```
 Renders the puck as a 3D model instead of the 2D images. When set, `topImage`, `bearingImage`, `shadowImage`, `scale`, `pulsing` and `androidRenderMode` are ignored.
 
-@example
-{ uri: require('./car.glb'), scale: [1, 1, 1], rotation: [0, 0, 90] }
+Example: `{ uri: require('./car.glb'), scale: [1, 1, 1], rotation: [0, 0, 90] }`
 
 [Location Puck 3D](../examples/UserLocation/LocationPuck3D)
   
