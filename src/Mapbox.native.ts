@@ -54,6 +54,7 @@ export { default as CustomLocationProvider } from './components/CustomLocationPr
 export { Terrain } from './components/Terrain';
 export { default as CameraGestureObserver } from './components/CameraGestureObserver';
 export { type OnMapSteadyEvent } from './specs/RNMBXCameraGestureObserverNativeComponent';
+export { type OnMapCameraChangeEvent } from './specs/RNMBXCameraGestureObserverNativeComponent';
 export {
   default as locationManager,
   type Location,

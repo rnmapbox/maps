@@ -2,6 +2,7 @@ import { memo } from 'react';
 import type { ViewProps } from 'react-native';
 import RNMBXCameraGestureObserverNativeComponent, {
   type OnMapSteadyEvent,
+  type OnMapCameraChangeEvent,
 } from '../specs/RNMBXCameraGestureObserverNativeComponent';
 
 type Props = ViewProps & {
@@ -20,6 +21,11 @@ type Props = ViewProps & {
    * Callback when the map reaches a steady state (no active gestures or animations).
    */
   onMapSteady?: (event: { nativeEvent: OnMapSteadyEvent }) => void;
+
+  /**
+   * Callback when the camera changes (due to gestures or animations).
+   */
+  onMapCameraChange?: (event: { nativeEvent: OnMapCameraChangeEvent }) => void;
 };
 
 /**
@@ -32,6 +38,7 @@ export default memo((props: Props) => {
     <RNMBXCameraGestureObserverNativeComponent
       {...props}
       hasOnMapSteady={props.onMapSteady ? true : false}
+      hasOnMapCameraChange={props.onMapCameraChange ? true : false}
     />
   );
 });
