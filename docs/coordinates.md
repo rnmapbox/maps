@@ -8,7 +8,7 @@ import { coordinates } from '@rnmapbox/maps';
 coordinates
 
 ```
-Coorinates sent by locationManager
+Geographic coordinates sent by locationManager. Includes latitude and longitude in degrees, optional altitude in meters above sea level, optional accuracy as the horizontal radius of uncertainty in meters, heading and course in degrees, and the instantaneous speed in meters per second. Heading is the compass direction the device is facing and course is the direction of travel; these are distinct values, but on Android both currently return the same value because the Mapbox SDK does not expose a public compass engine API (see rnmapbox/maps issues 4063, 3391, and 3041 for context).
 
 
 

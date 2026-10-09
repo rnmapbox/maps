@@ -8,19 +8,137 @@ import { locationManager } from '@rnmapbox/maps';
 locationManager
 
 ```
-LocationManager is a singleton, see 
+Singleton class that wraps the native Mapbox location manager.
+Manages GPS location updates and distributes them to registered listeners, automatically pausing updates when the app moves to the background and resuming when it returns to the foreground (unless requestsAlwaysUse is enabled), and caches the last known location for immediate access.
+Use the default export locationManager rather than instantiating this class directly.
 
 
 
 ## methods
-### setLocationEventThrottle(throttleValue)
+### getLastKnownLocation()
 
-Sets the period at which location events will be sent over the React Native bridge.<br/>The default is 0, aka no limit. [V10, iOS only]
+Returns the last known location from the cache. If no cached location is available,<br/>queries the native location manager for the most recent location.This method does not activate GPS or start location updates. To receive<br/>continuous location updates, use addListener instead.
 
 #### arguments
 | Name | Type | Required | Description  |
 | ---- | :--: | :------: | :----------: |
-| `throttleValue` | `Number` | `Yes` | event throttle value in ms. |
+
+
+
+
+```javascript
+const location = await locationManager.getLastKnownLocation();
+if (location) {
+  console.log(location.coords.latitude, location.coords.longitude);
+}
+```
+
+
+### addListener(listener)
+
+Registers a callback to receive location updates. Automatically starts<br/>location updates if not already listening.If a cached location is available, the listener is called immediately<br/>with the cached value.
+
+#### arguments
+| Name | Type | Required | Description  |
+| ---- | :--: | :------: | :----------: |
+| `listener` | `Function` | `Yes` | Callback that receives a Location object on each update. |
+
+
+
+```javascript
+const onLocation = (location) => {
+  console.log(location.coords.latitude, location.coords.longitude);
+};
+locationManager.addListener(onLocation);
+```
+
+
+### removeListener(listener)
+
+Removes a previously registered location listener. If no listeners remain,<br/>location updates are automatically stopped.
+
+#### arguments
+| Name | Type | Required | Description  |
+| ---- | :--: | :------: | :----------: |
+| `listener` | `Function` | `Yes` | The listener callback to remove. |
+
+
+
+```javascript
+locationManager.removeListener(onLocation);
+```
+
+
+### removeAllListeners()
+
+Removes all registered location listeners and stops location updates.
+
+#### arguments
+| Name | Type | Required | Description  |
+| ---- | :--: | :------: | :----------: |
+
+
+
+
+```javascript
+locationManager.removeAllListeners();
+```
+
+
+### start(displacement)
+
+Starts listening for native location updates. This is called automatically<br/>by addListener when the first listener is registered, so you<br/>typically do not need to call it directly.
+
+#### arguments
+| Name | Type | Required | Description  |
+| ---- | :--: | :------: | :----------: |
+| `displacement` | `number` | `Yes` | Minimum distance in meters the device must move<br/>before a location update is generated. Defaults to the value set by<br/>setMinDisplacement, or -1 (no minimum) if not set. |
+
+
+### stop()
+
+Stops listening for native location updates. Called automatically when<br/>all listeners are removed or when the app moves to the background<br/>(unless requestsAlwaysUse is enabled).
+
+#### arguments
+| Name | Type | Required | Description  |
+| ---- | :--: | :------: | :----------: |
+
+
+
+### setMinDisplacement(minDisplacement)
+
+Sets the minimum distance in meters the device must move before a location<br/>update is generated. Defaults to 0 (no minimum, updates on every change).Maps to distanceFilter on iOS and displacement on Android.
+
+#### arguments
+| Name | Type | Required | Description  |
+| ---- | :--: | :------: | :----------: |
+| `minDisplacement` | `number` | `Yes` | The minimum displacement in meters. |
+
+
+
+```javascript
+locationManager.setMinDisplacement(10); // Only update after moving 10 meters
+```
+
+
+### setRequestsAlwaysUse(requestsAlwaysUse)
+
+Sets whether the app should request "always" location permission and continue<br/>receiving updates in the background.Note: This is not implemented in Mapbox Maps SDK v11 and is currently a no-op<br/>on both iOS and Android.
+
+#### arguments
+| Name | Type | Required | Description  |
+| ---- | :--: | :------: | :----------: |
+| `requestsAlwaysUse` | `boolean` | `Yes` | Whether to request always-on location. |
+
+
+### setLocationEventThrottle(throttleValue)
+
+Sets the period at which location events will be sent over the React Native bridge.<br/>The default is 0, which means no throttling (every update is sent immediately).
+
+#### arguments
+| Name | Type | Required | Description  |
+| ---- | :--: | :------: | :----------: |
+| `throttleValue` | `number` | `Yes` | Event throttle value in milliseconds. Set to 0 to disable throttling. |
 
 
 

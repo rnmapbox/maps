@@ -8,7 +8,8 @@ import { location } from '@rnmapbox/maps';
 location
 
 ```
-Location sent by locationManager
+Location object sent by locationManager, containing geographic coordinates (a Coordinates object with latitude, longitude, altitude, accuracy, heading, course, and speed) and a Unix timestamp in milliseconds indicating when the location was determined.
+The native SDK requests location with high accuracy by default: iOS uses kCLLocationAccuracyBest (the 2nd highest of 6 accuracy levels), and Android uses AccuracyLevel.HIGH (the 2nd highest of 5 levels) with a 1000ms update interval. These accuracy settings are not configurable from the React Native side.
 
 
 

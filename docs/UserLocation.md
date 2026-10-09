@@ -8,7 +8,13 @@ import { UserLocation } from '@rnmapbox/maps';
 UserLocation
 
 ```
+Displays the user's current location on the map with a customizable appearance.
 
+By default, renders a blue circle indicator. Provide children (layer components) to
+customize the appearance. Uses `locationManager` internally to subscribe to location
+updates, with automatic start/stop on mount/unmount and background/foreground transitions.
+
+For a simpler native-rendered location indicator, consider using {@link LocationPuck} directly.
 
 ## props
 
@@ -52,7 +58,8 @@ Custom location icon of type mapbox-gl-native components
 ```tsx
 number
 ```
-Minimum amount of movement before GPS location is updated in meters
+Minimum distance in meters the device must move before a location update is generated.
+Maps to `distanceFilter` on iOS and `displacement` on Android. Defaults to 0.
 
   _defaults to:_ `0`
 [Set Displacement](../examples/UserLocation/SetDisplacement)
@@ -72,7 +79,9 @@ Callback that is triggered on location icon press
 ```tsx
 func
 ```
-Callback that is triggered on location update
+Callback that is triggered on each location update. Receives a {@link Location} object
+containing `coords` (latitude, longitude, altitude, accuracy, heading, course, speed)
+and `timestamp`.
 *signature:*`(location:Location) =&gt; void`
 
 [User Location Updates](../examples/UserLocation/UserLocationUpdates)
@@ -93,7 +102,10 @@ Which render mode to use.
 ```tsx
 boolean
 ```
-Request the always location permission, and listen to the location even when the app is in background
+Request the always location permission, and listen to the location even when the app is in background.
+
+**Note:** This is not implemented in Mapbox Maps SDK v11 and is currently a no-op
+on both iOS and Android.
 
 @platform ios
 
