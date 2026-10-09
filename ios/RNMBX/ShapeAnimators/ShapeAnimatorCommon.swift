@@ -63,6 +63,11 @@ public class ShapeAnimatorCommon: NSObject, ShapeAnimator {
   // - MARK: Lifecycle
   
   @objc func refresh() {
+    guard Thread.isMainThread else {
+      DispatchQueue.main.async { [weak self] in self?.refresh() }
+      return
+    }
+
     if startedAt == nil {
       startedAt = displayLink?.targetTimestamp.magnitude ?? 0
     }

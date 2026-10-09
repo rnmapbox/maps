@@ -5,18 +5,21 @@ class ShapeAnimatorManager {
 
   typealias Tag = Int
 
+  private let lock = NSLock()
   var animatorByTags: [Tag: ShapeAnimator] = [:]
 
   func getShapeAnimatorByTag(tag: Tag) -> ShapeAnimator? {
-    return animatorByTags[tag]
+    return get(tag: tag)
   }
 
   func register(tag: Tag, animator: ShapeAnimator) {
+    lock.lock()
     animatorByTags[tag] = animator
+    lock.unlock()
   }
 
   func withAnimator(tag: NSNumber, callback: (ShapeAnimator) -> Void) {
-    if let animator = animatorByTags[tag.intValue] {
+    if let animator = get(tag: tag.intValue) {
       callback(animator)
     }
   }
@@ -26,6 +29,8 @@ class ShapeAnimatorManager {
   }
   
   func get(tag: Tag) -> ShapeAnimator? {
+    lock.lock()
+    defer { lock.unlock() }
     return animatorByTags[tag]
   }
 
