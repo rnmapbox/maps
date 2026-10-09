@@ -242,6 +242,9 @@ open class RNMBXMapView(private val mContext: Context, var mManager: RNMBXMapVie
        )
     }
 
+    // the map-loading-error subscription, cancelled when the view is dropped
+    private var mapLoadingErrorSubscription: com.mapbox.common.Cancelable? = null
+
     private fun onMapReady(map: MapboxMap) {
         map.getStyle(object : Style.OnStyleLoaded {
             override fun onStyleLoaded(style: Style) {
@@ -322,15 +325,18 @@ open class RNMBXMapView(private val mContext: Context, var mManager: RNMBXMapVie
             }
         })
 
-        map.subscribe({ event ->
-            Logger.e(LOG_TAG, String.format("Map load failed: %s", event.data.toString()))
-            val errorMessage = event.getMapLoadingErrorEventData().message
-            val event = MapChangeEvent(this, EventTypes.MAP_LOADING_ERROR, writableMapOf(
-                    "error" to errorMessage
-            ))
+        // `MapboxMap.subscribe(observer, events)` is an empty shim in the v11 compat layer, so it never
+        // delivered MAP_LOADING_ERROR. The payload matches iOS: `{ error, type, tileId?, sourceId? }`,
+        // where `type` is the SDK's error kind (style | sprite | source | glyphs | tile).
+        mapLoadingErrorSubscription?.cancel()
+        mapLoadingErrorSubscription = map.subscribeMapLoadingError { error ->
+            Logger.e(LOG_TAG, String.format("Map load failed: %s", error.message))
+            val payload = writableMapOf("error" to error.message, "type" to error.type.name.lowercase())
+            error.sourceId?.let { payload.putString("sourceId", it) }
+            error.tileId?.let { payload.putString("tileId", String.format("x:%d y:%d z:%d", it.x, it.y, it.z.toInt())) }
+            val event = MapChangeEvent(this, EventTypes.MAP_LOADING_ERROR, payload)
             mManager.handleEvent(event)
-
-                      }, Arrays.asList(MapEvents.MAP_LOADING_ERROR))
+        }
     }
 
     fun<T> mapGestureBegin(type:MapGestureType, gesture: T) {
@@ -1579,6 +1585,8 @@ open class RNMBXMapView(private val mContext: Context, var mManager: RNMBXMapVie
      */
 
     fun onDropViewInstance() {
+        mapLoadingErrorSubscription?.cancel()
+        mapLoadingErrorSubscription = null
         removeAllFeaturesFromMap(RemovalReason.ON_DESTROY)
         mapView.viewAnnotationManager.removeAllViewAnnotations()
         lifecycle.onDestroy()

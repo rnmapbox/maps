@@ -158,6 +158,14 @@ type LocalizeLabels =
     }
   | true;
 
+/** What `onMapLoadingError` receives on both platforms; `type` is the Mapbox SDK's error kind. */
+export type MapLoadingErrorPayload = {
+  error: string;
+  type?: 'style' | 'sprite' | 'source' | 'glyphs' | 'tile';
+  tileId?: string;
+  sourceId?: string;
+};
+
 type Props = ViewProps & {
   /**
    * The distance from the edges of the map view’s frame to the edges of the map view’s logical viewport.
@@ -390,7 +398,7 @@ type Props = ViewProps & {
   /**
    * This event is tiggered when there is an error during map load. V10 only, replaces onDidFailLoadingMap, might be called multiple times and not exclusive with onDidFinishLoadingMap.
    */
-  onMapLoadingError?: () => void;
+  onMapLoadingError?: (payload?: MapLoadingErrorPayload) => void;
 
   /**
    * This event is triggered when the map will start rendering a frame.
