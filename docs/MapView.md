@@ -280,15 +280,16 @@ when embedded into a scroll view
 
 ```tsx
 | {
-    /** locale code like `es` or `current` for the device's current locale */
+    /** locale code like `es`, `nl`, `zh-Hant` or `current` for the device's preferred languages */
     locale: string;
-    /** layer id to localize. If not specified, all layers will be localized */
+    /** layer ids to localize. If not specified, all labels will be localized. With `layerIds` only `ar`, `de`, `en`, `es`, `fr`, `it`, `ja`, `ko`, `pt`, `ru`, `vi`, `zh-Hans` and `zh-Hant` are supported */
     layerIds?: string[];
   }
 | true
 ```
-[`mapbox` (v10) implementation only]
 Set map's label locale, e.g. `{ "locale": "es" }` will localize labels to Spanish, `{ "locale": "current" }` will localize labels to system locale.
+Any [language supported by Mapbox](https://docs.mapbox.com/help/dive-deeper/maps-internationalization/) can be used, with all styles including Standard.
+The label language is shared by all maps in the app, so with multiple maps the last one set wins.
 
 [Localize Labels](../examples/Map/LocalizeLabels)
   

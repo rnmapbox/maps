@@ -5476,9 +5476,9 @@
       {
         "name": "localizeLabels",
         "required": false,
-        "type": "\\| {\n    /** locale code like `es` or `current` for the device's current locale */\n    locale: string;\n    /** layer id to localize. If not specified, all layers will be localized */\n    layerIds?: string[];\n  }\n\\| true",
+        "type": "\\| {\n    /** locale code like `es`, `nl`, `zh-Hant` or `current` for the device's preferred languages */\n    locale: string;\n    /** layer ids to localize. If not specified, all labels will be localized. With `layerIds` only `ar`, `de`, `en`, `es`, `fr`, `it`, `ja`, `ko`, `pt`, `ru`, `vi`, `zh-Hans` and `zh-Hant` are supported */\n    layerIds?: string[];\n  }\n\\| true",
         "default": "none",
-        "description": "[`mapbox` (v10) implementation only]\nSet map's label locale, e.g. `{ \"locale\": \"es\" }` will localize labels to Spanish, `{ \"locale\": \"current\" }` will localize labels to system locale."
+        "description": "Set map's label locale, e.g. `{ \"locale\": \"es\" }` will localize labels to Spanish, `{ \"locale\": \"current\" }` will localize labels to system locale.\nAny [language supported by Mapbox](https://docs.mapbox.com/help/dive-deeper/maps-internationalization/) can be used, with all styles including Standard.\nThe label language is shared by all maps in the app, so with multiple maps the last one set wins."
       },
       {
         "name": "gestureSettings",
