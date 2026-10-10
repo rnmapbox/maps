@@ -393,11 +393,16 @@ open class RNMBXMapView: UIView, RCTInvalidating {
 
   @objc public required init(frame:CGRect, eventDispatcher: RCTEventDispatcherProtocol) {
     self.eventDispatcher = eventDispatcher
+    _ = RNMBXLocalization.clearStaleLanguage
     super.init(frame: frame)
   }
 
   public required init (coder: NSCoder) {
     fatalError("not implemented")
+  }
+
+  deinit {
+    RNMBXLocalization.reset(owner: self)
   }
 
   func layerAdded (_ layer: Layer) {
@@ -570,14 +575,27 @@ open class RNMBXMapView: UIView, RCTInvalidating {
     }
   }
 
-  var locale: (layerIds: [String]?, locale: Locale)? = nil
+  var locale: (layerIds: [String]?, localeString: String)? = nil
 
   @objc public func setReactLocalizeLabels(_ value: NSDictionary?) {
-    if let value = value {
-      let localeString = value["locale"] as! String
-      let layerIds = value["layerIds"] as! [String]?
-      let locale = localeString == "current" ? Locale.current : Locale(identifier: localeString)
-      self.locale = (layerIds, locale)
+    if let value = value, let localeString = value["locale"] as? String {
+      let layerIds = value["layerIds"] as? [String]
+      if let current = locale, current.localeString == localeString, current.layerIds == layerIds {
+        return
+      }
+      self.locale = (layerIds, localeString)
+      if layerIds == nil {
+        // Set right away, so the first style load already requests tiles in this language
+        RNMBXLocalization.setLanguages(RNMBXLocalization.languages(for: localeString), owner: self)
+      } else {
+        RNMBXLocalization.reset(owner: self)
+      }
+    } else {
+      guard locale != nil else {
+        return
+      }
+      self.locale = nil
+      RNMBXLocalization.reset(owner: self)
     }
     changed(.localizeLabels)
   }
@@ -585,8 +603,10 @@ open class RNMBXMapView: UIView, RCTInvalidating {
   func applyLocalizeLabels() {
     onMapStyleLoaded { _ in
       logged("RNMBXMapView.\(#function)") {
-        if let locale = self.locale {
-          try self.mapboxMap.style.localizeLabels(into: locale.locale, forLayerIds: locale.layerIds)
+        // Without layerIds labels are localized by the language setting, see setReactLocalizeLabels
+        if let locale = self.locale, let layerIds = locale.layerIds {
+          let nativeLocale = locale.localeString == "current" ? Locale.current : Locale(identifier: locale.localeString)
+          try self.mapboxMap.style.localizeLabels(into: nativeLocale, forLayerIds: layerIds)
         }
       }
     }
