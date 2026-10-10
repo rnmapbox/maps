@@ -1,3 +1,5 @@
+import fs from 'fs';
+import os from 'os';
 import path from 'path';
 import { execSync } from 'child_process';
 import * as url from 'url';
@@ -75,6 +77,13 @@ async function generate() {
   const markdownBuilder = new MarkdownBuilder();
   await docBuilder.generate(docsJsonPath);
   await markdownBuilder.generate(docsJsonPath, docsRoot);
+
+  // The docs site renders the docosaurus variant as MDX, which can fail where plain markdown doesn't (#4324)
+  await markdownBuilder.generate(
+    docsJsonPath,
+    fs.mkdtempSync(path.join(os.tmpdir(), 'rnmbx-docs-mdx-')),
+    { docosaurus: true },
+  );
 
   // autogenerate iOS components configuration
   const updatedComponents = updatePackageJsonWithIOSComponents();
