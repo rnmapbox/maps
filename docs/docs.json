@@ -793,41 +793,9 @@
       {
         "name": "padding",
         "required": false,
-        "type": {
-          "name": "shape",
-          "value": [
-            {
-              "name": "paddingLeft",
-              "required": true,
-              "type": "number",
-              "default": "none",
-              "description": "Left padding in points"
-            },
-            {
-              "name": "paddingRight",
-              "required": true,
-              "type": "number",
-              "default": "none",
-              "description": "Right padding in points"
-            },
-            {
-              "name": "paddingTop",
-              "required": true,
-              "type": "number",
-              "default": "none",
-              "description": "Top padding in points"
-            },
-            {
-              "name": "paddingBottom",
-              "required": true,
-              "type": "number",
-              "default": "none",
-              "description": "Bottom padding in points"
-            }
-          ]
-        },
+        "type": "Partial",
         "default": "none",
-        "description": "The viewport padding in points."
+        "description": "The viewport padding in points. Individual edges may be omitted."
       },
       {
         "name": "animationDuration",
@@ -975,9 +943,9 @@
             {
               "name": "padding",
               "required": false,
-              "type": "signature",
+              "type": "Partial",
               "default": "none",
-              "description": "The viewport padding in points."
+              "description": "The viewport padding in points. Individual edges may be omitted."
             },
             {
               "name": "animationDuration",
