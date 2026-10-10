@@ -7,6 +7,7 @@ import com.facebook.react.uimanager.annotations.ReactProp
 import com.facebook.react.viewmanagers.RNMBXFillLayerManagerInterface
 import com.facebook.react.uimanager.ViewManagerDelegate
 import com.facebook.react.viewmanagers.RNMBXFillLayerManagerDelegate
+import com.rnmapbox.rnmbx.utils.extensions.asStringOrNull
 
 class RNMBXFillLayerManager : ViewGroupManager<RNMBXFillLayer>(),
     RNMBXFillLayerManagerInterface<RNMBXFillLayer> {
@@ -40,12 +41,12 @@ class RNMBXFillLayerManager : ViewGroupManager<RNMBXFillLayer>(),
 
     @ReactProp(name = "aboveLayerID")
     override fun setAboveLayerID(layer: RNMBXFillLayer, aboveLayerID: Dynamic) {
-        layer.setAboveLayerID(aboveLayerID.asString())
+        layer.setAboveLayerID(aboveLayerID.asStringOrNull())
     }
 
     @ReactProp(name = "belowLayerID")
     override fun setBelowLayerID(layer: RNMBXFillLayer, belowLayerID: Dynamic) {
-        layer.setBelowLayerID(belowLayerID.asString())
+        layer.setBelowLayerID(belowLayerID.asStringOrNull())
     }
 
     @ReactProp(name = "layerIndex")

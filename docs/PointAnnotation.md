@@ -63,6 +63,7 @@ Manually selects/deselects annotation
 boolean
 ```
 Enable or disable dragging. Defaults to false.
+When enabled, a long press is required to begin dragging (iOS and Android).
 
   _defaults to:_ `false`
 

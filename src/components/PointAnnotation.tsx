@@ -59,6 +59,7 @@ type Props = BaseProps & {
 
   /**
    * Enable or disable dragging. Defaults to false.
+   * When enabled, a long press is required to begin dragging (iOS and Android).
    */
   draggable?: boolean;
 
