@@ -581,16 +581,25 @@ open class RNMBXMapView(private val mContext: Context, var mManager: RNMBXMapVie
 
     fun applyLocalizeLabels() {
         val localeStr = mLocaleString
-        if (localeStr != null) {
+        // Without layerIds labels are localized by the language setting, see setReactLocalizeLabels
+        val layerIds = mLocaleLayerIds
+        if (localeStr != null && layerIds != null) {
             val locale = if (localeStr == "current") Locale.getDefault() else Locale.Builder()
                 .setLanguageTag(localeStr).build()
-            savedStyle?.localizeLabels(locale, mLocaleLayerIds)
+            savedStyle?.localizeLabels(locale, layerIds)
         }
     }
     fun setReactLocalizeLabels(localeStr: String?, layerIds: List<String>?) {
-        if (localeStr != null) {
-            mLocaleString = localeStr
-            mLocaleLayerIds = layerIds
+        if (localeStr == mLocaleString && layerIds == mLocaleLayerIds) {
+            return
+        }
+        mLocaleString = localeStr
+        mLocaleLayerIds = layerIds
+        if (localeStr != null && layerIds == null) {
+            // Set right away, so the first style load already requests tiles in this language
+            RNMBXLocalization.setLanguages(RNMBXLocalization.languages(localeStr), this)
+        } else {
+            RNMBXLocalization.reset(this)
         }
         changes.add(Property.LOCALIZE_LABELS)
     }
@@ -1306,6 +1315,7 @@ open class RNMBXMapView(private val mContext: Context, var mManager: RNMBXMapVie
     }
 
     init {
+        RNMBXLocalization.clearStaleLanguage
         offscreenAnnotationViewContainer = FrameLayout(getContext())
         val p = FrameLayout.LayoutParams(0, 0)
         p.setMargins(-10000, -10000, -10000, -10000)
@@ -1579,6 +1589,7 @@ open class RNMBXMapView(private val mContext: Context, var mManager: RNMBXMapVie
      */
 
     fun onDropViewInstance() {
+        RNMBXLocalization.reset(this)
         removeAllFeaturesFromMap(RemovalReason.ON_DESTROY)
         mapView.viewAnnotationManager.removeAllViewAnnotations()
         lifecycle.onDestroy()

@@ -320,7 +320,7 @@
           "tags": [
             "MapView#localizeLabels"
           ],
-          "docs": "\nLocalize labels to a specific locale(es).\n"
+          "docs": "\nLocalize labels to a specific locale (Spanish, Dutch, Polish, Greek) or to the device's preferred languages, with the Standard and Street styles.\n"
         },
         "fullPath": "example/src/examples/Map/LocalizeLabels.tsx",
         "relPath": "Map/LocalizeLabels.tsx",

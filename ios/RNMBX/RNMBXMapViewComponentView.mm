@@ -218,6 +218,8 @@ using namespace facebook::react;
     id localizeLabels = RNMBXConvertFollyDynamicToId(newViewProps.localizeLabels);
     if (localizeLabels != nil) {
         _view.reactLocalizeLabels = localizeLabels;
+    } else if (oldProps && RNMBXConvertFollyDynamicToId(oldViewProps.localizeLabels) != nil) {
+        _view.reactLocalizeLabels = nil;
     }
 
     RNMBX_OPTIONAL_PROP_BOOL(deselectAnnotationOnTap);
