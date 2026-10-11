@@ -28,6 +28,7 @@ public class ShapeAnimatorCommon: NSObject, ShapeAnimator {
   public let tag: Int
   public let emptyGeoJsonObj: GeoJSONObject = .geometry(.lineString(.init([])))
   
+  // Main-thread only, like the animation state that refresh() reads.
   private var displayLink: CADisplayLink?
   private var startedAt: Double?
   
