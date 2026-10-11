@@ -40,6 +40,16 @@ open class ViewTagResolver(val context: ReactApplicationContext) {
         val list = viewWaiters[viewTag]
         if (list != null) {
             context.runOnUiQueueThread {
+                if (viewWaiters[viewTag] !== list) {
+                    return@runOnUiQueueThread
+                }
+                viewWaiters.remove(viewTag)
+                val manager = manager
+                if (manager == null) {
+                    val err = IllegalStateException("Cannot resolve view: $viewTag because the React Native UIManager is unavailable (context may be inactive)")
+                    list.forEach { it.reject?.reject(err) }
+                    return@runOnUiQueueThread
+                }
                 try {
                     val view = manager.resolveView(viewTag)
 
@@ -47,7 +57,6 @@ open class ViewTagResolver(val context: ReactApplicationContext) {
                 } catch (err: IllegalViewOperationException) {
                     list.forEach { it.reject?.reject(err) }
                 }
-                viewWaiters.remove(viewTag)
             }
         }
     }
@@ -57,12 +66,17 @@ open class ViewTagResolver(val context: ReactApplicationContext) {
         createdViews.remove(viewTag)
     }
 
-    private val manager : UIManager
-        get() = UIManagerHelper.getUIManager(context, UIManagerType.FABRIC)!!
+    private val manager : UIManager?
+        get() = UIManagerHelper.getUIManager(context, UIManagerType.FABRIC)
 
     // calls on UiQueueThread with resolved view
     fun <V>withViewResolved(viewTag: Int, reject: Promise? = null, fn: (V) -> Unit) {
         context.runOnUiQueueThread() {
+            val manager = manager
+            if (manager == null) {
+                reject?.reject(IllegalStateException("Cannot resolve view: $viewTag because the React Native UIManager is unavailable (context may be inactive)"))
+                return@runOnUiQueueThread
+            }
             try {
                 val resolvedView: View? = manager.resolveView(viewTag)
                 val view = resolvedView as? V
