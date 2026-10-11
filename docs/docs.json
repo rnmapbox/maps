@@ -798,28 +798,28 @@
           "value": [
             {
               "name": "paddingLeft",
-              "required": true,
+              "required": false,
               "type": "number",
               "default": "none",
               "description": "Left padding in points"
             },
             {
               "name": "paddingRight",
-              "required": true,
+              "required": false,
               "type": "number",
               "default": "none",
               "description": "Right padding in points"
             },
             {
               "name": "paddingTop",
-              "required": true,
+              "required": false,
               "type": "number",
               "default": "none",
               "description": "Top padding in points"
             },
             {
               "name": "paddingBottom",
-              "required": true,
+              "required": false,
               "type": "number",
               "default": "none",
               "description": "Bottom padding in points"
@@ -827,7 +827,7 @@
           ]
         },
         "default": "none",
-        "description": "The viewport padding in points."
+        "description": "The viewport padding in points. An omitted edge keeps its current padding; on iOS it's currently reset to 0."
       },
       {
         "name": "animationDuration",
@@ -977,7 +977,7 @@
               "required": false,
               "type": "signature",
               "default": "none",
-              "description": "The viewport padding in points."
+              "description": "The viewport padding in points. An omitted edge keeps its current padding; on iOS it's currently reset to 0."
             },
             {
               "name": "animationDuration",
