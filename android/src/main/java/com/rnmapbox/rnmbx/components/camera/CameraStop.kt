@@ -127,9 +127,11 @@ class CameraStop {
             val tilt = if (mTilt != null) mTilt!! else currentCamera.pitch
             val bearing = if (mBearing != null) mBearing!! else currentCamera.bearing
 
+            // cameraForCoordinateBounds insets the bounds within the map's current padding, so omitted edges must add nothing.
+            val boundsPadding = intArrayOf(mPaddingLeft ?: 0, mPaddingTop ?: 0, mPaddingRight ?: 0, mPaddingBottom ?: 0)
             val boundsCamera = map.cameraForCoordinateBounds(
                 mBounds!!.toBounds(),
-                cameraPaddingEdgeInsets,
+                convert(clippedPadding(boundsPadding, mapView)),
                 bearing,
                 tilt
             )
