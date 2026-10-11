@@ -827,7 +827,7 @@
           ]
         },
         "default": "none",
-        "description": "The viewport padding in points. An omitted edge keeps its current padding; on iOS it's currently reset to 0."
+        "description": "The viewport padding in points. An omitted edge keeps its current padding."
       },
       {
         "name": "animationDuration",
@@ -977,7 +977,7 @@
               "required": false,
               "type": "signature",
               "default": "none",
-              "description": "The viewport padding in points. An omitted edge keeps its current padding; on iOS it's currently reset to 0."
+              "description": "The viewport padding in points. An omitted edge keeps its current padding."
             },
             {
               "name": "animationDuration",

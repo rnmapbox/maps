@@ -147,7 +147,7 @@ export type CameraStop = {
   pitch?: number;
   /** The zoom level of the map. */
   zoomLevel?: number;
-  /** The viewport padding in points. An omitted edge keeps its current padding; on iOS it's currently reset to 0. */
+  /** The viewport padding in points. An omitted edge keeps its current padding. */
   padding?: {
     /** Left padding in points */
     paddingLeft?: number;
