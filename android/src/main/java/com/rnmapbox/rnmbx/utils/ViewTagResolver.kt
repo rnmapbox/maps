@@ -46,7 +46,7 @@ open class ViewTagResolver(val context: ReactApplicationContext) {
                 viewWaiters.remove(viewTag)
                 val manager = manager
                 if (manager == null) {
-                    val err = IllegalStateException("Cannot resolve view: $viewTag because the React Native UIManager is unavailable (context may be inactive)")
+                    val err = managerUnavailableError(viewTag)
                     list.forEach { it.reject?.reject(err) }
                     return@runOnUiQueueThread
                 }
@@ -66,15 +66,20 @@ open class ViewTagResolver(val context: ReactApplicationContext) {
         createdViews.remove(viewTag)
     }
 
+    // Null while the React instance is reloading or destroyed (dev reload, expo-updates reloadAsync, fatal error), see #3343.
+    // The call came from the old JS runtime, so reject it instead of waiting for the new instance, whose views have different tags.
     private val manager : UIManager?
         get() = UIManagerHelper.getUIManager(context, UIManagerType.FABRIC)
+
+    private fun managerUnavailableError(viewTag: Int) =
+        IllegalStateException("Cannot resolve view: $viewTag, the React instance is reloading or destroyed")
 
     // calls on UiQueueThread with resolved view
     fun <V>withViewResolved(viewTag: Int, reject: Promise? = null, fn: (V) -> Unit) {
         context.runOnUiQueueThread() {
             val manager = manager
             if (manager == null) {
-                reject?.reject(IllegalStateException("Cannot resolve view: $viewTag because the React Native UIManager is unavailable (context may be inactive)"))
+                reject?.reject(managerUnavailableError(viewTag))
                 return@runOnUiQueueThread
             }
             try {

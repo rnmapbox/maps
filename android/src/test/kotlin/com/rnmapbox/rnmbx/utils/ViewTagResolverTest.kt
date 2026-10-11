@@ -9,6 +9,7 @@ import com.facebook.react.uimanager.UIManagerHelper
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.Assertions.*
 import org.mockito.Mockito
+import org.mockito.kotlin.any
 
 class ViewTagResolverTest {
     @Test
@@ -29,7 +30,7 @@ class ViewTagResolverTest {
                         fail("Unexpected resolution")
                     }
 
-                    Mockito.verify(promise).reject(Mockito.any(IllegalStateException::class.java))
+                    Mockito.verify(promise).reject(any<IllegalStateException>())
                     Mockito.verifyNoMoreInteractions(promise)
                 }
             }
