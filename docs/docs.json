@@ -5687,10 +5687,10 @@
         "required": false,
         "type": {
           "name": "func",
-          "funcSignature": "() => void"
+          "funcSignature": "(payload:{error: string, type: union, tileId: string, sourceId: string}) => void"
         },
         "default": "none",
-        "description": "This event is tiggered when there is an error during map load. V10 only, replaces onDidFailLoadingMap, might be called multiple times and not exclusive with onDidFinishLoadingMap.\n*signature:*`() => void`"
+        "description": "This event is tiggered when there is an error during map load. V10 only, replaces onDidFailLoadingMap, might be called multiple times and not exclusive with onDidFinishLoadingMap.\n*signature:*`(payload:{error: string, type: union, tileId: string, sourceId: string}) => void`"
       },
       {
         "name": "onWillStartRenderingFrame",
