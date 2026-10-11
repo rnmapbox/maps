@@ -572,12 +572,28 @@ open class RNMBXMapView: UIView, RCTInvalidating {
 
   var locale: (layerIds: [String]?, locale: Locale)? = nil
 
+  /// Rejection already warned about, so each map logs it once instead of once per failed source
+  private var warnedLanguageRejection: String?
+
+  /// The tile API answers HTTP 400 to a language set by `Mapbox.setLanguage` that it can't parse, and then no tiles load
+  private func warnIfLanguageRejected(_ error: MapLoadingError) {
+    guard error.type == .source || error.type == .tile,
+          error.message.contains("status code 400"),
+          case .success(true) = SettingsServiceFactory.getInstance(storageType: .persistent).has(key: MapboxCommonSettings.language),
+          warnedLanguageRejection != error.message else {
+      return
+    }
+    warnedLanguageRejection = error.message
+    Logger.log(level: .warn, tag: "RNMBXMapView", message: "Mapbox rejected the language set with Mapbox.setLanguage: \(error.message)")
+  }
+
   @objc public func setReactLocalizeLabels(_ value: NSDictionary?) {
-    if let value = value {
-      let localeString = value["locale"] as! String
-      let layerIds = value["layerIds"] as! [String]?
+    if let value = value, let localeString = value["locale"] as? String {
+      let layerIds = value["layerIds"] as? [String]
       let locale = localeString == "current" ? Locale.current : Locale(identifier: localeString)
       self.locale = (layerIds, locale)
+    } else {
+      self.locale = nil
     }
     changed(.localizeLabels)
   }
@@ -1195,6 +1211,10 @@ extension RNMBXMapView {
         Logger.log(level: .error, message: "MapLoad error \(event)")
       }
     })
+
+    self.onEvery(event: .mapLoadingError) { (self, event) in
+      self.warnIfLanguageRejected(event.payload)
+    }
 
     self.onEvery(event: .styleImageMissing) { (self, event) in
       let imageName = event.payload.id
