@@ -28,6 +28,7 @@ public class ShapeAnimatorCommon: NSObject, ShapeAnimator {
   public let tag: Int
   public let emptyGeoJsonObj: GeoJSONObject = .geometry(.lineString(.init([])))
   
+  // Main-thread only, like the animation state that refresh() reads.
   private var displayLink: CADisplayLink?
   private var startedAt: Double?
   
@@ -63,11 +64,6 @@ public class ShapeAnimatorCommon: NSObject, ShapeAnimator {
   // - MARK: Lifecycle
   
   @objc func refresh() {
-    guard Thread.isMainThread else {
-      DispatchQueue.main.async { [weak self] in self?.refresh() }
-      return
-    }
-
     if startedAt == nil {
       startedAt = displayLink?.targetTimestamp.magnitude ?? 0
     }
