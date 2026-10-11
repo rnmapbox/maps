@@ -36,27 +36,21 @@ open class ViewTagResolver(val context: ReactApplicationContext) {
     // to be called from view.setId
     fun tagAssigned(viewTag: Int) {
         createdViews.add(viewTag)
+        if (!viewWaiters.containsKey(viewTag)) return
 
-        val list = viewWaiters[viewTag]
-        if (list != null) {
-            context.runOnUiQueueThread {
-                if (viewWaiters[viewTag] !== list) {
-                    return@runOnUiQueueThread
-                }
-                viewWaiters.remove(viewTag)
-                val manager = manager
-                if (manager == null) {
-                    val err = managerUnavailableError(viewTag)
-                    list.forEach { it.reject?.reject(err) }
-                    return@runOnUiQueueThread
-                }
-                try {
-                    val view = manager.resolveView(viewTag)
-
-                    list.forEach { it.fn(view) }
-                } catch (err: IllegalViewOperationException) {
-                    list.forEach { it.reject?.reject(err) }
-                }
+        context.runOnUiQueueThread {
+            val list = viewWaiters.remove(viewTag) ?: return@runOnUiQueueThread
+            val manager = manager
+            if (manager == null) {
+                val err = managerUnavailableError(viewTag)
+                list.forEach { it.reject?.reject(err) }
+                return@runOnUiQueueThread
+            }
+            try {
+                val view = manager.resolveView(viewTag)
+                list.forEach { it.fn(view) }
+            } catch (err: IllegalViewOperationException) {
+                list.forEach { it.reject?.reject(err) }
             }
         }
     }
