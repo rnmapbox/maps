@@ -60,7 +60,9 @@ if (NativeModules.RNMBXModule == null) {
  * Add a custom header to HTTP requests.
  * @param headerName - The name of the header
  * @param headerValue - The value of the header
- * @param options - Optional configuration. If provided with urlRegexp, the header will only be added to URLs matching the regex
+ * @param options - Optional configuration. If provided with urlRegexp, the header
+ * is added only when the pattern matches the URL. The match is a substring
+ * match on both platforms; anchor the pattern with ^ and $ to require the whole URL.
  */
 function addCustomHeader(
   headerName: string,

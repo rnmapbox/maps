@@ -34,7 +34,7 @@ object CustomHttpHeaders : HttpServiceBase() {
             val urlRegexp = entry.value.options?.urlRegexp
             if (urlRegexp != null) {
                 val destination = httpRequest.headers.getOrDefault("location", httpRequest.url)
-                if (urlRegexp.matches(destination)) {
+                if (urlRegexpMatches(urlRegexp, destination)) {
                     headers[entry.key] = entry.value.headerValue
                 }
             }
@@ -59,5 +59,16 @@ object CustomHttpHeaders : HttpServiceBase() {
     override fun onResponse(response: HttpResponse): HttpResponse {
         return response
     }
+}
+
+/**
+ * Substring match, same as iOS `NSRegularExpression.firstMatch`.
+ * [Regex.matches] would require the pattern to cover the entire URL, so a
+ * pattern like `https://tiles.example.com/v1/map` would miss a tile URL that
+ * has a query string. Patterns that already use `^` and `$` still have to
+ * match the whole string.
+ */
+internal fun urlRegexpMatches(pattern: Regex, url: String): Boolean {
+    return pattern.containsMatchIn(url)
 }
 
