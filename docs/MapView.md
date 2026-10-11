@@ -438,7 +438,7 @@ This event is triggered when the map has failed to load a new map style. On v10 
 func
 ```
 This event is tiggered when there is an error during map load. V10 only, replaces onDidFailLoadingMap, might be called multiple times and not exclusive with onDidFinishLoadingMap.
-*signature:*`() =&gt; void`
+*signature:*`(payload:{error: string, type: union, tileId: string, sourceId: string}) =&gt; void`
 
 
   
