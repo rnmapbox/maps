@@ -117,6 +117,8 @@ class CameraUpdateItem(
     private fun jumpTo(map: MapboxMap, callback: Animator.AnimatorListener) {
         val animator = ValueAnimator.ofFloat(0f, 0f)
         callback.onAnimationStart(animator)
+        // setCamera alone leaves a running flight in charge, which would then pull the camera back
+        map.cameraAnimationsPlugin { cancelAllAnimators() }
         map.setCamera(mCameraUpdate)
         callback.onAnimationEnd(animator)
     }
