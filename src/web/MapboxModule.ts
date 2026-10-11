@@ -1,6 +1,7 @@
 import mapboxgl from 'mapbox-gl';
 
 import { warnUnimplemented } from './UnimplementedComponent';
+import { normalizeLanguageTag } from '../utils/normalizeLanguageTag';
 
 export const LineJoin = {
   Bevel: 'bevel',
@@ -73,6 +74,12 @@ export const setTelemetryEnabled = (_telemetryEnabled: boolean) => {};
 
 export const setConnected = (_connected: boolean) => {};
 
+export { normalizeLanguageTag };
+
+export const setLanguage = async (_language: string | string[] | null) => {
+  warnUnimplemented('setLanguage');
+};
+
 export const setWellKnownTileServer = (_tileServer: string) => {};
 
 export const clearData = async () => {};
@@ -92,6 +99,8 @@ const MapboxModule = {
   removeCustomHeader,
   setTelemetryEnabled,
   setConnected,
+  setLanguage,
+  normalizeLanguageTag,
   setWellKnownTileServer,
   clearData,
 };

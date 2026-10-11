@@ -410,6 +410,18 @@
       },
       {
         "metadata": {
+          "title": "Set Language",
+          "tags": [
+            "Mapbox#setLanguage"
+          ],
+          "docs": "\nSets the label language for all maps in the app with `Mapbox.setLanguage`, which works with any language Mapbox supports and with the Standard style.\n"
+        },
+        "fullPath": "example/src/examples/Map/SetLanguage.tsx",
+        "relPath": "Map/SetLanguage.tsx",
+        "name": "SetLanguage"
+      },
+      {
+        "metadata": {
           "title": "Show and hide layer",
           "tags": [
             "FillLayer#existing",

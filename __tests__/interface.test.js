@@ -100,6 +100,8 @@ describe('Public Interface', () => {
       'getAccessToken',
       'setTelemetryEnabled',
       'setConnected',
+      'setLanguage',
+      'normalizeLanguageTag',
       'requestAndroidLocationPermissions',
       'getAnnotationsLayerID',
       'addCustomHeader',
