@@ -695,14 +695,19 @@ open class RNMBXMapView(private val mContext: Context, var mManager: RNMBXMapVie
         val source = sources.removeFirst()
         val hitbox = source.touchHitbox
         if (hitbox != null) {
-            val halfWidth = (hitbox["width"]!!.toFloat() / 2.0f).toDouble()
-            val halfHeight = (hitbox["height"]!!.toFloat() / 2.0f).toDouble()
+            // hitbox width/height are density-independent pixels. screenPoint is
+            // physical pixels from pixelForCoordinate, which is what
+            // queryRenderedFeatures expects. See queryRenderedFeaturesInRect.
+            val box = hitboxQueryBoxPx(
+                    screenPoint.x,
+                    screenPoint.y,
+                    hitbox["width"]!!,
+                    hitbox["height"]!!,
+                    getDisplayDensity(),
+            )
             val screenBox = ScreenBox(
-                    ScreenCoordinate(screenPoint.x - halfWidth,
-                            screenPoint.y - halfHeight
-                    ),
-                    ScreenCoordinate(screenPoint.x + halfWidth,
-                            screenPoint.y + halfHeight)
+                    ScreenCoordinate(box.minX, box.minY),
+                    ScreenCoordinate(box.maxX, box.maxY),
             )
             mapView.getMapboxMap().queryRenderedFeatures(RenderedQueryGeometry(screenBox),
                     RenderedQueryOptions(
