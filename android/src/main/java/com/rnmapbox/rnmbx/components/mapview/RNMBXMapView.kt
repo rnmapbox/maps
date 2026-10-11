@@ -16,6 +16,9 @@ import com.mapbox.bindgen.Value
 import com.mapbox.geojson.Feature
 import com.mapbox.geojson.FeatureCollection
 import com.mapbox.geojson.Point
+import com.mapbox.common.MapboxCommonSettings
+import com.mapbox.common.SettingsServiceFactory
+import com.mapbox.common.SettingsServiceStorageType
 import com.mapbox.maps.*
 import com.mapbox.maps.extension.localization.localizeLabels
 import com.mapbox.maps.extension.observable.eventdata.MapLoadingErrorEventData
@@ -170,6 +173,9 @@ open class RNMBXMapView(private val mContext: Context, var mManager: RNMBXMapVie
     private var mProjection: ProjectionName = ProjectionName.MERCATOR
     private var mLocaleString: String? = null
     private var mLocaleLayerIds: List<String>? = null
+    private var languageRejectionSubscription: com.mapbox.common.Cancelable? = null
+    /** Rejection already warned about, so each map logs it once instead of once per failed source */
+    private var warnedLanguageRejection: String? = null
     private var mStyleURL: String? = null
     val isDestroyed = false
     private var mCamera: RNMBXCamera? = null
@@ -581,26 +587,32 @@ open class RNMBXMapView(private val mContext: Context, var mManager: RNMBXMapVie
 
     fun applyLocalizeLabels() {
         val localeStr = mLocaleString
-        // Without layerIds labels are localized by the language setting, see setReactLocalizeLabels
-        val layerIds = mLocaleLayerIds
-        if (localeStr != null && layerIds != null) {
-            val locale = if (localeStr == "current") Locale.getDefault() else Locale.Builder()
-                .setLanguageTag(localeStr).build()
-            savedStyle?.localizeLabels(locale, layerIds)
+        if (localeStr != null) {
+            // The localization extension throws for the Standard style and Locale.Builder for a malformed tag
+            try {
+                val locale = if (localeStr == "current") Locale.getDefault() else Locale.Builder()
+                    .setLanguageTag(localeStr).build()
+                savedStyle?.localizeLabels(locale, mLocaleLayerIds)
+            } catch (e: RuntimeException) {
+                Logger.w(LOG_TAG, "localizeLabels: ${e.message} Use Mapbox.setLanguage to localize all styles.")
+            }
         }
     }
-    fun setReactLocalizeLabels(localeStr: String?, layerIds: List<String>?) {
-        if (localeStr == mLocaleString && layerIds == mLocaleLayerIds) {
+    /** The tile API answers HTTP 400 to a language set by `Mapbox.setLanguage` that it can't parse, and then no tiles load */
+    private fun warnIfLanguageRejected(error: MapLoadingError) {
+        if ((error.type != MapLoadingErrorType.SOURCE && error.type != MapLoadingErrorType.TILE) ||
+            !error.message.contains("status code 400") ||
+            SettingsServiceFactory.getInstance(SettingsServiceStorageType.PERSISTENT).has(MapboxCommonSettings.LANGUAGE).value != true ||
+            warnedLanguageRejection == error.message) {
             return
         }
+        warnedLanguageRejection = error.message
+        Logger.w(LOG_TAG, "Mapbox rejected the language set with Mapbox.setLanguage: ${error.message}")
+    }
+
+    fun setReactLocalizeLabels(localeStr: String?, layerIds: List<String>?) {
         mLocaleString = localeStr
         mLocaleLayerIds = layerIds
-        if (localeStr != null && layerIds == null) {
-            // Set right away, so the first style load already requests tiles in this language
-            RNMBXLocalization.setLanguages(RNMBXLocalization.languages(localeStr), this)
-        } else {
-            RNMBXLocalization.reset(this)
-        }
         changes.add(Property.LOCALIZE_LABELS)
     }
 
@@ -1311,11 +1323,11 @@ open class RNMBXMapView(private val mContext: Context, var mManager: RNMBXMapVie
         RNMBXMarkerViewManager.markerViewContainerSizeFixer(this, mapView.viewAnnotationManager)
 
         this.setupEvents(map)
+        languageRejectionSubscription = map.subscribeMapLoadingError { warnIfLanguageRejected(it) }
         return mapView
     }
 
     init {
-        RNMBXLocalization.clearStaleLanguage
         offscreenAnnotationViewContainer = FrameLayout(getContext())
         val p = FrameLayout.LayoutParams(0, 0)
         p.setMargins(-10000, -10000, -10000, -10000)
@@ -1589,7 +1601,8 @@ open class RNMBXMapView(private val mContext: Context, var mManager: RNMBXMapVie
      */
 
     fun onDropViewInstance() {
-        RNMBXLocalization.reset(this)
+        languageRejectionSubscription?.cancel()
+        languageRejectionSubscription = null
         removeAllFeaturesFromMap(RemovalReason.ON_DESTROY)
         mapView.viewAnnotationManager.removeAllViewAnnotations()
         lifecycle.onDestroy()

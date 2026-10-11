@@ -393,16 +393,11 @@ open class RNMBXMapView: UIView, RCTInvalidating {
 
   @objc public required init(frame:CGRect, eventDispatcher: RCTEventDispatcherProtocol) {
     self.eventDispatcher = eventDispatcher
-    _ = RNMBXLocalization.clearStaleLanguage
     super.init(frame: frame)
   }
 
   public required init (coder: NSCoder) {
     fatalError("not implemented")
-  }
-
-  deinit {
-    RNMBXLocalization.reset(owner: self)
   }
 
   func layerAdded (_ layer: Layer) {
@@ -575,27 +570,30 @@ open class RNMBXMapView: UIView, RCTInvalidating {
     }
   }
 
-  var locale: (layerIds: [String]?, localeString: String)? = nil
+  var locale: (layerIds: [String]?, locale: Locale)? = nil
+
+  /// Rejection already warned about, so each map logs it once instead of once per failed source
+  private var warnedLanguageRejection: String?
+
+  /// The tile API answers HTTP 400 to a language set by `Mapbox.setLanguage` that it can't parse, and then no tiles load
+  private func warnIfLanguageRejected(_ error: MapLoadingError) {
+    guard error.type == .source || error.type == .tile,
+          error.message.contains("status code 400"),
+          case .success(true) = SettingsServiceFactory.getInstance(storageType: .persistent).has(key: MapboxCommonSettings.language),
+          warnedLanguageRejection != error.message else {
+      return
+    }
+    warnedLanguageRejection = error.message
+    Logger.log(level: .warn, tag: "RNMBXMapView", message: "Mapbox rejected the language set with Mapbox.setLanguage: \(error.message)")
+  }
 
   @objc public func setReactLocalizeLabels(_ value: NSDictionary?) {
     if let value = value, let localeString = value["locale"] as? String {
       let layerIds = value["layerIds"] as? [String]
-      if let current = locale, current.localeString == localeString, current.layerIds == layerIds {
-        return
-      }
-      self.locale = (layerIds, localeString)
-      if layerIds == nil {
-        // Set right away, so the first style load already requests tiles in this language
-        RNMBXLocalization.setLanguages(RNMBXLocalization.languages(for: localeString), owner: self)
-      } else {
-        RNMBXLocalization.reset(owner: self)
-      }
+      let locale = localeString == "current" ? Locale.current : Locale(identifier: localeString)
+      self.locale = (layerIds, locale)
     } else {
-      guard locale != nil else {
-        return
-      }
       self.locale = nil
-      RNMBXLocalization.reset(owner: self)
     }
     changed(.localizeLabels)
   }
@@ -603,10 +601,8 @@ open class RNMBXMapView: UIView, RCTInvalidating {
   func applyLocalizeLabels() {
     onMapStyleLoaded { _ in
       logged("RNMBXMapView.\(#function)") {
-        // Without layerIds labels are localized by the language setting, see setReactLocalizeLabels
-        if let locale = self.locale, let layerIds = locale.layerIds {
-          let nativeLocale = locale.localeString == "current" ? Locale.current : Locale(identifier: locale.localeString)
-          try self.mapboxMap.style.localizeLabels(into: nativeLocale, forLayerIds: layerIds)
+        if let locale = self.locale {
+          try self.mapboxMap.style.localizeLabels(into: locale.locale, forLayerIds: locale.layerIds)
         }
       }
     }
@@ -1215,6 +1211,10 @@ extension RNMBXMapView {
         Logger.log(level: .error, message: "MapLoad error \(event)")
       }
     })
+
+    self.onEvery(event: .mapLoadingError) { (self, event) in
+      self.warnIfLanguageRejected(event.payload)
+    }
 
     self.onEvery(event: .styleImageMissing) { (self, event) in
       let imageName = event.payload.id
