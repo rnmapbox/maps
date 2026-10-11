@@ -1,6 +1,7 @@
 package com.rnmapbox.rnmbx.components.camera
 
 import android.animation.Animator
+import android.animation.ValueAnimator
 import com.mapbox.maps.plugin.animation.MapAnimationOptions
 import com.mapbox.maps.MapboxMap
 import com.mapbox.maps.plugin.animation.CameraAnimationsPlugin
@@ -82,12 +83,14 @@ class CameraUpdateItem(
         }
         val animationOptions = MapAnimationOptions.Builder();
 
-        // animateCamera / easeCamera only allows positive duration
+        // A zero-duration flyTo writes center and zoom as separate setCamera
+        // calls. The center write runs while zoom is still 0, and Mapbox's
+        // height-only constraint then keeps latitude at 0, so the opening
+        // camera never lands. Jump once, as iOS does for mode none.
+        // Returning also skips the flight below: duration 0 used to start both.
         if (duration == 0 || mCameraMode == CameraMode.MOVE || mCameraMode == CameraMode.NONE) {
-            map.flyToV11(mCameraUpdate, animationOptions.apply {
-                duration(0)
-            },
-            callback)
+            jumpTo(map, callback)
+            return
         }
 
         // On iOS a duration of -1 means default or dynamic duration (based on flight-path length)
@@ -109,6 +112,13 @@ class CameraUpdateItem(
                 callback
             )
         }
+    }
+
+    private fun jumpTo(map: MapboxMap, callback: Animator.AnimatorListener) {
+        val animator = ValueAnimator.ofFloat(0f, 0f)
+        callback.onAnimationStart(animator)
+        map.setCamera(mCameraUpdate)
+        callback.onAnimationEnd(animator)
     }
 
     override fun cancel(mayInterruptIfRunning: Boolean): Boolean {
