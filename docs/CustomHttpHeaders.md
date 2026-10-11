@@ -30,6 +30,8 @@ You can add and remove headers at runtime.
     MapboxGL.addCustomHeader('Authorization', '{auth header}', { urlRegexp: '^https:\/\/api\.mapbox\.com\/(.*)$' });
 ```
 
+`urlRegexp` is a substring match on iOS and Android. A pattern without `^` and `$` matches when it appears anywhere in the request URL. Anchor the pattern when it must cover the whole URL.
+
 ### Working example
 
 ```tsx
