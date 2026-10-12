@@ -264,7 +264,7 @@ class RNMBXStyleValue {
     }
     let valueObj = RNMBXStyleValue.convert(value["stylevalue"] as! [String:Any])
 
-    if let num = value as? Int {
+    if let num = valueObj as? Int {
       let uicolor = uicolor(num)
       return .constant(StyleColor(uicolor))
     } else {
