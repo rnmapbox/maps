@@ -71,7 +71,7 @@ interface Props {
   onPress?: (event: OnPressEvent) => void;
 
   /**
-   * Overrides the default touch hitbox(44x44 pixels) for the source layers
+   * Overrides the default touch hitbox (44x44 points) for the source layers
    */
   hitbox?: {
     /**
