@@ -798,28 +798,28 @@
           "value": [
             {
               "name": "paddingLeft",
-              "required": true,
+              "required": false,
               "type": "number",
               "default": "none",
               "description": "Left padding in points"
             },
             {
               "name": "paddingRight",
-              "required": true,
+              "required": false,
               "type": "number",
               "default": "none",
               "description": "Right padding in points"
             },
             {
               "name": "paddingTop",
-              "required": true,
+              "required": false,
               "type": "number",
               "default": "none",
               "description": "Top padding in points"
             },
             {
               "name": "paddingBottom",
-              "required": true,
+              "required": false,
               "type": "number",
               "default": "none",
               "description": "Bottom padding in points"
@@ -827,7 +827,7 @@
           ]
         },
         "default": "none",
-        "description": "The viewport padding in points."
+        "description": "The viewport padding in points. An omitted edge keeps its current padding."
       },
       {
         "name": "animationDuration",
@@ -977,7 +977,7 @@
               "required": false,
               "type": "signature",
               "default": "none",
-              "description": "The viewport padding in points."
+              "description": "The viewport padding in points. An omitted edge keeps its current padding."
             },
             {
               "name": "animationDuration",
@@ -4611,6 +4611,45 @@
         "description": "The configration parameters for sonar-like pulsing circle animation shown around the 2D puck."
       },
       {
+        "name": "model",
+        "required": false,
+        "type": {
+          "name": "shape",
+          "value": [
+            {
+              "name": "uri",
+              "required": true,
+              "type": "string \\| number",
+              "default": "none",
+              "description": "URL of a glTF/glb model, or an asset reference from `require`."
+            },
+            {
+              "name": "scale",
+              "required": false,
+              "type": "T \\| Expression",
+              "default": "none",
+              "description": "Scale of the model in x, y, z. Supports expressions based on zoom."
+            },
+            {
+              "name": "rotation",
+              "required": false,
+              "type": "T \\| Expression",
+              "default": "none",
+              "description": "Rotation of the model in degrees around x, y, z."
+            },
+            {
+              "name": "opacity",
+              "required": false,
+              "type": "T \\| Expression",
+              "default": "none",
+              "description": "Opacity of the model, between 0 and 1."
+            }
+          ]
+        },
+        "default": "none",
+        "description": "Renders the puck as a 3D model instead of the 2D images. When set, `topImage`, `bearingImage`, `shadowImage`, `scale`, `pulsing` and `androidRenderMode` are ignored.\n\nExample: `{ uri: require('./car.glb'), scale: [1, 1, 1], rotation: [0, 0, 90] }`"
+      },
+      {
         "name": "visible",
         "required": false,
         "type": "boolean",
@@ -5437,9 +5476,9 @@
       {
         "name": "localizeLabels",
         "required": false,
-        "type": "\\| {\n    /** locale code like `es` or `current` for the device's current locale */\n    locale: string;\n    /** layer id to localize. If not specified, all layers will be localized */\n    layerIds?: string[];\n  }\n\\| true",
+        "type": "\\| {\n    /** locale code like `es` or `current` for the device's current locale */\n    locale: string;\n    /** layer ids to localize. If not specified, all layers will be localized */\n    layerIds?: string[];\n  }\n\\| true",
         "default": "none",
-        "description": "[`mapbox` (v10) implementation only]\nSet map's label locale, e.g. `{ \"locale\": \"es\" }` will localize labels to Spanish, `{ \"locale\": \"current\" }` will localize labels to system locale."
+        "description": "Set map's label locale, e.g. `{ \"locale\": \"es\" }` will localize labels to Spanish, `{ \"locale\": \"current\" }` will localize labels to system locale.\nLabels are localized on the device for this map only, into `ar`, `de`, `en`, `es`, `fr`, `it`, `ja`, `ko`, `pt`, `ru`, `vi`, `zh-Hans` or `zh-Hant`, and not on the Standard style.\nFor any language Mapbox supports and for the Standard style, use the app-wide `Mapbox.setLanguage`.\nRemoving the prop stops localizing labels from the next style load."
       },
       {
         "name": "gestureSettings",
@@ -5648,10 +5687,10 @@
         "required": false,
         "type": {
           "name": "func",
-          "funcSignature": "() => void"
+          "funcSignature": "(payload:{error: string, type: union, tileId: string, sourceId: string}) => void"
         },
         "default": "none",
-        "description": "This event is tiggered when there is an error during map load. V10 only, replaces onDidFailLoadingMap, might be called multiple times and not exclusive with onDidFinishLoadingMap.\n*signature:*`() => void`"
+        "description": "This event is tiggered when there is an error during map load. V10 only, replaces onDidFailLoadingMap, might be called multiple times and not exclusive with onDidFinishLoadingMap.\n*signature:*`(payload:{error: string, type: union, tileId: string, sourceId: string}) => void`"
       },
       {
         "name": "onWillStartRenderingFrame",

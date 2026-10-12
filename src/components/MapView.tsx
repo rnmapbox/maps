@@ -147,16 +147,24 @@ export type MapState = {
 };
 
 /**
- * label localization settings (v10 only). `true` is equivalent to current locale.
+ * label localization settings. `true` is equivalent to current locale.
  */
 type LocalizeLabels =
   | {
       /** locale code like `es` or `current` for the device's current locale */
       locale: string;
-      /** layer id to localize. If not specified, all layers will be localized */
+      /** layer ids to localize. If not specified, all layers will be localized */
       layerIds?: string[];
     }
   | true;
+
+/** What `onMapLoadingError` receives on both platforms; `type` is the Mapbox SDK's error kind. */
+export type MapLoadingErrorPayload = {
+  error: string;
+  type?: 'style' | 'sprite' | 'source' | 'glyphs' | 'tile';
+  tileId?: string;
+  sourceId?: string;
+};
 
 type Props = ViewProps & {
   /**
@@ -306,8 +314,10 @@ type Props = ViewProps & {
   requestDisallowInterceptTouchEvent?: boolean;
 
   /**
-   * [`mapbox` (v10) implementation only]
    * Set map's label locale, e.g. `{ "locale": "es" }` will localize labels to Spanish, `{ "locale": "current" }` will localize labels to system locale.
+   * Labels are localized on the device for this map only, into `ar`, `de`, `en`, `es`, `fr`, `it`, `ja`, `ko`, `pt`, `ru`, `vi`, `zh-Hans` or `zh-Hant`, and not on the Standard style.
+   * For any language Mapbox supports and for the Standard style, use the app-wide `Mapbox.setLanguage`.
+   * Removing the prop stops localizing labels from the next style load.
    */
   localizeLabels?: LocalizeLabels;
 
@@ -390,7 +400,7 @@ type Props = ViewProps & {
   /**
    * This event is tiggered when there is an error during map load. V10 only, replaces onDidFailLoadingMap, might be called multiple times and not exclusive with onDidFinishLoadingMap.
    */
-  onMapLoadingError?: () => void;
+  onMapLoadingError?: (payload?: MapLoadingErrorPayload) => void;
 
   /**
    * This event is triggered when the map will start rendering a frame.
@@ -672,9 +682,11 @@ class MapView extends NativeBridgeComponent(
       );
     }
 
-    this._runNativeMethod('setHandledMapChangedEvents', this._nativeRef, [
-      events,
-    ]);
+    this._runNativeMethodDetached(
+      'setHandledMapChangedEvents',
+      this._nativeRef,
+      [events],
+    );
   }
 
   /**
@@ -937,7 +949,7 @@ class MapView extends NativeBridgeComponent(
     sourceId: string,
     sourceLayerId: string | null = null,
   ) {
-    this._runNative<void>('setSourceVisibility', [
+    this._runNativeMethodDetached('setSourceVisibility', this._nativeRef, [
       visible,
       sourceId,
       sourceLayerId,

@@ -1,6 +1,6 @@
 {
   "name": "@rnmapbox/maps-example",
-  "main": "index.js",
+  "main": "index",
   "version": "1.0.0",
   "private": true,
   "scripts": {

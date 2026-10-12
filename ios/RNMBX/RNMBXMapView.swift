@@ -401,7 +401,10 @@ open class RNMBXMapView: UIView, RCTInvalidating {
   }
 
   func layerAdded (_ layer: Layer) {
-    // TODO
+    let callbacks = layerWaiters.removeValue(forKey: layer.id) ?? []
+    callbacks.forEach { callback in
+      callback(layer.id)
+    }
   }
 
   func waitForLayerWithID(_ layerId: String, _  callback: @escaping (_ layerId: String) -> Void) {
@@ -569,12 +572,28 @@ open class RNMBXMapView: UIView, RCTInvalidating {
 
   var locale: (layerIds: [String]?, locale: Locale)? = nil
 
+  /// Rejection already warned about, so each map logs it once instead of once per failed source
+  private var warnedLanguageRejection: String?
+
+  /// The tile API answers HTTP 400 to a language set by `Mapbox.setLanguage` that it can't parse, and then no tiles load
+  private func warnIfLanguageRejected(_ error: MapLoadingError) {
+    guard error.type == .source || error.type == .tile,
+          error.message.contains("status code 400"),
+          case .success(true) = SettingsServiceFactory.getInstance(storageType: .persistent).has(key: MapboxCommonSettings.language),
+          warnedLanguageRejection != error.message else {
+      return
+    }
+    warnedLanguageRejection = error.message
+    Logger.log(level: .warn, tag: "RNMBXMapView", message: "Mapbox rejected the language set with Mapbox.setLanguage: \(error.message)")
+  }
+
   @objc public func setReactLocalizeLabels(_ value: NSDictionary?) {
-    if let value = value {
-      let localeString = value["locale"] as! String
-      let layerIds = value["layerIds"] as! [String]?
+    if let value = value, let localeString = value["locale"] as? String {
+      let layerIds = value["layerIds"] as? [String]
       let locale = localeString == "current" ? Locale.current : Locale(identifier: localeString)
       self.locale = (layerIds, locale)
+    } else {
+      self.locale = nil
     }
     changed(.localizeLabels)
   }
@@ -1183,15 +1202,30 @@ extension RNMBXMapView {
       if let sourceId = eventPayload.sourceId {
         payload["sourceId"] = sourceId
       }
+      // the SDK's own error kind, as on Android
+      switch eventPayload.type {
+      case .style: payload["type"] = "style"
+      case .sprite: payload["type"] = "sprite"
+      case .source: payload["type"] = "source"
+      case .glyphs: payload["type"] = "glyphs"
+      case .tile: payload["type"] = "tile"
+      @unknown default: break
+      }
       let RNMBXEvent = RNMBXEvent(type: .mapLoadingError, payload: payload);
       self.fireEvent(event: RNMBXEvent, callback: self.reactOnMapChange)
 
-      if let message = error.errorDescription {
-        Logger.log(level: .error, message: "MapLoad error \(message)")
+      let message = error.errorDescription ?? "\(event)"
+      if let sourceId = eventPayload.sourceId,
+         let source = self.sources.first(where: { $0.id == sourceId }) {
+        Logger.log(level: .error, message: "MapLoad error in \(type(of: source)) '\(sourceId)': \(message)")
       } else {
-        Logger.log(level: .error, message: "MapLoad error \(event)")
+        Logger.log(level: .error, message: "MapLoad error \(message)")
       }
     })
+
+    self.onEvery(event: .mapLoadingError) { (self, event) in
+      self.warnIfLanguageRejected(event.payload)
+    }
 
     self.onEvery(event: .styleImageMissing) { (self, event) in
       let imageName = event.payload.id
@@ -1578,13 +1612,13 @@ extension RNMBXMapView
   @objc public func takeSnap(
     writeToDisk:Bool) -> URL
   {
-    UIGraphicsBeginImageContextWithOptions(self.bounds.size, true, 0);
+    let format = UIGraphicsImageRendererFormat(for: self.traitCollection)
+    format.opaque = true
+    let snapshot = UIGraphicsImageRenderer(bounds: self.bounds, format: format).image { _ in
+      self.drawHierarchy(in: self.bounds, afterScreenUpdates: true)
+    }
 
-    self.drawHierarchy(in: self.bounds, afterScreenUpdates: true)
-    let snapshot = UIGraphicsGetImageFromCurrentImageContext();
-    UIGraphicsEndImageContext();
-
-    return writeToDisk ? RNMBImageUtils.createTempFile(snapshot!) :  RNMBImageUtils.createBase64(snapshot!)
+    return writeToDisk ? RNMBImageUtils.createTempFile(snapshot) :  RNMBImageUtils.createBase64(snapshot)
   }
 }
 

@@ -188,6 +188,19 @@
       },
       {
         "metadata": {
+          "title": "Location Puck 3D",
+          "tags": [
+            "LocationPuck",
+            "LocationPuck#model"
+          ],
+          "docs": "\n  Renders the user location as a 3D model that rotates with the course\n  "
+        },
+        "fullPath": "example/src/examples/UserLocation/LocationPuck3D.tsx",
+        "relPath": "UserLocation/LocationPuck3D.tsx",
+        "name": "LocationPuck3D"
+      },
+      {
+        "metadata": {
           "title": "Set Displacement",
           "tags": [
             "UserLocation",
@@ -394,6 +407,18 @@
         "fullPath": "example/src/examples/Map/ScreenCoordinates.tsx",
         "relPath": "Map/ScreenCoordinates.tsx",
         "name": "ScreenCoordinates"
+      },
+      {
+        "metadata": {
+          "title": "Set Language",
+          "tags": [
+            "Mapbox#setLanguage"
+          ],
+          "docs": "\nSets the label language for all maps in the app with `Mapbox.setLanguage`, which works with any language Mapbox supports and with the Standard style.\n"
+        },
+        "fullPath": "example/src/examples/Map/SetLanguage.tsx",
+        "relPath": "Map/SetLanguage.tsx",
+        "name": "SetLanguage"
       },
       {
         "metadata": {

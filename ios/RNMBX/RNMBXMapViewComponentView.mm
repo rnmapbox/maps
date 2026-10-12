@@ -218,9 +218,17 @@ using namespace facebook::react;
     id localizeLabels = RNMBXConvertFollyDynamicToId(newViewProps.localizeLabels);
     if (localizeLabels != nil) {
         _view.reactLocalizeLabels = localizeLabels;
+    } else if (oldProps && RNMBXConvertFollyDynamicToId(oldViewProps.localizeLabels) != nil) {
+        _view.reactLocalizeLabels = nil;
     }
 
     RNMBX_OPTIONAL_PROP_BOOL(deselectAnnotationOnTap);
+
+    // Has to be set before -didSetProps: below, which is where the MapView is created.
+    id mapViewImpl = RNMBXConvertFollyDynamicToId(newViewProps.mapViewImpl);
+    if (mapViewImpl != nil) {
+        _view.mapViewImpl = mapViewImpl;
+    }
 
     id styleURL = RNMBXConvertFollyDynamicToId(newViewProps.styleURL);
     if (styleURL != nil) {

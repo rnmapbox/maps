@@ -130,9 +130,9 @@ open class RNMBXMapViewManager(context: ReactApplicationContext, val viewTagReso
 
     @ReactProp(name = "localizeLabels")
     override fun setLocalizeLabels(mapView: RNMBXMapView, localeMap: Dynamic) {
-        val mapValue = localeMap.asMap()
+        val mapValue = if (localeMap.isNull) null else localeMap.asMap()
         if (mapValue == null) {
-            Logger.e(LOG_TAG, "localizeLabels map is null")
+            mapView.setReactLocalizeLabels(null, null)
             return
         }
         val locale = mapValue.getString("locale")

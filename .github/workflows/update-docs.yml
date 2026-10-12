@@ -47,8 +47,12 @@ jobs:
       - name: Generate example app into maps-docs repo
         run: |
           cd example
-          echo $MAPBOX_WEB_ACCESS_TOKEN > accesstoken
-          yarn install
+          if [ -z "$MAPBOX_WEB_ACCESS_TOKEN" ]; then
+            echo "::warning::MAPBOX_WEB_ACCESS_TOKEN is not set, the published example app will have no map tiles"
+          fi
+          echo "$MAPBOX_WEB_ACCESS_TOKEN" > accesstoken
+          # yarn skips postinstall when nothing changed, so write env.json explicitly
+          node scripts/set_access_token.js
           npx expo export -p web --output-dir ../../maps-docs/static/example-app
         working-directory: maps
         env:

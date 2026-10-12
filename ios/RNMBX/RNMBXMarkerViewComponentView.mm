@@ -99,17 +99,11 @@ using namespace facebook::react;
       next = CGRectMake(0, 0, next.size.width, next.size.height);
     }
     
-    LayoutMetrics newLayoutMetrics = LayoutMetrics{
-        RCTRectFromCGRect(next),
-        layoutMetrics.contentInsets,
-        layoutMetrics.borderWidth,
-        layoutMetrics.displayType,
-        layoutMetrics.positionType, // RN074
-        layoutMetrics.layoutDirection,
-        layoutMetrics.wasLeftAndRightSwapped,
-        layoutMetrics.pointScaleFactor,
-        layoutMetrics.overflowInset
-    };
+    // Copy and override `frame` rather than listing every field positionally.
+    // A positional aggregate initializer silently breaks whenever React Native
+    // adds, removes or reorders a `LayoutMetrics` member.
+    LayoutMetrics newLayoutMetrics = layoutMetrics;
+    newLayoutMetrics.frame = RCTRectFromCGRect(next);
 
     [super updateLayoutMetrics:newLayoutMetrics oldLayoutMetrics:oldLayoutMetrics];
     if (frameDidChange) {

@@ -7,9 +7,6 @@ on:
         required: true
         default: default
         type: string
-      ref:
-        required: false
-        type: string
       NVMRC:
         required: true
         type: string
@@ -23,6 +20,11 @@ on:
         default: false
         required: false
         type: boolean
+      SKIP:
+        description: "Report the build as skipped, e.g. when only the web implementation changed"
+        default: false
+        required: false
+        type: boolean
     secrets:
       MAPBOX_ACCESS_TOKEN:
         required: true
@@ -30,8 +32,16 @@ on:
         required: false
 
 jobs:
+  report_skipped_build:
+    name: iOS Example Build ${{ inputs.NEW_ARCH && 'Fabric' || 'Paper' }} ${{ inputs.MAP_IMPL }}
+    if: ${{ inputs.SKIP }}
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo "Only src/web changed, so the iOS build is not needed"
+
   build:
     name: iOS Example Build ${{ inputs.NEW_ARCH && 'Fabric' || 'Paper' }} ${{ inputs.MAP_IMPL }}
+    if: ${{ !inputs.SKIP }}
     runs-on: macos-15
     timeout-minutes: 55
     environment: ${{ inputs.env_name }}
@@ -43,20 +53,18 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-        if: ${{ inputs.ref == '' }}
 
-      - name: Checkout fork
-        uses: actions/checkout@v4
-        if: ${{ inputs.ref != '' }}
-        with:
-          ref: ${{ inputs.ref }}
-
+      # Fork PRs get no secrets; fall back to the public rotated CI token (see rnmapbox/ci-config)
       - name: Access Token
-        run: echo $MAPBOX_ACCESS_TOKEN > ./accesstoken
+        run: |
+          if [ -n "$MAPBOX_ACCESS_TOKEN" ]; then
+            echo "$MAPBOX_ACCESS_TOKEN" > ./accesstoken
+          else
+            "$GITHUB_WORKSPACE/scripts/ci/fetch-mapbox-token.sh" > ./accesstoken
+          fi
         env:
           MAPBOX_ACCESS_TOKEN: ${{ secrets.MAPBOX_ACCESS_TOKEN || secrets.ENV_MAPBOX_ACCESS_TOKEN }}
 
-        
       - name: Setup node ${{ inputs.NVMRC }}
         uses: actions/setup-node@v3.5.1
         with:

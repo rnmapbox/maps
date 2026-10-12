@@ -10,10 +10,10 @@ interface RNMBXModule {
     SatelliteStreet: URL;
   };
   OfflinePackDownloadState: {
-    Inactive: string | number;
-    Active: string | number;
-    Complete: string | number;
-    Unknown?: string | number;
+    Inactive: string;
+    Active: string;
+    Complete: string;
+    Unknown?: string;
   };
   LineJoin: {
     Bevel: string | number;
@@ -39,6 +39,7 @@ interface RNMBXModule {
   getAccessToken(): Promise<string>;
   setTelemetryEnabled(telemetryEnabled: boolean): void;
   setConnected(connected: boolean): void;
+  setLanguage(language: string | string[] | null): Promise<void>;
 }
 
 const RNMBXModule: RNMBXModule = NativeModules.RNMBXModule;
@@ -86,6 +87,7 @@ export const {
   getAccessToken,
   setTelemetryEnabled,
   setConnected,
+  setLanguage,
 } = RNMBXModule;
 
 export { addCustomHeader };

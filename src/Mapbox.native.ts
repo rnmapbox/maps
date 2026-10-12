@@ -81,6 +81,7 @@ export { default as Style } from './components/Style';
 export { default as Logger, type LogLevel } from './utils/Logger';
 export { requestAndroidLocationPermissions } from './requestAndroidLocationPermissions';
 export { getAnnotationsLayerID } from './utils/getAnnotationsLayerID';
+export { normalizeLanguageTag } from './utils/normalizeLanguageTag';
 export type {
   FillLayerStyleProps as FillLayerStyle,
   LineLayerStyleProps as LineLayerStyle,

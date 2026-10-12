@@ -78,6 +78,13 @@ struct CameraUpdateItem {
         try center.validate()
       }
 
+      // Mapbox cancels camera animations immediately while the map view has no window
+      // (e.g. an inactive navigator screen), so jump to the target instead of dropping it.
+      if map.mapView.window == nil {
+        map.mapboxMap.setCamera(to: camera)
+        return
+      }
+
       switch mode {
       case .flight:
         map.mapView.camera.fly(to: camera, duration: duration)
@@ -339,7 +346,12 @@ open class RNMBXCamera : RNMBXMapAndMapViewComponentBase {
           options.bounds = try self._toCoordinateBounds(maxBounds)
         }
       } else {
-        options.bounds = nil
+        // Passing nil does not reset this value, so reset to the SDK default (infinite world bounds).
+        options.bounds = CoordinateBounds(
+          southwest: CLLocationCoordinate2D(latitude: -90, longitude: -180),
+          northeast: CLLocationCoordinate2D(latitude: 90, longitude: 180),
+          infiniteBounds: true
+        )
       }
       options.minZoom = self.minZoomLevel?.CGFloat
       options.maxZoom = self.maxZoomLevel?.CGFloat
@@ -460,12 +472,15 @@ open class RNMBXCamera : RNMBXMapAndMapViewComponentBase {
       heading = CLLocationDirection(h)
     }
     
-    var padding: UIEdgeInsets = UIEdgeInsets(
-      top: stop["paddingTop"] as? Double ?? 0,
-      left: stop["paddingLeft"] as? Double ?? 0,
-      bottom: stop["paddingBottom"] as? Double ?? 0,
-      right: stop["paddingRight"] as? Double ?? 0
-    )
+    func stopPadding(defaults: UIEdgeInsets) -> UIEdgeInsets {
+      UIEdgeInsets(
+        top: stop["paddingTop"] as? Double ?? defaults.top,
+        left: stop["paddingLeft"] as? Double ?? defaults.left,
+        bottom: stop["paddingBottom"] as? Double ?? defaults.bottom,
+        right: stop["paddingRight"] as? Double ?? defaults.right
+      )
+    }
+    let padding = stopPadding(defaults: map?.mapView?.mapboxMap.cameraState.padding ?? .zero)
     
     var camera: CameraOptions?
     
@@ -518,9 +533,10 @@ open class RNMBXCamera : RNMBXMapAndMapViewComponentBase {
       withMapView { map in
         let bounds = [sw, ne]
 
+        // camera(for:padding:) insets the bounds within the map's current padding, so omitted edges must add nothing.
         camera = map.mapboxMap.camera(
           for: bounds,
-          padding: padding,
+          padding: stopPadding(defaults: .zero),
           bearing: heading ?? map.mapboxMap.cameraState.bearing,
           pitch: pitch ?? map.mapboxMap.cameraState.pitch
         )
