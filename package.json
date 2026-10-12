@@ -10,6 +10,18 @@
       "types": "./lib/typescript/src/index.native.d.ts",
       "default": "./lib/module/index.js"
     },
+    "./src/utils/MapboxStyles": {
+      "types": "./lib/typescript/src/utils/MapboxStyles.d.ts"
+    },
+    "./src/components/SymbolLayer": {
+      "types": "./lib/typescript/src/components/SymbolLayer.d.ts"
+    },
+    "./src/components/MapView": {
+      "types": "./lib/typescript/src/components/MapView.d.ts"
+    },
+    "./src/types/OnPressEvent": {
+      "types": "./lib/typescript/src/types/OnPressEvent.d.ts"
+    },
     "./package.json": "./package.json",
     "./app.plugin.js": "./app.plugin.js",
     "./setup-jest": "./setup-jest.js"
