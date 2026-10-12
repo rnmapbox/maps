@@ -701,8 +701,9 @@ open class RNMBXMapView(private val mContext: Context, var mManager: RNMBXMapVie
         val source = sources.removeFirst()
         val hitbox = source.touchHitbox
         if (hitbox != null) {
-            val halfWidth = (hitbox["width"]!!.toFloat() / 2.0f).toDouble()
-            val halfHeight = (hitbox["height"]!!.toFloat() / 2.0f).toDouble()
+            val density = getDisplayDensity()
+            val halfWidth = hitbox["width"]!! / 2.0 * density
+            val halfHeight = hitbox["height"]!! / 2.0 * density
             val screenBox = ScreenBox(
                     ScreenCoordinate(screenPoint.x - halfWidth,
                             screenPoint.y - halfHeight

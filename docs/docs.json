@@ -7887,7 +7887,7 @@
           ]
         },
         "default": "none",
-        "description": "Overrides the default touch hitbox(44x44 pixels) for the source layers"
+        "description": "Overrides the default touch hitbox (44x44 points) for the source layers"
       },
       {
         "name": "children",
@@ -10811,7 +10811,7 @@
           ]
         },
         "default": "none",
-        "description": "Overrides the default touch hitbox(44x44 pixels) for the source layers"
+        "description": "Overrides the default touch hitbox (44x44 points) for the source layers"
       },
       {
         "name": "children",
