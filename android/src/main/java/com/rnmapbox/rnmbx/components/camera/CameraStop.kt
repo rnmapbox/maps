@@ -127,13 +127,18 @@ class CameraStop {
             val tilt = if (mTilt != null) mTilt!! else currentCamera.pitch
             val bearing = if (mBearing != null) mBearing!! else currentCamera.bearing
 
-            // cameraForCoordinateBounds insets the bounds within the map's current padding, so omitted edges must add nothing.
-            val boundsPadding = intArrayOf(mPaddingLeft ?: 0, mPaddingTop ?: 0, mPaddingRight ?: 0, mPaddingBottom ?: 0)
-            val boundsCamera = map.cameraForCoordinateBounds(
-                mBounds!!.toBounds(),
-                convert(clippedPadding(boundsPadding, mapView)),
-                bearing,
-                tilt
+            val bounds = mBounds!!.toBounds()
+            // Apply viewport padding before fitting; coordinatesPadding would add to it.
+            val boundsCamera = map.cameraForCoordinates(
+                coordinates = listOf(bounds.southwest, bounds.northeast),
+                camera = CameraOptions.Builder()
+                    .padding(cameraPaddingEdgeInsets)
+                    .bearing(bearing)
+                    .pitch(tilt)
+                    .build(),
+                coordinatesPadding = EdgeInsets(0.0, 0.0, 0.0, 0.0),
+                maxZoom = null,
+                offset = null
             )
             builder.center(boundsCamera.center)
             builder.anchor(boundsCamera.anchor)
