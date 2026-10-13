@@ -90,7 +90,8 @@ type Props = {
   children?: ReactElement | ReactElement[];
 
   /**
-   * Minimum amount of movement before GPS location is updated in meters
+   * Minimum distance in meters the device must move before a location update is generated.
+   * Maps to `distanceFilter` on iOS and `displacement` on Android. Defaults to 0.
    */
   minDisplacement?: number;
 
@@ -100,7 +101,9 @@ type Props = {
   onPress?: () => void;
 
   /**
-   * Callback that is triggered on location update
+   * Callback that is triggered on each location update. Receives a {@link Location} object
+   * containing `coords` (latitude, longitude, altitude, accuracy, heading, course, speed)
+   * and `timestamp`.
    */
   onUpdate?: (location: Location) => void;
 
@@ -111,7 +114,10 @@ type Props = {
   renderMode?: UserLocationRenderMode;
 
   /**
-   * Request the always location permission, and listen to the location even when the app is in background
+   * Request the always location permission, and listen to the location even when the app is in background.
+   *
+   * **Note:** This is not implemented in Mapbox Maps SDK v11 and is currently a no-op
+   * on both iOS and Android.
    *
    * @platform ios
    */
@@ -134,6 +140,15 @@ type UserLocationState = {
   heading: number | null;
 };
 
+/**
+ * Displays the user's current location on the map with a customizable appearance.
+ *
+ * By default, renders a blue circle indicator. Provide children (layer components) to
+ * customize the appearance. Uses `locationManager` internally to subscribe to location
+ * updates, with automatic start/stop on mount/unmount and background/foreground transitions.
+ *
+ * For a simpler native-rendered location indicator, consider using {@link LocationPuck} directly.
+ */
 class UserLocation extends React.Component<Props, UserLocationState> {
   static defaultProps = {
     animated: true,

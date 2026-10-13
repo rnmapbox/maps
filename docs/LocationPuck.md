@@ -8,7 +8,11 @@ import { LocationPuck } from '@rnmapbox/maps';
 LocationPuck
 
 ```
-Renders a puck on the map that shows the device's current location.
+Renders the native Mapbox location puck on the map to show the device's current location.
+
+This is the recommended way to display user location, as it leverages the native
+Mapbox location indicator with smooth animations and built-in bearing tracking.
+Must be a child of `MapView`.
 
 ## props
 
@@ -108,7 +112,7 @@ The size of the images, as a scale factor applied to the size of the specified i
 ```tsx
 | {
     /**
-     * Flag determining whether the pulsing circle animation.
+     * Flag determining whether the pulsing circle animation is enabled.
      */
     isEnabled?: boolean;
 
@@ -119,14 +123,17 @@ The size of the images, as a scale factor applied to the size of the specified i
 
     /**
      * Circle radius configuration for the pulsing circle animation.
-     *  - accuracy:  Pulsing circle animates with the `horizontalAccuracy` form the latest puck location.
-     *  - number: Pulsing circle should animate with the constant radius.
+     *  - `'accuracy'`: Pulsing circle radius is based on the `horizontalAccuracy` from the latest
+     *    location, providing a visual representation of GPS precision.
+     *  - `number`: Pulsing circle uses a constant radius in screen points.
      */
     radius?: 'accuracy' | number;
   }
 | 'default'
 ```
-The configration parameters for sonar-like pulsing circle animation shown around the 2D puck.
+The configuration parameters for sonar-like pulsing circle animation shown around the 2D puck.
+Set to `'default'` to enable pulsing with platform default settings. Pass an object to customize.
+Omit or set to `undefined` to disable pulsing.
 
 
   
