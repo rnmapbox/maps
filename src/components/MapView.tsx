@@ -328,6 +328,8 @@ type Props = ViewProps & {
 
   /**
    * Map press listener, called when a user presses the map.
+   * Single taps are reported only after the map rules out a double tap, so `onPress` fires a few hundred milliseconds after the touch.
+   * On iOS, setting both `doubleTapToZoomInEnabled` and `quickZoomEnabled` to `false` in `gestureSettings` removes most of this delay; on Android it doesn't.
    */
   onPress?: (
     feature: GeoJSON.Feature<GeoJSON.Point, ScreenPointPayload>,

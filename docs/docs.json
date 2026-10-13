@@ -5590,7 +5590,7 @@
           "funcSignature": "(feature:GeoJSON.Feature) => void"
         },
         "default": "none",
-        "description": "Map press listener, called when a user presses the map.\n*signature:*`(feature:GeoJSON.Feature) => void`"
+        "description": "Map press listener, called when a user presses the map.\nSingle taps are reported only after the map rules out a double tap, so `onPress` fires a few hundred milliseconds after the touch.\nOn iOS, setting both `doubleTapToZoomInEnabled` and `quickZoomEnabled` to `false` in `gestureSettings` removes most of this delay; on Android it doesn't.\n*signature:*`(feature:GeoJSON.Feature) => void`"
       },
       {
         "name": "onLongPress",
