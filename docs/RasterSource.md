@@ -85,6 +85,28 @@ Mapbox urls default to 256, all others default to 512.
 
 
   
+### prefetchZoomDelta
+
+```tsx
+number
+```
+When a tile for the current zoom level is not loaded yet, tiles up to this many zoom levels
+above it are requested and rendered in its place. 0 turns this off, so only tiles for the
+current zoom level are requested. The default value for this option is 4.
+
+[Raster Source tile requests](../examples/FillRasterLayer/RasterSourceTileRequests)
+  
+### tileNetworkRequestsDelay
+
+```tsx
+number
+```
+Delay in milliseconds before a tile's network request is sent while a gesture or a camera
+animation is in progress. Tiles that leave the viewport before the delay elapses are never
+requested. Has no effect on an idle map. The default value for this option is 0.
+
+[Raster Source tile requests](../examples/FillRasterLayer/RasterSourceTileRequests)
+  
 ### tms
 
 ```tsx
