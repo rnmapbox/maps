@@ -202,6 +202,8 @@ open class RNMBXMapView(private val mContext: Context, var mManager: RNMBXMapVie
 
     private var wasGestureActive = false
     private var isGestureActive = false
+    private var cameraEventsReady = false
+    private var hasPendingCameraChange = false
 
     var mapViewImpl: String? = null
 
@@ -260,8 +262,7 @@ open class RNMBXMapView(private val mContext: Context, var mManager: RNMBXMapVie
         val _this = this
 
         map.addOnCameraChangeListener(OnCameraChangeListener { cameraChangedEventData ->
-            handleMapChangedEvent(EventTypes.REGION_IS_CHANGING)
-            handleMapChangedEvent(EventTypes.CAMERA_CHANGED)
+            sendCameraChangedEvents()
         })
 
         map.addOnMapIdleListener(OnMapIdleListener { mapIdleEventData ->
@@ -855,6 +856,16 @@ open class RNMBXMapView(private val mContext: Context, var mManager: RNMBXMapVie
     }
 
     // region Events
+
+    private fun sendCameraChangedEvents() {
+        if (!cameraEventsReady) {
+            hasPendingCameraChange = true
+            return
+        }
+        hasPendingCameraChange = false
+        handleMapChangedEvent(EventTypes.REGION_IS_CHANGING)
+        handleMapChangedEvent(EventTypes.CAMERA_CHANGED)
+    }
 
     fun sendRegionDidChangeEvent() {
         handleMapChangedEvent(EventTypes.REGION_DID_CHANGE)
@@ -1622,6 +1633,13 @@ open class RNMBXMapView(private val mContext: Context, var mManager: RNMBXMapVie
         super.onAttachedToWindow()
         Handler(Looper.getMainLooper()).post {
             lifecycle.afterAttachFromLooper()
+            // Camera.addToMap applies defaultSettings in these attachment callbacks.
+            // Forward the current camera only after they finish, rather than the
+            // SDK's earlier startup positions. Maps without a Camera also become ready.
+            cameraEventsReady = true
+            if (hasPendingCameraChange) {
+                sendCameraChangedEvents()
+            }
         }
     }
 
