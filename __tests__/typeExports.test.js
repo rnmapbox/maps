@@ -1,8 +1,9 @@
 import fs from 'fs';
-import os from 'os';
 import path from 'path';
 import { execFileSync } from 'child_process';
 import ts from 'typescript';
+
+import { packPackage } from './fixtures/packPackage';
 
 const legacyPaths = [
   '@rnmapbox/maps/src/utils/MapboxStyles',
@@ -70,73 +71,11 @@ describe('Published type exports', () => {
   let packageDir;
 
   beforeAll(() => {
-    consumerDir = fs.mkdtempSync(
-      path.join(os.tmpdir(), 'rnmapbox-type-exports-'),
-    );
-    packageDir = path.join(consumerDir, 'node_modules/@rnmapbox/maps');
-    fs.mkdirSync(packageDir, { recursive: true });
+    const packed = packPackage();
+    consumerDir = packed.consumerDir;
+    packageDir = packed.packageDir;
+    const { projectRoot } = packed;
     fs.writeFileSync(path.join(consumerDir, 'index.ts'), consumerSource);
-
-    const projectRoot = path.resolve(__dirname, '..');
-    const buildDir = path.join(consumerDir, 'build');
-    fs.mkdirSync(buildDir);
-    fs.cpSync(path.join(projectRoot, 'src'), path.join(buildDir, 'src'), {
-      recursive: true,
-    });
-    for (const file of [
-      'package.json',
-      'tsconfig.json',
-      'tsconfig.build.json',
-      'yarn.lock',
-    ]) {
-      fs.copyFileSync(path.join(projectRoot, file), path.join(buildDir, file));
-    }
-    fs.mkdirSync(path.join(buildDir, 'example'));
-    fs.copyFileSync(
-      path.join(projectRoot, 'example/package.json'),
-      path.join(buildDir, 'example/package.json'),
-    );
-    fs.writeFileSync(
-      path.join(buildDir, '.yarnrc.yml'),
-      'nodeLinker: node-modules\n',
-    );
-    fs.symlinkSync(
-      path.join(projectRoot, 'node_modules'),
-      path.join(buildDir, 'node_modules'),
-      'junction',
-    );
-
-    // Use the real build targets and package file selection, including Bob's
-    // generated package metadata. Build outside the checkout to avoid stale
-    // output and interference with other checks.
-    const env = { ...process.env };
-    delete env.npm_execpath;
-    const bob = require.resolve('react-native-builder-bob/bin/bob');
-    for (const target of ['module', 'typescript']) {
-      execFileSync(process.execPath, [bob, 'build', '--target', target], {
-        cwd: buildDir,
-        env,
-        timeout: 60000,
-      });
-    }
-    const archive = path.join(consumerDir, 'package.tgz');
-    execFileSync(
-      process.execPath,
-      [
-        path.join(projectRoot, '.yarn/releases/yarn-3.6.1.cjs'),
-        'pack',
-        '--out',
-        archive,
-      ],
-      { cwd: buildDir, env, timeout: 30000 },
-    );
-    execFileSync('tar', [
-      '-xzf',
-      archive,
-      '--strip-components=1',
-      '-C',
-      packageDir,
-    ]);
 
     // Resolve React and GeoJSON types as a consumer would, rather than letting
     // missing declaration dependencies degrade to any under skipLibCheck.
@@ -177,16 +116,13 @@ describe('Published type exports', () => {
     },
   );
 
-  it('includes the generated package metadata and export targets', () => {
+  it('keeps the package root as the scope and includes export targets', () => {
+    // Legacy Expo Tools locates app.plugin.js beside the nearest package.json
+    // to the runtime entry. Bob's ESM metadata would hide the actual root.
     for (const output of ['module', 'typescript']) {
       expect(
-        JSON.parse(
-          fs.readFileSync(
-            path.join(packageDir, 'lib', output, 'package.json'),
-            'utf8',
-          ),
-        ),
-      ).toEqual({ type: 'module' });
+        fs.existsSync(path.join(packageDir, 'lib', output, 'package.json')),
+      ).toBe(false);
     }
     const manifest = JSON.parse(
       fs.readFileSync(path.join(packageDir, 'package.json'), 'utf8'),

@@ -30,6 +30,7 @@
     "verbatimModuleSyntax": true
   },
   "exclude": [
+    "lib",
     "**/*.codepart.ts"
   ]
 }
