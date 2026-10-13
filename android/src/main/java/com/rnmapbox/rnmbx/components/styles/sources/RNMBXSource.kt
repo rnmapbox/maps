@@ -104,7 +104,7 @@ abstract class RNMBXSource<T : Source?>(context: Context?) : AbstractMapFeature(
             } else mTouchHitbox
         }
 
-    fun addToMap(existings: Boolean, style: Style, mapView: RNMBXMapView) {
+    open fun addToMap(existings: Boolean, style: Style, mapView: RNMBXMapView) {
         mSource = null
         val existingSource = getSourceAs(style, iD)
         if (existingSource != null) {
