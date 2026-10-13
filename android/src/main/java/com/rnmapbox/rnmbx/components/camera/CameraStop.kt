@@ -127,7 +127,7 @@ class CameraStop {
             val tilt = if (mTilt != null) mTilt!! else currentCamera.pitch
             val bearing = if (mBearing != null) mBearing!! else currentCamera.bearing
 
-            val bounds = mBounds!!.toBounds()
+            val bounds = mBounds!!.toCameraBounds()
             // Apply viewport padding before fitting; coordinatesPadding would add to it.
             val boundsCamera = map.cameraForCoordinates(
                 coordinates = listOf(bounds.southwest, bounds.northeast),
