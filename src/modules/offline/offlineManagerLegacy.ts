@@ -19,6 +19,8 @@ const MapboxOfflineManager = NativeModules.RNMBXOfflineModuleLegacy;
 class OfflineManagerLegacy {
   private _hasInitialized: boolean;
   private _offlinePacks: Record<string, OfflinePack>;
+  private _cacheRevision = 0;
+  private _refreshId = 0;
 
   constructor() {
     this._hasInitialized = false;
@@ -55,6 +57,7 @@ class OfflineManagerLegacy {
     const nativeOfflinePack =
       await MapboxOfflineManager.createPack(packOptions);
     this._offlinePacks[packOptions.name] = new OfflinePack(nativeOfflinePack);
+    this._cacheRevision++;
   }
 
   /**
@@ -101,6 +104,7 @@ class OfflineManagerLegacy {
     if (offlinePack) {
       await MapboxOfflineManager.deletePack(name);
       delete this._offlinePacks[name];
+      this._cacheRevision++;
     }
   }
 
@@ -125,9 +129,11 @@ class OfflineManagerLegacy {
    * @return {void}
    */
   async resetDatabase(): Promise<void> {
+    this._cacheRevision++;
     await MapboxOfflineManager.resetDatabase();
     this._offlinePacks = {};
-    await this._initialize(true);
+    this._cacheRevision++;
+    await this._initialize(true, true);
   }
 
   /**
@@ -139,7 +145,7 @@ class OfflineManagerLegacy {
    * @return {Array<OfflinePack>}
    */
   async getPacks(): Promise<OfflinePack[]> {
-    await this._initialize();
+    await this._initialize(true, true);
     return Object.keys(this._offlinePacks).map(
       (name) => this._offlinePacks[name],
     ) as OfflinePack[];
@@ -173,18 +179,35 @@ class OfflineManagerLegacy {
     MapboxOfflineManager.setTileCountLimit(limit);
   }
 
-  async _initialize(forceInit?: boolean): Promise<boolean> {
+  async _initialize(
+    forceInit?: boolean,
+    replaceExistingPacks = false,
+  ): Promise<boolean> {
     if (this._hasInitialized && !forceInit) {
       return true;
     }
 
+    const cacheRevision = this._cacheRevision;
+    const refreshId = ++this._refreshId;
     const nativeOfflinePacks = await MapboxOfflineManager.getPacks();
+
+    // A mutation or a newer refresh makes this native snapshot obsolete.
+    if (
+      cacheRevision !== this._cacheRevision ||
+      refreshId !== this._refreshId
+    ) {
+      return true;
+    }
+    const offlinePacks: Record<string, OfflinePack> = replaceExistingPacks
+      ? {}
+      : this._offlinePacks;
 
     for (const nativeOfflinePack of nativeOfflinePacks) {
       const offlinePack = new OfflinePack(nativeOfflinePack);
-      this._offlinePacks[offlinePack.name] = offlinePack;
+      offlinePacks[offlinePack.name] = offlinePack;
     }
 
+    this._offlinePacks = offlinePacks;
     this._hasInitialized = true;
     return true;
   }
