@@ -4,7 +4,9 @@ import android.content.Context
 import android.graphics.BitmapFactory
 import android.os.Handler
 import android.os.Looper
+import android.os.SystemClock
 import android.view.Gravity
+import android.view.MotionEvent
 import android.view.View
 import android.view.View.OnLayoutChangeListener
 import android.view.ViewGroup
@@ -50,6 +52,7 @@ import com.rnmapbox.rnmbx.components.location.LocationComponentManager
 import com.rnmapbox.rnmbx.components.location.RNMBXNativeUserLocation
 import com.rnmapbox.rnmbx.components.mapview.helpers.CameraChangeReason
 import com.rnmapbox.rnmbx.components.mapview.helpers.CameraChangeTracker
+import com.rnmapbox.rnmbx.components.mapview.helpers.LongPressCameraGesture
 import com.rnmapbox.rnmbx.components.styles.layers.RNMBXLayer
 import com.rnmapbox.rnmbx.components.styles.light.RNMBXLight
 import com.rnmapbox.rnmbx.components.styles.sources.RNMBXSource
@@ -179,6 +182,24 @@ open class RNMBXMapView(private val mContext: Context, var mManager: RNMBXMapVie
     private var mStyleURL: String? = null
     val isDestroyed = false
     private var mCamera: RNMBXCamera? = null
+    private val longPressCameraGesture = LongPressCameraGesture()
+
+    override fun dispatchTouchEvent(event: MotionEvent): Boolean {
+        if (longPressCameraGesture.onTouch(event.actionMasked)) return true
+        return super.dispatchTouchEvent(event)
+    }
+
+    fun cancelLongPressForCameraUpdate() {
+        if (!longPressCameraGesture.takeCameraControl()) return
+        val now = SystemClock.uptimeMillis()
+        val cancel = MotionEvent.obtain(now, now, MotionEvent.ACTION_CANCEL, 0f, 0f, 0)
+        try {
+            // Cancel the SDK gesture, then consume its remaining touches so panning cannot restart.
+            super.dispatchTouchEvent(cancel)
+        } finally {
+            cancel.recycle()
+        }
+    }
     private val mFeatures = mutableListOf<FeatureEntry>()
     private var mQueuedFeatures: MutableList<AbstractMapFeature>? = ArrayList()
     private val mCameraChangeTracker = CameraChangeTracker()
@@ -812,6 +833,7 @@ open class RNMBXMapView(private val mContext: Context, var mManager: RNMBXMapVie
         if (screenPointPx != null) {
             val screenPointDp = toDp(screenPointPx)
             val event = MapClickEvent(_this, LatLng(point), screenPointDp, EventTypes.MAP_LONG_CLICK)
+            longPressCameraGesture.onLongPress()
             mManager.handleEvent(event)
         }
 
