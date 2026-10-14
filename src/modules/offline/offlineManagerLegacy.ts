@@ -21,6 +21,7 @@ class OfflineManagerLegacy {
   private _offlinePacks: Record<string, OfflinePack>;
   private _cacheRevision = 0;
   private _refreshId = 0;
+  private _appliedRefreshId = 0;
 
   constructor() {
     this._hasInitialized = false;
@@ -191,10 +192,10 @@ class OfflineManagerLegacy {
     const refreshId = ++this._refreshId;
     const nativeOfflinePacks = await MapboxOfflineManager.getPacks();
 
-    // A mutation or a newer refresh makes this native snapshot obsolete.
+    // Only an applied newer refresh or a mutation makes this snapshot obsolete.
     if (
       cacheRevision !== this._cacheRevision ||
-      refreshId !== this._refreshId
+      refreshId < this._appliedRefreshId
     ) {
       return true;
     }
@@ -208,6 +209,7 @@ class OfflineManagerLegacy {
     }
 
     this._offlinePacks = offlinePacks;
+    this._appliedRefreshId = refreshId;
     this._hasInitialized = true;
     return true;
   }

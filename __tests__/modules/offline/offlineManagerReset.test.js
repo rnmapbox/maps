@@ -28,6 +28,10 @@ describe.each([
     minZoom: 1,
     maxZoom: 2,
   };
+  const storedPack = {
+    bounds: options.bounds,
+    metadata: JSON.stringify({ name: options.name }),
+  };
   let packs;
   let getPacks;
   let deletePack;
@@ -68,6 +72,70 @@ describe.each([
     jest.restoreAllMocks();
     if (originalReset === undefined) delete native.resetDatabase;
     else native.resetDatabase = originalReset;
+  });
+
+  it('deletes a stored pack when its initial read finishes before a newer refresh', async () => {
+    packs.set(options.name, storedPack);
+    const first = deferred();
+    const second = deferred();
+    getPacks
+      .mockReturnValueOnce(first.promise)
+      .mockReturnValueOnce(second.promise);
+
+    const deletion = manager.deletePack(options.name);
+    const refresh = manager.getPacks();
+    first.resolve([storedPack]);
+    await first.promise;
+    await Promise.resolve();
+    second.resolve([storedPack]);
+    await Promise.all([deletion, refresh]);
+
+    expect(deletePack).toHaveBeenCalledWith(options.name);
+    expect(packs.has(options.name)).toBe(false);
+  });
+
+  it('returns stored packs when the first cold-start refresh finishes first', async () => {
+    packs.set(options.name, storedPack);
+    const first = deferred();
+    const second = deferred();
+    getPacks
+      .mockReturnValueOnce(first.promise)
+      .mockReturnValueOnce(second.promise);
+
+    const olderRefresh = manager.getPacks();
+    const newerRefresh = manager.getPacks();
+    first.resolve([storedPack]);
+    await first.promise;
+    await Promise.resolve();
+    second.resolve([storedPack]);
+    const [olderPacks, newerPacks] = await Promise.all([
+      olderRefresh,
+      newerRefresh,
+    ]);
+
+    expect(olderPacks.map((pack) => pack.name)).toEqual([options.name]);
+    expect(newerPacks.map((pack) => pack.name)).toEqual([options.name]);
+  });
+
+  it('uses a successful older response when a newer cold-start refresh fails', async () => {
+    packs.set(options.name, storedPack);
+    const first = deferred();
+    const second = deferred();
+    getPacks
+      .mockReturnValueOnce(first.promise)
+      .mockReturnValueOnce(second.promise);
+
+    const olderRefresh = manager.getPacks();
+    const newerRefresh = manager.getPacks();
+    second.reject(new Error('refresh failed'));
+    await expect(newerRefresh).rejects.toThrow('refresh failed');
+    first.resolve([storedPack]);
+
+    expect((await olderRefresh).map((pack) => pack.name)).toEqual([
+      options.name,
+    ]);
+    await manager.deletePack(options.name);
+    expect(deletePack).toHaveBeenCalledWith(options.name);
   });
 
   it('preserves a pack created after an older native snapshot was requested', async () => {
