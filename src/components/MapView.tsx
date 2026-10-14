@@ -220,6 +220,11 @@ type Props = ViewProps & {
   maxPitch?: number;
 
   /**
+   * Minimum allowed pitch in degrees. Mirrors the Mapbox map option `minPitch`.
+   */
+  minPitch?: number;
+
+  /**
    * Enable/Disable rotation on map
    */
   rotateEnabled?: boolean;
