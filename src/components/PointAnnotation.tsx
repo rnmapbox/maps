@@ -59,8 +59,19 @@ type Props = BaseProps & {
 
   /**
    * Enable or disable dragging. Defaults to false.
+   * When enabled, a long press is required to begin dragging (iOS and Android).
+   * On Android, set `androidInstantDraggable` to start dragging on touch-move instead.
    */
   draggable?: boolean;
+
+  /**
+   * Android only. When `draggable` is true, start dragging on touch-move instead of
+   * waiting for a long press. This restores the previous Android behavior.
+   * Defaults to false. Has no effect on iOS, which always requires a long press.
+   *
+   * @platform android
+   */
+  androidInstantDraggable?: boolean;
 
   /**
    * The center point (specified as a map coordinate) of the annotation.
@@ -135,6 +146,7 @@ class PointAnnotation extends NativeBridgeComponent(
   static defaultProps = {
     anchor: { x: 0.5, y: 0.5 },
     draggable: false,
+    androidInstantDraggable: false,
   };
 
   _nativeRef: NativePointAnnotationRef | null = null;
@@ -228,6 +240,7 @@ class PointAnnotation extends NativeBridgeComponent(
       anchor: this.props.anchor,
       selected: this.props.selected,
       draggable: this.props.draggable,
+      androidInstantDraggable: this.props.androidInstantDraggable,
       style: [this.props.style, styles.container],
       onMapboxPointAnnotationSelected: this._onSelected,
       onMapboxPointAnnotationDeselected: this._onDeselected,

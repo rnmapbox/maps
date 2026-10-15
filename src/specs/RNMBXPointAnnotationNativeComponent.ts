@@ -26,6 +26,7 @@ type OnMapboxPointAnnotationSelectedEventType = {
 export interface NativeProps extends ViewProps {
   coordinate: UnsafeMixed<string>;
   draggable: UnsafeMixed<boolean>;
+  androidInstantDraggable?: UnsafeMixed<boolean>;
   id: UnsafeMixed<string>;
   anchor: UnsafeMixed<any>;
   selected: UnsafeMixed<boolean>;

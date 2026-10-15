@@ -94,6 +94,15 @@ class RNMBXPointAnnotationManager(reactApplicationContext: ReactApplicationConte
         annotation.setDraggable(draggable.asBoolean())
     }
 
+    @ReactProp(name = "androidInstantDraggable")
+    override fun setAndroidInstantDraggable(annotation: RNMBXPointAnnotation, value: Dynamic) {
+        if (value.isNull) {
+            annotation.setAndroidInstantDraggable(false)
+            return
+        }
+        annotation.setAndroidInstantDraggable(value.asBoolean())
+    }
+
     companion object {
         const val REACT_CLASS = "RNMBXPointAnnotation"
     }
