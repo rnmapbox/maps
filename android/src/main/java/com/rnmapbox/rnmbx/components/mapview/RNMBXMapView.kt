@@ -202,7 +202,27 @@ open class RNMBXMapView(private val mContext: Context, var mManager: RNMBXMapVie
 
     private var wasGestureActive = false
     private var isGestureActive = false
-    private val cameraChangeEventGate = CameraChangeEventGate { dispatchCameraChangedEvents() }
+    private val startupCameraEvents = object {
+        private var isReady = false
+        private var hasPendingChange = false
+
+        fun onCameraChanged() {
+            if (!isReady) {
+                hasPendingChange = true
+                return
+            }
+            sendCameraChangedEvents()
+        }
+
+        fun markReady() {
+            if (isReady) return
+            isReady = true
+            if (hasPendingChange) {
+                hasPendingChange = false
+                sendCameraChangedEvents()
+            }
+        }
+    }
 
     var mapViewImpl: String? = null
 
@@ -261,7 +281,7 @@ open class RNMBXMapView(private val mContext: Context, var mManager: RNMBXMapVie
         val _this = this
 
         map.addOnCameraChangeListener(OnCameraChangeListener { cameraChangedEventData ->
-            sendCameraChangedEvents()
+            startupCameraEvents.onCameraChanged()
         })
 
         map.addOnMapIdleListener(OnMapIdleListener { mapIdleEventData ->
@@ -857,10 +877,6 @@ open class RNMBXMapView(private val mContext: Context, var mManager: RNMBXMapVie
     // region Events
 
     private fun sendCameraChangedEvents() {
-        cameraChangeEventGate.onCameraChanged()
-    }
-
-    private fun dispatchCameraChangedEvents() {
         handleMapChangedEvent(EventTypes.REGION_IS_CHANGING)
         handleMapChangedEvent(EventTypes.CAMERA_CHANGED)
     }
@@ -1631,10 +1647,8 @@ open class RNMBXMapView(private val mContext: Context, var mManager: RNMBXMapVie
         super.onAttachedToWindow()
         Handler(Looper.getMainLooper()).post {
             lifecycle.afterAttachFromLooper()
-            // Camera.addToMap applies defaultSettings in these attachment callbacks.
-            // Forward the current camera only after they finish, rather than the
-            // SDK's earlier startup positions. Maps without a Camera also become ready.
-            cameraChangeEventGate.markReady()
+            // Camera.addToMap applies defaultSettings in the attach callbacks (#4213).
+            startupCameraEvents.markReady()
         }
     }
 
