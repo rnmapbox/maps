@@ -303,9 +303,22 @@ type Props = ViewProps & {
   scaleBarUnits?: 'metric' | 'imperial' | 'nautical';
 
   /**
-   * [Android only] Enable/Disable use of GLSurfaceView instead of TextureView.
+   * [Android only] Enable/Disable use of GLSurfaceView instead of TextureView. Defaults to `true`, or to `false` when `transparent` is set.
+   * Only applies when the map is created.
    */
   surfaceView?: boolean;
+
+  /**
+   * Renders the map with a transparent background, so views behind the map show through wherever the style's background is transparent or semi-transparent.
+   * The style must provide that background itself, e.g. a `background` layer with `background-color: rgba(0,0,0,0)`; maps with regular Mapbox styles stay opaque.
+   * Snapshots taken with `takeSnap` keep the transparency.
+   *
+   * On Android this uses a TextureView, which is slower, uses more memory and lags one frame behind the rest of the UI. It only applies when the map is created and
+   * overrides `surfaceView={true}`.
+   *
+   * Globe fog and atmosphere may not composite correctly over a transparent background.
+   */
+  transparent?: boolean;
 
   /**
    * [Android only] Experimental, call requestDisallowInterceptTouchEvent on parent with onTochEvent, this allows touch interaction to work
@@ -515,7 +528,6 @@ class MapView extends NativeBridgeComponent(
     compassFadeWhenNorth: false,
     logoEnabled: true,
     scaleBarEnabled: true,
-    surfaceView: true,
     requestDisallowInterceptTouchEvent: false,
     regionWillChangeDebounceTime: 10,
     regionDidChangeDebounceTime: 500,

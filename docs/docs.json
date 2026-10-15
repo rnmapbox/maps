@@ -5463,8 +5463,15 @@
         "name": "surfaceView",
         "required": false,
         "type": "boolean",
-        "default": "true",
-        "description": "[Android only] Enable/Disable use of GLSurfaceView instead of TextureView."
+        "default": "none",
+        "description": "[Android only] Enable/Disable use of GLSurfaceView instead of TextureView. Defaults to `true`, or to `false` when `transparent` is set.\nOnly applies when the map is created."
+      },
+      {
+        "name": "transparent",
+        "required": false,
+        "type": "boolean",
+        "default": "none",
+        "description": "Renders the map with a transparent background, so views behind the map show through wherever the style's background is transparent or semi-transparent.\nThe style must provide that background itself, e.g. a `background` layer with `background-color: rgba(0,0,0,0)`; maps with regular Mapbox styles stay opaque.\nSnapshots taken with `takeSnap` keep the transparency.\n\nOn Android this uses a TextureView, which is slower, uses more memory and lags one frame behind the rest of the UI. It only applies when the map is created and\noverrides `surfaceView={true}`.\n\nGlobe fog and atmosphere may not composite correctly over a transparent background."
       },
       {
         "name": "requestDisallowInterceptTouchEvent",

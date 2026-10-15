@@ -535,6 +535,7 @@ open class RNMBXMapView(private val mContext: Context, var mManager: RNMBXMapVie
 
     // region properties
     var surfaceView: Boolean? = null
+    var transparent: Boolean = false
 
     enum class Property(val _apply: (RNMBXMapView) -> Unit) : PropertyUpdaterWithName<RNMBXMapView> {
         PROJECTION(RNMBXMapView::applyProjection),
@@ -1291,7 +1292,10 @@ open class RNMBXMapView(private val mContext: Context, var mManager: RNMBXMapVie
         }
         if (!created) {
             var options: MapInitOptions? = null
-            if (surfaceView == false) {
+            if (transparent && surfaceView == true) {
+                Logger.w(LOG_TAG, "surfaceView is ignored with transparent, a SurfaceView cannot be transparent so TextureView is used")
+            }
+            if (surfaceView == false || transparent) {
                 options = MapInitOptions(context = mContext, textureView = true)
             }
             val mapView = if (options != null) MapView(mContext, options) else MapView(mContext)

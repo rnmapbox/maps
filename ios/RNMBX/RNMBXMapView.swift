@@ -450,6 +450,7 @@ open class RNMBXMapView: UIView, RCTInvalidating {
     case styleURL
     case gestureSettings
     case preferredFramesPerSecond
+    case transparent
 
     func apply(_ map: RNMBXMapView) -> Void {
       switch self {
@@ -488,6 +489,8 @@ open class RNMBXMapView: UIView, RCTInvalidating {
         map.applyGestureSettings()
       case .preferredFramesPerSecond:
         map.applyPreferredFramesPerSecond()
+      case .transparent:
+        map.applyTransparent()
       }
     }
   }
@@ -526,6 +529,21 @@ open class RNMBXMapView: UIView, RCTInvalidating {
       if let projection = projection {
         try self.mapboxMap.style.setProjection(projection)
       }
+    }
+  }
+
+  var transparent: Bool? = nil
+
+  @objc public func setReactTransparent(_ value: Bool) {
+    transparent = value
+    changed(.transparent)
+  }
+
+  func applyTransparent() {
+    if let transparent = transparent {
+      mapView.isOpaque = !transparent
+      // The new opacity only shows from the next rendered frame.
+      mapView.mapboxMap.triggerRepaint()
     }
   }
 
@@ -1613,7 +1631,7 @@ extension RNMBXMapView
     writeToDisk:Bool) -> URL
   {
     let format = UIGraphicsImageRendererFormat(for: self.traitCollection)
-    format.opaque = true
+    format.opaque = _mapView?.isOpaque ?? true
     let snapshot = UIGraphicsImageRenderer(bounds: self.bounds, format: format).image { _ in
       self.drawHierarchy(in: self.bounds, afterScreenUpdates: true)
     }

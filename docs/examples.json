@@ -510,6 +510,18 @@
       },
       {
         "metadata": {
+          "title": "Transparent Map",
+          "tags": [
+            "MapView#transparent"
+          ],
+          "docs": "\nRenders the map over coloured stripes. With `transparent` on, the stripes show through wherever the style's background is transparent or semi-transparent; the Streets style stays opaque.\n\nOn Android `transparent` is applied when the map is created, so toggling it here has no effect until the screen is reopened.\n"
+        },
+        "fullPath": "example/src/examples/Map/TransparentMap.tsx",
+        "relPath": "Map/TransparentMap.tsx",
+        "name": "TransparentMap"
+      },
+      {
+        "metadata": {
           "title": "Two Map Views",
           "tags": [
             "MapView"

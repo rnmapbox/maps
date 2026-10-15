@@ -1,8 +1,9 @@
 import * as React from 'react';
-import { render } from '@testing-library/react-native';
+import { fireEvent, render } from '@testing-library/react-native';
 
 import MapView from '../../src/components/MapView';
 import NativeMapViewModule from '../../src/specs/NativeMapViewModule';
+import NativeMapView from '../../src/specs/RNMBXMapViewNativeComponent';
 
 // `_runNativeMethod` lives on the class produced by `NativeBridgeComponent`,
 // which `MapView` extends - it is not an own property of `MapView.prototype`.
@@ -172,6 +173,32 @@ describe('MapView', () => {
       expect(runNativeMethod).toHaveBeenCalledTimes(1);
       expect(unhandledRejection).not.toHaveBeenCalled();
       expect(warnSpy).not.toHaveBeenCalled();
+    });
+  });
+
+  describe('surfaceView and transparent', () => {
+    const renderNativeProps = (props) => {
+      const { getByTestId, UNSAFE_getByType } = render(
+        <MapView testID="map" {...props} />,
+      );
+      fireEvent(getByTestId('map'), 'layout', {
+        nativeEvent: { layout: { width: 100, height: 100 } },
+      });
+      return UNSAFE_getByType(NativeMapView).props;
+    };
+
+    // Native code can only tell an explicit `surfaceView` from the default
+    // when the default is not filled in on the JS side.
+    test('does not pass surfaceView unless set', () => {
+      const props = renderNativeProps({});
+      expect(props).not.toHaveProperty('surfaceView');
+      expect(props).not.toHaveProperty('transparent');
+    });
+
+    test('passes both explicitly set props through', () => {
+      const props = renderNativeProps({ transparent: true, surfaceView: true });
+      expect(props.transparent).toBe(true);
+      expect(props.surfaceView).toBe(true);
     });
   });
 });
