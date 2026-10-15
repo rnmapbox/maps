@@ -3,6 +3,9 @@
 @objc(RNMBXViewport)
 open class RNMBXViewport : UIView, RNMBXMapAndMapViewComponent, ViewportStatusObserver {
   var mapView: MapView? = nil
+  weak var map: RNMBXMapView? = nil
+  var gestureHandler: RNMBXViewportGestureHandler? = nil
+  var gestureIdlePending = false
 
   // MARK: React properties
   @objc
@@ -29,6 +32,11 @@ open class RNMBXViewport : UIView, RNMBXMapAndMapViewComponent, ViewportStatusOb
                                to toStatus: ViewportStatus,
                                reason: ViewportStatusChangeReason)
   {
+    var reason = reason
+    if gestureIdlePending, case .idle = toStatus, reason == .idleRequested {
+      gestureIdlePending = false
+      reason = .userInteraction
+    }
     onStatusChanged?([
       "type": "statuschanged",
       "payload": [
@@ -38,8 +46,9 @@ open class RNMBXViewport : UIView, RNMBXMapAndMapViewComponent, ViewportStatusOb
       ]])
   }
 
+  /// `NSNumber` (boolean) or a dictionary of gesture names to booleans.
   @objc
-  public var transitionsToIdleUponUserInteraction: NSNumber? = nil {
+  public var transitionsToIdleUponUserInteraction: Any? = nil {
     didSet {
       if let mapView = mapView {
         apply(mapView: mapView)
@@ -53,6 +62,7 @@ open class RNMBXViewport : UIView, RNMBXMapAndMapViewComponent, ViewportStatusOb
 
   public func addToMap(_ map: RNMBXMapView, mapView: MapView, style: Style) {
     self.mapView = mapView
+    self.map = map
     applyHasStatusChanged(mapView: mapView)
     apply(mapView: mapView)
   }
@@ -61,14 +71,38 @@ open class RNMBXViewport : UIView, RNMBXMapAndMapViewComponent, ViewportStatusOb
     if (hasStatusChanged) {
       mapView.viewport.removeStatusObserver(self)
     }
+    gestureHandler?.detach()
+    gestureHandler = nil
     self.mapView = nil
+    self.map = nil
     return true
   }
 
   func apply(mapView: MapView) {
-    if let value = transitionsToIdleUponUserInteraction {
+    if let value = transitionsToIdleUponUserInteraction as? NSNumber {
+      gestureHandler?.detach()
+      gestureHandler = nil
       var origOptions = mapView.viewport.options
       origOptions.transitionsToIdleUponUserInteraction = value.boolValue
+      mapView.viewport.options = origOptions
+    } else if let value = transitionsToIdleUponUserInteraction as? [String: Any] {
+      let gestures = RNMBXViewportGestureHandler.IdleGestures(value)
+      if let gestureHandler = gestureHandler {
+        gestureHandler.idleGestures = gestures
+      } else if let map = map {
+        gestureHandler = RNMBXViewportGestureHandler(map: map, mapView: mapView, idleGestures: gestures) { [weak self] in
+          guard let self = self else { return }
+          self.gestureIdlePending = self.hasStatusChanged
+        }
+      }
+      var origOptions = mapView.viewport.options
+      origOptions.transitionsToIdleUponUserInteraction = false
+      mapView.viewport.options = origOptions
+    } else if let gestureHandler = gestureHandler {
+      gestureHandler.detach()
+      self.gestureHandler = nil
+      var origOptions = mapView.viewport.options
+      origOptions.transitionsToIdleUponUserInteraction = true
       mapView.viewport.options = origOptions
     }
   }
@@ -338,4 +372,190 @@ func toPadding(_ value: [String: NSNumber]) -> UIEdgeInsets {
   }
   
   return result
+}
+
+/// Implements the object form of `transitionsToIdleUponUserInteraction`: the SDK's own option is off,
+/// and this idles the viewport only when one of the selected gestures begins.
+class RNMBXViewportGestureHandler: NSObject, GestureManagerDelegate, ViewportStatusObserver {
+  struct IdleGestures: Equatable {
+    var pan = true
+    var pinch = true
+    var doubleTap = true
+    var rotate = true
+    var pitch = true
+
+    init(_ value: [String: Any]) {
+      pan = (value["pan"] as? NSNumber)?.boolValue ?? true
+      pinch = (value["pinch"] as? NSNumber)?.boolValue ?? true
+      doubleTap = (value["doubleTap"] as? NSNumber)?.boolValue ?? true
+      rotate = (value["rotate"] as? NSNumber)?.boolValue ?? true
+      pitch = (value["pitch"] as? NSNumber)?.boolValue ?? true
+    }
+  }
+
+  var idleGestures: IdleGestures {
+    didSet { updateZoomOverrides() }
+  }
+
+  private weak var map: RNMBXMapView?
+  private weak var mapView: MapView?
+  private let willIdle: () -> Void
+
+  private var cameraChangedCancelable: AnyCancelable? = nil
+  /// The focal point this handler set, or nil if it isn't managing the focal point.
+  private var managedFocalPoint: CGPoint? = nil
+  private var managesPinchPan = false
+
+  init(map: RNMBXMapView, mapView: MapView, idleGestures: IdleGestures, willIdle: @escaping () -> Void) {
+    self.map = map
+    self.mapView = mapView
+    self.idleGestures = idleGestures
+    self.willIdle = willIdle
+    super.init()
+    map.addGestureDelegate(self)
+    mapView.viewport.addStatusObserver(self)
+    updateZoomOverrides()
+  }
+
+  func detach() {
+    stopZoomOverrides()
+    map?.removeGestureDelegate(self)
+    mapView?.viewport.removeStatusObserver(self)
+  }
+
+  // MARK: GestureManagerDelegate
+
+  func gestureManager(_ gestureManager: GestureManager, didBegin gestureType: GestureType) {
+    guard let mapView = mapView else { return }
+    let idles: Bool
+    switch gestureType {
+    case .pan:
+      idles = idleGestures.pan
+    case .pinch, .quickZoom:
+      idles = idleGestures.pinch
+    case .doubleTapToZoomIn, .doubleTouchToZoomOut:
+      idles = idleGestures.doubleTap
+    case .rotation:
+      idles = idleGestures.rotate
+    case .pitch:
+      idles = idleGestures.pitch
+    @unknown default:
+      idles = true
+    }
+
+    if idles {
+      // the SDK option, when on, also cancels camera animations on touch
+      mapView.camera.cancelAnimations()
+      if case .idle = mapView.viewport.status { return }
+      willIdle()
+      mapView.viewport.idle()
+    } else if let followPuck = followPuckState(mapView.viewport.status) {
+      switch gestureType {
+      case .pinch, .quickZoom, .doubleTapToZoomIn, .doubleTouchToZoomOut:
+        followPuck.options.zoom = nil
+      case .rotation:
+        followPuck.options.bearing = nil
+      case .pitch:
+        followPuck.options.pitch = nil
+      default:
+        break
+      }
+    }
+  }
+
+  func gestureManager(_ gestureManager: GestureManager, didEnd gestureType: GestureType, willAnimate: Bool) {}
+
+  func gestureManager(_ gestureManager: GestureManager, didEndAnimatingFor gestureType: GestureType) {}
+
+  // MARK: ViewportStatusObserver
+
+  func viewportStatusDidChange(from fromStatus: ViewportStatus, to toStatus: ViewportStatus, reason: ViewportStatusChangeReason) {
+    updateZoomOverrides()
+  }
+
+  // MARK: Zooming around the puck
+
+  private func followPuckState(_ status: ViewportStatus) -> FollowPuckViewportState? {
+    switch status {
+    case .state(let state):
+      return state as? FollowPuckViewportState
+    case .transition(_, let toState):
+      return toState as? FollowPuckViewportState
+    case .idle:
+      return nil
+    }
+  }
+
+  private func updateZoomOverrides() {
+    guard let mapView = mapView else { return }
+    let following: Bool
+    if case .state(let state) = mapView.viewport.status, state is FollowPuckViewportState {
+      following = true
+    } else {
+      following = false
+    }
+    if following && (!idleGestures.pinch || !idleGestures.doubleTap) {
+      startZoomOverrides(mapView)
+    } else {
+      stopZoomOverrides()
+    }
+  }
+
+  private func startZoomOverrides(_ mapView: MapView) {
+    guard cameraChangedCancelable == nil else { return }
+
+    if mapView.gestures.options.focalPoint == nil {
+      let focalPoint = puckScreenPoint(mapView)
+      mapView.gestures.options.focalPoint = focalPoint
+      managedFocalPoint = focalPoint
+    }
+
+    // pinch ignores focalPoint while pinchPanEnabled is set, and it makes a drifting pinch also begin a pan
+    if !pinchPanSetByApp() && mapView.gestures.options.pinchPanEnabled {
+      mapView.gestures.options.pinchPanEnabled = false
+      managesPinchPan = true
+    }
+
+    cameraChangedCancelable = mapView.mapboxMap.onCameraChanged.observe { [weak self, weak mapView] _ in
+      guard let self = self, let mapView = mapView, let managed = self.managedFocalPoint else { return }
+      guard mapView.gestures.options.focalPoint == managed else {
+        // someone else set a focal point, theirs wins
+        self.managedFocalPoint = nil
+        return
+      }
+      let focalPoint = self.puckScreenPoint(mapView)
+      if focalPoint != managed {
+        mapView.gestures.options.focalPoint = focalPoint
+        self.managedFocalPoint = focalPoint
+      }
+    }
+  }
+
+  private func stopZoomOverrides() {
+    cameraChangedCancelable?.cancel()
+    cameraChangedCancelable = nil
+    guard let mapView = mapView else { return }
+    if let managed = managedFocalPoint, mapView.gestures.options.focalPoint == managed {
+      mapView.gestures.options.focalPoint = nil
+    }
+    managedFocalPoint = nil
+    if managesPinchPan && !pinchPanSetByApp() && !mapView.gestures.options.pinchPanEnabled {
+      mapView.gestures.options.pinchPanEnabled = true
+    }
+    managesPinchPan = false
+  }
+
+  private func pinchPanSetByApp() -> Bool {
+    return map?.gestureSettings.pinchPanEnabled != nil || map?.scrollEnabled == false
+  }
+
+  /// While following, the puck is at the centre of the padded viewport.
+  private func puckScreenPoint(_ mapView: MapView) -> CGPoint {
+    let padding = mapView.mapboxMap.cameraState.padding
+    let bounds = mapView.bounds
+    return CGPoint(
+      x: padding.left + (bounds.width - padding.left - padding.right) / 2.0,
+      y: padding.top + (bounds.height - padding.top - padding.bottom) / 2.0
+    )
+  }
 }

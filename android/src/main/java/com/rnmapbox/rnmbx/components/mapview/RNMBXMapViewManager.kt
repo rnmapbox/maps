@@ -160,6 +160,7 @@ open class RNMBXMapViewManager(context: ReactApplicationContext, val viewTagReso
                    Logger.e(LOG_TAG, "gestureSettings map is null")
                    return@gesturesPlugin Unit
                }
+               mapView.pinchPanEnabledSetByApp = map.hasKey("pinchPanEnabled") && !map.isNull("pinchPanEnabled")
                this.updateSettings {
                    map.getAndLogIfNotBoolean("doubleTapToZoomInEnabled", LOG_TAG)?.let {
                        this.doubleTapToZoomInEnabled = it
