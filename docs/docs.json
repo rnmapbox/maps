@@ -6493,7 +6493,14 @@
         "required": false,
         "type": "boolean",
         "default": "false",
-        "description": "Enable or disable dragging. Defaults to false."
+        "description": "Enable or disable dragging. Defaults to false.\nWhen enabled, a long press is required to begin dragging (iOS and Android).\nOn Android, set `androidInstantDraggable` to start dragging on touch-move instead."
+      },
+      {
+        "name": "androidInstantDraggable",
+        "required": false,
+        "type": "boolean",
+        "default": "false",
+        "description": "Android only. When `draggable` is true, start dragging on touch-move instead of\nwaiting for a long press. This restores the previous Android behavior.\nDefaults to false. Has no effect on iOS, which always requires a long press.\n\n@platform android"
       },
       {
         "name": "coordinate",
