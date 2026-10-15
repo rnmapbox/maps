@@ -12,8 +12,10 @@
 		13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
 		13B07FC11A68108700A75B9A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
 		414C0719E539AA79660FB51C /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = E25ADBA51759ED101B3FC90F /* PrivacyInfo.xcprivacy */; };
+		49449BC0CAF7B1C3C0DD0BF6 /* LongPressCameraTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F27A5E52F123F8A265890BC2 /* LongPressCameraTests.swift */; };
 		51C0260825301F99008C5283 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 51C0260725301F99008C5283 /* LaunchScreen.storyboard */; };
 		D8E751FC2B4D755200FEFCF7 /* DebugWorkaround.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8E751FB2B4D755200FEFCF7 /* DebugWorkaround.swift */; };
+		EAC01AC0A18DB53884E0E1B8 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EF33DF423399F663308CE368 /* Foundation.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -29,6 +31,7 @@
 		13B07FB71A68108700A75B9A /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = main.m; path = RNMapboxExample/main.m; sourceTree = "<group>"; };
 		1DDF0404A5884CA6A9492067 /* Zocial.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Zocial.ttf; path = "../node_modules/react-native-vector-icons/Fonts/Zocial.ttf"; sourceTree = "<group>"; };
 		364D3AF88B4E4C1AA568F0FA /* SimpleLineIcons.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = SimpleLineIcons.ttf; path = "../node_modules/react-native-vector-icons/Fonts/SimpleLineIcons.ttf"; sourceTree = "<group>"; };
+		39D74405ADC3C799193BFBBC /* LongPressCameraTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = LongPressCameraTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		425D02CB50EE42159354FD53 /* Fontisto.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Fontisto.ttf; path = "../node_modules/react-native-vector-icons/Fonts/Fontisto.ttf"; sourceTree = "<group>"; };
 		4EDFCE83912B4B4844380179 /* libPods-RNMapboxExample.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-RNMapboxExample.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		51C0260725301F99008C5283 /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = LaunchScreen.storyboard; path = RNMapboxExample/LaunchScreen.storyboard; sourceTree = "<group>"; };
@@ -48,6 +51,8 @@
 		E25ADBA51759ED101B3FC90F /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; includeInIndex = 1; name = PrivacyInfo.xcprivacy; path = RNMapboxExample/PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
 		ED2971642150620600B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = Platforms/AppleTVOS.platform/Developer/SDKs/AppleTVOS12.0.sdk/System/Library/Frameworks/JavaScriptCore.framework; sourceTree = DEVELOPER_DIR; };
+		EF33DF423399F663308CE368 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
+		F27A5E52F123F8A265890BC2 /* LongPressCameraTests.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = LongPressCameraTests.swift; path = ../e2e/LongPressCameraTests.swift; sourceTree = "<group>"; };
 		FB39D57B6FFB431886261B00 /* MaterialIcons.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = MaterialIcons.ttf; path = "../node_modules/react-native-vector-icons/Fonts/MaterialIcons.ttf"; sourceTree = "<group>"; };
 		FE019B5E48F8468987FC5960 /* FontAwesome5_Solid.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = FontAwesome5_Solid.ttf; path = "../node_modules/react-native-vector-icons/Fonts/FontAwesome5_Solid.ttf"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -58,6 +63,14 @@
 			buildActionMask = 2147483647;
 			files = (
 				02C925EFAD51B3C2F1BD6FFF /* libPods-RNMapboxExample.a in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		2A4886B19353144BEEB5BCC7 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				EAC01AC0A18DB53884E0E1B8 /* Foundation.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -126,8 +139,17 @@
 				ED297162215061F000B7C4FE /* JavaScriptCore.framework */,
 				ED2971642150620600B7C4FE /* JavaScriptCore.framework */,
 				4EDFCE83912B4B4844380179 /* libPods-RNMapboxExample.a */,
+				30B5CE75E8D9E88F56D46437 /* iOS */,
 			);
 			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		30B5CE75E8D9E88F56D46437 /* iOS */ = {
+			isa = PBXGroup;
+			children = (
+				EF33DF423399F663308CE368 /* Foundation.framework */,
+			);
+			name = iOS;
 			sourceTree = "<group>";
 		};
 		832341AE1AAA6A7D00B99B32 /* Libraries */ = {
@@ -147,6 +169,7 @@
 				2D16E6871FA4F8E400B85C8A /* Frameworks */,
 				EE5EDD88BB42C11717A56BB9 /* Pods */,
 				29082F7A5E3B4C188AA82FB2 /* Resources */,
+				F27A5E52F123F8A265890BC2 /* LongPressCameraTests.swift */,
 			);
 			indentWidth = 2;
 			sourceTree = "<group>";
@@ -157,6 +180,7 @@
 			isa = PBXGroup;
 			children = (
 				13B07F961A680F5B00A75B9A /* RNMapboxExample.app */,
+				39D74405ADC3C799193BFBBC /* LongPressCameraTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -195,6 +219,23 @@
 			productReference = 13B07F961A680F5B00A75B9A /* RNMapboxExample.app */;
 			productType = "com.apple.product-type.application";
 		};
+		1610B47F6AE898E466616EEB /* LongPressCameraTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 644CDFE4A12E5A6D70FFFCAF /* Build configuration list for PBXNativeTarget "LongPressCameraTests" */;
+			buildPhases = (
+				2D10C985D8587D7AF812BC0A /* Sources */,
+				2A4886B19353144BEEB5BCC7 /* Frameworks */,
+				1E35094759D80AF903218688 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = LongPressCameraTests;
+			productName = LongPressCameraTests;
+			productReference = 39D74405ADC3C799193BFBBC /* LongPressCameraTests.xctest */;
+			productType = "com.apple.product-type.bundle.ui-testing";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -219,6 +260,7 @@
 			projectRoot = "";
 			targets = (
 				13B07F861A680F5B00A75B9A /* RNMapboxExample */,
+				1610B47F6AE898E466616EEB /* LongPressCameraTests */,
 			);
 		};
 /* End PBXProject section */
@@ -231,6 +273,13 @@
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
 				51C0260825301F99008C5283 /* LaunchScreen.storyboard in Resources */,
 				414C0719E539AA79660FB51C /* PrivacyInfo.xcprivacy in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		1E35094759D80AF903218688 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -397,6 +446,14 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		2D10C985D8587D7AF812BC0A /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				49449BC0CAF7B1C3C0DD0BF6 /* LongPressCameraTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin XCBuildConfiguration section */
@@ -529,6 +586,18 @@
 				VERSIONING_SYSTEM = "apple-generic";
 			};
 			name = Release;
+		};
+		50A418F961657F519036040C /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.1;
+				PRODUCT_BUNDLE_IDENTIFIER = org.rnmapbox.LongPressCameraTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
 		};
 		83CBBA201A601CBA00E9B192 /* Debug */ = {
 			isa = XCBuildConfiguration;
@@ -680,6 +749,18 @@
 			};
 			name = Release;
 		};
+		A9027290983C1FFBD01E5BD9 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.1;
+				PRODUCT_BUNDLE_IDENTIFIER = org.rnmapbox.LongPressCameraTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -688,6 +769,15 @@
 			buildConfigurations = (
 				13B07F941A680F5B00A75B9A /* Debug */,
 				13B07F951A680F5B00A75B9A /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		644CDFE4A12E5A6D70FFFCAF /* Build configuration list for PBXNativeTarget "LongPressCameraTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				A9027290983C1FFBD01E5BD9 /* Release */,
+				50A418F961657F519036040C /* Debug */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
