@@ -12,6 +12,7 @@ import com.rnmapbox.rnmbx.utils.ExpressionParser
 import com.rnmapbox.rnmbx.utils.ViewRefTag
 import com.rnmapbox.rnmbx.utils.ViewTagResolver
 import com.rnmapbox.rnmbx.utils.extensions.toCoordinate
+import com.rnmapbox.rnmbx.utils.extensions.toScreenBox
 import com.rnmapbox.rnmbx.utils.extensions.toScreenCoordinate
 import com.rnmapbox.rnmbx.utils.extensions.toValueHashMap
 
@@ -116,7 +117,7 @@ class NativeMapViewModule(context: ReactApplicationContext, val viewTagResolver:
             val layerIds = ConvertUtils.toStringList(withLayerIDs)
 
             it.queryRenderedFeaturesAtPoint(
-                ConvertUtils.toPointF(atPoint),
+                atPoint.toScreenCoordinate(),
                 ExpressionParser.from(withFilter),
                 if (layerIds.size == 0) null else layerIds,
                 createCommandResponse(promise)
@@ -135,7 +136,7 @@ class NativeMapViewModule(context: ReactApplicationContext, val viewTagResolver:
             val layerIds = ConvertUtils.toStringList(withLayerIDs)
 
             it.queryRenderedFeaturesInRect(
-                ConvertUtils.toRectF(withBBox),
+                if (withBBox.size() == 0) null else withBBox.toScreenBox(),
                 ExpressionParser.from(withFilter),
                 if (layerIds.size == 0) null else layerIds,
                 createCommandResponse(promise)

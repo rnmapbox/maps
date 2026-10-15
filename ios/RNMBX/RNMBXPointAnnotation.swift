@@ -10,6 +10,14 @@ final class WeakRef<T: AnyObject> {
 }
 @objc
 public class RNMBXPointAnnotation : RNMBXInteractiveElement {
+  weak var manager: RNMBXPointAnnotationManager? = nil
+
+  weak var ownerManager: RNMBXPointAnnotationManager? = nil
+
+  var resolvedManager: RNMBXPointAnnotationManager? {
+    return ownerManager ?? map?.pointAnnotationManager
+  }
+
   static let key = "RNMBXPointAnnotation"
   static var gid = 0;
   
@@ -31,7 +39,25 @@ public class RNMBXPointAnnotation : RNMBXInteractiveElement {
   @objc public var onDrag: RCTBubblingEventBlock? = nil
   @objc public var onDragEnd: RCTBubblingEventBlock? = nil
   @objc public var onSelected: RCTBubblingEventBlock? = nil
-  
+
+  private var selected: Bool? = nil {
+    didSet {
+      update { annotation in
+        if let selected = selected {
+          annotation.isSelected = selected
+        }
+      }
+    }
+  }
+
+  @objc public func setReactSelected(_ _selected: Bool) {
+    if (_selected == true && self.selected != true) {
+      manager?.selected(pointAnnotation: self)
+    } else if (_selected == false && self.selected == true) {
+      manager?.unselected(pointAnnotation: self)
+    }
+  }
+
   @objc public var coordinate : String? {
     didSet {
       _updateCoordinate()
@@ -173,14 +199,16 @@ public class RNMBXPointAnnotation : RNMBXInteractiveElement {
   }
   
   func doSelect() {
+    self.selected = true
     let event = makeEvent(isSelect: true)
     if let onSelected = onSelected {
       onSelected(event.toJSON())
     }
     onSelect()
   }
-  
+
   func doDeselect(deselectAnnotationOnMapTap: Bool = false) {
+    self.selected = false
     let event = makeEvent(isSelect: false, deselectAnnotationOnMapTap: deselectAnnotationOnMapTap)
     if let onDeselected = onDeselected {
       onDeselected(event.toJSON())
@@ -192,7 +220,7 @@ public class RNMBXPointAnnotation : RNMBXInteractiveElement {
     if let callout = callout,
        let calloutImage = _createViewSnapshot(view: callout),
        let point = point() {
-      
+
       var calloutPtAnnotation = PointAnnotation(point: point)
       calloutId = calloutPtAnnotation.id
       let name =  "rnviewcallout-\(gid())-\(calloutPtAnnotation.id)"
@@ -271,28 +299,28 @@ public class RNMBXPointAnnotation : RNMBXInteractiveElement {
 
 extension RNMBXPointAnnotation {
   func removeIfAdded() {
-    if added, let pointAnnotationManager = map?.pointAnnotationManager {
+    if added, let pointAnnotationManager = resolvedManager {
       pointAnnotationManager.remove(annotation)
       added = false
     }
   }
-  
+
   @discardableResult
   func addIfPossible() -> Bool {
     if !added
         && annotation.point.coordinates.isValid()
         && (logged("PointAnnotation: missing id attribute") { return id }) != nil,
-        let pointAnnotationManager = map?.pointAnnotationManager {
+        let pointAnnotationManager = resolvedManager {
       pointAnnotationManager.add(annotation, self)
       added = true
       return true
     }
     return false
   }
-  
+
   func update(callback: (_ annotation: inout PointAnnotation) -> Void) {
     callback(&annotation)
-    if let pointAnnotationManager = map?.pointAnnotationManager {
+    if let pointAnnotationManager = resolvedManager {
       if added {
         pointAnnotationManager.update(annotation)
       } else if !added {

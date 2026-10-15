@@ -3,11 +3,11 @@ import {
   View,
   StyleSheet,
   NativeModules,
-  ViewProps,
-  NativeSyntheticEvent,
-  NativeMethods,
-  HostComponent,
-  LayoutChangeEvent,
+  type ViewProps,
+  type NativeSyntheticEvent,
+  type NativeMethods,
+  type HostComponent,
+  type LayoutChangeEvent,
 } from 'react-native';
 import debounce from 'debounce';
 
@@ -37,11 +37,6 @@ if (RNMBXModule == null) {
     'Native part of Mapbox React Native libraries were not registered properly, double check our native installation guides.',
   );
 }
-if (!RNMBXModule.MapboxV10) {
-  console.warn(
-    '@rnmapbox/maps: Non v10 implementations are deprecated and will be removed in next version - see https://github.com/rnmapbox/maps/wiki/Deprecated-RNMapboxImpl-Maplibre',
-  );
-}
 
 const styles = StyleSheet.create({
   matchParent: { flex: 1 },
@@ -63,6 +58,11 @@ export type RegionPayload = {
   isUserInteraction: boolean;
   visibleBounds: GeoJSON.Position[];
   pitch: number;
+};
+
+export type ScreenPointPayload = {
+  readonly screenPointX: number;
+  readonly screenPointY: number;
 };
 
 export type GestureSettings = {
@@ -153,16 +153,24 @@ export type MapState = {
 };
 
 /**
- * label localization settings (v10 only). `true` is equivalent to current locale.
+ * label localization settings. `true` is equivalent to current locale.
  */
 type LocalizeLabels =
   | {
       /** locale code like `es` or `current` for the device's current locale */
       locale: string;
-      /** layer id to localize. If not specified, all layers will be localized */
+      /** layer ids to localize. If not specified, all layers will be localized */
       layerIds?: string[];
     }
   | true;
+
+/** What `onMapLoadingError` receives on both platforms; `type` is the Mapbox SDK's error kind. */
+export type MapLoadingErrorPayload = {
+  error: string;
+  type?: 'style' | 'sprite' | 'source' | 'glyphs' | 'tile';
+  tileId?: string;
+  sourceId?: string;
+};
 
 type Props = ViewProps & {
   /**
@@ -296,6 +304,11 @@ type Props = ViewProps & {
   scaleBarPosition?: OrnamentPositonProp;
 
   /**
+   * Set the scale bar distance units. Defaults to metric.
+   */
+  scaleBarUnits?: 'metric' | 'imperial' | 'nautical';
+
+  /**
    * [Android only] Enable/Disable use of GLSurfaceView instead of TextureView.
    */
   surfaceView?: boolean;
@@ -307,8 +320,10 @@ type Props = ViewProps & {
   requestDisallowInterceptTouchEvent?: boolean;
 
   /**
-   * [`mapbox` (v10) implementation only]
    * Set map's label locale, e.g. `{ "locale": "es" }` will localize labels to Spanish, `{ "locale": "current" }` will localize labels to system locale.
+   * Labels are localized on the device for this map only, into `ar`, `de`, `en`, `es`, `fr`, `it`, `ja`, `ko`, `pt`, `ru`, `vi`, `zh-Hans` or `zh-Hant`, and not on the Standard style.
+   * For any language Mapbox supports and for the Standard style, use the app-wide `Mapbox.setLanguage`.
+   * Removing the prop stops localizing labels from the next style load.
    */
   localizeLabels?: LocalizeLabels;
 
@@ -318,14 +333,20 @@ type Props = ViewProps & {
   gestureSettings?: GestureSettings;
 
   /**
-   * Map press listener, gets called when a user presses the map
+   * Map press listener, called when a user presses the map.
+   * Single taps are reported only after the map rules out a double tap, so `onPress` fires a few hundred milliseconds after the touch.
+   * On iOS, setting both `doubleTapToZoomInEnabled` and `quickZoomEnabled` to `false` in `gestureSettings` removes most of this delay; on Android it doesn't.
    */
-  onPress?: (feature: GeoJSON.Feature) => void;
+  onPress?: (
+    feature: GeoJSON.Feature<GeoJSON.Point, ScreenPointPayload>,
+  ) => void;
 
   /**
-   * Map long press listener, gets called when a user long presses the map
+   * Map long press listener, called when a user long presses the map.
    */
-  onLongPress?: (feature: GeoJSON.Feature) => void;
+  onLongPress?: (
+    feature: GeoJSON.Feature<GeoJSON.Point, ScreenPointPayload>,
+  ) => void;
 
   /**
    * <v10 only
@@ -387,7 +408,7 @@ type Props = ViewProps & {
   /**
    * This event is tiggered when there is an error during map load. V10 only, replaces onDidFailLoadingMap, might be called multiple times and not exclusive with onDidFinishLoadingMap.
    */
-  onMapLoadingError?: () => void;
+  onMapLoadingError?: (payload?: MapLoadingErrorPayload) => void;
 
   /**
    * This event is triggered when the map will start rendering a frame.
@@ -476,7 +497,7 @@ const CallbablePropKeys = [
   'onCameraChanged',
 ] as const;
 
-type CallbablePropKeys = (typeof CallbablePropKeys)[number];
+type CallbablePropKeys = typeof CallbablePropKeys[number];
 
 type CallbablePropKeysWithoutOn = CallbablePropKeys extends `on${infer C}`
   ? C
@@ -500,7 +521,7 @@ class MapView extends NativeBridgeComponent(
     compassFadeWhenNorth: false,
     logoEnabled: true,
     scaleBarEnabled: true,
-    surfaceView: RNMBXModule.MapboxV10 ? true : false,
+    surfaceView: true,
     requestDisallowInterceptTouchEvent: false,
     regionWillChangeDebounceTime: 10,
     regionDidChangeDebounceTime: 500,
@@ -597,93 +618,95 @@ class MapView extends NativeBridgeComponent(
   }
 
   _setHandledMapChangedEvents(props: Props) {
-    if (isAndroid() || RNMBXModule.MapboxV10) {
-      const events: string[] = [];
+    const events: string[] = [];
 
-      function addIfHasHandler(name: CallbablePropKeysWithoutOn) {
-        if (props[`on${name}`] != null) {
-          if (EventTypes[name] == null) {
-            if (name === 'DidFailLoadingMap') {
-              console.warn(
-                `rnmapbox maps: on${name} is deprecated, please use onMapLoadingError`,
-              );
-            } else {
-              console.warn(`rnmapbox maps: ${name} is not supported`);
-            }
+    function addIfHasHandler(name: CallbablePropKeysWithoutOn) {
+      if (props[`on${name}`] != null) {
+        if (EventTypes[name] == null) {
+          if (name === 'DidFailLoadingMap') {
+            console.warn(
+              `rnmapbox maps: on${name} is deprecated, please use onMapLoadingError`,
+            );
           } else {
-            events.push(EventTypes[name]);
-            return true;
+            console.warn(`rnmapbox maps: ${name} is not supported`);
           }
-        }
-        return false;
-      }
-
-      addIfHasHandler('RegionWillChange');
-      addIfHasHandler('RegionIsChanging');
-      addIfHasHandler('RegionDidChange');
-      addIfHasHandler('UserLocationUpdate');
-      addIfHasHandler('WillStartLoadingMap');
-      addIfHasHandler('DidFinishLoadingMap');
-      addIfHasHandler('MapLoadingError');
-      addIfHasHandler('DidFailLoadingMap');
-      addIfHasHandler('WillStartRenderingFrame');
-      addIfHasHandler('DidFinishRenderingFrame');
-      addIfHasHandler('DidFinishRenderingFrameFully');
-      addIfHasHandler('WillStartRenderingMap');
-      addIfHasHandler('DidFinishRenderingMap');
-      addIfHasHandler('DidFinishRenderingMapFully');
-      addIfHasHandler('DidFinishLoadingStyle');
-
-      addIfHasHandler('CameraChanged');
-      addIfHasHandler('MapIdle');
-
-      if (addIfHasHandler('RegionDidChange')) {
-        if (!this.deprecationLogged.regionDidChange) {
-          console.warn(
-            'onRegionDidChange is deprecated and will be removed in next release - please use onMapIdle. https://github.com/rnmapbox/maps/wiki/Deprecated-RegionIsDidChange',
-          );
-          this.deprecationLogged.regionDidChange = true;
-        }
-        if (props.onMapIdle) {
-          console.warn(
-            'rnmapbox/maps: only one of MapView.onRegionDidChange or onMapIdle is supported',
-          );
+        } else {
+          events.push(EventTypes[name]);
+          return true;
         }
       }
-      if (addIfHasHandler('RegionIsChanging')) {
-        if (!this.deprecationLogged.regionIsChanging) {
-          console.warn(
-            'onRegionIsChanging is deprecated and will be removed in next release - please use onCameraChanged. https://github.com/rnmapbox/maps/wiki/Deprecated-RegionIsDidChange',
-          );
-          this.deprecationLogged.regionIsChanging = true;
-        }
-        if (props.onCameraChanged) {
-          console.warn(
-            'rnmapbox/maps: only one of MapView.onRegionIsChanging or onCameraChanged is supported',
-          );
-        }
-      }
+      return false;
+    }
 
-      if (props.onRegionWillChange) {
+    addIfHasHandler('RegionWillChange');
+    addIfHasHandler('RegionIsChanging');
+    addIfHasHandler('RegionDidChange');
+    addIfHasHandler('UserLocationUpdate');
+    addIfHasHandler('WillStartLoadingMap');
+    addIfHasHandler('DidFinishLoadingMap');
+    addIfHasHandler('MapLoadingError');
+    addIfHasHandler('DidFailLoadingMap');
+    addIfHasHandler('WillStartRenderingFrame');
+    addIfHasHandler('DidFinishRenderingFrame');
+    addIfHasHandler('DidFinishRenderingFrameFully');
+    addIfHasHandler('WillStartRenderingMap');
+    addIfHasHandler('DidFinishRenderingMap');
+    addIfHasHandler('DidFinishRenderingMapFully');
+    addIfHasHandler('DidFinishLoadingStyle');
+
+    addIfHasHandler('CameraChanged');
+    addIfHasHandler('MapIdle');
+
+    if (addIfHasHandler('RegionDidChange')) {
+      if (!this.deprecationLogged.regionDidChange) {
         console.warn(
-          'onRegionWillChange is deprecated and will be removed in v10 - please use onRegionIsChanging',
+          'onRegionDidChange is deprecated and will be removed in next release - please use onMapIdle. https://github.com/rnmapbox/maps/wiki/Deprecated-RegionIsDidChange',
+        );
+        this.deprecationLogged.regionDidChange = true;
+      }
+      if (props.onMapIdle) {
+        console.warn(
+          'rnmapbox/maps: only one of MapView.onRegionDidChange or onMapIdle is supported',
         );
       }
-
-      this._runNativeMethod('setHandledMapChangedEvents', this._nativeRef, [
-        events,
-      ]);
     }
+    if (addIfHasHandler('RegionIsChanging')) {
+      if (!this.deprecationLogged.regionIsChanging) {
+        console.warn(
+          'onRegionIsChanging is deprecated and will be removed in next release - please use onCameraChanged. https://github.com/rnmapbox/maps/wiki/Deprecated-RegionIsDidChange',
+        );
+        this.deprecationLogged.regionIsChanging = true;
+      }
+      if (props.onCameraChanged) {
+        console.warn(
+          'rnmapbox/maps: only one of MapView.onRegionIsChanging or onCameraChanged is supported',
+        );
+      }
+    }
+
+    if (props.onRegionWillChange) {
+      console.warn(
+        'onRegionWillChange is deprecated and will be removed in v10 - please use onRegionIsChanging',
+      );
+    }
+
+    this._runNativeMethodDetached(
+      'setHandledMapChangedEvents',
+      this._nativeRef,
+      [events],
+    );
   }
 
   /**
-   * Converts a geographic coordinate to a point in the given view’s coordinate system.
+   * Converts a geographic coordinate to a screen coordinate relative to the map view.
    *
    * @example
-   * const pointInView = await this._map.getPointInView([-37.817070, 144.949901]);
+   * const longitude = 144.949901;
+   * const latitude = -37.817070;
+   * const [x, y] = await this._map.getPointInView([longitude, latitude]);
    *
-   * @param {Array<number>} coordinate - A point expressed in the map view's coordinate system.
-   * @return {Array}
+   * @param {Position} coordinate - A point expressed in the map view's coordinate system `[longitude, latitude]`.
+   * @return {Position} A point expressed in screen coordinates relative to the map view `[x, y]`.
    */
   async getPointInView(coordinate: Position): Promise<Position> {
     const res = await this._runNative<{ pointInView: Position }>(
@@ -694,13 +717,14 @@ class MapView extends NativeBridgeComponent(
   }
 
   /**
-   * Converts a point in the given view’s coordinate system to a geographic coordinate.
+   * Converts a screen coordinate relative to the map view to a geographic coordinate.
    *
    * @example
-   * const coordinate = await this._map.getCoordinateFromView([100, 100]);
+   * const x = 100; const y = 100;
+   * const [longitude, latitude] = await this._map.getCoordinateFromView([x, y]);
    *
-   * @param {Array<number>} point - A point expressed in the given view’s coordinate system.
-   * @return {Array}
+   * @param {Position} point - A point expressed in screen coordinates relative to the map view `[x, y]`.
+   * @return {Position} A point expressed in the map view's coordinate system `[longitude, latitude]`.
    */
   async getCoordinateFromView(point: Position): Promise<Position> {
     const res = await this._runNative<{ coordinateFromView: Position }>(
@@ -711,12 +735,12 @@ class MapView extends NativeBridgeComponent(
   }
 
   /**
-   * The coordinate bounds (ne, sw) visible in the user’s viewport.
+   * The coordinate bounds of the map viewport.
    *
    * @example
-   * const visibleBounds = await this._map.getVisibleBounds();
+   * const [[rightLon, topLat], [leftLon, bottomLat]] = await this._map.getVisibleBounds();
    *
-   * @return {Array}
+   * @return {[Position, Position]} The geographic coordinate bounds of the map viewport `[[rightLon, topLat], [leftLon, bottomLat]]`.
    */
   async getVisibleBounds(): Promise<[Position, Position]> {
     const res = await this._runNative<{ visibleBounds: [Position, Position] }>(
@@ -729,12 +753,13 @@ class MapView extends NativeBridgeComponent(
    * Returns an array of rendered map features that intersect with a given point.
    *
    * @example
-   * this._map.queryRenderedFeaturesAtPoint([30, 40], ['==', 'type', 'Point'], ['id1', 'id2'])
+   * const x = 30; const y = 40;
+   * this._map.queryRenderedFeaturesAtPoint([x, y], ['==', 'type', 'Point'], ['id1', 'id2'])
    *
-   * @param  {Array<Number>} coordinate - A point expressed in the map view’s coordinate system.
-   * @param  {Array=} filter - A set of strings that correspond to the names of layers defined in the current style. Only the features contained in these layers are included in the returned array.
-   * @param  {Array=} layerIDs - A array of layer id's to filter the features by
-   * @return {FeatureCollection}
+   * @param  {Position} coordinate - A point expressed in the map view’s coordinate system `[x, y]`;
+   * @param  {FilterExpression | []} filter - A set of strings that correspond to the names of layers defined in the current style. Only the features contained in these layers are included in the returned array.
+   * @param  {string[]} layerIDs - A array of layer IDs by which to filter the features.
+   * @return {FeatureCollection}  A GeoJSON feature collection containing the query results.
    */
 
   async queryRenderedFeaturesAtPoint(
@@ -764,22 +789,21 @@ class MapView extends NativeBridgeComponent(
    * passing an empty array will query the entire visible bounds of the map.
    *
    * @example
-   * this._map.queryRenderedFeaturesInRect([30, 40, 20, 10], ['==', 'type', 'Point'], ['id1', 'id2'])
+   * const left = 40; const top = 30;
+   * const right = 10; const bottom = 20;
+   * this._map.queryRenderedFeaturesInRect([top, left, bottom, right], ['==', 'type', 'Point'], ['id1', 'id2'])
    *
-   * @param  {Array<Number>} bbox - A rectangle expressed in the map view’s coordinate system, density independent pixels and not map coordinates. This can be an empty array to query the visible map area.
-   * @param  {Array=} filter - A set of strings that correspond to the names of layers defined in the current style. Only the features contained in these layers are included in the returned array.
-   * @param  {Array=} layerIDs -  A array of layer id's to filter the features by
-   * @return {FeatureCollection}
+   * @param  {BBox | []} bbox - A rectangle expressed in density-independent screen coordinates relative to the map view `[top, left, bottom, right]` or `[minY, minX, maxY, maxX]` (not geographic coordinates). An empty array queries the visible map area.
+   * @param  {FilterExpression} filter - An array of strings that correspond to the names of layers defined in the current style. Only the features contained in these layers are included in the returned array.
+   * @param  {string[] | null} layerIDs -  A array of layer IDs by which to filter the features.
+   * @return {FeatureCollection} A GeoJSON feature collection containing the query results.
    */
   async queryRenderedFeaturesInRect(
     bbox: BBox | [],
     filter: FilterExpression | [] = [],
     layerIDs: string[] | null = null,
   ): Promise<GeoJSON.FeatureCollection | undefined> {
-    if (
-      bbox != null &&
-      (bbox.length === 4 || (RNMBXModule.MapboxV10 && bbox.length === 0))
-    ) {
+    if (bbox != null && (bbox.length === 4 || bbox.length === 0)) {
       const res = await this._runNative<{ data: GeoJSON.FeatureCollection }>(
         'queryRenderedFeaturesInRect',
         [bbox, getFilter(filter), layerIDs],
@@ -792,7 +816,7 @@ class MapView extends NativeBridgeComponent(
       return res.data;
     } else {
       throw new Error(
-        'Must pass in a valid bounding box: [top, right, bottom, left]. An empty array [] is also acceptable in v10.',
+        'Must pass in a valid bounding box: [top, left, bottom, right]. An empty array [] is also acceptable in v10.',
       );
     }
   }
@@ -804,9 +828,9 @@ class MapView extends NativeBridgeComponent(
    * this._map.querySourceFeatures('your-source-id', [], ['your-source-layer'])
    *
    * @param  {String} sourceId - Style source identifier used to query for source features.
-   * @param  {Array=} filter - A filter to limit query results.
-   * @param  {Array=} sourceLayerIDs - The name of the source layers to query. For vector tile sources, this parameter is required. For GeoJSON sources, it is ignored.
-   * @return {FeatureCollection}
+   * @param  {FilterExpression | []} filter - A filter to limit query results.
+   * @param  {string[]} sourceLayerIDs - The name of the source layers to query. For vector tile sources, this parameter is required. For GeoJSON sources, it is ignored.
+   * @return {FeatureCollection} A GeoJSON feature collection.
    */
   async querySourceFeatures(
     sourceId: string,
@@ -850,9 +874,11 @@ class MapView extends NativeBridgeComponent(
   }
 
   /**
-   * Takes snapshot of map with current tiles and returns a URI to the image
-   * @param  {Boolean} writeToDisk If true will create a temp file, otherwise it is in base64
-   * @return {String}
+   * Takes snapshot of map with current tiles and returns a Base64-encoded PNG image,
+   * or an file-system URI to a temporary PNG file if `writeToDisk` is `true`.
+   *
+   * @param  {boolean} writeToDisk If `true`, creates a temporary PNG file and returns a file-system URI, otherwise returns a Base64-encoded PNG image. (Defaults to `false`)
+   * @return {string} A a Base64-encoded PNG image or a file-system URI to a temporary PNG file.
    */
   async takeSnap(writeToDisk = false): Promise<string> {
     const res = await this._runNative<{ uri: string }>('takeSnap', [
@@ -867,7 +893,7 @@ class MapView extends NativeBridgeComponent(
    * @example
    * const zoom = await this._map.getZoom();
    *
-   * @return {Number}
+   * @return {number} The current zoom of the map view.
    */
 
   async getZoom(): Promise<number> {
@@ -876,12 +902,12 @@ class MapView extends NativeBridgeComponent(
   }
 
   /**
-   * Returns the map's geographical centerpoint
+   * Returns the map's center point expressed as geographic coordinates `[longitude, latitude]`.
    *
    * @example
    * const center = await this._map.getCenter();
    *
-   * @return {Array<Number>} Coordinates
+   * @return {Position} The map's center point expressed as geographic coordinates `[longitude, latitude]`.
    */
   async getCenter(): Promise<Position> {
     const res = await this._runNative<{ center: Position }>('getCenter');
@@ -897,12 +923,6 @@ class MapView extends NativeBridgeComponent(
    * v10 only
    */
   async clearData(): Promise<void> {
-    if (!RNMBXModule.MapboxV10) {
-      console.warn(
-        'RNMapbox: clearData is only implemented in v10 implementation or later',
-      );
-      return;
-    }
     await this._runNative<void>('clearData');
   }
 
@@ -911,8 +931,8 @@ class MapView extends NativeBridgeComponent(
    * The elevation is returned in meters relative to mean sea-level.
    * Returns null if terrain is disabled or if terrain data for the location hasn't been loaded yet.
    *
-   * @param {Array<Number>} coordinate - the coordinates to query elevation at
-   * @return {Number}
+   * @param {Position} coordinate - The geographic coordinates `[longitude, latitude]` at which to query elevation.
+   * @return {number} Elevation in meters relative to mean sea-level.
    */
   async queryTerrainElevation(coordinate: Position): Promise<number> {
     const res = await this._runNative<{ data: number }>(
@@ -929,15 +949,15 @@ class MapView extends NativeBridgeComponent(
    * await this._map.setSourceVisibility(false, 'composite', 'building')
    *
    * @param {boolean} visible - Visibility of the layers
-   * @param {String} sourceId - Identifier of the target source (e.g. 'composite')
-   * @param {String=} sourceLayerId - Identifier of the target source-layer (e.g. 'building')
+   * @param {string} sourceId - Target source identifier (e.g. 'composite')
+   * @param {string | null} sourceLayerId - Target source-layer identifier (e.g. 'building'). If `null`, the change affects all layers in the target source.
    */
   setSourceVisibility(
     visible: boolean,
     sourceId: string,
     sourceLayerId: string | null = null,
   ) {
-    this._runNative<void>('setSourceVisibility', [
+    this._runNativeMethodDetached('setSourceVisibility', this._nativeRef, [
       visible,
       sourceId,
       sourceLayerId,
@@ -962,13 +982,6 @@ class MapView extends NativeBridgeComponent(
     sourceId: string,
     sourceLayerId: string | null = null,
   ): Promise<void> {
-    if (!RNMBXModule.MapboxV10) {
-      console.warn(
-        'RNMapbox: setFeatureState is only implemented in v10 implementation or later',
-      );
-      return;
-    }
-
     await this._runNative<void>('setFeatureState', [
       featureId,
       state,
@@ -989,13 +1002,6 @@ class MapView extends NativeBridgeComponent(
     sourceId: string,
     sourceLayerId: string | null = null,
   ): Promise<Readonly<Record<string, unknown>>> {
-    if (!RNMBXModule.MapboxV10) {
-      console.warn(
-        'RNMapbox: setFeatureState is only implemented in v10 implementation or later',
-      );
-      return {};
-    }
-
     const res = await this._runNative<{
       featureState: Readonly<Record<string, unknown>>;
     }>('getFeatureState', [featureId, sourceId, sourceLayerId]);
@@ -1019,13 +1025,6 @@ class MapView extends NativeBridgeComponent(
     sourceId: string,
     sourceLayerId: string | null = null,
   ): Promise<void> {
-    if (!RNMBXModule.MapboxV10) {
-      console.warn(
-        'RNMapbox: removeFeatureState is only implemented in v10 implementation or later',
-      );
-      return;
-    }
-
     await this._runNative<void>('removeFeatureState', [
       featureId,
       stateKey,
@@ -1042,13 +1041,21 @@ class MapView extends NativeBridgeComponent(
     }
   }
 
-  _onPress(e: NativeSyntheticEvent<{ payload: GeoJSON.Feature | string }>) {
+  _onPress(
+    e: NativeSyntheticEvent<{
+      payload: GeoJSON.Feature<GeoJSON.Point, ScreenPointPayload> | string;
+    }>,
+  ) {
     if (isFunction(this.props.onPress)) {
       this.props.onPress(this._decodePayload(e.nativeEvent.payload));
     }
   }
 
-  _onLongPress(e: NativeSyntheticEvent<{ payload: GeoJSON.Feature | string }>) {
+  _onLongPress(
+    e: NativeSyntheticEvent<{
+      payload: GeoJSON.Feature<GeoJSON.Point, ScreenPointPayload> | string;
+    }>,
+  ) {
     if (isFunction(this.props.onLongPress)) {
       this.props.onLongPress(this._decodePayload(e.nativeEvent.payload));
     }
@@ -1193,13 +1200,11 @@ class MapView extends NativeBridgeComponent(
       return;
     }
 
-    if (RNMBXModule.MapboxV10) {
-      if (!this.deprecationLogged.contentInset) {
-        console.warn(
-          '@rnmapbox/maps: contentInset is deprecated, use Camera padding instead.',
-        );
-        this.deprecationLogged.contentInset = true;
-      }
+    if (!this.deprecationLogged.contentInset) {
+      console.warn(
+        '@rnmapbox/maps: contentInset is deprecated, use Camera padding instead.',
+      );
+      this.deprecationLogged.contentInset = true;
     }
 
     if (!Array.isArray(this.props.contentInset)) {
@@ -1241,9 +1246,6 @@ class MapView extends NativeBridgeComponent(
   }
 
   _setLocalizeLabels(props: Props) {
-    if (!RNMBXModule.MapboxV10) {
-      return;
-    }
     if (typeof props.localizeLabels === 'boolean') {
       props.localizeLabels = {
         locale: 'current',

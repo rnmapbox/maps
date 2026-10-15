@@ -182,10 +182,13 @@ class RNMBXCamera(private val mContext: Context, private val mManager: RNMBXCame
 
     private fun updateMaxBounds(mapView: RNMBXMapView) {
         val map = mapView.getMapboxMap()
+        val currentBounds = map.getBounds()
         val builder = CameraBoundsOptions.Builder()
-        builder.bounds(mMaxBounds?.toBounds())
+        builder.bounds(mMaxBounds?.toBounds() ?: CoordinateBounds.world()) // Passing null does not reset this value.
         builder.minZoom(mMinZoomLevel ?: 0.0) // Passing null does not reset this value.
         builder.maxZoom(mMaxZoomLevel ?: 25.0) // Passing null does not reset this value.
+        builder.minPitch(currentBounds.minPitch)
+        builder.maxPitch(currentBounds.maxPitch)
         map.setBounds(builder.build())
         mCameraStop?.let { updateCamera(it, mapView) }
     }
@@ -485,13 +488,12 @@ class RNMBXCamera(private val mContext: Context, private val mManager: RNMBXCame
                     followOptions.bearing(FollowPuckViewportStateBearing.SyncWithLocationPuck)
                 }
                 "normal" -> {
-                    location.puckBearingEnabled = false
                     when(val it=mFollowHeading) {
                         null -> followOptions.bearing( FollowPuckViewportStateBearing.Constant(
                             cameraState.bearing
                         ))
                         else -> followOptions.bearing( FollowPuckViewportStateBearing.Constant(
-                            cameraState.bearing
+                            it
                         ))
                     }
                 }

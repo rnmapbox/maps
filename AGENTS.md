@@ -6,6 +6,13 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 This is the React Native Mapbox Maps SDK (@rnmapbox/maps) - a community-supported library for building maps with Mapbox Maps SDK for iOS and Android in React Native applications.
 
+### Design philosophy: a thin wrapper over the native SDKs
+
+- @rnmapbox/maps is a low-level wrapper over the Mapbox Maps SDKs for Android and iOS. Expose APIs that mirror the upstream ones (same concepts, scope and naming), so Mapbox's docs and guides map directly onto ours.
+- Don't build clever abstractions over upstream behavior, e.g. merging two upstream mechanisms into one prop or hiding that a setting is app-wide. Many users want full control, so every upstream capability should stay reachable at that level.
+- Keep upstream scope visible: per-map features are props/methods on components, app-wide upstream settings are app-wide functions on the `Mapbox` module (like `Mapbox.setAccessToken`).
+- Convenience belongs on top, not instead: JS components, helpers or examples can streamline common cases, as long as the low-level API stays available.
+
 ## Prerequisites
 
 - **Node.js**: This project requires Node.js v22.16.0 (see .nvmrc)
@@ -118,6 +125,12 @@ The project uses Mapbox Maps SDK v11 and React Native's New Architecture (Fabric
 - Component docs are auto-generated from JSDoc comments
 - Don't edit `.md` files in `docs/` directly - edit source files and run `yarn generate`
 - Examples in `example/src/examples/` are used for documentation
+
+### Fixing Bugs
+
+- Read and follow `.github/REPRODUCING.md` before writing a fix: reproduce the issue first, and verify the fix against the reproducer.
+- Make every effort to reproduce — build the example app, drive it on a simulator/device, capture logs and crash reports. Provoke bugs that don't fire on their own: tight loops, bursts, rapid create/destroy, background threads, delays/busy work, fast-failing inputs, temporary lifetime/thread instrumentation, sanitizers.
+- A reproducer is worth 100x more than a speculative fix; keep provocation code out of the final PR and attach it (with before/after evidence) to the issue/PR description instead.
 
 ## Important Notes
 

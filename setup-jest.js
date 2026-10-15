@@ -99,7 +99,7 @@ NativeModules.RNMBXModule = {
   setTelemetryEnabled: jest.fn(),
   setConnected: jest.fn(),
   clearData: jest.fn(),
-
+  // Deprecated: means v10 or later, always true. Will be removed in next major version.
   MapboxV10: true,
 };
 

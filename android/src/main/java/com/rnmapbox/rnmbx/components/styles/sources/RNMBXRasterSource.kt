@@ -28,7 +28,7 @@ class RNMBXRasterSource(context: Context?) : RNMBXTileSource<RasterSource?>(cont
     }
 
     override fun hasNoDataSoRefersToExisting(): Boolean {
-        return uRL == null
+        return uRL == null && tileUrlTemplates.isEmpty()
     }
 
     companion object {

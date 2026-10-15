@@ -1,7 +1,7 @@
 import {
   NativeModules,
   NativeEventEmitter,
-  EventSubscription,
+  type EventSubscription,
 } from 'react-native';
 
 import { isUndefined, isFunction, isAndroid } from '../../utils';
@@ -22,16 +22,25 @@ export const OfflineModuleEventEmitter = new NativeEventEmitter(
   MapboxOfflineManager,
 );
 
-export type OfflineProgressStatus = {
-  name: string;
-  state: number;
-  percentage: number;
-  completedResourceSize: number;
-  completedTileCount: number;
-  completedResourceCount: number;
-  requiredResourceCount: number;
-  completedTileSize: number;
-};
+export type OfflineProgressStatus =
+  | {
+      name: string;
+      state: 'invalid' | 'inactive' | 'active' | 'complete' | 'unknown';
+      percentage: number;
+      completedResourceCount: number;
+      completedResourceSize: number;
+      erroredResourceCount: number;
+      loadedResourceSize: number;
+      loadedResourceCount: number;
+      requiredResourceCount: number;
+      metadata?: Record<string, unknown>;
+    }
+  | {
+      name: string;
+      state: 'invalid' | 'inactive' | 'active' | 'complete' | 'unknown';
+      percentage: null;
+      metadata?: Record<string, unknown>;
+    };
 
 export type OfflinePackError = {
   name: string;
@@ -182,14 +191,7 @@ class OfflineManager {
    * @return {void}
    */
   async invalidateAmbientCache(): Promise<void> {
-    if (RNMBXModule.MapboxV10) {
-      console.warn(
-        'RNMapbox: invalidateAmbientCache is not implemented on v10',
-      );
-      return;
-    }
-    await this._initialize();
-    await MapboxOfflineManager.invalidateAmbientCache();
+    console.warn('RNMapbox: invalidateAmbientCache is not implemented on v10');
   }
 
   /**
@@ -204,12 +206,7 @@ class OfflineManager {
    * @return {void}
    */
   async clearAmbientCache(): Promise<void> {
-    if (RNMBXModule.MapboxV10) {
-      console.warn('RNMapbox: clearAmbientCache is not implemented on v10');
-      return;
-    }
-    await this._initialize();
-    await MapboxOfflineManager.clearAmbientCache();
+    console.warn('RNMapbox: clearAmbientCache is not implemented on v10');
   }
 
   /**

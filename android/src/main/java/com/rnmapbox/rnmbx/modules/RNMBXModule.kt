@@ -14,6 +14,9 @@ import com.rnmapbox.rnmbx.modules.RNMBXLocationModule
 import com.facebook.react.bridge.ReactMethod
 import com.facebook.react.bridge.Arguments
 import com.facebook.react.bridge.ReadableMap
+import com.facebook.react.bridge.Dynamic
+import com.facebook.react.bridge.ReadableType
+import com.mapbox.bindgen.Value
 import com.facebook.react.common.MapBuilder
 import com.mapbox.bindgen.None
 import com.mapbox.common.*
@@ -114,6 +117,7 @@ class RNMBXModule(private val mReactContext: ReactApplicationContext) : ReactCon
         val locationModuleCallbackNames: MutableMap<String, String> = HashMap()
         locationModuleCallbackNames["Update"] = RNMBXLocationModule.LOCATION_UPDATE
         return MapBuilder.builder<String, Any>()
+            // Deprecated: means v10 or later, always true. Will be removed in next major version.
             .put("MapboxV10", true)
             .put("StyleURL", styleURLS)
             .put("EventTypes", eventTypes)
@@ -151,6 +155,29 @@ class RNMBXModule(private val mReactContext: ReactApplicationContext) : ReactCon
                     promise.reject("error", "RNMBXModule.clearError ${it.error}")
                 }
             }
+        }
+    }
+
+    /** Sets [MapboxCommonSettings.LANGUAGE] in the persistent settings storage, see https://docs.mapbox.com/help/dive-deeper/maps-internationalization/ */
+    @ReactMethod
+    fun setLanguage(language: Dynamic, promise: Promise) {
+        val settings = SettingsServiceFactory.getInstance(SettingsServiceStorageType.PERSISTENT)
+        val result = when (language.type) {
+            ReadableType.Null -> settings.erase(MapboxCommonSettings.LANGUAGE)
+            ReadableType.String -> settings.set(MapboxCommonSettings.LANGUAGE, Value(language.asString()!!))
+            ReadableType.Array -> {
+                val tags = language.asArray()!!
+                settings.set(MapboxCommonSettings.LANGUAGE, Value((0 until tags.size()).mapNotNull { tags.getString(it) }.map { Value(it) }))
+            }
+            else -> {
+                promise.reject("error", "setLanguage: language must be a string, an array of strings or null, got ${language.type}")
+                return
+            }
+        }
+        if (result.isValue) {
+            promise.resolve(null)
+        } else {
+            promise.reject("error", "setLanguage: ${result.error}")
         }
     }
 

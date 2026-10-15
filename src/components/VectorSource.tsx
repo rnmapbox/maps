@@ -1,10 +1,10 @@
 import React from 'react';
-import { NativeModules, NativeSyntheticEvent } from 'react-native';
+import { NativeModules, type NativeSyntheticEvent } from 'react-native';
 
 import RNMBXVectorSourceNativeComponent from '../specs/RNMBXVectorSourceNativeComponent';
 import { cloneReactChildrenWithProps, isFunction } from '../utils';
 import { copyPropertiesAsDeprecated } from '../utils/deprecation';
-import { OnPressEvent } from '../types/OnPressEvent';
+import { type OnPressEvent } from '../types/OnPressEvent';
 
 import AbstractSource from './AbstractSource';
 
@@ -71,7 +71,7 @@ interface Props {
   onPress?: (event: OnPressEvent) => void;
 
   /**
-   * Overrides the default touch hitbox(44x44 pixels) for the source layers
+   * Overrides the default touch hitbox (44x44 points) for the source layers
    */
   hitbox?: {
     /**

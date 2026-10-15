@@ -2,6 +2,7 @@ package com.rnmapbox.rnmbx.components.styles.atmosphere
 
 import com.facebook.react.bridge.Dynamic
 import com.facebook.react.uimanager.ThemedReactContext
+import com.rnmapbox.rnmbx.utils.extensions.asMapOrNull
 import com.facebook.react.uimanager.ViewGroupManager
 import com.facebook.react.uimanager.ViewManagerDelegate
 import com.facebook.react.uimanager.annotations.ReactProp
@@ -30,7 +31,7 @@ class RNMBXAtmosphereManager : ViewGroupManager<RNMBXAtmosphere>(), RNMBXAtmosph
 
     @ReactProp(name = "reactStyle")
     override fun setReactStyle(atmosphere: RNMBXAtmosphere, reactStyle: Dynamic) {
-        atmosphere.setReactStyle(reactStyle.asMap())
+        atmosphere.setReactStyle(reactStyle.asMapOrNull())
     }
 
     companion object {

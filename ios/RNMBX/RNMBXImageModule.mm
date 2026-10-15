@@ -4,15 +4,28 @@
 
 #import "RNMBXImageModule.h"
 #import "RNMBXImageComponentView.h"
+#import "RNMBXBridgeManager.h"
 
 #import "rnmapbox_maps-Swift.pre.h"
 
-@implementation RNMBXImageModule
+@implementation RNMBXImageModule {
+    id _bridgeBacking;
+}
 
 RCT_EXPORT_MODULE();
 
 @synthesize viewRegistry_DEPRECATED = _viewRegistry_DEPRECATED;
-@synthesize bridge = _bridge;
+
+- (void)setBridge:(RCTBridge *)bridge {
+    _bridgeBacking = bridge;
+    if (bridge != nil) {
+        [RNMBXBridgeManager setBridge:bridge];
+    }
+}
+
+- (RCTBridge *)bridge {
+    return _bridgeBacking;
+}
 
 - (dispatch_queue_t)methodQueue
 {
@@ -37,8 +50,7 @@ RCT_EXPORT_MODULE();
 RCT_EXPORT_METHOD(refresh:(nonnull NSNumber*)viewRef resolve:(RCTPromiseResolveBlock)resolve reject:(RCTPromiseRejectBlock)reject)
 {
     [self withImage:viewRef block:^(RNMBXImage *view) {
-        // TODO: implement refresh on iOS
-//        [view refresh];
+        [view refresh];
     } reject:reject methodName:@"refresh"];
 }
 

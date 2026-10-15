@@ -229,14 +229,35 @@ open class RNMBXMapView: UIView, RCTInvalidating {
 
   var cancelables = Set<AnyCancelable>()
 
+  var pointAnnotationManagers: [RNMBXPointAnnotationManager] = []
+
+  weak var defaultPointAnnotationManagerView: RNMBXPointAnnotationManagerView? = nil
+
   lazy var pointAnnotationManager : RNMBXPointAnnotationManager = {
-    let result = RNMBXPointAnnotationManager(annotations: mapView.annotations, mapView: mapView)
+    let result = RNMBXPointAnnotationManager(annotations: mapView.annotations, mapView: mapView, id: "RNMBX-mapview-point-annotations")
     self._removeMapboxLongPressGestureRecognizer()
+    self.registerPointAnnotationManager(result)
     return result
   }()
 
+  func registerPointAnnotationManager(_ manager: RNMBXPointAnnotationManager) {
+    if !pointAnnotationManagers.contains(where: { $0 === manager }) {
+      pointAnnotationManagers.append(manager)
+    }
+    // We handle taps ourselves; detach Mapbox's built-in tap target for this manager.
+    if let mapView = _mapView {
+      mapView.gestures.singleTapGestureRecognizer.removeTarget(manager.manager, action: nil)
+    }
+  }
+
+  func unregisterPointAnnotationManager(_ manager: RNMBXPointAnnotationManager) {
+    pointAnnotationManagers.removeAll { $0 === manager }
+  }
+
   lazy var calloutAnnotationManager : MapboxMaps.PointAnnotationManager = {
-    return mapView.annotations.makePointAnnotationManager(id: "RNMBX-mapview-callouts")
+    let manager = mapView.annotations.makePointAnnotationManager(id: "RNMBX-mapview-callouts")
+    manager.iconAllowOverlap = true
+    return manager
   }()
 
   var _mapView: MapView! = nil
@@ -380,7 +401,10 @@ open class RNMBXMapView: UIView, RCTInvalidating {
   }
 
   func layerAdded (_ layer: Layer) {
-    // TODO
+    let callbacks = layerWaiters.removeValue(forKey: layer.id) ?? []
+    callbacks.forEach { callback in
+      callback(layer.id)
+    }
   }
 
   func waitForLayerWithID(_ layerId: String, _  callback: @escaping (_ layerId: String) -> Void) {
@@ -548,12 +572,28 @@ open class RNMBXMapView: UIView, RCTInvalidating {
 
   var locale: (layerIds: [String]?, locale: Locale)? = nil
 
+  /// Rejection already warned about, so each map logs it once instead of once per failed source
+  private var warnedLanguageRejection: String?
+
+  /// The tile API answers HTTP 400 to a language set by `Mapbox.setLanguage` that it can't parse, and then no tiles load
+  private func warnIfLanguageRejected(_ error: MapLoadingError) {
+    guard error.type == .source || error.type == .tile,
+          error.message.contains("status code 400"),
+          case .success(true) = SettingsServiceFactory.getInstance(storageType: .persistent).has(key: MapboxCommonSettings.language),
+          warnedLanguageRejection != error.message else {
+      return
+    }
+    warnedLanguageRejection = error.message
+    Logger.log(level: .warn, tag: "RNMBXMapView", message: "Mapbox rejected the language set with Mapbox.setLanguage: \(error.message)")
+  }
+
   @objc public func setReactLocalizeLabels(_ value: NSDictionary?) {
-    if let value = value {
-      let localeString = value["locale"] as! String
-      let layerIds = value["layerIds"] as! [String]?
+    if let value = value, let localeString = value["locale"] as? String {
+      let layerIds = value["layerIds"] as? [String]
       let locale = localeString == "current" ? Locale.current : Locale(identifier: localeString)
       self.locale = (layerIds, locale)
+    } else {
+      self.locale = nil
     }
     changed(.localizeLabels)
   }
@@ -831,6 +871,7 @@ open class RNMBXMapView: UIView, RCTInvalidating {
   var scaleBarEnabled: Bool? = nil
   var scaleBarPosition: OrnamentPosition? = nil
   var scaleBarMargins: CGPoint? = nil
+  var scaleBarUnits: String? = nil
 
   @objc public func setReactScaleBarEnabled(_ value: Bool) {
     scaleBarEnabled = value
@@ -844,6 +885,11 @@ open class RNMBXMapView: UIView, RCTInvalidating {
     }
   }
 
+  @objc public func setReactScaleBarUnits(_ value: NSString?) {
+    scaleBarUnits = value as? String
+    changed(.scaleBar)
+  }
+
   func applyScaleBar() {
     if let enabled = scaleBarEnabled {
       mapView.ornaments.options.scaleBar.visibility = enabled ? .visible : .hidden
@@ -853,6 +899,16 @@ open class RNMBXMapView: UIView, RCTInvalidating {
     }
     if let margins = scaleBarMargins {
       mapView.ornaments.options.scaleBar.margins = margins
+    }
+    if let units = scaleBarUnits {
+      switch units {
+      case "imperial":
+        mapView.ornaments.options.scaleBar.units = .imperial
+      case "nautical":
+        mapView.ornaments.options.scaleBar.units = .nautical
+      default:
+        mapView.ornaments.options.scaleBar.units = .metric
+      }
     }
   }
 
@@ -1156,15 +1212,30 @@ extension RNMBXMapView {
       if let sourceId = eventPayload.sourceId {
         payload["sourceId"] = sourceId
       }
+      // the SDK's own error kind, as on Android
+      switch eventPayload.type {
+      case .style: payload["type"] = "style"
+      case .sprite: payload["type"] = "sprite"
+      case .source: payload["type"] = "source"
+      case .glyphs: payload["type"] = "glyphs"
+      case .tile: payload["type"] = "tile"
+      @unknown default: break
+      }
       let RNMBXEvent = RNMBXEvent(type: .mapLoadingError, payload: payload);
       self.fireEvent(event: RNMBXEvent, callback: self.reactOnMapChange)
 
-      if let message = error.errorDescription {
-        Logger.log(level: .error, message: "MapLoad error \(message)")
+      let message = error.errorDescription ?? "\(event)"
+      if let sourceId = eventPayload.sourceId,
+         let source = self.sources.first(where: { $0.id == sourceId }) {
+        Logger.log(level: .error, message: "MapLoad error in \(type(of: source)) '\(sourceId)': \(message)")
       } else {
-        Logger.log(level: .error, message: "MapLoad error \(event)")
+        Logger.log(level: .error, message: "MapLoad error \(message)")
       }
     })
+
+    self.onEvery(event: .mapLoadingError) { (self, event) in
+      self.warnIfLanguageRejected(event.payload)
+    }
 
     self.onEvery(event: .styleImageMissing) { (self, event) in
       let imageName = event.payload.id
@@ -1276,7 +1347,10 @@ extension RNMBXMapView {
   func applyOnPress() {
     let singleTapGestureRecognizer = self.mapView.gestures.singleTapGestureRecognizer
 
-    singleTapGestureRecognizer.removeTarget(pointAnnotationManager.manager, action: nil)
+    // Detach Mapbox's built-in tap target for every manager; we handle taps ourselves.
+    for manager in pointAnnotationManagers {
+      singleTapGestureRecognizer.removeTarget(manager.manager, action: nil)
+    }
     singleTapGestureRecognizer.addTarget(self, action: #selector(doHandleTap(_:)))
 
     self.tapDelegate = IgnoreRNMBXMakerViewGestureDelegate(originalDelegate: singleTapGestureRecognizer.delegate)
@@ -1378,13 +1452,34 @@ extension RNMBXMapView: GestureManagerDelegate {
     return event
   }
 
+  private func handleTapAcrossPointAnnotationManagers(_ sender: UITapGestureRecognizer, index: Int, noneFound: @escaping () -> Void) {
+    if index >= pointAnnotationManagers.count {
+      noneFound()
+      return
+    }
+    pointAnnotationManagers[index].handleTap(sender) { _ in
+      self.handleTapAcrossPointAnnotationManagers(sender, index: index + 1, noneFound: noneFound)
+    }
+  }
+
+  @discardableResult
+  func deselectCurrentlySelectedPointAnnotation(deselectAnnotationOnTap: Bool) -> Bool {
+    var any = false
+    for manager in pointAnnotationManagers {
+      if manager.deselectCurrentlySelected(deselectAnnotationOnTap: deselectAnnotationOnTap) {
+        any = true
+      }
+    }
+    return any
+  }
+
   @objc
   func doHandleTap(_ sender: UITapGestureRecognizer) {
     let tapPoint = sender.location(in: self)
-    pointAnnotationManager.handleTap(sender) { (_: UITapGestureRecognizer) in
+    handleTapAcrossPointAnnotationManagers(sender, index: 0) {
       DispatchQueue.main.async {
         if (self.deselectAnnotationOnTap) {
-          if (self.pointAnnotationManager.deselectCurrentlySelected(deselectAnnotationOnTap: true)) {
+          if (self.deselectCurrentlySelectedPointAnnotation(deselectAnnotationOnTap: true)) {
             return
           }
         }
@@ -1427,10 +1522,23 @@ extension RNMBXMapView: GestureManagerDelegate {
     }
   }
 
+  private func handleLongPressAcrossPointAnnotationManagers(_ sender: UILongPressGestureRecognizer, index: Int, noneFound: @escaping () -> Void) {
+    if index >= pointAnnotationManagers.count {
+      noneFound()
+      return
+    }
+    pointAnnotationManagers[index].handleLongPress(sender) { _ in
+      self.handleLongPressAcrossPointAnnotationManagers(sender, index: index + 1, noneFound: noneFound)
+    }
+  }
+
   @objc
   func doHandleLongPress(_ sender: UILongPressGestureRecognizer) {
     let position = sender.location(in: self)
-    pointAnnotationManager.handleLongPress(sender) { (_: UILongPressGestureRecognizer) in
+    handleLongPressAcrossPointAnnotationManagers(sender, index: 0) {
+      // Source-based drag handling only starts on `.began`; annotation drag
+      // continuation (.changed/.ended) is consumed by the owning manager above.
+      guard sender.state == .began else { return }
       DispatchQueue.main.async {
         let draggableSources = self.draggableSources()
         self.doHandleTapInSources(sources: draggableSources, tapPoint: position, hits: [:], touchedSources: []) { (hits, draggedSources) in
@@ -1514,13 +1622,13 @@ extension RNMBXMapView
   @objc public func takeSnap(
     writeToDisk:Bool) -> URL
   {
-    UIGraphicsBeginImageContextWithOptions(self.bounds.size, true, 0);
+    let format = UIGraphicsImageRendererFormat(for: self.traitCollection)
+    format.opaque = true
+    let snapshot = UIGraphicsImageRenderer(bounds: self.bounds, format: format).image { _ in
+      self.drawHierarchy(in: self.bounds, afterScreenUpdates: true)
+    }
 
-    self.drawHierarchy(in: self.bounds, afterScreenUpdates: true)
-    let snapshot = UIGraphicsGetImageFromCurrentImageContext();
-    UIGraphicsEndImageContext();
-
-    return writeToDisk ? RNMBImageUtils.createTempFile(snapshot!) :  RNMBImageUtils.createBase64(snapshot!)
+    return writeToDisk ? RNMBImageUtils.createTempFile(snapshot) :  RNMBImageUtils.createBase64(snapshot)
   }
 }
 
@@ -1903,6 +2011,20 @@ class RNMBXPointAnnotationManager : AnnotationInteractionDelegate {
     //   onTap(annotations: annotations)
   }
 
+  func selected(pointAnnotation: RNMBXPointAnnotation) {
+    if (selected != nil) {
+      deselectCurrentlySelected(deselectAnnotationOnTap: false)
+    }
+    pointAnnotation.doSelect()
+    selected = pointAnnotation
+  }
+
+  func unselected(pointAnnotation: RNMBXPointAnnotation) {
+    if (selected == pointAnnotation) {
+      deselectCurrentlySelected(deselectAnnotationOnTap: false)
+    }
+  }
+
   func deselectCurrentlySelected(deselectAnnotationOnTap: Bool = false) -> Bool {
     if let selected = selected {
       selected.doDeselect(deselectAnnotationOnMapTap: deselectAnnotationOnTap)
@@ -2004,8 +2126,12 @@ class RNMBXPointAnnotationManager : AnnotationInteractionDelegate {
   var manager : MapboxMaps.PointAnnotationManager
   weak var mapView : MapView? = nil
 
-  init(annotations: AnnotationOrchestrator, mapView: MapView) {
-    manager = annotations.makePointAnnotationManager(id: "RNMBX-mapview-point-annotations")
+  init(annotations: AnnotationOrchestrator, mapView: MapView, id: String? = nil) {
+    if let id = id {
+      manager = annotations.makePointAnnotationManager(id: id)
+    } else {
+      manager = annotations.makePointAnnotationManager()
+    }
     manager.delegate = self
     self.mapView = mapView
   }
@@ -2097,6 +2223,7 @@ class RNMBXPointAnnotationManager : AnnotationInteractionDelegate {
 
       case .changed:
           guard var annotation = self.draggedAnnotation else {
+              noAnnotationFound(sender)
               return
           }
 
@@ -2108,6 +2235,7 @@ class RNMBXPointAnnotationManager : AnnotationInteractionDelegate {
           }
       case .cancelled, .ended:
         guard let annotation = self.draggedAnnotation else {
+            noAnnotationFound(sender)
             return
         }
         // Optionally notify some other delegate to tell them the drag finished.
@@ -2130,6 +2258,7 @@ class RNMBXPointAnnotationManager : AnnotationInteractionDelegate {
     )
 
   func add(_ annotation: PointAnnotation, _ rnmbxPointAnnotation: RNMBXPointAnnotation) {
+    rnmbxPointAnnotation.manager = self
     manager.annotations.append(annotation)
     manager.refresh()
     annotations.setObject(rnmbxPointAnnotation, forKey: annotation.id as NSString)

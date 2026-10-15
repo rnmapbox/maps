@@ -1,7 +1,7 @@
 import { memo } from 'react';
 import type { ViewProps } from 'react-native';
 import RNMBXCameraGestureObserverNativeComponent, {
-  OnMapSteadyEvent,
+  type OnMapSteadyEvent,
 } from '../specs/RNMBXCameraGestureObserverNativeComponent';
 
 type Props = ViewProps & {

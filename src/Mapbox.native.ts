@@ -9,12 +9,20 @@ export {
   type CameraStop,
 } from './components/Camera';
 export { Atmosphere } from './components/Atmosphere';
-export { default as MapView, type MapState } from './components/MapView';
+export { Snow } from './components/Snow';
+export { Rain } from './components/Rain';
+export {
+  default as MapView,
+  type MapState,
+  type ScreenPointPayload,
+} from './components/MapView';
 export { default as Light } from './components/Light';
 export { default as PointAnnotation } from './components/PointAnnotation';
+export { default as PointAnnotationManager } from './components/PointAnnotationManager';
 export { default as Annotation } from './components/Annotation';
 export { default as Callout } from './components/Callout';
 export { default as StyleImport } from './components/StyleImport';
+export type { StandardStyleConfig } from './components/StyleImport';
 export {
   default as UserLocation,
   UserLocationRenderMode,
@@ -45,7 +53,7 @@ export { default as BackgroundLayer } from './components/BackgroundLayer';
 export { default as CustomLocationProvider } from './components/CustomLocationProvider';
 export { Terrain } from './components/Terrain';
 export { default as CameraGestureObserver } from './components/CameraGestureObserver';
-export { OnMapSteadyEvent } from './specs/RNMBXCameraGestureObserverNativeComponent';
+export { type OnMapSteadyEvent } from './specs/RNMBXCameraGestureObserverNativeComponent';
 export {
   default as locationManager,
   type Location,
@@ -73,6 +81,7 @@ export { default as Style } from './components/Style';
 export { default as Logger, type LogLevel } from './utils/Logger';
 export { requestAndroidLocationPermissions } from './requestAndroidLocationPermissions';
 export { getAnnotationsLayerID } from './utils/getAnnotationsLayerID';
+export { normalizeLanguageTag } from './utils/normalizeLanguageTag';
 export type {
   FillLayerStyleProps as FillLayerStyle,
   LineLayerStyleProps as LineLayerStyle,

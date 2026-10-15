@@ -74,13 +74,13 @@ object Logger {
     }
 
     fun w(tag: String, msg: String) {
-        if (logLevel <= Log.VERBOSE) {
+        if (logLevel <= Log.WARN) {
             logger.w(tag, msg)
         }
     }
 
     fun w(tag: String, msg: String, tr: Throwable) {
-        if (logLevel <= Log.VERBOSE) {
+        if (logLevel <= Log.WARN) {
             logger.w(tag, msg, tr)
         }
     }

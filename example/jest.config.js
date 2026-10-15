@@ -1,7 +1,7 @@
-import type { Config } from 'jest';
-import * as path from 'path';
+const path = require('path');
 
-const config: Config = {
+/** @type {import('jest').Config} */
+const config = {
   preset: 'react-native',
   setupFiles: ['./jest.setup.ts'],
   verbose: true,
@@ -10,4 +10,4 @@ const config: Config = {
   },
 };
 
-export default config;
+module.exports = config;

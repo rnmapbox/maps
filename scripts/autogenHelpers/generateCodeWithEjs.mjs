@@ -72,6 +72,14 @@ const ANDROID_V10_OUTPUT_PATH = path.join(
 
 const JS_OUTPUT_PATH = path.join(__dirname, ...OUTPUT_PREFIX, 'src', 'utils');
 
+const WEB_OUTPUT_PATH = path.join(
+  __dirname,
+  ...OUTPUT_PREFIX,
+  'src',
+  'web',
+  'utils',
+);
+
 /**
  * @param {string[]|undefined} only
  */
@@ -319,16 +327,15 @@ function isTranslate(attrName) {
 }
 
 const UnsupportedProperties = [
-  'hillshade-emissive-strength', // should be supported in v11 according to specs but it's not on ios 11.0.0.rc2
-
-  'icon-color-contrast', // should be supported in v11 11.15.2 but it's not on android
-
-  'icon-color-brightness-min', // should be supported in v11 11.15.0 but it's not on android
-  'icon-color-brightness-max', // should be supported in v11 11.15.0 but it's not on android
-
-  'fill-extrusion-cast-shadows', // should be supported in v11 11.8.0 but it's not on android
-
   'raster-particle-elevation', // should be supported in v11 11.7.0 but it's not yet implemented in SDK
+
+  'raster-elevation-reference', // spec says ios 11.19.0 but not present in SDK 11.23.1
+];
+
+// Properties marked as private in the style-spec but supported by native SDKs
+const AllowedPrivateProperties = [
+  'line-border-width',
+  'line-border-color',
 ];
 
 /**
@@ -340,7 +347,7 @@ function isAttrSupported(name, attr, only) {
     return false;
   }
   const support = getAttributeSupport(attr['sdk-support']);
-  if (attr.private === true) {
+  if (attr.private === true && !AllowedPrivateProperties.includes(name)) {
     return false;
   }
   if (only != null) {
@@ -481,6 +488,26 @@ export function getLayers() {
     support: { v10: true },
   });
 
+  // add snow as a layer
+  layers.push({
+    name: 'snow',
+    properties: getPropertiesFor('snow'),
+    props: {
+      v11: getPropertiesFor('snow'),
+    },
+    support: { v11: true },
+  });
+
+  // add rain as a layer
+  layers.push({
+    name: 'rain',
+    properties: getPropertiesFor('rain'),
+    props: {
+      v11: getPropertiesFor('rain'),
+    },
+    support: { v11: true },
+  });
+
   // add terrain as a layer
   layers.push({
     name: 'terrain',
@@ -520,6 +547,11 @@ export default async function generateCodeWithEjs(layers) {
     {
       input: path.join(TMPL_PATH, 'styleMap.ts.ejs'),
       output: path.join(JS_OUTPUT_PATH, 'styleMap.ts'),
+      only: ['v10', 'v11'],
+    },
+    {
+      input: path.join(TMPL_PATH, 'webStyleMap.ts.ejs'),
+      output: path.join(WEB_OUTPUT_PATH, 'webStyleMap.ts'),
       only: ['v10', 'v11'],
     },
   ];

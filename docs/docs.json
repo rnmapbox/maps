@@ -747,7 +747,25 @@
       {
         "name": "bounds",
         "required": false,
-        "type": "intersection",
+        "type": {
+          "name": "shape",
+          "value": [
+            {
+              "name": "ne",
+              "required": true,
+              "type": "Position",
+              "default": "none",
+              "description": "FIX ME NO DESCRIPTION"
+            },
+            {
+              "name": "sw",
+              "required": true,
+              "type": "Position",
+              "default": "none",
+              "description": "FIX ME NO DESCRIPTION"
+            }
+          ]
+        },
         "default": "none",
         "description": "The corners of a box around which the map should bound. Contains padding props for backwards\ncompatibility; the root `padding` prop should be used instead."
       },
@@ -756,14 +774,14 @@
         "required": false,
         "type": "number",
         "default": "none",
-        "description": "The heading (orientation) of the map."
+        "description": "Heading (bearing, orientation) of the map, measured in degrees clockwise from true north."
       },
       {
         "name": "pitch",
         "required": false,
         "type": "number",
         "default": "none",
-        "description": "The pitch of the map."
+        "description": "The pitch toward the horizon measured in degrees, with 0 degrees resulting in a top-down view for a two-dimensional map."
       },
       {
         "name": "zoomLevel",
@@ -780,28 +798,28 @@
           "value": [
             {
               "name": "paddingLeft",
-              "required": true,
+              "required": false,
               "type": "number",
               "default": "none",
               "description": "Left padding in points"
             },
             {
               "name": "paddingRight",
-              "required": true,
+              "required": false,
               "type": "number",
               "default": "none",
               "description": "Right padding in points"
             },
             {
               "name": "paddingTop",
-              "required": true,
+              "required": false,
               "type": "number",
               "default": "none",
               "description": "Top padding in points"
             },
             {
               "name": "paddingBottom",
-              "required": true,
+              "required": false,
               "type": "number",
               "default": "none",
               "description": "Bottom padding in points"
@@ -809,7 +827,7 @@
           ]
         },
         "default": "none",
-        "description": "The viewport padding in points."
+        "description": "The viewport padding in points. An omitted edge keeps its current padding."
       },
       {
         "name": "animationDuration",
@@ -938,14 +956,14 @@
               "required": false,
               "type": "number",
               "default": "none",
-              "description": "The heading (orientation) of the map."
+              "description": "Heading (bearing, orientation) of the map, measured in degrees clockwise from true north."
             },
             {
               "name": "pitch",
               "required": false,
               "type": "number",
               "default": "none",
-              "description": "The pitch of the map."
+              "description": "The pitch toward the horizon measured in degrees, with 0 degrees resulting in a top-down view for a two-dimensional map."
             },
             {
               "name": "zoomLevel",
@@ -959,7 +977,7 @@
               "required": false,
               "type": "signature",
               "default": "none",
-              "description": "The viewport padding in points."
+              "description": "The viewport padding in points. An omitted edge keeps its current padding."
             },
             {
               "name": "animationDuration",
@@ -971,7 +989,7 @@
             {
               "name": "animationMode",
               "required": false,
-              "type": "union",
+              "type": "'flyTo' \\| 'easeTo' \\| 'linearTo' \\| 'moveTo' \\| 'none'",
               "default": "none",
               "description": "The easing or path the camera uses to animate to a new configuration."
             }
@@ -2370,6 +2388,22 @@
           "name": "fill-extrusion-line-width",
           "namespace": "paint"
         }
+      },
+      {
+        "name": "fillExtrusionCastShadows",
+        "type": "boolean",
+        "values": [],
+        "default": true,
+        "description": "Enable/Disable shadow casting for this layer",
+        "requires": [],
+        "disabledBy": [],
+        "allowedFunctionTypes": [],
+        "transition": false,
+        "mbx": {
+          "fullName": "paint-fill-extrusion-fill-extrusion-cast-shadows",
+          "name": "fill-extrusion-cast-shadows",
+          "namespace": "paint"
+        }
       }
     ]
   },
@@ -3309,6 +3343,33 @@
           "name": "hillshade-accent-color",
           "namespace": "paint"
         }
+      },
+      {
+        "name": "hillshadeEmissiveStrength",
+        "type": "number",
+        "values": [],
+        "minimum": 0,
+        "units": "intensity",
+        "default": 0,
+        "description": "Controls the intensity of light emitted on the source features.",
+        "requires": [
+          "lights"
+        ],
+        "disabledBy": [],
+        "allowedFunctionTypes": [],
+        "expression": {
+          "interpolated": true,
+          "parameters": [
+            "zoom",
+            "measure-light"
+          ]
+        },
+        "transition": true,
+        "mbx": {
+          "fullName": "paint-hillshade-hillshade-emissive-strength",
+          "name": "hillshade-emissive-strength",
+          "namespace": "paint"
+        }
       }
     ]
   },
@@ -3436,11 +3497,9 @@
           "name": "shape",
           "value": [
             {
-              "name": {
-                "name": "string"
-              },
+              "name": "[key: string]",
               "required": true,
-              "type": "union",
+              "type": "string \\| ImageSourcePropType \\| ImageEntryData",
               "default": "none",
               "description": "FIX ME NO DESCRIPTION"
             }
@@ -3946,6 +4005,34 @@
         }
       },
       {
+        "name": "lineElevationGroundScale",
+        "type": "number",
+        "values": [],
+        "minimum": 0,
+        "maximum": 1,
+        "default": 0,
+        "description": "Controls how much the elevation of lines with `lineElevationReference` set to `sea` scales with terrain exaggeration. A value of 0 keeps the line at a fixed altitude above sea level. A value of 1 scales the elevation proportionally with terrain exaggeration.",
+        "requires": [
+          "lineZOffset"
+        ],
+        "disabledBy": [],
+        "allowedFunctionTypes": [],
+        "expression": {
+          "interpolated": true,
+          "parameters": [
+            "zoom",
+            "feature",
+            "line-progress"
+          ]
+        },
+        "transition": true,
+        "mbx": {
+          "fullName": "layout-line-line-elevation-ground-scale",
+          "name": "line-elevation-ground-scale",
+          "namespace": "layout"
+        }
+      },
+      {
         "name": "lineOpacity",
         "type": "number",
         "values": [],
@@ -4369,13 +4456,63 @@
           "interpolated": true,
           "parameters": [
             "zoom",
-            "measure-light"
+            "measure-light",
+            "line-progress"
           ]
         },
         "transition": true,
         "mbx": {
           "fullName": "paint-line-line-emissive-strength",
           "name": "line-emissive-strength",
+          "namespace": "paint"
+        }
+      },
+      {
+        "name": "lineBorderWidth",
+        "type": "number",
+        "values": [],
+        "minimum": 0,
+        "default": 0,
+        "description": "The width of the line border. A value of zero means no border.",
+        "requires": [],
+        "disabledBy": [],
+        "allowedFunctionTypes": [],
+        "expression": {
+          "interpolated": true,
+          "parameters": [
+            "zoom",
+            "feature",
+            "feature-state"
+          ]
+        },
+        "transition": true,
+        "mbx": {
+          "fullName": "paint-line-line-border-width",
+          "name": "line-border-width",
+          "namespace": "paint"
+        }
+      },
+      {
+        "name": "lineBorderColor",
+        "type": "color",
+        "values": [],
+        "default": "rgba(0, 0, 0, 0)",
+        "description": "The color of the line border. If lineBorderWidth is greater than zero and the alpha value of this color is 0 (default), the color for the border will be selected automatically based on the line color.",
+        "requires": [],
+        "disabledBy": [],
+        "allowedFunctionTypes": [],
+        "expression": {
+          "interpolated": true,
+          "parameters": [
+            "zoom",
+            "feature",
+            "feature-state"
+          ]
+        },
+        "transition": true,
+        "mbx": {
+          "fullName": "paint-line-line-border-color",
+          "name": "line-border-color",
           "namespace": "paint"
         }
       },
@@ -4474,6 +4611,45 @@
         "description": "The configration parameters for sonar-like pulsing circle animation shown around the 2D puck."
       },
       {
+        "name": "model",
+        "required": false,
+        "type": {
+          "name": "shape",
+          "value": [
+            {
+              "name": "uri",
+              "required": true,
+              "type": "string \\| number",
+              "default": "none",
+              "description": "URL of a glTF/glb model, or an asset reference from `require`."
+            },
+            {
+              "name": "scale",
+              "required": false,
+              "type": "T \\| Expression",
+              "default": "none",
+              "description": "Scale of the model in x, y, z. Supports expressions based on zoom."
+            },
+            {
+              "name": "rotation",
+              "required": false,
+              "type": "T \\| Expression",
+              "default": "none",
+              "description": "Rotation of the model in degrees around x, y, z."
+            },
+            {
+              "name": "opacity",
+              "required": false,
+              "type": "T \\| Expression",
+              "default": "none",
+              "description": "Opacity of the model, between 0 and 1."
+            }
+          ]
+        },
+        "default": "none",
+        "description": "Renders the puck as a 3D model instead of the 2D images. When set, `topImage`, `bearingImage`, `shadowImage`, `scale`, `pulsing` and `androidRenderMode` are ignored.\n\nExample: `{ uri: require('./car.glb'), scale: [1, 1, 1], rotation: [0, 0, 90] }`"
+      },
+      {
         "name": "visible",
         "required": false,
         "type": "boolean",
@@ -4491,14 +4667,14 @@
     "methods": [
       {
         "name": "getPointInView",
-        "docblock": "Converts a geographic coordinate to a point in the given view’s coordinate system.\n\n@example\nconst pointInView = await this._map.getPointInView([-37.817070, 144.949901]);\n\n@param {Array<number>} coordinate - A point expressed in the map view's coordinate system.\n@return {Array}",
+        "docblock": "Converts a geographic coordinate to a screen coordinate relative to the map view.\n\n@example\nconst longitude = 144.949901;\nconst latitude = -37.817070;\nconst [x, y] = await this._map.getPointInView([longitude, latitude]);\n\n@param {Position} coordinate - A point expressed in the map view's coordinate system `[longitude, latitude]`.\n@return {Position} A point expressed in screen coordinates relative to the map view `[x, y]`.",
         "modifiers": [
           "async"
         ],
         "params": [
           {
             "name": "coordinate",
-            "description": "A point expressed in the map view's coordinate system.",
+            "description": "A point expressed in the map view's coordinate system `[longitude, latitude]`.",
             "type": {
               "name": "Position"
             },
@@ -4506,6 +4682,7 @@
           }
         ],
         "returns": {
+          "description": "A point expressed in screen coordinates relative to the map view `[x, y]`.",
           "type": {
             "name": "Promise",
             "elements": [
@@ -4516,21 +4693,21 @@
             "raw": "Promise<Position>"
           }
         },
-        "description": "Converts a geographic coordinate to a point in the given view’s coordinate system.",
+        "description": "Converts a geographic coordinate to a screen coordinate relative to the map view.",
         "examples": [
-          "\nconst pointInView = await this._map.getPointInView([-37.817070, 144.949901]);\n\n"
+          "\nconst longitude = 144.949901;\nconst latitude = -37.817070;\nconst [x, y] = await this._map.getPointInView([longitude, latitude]);\n\n"
         ]
       },
       {
         "name": "getCoordinateFromView",
-        "docblock": "Converts a point in the given view’s coordinate system to a geographic coordinate.\n\n@example\nconst coordinate = await this._map.getCoordinateFromView([100, 100]);\n\n@param {Array<number>} point - A point expressed in the given view’s coordinate system.\n@return {Array}",
+        "docblock": "Converts a screen coordinate relative to the map view to a geographic coordinate.\n\n@example\nconst x = 100; const y = 100;\nconst [longitude, latitude] = await this._map.getCoordinateFromView([x, y]);\n\n@param {Position} point - A point expressed in screen coordinates relative to the map view `[x, y]`.\n@return {Position} A point expressed in the map view's coordinate system `[longitude, latitude]`.",
         "modifiers": [
           "async"
         ],
         "params": [
           {
             "name": "point",
-            "description": "A point expressed in the given view’s coordinate system.",
+            "description": "A point expressed in screen coordinates relative to the map view `[x, y]`.",
             "type": {
               "name": "Position"
             },
@@ -4538,6 +4715,7 @@
           }
         ],
         "returns": {
+          "description": "A point expressed in the map view's coordinate system `[longitude, latitude]`.",
           "type": {
             "name": "Promise",
             "elements": [
@@ -4548,19 +4726,20 @@
             "raw": "Promise<Position>"
           }
         },
-        "description": "Converts a point in the given view’s coordinate system to a geographic coordinate.",
+        "description": "Converts a screen coordinate relative to the map view to a geographic coordinate.",
         "examples": [
-          "\nconst coordinate = await this._map.getCoordinateFromView([100, 100]);\n\n"
+          "\nconst x = 100; const y = 100;\nconst [longitude, latitude] = await this._map.getCoordinateFromView([x, y]);\n\n"
         ]
       },
       {
         "name": "getVisibleBounds",
-        "docblock": "The coordinate bounds (ne, sw) visible in the user’s viewport.\n\n@example\nconst visibleBounds = await this._map.getVisibleBounds();\n\n@return {Array}",
+        "docblock": "The coordinate bounds of the map viewport.\n\n@example\nconst [[rightLon, topLat], [leftLon, bottomLat]] = await this._map.getVisibleBounds();\n\n@return {[Position, Position]} The geographic coordinate bounds of the map viewport `[[rightLon, topLat], [leftLon, bottomLat]]`.",
         "modifiers": [
           "async"
         ],
         "params": [],
         "returns": {
+          "description": "The geographic coordinate bounds of the map viewport `[[rightLon, topLat], [leftLon, bottomLat]]`.",
           "type": {
             "name": "Promise",
             "elements": [
@@ -4580,21 +4759,21 @@
             "raw": "Promise<[Position, Position]>"
           }
         },
-        "description": "The coordinate bounds (ne, sw) visible in the user’s viewport.",
+        "description": "The coordinate bounds of the map viewport.",
         "examples": [
-          "\nconst visibleBounds = await this._map.getVisibleBounds();\n\n"
+          "\nconst [[rightLon, topLat], [leftLon, bottomLat]] = await this._map.getVisibleBounds();\n\n"
         ]
       },
       {
         "name": "queryRenderedFeaturesAtPoint",
-        "docblock": "Returns an array of rendered map features that intersect with a given point.\n\n@example\nthis._map.queryRenderedFeaturesAtPoint([30, 40], ['==', 'type', 'Point'], ['id1', 'id2'])\n\n@param  {Array<Number>} coordinate - A point expressed in the map view’s coordinate system.\n@param  {Array=} filter - A set of strings that correspond to the names of layers defined in the current style. Only the features contained in these layers are included in the returned array.\n@param  {Array=} layerIDs - A array of layer id's to filter the features by\n@return {FeatureCollection}",
+        "docblock": "Returns an array of rendered map features that intersect with a given point.\n\n@example\nconst x = 30; const y = 40;\nthis._map.queryRenderedFeaturesAtPoint([x, y], ['==', 'type', 'Point'], ['id1', 'id2'])\n\n@param  {Position} coordinate - A point expressed in the map view’s coordinate system `[x, y]`;\n@param  {FilterExpression | []} filter - A set of strings that correspond to the names of layers defined in the current style. Only the features contained in these layers are included in the returned array.\n@param  {string[]} layerIDs - A array of layer IDs by which to filter the features.\n@return {FeatureCollection}  A GeoJSON feature collection containing the query results.",
         "modifiers": [
           "async"
         ],
         "params": [
           {
             "name": "coordinate",
-            "description": "A point expressed in the map view’s coordinate system.",
+            "description": "A point expressed in the map view’s coordinate system `[x, y]`;",
             "type": {
               "name": "Position"
             },
@@ -4604,13 +4783,13 @@
             "name": "filter",
             "description": "A set of strings that correspond to the names of layers defined in the current style. Only the features contained in these layers are included in the returned array.",
             "type": {
-              "name": "Array"
+              "name": "FilterExpression \\| tuple"
             },
             "optional": true
           },
           {
             "name": "layerIDs",
-            "description": "A array of layer id's to filter the features by",
+            "description": "A array of layer IDs by which to filter the features.",
             "type": {
               "name": "Array"
             },
@@ -4618,6 +4797,7 @@
           }
         ],
         "returns": {
+          "description": "A GeoJSON feature collection containing the query results.",
           "type": {
             "name": "Promise",
             "elements": [
@@ -4639,19 +4819,19 @@
         },
         "description": "Returns an array of rendered map features that intersect with a given point.",
         "examples": [
-          "\nthis._map.queryRenderedFeaturesAtPoint([30, 40], ['==', 'type', 'Point'], ['id1', 'id2'])\n\n"
+          "\nconst x = 30; const y = 40;\nthis._map.queryRenderedFeaturesAtPoint([x, y], ['==', 'type', 'Point'], ['id1', 'id2'])\n\n"
         ]
       },
       {
         "name": "queryRenderedFeaturesInRect",
-        "docblock": "Returns an array of rendered map features that intersect with the given rectangle,\nrestricted to the given style layers and filtered by the given predicate. In v10,\npassing an empty array will query the entire visible bounds of the map.\n\n@example\nthis._map.queryRenderedFeaturesInRect([30, 40, 20, 10], ['==', 'type', 'Point'], ['id1', 'id2'])\n\n@param  {Array<Number>} bbox - A rectangle expressed in the map view’s coordinate system, density independent pixels and not map coordinates. This can be an empty array to query the visible map area.\n@param  {Array=} filter - A set of strings that correspond to the names of layers defined in the current style. Only the features contained in these layers are included in the returned array.\n@param  {Array=} layerIDs -  A array of layer id's to filter the features by\n@return {FeatureCollection}",
+        "docblock": "Returns an array of rendered map features that intersect with the given rectangle,\nrestricted to the given style layers and filtered by the given predicate. In v10,\npassing an empty array will query the entire visible bounds of the map.\n\n@example\nconst left = 40; const top = 30;\nconst right = 10; const bottom = 20;\nthis._map.queryRenderedFeaturesInRect([top, left, bottom, right], ['==', 'type', 'Point'], ['id1', 'id2'])\n\n@param  {BBox | []} bbox - A rectangle expressed in density-independent screen coordinates relative to the map view `[top, left, bottom, right]` or `[minY, minX, maxY, maxX]` (not geographic coordinates). An empty array queries the visible map area.\n@param  {FilterExpression} filter - An array of strings that correspond to the names of layers defined in the current style. Only the features contained in these layers are included in the returned array.\n@param  {string[] | null} layerIDs -  A array of layer IDs by which to filter the features.\n@return {FeatureCollection} A GeoJSON feature collection containing the query results.",
         "modifiers": [
           "async"
         ],
         "params": [
           {
             "name": "bbox",
-            "description": "A rectangle expressed in the map view’s coordinate system, density independent pixels and not map coordinates. This can be an empty array to query the visible map area.",
+            "description": "A rectangle expressed in density-independent screen coordinates relative to the map view `[top, left, bottom, right]` or `[minY, minX, maxY, maxX]` (not geographic coordinates). An empty array queries the visible map area.",
             "type": {
               "name": "BBox \\| []"
             },
@@ -4659,15 +4839,15 @@
           },
           {
             "name": "filter",
-            "description": "A set of strings that correspond to the names of layers defined in the current style. Only the features contained in these layers are included in the returned array.",
+            "description": "An array of strings that correspond to the names of layers defined in the current style. Only the features contained in these layers are included in the returned array.",
             "type": {
-              "name": "Array"
+              "name": "FilterExpression"
             },
             "optional": true
           },
           {
             "name": "layerIDs",
-            "description": " A array of layer id's to filter the features by",
+            "description": " A array of layer IDs by which to filter the features.",
             "type": {
               "name": "Array"
             },
@@ -4675,6 +4855,7 @@
           }
         ],
         "returns": {
+          "description": "A GeoJSON feature collection containing the query results.",
           "type": {
             "name": "Promise",
             "elements": [
@@ -4696,12 +4877,12 @@
         },
         "description": "Returns an array of rendered map features that intersect with the given rectangle,\nrestricted to the given style layers and filtered by the given predicate. In v10,\npassing an empty array will query the entire visible bounds of the map.",
         "examples": [
-          "\nthis._map.queryRenderedFeaturesInRect([30, 40, 20, 10], ['==', 'type', 'Point'], ['id1', 'id2'])\n\n"
+          "\nconst left = 40; const top = 30;\nconst right = 10; const bottom = 20;\nthis._map.queryRenderedFeaturesInRect([top, left, bottom, right], ['==', 'type', 'Point'], ['id1', 'id2'])\n\n"
         ]
       },
       {
         "name": "querySourceFeatures",
-        "docblock": "Returns an array of GeoJSON Feature objects representing features within the specified vector tile or GeoJSON source that satisfy the query parameters.\n\n@example\nthis._map.querySourceFeatures('your-source-id', [], ['your-source-layer'])\n\n@param  {String} sourceId - Style source identifier used to query for source features.\n@param  {Array=} filter - A filter to limit query results.\n@param  {Array=} sourceLayerIDs - The name of the source layers to query. For vector tile sources, this parameter is required. For GeoJSON sources, it is ignored.\n@return {FeatureCollection}",
+        "docblock": "Returns an array of GeoJSON Feature objects representing features within the specified vector tile or GeoJSON source that satisfy the query parameters.\n\n@example\nthis._map.querySourceFeatures('your-source-id', [], ['your-source-layer'])\n\n@param  {String} sourceId - Style source identifier used to query for source features.\n@param  {FilterExpression | []} filter - A filter to limit query results.\n@param  {string[]} sourceLayerIDs - The name of the source layers to query. For vector tile sources, this parameter is required. For GeoJSON sources, it is ignored.\n@return {FeatureCollection} A GeoJSON feature collection.",
         "modifiers": [
           "async"
         ],
@@ -4718,7 +4899,7 @@
             "name": "filter",
             "description": "A filter to limit query results.",
             "type": {
-              "name": "Array"
+              "name": "FilterExpression \\| tuple"
             },
             "optional": true
           },
@@ -4732,6 +4913,7 @@
           }
         ],
         "returns": {
+          "description": "A GeoJSON feature collection.",
           "type": {
             "name": "Promise",
             "elements": [
@@ -4758,21 +4940,22 @@
       },
       {
         "name": "takeSnap",
-        "docblock": "Takes snapshot of map with current tiles and returns a URI to the image\n@param  {Boolean} writeToDisk If true will create a temp file, otherwise it is in base64\n@return {String}",
+        "docblock": "Takes snapshot of map with current tiles and returns a Base64-encoded PNG image,\nor an file-system URI to a temporary PNG file if `writeToDisk` is `true`.\n\n@param  {boolean} writeToDisk If `true`, creates a temporary PNG file and returns a file-system URI, otherwise returns a Base64-encoded PNG image. (Defaults to `false`)\n@return {string} A a Base64-encoded PNG image or a file-system URI to a temporary PNG file.",
         "modifiers": [
           "async"
         ],
         "params": [
           {
             "name": "writeToDisk",
-            "description": "If true will create a temp file, otherwise it is in base64",
+            "description": "If `true`, creates a temporary PNG file and returns a file-system URI, otherwise returns a Base64-encoded PNG image. (Defaults to `false`)",
             "type": {
-              "name": "Boolean"
+              "name": "boolean"
             },
             "optional": true
           }
         ],
         "returns": {
+          "description": "A a Base64-encoded PNG image or a file-system URI to a temporary PNG file.",
           "type": {
             "name": "Promise",
             "elements": [
@@ -4783,17 +4966,18 @@
             "raw": "Promise<string>"
           }
         },
-        "description": "Takes snapshot of map with current tiles and returns a URI to the image",
+        "description": "Takes snapshot of map with current tiles and returns a Base64-encoded PNG image,\nor an file-system URI to a temporary PNG file if `writeToDisk` is `true`.",
         "examples": []
       },
       {
         "name": "getZoom",
-        "docblock": "Returns the current zoom of the map view.\n\n@example\nconst zoom = await this._map.getZoom();\n\n@return {Number}",
+        "docblock": "Returns the current zoom of the map view.\n\n@example\nconst zoom = await this._map.getZoom();\n\n@return {number} The current zoom of the map view.",
         "modifiers": [
           "async"
         ],
         "params": [],
         "returns": {
+          "description": "The current zoom of the map view.",
           "type": {
             "name": "Promise",
             "elements": [
@@ -4811,13 +4995,13 @@
       },
       {
         "name": "getCenter",
-        "docblock": "Returns the map's geographical centerpoint\n\n@example\nconst center = await this._map.getCenter();\n\n@return {Array<Number>} Coordinates",
+        "docblock": "Returns the map's center point expressed as geographic coordinates `[longitude, latitude]`.\n\n@example\nconst center = await this._map.getCenter();\n\n@return {Position} The map's center point expressed as geographic coordinates `[longitude, latitude]`.",
         "modifiers": [
           "async"
         ],
         "params": [],
         "returns": {
-          "description": "Coordinates",
+          "description": "The map's center point expressed as geographic coordinates `[longitude, latitude]`.",
           "type": {
             "name": "Promise",
             "elements": [
@@ -4828,7 +5012,7 @@
             "raw": "Promise<Position>"
           }
         },
-        "description": "Returns the map's geographical centerpoint",
+        "description": "Returns the map's center point expressed as geographic coordinates `[longitude, latitude]`.",
         "examples": [
           "\nconst center = await this._map.getCenter();\n\n"
         ]
@@ -4856,14 +5040,14 @@
       },
       {
         "name": "queryTerrainElevation",
-        "docblock": "Queries the currently loaded data for elevation at a geographical location.\nThe elevation is returned in meters relative to mean sea-level.\nReturns null if terrain is disabled or if terrain data for the location hasn't been loaded yet.\n\n@param {Array<Number>} coordinate - the coordinates to query elevation at\n@return {Number}",
+        "docblock": "Queries the currently loaded data for elevation at a geographical location.\nThe elevation is returned in meters relative to mean sea-level.\nReturns null if terrain is disabled or if terrain data for the location hasn't been loaded yet.\n\n@param {Position} coordinate - The geographic coordinates `[longitude, latitude]` at which to query elevation.\n@return {number} Elevation in meters relative to mean sea-level.",
         "modifiers": [
           "async"
         ],
         "params": [
           {
             "name": "coordinate",
-            "description": "the coordinates to query elevation at",
+            "description": "The geographic coordinates `[longitude, latitude]` at which to query elevation.",
             "type": {
               "name": "Position"
             },
@@ -4871,6 +5055,7 @@
           }
         ],
         "returns": {
+          "description": "Elevation in meters relative to mean sea-level.",
           "type": {
             "name": "Promise",
             "elements": [
@@ -4886,7 +5071,7 @@
       },
       {
         "name": "setSourceVisibility",
-        "docblock": "Sets the visibility of all the layers referencing the specified `sourceLayerId` and/or `sourceId`\n\n@example\nawait this._map.setSourceVisibility(false, 'composite', 'building')\n\n@param {boolean} visible - Visibility of the layers\n@param {String} sourceId - Identifier of the target source (e.g. 'composite')\n@param {String=} sourceLayerId - Identifier of the target source-layer (e.g. 'building')",
+        "docblock": "Sets the visibility of all the layers referencing the specified `sourceLayerId` and/or `sourceId`\n\n@example\nawait this._map.setSourceVisibility(false, 'composite', 'building')\n\n@param {boolean} visible - Visibility of the layers\n@param {string} sourceId - Target source identifier (e.g. 'composite')\n@param {string | null} sourceLayerId - Target source-layer identifier (e.g. 'building'). If `null`, the change affects all layers in the target source.",
         "modifiers": [],
         "params": [
           {
@@ -4899,7 +5084,7 @@
           },
           {
             "name": "sourceId",
-            "description": "Identifier of the target source (e.g. 'composite')",
+            "description": "Target source identifier (e.g. 'composite')",
             "type": {
               "name": "string"
             },
@@ -4907,9 +5092,9 @@
           },
           {
             "name": "sourceLayerId",
-            "description": "Identifier of the target source-layer (e.g. 'building')",
+            "description": "Target source-layer identifier (e.g. 'building'). If `null`, the change affects all layers in the target source.",
             "type": {
-              "name": "String"
+              "name": "string"
             },
             "optional": true
           }
@@ -5268,10 +5453,17 @@
         "description": "[`mapbox` (v10) implementation only] Adds scale bar offset, e.g. `{top: 8, left: 8}` will put the scale bar in top-left corner of the map"
       },
       {
+        "name": "scaleBarUnits",
+        "required": false,
+        "type": "'metric' \\| 'imperial' \\| 'nautical'",
+        "default": "none",
+        "description": "Set the scale bar distance units. Defaults to metric."
+      },
+      {
         "name": "surfaceView",
         "required": false,
         "type": "boolean",
-        "default": "RNMBXModule.MapboxV10 ? true : false",
+        "default": "true",
         "description": "[Android only] Enable/Disable use of GLSurfaceView instead of TextureView."
       },
       {
@@ -5284,9 +5476,9 @@
       {
         "name": "localizeLabels",
         "required": false,
-        "type": "\\| {\n    /** locale code like `es` or `current` for the device's current locale */\n    locale: string;\n    /** layer id to localize. If not specified, all layers will be localized */\n    layerIds?: string[];\n  }\n\\| true",
+        "type": "\\| {\n    /** locale code like `es` or `current` for the device's current locale */\n    locale: string;\n    /** layer ids to localize. If not specified, all layers will be localized */\n    layerIds?: string[];\n  }\n\\| true",
         "default": "none",
-        "description": "[`mapbox` (v10) implementation only]\nSet map's label locale, e.g. `{ \"locale\": \"es\" }` will localize labels to Spanish, `{ \"locale\": \"current\" }` will localize labels to system locale."
+        "description": "Set map's label locale, e.g. `{ \"locale\": \"es\" }` will localize labels to Spanish, `{ \"locale\": \"current\" }` will localize labels to system locale.\nLabels are localized on the device for this map only, into `ar`, `de`, `en`, `es`, `fr`, `it`, `ja`, `ko`, `pt`, `ru`, `vi`, `zh-Hans` or `zh-Hant`, and not on the Standard style.\nFor any language Mapbox supports and for the Standard style, use the app-wide `Mapbox.setLanguage`.\nRemoving the prop stops localizing labels from the next style load."
       },
       {
         "name": "gestureSettings",
@@ -5405,7 +5597,7 @@
           "funcSignature": "(feature:GeoJSON.Feature) => void"
         },
         "default": "none",
-        "description": "Map press listener, gets called when a user presses the map\n*signature:*`(feature:GeoJSON.Feature) => void`"
+        "description": "Map press listener, called when a user presses the map.\nSingle taps are reported only after the map rules out a double tap, so `onPress` fires a few hundred milliseconds after the touch.\nOn iOS, setting both `doubleTapToZoomInEnabled` and `quickZoomEnabled` to `false` in `gestureSettings` removes most of this delay; on Android it doesn't.\n*signature:*`(feature:GeoJSON.Feature) => void`"
       },
       {
         "name": "onLongPress",
@@ -5415,7 +5607,7 @@
           "funcSignature": "(feature:GeoJSON.Feature) => void"
         },
         "default": "none",
-        "description": "Map long press listener, gets called when a user long presses the map\n*signature:*`(feature:GeoJSON.Feature) => void`"
+        "description": "Map long press listener, called when a user long presses the map.\n*signature:*`(feature:GeoJSON.Feature) => void`"
       },
       {
         "name": "onRegionWillChange",
@@ -5502,10 +5694,10 @@
         "required": false,
         "type": {
           "name": "func",
-          "funcSignature": "() => void"
+          "funcSignature": "(payload:{error: string, type: union, tileId: string, sourceId: string}) => void"
         },
         "default": "none",
-        "description": "This event is tiggered when there is an error during map load. V10 only, replaces onDidFailLoadingMap, might be called multiple times and not exclusive with onDidFinishLoadingMap.\n*signature:*`() => void`"
+        "description": "This event is tiggered when there is an error during map load. V10 only, replaces onDidFailLoadingMap, might be called multiple times and not exclusive with onDidFinishLoadingMap.\n*signature:*`(payload:{error: string, type: union, tileId: string, sourceId: string}) => void`"
       },
       {
         "name": "onWillStartRenderingFrame",
@@ -5614,7 +5806,7 @@
     "name": "MapView"
   },
   "MarkerView": {
-    "description": "MarkerView represents an interactive React Native marker on the map.\n\nIf you have static views, consider using PointAnnotation or SymbolLayer to display\nan image, as they'll offer much better performance. Mapbox suggests using this\ncomponent for a maximum of around 100 views displayed at one time.\n\nThis is implemented with view annotations on [Android](https://docs.mapbox.com/android/maps/guides/annotations/view-annotations/)\nand [iOS](https://docs.mapbox.com/ios/maps/guides/annotations/view-annotations).\n\nThis component has no dedicated `onPress` method. Instead, you should handle gestures\nwith the React views passed in as `children`.",
+    "description": "MarkerView represents an interactive React Native marker on the map.\n\nIf you have static views, consider using PointAnnotation or SymbolLayer to display\nan image, as they'll offer much better performance. Mapbox suggests using this\ncomponent for a maximum of around 100 views displayed at one time.\n\nThis is implemented with view annotations on [Android](https://docs.mapbox.com/android/maps/guides/annotations/view-annotations/)\nand [iOS](https://docs.mapbox.com/ios/maps/guides/annotations/view-annotations).\n\nThis component has no dedicated `onPress` method. Instead, handle gestures\nwith the React views passed in as `children` — Pressable, TouchableOpacity,\netc. all work including their visual feedback (opacity, scale, etc.).",
     "displayName": "MarkerView",
     "methods": [],
     "props": [
@@ -5655,7 +5847,7 @@
         "required": false,
         "type": "boolean",
         "default": "false",
-        "description": "@v10\n\nWhether or not nearby markers on the map should all be displayed. If false, adjacent\nmarkers will 'collapse' and only one will be shown. Defaults to false."
+        "description": "Whether or not nearby markers on the map should all be displayed. If false, adjacent\nmarkers will 'collapse' and only one will be shown. Defaults to false."
       },
       {
         "name": "allowOverlapWithPuck",
@@ -5672,11 +5864,18 @@
         "description": "FIX ME NO DESCRIPTION"
       },
       {
+        "name": "stopGesturePropagation",
+        "required": false,
+        "type": "boolean",
+        "default": "false",
+        "description": "Keep pan/pinch/drag gestures that start on this marker inside the marker instead of\nletting them reach the map. Enable this for markers whose children handle their own\ndrags in JavaScript (e.g. a PanResponder-based slider), which otherwise race the map's\npan/zoom recogniser and can be taken over by the map. By default the marker is smart:\ntaps and native scrollables are kept, but a pan/pinch that merely starts on the marker\nmoves the map. Defaults to false.\n\n@platform android — on iOS the map's gesture recognisers already coexist with marker\ncontent, so this has no effect."
+      },
+      {
         "name": "children",
         "required": true,
         "type": "ReactReactElement",
         "default": "none",
-        "description": "One or more valid React Native views."
+        "description": "One or more valid React Native views. You can use Pressable, TouchableOpacity,\netc. directly as children — onPress and touch feedback work correctly."
       }
     ],
     "fileNameWithExt": "MarkerView.tsx",
@@ -6237,11 +6436,9 @@
           "name": "shape",
           "value": [
             {
-              "name": {
-                "name": "string"
-              },
+              "name": "[key: string]",
               "required": true,
-              "type": "union",
+              "type": "string \\| number",
               "default": "none",
               "description": "FIX ME NO DESCRIPTION"
             }
@@ -6405,6 +6602,103 @@
     "fileNameWithExt": "PointAnnotation.tsx",
     "relPath": "src/components/PointAnnotation.tsx",
     "name": "PointAnnotation"
+  },
+  "PointAnnotationManager": {
+    "description": "Configures a PointAnnotation manager. Each PointAnnotationManager owns its own\nannotation layer, so multiple managers can be placed in different `slot`s of the\nMapbox Standard style. Wrap PointAnnotation components as children.\n\nPointAnnotations that are not wrapped in a PointAnnotationManager attach to a\ndefault manager. Use `default` to configure that manager.",
+    "displayName": "PointAnnotationManager",
+    "methods": [],
+    "props": [
+      {
+        "name": "id",
+        "required": false,
+        "type": "string",
+        "default": "none",
+        "description": "A stable Mapbox layer id for this manager's annotation layer.\nWhen omitted, the SDK generates a unique id automatically."
+      },
+      {
+        "name": "default",
+        "required": false,
+        "type": "boolean",
+        "default": "none",
+        "description": "Marks this as the default manager. PointAnnotations that are not wrapped in a\nPointAnnotationManager attach to the default manager, so this lets you configure\nthe slot and properties used by those bare annotations. Only one default manager\nis allowed per MapView."
+      },
+      {
+        "name": "slot",
+        "required": false,
+        "type": "Slot \\| (string & {})",
+        "default": "none",
+        "description": "The slot in the style layer stack to position the annotation layer.\nUse with Mapbox Standard style to control layer ordering."
+      },
+      {
+        "name": "iconAllowOverlap",
+        "required": false,
+        "type": "boolean",
+        "default": "none",
+        "description": "If true, the icon will be visible even if it collides with other previously drawn symbols."
+      },
+      {
+        "name": "iconIgnorePlacement",
+        "required": false,
+        "type": "boolean",
+        "default": "none",
+        "description": "If true, other symbols can be visible even if they collide with the icon."
+      },
+      {
+        "name": "iconOptional",
+        "required": false,
+        "type": "boolean",
+        "default": "none",
+        "description": "If true, text will display without their corresponding icons when the icon collides\nwith other symbols and the text does not."
+      },
+      {
+        "name": "textAllowOverlap",
+        "required": false,
+        "type": "boolean",
+        "default": "none",
+        "description": "If true, the text will be visible even if it collides with other previously drawn symbols."
+      },
+      {
+        "name": "textIgnorePlacement",
+        "required": false,
+        "type": "boolean",
+        "default": "none",
+        "description": "If true, other symbols can be visible even if they collide with the text."
+      },
+      {
+        "name": "textOptional",
+        "required": false,
+        "type": "boolean",
+        "default": "none",
+        "description": "If true, icons will display without their corresponding text when the text collides\nwith other symbols and the icon does not."
+      },
+      {
+        "name": "children",
+        "required": false,
+        "type": "ReactNode",
+        "default": "none",
+        "description": "FIX ME NO DESCRIPTION"
+      }
+    ],
+    "fileNameWithExt": "PointAnnotationManager.tsx",
+    "relPath": "src/components/PointAnnotationManager.tsx",
+    "name": "PointAnnotationManager"
+  },
+  "Rain": {
+    "description": "",
+    "displayName": "Rain",
+    "methods": [],
+    "props": [
+      {
+        "name": "style",
+        "required": false,
+        "type": "RainLayerStyleProps",
+        "default": "none",
+        "description": "Rain particle effect style properties.\n\n@note The default `color` and `vignetteColor` values use `measure-light(\"brightness\")`\nexpressions that are only available in Mapbox Standard-based styles\n(`mapbox://styles/mapbox/standard`, `mapbox://styles/mapbox/standard-satellite`).\nWhen using legacy or custom styles, set `color` and `vignetteColor` explicitly to\navoid \"Brightness is unavailable in the current evaluation context\" warnings and\ninvisible rain. For example: `color=\"#a8adbc\" vignetteColor=\"#464646\"`."
+      }
+    ],
+    "fileNameWithExt": "Rain.tsx",
+    "relPath": "src/components/Rain.tsx",
+    "name": "Rain"
   },
   "RasterArraySource": {
     "description": "RasterArraySource is a map content source that supplies raster array image tiles to be shown on the map.\nThis is typically used for particle animations like wind or precipitation patterns.\nThe location of and metadata about the tiles are defined either by an option dictionary\nor by an external file that conforms to the TileJSON specification.\n\n@experimental This component requires Mapbox Maps SDK v11.4.0 or later",
@@ -7540,6 +7834,13 @@
         "description": "Specifies the maximum zoom level at which to create vector tiles.\nA greater value produces greater detail at high zoom levels.\nThe default value is 18."
       },
       {
+        "name": "minZoomLevel",
+        "required": false,
+        "type": "number",
+        "default": "none",
+        "description": "Specifies the minimum zoom level at which to create vector tiles.\nThe default value is 0."
+      },
+      {
         "name": "buffer",
         "required": false,
         "type": "number",
@@ -7593,7 +7894,7 @@
           ]
         },
         "default": "none",
-        "description": "Overrides the default touch hitbox(44x44 pixels) for the source layers"
+        "description": "Overrides the default touch hitbox (44x44 points) for the source layers"
       },
       {
         "name": "children",
@@ -7931,6 +8232,23 @@
       }
     ]
   },
+  "Snow": {
+    "description": "",
+    "displayName": "Snow",
+    "methods": [],
+    "props": [
+      {
+        "name": "style",
+        "required": false,
+        "type": "SnowLayerStyleProps",
+        "default": "none",
+        "description": "FIX ME NO DESCRIPTION"
+      }
+    ],
+    "fileNameWithExt": "Snow.tsx",
+    "relPath": "src/components/Snow.tsx",
+    "name": "Snow"
+  },
   "Style": {
     "description": "Style is a component that automatically adds sources / layers to the map using Mapbox GL Style Spec.\nOnly [`sources`](https://docs.mapbox.com/mapbox-gl-js/style-spec/sources) & [`layers`](https://docs.mapbox.com/mapbox-gl-js/style-spec/layers/) are supported.\nOther fields such as `sprites`, `glyphs` etc. will be ignored. Not all layer / source attributes from the style spec are supported, in general the supported attributes will be mentioned under https://github.com/rnmapbox/maps/tree/main/docs.",
     "displayName": "Style",
@@ -7973,18 +8291,177 @@
           "name": "shape",
           "value": [
             {
-              "name": {
-                "name": "string"
-              },
-              "required": true,
+              "name": "lightPreset",
+              "required": false,
+              "type": "'dawn' \\| 'day' \\| 'dusk' \\| 'night'",
+              "default": "none",
+              "description": "Light preset: controls time-of-day lighting"
+            },
+            {
+              "name": "theme",
+              "required": false,
+              "type": "'default' \\| 'faded' \\| 'monochrome'",
+              "default": "none",
+              "description": "Color theme"
+            },
+            {
+              "name": "font",
+              "required": false,
               "type": "string",
               "default": "none",
-              "description": "FIX ME NO DESCRIPTION"
+              "description": "Font family for labels (e.g., 'Montserrat')"
+            },
+            {
+              "name": "show3dObjects",
+              "required": false,
+              "type": "boolean",
+              "default": "none",
+              "description": "Show generic 3D objects"
+            },
+            {
+              "name": "show3dBuildings",
+              "required": false,
+              "type": "boolean",
+              "default": "none",
+              "description": "Show extruded 3D buildings"
+            },
+            {
+              "name": "show3dFacades",
+              "required": false,
+              "type": "boolean",
+              "default": "none",
+              "description": "Show 3D building facades (v11.16+)"
+            },
+            {
+              "name": "show3dLandmarks",
+              "required": false,
+              "type": "boolean",
+              "default": "none",
+              "description": "Show 3D landmarks (v11.16+)"
+            },
+            {
+              "name": "show3dTrees",
+              "required": false,
+              "type": "boolean",
+              "default": "none",
+              "description": "Show 3D trees (v11.17+)"
+            },
+            {
+              "name": "showPointOfInterestLabels",
+              "required": false,
+              "type": "boolean",
+              "default": "none",
+              "description": "Show point of interest labels"
+            },
+            {
+              "name": "showTransitLabels",
+              "required": false,
+              "type": "boolean",
+              "default": "none",
+              "description": "Show transit labels"
+            },
+            {
+              "name": "showPlaceLabels",
+              "required": false,
+              "type": "boolean",
+              "default": "none",
+              "description": "Show place labels"
+            },
+            {
+              "name": "showRoadLabels",
+              "required": false,
+              "type": "boolean",
+              "default": "none",
+              "description": "Show road labels"
+            },
+            {
+              "name": "showPedestrianRoads",
+              "required": false,
+              "type": "boolean",
+              "default": "none",
+              "description": "Show pedestrian roads"
+            },
+            {
+              "name": "colorBuildings",
+              "required": false,
+              "type": "string",
+              "default": "none",
+              "description": "Color override for buildings (v11.18+)"
+            },
+            {
+              "name": "colorCommercial",
+              "required": false,
+              "type": "string",
+              "default": "none",
+              "description": "Color override for commercial areas (v11.18+)"
+            },
+            {
+              "name": "colorEducation",
+              "required": false,
+              "type": "string",
+              "default": "none",
+              "description": "Color override for education areas (v11.18+)"
+            },
+            {
+              "name": "colorIndustrial",
+              "required": false,
+              "type": "string",
+              "default": "none",
+              "description": "Color override for industrial areas (v11.18+)"
+            },
+            {
+              "name": "colorLand",
+              "required": false,
+              "type": "string",
+              "default": "none",
+              "description": "Color override for land (v11.18+)"
+            },
+            {
+              "name": "colorMedical",
+              "required": false,
+              "type": "string",
+              "default": "none",
+              "description": "Color override for medical areas (v11.18+)"
+            },
+            {
+              "name": "colorRoads",
+              "required": false,
+              "type": "string",
+              "default": "none",
+              "description": "Color override for roads (v11.18+)"
+            },
+            {
+              "name": "colorMotorways",
+              "required": false,
+              "type": "string",
+              "default": "none",
+              "description": "Color override for motorways (v11.18+)"
+            },
+            {
+              "name": "colorWater",
+              "required": false,
+              "type": "string",
+              "default": "none",
+              "description": "Color override for water (v11.18+)"
+            },
+            {
+              "name": "colorGreenspaces",
+              "required": false,
+              "type": "string",
+              "default": "none",
+              "description": "Color override for greenspaces (v11.18+)"
+            },
+            {
+              "name": "colorBoundaries",
+              "required": false,
+              "type": "string",
+              "default": "none",
+              "description": "Color override for boundaries (v11.18+)"
             }
           ]
         },
         "default": "none",
-        "description": "config is a dictionary of configuration options for the style import.\n\nSee https://github.com/mapbox/mapbox-maps-ios/blob/main/Sources/MapboxMaps/Documentation.docc/Migrate%20to%20v11.md#21-the-mapbox-standard-style"
+        "description": "config is a dictionary of configuration options for the style import.\n\nWhen using the Mapbox Standard style with `id=\"basemap\"`, use `StandardStyleConfig`\nkeys for autocomplete. Arbitrary keys are also accepted for forward compatibility.\n\nSee https://github.com/mapbox/mapbox-maps-ios/blob/main/Sources/MapboxMaps/Documentation.docc/Migrate%20to%20v11.md#21-the-mapbox-standard-style"
       }
     ],
     "fileNameWithExt": "StyleImport.tsx",
@@ -9939,6 +10416,69 @@
         }
       },
       {
+        "name": "iconColorContrast",
+        "type": "number",
+        "values": [],
+        "minimum": -1,
+        "maximum": 1,
+        "default": 0,
+        "description": "Increase or reduce the contrast of the symbol icon.",
+        "requires": [],
+        "disabledBy": [],
+        "allowedFunctionTypes": [],
+        "expression": {
+          "interpolated": false
+        },
+        "transition": false,
+        "mbx": {
+          "fullName": "paint-symbol-icon-color-contrast",
+          "name": "icon-color-contrast",
+          "namespace": "paint"
+        }
+      },
+      {
+        "name": "iconColorBrightnessMin",
+        "type": "number",
+        "values": [],
+        "minimum": 0,
+        "maximum": 1,
+        "default": 0,
+        "description": "Increase or reduce the brightness of the symbols. The value is the minimum brightness.",
+        "requires": [],
+        "disabledBy": [],
+        "allowedFunctionTypes": [],
+        "expression": {
+          "interpolated": false
+        },
+        "transition": false,
+        "mbx": {
+          "fullName": "paint-symbol-icon-color-brightness-min",
+          "name": "icon-color-brightness-min",
+          "namespace": "paint"
+        }
+      },
+      {
+        "name": "iconColorBrightnessMax",
+        "type": "number",
+        "values": [],
+        "minimum": 0,
+        "maximum": 1,
+        "default": 1,
+        "description": "Increase or reduce the brightness of the symbols. The value is the maximum brightness.",
+        "requires": [],
+        "disabledBy": [],
+        "allowedFunctionTypes": [],
+        "expression": {
+          "interpolated": false
+        },
+        "transition": false,
+        "mbx": {
+          "fullName": "paint-symbol-icon-color-brightness-max",
+          "name": "icon-color-brightness-max",
+          "namespace": "paint"
+        }
+      },
+      {
         "name": "symbolZOffset",
         "type": "number",
         "values": [],
@@ -10278,7 +10818,7 @@
           ]
         },
         "default": "none",
-        "description": "Overrides the default touch hitbox(44x44 pixels) for the source layers"
+        "description": "Overrides the default touch hitbox (44x44 points) for the source layers"
       },
       {
         "name": "children",

@@ -9,10 +9,16 @@ import com.facebook.react.viewmanagers.RNMBXImageManagerInterface
 import com.rnmapbox.rnmbx.components.AbstractEventEmitter
 import com.rnmapbox.rnmbx.components.styles.sources.RNMBXShapeSource
 import com.rnmapbox.rnmbx.utils.ViewTagResolver
+import com.facebook.react.uimanager.ViewManagerDelegate
+import com.facebook.react.viewmanagers.RNMBXImageManagerDelegate
 
 class RNMBXImageManager(private val mContext: ReactApplicationContext, val viewTagResolver: ViewTagResolver) : AbstractEventEmitter<RNMBXImage>(
 mContext
 ), RNMBXImageManagerInterface<RNMBXImage> {
+
+    private val delegate = RNMBXImageManagerDelegate<RNMBXImage, RNMBXImageManager>(this)
+
+    override fun getDelegate(): ViewManagerDelegate<RNMBXImage> = delegate
     override fun getName(): String {
         return "RNMBXImage"
     }

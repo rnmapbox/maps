@@ -5,9 +5,15 @@ import com.facebook.react.uimanager.ThemedReactContext
 import com.facebook.react.uimanager.ViewGroupManager
 import com.facebook.react.uimanager.annotations.ReactProp
 import com.facebook.react.viewmanagers.RNMBXSkyLayerManagerInterface
+import com.facebook.react.uimanager.ViewManagerDelegate
+import com.facebook.react.viewmanagers.RNMBXSkyLayerManagerDelegate
 
 class RNMBXSkyLayerManager : ViewGroupManager<RNMBXSkyLayer>(),
     RNMBXSkyLayerManagerInterface<RNMBXSkyLayer> {
+
+    private val delegate = RNMBXSkyLayerManagerDelegate<RNMBXSkyLayer, RNMBXSkyLayerManager>(this)
+
+    override fun getDelegate(): ViewManagerDelegate<RNMBXSkyLayer> = delegate
     override fun getName(): String {
         return REACT_CLASS
     }

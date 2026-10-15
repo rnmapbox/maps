@@ -264,7 +264,7 @@ class RNMBXStyleValue {
     }
     let valueObj = RNMBXStyleValue.convert(value["stylevalue"] as! [String:Any])
 
-    if let num = value as? Int {
+    if let num = valueObj as? Int {
       let uicolor = uicolor(num)
       return .constant(StyleColor(uicolor))
     } else {
@@ -450,7 +450,7 @@ class RNMBXStyleValue {
   }
 
   func setImage(
-    bridge: RCTBridge,
+    bridge: RCTBridge?,
     style: Style,
     oldValue: Any?,
     setImageOnLayer: (_: RNMBXStyleValue) -> Void,
@@ -472,6 +472,12 @@ class RNMBXStyleValue {
             }
           }
         }
+      }
+
+      guard let bridge = bridge else {
+        Logger.log(level: .error, message: "\(name): bridge is nil, cannot fetch image \(optional: imageURI). Use nativeAssetImages instead.")
+        setImageOnLayer(self)
+        return
       }
 
       RNMBXUtils.fetchImage(bridge, url:imageURI, scale:getImageScale(), callback:{ (error, image) in

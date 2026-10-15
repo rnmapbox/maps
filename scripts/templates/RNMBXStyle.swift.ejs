@@ -35,7 +35,7 @@ func <%- setLayerMethodName(layer, 'ios') -%>(layer: inout <%- getLayerType(laye
   <%- ifOrElseIf(i) -%> (prop == "<%= layer.properties[i].name %>") {
   <%_ if (layer.properties[i].image) { _%>
       styleValue.setImage(
-        bridge: bridge!,
+        bridge: bridge,
         style: style,
         oldValue: oldReactStyle?[prop],
         setImageOnLayer: { (_) in self.set<%- iosPropMethodName(layer, pascelCase(layer.properties[i].name)) -%>(&layer, styleValue:styleValue) },

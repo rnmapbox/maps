@@ -29,11 +29,13 @@ export function getStyleType(styleProp: keyof typeof styleExtras) {
 }
 
 const styleMap = {
+  <%_ const seenProps = new Set(); _%>
   <%_ for (let layer of layers) { _%>
   <%_ for (let prop of layer.properties) { _%>
-  <%_ if (!['color', 'colorTransition', 'visibility'].includes(prop.name)) { _%>
+  <%_ if (!['color', 'colorTransition', 'visibility'].includes(prop.name) && !seenProps.has(prop.name)) { _%>
+  <%_ seenProps.add(prop.name); _%>
   <%= prop.name %>: <%- jsStyleType(prop) %>,
-  <%_ if (prop.transition) { _%>
+  <%_ if (prop.transition) { seenProps.add(prop.name + 'Transition'); _%>
   <%= prop.name %>Transition: StyleTypes.Transition,
   <%_ } _%>
   <%_ } _%>

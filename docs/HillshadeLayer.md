@@ -144,6 +144,7 @@ Customizable style attributes
 * <a href="#hillshadeshadowcolor">hillshadeShadowColor</a><br/>
 * <a href="#hillshadehighlightcolor">hillshadeHighlightColor</a><br/>
 * <a href="#hillshadeaccentcolor">hillshadeAccentColor</a><br/>
+* <a href="#hillshadeemissivestrength">hillshadeEmissiveStrength</a><br/>
 
 ___
 
@@ -369,6 +370,54 @@ Name: `hillshadeAccentColorTransition`
 #### Description
 
 The transition affecting any changes to this layer’s hillshadeAccentColor property.
+
+#### Type
+
+`{ duration, delay }`
+
+#### Units
+`milliseconds`
+
+#### Default Value
+`{duration: 300, delay: 0}`
+
+
+___
+
+### hillshadeEmissiveStrength
+Name: `hillshadeEmissiveStrength`
+
+Mapbox spec: [hillshade-emissive-strength](https://docs.mapbox.com/style-spec/reference/layers/#paint-hillshade-hillshade-emissive-strength)
+
+#### Description
+Controls the intensity of light emitted on the source features.
+
+#### Type
+`number`
+#### Default Value
+`0`
+
+#### Units
+`intensity`
+
+#### Minimum
+`0`
+
+
+#### Requires
+`lights`
+
+#### Expression
+
+Parameters: `zoom, measure-light`
+___
+
+### hillshadeEmissiveStrengthTransition
+Name: `hillshadeEmissiveStrengthTransition`
+
+#### Description
+
+The transition affecting any changes to this layer’s hillshadeEmissiveStrength property.
 
 #### Type
 

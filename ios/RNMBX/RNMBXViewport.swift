@@ -274,11 +274,8 @@ open class RNMBXViewport : UIView, RNMBXMapAndMapViewComponent, ViewportStatusOb
       Logger.log(level:.error, message: "no viewport")
       return nil
     }
-    guard let kind = from["kind"] as? String else {
-      Logger.log(level:.error, message: "no kind found in state")
-      return nil
-    }
-    
+    let kind = from["kind"] as? String ?? "default"
+
     switch (kind) {
     case "immediate":
       return viewport.makeImmediateViewportTransition()
@@ -290,7 +287,7 @@ open class RNMBXViewport : UIView, RNMBXMapAndMapViewComponent, ViewportStatusOb
       return viewport.makeDefaultViewportTransition(
         options: options
       )
-        
+
     default:
       Logger.log(level:.error, message: "unexpected transition kind: \(kind)")
       return nil

@@ -1,4 +1,4 @@
-import { ExampleMetadata } from '../../example/src/examples/common/ExampleMetadata';
+import { type ExampleMetadata } from '../../example/src/examples/common/ExampleMetadata';
 
 export type { ExampleMetadata } from '../../example/src/examples/common/ExampleMetadata';
 

@@ -5,9 +5,15 @@ import com.facebook.react.uimanager.ThemedReactContext
 import com.facebook.react.uimanager.ViewGroupManager
 import com.facebook.react.uimanager.annotations.ReactProp
 import com.facebook.react.viewmanagers.RNMBXHeatmapLayerManagerInterface
+import com.facebook.react.uimanager.ViewManagerDelegate
+import com.facebook.react.viewmanagers.RNMBXHeatmapLayerManagerDelegate
 
 class RNMBXHeatmapLayerManager : ViewGroupManager<RNMBXHeatmapLayer>(),
     RNMBXHeatmapLayerManagerInterface<RNMBXHeatmapLayer> {
+
+    private val delegate = RNMBXHeatmapLayerManagerDelegate<RNMBXHeatmapLayer, RNMBXHeatmapLayerManager>(this)
+
+    override fun getDelegate(): ViewManagerDelegate<RNMBXHeatmapLayer> = delegate
     override fun getName(): String {
         return REACT_CLASS
     }

@@ -4,7 +4,7 @@ import type {
   FilterExpression,
   ModelLayerStyleProps,
 } from '../utils/MapboxStyles';
-import { StyleValue } from '../utils/StyleValue';
+import { type StyleValue } from '../utils/StyleValue';
 import RNMBXModelLayerNativeComponent from '../specs/RNMBXModelLayerNativeComponent';
 
 import AbstractLayer from './AbstractLayer';

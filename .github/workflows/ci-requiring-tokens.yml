@@ -10,9 +10,10 @@ on:
         required: false
         type: string
         default: default
-      ref:
+      SKIP_NATIVE:
         required: false
-        type: string
+        type: boolean
+        default: false
     secrets:
       MAPBOX_ACCESS_TOKEN:
         required: false
@@ -32,10 +33,10 @@ jobs:
     uses: ./.github/workflows/android-actions.yml
     with:
       env_name: ${{ inputs.env_name }}
-      ref: ${{ inputs.ref }}
       NVMRC: ${{ inputs.NVMRC }}
       MAP_IMPL: mapbox11
       NEW_ARCH: true
+      SKIP: ${{ inputs.SKIP_NATIVE }}
     secrets:
       MAPBOX_ACCESS_TOKEN: ${{ secrets.MAPBOX_ACCESS_TOKEN }}
       ENV_MAPBOX_ACCESS_TOKEN: ${{ secrets.ENV_MAPBOX_ACCESS_TOKEN }}
@@ -45,10 +46,10 @@ jobs:
     uses: ./.github/workflows/ios-actions.yml
     with:
       env_name: ${{ inputs.env_name }}
-      ref: ${{ inputs.ref }}
       NVMRC: ${{ inputs.NVMRC }}
       MAP_IMPL: mapbox11
       NEW_ARCH: true
+      SKIP: ${{ inputs.SKIP_NATIVE }}
     secrets:
       MAPBOX_ACCESS_TOKEN: ${{ secrets.MAPBOX_ACCESS_TOKEN }}
       ENV_MAPBOX_ACCESS_TOKEN: ${{ secrets.ENV_MAPBOX_ACCESS_TOKEN }}
@@ -58,7 +59,6 @@ jobs:
     uses: ./.github/workflows/web-actions.yml
     with:
       env_name: ${{ inputs.env_name }}
-      ref: ${{ inputs.ref }}
       NVMRC: ${{ inputs.NVMRC }}
     secrets:
       MAPBOX_ACCESS_TOKEN: ${{ secrets.MAPBOX_ACCESS_TOKEN }}

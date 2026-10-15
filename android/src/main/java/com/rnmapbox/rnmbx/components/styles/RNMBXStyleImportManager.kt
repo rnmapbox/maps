@@ -15,10 +15,16 @@ import com.rnmapbox.rnmbx.rncompat.dynamic.*
 import com.rnmapbox.rnmbx.utils.Logger
 import com.rnmapbox.rnmbx.utils.extensions.toValueHashMap
 import org.json.JSONObject
+import com.facebook.react.uimanager.ViewManagerDelegate
+import com.facebook.react.viewmanagers.RNMBXStyleImportManagerDelegate
 
 class RNMBXStyleImportManager(context: ReactApplicationContext) :
     AbstractEventEmitter<RNMBXStyleImport>(context),
     RNMBXStyleImportManagerInterface<RNMBXStyleImport> {
+
+    private val delegate = RNMBXStyleImportManagerDelegate<RNMBXStyleImport, RNMBXStyleImportManager>(this)
+
+    override fun getDelegate(): ViewManagerDelegate<RNMBXStyleImport> = delegate
     override fun customEvents(): Map<String, String>? {
         return MapBuilder.builder<String, String>().build()
     }

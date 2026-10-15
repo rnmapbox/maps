@@ -1,5 +1,16 @@
 import React from 'react';
-import { Button, StyleSheet, View, Text, TouchableOpacity } from 'react-native';
+import {
+  Button,
+  Pressable,
+  ScrollView,
+  StyleSheet,
+  Switch,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  View,
+} from 'react-native';
+import { Slider } from '@rneui/base';
 import Mapbox from '@rnmapbox/maps';
 
 import Bubble from '../common/Bubble';
@@ -19,6 +30,115 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
   matchParent: { flex: 1 },
+  interactiveCard: {
+    backgroundColor: 'white',
+    borderRadius: 12,
+    padding: 12,
+    width: 200,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.25,
+    shadowRadius: 4,
+    elevation: 5,
+    borderWidth: 1,
+    borderColor: '#ddd',
+  },
+  cardTitle: {
+    fontWeight: 'bold',
+    fontSize: 13,
+    marginBottom: 8,
+    color: '#333',
+  },
+  sliderLabel: {
+    fontSize: 11,
+    color: '#666',
+    marginBottom: 2,
+  },
+  sliderValue: {
+    fontSize: 11,
+    fontWeight: '600',
+    color: '#333',
+    textAlign: 'right',
+  },
+  sliderRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    marginBottom: 4,
+  },
+  switchRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    marginVertical: 4,
+  },
+  switchLabel: {
+    fontSize: 11,
+    color: '#666',
+  },
+  counterRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginVertical: 6,
+  },
+  counterButton: {
+    backgroundColor: '#4A90D9',
+    width: 30,
+    height: 30,
+    borderRadius: 15,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  counterButtonText: {
+    color: 'white',
+    fontWeight: 'bold',
+    fontSize: 16,
+  },
+  counterValue: {
+    fontSize: 16,
+    fontWeight: 'bold',
+    marginHorizontal: 16,
+    minWidth: 24,
+    textAlign: 'center',
+  },
+  textInput: {
+    borderWidth: 1,
+    borderColor: '#ccc',
+    borderRadius: 6,
+    paddingHorizontal: 8,
+    paddingVertical: 4,
+    fontSize: 11,
+    marginTop: 4,
+    backgroundColor: '#fafafa',
+  },
+  pressableButton: {
+    marginTop: 8,
+    backgroundColor: '#4A90D9',
+    borderRadius: 6,
+    paddingVertical: 6,
+    alignItems: 'center',
+  },
+  pressableButtonPressed: {
+    backgroundColor: '#2E6DB4',
+  },
+  pressableText: {
+    color: 'white',
+    fontWeight: '600',
+    fontSize: 12,
+  },
+  colorPreview: {
+    height: 20,
+    borderRadius: 4,
+    marginTop: 4,
+    borderWidth: 1,
+    borderColor: '#ccc',
+  },
+  divider: {
+    height: 1,
+    backgroundColor: '#eee',
+    marginVertical: 6,
+  },
 });
 
 const AnnotationContent = ({ title }: { title: string }) => (
@@ -29,9 +149,125 @@ const AnnotationContent = ({ title }: { title: string }) => (
     </TouchableOpacity>
   </View>
 );
+
+/**
+ * An interactive MarkerView with slider, switch, counter, text input, and
+ * pressable button — useful for verifying that complex touch interactions
+ * work correctly inside a MarkerView.
+ */
+const InteractiveMarkerContent = () => {
+  const [sliderValue, setSliderValue] = React.useState(0.5);
+  const [opacity, setOpacity] = React.useState(1.0);
+  const [toggleOn, setToggleOn] = React.useState(false);
+  const [counter, setCounter] = React.useState(0);
+  const [note, setNote] = React.useState('');
+  const [pressCount, setPressCount] = React.useState(0);
+
+  const hue = Math.round(sliderValue * 360);
+  const bgColor = `hsla(${hue}, 70%, 55%, ${opacity})`;
+
+  return (
+    <View style={styles.interactiveCard} collapsable={false}>
+      <Text style={styles.cardTitle}>Interactive Marker</Text>
+
+      {/* Slider: Hue */}
+      <View style={styles.sliderRow}>
+        <Text style={styles.sliderLabel}>Hue</Text>
+        <Text style={styles.sliderValue}>{hue}°</Text>
+      </View>
+      <Slider
+        value={sliderValue}
+        onValueChange={setSliderValue}
+        minimumValue={0}
+        maximumValue={1}
+        step={0.01}
+        thumbStyle={{ width: 18, height: 18 }}
+        trackStyle={{ height: 4 }}
+        minimumTrackTintColor="#4A90D9"
+        maximumTrackTintColor="#ccc"
+      />
+
+      {/* Slider: Opacity */}
+      <View style={styles.sliderRow}>
+        <Text style={styles.sliderLabel}>Opacity</Text>
+        <Text style={styles.sliderValue}>{opacity.toFixed(2)}</Text>
+      </View>
+      <Slider
+        value={opacity}
+        onValueChange={setOpacity}
+        minimumValue={0}
+        maximumValue={1}
+        step={0.05}
+        thumbStyle={{ width: 18, height: 18 }}
+        trackStyle={{ height: 4 }}
+        minimumTrackTintColor="#E8913A"
+        maximumTrackTintColor="#ccc"
+      />
+
+      {/* Color preview */}
+      <View style={[styles.colorPreview, { backgroundColor: bgColor }]} />
+
+      <View style={styles.divider} />
+
+      {/* Switch */}
+      <View style={styles.switchRow}>
+        <Text style={styles.switchLabel}>
+          Toggle: {toggleOn ? 'ON' : 'OFF'}
+        </Text>
+        <Switch value={toggleOn} onValueChange={setToggleOn} />
+      </View>
+
+      <View style={styles.divider} />
+
+      {/* Counter */}
+      <View style={styles.counterRow}>
+        <TouchableOpacity
+          style={styles.counterButton}
+          onPress={() => setCounter((c) => c - 1)}
+        >
+          <Text style={styles.counterButtonText}>−</Text>
+        </TouchableOpacity>
+        <Text style={styles.counterValue}>{counter}</Text>
+        <TouchableOpacity
+          style={styles.counterButton}
+          onPress={() => setCounter((c) => c + 1)}
+        >
+          <Text style={styles.counterButtonText}>+</Text>
+        </TouchableOpacity>
+      </View>
+
+      <View style={styles.divider} />
+
+      {/* Text input */}
+      <Text style={styles.sliderLabel}>Note</Text>
+      <TextInput
+        style={styles.textInput}
+        value={note}
+        onChangeText={setNote}
+        placeholder="Type something…"
+        placeholderTextColor="#aaa"
+      />
+
+      {/* Pressable button */}
+      <Pressable
+        style={({ pressed }) => [
+          styles.pressableButton,
+          pressed && styles.pressableButtonPressed,
+        ]}
+        onPress={() => setPressCount((c) => c + 1)}
+      >
+        <Text style={styles.pressableText}>
+          Pressed {pressCount} time{pressCount !== 1 ? 's' : ''}
+        </Text>
+      </Pressable>
+    </View>
+  );
+};
+
 const INITIAL_COORDINATES: [number, number][] = [
   [-73.99155, 40.73581],
   [-73.99155, 40.73681],
+  [-73.98955, 40.73581],
 ];
 
 const ShowMarkerView = () => {
@@ -39,11 +275,38 @@ const ShowMarkerView = () => {
     React.useState<GeoJSON.Position[]>(INITIAL_COORDINATES);
   const [allowOverlapWithPuck, setAllowOverlapWithPuck] =
     React.useState<boolean>(false);
+  const [pointerEventsNone, setPointerEventsNone] =
+    React.useState<boolean>(false);
+
+  const [mapMoveCount, setMapMoveCount] = React.useState(0);
+  const [featurePressCount, setFeaturePressCount] = React.useState(0);
+  const [scrollCount, setScrollCount] = React.useState(0);
+  const [stopGesture, setStopGesture] = React.useState(false);
 
   const onPressMap = (e: GeoJSON.Feature) => {
     const geometry = e.geometry as GeoJSON.Point;
     setPointList((pl) => [...pl, geometry.coordinates]);
   };
+
+  const onRegionDidChange = React.useCallback(() => {
+    setMapMoveCount((c) => c + 1);
+  }, []);
+
+  // A tappable circle sitting directly under the first MarkerView, to demonstrate that a tap on
+  // the marker does not fall through and select the feature beneath it (#4255).
+  const underMarkerShape = React.useMemo<GeoJSON.FeatureCollection>(
+    () => ({
+      type: 'FeatureCollection',
+      features: [
+        {
+          type: 'Feature',
+          properties: {},
+          geometry: { type: 'Point', coordinates: pointList[0]! },
+        },
+      ],
+    }),
+    [pointList],
+  );
 
   return (
     <>
@@ -55,7 +318,27 @@ const ShowMarkerView = () => {
         }
         onPress={() => setAllowOverlapWithPuck((prev) => !prev)}
       />
-      <Mapbox.MapView onPress={onPressMap} style={styles.matchParent}>
+      <Button
+        title={
+          pointerEventsNone
+            ? 'pointerEvents="none" – tap/drag passes to map'
+            : 'pointerEvents="auto" – marker handles touches'
+        }
+        onPress={() => setPointerEventsNone((prev) => !prev)}
+      />
+      <Button
+        title={
+          stopGesture
+            ? 'stopGesturePropagation ON – slider marker keeps gestures'
+            : 'stopGesturePropagation OFF – slider drag may pan map'
+        }
+        onPress={() => setStopGesture((prev) => !prev)}
+      />
+      <Mapbox.MapView
+        onPress={onPressMap}
+        onRegionDidChange={onRegionDidChange}
+        style={styles.matchParent}
+      >
         <Mapbox.Camera
           defaultSettings={{
             zoomLevel: 16,
@@ -67,14 +350,79 @@ const ShowMarkerView = () => {
           <AnnotationContent title={'this is a point annotation'} />
         </Mapbox.PointAnnotation>
 
+        <Mapbox.ShapeSource
+          id="under-marker-src"
+          shape={underMarkerShape}
+          onPress={() => setFeaturePressCount((c) => c + 1)}
+        >
+          <Mapbox.CircleLayer
+            id="under-marker-circle"
+            style={{ circleRadius: 44, circleColor: 'rgba(255,0,0,0.35)' }}
+          />
+        </Mapbox.ShapeSource>
+
         <Mapbox.MarkerView
-          coordinate={pointList[0]}
+          coordinate={pointList[0]!}
           allowOverlapWithPuck={allowOverlapWithPuck}
+          pointerEvents={pointerEventsNone ? 'none' : 'auto'}
         >
           <AnnotationContent title={'this is a marker view'} />
         </Mapbox.MarkerView>
 
-        {pointList.slice(2).map((coordinate, index) => (
+        <Mapbox.MarkerView
+          coordinate={pointList[1]!}
+          anchor={{ x: 0.5, y: 1.3 }}
+          allowOverlap
+        >
+          <View
+            collapsable={false}
+            style={{
+              width: 180,
+              height: 54,
+              backgroundColor: 'white',
+              borderRadius: 8,
+              borderWidth: 1,
+              borderColor: '#333',
+            }}
+          >
+            <ScrollView
+              horizontal
+              onScroll={() => setScrollCount((c) => c + 1)}
+              scrollEventThrottle={16}
+              showsHorizontalScrollIndicator
+            >
+              {Array.from({ length: 12 }).map((_, i) => (
+                <View
+                  key={i}
+                  style={{
+                    width: 50,
+                    height: 50,
+                    margin: 2,
+                    borderRadius: 6,
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    backgroundColor: `hsl(${i * 30}, 70%, 60%)`,
+                  }}
+                >
+                  <Text style={{ color: 'white', fontWeight: 'bold' }}>
+                    {i}
+                  </Text>
+                </View>
+              ))}
+            </ScrollView>
+          </View>
+        </Mapbox.MarkerView>
+
+        <Mapbox.MarkerView
+          coordinate={INITIAL_COORDINATES[2]!}
+          allowOverlap
+          allowOverlapWithPuck={allowOverlapWithPuck}
+          stopGesturePropagation={stopGesture}
+        >
+          <InteractiveMarkerContent />
+        </Mapbox.MarkerView>
+
+        {pointList.slice(3).map((coordinate, index) => (
           <Mapbox.PointAnnotation
             coordinate={coordinate}
             id={`pt-ann-${index}`}
@@ -88,6 +436,9 @@ const ShowMarkerView = () => {
       </Mapbox.MapView>
 
       <Bubble>
+        <Text>Map moved: {mapMoveCount} times</Text>
+        <Text>Feature (under marker) pressed: {featurePressCount} times</Text>
+        <Text>ScrollView scrolled: {scrollCount} events</Text>
         <Text>Tap on map to add a point annotation</Text>
       </Bubble>
     </>
@@ -101,9 +452,18 @@ export default ShowMarkerView;
 /** @type ExampleWithMetadata['metadata'] */
 const metadata = {
   title: 'Marker View',
-  tags: ['PointAnnotation', 'MarkerView'],
+  tags: [
+    'PointAnnotation',
+    'MarkerView',
+    'Slider',
+    'Interactive',
+    'pointerEvents',
+  ],
   docs: `
-Shows marker view and point annotations
+Shows marker view and point annotations, including an interactive marker with
+sliders, switch, counter, text input, and pressable button to verify complex
+touch interactions inside a MarkerView. Toggle pointerEvents="none" to make
+the marker transparent to all touch events, passing them through to the map.
 `,
 };
 ShowMarkerView.metadata = metadata;

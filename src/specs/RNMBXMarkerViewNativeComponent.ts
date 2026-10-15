@@ -3,9 +3,9 @@ import type { HostComponent, ViewProps } from 'react-native';
 import { Int32 } from 'react-native/Libraries/Types/CodegenTypes';
 import codegenNativeComponent from 'react-native/Libraries/Utilities/codegenNativeComponent';
 
-import { Position } from '../types/Position';
+import { type Position } from '../types/Position';
 
-import { UnsafeMixed } from './codegenUtils';
+import { type UnsafeMixed } from './codegenUtils';
 
 type Point = {
   x: Int32;
@@ -18,6 +18,7 @@ export interface NativeProps extends ViewProps {
   allowOverlap: UnsafeMixed<boolean>;
   allowOverlapWithPuck: UnsafeMixed<boolean>;
   isSelected: UnsafeMixed<boolean>;
+  stopGesturePropagation: UnsafeMixed<boolean>;
 }
 
 // @ts-ignore-error - Codegen requires single cast but TypeScript prefers double cast

@@ -27,6 +27,9 @@ import com.rnmapbox.rnmbx.v11compat.annotation.*;
 class RNMBXPointAnnotation(private val mContext: Context, private val mManager: RNMBXPointAnnotationManager) : AbstractMapFeature(mContext), View.OnLayoutChangeListener {
 
     var pointAnnotations: RNMBXPointAnnotationCoordinator? = null
+
+    var parentCoordinator: RNMBXPointAnnotationCoordinator? = null
+
     var annotation: PointAnnotation? = null
         private set
     private var mMap: MapboxMap? = null
@@ -36,7 +39,7 @@ class RNMBXPointAnnotation(private val mContext: Context, private val mManager: 
     private val mTitle: String? = null
     private val mSnippet: String? = null
     private var mAnchor: Array<Float>? = null
-    private val mIsSelected = false
+    private var mIsSelected = false
     private var mDraggable = false
     private var mChildView: View? = null
     private var mChildBitmap: Bitmap? = null
@@ -97,7 +100,7 @@ class RNMBXPointAnnotation(private val mContext: Context, private val mManager: 
     override fun addToMap(mapView: RNMBXMapView) {
         super.addToMap(mapView)
         mMap = mapView.getMapboxMap()
-        pointAnnotations = mapView.pointAnnotations
+        pointAnnotations = parentCoordinator ?: mapView.pointAnnotations
         makeMarker()
         if (mChildView != null) {
             if (!mChildView!!.isAttachedToWindow) {
@@ -117,7 +120,8 @@ class RNMBXPointAnnotation(private val mContext: Context, private val mManager: 
     override fun removeFromMap(mapView: RNMBXMapView, reason: RemovalReason): Boolean {
         val map = mMapView ?: mapView
 
-        annotation?.let { map.pointAnnotations?.delete(it) }
+        val coordinator = pointAnnotations ?: map.pointAnnotations
+        annotation?.let { coordinator.delete(it) }
 
         mChildView?.let { map.offscreenAnnotationViewContainer?.removeView(it) }
         calloutView?.let { map.offscreenAnnotationViewContainer?.removeView(it)}
@@ -187,7 +191,19 @@ class RNMBXPointAnnotation(private val mContext: Context, private val mManager: 
         }
     }
 
+    fun setReactSelected(selected: Boolean) {
+        if (selected && !mIsSelected) {
+            pointAnnotations?.let {
+                it.deselectSelectedAnnotation()
+                it.selectAnnotation(this)
+            }
+        } else if (!selected && mIsSelected) {
+            pointAnnotations?.deselectAnnotation(this)
+        }
+    }
+
     fun doSelect(shouldSendEvent: Boolean) {
+        mIsSelected = true
         if (calloutView != null) {
             makeCallout()
         }
@@ -197,6 +213,7 @@ class RNMBXPointAnnotation(private val mContext: Context, private val mManager: 
     }
 
     fun doDeselect() {
+        mIsSelected = false
         mManager.handleEvent(makeEvent(false))
         mCalloutSymbol?.let { mCalloutSymbol ->
             pointAnnotations?.delete(mCalloutSymbol)

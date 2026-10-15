@@ -13,7 +13,7 @@ import com.mapbox.maps.plugin.annotation.generated.createPointAnnotationManager
 import com.rnmapbox.rnmbx.components.annotation.RNMBXPointAnnotation
 import com.rnmapbox.rnmbx.utils.Logger
 
-class RNMBXPointAnnotationCoordinator(val mapView: MapView) {
+class RNMBXPointAnnotationCoordinator(val mapView: MapView, layerId: String? = "RNMBX-mapview-annotations") {
     val manager: PointAnnotationManager;
     var annotationClicked = false
     var annotationDragged = false
@@ -24,7 +24,11 @@ class RNMBXPointAnnotationCoordinator(val mapView: MapView) {
     val callouts: MutableMap<String, RNMBXPointAnnotation> = hashMapOf()
 
     init {
-        manager = mapView.annotations.createPointAnnotationManager(AnnotationConfig(layerId = "RNMBX-mapview-annotations"))
+        manager = if (layerId != null) {
+            mapView.annotations.createPointAnnotationManager(AnnotationConfig(layerId = layerId))
+        } else {
+            mapView.annotations.createPointAnnotationManager()
+        }
         manager.addClickListener(OnPointAnnotationClickListener { pointAnnotation ->
             onAnnotationClick(pointAnnotation)
             false
@@ -159,6 +163,10 @@ class RNMBXPointAnnotationCoordinator(val mapView: MapView) {
 
     fun add(annotation: RNMBXPointAnnotation) {
         annotations[annotation.iD!!] = annotation
+    }
+
+    fun destroy() {
+        mapView.annotations.removeAnnotationManager(manager)
     }
 
     companion object {

@@ -2,11 +2,8 @@ package com.rnmapbox.rnmbx.components.mapview
 
 import android.content.Context
 import android.graphics.BitmapFactory
-import android.graphics.PointF
-import android.graphics.RectF
 import android.os.Handler
 import android.os.Looper
-import android.util.Log
 import android.view.Gravity
 import android.view.View
 import android.view.View.OnLayoutChangeListener
@@ -19,6 +16,9 @@ import com.mapbox.bindgen.Value
 import com.mapbox.geojson.Feature
 import com.mapbox.geojson.FeatureCollection
 import com.mapbox.geojson.Point
+import com.mapbox.common.MapboxCommonSettings
+import com.mapbox.common.SettingsServiceFactory
+import com.mapbox.common.SettingsServiceStorageType
 import com.mapbox.maps.*
 import com.mapbox.maps.extension.localization.localizeLabels
 import com.mapbox.maps.extension.observable.eventdata.MapLoadingErrorEventData
@@ -64,6 +64,7 @@ import com.rnmapbox.rnmbx.utils.extensions.toReadableArray
 import java.util.*
 
 import com.rnmapbox.rnmbx.components.annotation.RNMBXPointAnnotationCoordinator
+import com.rnmapbox.rnmbx.components.annotation.RNMBXPointAnnotationManagerView
 import com.rnmapbox.rnmbx.components.images.ImageManager
 import com.rnmapbox.rnmbx.utils.extensions.toStringKeyPairs
 
@@ -138,21 +139,43 @@ open class RNMBXMapView(private val mContext: Context, var mManager: RNMBXMapVie
 
     private val mSources: MutableMap<String, RNMBXSource<*>>
     private val mImages: MutableList<RNMBXImages>
-    public val pointAnnotations: RNMBXPointAnnotationCoordinator by lazy {
+    val pointAnnotationCoordinators = mutableListOf<RNMBXPointAnnotationCoordinator>()
+    private var pointAnnotationGesturesInited = false
+
+    var defaultPointAnnotationManagerView: RNMBXPointAnnotationManagerView? = null
+
+    private fun ensurePointAnnotationGestures() {
+        if (pointAnnotationGesturesInited) return
         val gesturesPlugin: GesturesPlugin = mapView.gestures
         gesturesPlugin.removeOnMapClickListener(this)
         gesturesPlugin.removeOnMapLongClickListener(this)
-
-        val result = RNMBXPointAnnotationCoordinator(mapView)
-
         gesturesPlugin.addOnMapClickListener(this)
         gesturesPlugin.addOnMapLongClickListener(this)
+        pointAnnotationGesturesInited = true
+    }
 
+    fun registerPointAnnotationCoordinator(coordinator: RNMBXPointAnnotationCoordinator) {
+        ensurePointAnnotationGestures()
+        if (!pointAnnotationCoordinators.contains(coordinator)) {
+            pointAnnotationCoordinators.add(coordinator)
+        }
+    }
+
+    fun unregisterPointAnnotationCoordinator(coordinator: RNMBXPointAnnotationCoordinator) {
+        pointAnnotationCoordinators.remove(coordinator)
+    }
+
+    public val pointAnnotations: RNMBXPointAnnotationCoordinator by lazy {
+        val result = RNMBXPointAnnotationCoordinator(mapView)
+        registerPointAnnotationCoordinator(result)
         result
     }
     private var mProjection: ProjectionName = ProjectionName.MERCATOR
     private var mLocaleString: String? = null
     private var mLocaleLayerIds: List<String>? = null
+    private var languageRejectionSubscription: com.mapbox.common.Cancelable? = null
+    /** Rejection already warned about, so each map logs it once instead of once per failed source */
+    private var warnedLanguageRejection: String? = null
     private var mStyleURL: String? = null
     val isDestroyed = false
     private var mCamera: RNMBXCamera? = null
@@ -224,6 +247,9 @@ open class RNMBXMapView(private val mContext: Context, var mManager: RNMBXMapVie
            }
        )
     }
+
+    // the map-loading-error subscription, cancelled when the view is dropped
+    private var mapLoadingErrorSubscription: com.mapbox.common.Cancelable? = null
 
     private fun onMapReady(map: MapboxMap) {
         map.getStyle(object : Style.OnStyleLoaded {
@@ -305,15 +331,18 @@ open class RNMBXMapView(private val mContext: Context, var mManager: RNMBXMapVie
             }
         })
 
-        map.subscribe({ event ->
-            Logger.e(LOG_TAG, String.format("Map load failed: %s", event.data.toString()))
-            val errorMessage = event.getMapLoadingErrorEventData().message
-            val event = MapChangeEvent(this, EventTypes.MAP_LOADING_ERROR, writableMapOf(
-                    "error" to errorMessage
-            ))
+        // `MapboxMap.subscribe(observer, events)` is an empty shim in the v11 compat layer, so it never
+        // delivered MAP_LOADING_ERROR. The payload matches iOS: `{ error, type, tileId?, sourceId? }`,
+        // where `type` is the SDK's error kind (style | sprite | source | glyphs | tile).
+        mapLoadingErrorSubscription?.cancel()
+        mapLoadingErrorSubscription = map.subscribeMapLoadingError { error ->
+            Logger.e(LOG_TAG, String.format("Map load failed: %s", error.message))
+            val payload = writableMapOf("error" to error.message, "type" to error.type.name.lowercase())
+            error.sourceId?.let { payload.putString("sourceId", it) }
+            error.tileId?.let { payload.putString("tileId", String.format("x:%d y:%d z:%d", it.x, it.y, it.z.toInt())) }
+            val event = MapChangeEvent(this, EventTypes.MAP_LOADING_ERROR, payload)
             mManager.handleEvent(event)
-
-                      }, Arrays.asList(MapEvents.MAP_LOADING_ERROR))
+        }
     }
 
     fun<T> mapGestureBegin(type:MapGestureType, gesture: T) {
@@ -565,16 +594,31 @@ open class RNMBXMapView(private val mContext: Context, var mManager: RNMBXMapVie
     fun applyLocalizeLabels() {
         val localeStr = mLocaleString
         if (localeStr != null) {
-            val locale = if (localeStr == "current") Locale.getDefault() else Locale.Builder()
-                .setLanguageTag(localeStr).build()
-            savedStyle?.localizeLabels(locale, mLocaleLayerIds)
+            // The localization extension throws for the Standard style and Locale.Builder for a malformed tag
+            try {
+                val locale = if (localeStr == "current") Locale.getDefault() else Locale.Builder()
+                    .setLanguageTag(localeStr).build()
+                savedStyle?.localizeLabels(locale, mLocaleLayerIds)
+            } catch (e: RuntimeException) {
+                Logger.w(LOG_TAG, "localizeLabels: ${e.message} Use Mapbox.setLanguage to localize all styles.")
+            }
         }
     }
-    fun setReactLocalizeLabels(localeStr: String?, layerIds: List<String>?) {
-        if (localeStr != null) {
-            mLocaleString = localeStr
-            mLocaleLayerIds = layerIds
+    /** The tile API answers HTTP 400 to a language set by `Mapbox.setLanguage` that it can't parse, and then no tiles load */
+    private fun warnIfLanguageRejected(error: MapLoadingError) {
+        if ((error.type != MapLoadingErrorType.SOURCE && error.type != MapLoadingErrorType.TILE) ||
+            !error.message.contains("status code 400") ||
+            SettingsServiceFactory.getInstance(SettingsServiceStorageType.PERSISTENT).has(MapboxCommonSettings.LANGUAGE).value != true ||
+            warnedLanguageRejection == error.message) {
+            return
         }
+        warnedLanguageRejection = error.message
+        Logger.w(LOG_TAG, "Mapbox rejected the language set with Mapbox.setLanguage: ${error.message}")
+    }
+
+    fun setReactLocalizeLabels(localeStr: String?, layerIds: List<String>?) {
+        mLocaleString = localeStr
+        mLocaleLayerIds = layerIds
         changes.add(Property.LOCALIZE_LABELS)
     }
 
@@ -657,8 +701,9 @@ open class RNMBXMapView(private val mContext: Context, var mManager: RNMBXMapVie
         val source = sources.removeFirst()
         val hitbox = source.touchHitbox
         if (hitbox != null) {
-            val halfWidth = (hitbox["width"]!!.toFloat() / 2.0f).toDouble()
-            val halfHeight = (hitbox["height"]!!.toFloat() / 2.0f).toDouble()
+            val density = getDisplayDensity()
+            val halfWidth = hitbox["width"]!! / 2.0 * density
+            val halfHeight = hitbox["height"]!! / 2.0 * density
             val screenBox = ScreenBox(
                     ScreenCoordinate(screenPoint.x - halfWidth,
                             screenPoint.y - halfHeight
@@ -693,32 +738,46 @@ open class RNMBXMapView(private val mContext: Context, var mManager: RNMBXMapVie
 
     override fun onMapClick(point: Point): Boolean {
         val _this = this
-        if (pointAnnotations.getAndClearAnnotationClicked()) {
+        if (pointAnnotationCoordinators.any { it.getAndClearAnnotationClicked() }) {
             return true
         }
         if (deselectAnnotationOnTap) {
-            if (pointAnnotations.deselectSelectedAnnotation()) {
+            var deselected = false
+            for (coordinator in pointAnnotationCoordinators) {
+                if (coordinator.deselectSelectedAnnotation()) {
+                    deselected = true
+                }
+            }
+            if (deselected) {
                 return true
             }
         }
-        val screenPoint = mMap?.pixelForCoordinate(point)
+        val screenPointPx = mMap?.pixelForCoordinate(point)
+        // A tap that reaches the map but lands within a MarkerView (e.g. on a non-interactive
+        // part of it) should be absorbed by the marker, not fall through to touchable sources
+        // (symbol/shape layers) or pins underneath it. See #4255 discussion.
+        if (screenPointPx != null && isPointOnMarkerView(screenPointPx)) {
+            return true
+        }
         val touchableSources = allTouchableSources
         val hits = HashMap<String?, List<Feature?>?>()
-        if (screenPoint != null) {
-            handleTapInSources(LinkedList(touchableSources), screenPoint, hits, ArrayList(), object : HandleTap {
+        if (screenPointPx != null) {
+            handleTapInSources(LinkedList(touchableSources), screenPointPx, hits, ArrayList(), object : HandleTap {
                 override fun run(hitTouchableSources: List<RNMBXSource<*>?>?, hits: Map<String?, List<Feature?>?>) {
+                    /** Android Mapbox SDK returns screen coordinates in physical pixels, while JS expects density-independent pixels. */
+                    val screenPointDp = toDp(screenPointPx)
                     if (hits.size > 0) {
                         val source = getTouchableSourceWithHighestZIndex(hitTouchableSources as List<RNMBXSource<*>>?)
                         if (source != null && source.hasPressListener() && source.iD != null && source.iD in hits) {
                             source.onPress(RNMBXSource.OnPressEvent(
                                     hits[source.iD] as List<Feature>,
                                     GeoJSONUtils.toLatLng(point),
-                                    PointF(screenPoint.x.toFloat(), screenPoint.y.toFloat())
+                                    screenPointDp
                             ))
                             return
                         }
                     }
-                    val event = MapClickEvent(_this, LatLng(point), screenPoint)
+                    val event = MapClickEvent(_this, LatLng(point), screenPointDp)
                     mManager.handleEvent(event)
                 }
 
@@ -727,14 +786,32 @@ open class RNMBXMapView(private val mContext: Context, var mManager: RNMBXMapVie
         return false
     }
 
+    /**
+     * Whether the given map-surface coordinate (physical pixels, from `pixelForCoordinate`) lands
+     * within any `MarkerView` currently on the map. Converts to absolute screen coordinates so it
+     * can be compared against each marker view's `getLocationOnScreen` bounds.
+     */
+    private fun isPointOnMarkerView(screenPointPx: ScreenCoordinate): Boolean {
+        val markerViews = mFeatures.mapNotNull { it.feature as? RNMBXMarkerView }
+        if (markerViews.isEmpty()) {
+            return false
+        }
+        val mapLoc = IntArray(2)
+        mapView.getLocationOnScreen(mapLoc)
+        val absX = mapLoc[0] + screenPointPx.x.toFloat()
+        val absY = mapLoc[1] + screenPointPx.y.toFloat()
+        return markerViews.any { it.containsScreenPoint(absX, absY) }
+    }
+
     override fun onMapLongClick(point: Point): Boolean {
         val _this = this
-        if (pointAnnotations.getAndClearAnnotationDragged()) {
+        if (pointAnnotationCoordinators.any { it.getAndClearAnnotationDragged() }) {
             return true
         }
-        val screenPoint = mMap?.pixelForCoordinate(point)
-        if (screenPoint != null) {
-            val event = MapClickEvent(_this, LatLng(point), screenPoint, EventTypes.MAP_LONG_CLICK)
+        val screenPointPx = mMap?.pixelForCoordinate(point)
+        if (screenPointPx != null) {
+            val screenPointDp = toDp(screenPointPx)
+            val event = MapClickEvent(_this, LatLng(point), screenPointDp, EventTypes.MAP_LONG_CLICK)
             mManager.handleEvent(event)
         }
 
@@ -908,48 +985,61 @@ open class RNMBXMapView(private val mContext: Context, var mManager: RNMBXMapVie
         }
     }
 
-    private fun getDisplayDensity(): Float {
-        return mContext.resources.displayMetrics.density
+    private fun getDisplayDensity(): Double {
+        return mContext.resources.displayMetrics.density.toDouble()
     }
 
-    fun getCoordinateFromView(pixel: ScreenCoordinate, response: CommandResponse) {
-        val density: Float = getDisplayDensity()
-        val screenCoordinate = ScreenCoordinate(pixel.x * density, pixel.y * density)
+    /** Converts a point from physical pixels to density-independent pixels. */
+    private fun toDp(pointPx: ScreenCoordinate): ScreenCoordinate {
+        val density = getDisplayDensity()
+        return ScreenCoordinate(pointPx.x / density, pointPx.y / density)
+    }
 
-        val coordinate = mMap!!.coordinateForPixel(screenCoordinate)
+    /** Converts a point from density-independent pixels to physical pixels. */
+    private fun toPx(pointDp: ScreenCoordinate): ScreenCoordinate {
+        val density = getDisplayDensity()
+        return ScreenCoordinate(pointDp.x * density, pointDp.y * density)
+    }
+
+    /** Converts a bounding box from density-independent pixels to physical pixels. */
+    private fun toPx(boxDp: ScreenBox): ScreenBox {
+        val density = getDisplayDensity()
+        return ScreenBox(
+            ScreenCoordinate(boxDp.min.x * density, boxDp.min.y * density),
+            ScreenCoordinate(boxDp.max.x * density, boxDp.max.y * density),
+        )
+    }
+
+    fun getCoordinateFromView(pointDp: ScreenCoordinate, response: CommandResponse) {
+        val pointPx = toPx(pointDp)
+
+        val coordinate = mMap!!.coordinateForPixel(pointPx)
 
         response.success {
             it.putArray("coordinateFromView", coordinate.toReadableArray())
         }
     }
 
-    fun getPointInView(coordinate: Point, response: CommandResponse) {
-        val point = mMap!!.pixelForCoordinate(coordinate)
-        val density = getDisplayDensity()
-        val pointInView = PointF((point.x / density).toFloat(), (point.y / density).toFloat())
+    fun getPointInView(coordinates: Point, response: CommandResponse) {
+        val pointDp = toDp(mMap!!.pixelForCoordinate(coordinates))
 
         response.success {
             val array: WritableArray = WritableNativeArray()
-            array.pushDouble(pointInView.x.toDouble())
-            array.pushDouble(pointInView.y.toDouble())
+            array.pushDouble(pointDp.x)
+            array.pushDouble(pointDp.y)
             it.putArray("pointInView", array)
         }
     }
 
-    fun queryRenderedFeaturesAtPoint(point: PointF, filter: Expression?, layerIDs: List<String>?, response: CommandResponse) {
+    fun queryRenderedFeaturesAtPoint(pointDp: ScreenCoordinate, filter: Expression?, layerIDs: List<String>?, response: CommandResponse) {
         if (mMap == null) {
             Logger.e("queryRenderedFeaturesAtPoint", "mapbox map is null")
             return
         }
-        // JS sends point values in DIP (see getPointInView which divides by display density),
-        // but Mapbox core expects screen pixel coordinates. Convert back to px here.
-        val density: Float = getDisplayDensity()
-        val screenCoordinate = ScreenCoordinate(
-                (point.x * density).toDouble(),
-                (point.y * density).toDouble()
-        )
-        val queryGeometry = RenderedQueryGeometry(screenCoordinate)
-        val layers = layerIDs?.takeUnless { it.isEmpty() } ?: null;
+
+        val pointPx = toPx(pointDp)
+        val queryGeometry = RenderedQueryGeometry(pointPx)
+        val layers = layerIDs?.takeUnless { it.isEmpty() } ?: null
         val queryOptions = RenderedQueryOptions(layers, filter)
         mMap.queryRenderedFeatures(queryGeometry, queryOptions) { features ->
             if (features.isValue) {
@@ -966,14 +1056,19 @@ open class RNMBXMapView(private val mContext: Context, var mManager: RNMBXMapVie
         }
     }
 
-    fun queryRenderedFeaturesInRect(rect: RectF?, filter: Expression?, layerIDs: List<String>?, response: CommandResponse) {
+    fun queryRenderedFeaturesInRect(rectDp: ScreenBox?, filter: Expression?, layerIDs: List<String>?, response: CommandResponse) {
         val size = mMap.getMapOptions().size
-        val screenBox = if (rect == null) ScreenBox(ScreenCoordinate(0.0, 0.0), ScreenCoordinate(size?.width!!.toDouble(), size?.height!!.toDouble())) else ScreenBox(
-                ScreenCoordinate(rect.right.toDouble(), rect.bottom.toDouble() ),
-                ScreenCoordinate(rect.left.toDouble(), rect.top.toDouble()),
-        )
+
+        val rectPx: ScreenBox =
+            rectDp?.let { toPx(it) }
+                ?: ScreenBox(
+                    ScreenCoordinate(0.0, 0.0),
+                    /** No conversion needed, screen size is already returned in physical pixels. */
+                    ScreenCoordinate(size?.width?.toDouble() ?: 0.0, size?.height?.toDouble() ?: 0.0)
+                )
+
         mMap.queryRenderedFeatures(
-                RenderedQueryGeometry(screenBox),
+                RenderedQueryGeometry(rectPx),
                 RenderedQueryOptions(layerIDs, filter)
         ) { features ->
             if (features.isValue) {
@@ -1235,6 +1330,7 @@ open class RNMBXMapView(private val mContext: Context, var mManager: RNMBXMapVie
         RNMBXMarkerViewManager.markerViewContainerSizeFixer(this, mapView.viewAnnotationManager)
 
         this.setupEvents(map)
+        languageRejectionSubscription = map.subscribeMapLoadingError { warnIfLanguageRejected(it) }
         return mapView
     }
 
@@ -1339,6 +1435,7 @@ open class RNMBXMapView(private val mContext: Context, var mManager: RNMBXMapVie
     }
 
     var mScaleBarSettings = OrnamentSettings(enabled = false)
+    var mScaleBarUnits: String? = null
 
     fun setReactScaleBarEnabled(scaleBarEnabled: Boolean) {
         mScaleBarSettings.enabled = scaleBarEnabled
@@ -1360,9 +1457,21 @@ open class RNMBXMapView(private val mContext: Context, var mManager: RNMBXMapVie
         changes.add(Property.SCALEBAR)
     }
 
+    fun setReactScaleBarUnits(units: String?) {
+        mScaleBarUnits = units
+        changes.add(Property.SCALEBAR)
+    }
+
     private fun applyScaleBar() {
         mapView.scalebar.updateSettings {
             updateOrnament("scaleBar", mScaleBarSettings, this.toGenericOrnamentSettings())
+            mScaleBarUnits?.let { units ->
+                distanceUnits = when (units) {
+                    "imperial" -> com.mapbox.maps.plugin.DistanceUnits.IMPERIAL
+                    "nautical" -> com.mapbox.maps.plugin.DistanceUnits.NAUTICAL
+                    else -> com.mapbox.maps.plugin.DistanceUnits.METRIC
+                }
+            }
         }
         workaroundToRelayoutChildOfMapView()
     }
@@ -1499,6 +1608,10 @@ open class RNMBXMapView(private val mContext: Context, var mManager: RNMBXMapVie
      */
 
     fun onDropViewInstance() {
+        languageRejectionSubscription?.cancel()
+        languageRejectionSubscription = null
+        mapLoadingErrorSubscription?.cancel()
+        mapLoadingErrorSubscription = null
         removeAllFeaturesFromMap(RemovalReason.ON_DESTROY)
         mapView.viewAnnotationManager.removeAllViewAnnotations()
         lifecycle.onDestroy()

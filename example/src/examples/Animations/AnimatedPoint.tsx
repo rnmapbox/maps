@@ -7,10 +7,10 @@ import {
   CircleLayer,
   __experimental,
 } from '@rnmapbox/maps';
-import { Position } from 'geojson';
+import { type Position } from 'geojson';
 import { Divider, Slider, Text } from '@rneui/base';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { View, Button, StyleProp, ViewStyle } from 'react-native';
+import { View, Button, type StyleProp, type ViewStyle } from 'react-native';
 
 import type { ExampleWithMetadata } from '../common/ExampleMetadata';
 

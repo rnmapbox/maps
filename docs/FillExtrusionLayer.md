@@ -155,6 +155,7 @@ Customizable style attributes
 * <a href="#fillextrusioncutofffaderange">fillExtrusionCutoffFadeRange</a><br/>
 * <a href="#fillextrusionemissivestrength">fillExtrusionEmissiveStrength</a><br/>
 * <a href="#fillextrusionlinewidth">fillExtrusionLineWidth</a><br/>
+* <a href="#fillextrusioncastshadows">fillExtrusionCastShadows</a><br/>
 
 ___
 
@@ -1211,5 +1212,22 @@ The transition affecting any changes to this layer’s fillExtrusionLineWidth pr
 
 #### Default Value
 `{duration: 300, delay: 0}`
+
+
+___
+
+### fillExtrusionCastShadows
+Name: `fillExtrusionCastShadows`
+
+Mapbox spec: [fill-extrusion-cast-shadows](https://docs.mapbox.com/style-spec/reference/layers/#paint-fill-extrusion-fill-extrusion-cast-shadows)
+
+#### Description
+Enable/Disable shadow casting for this layer
+
+#### Type
+`boolean`
+#### Default Value
+`true`
+
 
 

@@ -3,7 +3,7 @@ import { Button, View } from 'react-native';
 import {
   useState,
   useRef,
-  ComponentProps,
+  type ComponentProps,
   useMemo,
   forwardRef,
   type ElementRef,

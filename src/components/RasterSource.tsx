@@ -2,7 +2,7 @@ import React from 'react';
 import { NativeModules } from 'react-native';
 
 import { cloneReactChildrenWithProps } from '../utils';
-import { BaseProps } from '../types/BaseProps';
+import { type BaseProps } from '../types/BaseProps';
 import RNMBXRasterSourceNativeComponent from '../specs/RNMBXRasterSourceNativeComponent';
 
 import AbstractSource from './AbstractSource';

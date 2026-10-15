@@ -1,8 +1,8 @@
-import React, { ReactElement } from 'react';
+import React, { type ReactElement } from 'react';
 
 import locationManager from '../modules/location/locationManager';
 import { type Location } from '../modules/location/locationManager';
-import { CircleLayerStyle } from '../Mapbox';
+import { type CircleLayerStyle } from '../Mapbox';
 
 import Annotation from './Annotation';
 import CircleLayer from './CircleLayer';

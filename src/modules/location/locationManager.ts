@@ -2,11 +2,11 @@ import {
   NativeModules,
   NativeEventEmitter,
   AppState,
-  NativeEventSubscription,
-  EmitterSubscription,
+  type NativeEventSubscription,
+  type EmitterSubscription,
   type AppStateStatus,
   Platform,
-  EventSubscription,
+  type EventSubscription,
 } from 'react-native';
 
 import NativeRNMBXLocationModule from '../../specs/NativeRNMBXLocationModule';
@@ -42,8 +42,6 @@ interface Coordinates {
   /**
    * The heading (measured in degrees) relative to true north.
    * Heading is used to describe the direction the device is pointing to (the value of the compass).
-   * Note that on Android this is incorrectly reporting the course value as mentioned in issue https://github.com/rnmapbox/maps/issues/1213
-   * and will be corrected in a future update.
    */
   heading?: number;
 

@@ -30,6 +30,7 @@ npx expo start -c --web
 - If you add a feature, make sure you add it to the documentation
 - Use meaningful commit messages, use semantic commit messages
 - If you add a new feature make sure to add a scene in `/example` for others to see/ test it
+- If you fix a bug, reproduce it first and verify your fix against the reproducer — see [.github/REPRODUCING.md](.github/REPRODUCING.md). This applies to everyone, and especially to AI coding agents: a reproducer is worth 100x more than a speculative fix.
 
 ## Generated code/documentation
 

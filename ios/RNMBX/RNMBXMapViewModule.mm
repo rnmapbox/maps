@@ -60,7 +60,7 @@ RCT_EXPORT_METHOD(getCoordinateFromView:(nonnull NSNumber*)viewRef atPoint:(NSAr
         NSNumber* a = [atPoint objectAtIndex:0];
         NSNumber* b = [atPoint objectAtIndex:1];
 
-        [view getCoordinateFromViewWithAtPoint:CGPointMake(a.floatValue, b.floatValue) resolver:resolve rejecter:reject];
+        [view getCoordinateFromViewWithAtPoint:CGPointMake(a.doubleValue, b.doubleValue) resolver:resolve rejecter:reject];
     } reject:reject methodName:@"getCoordinateFromView"];
 }
 

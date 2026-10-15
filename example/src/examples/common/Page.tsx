@@ -3,9 +3,9 @@ import { View } from 'react-native';
 import sheet from '../../styles/sheet';
 import colors from '../../styles/colors';
 
-import { BaseExampleProps } from './BaseExamplePropTypes';
+import { type BaseExampleProps } from './BaseExamplePropTypes';
 import MapHeader from './MapHeader';
-import { ReactNode } from 'react';
+import { type ReactNode } from 'react';
 
 export type PageProps = BaseExampleProps & { children: ReactNode };
 

@@ -17,8 +17,9 @@ component for a maximum of around 100 views displayed at one time.
 This is implemented with view annotations on [Android](https://docs.mapbox.com/android/maps/guides/annotations/view-annotations/)
 and [iOS](https://docs.mapbox.com/ios/maps/guides/annotations/view-annotations).
 
-This component has no dedicated `onPress` method. Instead, you should handle gestures
-with the React views passed in as `children`.
+This component has no dedicated `onPress` method. Instead, handle gestures
+with the React views passed in as `children` — Pressable, TouchableOpacity,
+etc. all work including their visual feedback (opacity, scale, etc.).
 
 ## props
 
@@ -52,8 +53,6 @@ the view, and (1, 1) is the bottom-right corner. Defaults to the center at (0.5,
 ```tsx
 boolean
 ```
-@v10
-
 Whether or not nearby markers on the map should all be displayed. If false, adjacent
 markers will 'collapse' and only one will be shown. Defaults to false.
 
@@ -81,13 +80,32 @@ FIX ME NO DESCRIPTION
   _defaults to:_ `false`
 
   
+### stopGesturePropagation
+
+```tsx
+boolean
+```
+Keep pan/pinch/drag gestures that start on this marker inside the marker instead of
+letting them reach the map. Enable this for markers whose children handle their own
+drags in JavaScript (e.g. a PanResponder-based slider), which otherwise race the map's
+pan/zoom recogniser and can be taken over by the map. By default the marker is smart:
+taps and native scrollables are kept, but a pan/pinch that merely starts on the marker
+moves the map. Defaults to false.
+
+@platform android — on iOS the map's gesture recognisers already coexist with marker
+content, so this has no effect.
+
+  _defaults to:_ `false`
+
+  
 ### children
 
 ```tsx
 ReactReactElement
 ```
 _required_
-One or more valid React Native views.
+One or more valid React Native views. You can use Pressable, TouchableOpacity,
+etc. directly as children — onPress and touch feedback work correctly.
 
 
   

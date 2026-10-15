@@ -81,6 +81,9 @@ public class RNMBXNativeUserLocation: UIView, RNMBXMapAndMapViewComponent {
   public var pulsing: NSDictionary? = nil
 
   @objc
+  public var model: NSDictionary? = nil
+
+  @objc
   override public func didSetProps(_ props: [String]) {
     _apply()
   }
@@ -127,6 +130,35 @@ public class RNMBXNativeUserLocation: UIView, RNMBXMapAndMapViewComponent {
     }
   }
 
+  func toDoubleArrayValue(value: Any?, name: String) -> Value<[Double]>? {
+    guard let array = value as? [Any] else {
+      return nil
+    }
+    if let numbers = array as? [NSNumber] {
+      return .constant(numbers.map { $0.doubleValue })
+    }
+    do {
+      let data = try JSONSerialization.data(withJSONObject: array)
+      return .expression(try JSONDecoder().decode(Expression.self, from: data))
+    } catch {
+      Logger.error("toDoubleArrayValue: \(name): unable to parse as expression \(array)")
+      return nil
+    }
+  }
+
+  func makePuck3DConfiguration(_ model: NSDictionary) -> Puck3DConfiguration? {
+    guard let uri = model["uri"] as? String, let url = URL(string: uri) else {
+      Logger.error("RNMBXNativeUserLocation model.uri is not a valid url: \(optional: model["uri"])")
+      return nil
+    }
+    return Puck3DConfiguration(
+      model: Model(id: "rnmbx-location-puck-model", uri: url),
+      modelScale: toDoubleArrayValue(value: model["scale"], name: "model.scale"),
+      modelRotation: toDoubleArrayValue(value: model["rotation"], name: "model.rotation"),
+      modelOpacity: toDoubleValue(value: model["opacity"], name: "model.opacity")
+    )
+  }
+
   func _apply() {
     guard let map = self.map else {
       return
@@ -151,6 +183,8 @@ public class RNMBXNativeUserLocation: UIView, RNMBXMapAndMapViewComponent {
         )
       )
       return
+    } else if let model = model, let configuration = makePuck3DConfiguration(model) {
+      location.options.puckType = .puck3D(configuration)
     } else {
       var configuration : Puck2DConfiguration = images.isEmpty ?
         .makeDefault(showBearing: puckBearingEnabled) : Puck2DConfiguration(

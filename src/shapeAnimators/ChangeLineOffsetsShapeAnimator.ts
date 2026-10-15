@@ -5,7 +5,7 @@ import NativeRNMBXChangeLineOffsetsShapeAnimatorModule from '../specs/NativeRNMB
 
 import ShapeAnimatorManager from './ShapeAnimatorManager';
 
-import { ShapeAnimatorInterface } from '.';
+import { type ShapeAnimatorInterface } from '.';
 
 export default class ChangeLineOffsetsShapeAnimator
   implements ShapeAnimatorInterface

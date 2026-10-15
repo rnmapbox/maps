@@ -34,6 +34,7 @@ class RNMBXShapeSource(context: Context, private val mManager: RNMBXShapeSourceM
     private var mClusterMaxZoom: Long? = null
     private var mClusterProperties: HashMap<String, Any>? = null
     private var mMaxZoom: Long? = null
+    private var mMinZoom: Long? = null
     private var mBuffer: Long? = null
     private var mTolerance: Double? = null
     private var mLineMetrics: Boolean? = null
@@ -158,6 +159,10 @@ class RNMBXShapeSource(context: Context, private val mManager: RNMBXShapeSourceM
         mMaxZoom = maxZoom
     }
 
+    fun setMinZoom(minZoom: Long) {
+        mMinZoom = minZoom
+    }
+
     fun setBuffer(buffer: Long) {
         mBuffer = buffer
     }
@@ -189,6 +194,9 @@ class RNMBXShapeSource(context: Context, private val mManager: RNMBXShapeSourceM
         }
         if (mMaxZoom != null) {
             builder.maxzoom(mMaxZoom!!)
+        }
+        if (mMinZoom != null) {
+            builder.minzoom(mMinZoom!!)
         }
         if (mBuffer != null) {
             builder.buffer(mBuffer!!)

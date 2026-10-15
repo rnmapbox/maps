@@ -1,10 +1,10 @@
 import type { HostComponent, ViewProps } from 'react-native';
 import codegenNativeComponent from 'react-native/Libraries/Utilities/codegenNativeComponent';
 import {
-  BubblingEventHandler,
-  DirectEventHandler,
-  Int32,
-  Double,
+  type BubblingEventHandler,
+  type DirectEventHandler,
+  type Int32,
+  type Double,
   // @ts-ignore - CI environment type resolution issue for CodegenTypes
 } from 'react-native/Libraries/Types/CodegenTypes';
 
@@ -49,6 +49,7 @@ export interface NativeProps extends ViewProps {
 
   scaleBarEnabled?: OptionalProp<boolean>;
   scaleBarPosition?: UnsafeMixed<any>;
+  scaleBarUnits?: OptionalProp<string>;
 
   zoomEnabled?: OptionalProp<boolean>;
   scrollEnabled?: OptionalProp<boolean>;

@@ -211,6 +211,9 @@ This is now deprecated, use Image component instead.
 * <a href="#texttranslate">textTranslate</a><br/>
 * <a href="#texttranslateanchor">textTranslateAnchor</a><br/>
 * <a href="#iconcolorsaturation">iconColorSaturation</a><br/>
+* <a href="#iconcolorcontrast">iconColorContrast</a><br/>
+* <a href="#iconcolorbrightnessmin">iconColorBrightnessMin</a><br/>
+* <a href="#iconcolorbrightnessmax">iconColorBrightnessMax</a><br/>
 * <a href="#symbolzoffset">symbolZOffset</a><br/>
 
 ___
@@ -2179,6 +2182,84 @@ Increase or reduce the saturation of the symbol icon.
 
 #### Minimum
 `-1`
+
+
+#### Maximum
+`1`
+
+#### Expression
+
+Parameters: ``
+
+___
+
+### iconColorContrast
+Name: `iconColorContrast`
+
+Mapbox spec: [icon-color-contrast](https://docs.mapbox.com/style-spec/reference/layers/#paint-symbol-icon-color-contrast)
+
+#### Description
+Increase or reduce the contrast of the symbol icon.
+
+#### Type
+`number`
+#### Default Value
+`0`
+
+#### Minimum
+`-1`
+
+
+#### Maximum
+`1`
+
+#### Expression
+
+Parameters: ``
+
+___
+
+### iconColorBrightnessMin
+Name: `iconColorBrightnessMin`
+
+Mapbox spec: [icon-color-brightness-min](https://docs.mapbox.com/style-spec/reference/layers/#paint-symbol-icon-color-brightness-min)
+
+#### Description
+Increase or reduce the brightness of the symbols. The value is the minimum brightness.
+
+#### Type
+`number`
+#### Default Value
+`0`
+
+#### Minimum
+`0`
+
+
+#### Maximum
+`1`
+
+#### Expression
+
+Parameters: ``
+
+___
+
+### iconColorBrightnessMax
+Name: `iconColorBrightnessMax`
+
+Mapbox spec: [icon-color-brightness-max](https://docs.mapbox.com/style-spec/reference/layers/#paint-symbol-icon-color-brightness-max)
+
+#### Description
+Increase or reduce the brightness of the symbols. The value is the maximum brightness.
+
+#### Type
+`number`
+#### Default Value
+`1`
+
+#### Minimum
+`0`
 
 
 #### Maximum

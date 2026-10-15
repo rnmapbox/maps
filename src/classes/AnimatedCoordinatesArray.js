@@ -169,7 +169,7 @@ export class AnimatedCoordinatesArray extends AnimatedWithChildren {
     const progressValue = new Animated.Value(0.0);
     return this.animate(
       progressValue,
-      Animated.decay(this.progressValue, {
+      Animated.decay(progressValue, {
         ...defaultConfig,
         ...config,
         toValue: 1.0,

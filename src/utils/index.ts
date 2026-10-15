@@ -1,10 +1,10 @@
-import React, { ReactNode } from 'react';
+import React, { type ReactNode } from 'react';
 import {
   findNodeHandle,
   Platform,
   Image,
-  ImageSourcePropType,
-  TurboModule,
+  type ImageSourcePropType,
+  type TurboModule,
 } from 'react-native';
 
 export function isAndroid(): boolean {

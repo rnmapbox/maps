@@ -5,7 +5,7 @@ import { Double } from 'react-native/Libraries/Types/CodegenTypes';
 
 import type { Position } from '../types/Position';
 
-import { UnsafeMixed } from './codegenUtils';
+import { type UnsafeMixed } from './codegenUtils';
 
 // see https://github.com/rnmapbox/maps/wiki/FabricOptionalProp
 type OptionalProp<T> = UnsafeMixed<T>;

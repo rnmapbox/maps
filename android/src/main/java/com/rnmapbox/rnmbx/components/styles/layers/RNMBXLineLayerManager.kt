@@ -5,9 +5,15 @@ import com.facebook.react.uimanager.ThemedReactContext
 import com.facebook.react.uimanager.ViewGroupManager
 import com.facebook.react.uimanager.annotations.ReactProp
 import com.facebook.react.viewmanagers.RNMBXLineLayerManagerInterface
+import com.facebook.react.uimanager.ViewManagerDelegate
+import com.facebook.react.viewmanagers.RNMBXLineLayerManagerDelegate
 
 class RNMBXLineLayerManager : ViewGroupManager<RNMBXLineLayer>(),
     RNMBXLineLayerManagerInterface<RNMBXLineLayer> {
+
+    private val delegate = RNMBXLineLayerManagerDelegate<RNMBXLineLayer, RNMBXLineLayerManager>(this)
+
+    override fun getDelegate(): ViewManagerDelegate<RNMBXLineLayer> = delegate
     override fun getName(): String {
         return REACT_CLASS
     }

@@ -78,6 +78,17 @@ class RNMBXPointAnnotationManager(reactApplicationContext: ReactApplicationConte
         annotation.setAnchor(mapValue.getDouble("x").toFloat(), mapValue.getDouble("y").toFloat())
     }
 
+    override fun setSelected(
+        annotation: RNMBXPointAnnotation,
+        value: Dynamic
+    ) {
+        if (value.isNull) {
+            Logger.e("RNMBXPointAnnotationManager", "selected value is null")
+            return
+        }
+        annotation.setReactSelected(value.asBoolean())
+    }
+
     @ReactProp(name = "draggable")
     override fun setDraggable(annotation: RNMBXPointAnnotation, draggable: Dynamic) {
         annotation.setDraggable(draggable.asBoolean())
