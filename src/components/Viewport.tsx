@@ -134,15 +134,40 @@ type ViewportStatusChangedEvent = {
   reason: ViewportStatusChangeReason;
 };
 
+type ViewportGesture = 'pan' | 'pinch' | 'doubleTap' | 'rotate' | 'pitch';
+
 type Props = {
   /**
    * Indicates whether the Viewport should idle when the MapView receives touch input.
    *
-   * Set this property to false to enable building custom ViewportStates that can work simultaneously with certain types of gestures.
+   * - `true`: any gesture idles the viewport.
+   * - `false`: no gesture idles it. Set this to build custom ViewportStates that can work simultaneously with certain types of gestures.
+   * - an object, e.g. `{ pan: true, pinch: false, doubleTap: false }`: only the gestures set to `true` idle the viewport,
+   *   the others leave the current state running. Omitted keys default to `true`.
+   *   - `pan`: one-finger pan
+   *   - `pinch`: pinch, and quick zoom (double-tap and drag)
+   *   - `doubleTap`: double-tap to zoom in, two-finger tap to zoom out
+   *   - `rotate`: two-finger rotate
+   *   - `pitch`: two-finger vertical drag (shove on Android)
+   *
+   * With the object form, while in a followPuck state:
+   * - once the user zooms, rotates or pitches with a gesture that doesn't idle, the state stops applying its zoom,
+   *   bearing or pitch, so the user's value sticks. The next transition to a followPuck state applies them again.
+   * - if `pinch` or `doubleTap` doesn't idle, zoom gestures zoom around the puck, and a two-finger drag doesn't pan the map.
+   *   This temporarily sets the gesture focal point and turns off `gestureSettings.pinchPanEnabled`,
+   *   unless the app has set them.
    *
    * Defaults to true.
    */
-  transitionsToIdleUponUserInteraction?: boolean;
+  transitionsToIdleUponUserInteraction?:
+    | boolean
+    | {
+        pan?: boolean;
+        pinch?: boolean;
+        doubleTap?: boolean;
+        rotate?: boolean;
+        pitch?: boolean;
+      };
 
   /**
    * Subscribes to status changes, will be called when the status changes.
@@ -155,6 +180,25 @@ type Props = {
    */
   onStatusChanged?: (event: ViewportStatusChangedEvent) => void;
 };
+
+const GESTURES: ViewportGesture[] = [
+  'pan',
+  'pinch',
+  'doubleTap',
+  'rotate',
+  'pitch',
+];
+
+export function normalizeTransitionsToIdleUponUserInteraction(
+  value: Props['transitionsToIdleUponUserInteraction'],
+): boolean | Record<ViewportGesture, boolean> | undefined {
+  if (value == null || typeof value === 'boolean') {
+    return value;
+  }
+  return Object.fromEntries(
+    GESTURES.map((gesture) => [gesture, value[gesture] ?? true]),
+  ) as Record<ViewportGesture, boolean>;
+}
 
 export interface Ref {
   getState(): Promise<string>;
@@ -211,9 +255,18 @@ export const Viewport = memo(
       }
     }, [props.onStatusChanged]);
 
+    const normalizedTransitionsToIdle = useMemo(
+      () =>
+        normalizeTransitionsToIdleUponUserInteraction(
+          props.transitionsToIdleUponUserInteraction,
+        ),
+      [props.transitionsToIdleUponUserInteraction],
+    );
+
     return (
       <RNMBXViewport
         {...props}
+        transitionsToIdleUponUserInteraction={normalizedTransitionsToIdle}
         hasStatusChanged={props.onStatusChanged != null}
         // @ts-ignore - DirectEventHandler type signature mismatch with React Native's event system
         // The handler function signature is correct but doesn't match the strict DirectEventHandler type
@@ -225,7 +278,13 @@ export const Viewport = memo(
 );
 export type Viewport = Ref;
 
-type NativeProps = Omit<Props, 'onStatusChanged'> & {
+type NativeProps = Omit<
+  Props,
+  'onStatusChanged' | 'transitionsToIdleUponUserInteraction'
+> & {
+  transitionsToIdleUponUserInteraction?:
+    | boolean
+    | Record<ViewportGesture, boolean>;
   hasStatusChanged: boolean;
   onStatusChanged?: (
     event: NativeSyntheticEvent<{

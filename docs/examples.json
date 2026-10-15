@@ -987,6 +987,20 @@
         "fullPath": "example/src/examples/Camera/GetZoom.js",
         "relPath": "Camera/GetZoom.js",
         "name": "GetZoom"
+      },
+      {
+        "metadata": {
+          "title": "Viewport Gestures",
+          "tags": [
+            "Viewport",
+            "Viewport#transitionsToIdleUponUserInteraction"
+          ],
+          "docs": "\nFollows a simulated moving location, and chooses which gestures stop following with `transitionsToIdleUponUserInteraction`.\n\nIn the object form, pan stops following, while zooming, rotating and pitching keep following and keep the user's value.\n",
+          "disableSync": true
+        },
+        "fullPath": "example/src/examples/Camera/ViewportGestures.tsx",
+        "relPath": "Camera/ViewportGestures.tsx",
+        "name": "ViewportGestures"
       }
     ]
   }

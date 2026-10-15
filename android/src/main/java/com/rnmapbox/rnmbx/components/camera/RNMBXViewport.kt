@@ -25,6 +25,7 @@ import com.mapbox.maps.plugin.viewport.transition.DefaultViewportTransition
 import com.mapbox.maps.plugin.viewport.transition.ViewportTransition
 import com.mapbox.maps.plugin.viewport.viewport
 import com.rnmapbox.rnmbx.components.AbstractMapFeature
+import com.rnmapbox.rnmbx.components.RemovalReason
 import com.rnmapbox.rnmbx.components.mapview.RNMBXMapView
 import com.rnmapbox.rnmbx.modules.RNMBXLogging
 import com.rnmapbox.rnmbx.utils.Logger
@@ -64,18 +65,46 @@ AbstractMapFeature(
 mContext
 ) {
     // region properties
-    var transitionsToIdleUponUserInteraction: Boolean? = null
-        set(value: Boolean?) {
-            field = value
-            if (value != null) {
-                mMapView?.let { applyTransitionsToIdleUponUserIntraction(it.mapView) }
+    private var transitionsToIdleUponUserInteraction: Boolean? = null
+    private var idleGestures: RNMBXViewportGestureHandler.IdleGestures? = null
+
+    /** Sets the boolean form, or the per-gesture form when `idleGestures` is non-null. */
+    fun setTransitionsToIdleUponUserInteraction(value: Boolean?, idleGestures: RNMBXViewportGestureHandler.IdleGestures?) {
+        this.transitionsToIdleUponUserInteraction = if (idleGestures != null) null else value
+        this.idleGestures = idleGestures
+        mMapView?.let { applyTransitionsToIdleUponUserIntraction(it) }
+    }
+
+    private var gestureHandler: RNMBXViewportGestureHandler? = null
+    private var gestureIdlePending = false
+
+    fun applyTransitionsToIdleUponUserIntraction(map: RNMBXMapView) {
+        val mapView = map.mapView
+        val idleGestures = this.idleGestures
+        val transitionsToIdle = this.transitionsToIdleUponUserInteraction
+        if (idleGestures != null) {
+            val gestureHandler = this.gestureHandler
+            if (gestureHandler != null) {
+                gestureHandler.idleGestures = idleGestures
+            } else {
+                this.gestureHandler = RNMBXViewportGestureHandler(map, idleGestures) {
+                    gestureIdlePending = hasStatusChanged
+                }
+            }
+            setSdkTransitionsToIdle(mapView, false)
+        } else {
+            val hadGestureHandler = gestureHandler != null
+            gestureHandler?.detach()
+            gestureHandler = null
+            when {
+                transitionsToIdle != null -> setSdkTransitionsToIdle(mapView, transitionsToIdle)
+                hadGestureHandler -> setSdkTransitionsToIdle(mapView, true)
             }
         }
+    }
 
-    fun applyTransitionsToIdleUponUserIntraction(mapView: MapView) {
-        this.transitionsToIdleUponUserInteraction?.let {
-            mapView.viewport.options = mapView.viewport.options.toBuilder().transitionsToIdleUponUserInteraction(it).build()
-        }
+    private fun setSdkTransitionsToIdle(mapView: MapView, value: Boolean) {
+        mapView.viewport.options = mapView.viewport.options.toBuilder().transitionsToIdleUponUserInteraction(value).build()
     }
 
     var hasStatusChanged: Boolean = false
@@ -90,7 +119,12 @@ mContext
         if (hasStatusChanged) {
             if (statusObserver == null) {
                 val statusObserver = ViewportStatusObserver { from, to, reason ->
-                    val payload = writableMapOf("from" to statusToMap(from), "to" to statusToMap(to), "reason" to reasonToSrting(reason))
+                    val userInteraction = gestureIdlePending && to is ViewportStatus.Idle && reason == ViewportStatusChangeReason.IDLE_REQUESTED
+                    if (userInteraction) {
+                        gestureIdlePending = false
+                    }
+                    val reasonString = if (userInteraction) reasonToSrting(ViewportStatusChangeReason.USER_INTERACTION) else reasonToSrting(reason)
+                    val payload = writableMapOf("from" to statusToMap(from), "to" to statusToMap(to), "reason" to reasonString)
                     mManager.dispatchEvent(
                         BaseEvent(
                             UIManagerHelper.getSurfaceId(mContext),
@@ -116,8 +150,14 @@ mContext
 
     override fun addToMap(mapView: RNMBXMapView) {
         super.addToMap(mapView)
-        applyTransitionsToIdleUponUserIntraction(mapView.mapView)
+        applyTransitionsToIdleUponUserIntraction(mapView)
         applyHasStatusChanged(mapView.mapView)
+    }
+
+    override fun removeFromMap(mapView: RNMBXMapView, reason: RemovalReason): Boolean {
+        gestureHandler?.detach()
+        gestureHandler = null
+        return super.removeFromMap(mapView, reason)
     }
 
     private fun toState(viewport: ViewportPlugin, state: ReadableMap): ViewportState? {

@@ -193,6 +193,9 @@ open class RNMBXMapView(private val mContext: Context, var mManager: RNMBXMapVie
     var savedStyle: Style? = null
         private set
 
+    /** Whether `gestureSettings.pinchPanEnabled` is set, so it must not be overridden temporarily. */
+    var pinchPanEnabledSetByApp = false
+
     private var styleLoaded = false
 
     private var mHandledMapChangedEvents: HashSet<String>? = null
