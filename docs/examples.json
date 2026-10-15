@@ -987,6 +987,20 @@
         "fullPath": "example/src/examples/Camera/GetZoom.js",
         "relPath": "Camera/GetZoom.js",
         "name": "GetZoom"
+      },
+      {
+        "metadata": {
+          "title": "Long Press Camera",
+          "tags": [
+            "Camera",
+            "MapView#onLongPress"
+          ],
+          "docs": "Move the camera during a held long press, then lift and pan again.",
+          "disableSync": true
+        },
+        "fullPath": "example/src/examples/Camera/LongPress.js",
+        "relPath": "Camera/LongPress.js",
+        "name": "LongPress"
       }
     ]
   }
