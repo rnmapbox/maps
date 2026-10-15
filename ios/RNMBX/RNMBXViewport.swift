@@ -61,15 +61,31 @@ open class RNMBXViewport : UIView, RNMBXMapAndMapViewComponent, ViewportStatusOb
     if (hasStatusChanged) {
       mapView.viewport.removeStatusObserver(self)
     }
+    restoreTransitionsToIdleUponUserInteraction(mapView: mapView)
     self.mapView = nil
     return true
   }
 
+  /// The map's value before this Viewport changed it, restored on removal so the option doesn't outlive the component.
+  private var savedTransitionsToIdleUponUserInteraction: Bool? = nil
+
   func apply(mapView: MapView) {
     if let value = transitionsToIdleUponUserInteraction {
       var origOptions = mapView.viewport.options
+      if savedTransitionsToIdleUponUserInteraction == nil {
+        savedTransitionsToIdleUponUserInteraction = origOptions.transitionsToIdleUponUserInteraction
+      }
       origOptions.transitionsToIdleUponUserInteraction = value.boolValue
       mapView.viewport.options = origOptions
+    }
+  }
+
+  func restoreTransitionsToIdleUponUserInteraction(mapView: MapView) {
+    if let saved = savedTransitionsToIdleUponUserInteraction {
+      var options = mapView.viewport.options
+      options.transitionsToIdleUponUserInteraction = saved
+      mapView.viewport.options = options
+      savedTransitionsToIdleUponUserInteraction = nil
     }
   }
   
