@@ -17,6 +17,7 @@ export { default as DynamicUrl } from './DynamicUrl';
 export { default as LocalizeLabels } from './LocalizeLabels';
 export { default as SetLanguage } from './SetLanguage';
 export { default as ScreenCoordinates} from './ScreenCoordinates';
+export { default as GestureFocalPoint } from './GestureFocalPoint';
 
 export const metadata = {
   title: 'Map',

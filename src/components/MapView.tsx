@@ -76,10 +76,11 @@ export type GestureSettings = {
   doubleTouchToZoomOutEnabled?: boolean;
   /**
    * By default, gestures rotate and zoom around the center of the gesture. Set
-   * this property to rotate and zoom around a fixed point instead.
+   * this property to rotate and zoom around a fixed point instead, given in
+   * points (iOS) / dp (Android) relative to the top-left of the map view.
+   * Applies to pinch, rotate, double-tap and two-finger tap zoom.
    */
-  focalPoint?: Point;
-
+  focalPoint?: { x: number; y: number };
   /**
    * Whether pan/scroll is enabled for the pinch gesture.
    */
