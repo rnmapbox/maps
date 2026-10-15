@@ -4,8 +4,18 @@ import UIKit
 /// dummy parent of RNMBXMarkerView, so react-native changes visibility on RNMBXMarkerView,
 /// and Mapbox changes visibility on RNMBXMarkerViewParentViewAnnotation
 class RNMBXMarkerViewParentViewAnnotation : UIView {
+  weak var marker: RNMBXMarkerView?
+
+  // Mapbox positions the annotation by setting its frame.
+  override var frame: CGRect {
+    didSet {
+      marker?.onPositionChange?()
+    }
+  }
+
   required init(marker: RNMBXMarkerView) {
     super.init(frame: marker.bounds)
+    self.marker = marker
     insertSubview(marker, at: 0)
   }
   
@@ -41,6 +51,8 @@ public class RNMBXMarkerView: UIView, RNMBXMapComponent {
   weak var _annotationView: RNMBXMarkerViewParentViewAnnotation?
   
   var didAddToMap = false
+
+  @objc public var onPositionChange: (() -> Void)?
   
   @objc public var coordinate: Array<NSNumber>? {
     didSet {
