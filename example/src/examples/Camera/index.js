@@ -3,6 +3,7 @@ export { default as Fit } from './Fit';
 export { default as FlyTo } from './FlyTo';
 export { default as GetCenter } from './GetCenter';
 export { default as GetZoom } from './GetZoom';
+export { default as LongPress } from './LongPress';
 export { default as RestrictMapBounds } from './RestrictMapBounds';
 export { default as SetHeading } from './SetHeading';
 export { default as SetPitch } from './SetPitch';
