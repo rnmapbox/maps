@@ -533,13 +533,20 @@ open class RNMBXCamera : RNMBXMapAndMapViewComponentBase {
       withMapView { map in
         let bounds = [sw, ne]
 
-        // camera(for:padding:) insets the bounds within the map's current padding, so omitted edges must add nothing.
-        camera = map.mapboxMap.camera(
-          for: bounds,
-          padding: stopPadding(defaults: .zero),
-          bearing: heading ?? map.mapboxMap.cameraState.bearing,
-          pitch: pitch ?? map.mapboxMap.cameraState.pitch
-        )
+        // Apply viewport padding before fitting; coordinatesPadding would add to it.
+        camera = logged("RNMBXCamera", "Failed to fit camera to bounds") {
+          try map.mapboxMap.camera(
+            for: bounds,
+            camera: CameraOptions(
+              padding: padding,
+              bearing: heading ?? map.mapboxMap.cameraState.bearing,
+              pitch: pitch ?? map.mapboxMap.cameraState.pitch
+            ),
+            coordinatesPadding: .zero,
+            maxZoom: nil,
+            offset: nil
+          )
+        }
       }
     } else {
       camera = CameraOptions(
