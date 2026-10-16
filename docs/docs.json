@@ -975,7 +975,7 @@
             {
               "name": "padding",
               "required": false,
-              "type": "signature",
+              "type": "{paddingLeft: number, paddingRight: number, paddingTop: number, paddingBottom: number}",
               "default": "none",
               "description": "The viewport padding in points. An omitted edge keeps its current padding."
             },
@@ -5506,6 +5506,13 @@
               "type": "boolean",
               "default": "none",
               "description": "Whether single tapping the map with two touches results in a zoom-out animation."
+            },
+            {
+              "name": "focalPoint",
+              "required": false,
+              "type": "{x: number, y: number}",
+              "default": "none",
+              "description": "By default, gestures rotate and zoom around the center of the gesture. Set\nthis property to rotate and zoom around a fixed point instead, given in\npoints (iOS) / dp (Android) relative to the top-left of the map view.\nApplies to pinch, rotate, double-tap and two-finger tap zoom."
             },
             {
               "name": "pinchPanEnabled",

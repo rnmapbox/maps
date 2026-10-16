@@ -316,6 +316,18 @@
       },
       {
         "metadata": {
+          "title": "Gesture Focal Point",
+          "tags": [
+            "MapView#gestureSettings"
+          ],
+          "docs": "\nPinch, rotate and double-tap zoom pivot around the red marker instead of the touch location while `gestureSettings.focalPoint` is set. The coordinate under the marker stays the same across those gestures.\n"
+        },
+        "fullPath": "example/src/examples/Map/GestureFocalPoint.tsx",
+        "relPath": "Map/GestureFocalPoint.tsx",
+        "name": "GestureFocalPoint"
+      },
+      {
+        "metadata": {
           "title": "Localize Labels",
           "tags": [
             "MapView#localizeLabels"

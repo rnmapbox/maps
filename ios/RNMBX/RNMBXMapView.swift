@@ -637,6 +637,7 @@ open class RNMBXMapView: UIView, RCTInvalidating {
     var panEnabled: Bool? = nil;
     var panDecelerationFactor: CGFloat? = nil;
     var simultaneousRotateAndPinchZoomEnabled: Bool? = nil;
+    var focalPoint: CGPoint? = nil;
   }
 
   var gestureSettings = GestureSettings()
@@ -684,12 +685,21 @@ open class RNMBXMapView: UIView, RCTInvalidating {
       if let simultaneousRotateAndPinchZoomEnabled = value["simultaneousRotateAndPinchZoomEnabled"] as? NSNumber {
         options.simultaneousRotateAndPinchZoomEnabled = simultaneousRotateAndPinchZoomEnabled.boolValue
       }
+      if let focalPoint = value["focalPoint"] as? NSDictionary,
+         let x = focalPoint["x"] as? NSNumber, let y = focalPoint["y"] as? NSNumber {
+        options.focalPoint = CGPoint(x: x.doubleValue, y: y.doubleValue)
+      } else {
+        options.focalPoint = nil
+      }
       /* android only
        if let zoomAnimationAmount = value["zoomAnimationAmount"] as? NSNumber {
        options.zoomAnimationAmount = zoomAnimationAmount.CGFloat
        }*/
       gestureSettings = options
 
+      changed(.gestureSettings)
+    } else if gestureSettings.focalPoint != nil {
+      gestureSettings.focalPoint = nil
       changed(.gestureSettings)
     }
   }
@@ -732,6 +742,7 @@ open class RNMBXMapView: UIView, RCTInvalidating {
       if let simultaneousRotateAndPinchZoomEnabled = settings.simultaneousRotateAndPinchZoomEnabled as? Bool {
         options.simultaneousRotateAndPinchZoomEnabled = simultaneousRotateAndPinchZoomEnabled
       }
+      options.focalPoint = settings.focalPoint
       /* android only
        if let zoomAnimationAmount = value["zoomAnimationAmount"] as? NSNumber {
        options.zoomAnimationAmount = zoomAnimationAmount.CGFloat
