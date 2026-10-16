@@ -61,7 +61,10 @@ open class RNMBXViewport : UIView, RNMBXMapAndMapViewComponent, ViewportStatusOb
     if (hasStatusChanged) {
       mapView.viewport.removeStatusObserver(self)
     }
-    restoreTransitionsToIdleUponUserInteraction(mapView: mapView)
+    // iOS passes .ViewRemoval when the map itself is torn down (RNMBXMapView.invalidate()).
+    if reason != .ViewRemoval {
+      restoreTransitionsToIdleUponUserInteraction(mapView: mapView)
+    }
     self.mapView = nil
     return true
   }
