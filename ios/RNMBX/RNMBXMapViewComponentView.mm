@@ -205,6 +205,8 @@ using namespace facebook::react;
   
     RNMBX_REMAP_OPTIONAL_PROP_NSDictionary(gestureSettings, reactGestureSettings)
 
+    RNMBX_REMAP_OPTIONAL_PROP_BOOL(transparent, reactTransparent)
+
     id preferredFramesPerSecond = RNMBXConvertFollyDynamicToId(newViewProps.preferredFramesPerSecond);
     if (preferredFramesPerSecond != nil) {
         _view.reactPreferredFramesPerSecond = [preferredFramesPerSecond integerValue];

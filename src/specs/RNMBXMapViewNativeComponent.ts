@@ -68,6 +68,8 @@ export interface NativeProps extends ViewProps {
 
   gestureSettings?: UnsafeMixed<GestureSettings>;
 
+  transparent?: OptionalProp<boolean>;
+
   // Android only
   surfaceView?: OptionalProp<boolean>;
   scaleBarViewMargins?: UnsafeMixed<any>;
