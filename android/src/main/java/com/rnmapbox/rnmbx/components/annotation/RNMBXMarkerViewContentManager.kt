@@ -24,8 +24,11 @@ class RNMBXMarkerViewContentManager(reactApplicationContext: ReactApplicationCon
         return RNMBXMarkerViewContent(context)
     }
 
-    override fun customEvents(): Map<String, String> {
-        return mapOf("topAnnotationPosition" to "onAnnotationPosition")
+    override fun customEvents(): Map<String, String>? = null
+
+    override fun onDropViewInstance(view: RNMBXMarkerViewContent) {
+        view.onDropViewInstance()
+        super.onDropViewInstance(view)
     }
 
     companion object {
