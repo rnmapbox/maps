@@ -177,7 +177,7 @@ open class RNMBXMapView: UIView, RCTInvalidating {
   }
 
   public func invalidate() {
-    self.removeAllFeaturesFromMap(reason: .ViewRemoval)
+    self.removeAllFeaturesFromMap(reason: .OnDestroy)
 
     cancelables.forEach { $0.cancel() }
     cancelables.removeAll()
@@ -356,7 +356,7 @@ open class RNMBXMapView: UIView, RCTInvalidating {
             features.remove(at: entryIndex)
             return
           }
-          mapAndMapViewComponent.removeFromMap(self, mapView: mapView, reason: .OnDestroy)
+          mapAndMapViewComponent.removeFromMap(self, mapView: mapView, reason: .ViewRemoval)
           entry.addedToMap = false
         }
         features.remove(at: entryIndex)
@@ -368,7 +368,7 @@ open class RNMBXMapView: UIView, RCTInvalidating {
       if let entryIndex = entryIndex {
         var entry = features[entryIndex]
         if (entry.addedToMap) {
-          mapComponent.removeFromMap(self, reason: .OnDestroy)
+          mapComponent.removeFromMap(self, reason: .ViewRemoval)
           entry.addedToMap = false
         }
         features.remove(at: entryIndex)
