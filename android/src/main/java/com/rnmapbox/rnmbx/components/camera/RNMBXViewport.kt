@@ -25,6 +25,7 @@ import com.mapbox.maps.plugin.viewport.transition.DefaultViewportTransition
 import com.mapbox.maps.plugin.viewport.transition.ViewportTransition
 import com.mapbox.maps.plugin.viewport.viewport
 import com.rnmapbox.rnmbx.components.AbstractMapFeature
+import com.rnmapbox.rnmbx.components.RemovalReason
 import com.rnmapbox.rnmbx.components.mapview.RNMBXMapView
 import com.rnmapbox.rnmbx.modules.RNMBXLogging
 import com.rnmapbox.rnmbx.utils.Logger
@@ -72,9 +73,23 @@ mContext
             }
         }
 
+    // The map's value before this Viewport changed it, restored on removal so the option doesn't outlive the component.
+    private var savedTransitionsToIdleUponUserInteraction: Boolean? = null
+
     fun applyTransitionsToIdleUponUserIntraction(mapView: MapView) {
         this.transitionsToIdleUponUserInteraction?.let {
+            val options = mapView.viewport.options
+            if (savedTransitionsToIdleUponUserInteraction == null) {
+                savedTransitionsToIdleUponUserInteraction = options.transitionsToIdleUponUserInteraction
+            }
+            mapView.viewport.options = options.toBuilder().transitionsToIdleUponUserInteraction(it).build()
+        }
+    }
+
+    private fun restoreTransitionsToIdleUponUserInteraction(mapView: MapView) {
+        savedTransitionsToIdleUponUserInteraction?.let {
             mapView.viewport.options = mapView.viewport.options.toBuilder().transitionsToIdleUponUserInteraction(it).build()
+            savedTransitionsToIdleUponUserInteraction = null
         }
     }
 
@@ -118,6 +133,13 @@ mContext
         super.addToMap(mapView)
         applyTransitionsToIdleUponUserIntraction(mapView.mapView)
         applyHasStatusChanged(mapView.mapView)
+    }
+
+    override fun removeFromMap(mapView: RNMBXMapView, reason: RemovalReason): Boolean {
+        if (reason != RemovalReason.ON_DESTROY) {
+            restoreTransitionsToIdleUponUserInteraction(mapView.mapView)
+        }
+        return super.removeFromMap(mapView, reason)
     }
 
     private fun toState(viewport: ViewportPlugin, state: ReadableMap): ViewportState? {
