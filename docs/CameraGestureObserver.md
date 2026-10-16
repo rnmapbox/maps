@@ -44,6 +44,16 @@ Callback when the map reaches a steady state (no active gestures or animations).
 
 [Camera Gesture Observer](../examples/Map/CameraGestureObserver)
   
+### onMapCameraChange
+
+```tsx
+func
+```
+Callback when the camera changes (due to gestures or animations).
+*signature:*`(event:{nativeEvent: OnMapCameraChangeEvent}) =&gt; void`
+
+[Camera Gesture Observer](../examples/Map/CameraGestureObserver)
+  
 
 
 
