@@ -359,7 +359,7 @@ func
 Map long press listener, called when a user long presses the map.
 *signature:*`(feature:GeoJSON.Feature) =&gt; void`
 
-[Screen Coordinates](../examples/Map/ScreenCoordinates)
+[Screen Coordinates](../examples/Map/ScreenCoordinates), [Long Press Camera](../examples/Camera/LongPress)
   
 ### onRegionWillChange
 
