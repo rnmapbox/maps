@@ -2,6 +2,7 @@ package com.rnmapbox.rnmbx.components.mapview
 
 import android.content.Context
 import android.graphics.BitmapFactory
+import android.graphics.Region
 import android.os.Handler
 import android.os.Looper
 import android.view.Gravity
@@ -1631,6 +1632,18 @@ open class RNMBXMapView(private val mContext: Context, var mManager: RNMBXMapVie
 
     fun callIfAttachedToWindow(callback: () -> Unit) {
        lifecycle.callIfAttachedToWindow(callback)
+    }
+
+    // The SurfaceView adds the map to the window's transparent-region hint, which is only recomputed on layout, so on
+    // translucent (edge-to-edge) windows SurfaceFlinger skips view annotations moved by translation; keep the map out.
+    override fun gatherTransparentRegion(region: Region?): Boolean {
+        val opaque = super.gatherTransparentRegion(region)
+        if (region != null) {
+            val location = IntArray(2)
+            getLocationInWindow(location)
+            region.op(location[0], location[1], location[0] + width, location[1] + height, Region.Op.DIFFERENCE)
+        }
+        return opaque
     }
 
     override fun onLayoutChange(
