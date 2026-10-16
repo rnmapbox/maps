@@ -10,7 +10,16 @@ extension NSNumber {
 }
 
 public enum RemovalReason {
-    case ViewRemoval, StyleChange, OnDestroy, ComponentChange, Reorder
+    /// The component was unmounted from its parent.
+    case ViewRemoval
+    /// The style is reloading; the component is added back once the new style loads.
+    case StyleChange
+    /// The map is being torn down while the component is still attached to it.
+    case OnDestroy
+    /// The component's `id` changed; it is added back right away.
+    case ComponentChange
+    /// The layer is being moved; it is added back right away.
+    case Reorder
 }
 
 /// Base protocol for all map components
