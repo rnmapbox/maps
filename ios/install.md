@@ -78,6 +78,8 @@ $RNMapboxMapsSwiftPackageManager = {
 
 The `rnmapbox-maps` pod links `MapboxMaps`, and `MapboxCommon`, `MapboxCoreMaps` and `Turf` are embedded by CocoaPods' `[CP] Embed Pods Frameworks` phase. Don't add the `mapbox-maps-ios` package to your app target as well, that links a second copy; `pod install` removes it if an earlier `@rnmapbox/maps` version added it.
 
+With Expo, set `"RNMapboxMapsSwiftPackageManager": true` (or the hash as an object) in the plugin options. See the [expo guide](/plugin/install.md).
+
 ## Troubleshooting
 
 ### Pod install fails on upgrade of @rnmapbox/maps with `could not find compatible versions for pod "MapboxMaps"`

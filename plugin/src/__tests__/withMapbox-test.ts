@@ -42,6 +42,23 @@ describe('applyCocoaPodsModifications', () => {
       }),
     ).toMatchSnapshot();
   });
+  it('sets $RNMapboxMapsSwiftPackageManager', () => {
+    expect(
+      applyCocoaPodsModifications(iosFixtures.expoTemplatePodfile, {
+        RNMapboxMapsSwiftPackageManager: true,
+      }),
+    ).toContain('$RNMapboxMapsSwiftPackageManager = true\n');
+    expect(
+      applyCocoaPodsModifications(iosFixtures.expoTemplatePodfile, {
+        RNMapboxMapsSwiftPackageManager: {
+          requirement: { kind: 'exactVersion', version: '11.23.1' },
+          product_name: 'MapboxMaps',
+        },
+      }),
+    ).toContain(
+      `$RNMapboxMapsSwiftPackageManager = { requirement: { kind: "exactVersion", version: "11.23.1" }, product_name: "MapboxMaps" }\n`,
+    );
+  });
   it('adds blocks to a expo prebuild template podfile', () => {
     expect(
       applyCocoaPodsModifications(iosFixtures.expoTemplatePodfile, {}),

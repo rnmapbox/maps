@@ -66,6 +66,23 @@ It's possible to overwrite the native SDK version with `RNMapboxMapsVersion`:
 }
 ```
 
+To get the Mapbox SDK through Swift Package Manager on iOS, set `RNMapboxMapsSwiftPackageManager` to `true`, or to the options described in the [iOS guide](/ios/install.md#using-swift-package-manager-experimental):
+
+```json
+{
+  "expo": {
+    "plugins": [
+      [
+        "@rnmapbox/maps",
+        {
+          "RNMapboxMapsSwiftPackageManager": true
+        }
+      ]
+    ]
+  }
+}
+```
+
 ## Manual Setup
 
 For bare workflow projects, you can follow the manual setup guides:
