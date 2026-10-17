@@ -43,6 +43,28 @@ export type MapboxPlugProps = {
   RNMapboxMapsDownloadToken?: string;
 
   RNMapboxMapsUseV11?: boolean;
+
+  /**
+   * Get the Mapbox Maps SDK through Swift Package Manager instead of CocoaPods on iOS.
+   * `true`, or the options of `$RNMapboxMapsSwiftPackageManager`, see ios/install.md.
+   */
+  RNMapboxMapsSwiftPackageManager?: boolean | SwiftPackageManagerOptions;
+};
+
+export type SwiftPackageManagerOptions = {
+  url?: string;
+  requirement?: { kind: string; version?: string; minimumVersion?: string };
+  product_name?: string;
+};
+
+const toRubyLiteral = (value: unknown): string => {
+  if (value !== null && typeof value === 'object') {
+    const entries = Object.entries(value).map(
+      ([key, item]) => `${key}: ${toRubyLiteral(item)}`,
+    );
+    return `{ ${entries.join(', ')} }`;
+  }
+  return JSON.stringify(value);
 };
 
 export const addInstallerBlock = (
@@ -86,6 +108,7 @@ export const addConstantBlock = (
     RNMapboxMapsVersion,
     RNMapboxMapsDownloadToken,
     RNMapboxMapsUseV11,
+    RNMapboxMapsSwiftPackageManager,
   }: MapboxPlugProps,
 ): string => {
   const tag = `@rnmapbox/maps-rnmapboxmapsimpl`;
@@ -93,7 +116,8 @@ export const addConstantBlock = (
   if (
     RNMapboxMapsVersion == null &&
     RNMapboxMapsDownloadToken == null &&
-    RNMapboxMapsUseV11 == null
+    RNMapboxMapsUseV11 == null &&
+    !RNMapboxMapsSwiftPackageManager
   ) {
     const modified = removeGeneratedContents(src, tag);
     if (!modified) {
@@ -128,6 +152,12 @@ export const addConstantBlock = (
     newSrc.push(`$RNMapboxMapsUseV11 = true`);
   }
 
+  if (RNMapboxMapsSwiftPackageManager) {
+    newSrc.push(
+      `$RNMapboxMapsSwiftPackageManager = ${toRubyLiteral(RNMapboxMapsSwiftPackageManager)}`,
+    );
+  }
+
   return mergeContents({
     tag,
     src,
@@ -139,8 +169,6 @@ export const addConstantBlock = (
   }).contents;
 };
 
-// Only the preinstaller block is required, the post installer block is
-// used for spm (swift package manager) which Expo doesn't currently support.
 export const applyCocoaPodsModifications = (
   contents: string,
   {
@@ -148,6 +176,7 @@ export const applyCocoaPodsModifications = (
     RNMapboxMapsVersion,
     RNMapboxMapsDownloadToken,
     RNMapboxMapsUseV11,
+    RNMapboxMapsSwiftPackageManager,
   }: MapboxPlugProps,
 ): string => {
   // Ensure installer blocks exist
@@ -156,6 +185,7 @@ export const applyCocoaPodsModifications = (
     RNMapboxMapsVersion,
     RNMapboxMapsDownloadToken,
     RNMapboxMapsUseV11,
+    RNMapboxMapsSwiftPackageManager,
   });
   src = addInstallerBlock(src, 'pre');
   src = addInstallerBlock(src, 'post');
@@ -191,6 +221,7 @@ const withCocoaPodsInstallerBlocks: ConfigPlugin<MapboxPlugProps> = (
     RNMapboxMapsVersion,
     RNMapboxMapsDownloadToken,
     RNMapboxMapsUseV11,
+    RNMapboxMapsSwiftPackageManager,
   }: MapboxPlugProps = {},
 ) =>
   withDangerousMod(config, [
@@ -209,6 +240,7 @@ const withCocoaPodsInstallerBlocks: ConfigPlugin<MapboxPlugProps> = (
           RNMapboxMapsVersion,
           RNMapboxMapsDownloadToken,
           RNMapboxMapsUseV11,
+          RNMapboxMapsSwiftPackageManager,
         }),
         'utf-8',
       );
@@ -464,6 +496,7 @@ const withMapbox: ConfigPlugin<MapboxPlugProps> = (
     RNMapboxMapsVersion,
     RNMapboxMapsDownloadToken,
     RNMapboxMapsUseV11,
+    RNMapboxMapsSwiftPackageManager,
   }: MapboxPlugProps = {},
 ) => {
   config = withMapboxAndroid(config, {
@@ -477,6 +510,7 @@ const withMapbox: ConfigPlugin<MapboxPlugProps> = (
     RNMapboxMapsVersion,
     RNMapboxMapsDownloadToken,
     RNMapboxMapsUseV11,
+    RNMapboxMapsSwiftPackageManager,
   });
 
   return config;
