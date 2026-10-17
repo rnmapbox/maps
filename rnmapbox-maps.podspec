@@ -2,14 +2,16 @@
 #  $RNMapboxMapsVersion - version specification ("~> 10.4.3", "~> 5.9.0" or "exactVersion 5.12.1" mapblibre/SPM)
 #  $RNMapboxMapsSwiftPackageManager can be either
 #     "manual" - you're responsible for the Mapbox lib dependency either using cocoapods or SPM
-#     Hash - ```
+#     true - get MapboxMaps from https://github.com/mapbox/mapbox-maps-ios.git through Swift Package Manager,
+#            with the requirement derived from $RNMapboxMapsVersion
+#     Hash - same as true, with any of these keys overridden: ```
 #         {
-#           url: "https://github.com/maplibre/maplibre-gl-native-distribution",
+#           url: "https://github.com/mapbox/mapbox-maps-ios.git",
 #           requirement: {
 #             kind: 'exactVersion',
-#             version: 5.12.1,
+#             version: '11.23.1',
 #           },
-#           product_name: "Mapbox"
+#           product_name: "MapboxMaps",
 #         }
 #         ```
 #  $RNMapboxMapsDownloadToken - *deprecated* download token is no longer required
@@ -114,22 +116,44 @@ def $RNMapboxMaps._check_no_mapbox_spm(project)
   end
 end
 
-def $RNMapboxMaps._add_spm_to_target(project, target, url, requirement, product_name)
-  pkg_class = Xcodeproj::Project::Object::XCRemoteSwiftPackageReference
-  ref_class = Xcodeproj::Project::Object::XCSwiftPackageProductDependency
-  pkg = project.root_object.package_references.find { |p| p.class == pkg_class && p.repositoryURL == url }
-  if !pkg
-    pkg = project.new(pkg_class)
-    pkg.repositoryURL = url
-    pkg.requirement = requirement
-    project.root_object.package_references << pkg
+def $RNMapboxMaps._spm_requirement(version)
+  case version.strip
+  when /\A~>\s*(\d+\.\d+\.\d+)\z/ then { kind: 'upToNextMinorVersion', minimumVersion: $1 }
+  when /\A~>\s*(\d+\.\d+)\z/ then { kind: 'upToNextMajorVersion', minimumVersion: "#{$1}.0" }
+  when /\A=?\s*(\d+\.\d+\.\d+)\z/ then { kind: 'exactVersion', version: $1 }
+  else
+    raise "[RNMapbox] Can't turn $RNMapboxMapsVersion '#{version}' into a Swift package requirement, " \
+          "set `requirement:` in $RNMapboxMapsSwiftPackageManager"
   end
-  ref = target.package_product_dependencies.find { |r| r.class == ref_class && r.package == pkg && r.product_name == product_name }
-  if !ref
-    ref = project.new(ref_class)
-    ref.package = pkg
-    ref.product_name = product_name
-    target.package_product_dependencies << ref
+end
+
+def $RNMapboxMaps._spm_spec
+  return nil if !$RNMapboxMapsSwiftPackageManager || $RNMapboxMapsSwiftPackageManager == "manual"
+  options = $RNMapboxMapsSwiftPackageManager == true ? {} : $RNMapboxMapsSwiftPackageManager
+  {
+    url: 'https://github.com/mapbox/mapbox-maps-ios.git',
+    product_name: 'MapboxMaps'
+  }.merge(options).tap { |spec| spec[:requirement] ||= self._spm_requirement($MapboxImplVersion) }
+end
+
+# @rnmapbox/maps 10.3.8 and earlier also added the package product to the app targets, which now links a second
+# copy next to the pod's and embeds its frameworks twice ("Multiple commands produce").
+def $RNMapboxMaps._remove_spm_from_app_targets(installer, url)
+  installer.aggregate_targets.group_by(&:user_project).each do |project, targets|
+    targets.flat_map(&:user_targets).uniq.each do |target|
+      stale = target.package_product_dependencies.select { |r| r.package.respond_to?(:repositoryURL) && r.package.repositoryURL == url }
+      next if stale.empty?
+      Pod::UI.warn "[RNMapbox] Removing #{stale.map(&:product_name).join(', ')} (#{url}) from #{target.name}, it is linked through the pods"
+      stale.each do |ref|
+        target.frameworks_build_phase.files.select { |f| f.product_ref == ref }.each(&:remove_from_project)
+        target.package_product_dependencies.delete(ref)
+        ref.remove_from_project
+      end
+    end
+    project.root_object.package_references.select { |p| p.respond_to?(:repositoryURL) && p.repositoryURL == url }.each do |pkg|
+      in_use = project.targets.any? { |t| t.package_product_dependencies.any? { |r| r.package == pkg } }
+      pkg.remove_from_project unless in_use
+    end
   end
 end
 
@@ -159,33 +183,10 @@ def $RNMapboxMaps.post_install(installer)
     end
   end
 
-  if $RNMapboxMapsSwiftPackageManager
-    return if $RNMapboxMapsSwiftPackageManager == "manual"
+  spm_spec = self._spm_spec
+  self._remove_spm_from_app_targets(installer, spm_spec[:url]) if spm_spec
 
-    spm_spec = $RNMapboxMapsSwiftPackageManager
-    project = installer.pods_project
-    self._add_spm_to_target(
-      project,
-      project.targets.find { |t| t.name == "rnmapbox-maps"},
-      spm_spec[:url],
-      spm_spec[:requirement],
-      spm_spec[:product_name]
-    )
-
-    installer.aggregate_targets.group_by(&:user_project).each do |project, targets|
-      targets.each do |target|
-        target.user_targets.each do |user_target|
-          self._add_spm_to_target(
-            project,
-            user_target,
-            spm_spec[:url],
-            spm_spec[:requirement],
-            spm_spec[:product_name]
-          )
-        end
-      end
-    end
-  else
+  if !$RNMapboxMapsSwiftPackageManager
     self._check_no_mapbox_spm(installer.pods_project)
     installer.aggregate_targets.group_by(&:user_project).each do |project, targets|
       targets.each do |target|
@@ -195,6 +196,12 @@ def $RNMapboxMaps.post_install(installer)
       end
     end
   end
+end
+
+rnMapboxMapsSPMSpec = $RNMapboxMaps._spm_spec
+
+if rnMapboxMapsSPMSpec
+  require_relative 'ios/rnmapbox_spm'
 end
 
 $rnMapboxMapsTargetsToChangeToDynamic = rnMapboxMapsTargetsToChangeToDynamic
@@ -262,6 +269,16 @@ Pod::Spec.new do |s|
     s.platform    	= :ios, "11.0"
   end
   s.header_dir = "rnmapbox_maps"
+
+  if rnMapboxMapsSPMSpec
+    spm_dependency(s,
+      url: rnMapboxMapsSPMSpec[:url],
+      requirement: rnMapboxMapsSPMSpec[:requirement],
+      products: [rnMapboxMapsSPMSpec[:product_name]]
+    )
+    RNMapboxSPM.embed_frameworks(s.name, ['MapboxCommon', 'MapboxCoreMaps', 'Turf'])
+    s.script_phase = RNMapboxSPM.signature_cleanup_script_phase(s.name)
+  end
 
   unless $RNMapboxMapsSwiftPackageManager
     if $RNMapboxMapsCustomPods
