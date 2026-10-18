@@ -271,12 +271,14 @@ Pod::Spec.new do |s|
   s.header_dir = "rnmapbox_maps"
 
   if rnMapboxMapsSPMSpec
+    spm_frameworks = ['MapboxCommon', 'MapboxCoreMaps', 'Turf']
     spm_dependency(s,
       url: rnMapboxMapsSPMSpec[:url],
       requirement: rnMapboxMapsSPMSpec[:requirement],
-      products: [rnMapboxMapsSPMSpec[:product_name]]
+      products: [rnMapboxMapsSPMSpec[:product_name]],
+      **RNMapboxSPM.spm_dependency_options(s.name, spm_frameworks)
     )
-    RNMapboxSPM.embed_frameworks(s.name, ['MapboxCommon', 'MapboxCoreMaps', 'Turf'])
+    RNMapboxSPM.embed_frameworks(s.name, spm_frameworks)
     s.script_phase = RNMapboxSPM.signature_cleanup_script_phase(s.name)
   end
 
