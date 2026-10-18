@@ -136,9 +136,7 @@ mContext
     }
 
     override fun removeFromMap(mapView: RNMBXMapView, reason: RemovalReason): Boolean {
-        if (reason != RemovalReason.ON_DESTROY) {
-            restoreTransitionsToIdleUponUserInteraction(mapView.mapView)
-        }
+        restoreTransitionsToIdleUponUserInteraction(mapView.mapView)
         return super.removeFromMap(mapView, reason)
     }
 
