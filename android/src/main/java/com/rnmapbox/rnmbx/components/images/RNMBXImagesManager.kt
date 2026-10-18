@@ -242,16 +242,37 @@ class RNMBXImagesManager(private val mContext: ReactApplicationContext) :
         parent.attachImageViewIfOnMap(childView)
     }
 
+    // mImageViews are not real children of RNMBXImages, so report them here - otherwise Fabric
+    // sees no children and its removeViewAt never reaches us.
+    override fun getChildCount(parent: RNMBXImages): Int {
+        return parent.mImageViews.size
+    }
+
+    override fun getChildAt(parent: RNMBXImages, index: Int): View? {
+        return parent.mImageViews.getOrNull(index)
+    }
+
+    override fun removeViewAt(parent: RNMBXImages, index: Int) {
+        if (index < 0 || index >= parent.mImageViews.size) {
+            Logger.e("RNMBXImages", "removeViewAt: no image view at index $index")
+            return
+        }
+        parent.mImageViews.removeAt(index).removeFromMap()
+    }
+
     override fun removeView(parent: RNMBXImages, view: View) {
         if (parent == null || view == null) {
             Logger.e("RNMBXImages", "removeView: parent or view is null")
             return
         }
 
-        parent.mImageViews.remove(view)
+        if (parent.mImageViews.remove(view)) {
+            (view as RNMBXImage).removeFromMap()
+        }
     }
 
     override fun removeAllViews(parent: RNMBXImages) {
+        parent.mImageViews.forEach { it.removeFromMap() }
         parent.mImageViews.clear()
     }
 

@@ -1,5 +1,6 @@
 package com.rnmapbox.rnmbx.components.images
 
+import android.view.View
 import com.facebook.react.bridge.Dynamic
 import com.facebook.react.bridge.ReactApplicationContext
 import com.facebook.react.bridge.ReadableArray
@@ -35,8 +36,31 @@ mContext
         val reactTag = view.id
 
         viewTagResolver.viewRemoved(reactTag)
+        // When a whole <Image> subtree is unmounted, Fabric only deletes the inner views and does
+        // not remove them one by one, so this is the last chance to take our child out of
+        // offscreenAnnotationViewContainer.
+        view.removeChildView()
+        view.removeFromMap()
         super.onDropViewInstance(view)
     }
+
+    // region RNMBXImage child
+    // The child view lives in offscreenAnnotationViewContainer, not in RNMBXImage, so report it
+    // here - otherwise Fabric sees no children and its removeViewAt never reaches us.
+    override fun getChildCount(parent: RNMBXImage): Int {
+        return if (parent.mChildView != null) 1 else 0
+    }
+
+    override fun getChildAt(parent: RNMBXImage, index: Int): View? {
+        return if (index == 0) parent.mChildView else null
+    }
+
+    override fun removeViewAt(parent: RNMBXImage, index: Int) {
+        if (index == 0) {
+            parent.removeChildView()
+        }
+    }
+    // endregion
 
     fun tagAssigned(reactTag: Int) {
         return viewTagResolver.tagAssigned(reactTag)
