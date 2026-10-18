@@ -114,14 +114,16 @@ typealias Factory = (impl: String, ViewGroup) -> MapView?;
 public class RNMBXMapViewFactory {
     companion object {
         var factories = mutableMapOf<String,Factory>();
-        fun regiser(impl: String, factory: Factory) {
-            val (impl, options) = impl.split(":",limit=2)
-            factories.put(impl, factory);
+
+        fun register(impl: String, factory: Factory) {
+            factories.put(impl.substringBefore(":"), factory);
         }
 
+        @Deprecated("Use register", ReplaceWith("register(impl, factory)"))
+        fun regiser(impl: String, factory: Factory) = register(impl, factory)
+
         fun get(impl: String): Factory? {
-            val (impl, options) = impl.split(":",limit=2) + null;
-            return factories.get(impl);
+            return factories.get(impl.substringBefore(":"));
         }
     }
 }
