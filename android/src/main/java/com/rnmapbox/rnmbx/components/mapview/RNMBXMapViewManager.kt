@@ -142,12 +142,25 @@ open class RNMBXMapViewManager(context: ReactApplicationContext, val viewTagReso
 
     @ReactProp(name = "surfaceView")
     override fun setSurfaceView(mapView: RNMBXMapView, value: Dynamic) {
+        val surfaceView = if (value.isNull) null else value.asBoolean()
         if (mapView.isInitialized) {
-            if (mapView.surfaceView != value.asBoolean()) {
+            if (mapView.surfaceView != surfaceView) {
                 Logger.d(LOG_TAG, "surafaceView cannot be changed on existing map")
             }
         } else {
-            mapView.surfaceView = value.asBoolean()
+            mapView.surfaceView = surfaceView
+        }
+    }
+
+    @ReactProp(name = "transparent")
+    override fun setTransparent(mapView: RNMBXMapView, value: Dynamic) {
+        val transparent = !value.isNull && value.asBoolean()
+        if (mapView.isInitialized) {
+            if (mapView.transparent != transparent) {
+                Logger.w(LOG_TAG, "transparent cannot be changed on existing map, it only applies when the map is created")
+            }
+        } else {
+            mapView.transparent = transparent
         }
     }
 

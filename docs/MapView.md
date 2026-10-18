@@ -260,10 +260,26 @@ Set the scale bar distance units. Defaults to metric.
 ```tsx
 boolean
 ```
-[Android only] Enable/Disable use of GLSurfaceView instead of TextureView.
+[Android only] Enable/Disable use of GLSurfaceView instead of TextureView. Defaults to `true`, or to `false` when `transparent` is set.
+Only applies when the map is created.
 
-  _defaults to:_ `true`
 
+  
+### transparent
+
+```tsx
+boolean
+```
+Renders the map with a transparent background, so views behind the map show through wherever the style's background is transparent or semi-transparent.
+The style must provide that background itself, e.g. a `background` layer with `background-color: rgba(0,0,0,0)`; maps with regular Mapbox styles stay opaque.
+Snapshots taken with `takeSnap` keep the transparency.
+
+On Android this uses a TextureView, which is slower, uses more memory and lags one frame behind the rest of the UI. It only applies when the map is created and
+overrides `surfaceView={true}`.
+
+Globe fog and atmosphere may not composite correctly over a transparent background.
+
+[Transparent Map](../examples/Map/TransparentMap)
   
 ### requestDisallowInterceptTouchEvent
 
@@ -329,6 +345,8 @@ Gesture configuration allows to control the user touch interaction.
 func
 ```
 Map press listener, called when a user presses the map.
+Single taps are reported only after the map rules out a double tap, so `onPress` fires a few hundred milliseconds after the touch.
+On iOS, setting both `doubleTapToZoomInEnabled` and `quickZoomEnabled` to `false` in `gestureSettings` removes most of this delay; on Android it doesn't.
 *signature:*`(feature:GeoJSON.Feature) =&gt; void`
 
 [Screen Coordinates](../examples/Map/ScreenCoordinates), [Show Click](../examples/Map/ShowClick)

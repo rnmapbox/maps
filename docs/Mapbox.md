@@ -53,6 +53,8 @@ gets the accessToken
 | `options` | `{ urlRegexp }` | `No` | optional configurations for customHeader |
 
 #### Description
+`urlRegexp` is a regular expression string (not a `RegExp` object); the header is only sent to request URLs it matches anywhere in, on both iOS and Android. Start it with `^` and end the host with `/` (or `:port`), e.g. `'^https://tiles\\.example\\.com/'`. Unanchored patterns are deprecated (warned since 10.4) and will be rejected in v11.
+
 also see [CustomHttpHeaders](/docs/CustomHttpHeaders.md)
 
 

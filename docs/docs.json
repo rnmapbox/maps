@@ -5463,8 +5463,15 @@
         "name": "surfaceView",
         "required": false,
         "type": "boolean",
-        "default": "true",
-        "description": "[Android only] Enable/Disable use of GLSurfaceView instead of TextureView."
+        "default": "none",
+        "description": "[Android only] Enable/Disable use of GLSurfaceView instead of TextureView. Defaults to `true`, or to `false` when `transparent` is set.\nOnly applies when the map is created."
+      },
+      {
+        "name": "transparent",
+        "required": false,
+        "type": "boolean",
+        "default": "none",
+        "description": "Renders the map with a transparent background, so views behind the map show through wherever the style's background is transparent or semi-transparent.\nThe style must provide that background itself, e.g. a `background` layer with `background-color: rgba(0,0,0,0)`; maps with regular Mapbox styles stay opaque.\nSnapshots taken with `takeSnap` keep the transparency.\n\nOn Android this uses a TextureView, which is slower, uses more memory and lags one frame behind the rest of the UI. It only applies when the map is created and\noverrides `surfaceView={true}`.\n\nGlobe fog and atmosphere may not composite correctly over a transparent background."
       },
       {
         "name": "requestDisallowInterceptTouchEvent",
@@ -5590,7 +5597,7 @@
           "funcSignature": "(feature:GeoJSON.Feature) => void"
         },
         "default": "none",
-        "description": "Map press listener, called when a user presses the map.\n*signature:*`(feature:GeoJSON.Feature) => void`"
+        "description": "Map press listener, called when a user presses the map.\nSingle taps are reported only after the map rules out a double tap, so `onPress` fires a few hundred milliseconds after the touch.\nOn iOS, setting both `doubleTapToZoomInEnabled` and `quickZoomEnabled` to `false` in `gestureSettings` removes most of this delay; on Android it doesn't.\n*signature:*`(feature:GeoJSON.Feature) => void`"
       },
       {
         "name": "onLongPress",
@@ -7887,7 +7894,7 @@
           ]
         },
         "default": "none",
-        "description": "Overrides the default touch hitbox(44x44 pixels) for the source layers"
+        "description": "Overrides the default touch hitbox (44x44 points) for the source layers"
       },
       {
         "name": "children",
@@ -10811,7 +10818,7 @@
           ]
         },
         "default": "none",
-        "description": "Overrides the default touch hitbox(44x44 pixels) for the source layers"
+        "description": "Overrides the default touch hitbox (44x44 points) for the source layers"
       },
       {
         "name": "children",

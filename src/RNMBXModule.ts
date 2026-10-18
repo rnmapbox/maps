@@ -1,5 +1,7 @@
 import { NativeModules } from 'react-native';
 
+import { isAnchoredUrlPattern } from './utils/customHeaderPattern';
+
 interface RNMBXModule {
   StyleURL: {
     Street: URL;
@@ -56,17 +58,34 @@ if (NativeModules.RNMBXModule == null) {
   }
 }
 
+const warnedUnanchoredUrlPatterns = new Set<string>();
+
 /**
  * Add a custom header to HTTP requests.
  * @param headerName - The name of the header
  * @param headerValue - The value of the header
- * @param options - Optional configuration. If provided with urlRegexp, the header will only be added to URLs matching the regex
+ * @param options - Optional configuration.
+ * `urlRegexp` is a regular expression string (not a RegExp object): the header is only
+ * sent when the pattern matches anywhere in the request URL, on both iOS and Android.
+ * Start it with `^` and end the host with `/` (or `:port`), e.g. `'^https://tiles\\.example\\.com/'`.
+ * Unanchored patterns are deprecated and will be rejected in v11.
  */
 function addCustomHeader(
   headerName: string,
   headerValue: string,
   options?: { urlRegexp?: string },
 ): void {
+  const urlRegexp = options?.urlRegexp;
+  if (
+    urlRegexp != null &&
+    !isAnchoredUrlPattern(urlRegexp) &&
+    !warnedUnanchoredUrlPatterns.has(urlRegexp)
+  ) {
+    warnedUnanchoredUrlPatterns.add(urlRegexp);
+    console.warn(
+      `[deprecation] @rnmapbox/maps addCustomHeader: the urlRegexp \`${urlRegexp}\` for header "${headerName}" is not anchored. Unanchored custom-header URL patterns are deprecated and will be rejected in v11. They match anywhere in the URL, so the header can be sent to look-alike hosts (e.g. tiles.example.com.evil.com). Anchor your pattern, e.g. \`^https://tiles\\.example\\.com/\`.`,
+    );
+  }
   if (options) {
     RNMBXModule.addCustomHeaderWithOptions(headerName, headerValue, options);
   } else {

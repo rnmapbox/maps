@@ -34,7 +34,7 @@ object CustomHttpHeaders : HttpServiceBase() {
             val urlRegexp = entry.value.options?.urlRegexp
             if (urlRegexp != null) {
                 val destination = httpRequest.headers.getOrDefault("location", httpRequest.url)
-                if (urlRegexp.matches(destination)) {
+                if (urlRegexpMatches(urlRegexp, destination)) {
                     headers[entry.key] = entry.value.headerValue
                 }
             }
@@ -61,3 +61,5 @@ object CustomHttpHeaders : HttpServiceBase() {
     }
 }
 
+// Search anywhere in the URL like iOS NSRegularExpression.firstMatch; Regex.matches would require a whole-URL match.
+internal fun urlRegexpMatches(pattern: Regex, url: String): Boolean = pattern.containsMatchIn(url)
