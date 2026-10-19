@@ -40,6 +40,46 @@ module RNMapboxSPM
     }
   end
 
+  def self.embeds_frameworks?(pod_name)
+    @frameworks_by_pod.key?(pod_name)
+  end
+
+  # react-native 0.87+ builds static pods with Swift packages into the shared products dir, but rewrites the
+  # aggregate -fmodule-map-file flags assuming the module is named after the pod, which rnmapbox-maps isn't:
+  # https://github.com/react/react-native/blob/v0.88.0/packages/react-native/scripts/cocoapods/spm.rb#L79
+  module SPMManager
+    private
+
+    def rewrite_aggregate_modulemap_references(installer, pod_names)
+      super
+      moved_pods = installer.pod_targets.select do |pod|
+        pod_names.include?(pod.label) && pod.label != pod.product_module_name && RNMapboxSPM.embeds_frameworks?(pod.pod_name)
+      end
+      return if moved_pods.empty?
+
+      installer.aggregate_targets.each do |aggregate_target|
+        aggregate_target.xcconfigs.each do |config_name, config_file|
+          changed = false
+          %w[OTHER_CFLAGS OTHER_SWIFT_FLAGS].each do |key|
+            value = config_file.attributes[key]
+            next unless value
+
+            updated_value = moved_pods.reduce(value) do |acc, pod|
+              acc.gsub(
+                "${PODS_CONFIGURATION_BUILD_DIR}/#{pod.label}/#{pod.product_module_name}.modulemap",
+                "${PODS_CONFIGURATION_BUILD_DIR}/#{pod.product_module_name}.modulemap"
+              )
+            end
+            next if updated_value == value
+            config_file.attributes[key] = updated_value
+            changed = true
+          end
+          config_file.save_as(aggregate_target.xcconfig_path(config_name)) if changed
+        end
+      end
+    end
+  end
+
   module AggregateTarget
     def framework_paths_by_config
       @rnmapbox_spm_framework_paths_by_config ||= begin
@@ -60,3 +100,7 @@ module RNMapboxSPM
 end
 
 Pod::AggregateTarget.prepend(RNMapboxSPM::AggregateTarget) unless Pod::AggregateTarget.ancestors.include?(RNMapboxSPM::AggregateTarget)
+if defined?(::SPMManager) && ::SPMManager.private_method_defined?(:rewrite_aggregate_modulemap_references) &&
+   !::SPMManager.ancestors.include?(RNMapboxSPM::SPMManager)
+  ::SPMManager.prepend(RNMapboxSPM::SPMManager)
+end
