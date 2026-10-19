@@ -12,12 +12,14 @@
 #             version: '11.23.1',
 #           },
 #           product_name: "MapboxMaps",
+#           link: false, # only compile against the product, another pod links it (e.g. through the Navigation SDK)
 #         }
 #         ```
 #  $RNMapboxMapsDownloadToken - *deprecated* download token is no longer required
 #  $RNMapboxMapsCustomPods - use a custom pod for mapbox libs
 
 require 'json'
+require 'digest'
 
 package = JSON.parse(File.read(File.join(__dir__, 'package.json')))
 
@@ -132,8 +134,45 @@ def $RNMapboxMaps._spm_spec
   options = $RNMapboxMapsSwiftPackageManager == true ? {} : $RNMapboxMapsSwiftPackageManager
   {
     url: 'https://github.com/mapbox/mapbox-maps-ios.git',
-    product_name: 'MapboxMaps'
+    product_name: 'MapboxMaps',
+    link: true
   }.merge(options).tap { |spec| spec[:requirement] ||= self._spm_requirement($MapboxImplVersion) }
+end
+
+# With `link: false` the pod only compiles against the package product: it gets a build-order dependency on it
+# and the products dir as a Swift include path, so the product is linked once, by the pod that depends on it.
+def $RNMapboxMaps._add_spm_compile_only_dependency(project, spec)
+  target = project.targets.find { |t| t.name == "rnmapbox-maps" }
+  pkg = project.root_object.package_references.find do |p|
+    p.is_a?(Xcodeproj::Project::Object::XCRemoteSwiftPackageReference) && p.repositoryURL == spec[:url]
+  end
+  unless pkg
+    pkg = self._new_pods_project_object(project, Xcodeproj::Project::Object::XCRemoteSwiftPackageReference, spec[:url])
+    pkg.repositoryURL = spec[:url]
+    pkg.requirement = spec[:requirement]
+    project.root_object.package_references << pkg
+  end
+  unless target.dependencies.any? { |d| d.product_ref&.package == pkg && d.product_ref.product_name == spec[:product_name] }
+    key = "#{spec[:url]}/#{spec[:product_name]}"
+    product = self._new_pods_project_object(project, Xcodeproj::Project::Object::XCSwiftPackageProductDependency, key)
+    product.package = pkg
+    product.product_name = spec[:product_name]
+    dependency = self._new_pods_project_object(project, Xcodeproj::Project::Object::PBXTargetDependency, key)
+    dependency.product_ref = product
+    target.dependencies << dependency
+  end
+  target.build_configurations.each do |config|
+    include_paths = Array(config.build_settings['SWIFT_INCLUDE_PATHS'] || '$(inherited)')
+    search_path = '${SYMROOT}/${CONFIGURATION}${EFFECTIVE_PLATFORM_NAME}/'
+    config.build_settings['SWIFT_INCLUDE_PATHS'] = include_paths | [search_path]
+  end
+end
+
+# CocoaPods' counter-based UUIDs restart after `stabilize_target_uuids`, so in a post_install hook `project.new` can
+# reuse the UUID of an existing object, e.g. the root PBXProject's.
+def $RNMapboxMaps._new_pods_project_object(project, klass, key)
+  uuid = Digest::MD5.hexdigest("rnmapbox-maps/#{klass.isa}/#{key}").upcase
+  klass.new(project, uuid).tap(&:initialize_defaults)
 end
 
 # @rnmapbox/maps 10.3.8 and earlier also added the package product to the app targets, which now links a second
@@ -204,6 +243,17 @@ if rnMapboxMapsSPMSpec
   require_relative 'ios/rnmapbox_spm'
 end
 
+if rnMapboxMapsSPMSpec && !rnMapboxMapsSPMSpec[:link]
+  module RNMapboxMapsSPMCompileOnly
+    # Runs after the Podfile's post_install hooks, as react_native_post_install removes all package references.
+    def run_podfile_post_install_hooks
+      super
+      $RNMapboxMaps._add_spm_compile_only_dependency(pods_project, $RNMapboxMaps._spm_spec) if pods_project
+    end
+  end
+  Pod::Installer.prepend(RNMapboxMapsSPMCompileOnly) unless Pod::Installer.ancestors.include?(RNMapboxMapsSPMCompileOnly)
+end
+
 $rnMapboxMapsTargetsToChangeToDynamic = rnMapboxMapsTargetsToChangeToDynamic
 
 def $RNMapboxMaps._expo_precompiled_pipeline?
@@ -270,7 +320,7 @@ Pod::Spec.new do |s|
   end
   s.header_dir = "rnmapbox_maps"
 
-  if rnMapboxMapsSPMSpec
+  if rnMapboxMapsSPMSpec&.fetch(:link)
     spm_frameworks = ['MapboxCommon', 'MapboxCoreMaps', 'Turf']
     spm_dependency(s,
       url: rnMapboxMapsSPMSpec[:url],

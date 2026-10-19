@@ -25,6 +25,7 @@ export type SwiftPackageManagerOptions = {
         minimumVersion?: string;
     };
     product_name?: string;
+    link?: boolean;
 };
 export declare const addInstallerBlock: (src: string, blockName: InstallerBlockName) => string;
 export declare const addConstantBlock: (src: string, { RNMapboxMapsImpl, RNMapboxMapsVersion, RNMapboxMapsDownloadToken, RNMapboxMapsUseV11, RNMapboxMapsSwiftPackageManager, }: MapboxPlugProps) => string;

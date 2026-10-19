@@ -58,6 +58,11 @@ describe('applyCocoaPodsModifications', () => {
     ).toContain(
       `$RNMapboxMapsSwiftPackageManager = { requirement: { kind: "exactVersion", version: "11.23.1" }, product_name: "MapboxMaps" }\n`,
     );
+    expect(
+      applyCocoaPodsModifications(iosFixtures.expoTemplatePodfile, {
+        RNMapboxMapsSwiftPackageManager: { link: false },
+      }),
+    ).toContain('$RNMapboxMapsSwiftPackageManager = { link: false }\n');
   });
   it('adds blocks to a expo prebuild template podfile', () => {
     expect(

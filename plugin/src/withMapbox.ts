@@ -55,6 +55,7 @@ export type SwiftPackageManagerOptions = {
   url?: string;
   requirement?: { kind: string; version?: string; minimumVersion?: string };
   product_name?: string;
+  link?: boolean;
 };
 
 const toRubyLiteral = (value: unknown): string => {
