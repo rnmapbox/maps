@@ -147,6 +147,11 @@ class RNMBXCameraChanged : RNMBXEvent, RCTEvent {
   }
 }
 
+/// Called right before `<Camera>` moves the map, but not for its `defaultSettings` or for user gestures.
+public protocol RNMBXCameraDelegate: AnyObject {
+  func cameraWillMoveMap(_ map: RNMBXMapView)
+}
+
 @objc(RNMBXMapView)
 open class RNMBXMapView: UIView, RCTInvalidating {
 
@@ -174,6 +179,23 @@ open class RNMBXMapView: UIView, RCTInvalidating {
     #if DEBUG
     print("[RNMBXMapView] removeGestureDelegate; delegates=\(_gestureDelegates.allObjects.count)")
     #endif
+  }
+
+  private var cameraDelegates: NSHashTable<AnyObject> = NSHashTable.weakObjects()
+
+  /// Lets native code driving the same map, such as a navigation camera, yield when `<Camera>` moves it.
+  public func addCameraDelegate(_ delegate: RNMBXCameraDelegate) {
+    cameraDelegates.add(delegate)
+  }
+
+  public func removeCameraDelegate(_ delegate: RNMBXCameraDelegate) {
+    cameraDelegates.remove(delegate)
+  }
+
+  func cameraWillMoveMap() {
+    for case let delegate as RNMBXCameraDelegate in cameraDelegates.allObjects {
+      delegate.cameraWillMoveMap(self)
+    }
   }
 
   public func invalidate() {

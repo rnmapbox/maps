@@ -63,6 +63,7 @@ import com.rnmapbox.rnmbx.events.constants.EventTypes
 import com.rnmapbox.rnmbx.utils.*
 import com.rnmapbox.rnmbx.utils.extensions.toReadableArray
 import java.util.*
+import java.util.concurrent.CopyOnWriteArraySet
 
 import com.rnmapbox.rnmbx.components.annotation.RNMBXPointAnnotationCoordinator
 import com.rnmapbox.rnmbx.components.annotation.RNMBXPointAnnotationManagerView
@@ -102,6 +103,11 @@ enum class MapGestureType {
 
 fun interface Cancelable {
     fun cancel()
+}
+
+/** Called right before `<Camera>` moves the map, but not for its `defaultSettings` or for user gestures. */
+fun interface OnCameraWillMoveMapListener {
+    fun onCameraWillMoveMap(mapView: RNMBXMapView)
 }
 
 // RNMBXLifeCycle is now provided by lifecycle-compat layer
@@ -166,6 +172,21 @@ open class RNMBXMapView(private val mContext: Context, var mManager: RNMBXMapVie
 
     fun unregisterPointAnnotationCoordinator(coordinator: RNMBXPointAnnotationCoordinator) {
         pointAnnotationCoordinators.remove(coordinator)
+    }
+
+    private val cameraWillMoveMapListeners = CopyOnWriteArraySet<OnCameraWillMoveMapListener>()
+
+    /** Lets native code driving the same map, such as a navigation camera, yield when `<Camera>` moves it. */
+    fun addOnCameraWillMoveMapListener(listener: OnCameraWillMoveMapListener) {
+        cameraWillMoveMapListeners.add(listener)
+    }
+
+    fun removeOnCameraWillMoveMapListener(listener: OnCameraWillMoveMapListener) {
+        cameraWillMoveMapListeners.remove(listener)
+    }
+
+    internal fun cameraWillMoveMap() {
+        cameraWillMoveMapListeners.forEach { it.onCameraWillMoveMap(this) }
     }
 
     public val pointAnnotations: RNMBXPointAnnotationCoordinator by lazy {
