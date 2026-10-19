@@ -1,9 +1,4 @@
 class RNMBXImageQueueOperation : Operation {
-  // Up to React Native 0.88, RCTImageLoader creates its image cache lazily without a lock,
-  // so concurrent first calls can use a cache that another thread has already released.
-  // Start all loads from one serial queue; the loading itself stays asynchronous.
-  static let loadQueue = DispatchQueue(label: "com.rnmapbox.rnmbx.ImageQueue.load", qos: .default)
-
   enum State : Equatable {
     case Initial
     case Executing
@@ -70,7 +65,7 @@ class RNMBXImageQueueOperation : Operation {
   override func start() {
     weak var weakSelf : RNMBXImageQueueOperation! = self
     
-    RNMBXImageQueueOperation.loadQueue.async {
+    DispatchQueue.global(qos: .default).async {
       if let weakSelf = weakSelf {
         guard let bridge = weakSelf.bridge else {
           Logger.log(level: .error, message: "RNMBXImageQueue: bridge is nil, cannot load image")
@@ -81,6 +76,7 @@ class RNMBXImageQueueOperation : Operation {
           return
         }
         let loader : RCTImageLoaderProtocol = bridge.module(forName: "ImageLoader", lazilyLoadIfNecessary: true) as! RCTImageLoaderProtocol
+        RNMBXImageQueue.warmUp(loader)
         
         let cancellationBlock = loader.loadImage(with: weakSelf.urlRequest, size: .zero, scale: CGFloat(weakSelf.scale), clipped: true, resizeMode: .stretch, progressBlock: { _,_  in }, partialLoad: { _ in }) { error, image in
           if let completionHandler = weakSelf.completionHandler {
@@ -131,6 +127,25 @@ class RNMBXImageQueueOperation : Operation {
 }
 
 class RNMBXImageQueue {
+  // RCTImageLoader is not safe for concurrent first use: react/react-native#57297 (fixed in 0.87) and #57971.
+  private static let warmUpLock = NSLock()
+  private static weak var warmedUpLoader: AnyObject?
+  private static let warmUpImage = URL(string: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+M9QDwADhgGAWjR9awAAAABJRU5ErkJggg==")!
+
+  static func warmUp(_ loader: RCTImageLoaderProtocol) {
+    warmUpLock.lock()
+    defer { warmUpLock.unlock() }
+    if warmedUpLoader === loader {
+      return
+    }
+    let done = DispatchSemaphore(value: 0)
+    _ = loader.loadImage(with: URLRequest(url: warmUpImage), size: .zero, scale: 1, clipped: false, resizeMode: .stretch, progressBlock: { _,_ in }, partialLoad: { _ in }) { _, _ in
+      done.signal()
+    }
+    _ = done.wait(timeout: .now() + 2)
+    warmedUpLoader = loader
+  }
+
    static let sharedInstance: RNMBXImageQueue = {
         let instance = RNMBXImageQueue()
         // setup code
