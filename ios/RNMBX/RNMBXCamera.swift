@@ -171,21 +171,28 @@ open class RNMBXMapComponentBase : UIView, RNMBXMapComponent {
 /// Base class for components that require MapView to be non-nil
 open class RNMBXMapAndMapViewComponentBase : UIView, RNMBXMapAndMapViewComponent {
   private weak var _map: RNMBXMapView! = nil
-  private var _mapCallbacks: [(RNMBXMapView) -> Void] = []
+  private weak var _mapView: MapView? = nil
+  private var _mapCallbacks: [(RNMBXMapView, MapView) -> Void] = []
 
   weak var map : RNMBXMapView? {
     return _map;
   }
 
   func withMapView(_ callback: @escaping (_ mapView: MapView) -> Void) {
-    withRNMBXMapView { mapView in
-      callback(mapView.mapView)
+    withMap { _, mapView in
+      callback(mapView)
     }
   }
 
   func withRNMBXMapView(_ callback: @escaping (_ map: RNMBXMapView) -> Void) {
-    if let map = _map {
+    withMap { map, _ in
       callback(map)
+    }
+  }
+
+  func withMap(_ callback: @escaping (_ map: RNMBXMapView, _ mapView: MapView) -> Void) {
+    if let map = _map, let mapView = _mapView {
+      callback(map, mapView)
     } else {
       _mapCallbacks.append(callback)
     }
@@ -195,15 +202,17 @@ open class RNMBXMapAndMapViewComponentBase : UIView, RNMBXMapAndMapViewComponent
 
   public func addToMap(_ map: RNMBXMapView, mapView: MapView, style: Style) {
     _mapCallbacks.forEach { callback in
-        callback(map)
+        callback(map, mapView)
     }
     _mapCallbacks = []
     _map = map
+    _mapView = mapView
   }
 
   public func removeFromMap(_ map: RNMBXMapView, mapView: MapView, reason: RemovalReason) -> Bool {
     _mapCallbacks = []
     _map = nil
+    _mapView = nil
     return true
   }
 }
@@ -317,7 +326,8 @@ open class RNMBXCamera : RNMBXMapAndMapViewComponentBase {
       }
     }
 
-    if let map = map {
+    if let map = map, !cameraUpdateQueue.queue.isEmpty {
+      map.cameraWillMoveMap()
       cameraUpdateQueue.execute(map: map, cameraAnimator: &cameraAnimator)
     }
   }
@@ -374,21 +384,21 @@ open class RNMBXCamera : RNMBXMapAndMapViewComponentBase {
   }
 
   func _updateCameraFromTrackingMode() {
-    withMapView { map in
+    withMap { map, mapView in
       let userTrackingMode = UserTrackingMode(rawValue: self.followUserMode ?? UserTrackingMode.normal.rawValue)
       guard let userTrackingMode = userTrackingMode else {
         Logger.error("RNMBXCamera: Unexpected followUserMode \(optional: self.followUserMode)")
-        self._disableUserTracking(map)
+        self._disableUserTracking(mapView)
         return
       }
 
       guard self.followUserLocation && userTrackingMode != .none else {
-        self._disableUserTracking(map)
+        self._disableUserTracking(mapView)
         return
       }
 
       if let locationModule = RNMBXLocationModule.shared {
-        locationModule.override(for: map.location)
+        locationModule.override(for: mapView.location)
       }
       var trackingModeChanged = false
       var followOptions = FollowPuckViewportStateOptions()
@@ -453,11 +463,12 @@ open class RNMBXCamera : RNMBXMapAndMapViewComponentBase {
         followOptions.padding = edgeInsets
       }
       
-      let followState = map.viewport.makeFollowPuckViewportState(options: followOptions)
+      let followState = mapView.viewport.makeFollowPuckViewportState(options: followOptions)
       
-      map.viewport.transition(to: followState)
-      map.viewport.addStatusObserver(self)
-      map.mapboxMap.setCamera(to: _camera)
+      map.cameraWillMoveMap()
+      mapView.viewport.transition(to: followState)
+      mapView.viewport.addStatusObserver(self)
+      mapView.mapboxMap.setCamera(to: _camera)
     }
   }
   
@@ -624,13 +635,15 @@ open class RNMBXCamera : RNMBXMapAndMapViewComponentBase {
   }
 
   @objc public func moveBy(x: Double, y: Double, animationMode: Double, animationDuration: Double, resolve: @escaping RCTPromiseResolveBlock, reject: @escaping RCTPromiseRejectBlock) {
-    withMapView { mapView in
+    withMap { map, mapView in
       let contentFrame = mapView.bounds.inset(by: mapView.safeAreaInsets)
       let centerPoint = CGPoint(x: contentFrame.midX, y: contentFrame.midY)
       let endCameraPoint = CGPoint(x: centerPoint.x + x, y: centerPoint.y + y)
       let cameraOptions = mapView.mapboxMap.dragCameraOptions(from: centerPoint, to: endCameraPoint)
       
       let duration = animationDuration / 1000
+
+      map.cameraWillMoveMap()
 
       if (duration == 0.0) {
         mapView.mapboxMap.setCamera(to: cameraOptions)
@@ -656,12 +669,14 @@ open class RNMBXCamera : RNMBXMapAndMapViewComponentBase {
     resolve: @escaping RCTPromiseResolveBlock,
     reject: @escaping RCTPromiseRejectBlock
   ) {
-    withMapView { mapView in
+    withMap { map, mapView in
       let currentZoom = mapView.cameraState.zoom
       let newZoom = currentZoom + log2(scaleFactor)
       let anchor = CGPoint(x: x, y: y)
       let cameraOptions = CameraOptions(anchor: anchor, zoom: newZoom)
       let duration = animationDuration / 1000
+
+      map.cameraWillMoveMap()
         
       if (duration == 0.0) {
         mapView.mapboxMap.setCamera(to: cameraOptions)

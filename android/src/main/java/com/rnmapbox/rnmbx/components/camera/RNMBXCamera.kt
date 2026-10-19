@@ -206,6 +206,7 @@ class RNMBXCamera(private val mContext: Context, private val mManager: RNMBXCame
 
     private fun updateCamera(cameraStop: CameraStop, mapView: RNMBXMapView) {
         mCameraUpdateQueue.offer(cameraStop)
+        mapView.cameraWillMoveMap()
         mCameraUpdateQueue.execute(mapView)
     }
 
@@ -519,6 +520,7 @@ class RNMBXCamera(private val mContext: Context, private val mManager: RNMBXCame
 
 
             val followState = viewport.makeFollowPuckViewportState(followOptions.build())
+            it.cameraWillMoveMap()
             viewport.transitionTo(followState)
         }
         mapboxMap?.let {
