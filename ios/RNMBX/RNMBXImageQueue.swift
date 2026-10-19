@@ -127,7 +127,7 @@ class RNMBXImageQueueOperation : Operation {
 }
 
 class RNMBXImageQueue {
-  // RCTImageLoader is not safe for concurrent first use: react/react-native#57297 (fixed in 0.87) and #57971.
+  // RCTImageLoader is not safe for concurrent first use: react/react-native#57297 (fixed in 0.87) and react/react-native#57971.
   private static let warmUpLock = NSLock()
   private static weak var warmedUpLoader: AnyObject?
   private static let warmUpImage = URL(string: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+M9QDwADhgGAWjR9awAAAABJRU5ErkJggg==")!
@@ -138,11 +138,7 @@ class RNMBXImageQueue {
     if warmedUpLoader === loader {
       return
     }
-    let done = DispatchSemaphore(value: 0)
-    _ = loader.loadImage(with: URLRequest(url: warmUpImage), size: .zero, scale: 1, clipped: false, resizeMode: .stretch, progressBlock: { _,_ in }, partialLoad: { _ in }) { _, _ in
-      done.signal()
-    }
-    _ = done.wait(timeout: .now() + 2)
+    _ = loader.loadImage(with: URLRequest(url: warmUpImage), size: .zero, scale: 1, clipped: false, resizeMode: .stretch, progressBlock: { _,_ in }, partialLoad: { _ in }) { _, _ in }
     warmedUpLoader = loader
   }
 
