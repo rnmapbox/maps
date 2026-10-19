@@ -294,6 +294,9 @@ open class RNMBXMapView: UIView, RCTInvalidating {
       addSubview(_mapView)
     }
 
+    if let delegate = _mapView.gestures.delegate, delegate !== self {
+      addGestureDelegate(delegate)
+    }
     _mapView.gestures.delegate = self
     setupEvents()
     afterMapViewAdded()
