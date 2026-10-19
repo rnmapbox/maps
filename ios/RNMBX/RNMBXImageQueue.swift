@@ -1,4 +1,9 @@
 class RNMBXImageQueueOperation : Operation {
+  // Up to React Native 0.88, RCTImageLoader creates its image cache lazily without a lock,
+  // so concurrent first calls can use a cache that another thread has already released.
+  // Start all loads from one serial queue; the loading itself stays asynchronous.
+  static let loadQueue = DispatchQueue(label: "com.rnmapbox.rnmbx.ImageQueue.load", qos: .default)
+
   enum State : Equatable {
     case Initial
     case Executing
@@ -65,7 +70,7 @@ class RNMBXImageQueueOperation : Operation {
   override func start() {
     weak var weakSelf : RNMBXImageQueueOperation! = self
     
-    DispatchQueue.global(qos: .default).async {
+    RNMBXImageQueueOperation.loadQueue.async {
       if let weakSelf = weakSelf {
         guard let bridge = weakSelf.bridge else {
           Logger.log(level: .error, message: "RNMBXImageQueue: bridge is nil, cannot load image")
