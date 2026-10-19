@@ -147,6 +147,11 @@ class RNMBXCameraChanged : RNMBXEvent, RCTEvent {
   }
 }
 
+/// Called right before `<Camera>` moves the map, but not for its `defaultSettings` or for user gestures.
+public protocol RNMBXCameraDelegate: AnyObject {
+  func cameraWillMoveMap(_ map: RNMBXMapView)
+}
+
 @objc(RNMBXMapView)
 open class RNMBXMapView: UIView, RCTInvalidating {
 
@@ -176,8 +181,25 @@ open class RNMBXMapView: UIView, RCTInvalidating {
     #endif
   }
 
+  private var cameraDelegates: NSHashTable<AnyObject> = NSHashTable.weakObjects()
+
+  /// Lets native code driving the same map, such as a navigation camera, yield when `<Camera>` moves it.
+  public func addCameraDelegate(_ delegate: RNMBXCameraDelegate) {
+    cameraDelegates.add(delegate)
+  }
+
+  public func removeCameraDelegate(_ delegate: RNMBXCameraDelegate) {
+    cameraDelegates.remove(delegate)
+  }
+
+  func cameraWillMoveMap() {
+    for case let delegate as RNMBXCameraDelegate in cameraDelegates.allObjects {
+      delegate.cameraWillMoveMap(self)
+    }
+  }
+
   public func invalidate() {
-    self.removeAllFeaturesFromMap(reason: .ViewRemoval)
+    self.removeAllFeaturesFromMap(reason: .OnDestroy)
 
     cancelables.forEach { $0.cancel() }
     cancelables.removeAll()
@@ -356,7 +378,7 @@ open class RNMBXMapView: UIView, RCTInvalidating {
             features.remove(at: entryIndex)
             return
           }
-          mapAndMapViewComponent.removeFromMap(self, mapView: mapView, reason: .OnDestroy)
+          mapAndMapViewComponent.removeFromMap(self, mapView: mapView, reason: .ViewRemoval)
           entry.addedToMap = false
         }
         features.remove(at: entryIndex)
@@ -368,7 +390,7 @@ open class RNMBXMapView: UIView, RCTInvalidating {
       if let entryIndex = entryIndex {
         var entry = features[entryIndex]
         if (entry.addedToMap) {
-          mapComponent.removeFromMap(self, reason: .OnDestroy)
+          mapComponent.removeFromMap(self, reason: .ViewRemoval)
           entry.addedToMap = false
         }
         features.remove(at: entryIndex)

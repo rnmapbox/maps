@@ -5,12 +5,10 @@ import android.view.MotionEvent
 import android.view.View
 import android.view.View.MeasureSpec
 import android.view.ViewGroup
-import com.facebook.react.bridge.Arguments
-import com.facebook.react.bridge.ReactContext
+import com.facebook.react.uimanager.PixelUtil
 import com.facebook.react.uimanager.PointerEvents
-import com.facebook.react.uimanager.UIManagerHelper
+import com.facebook.react.uimanager.ThemedReactContext
 import com.facebook.react.views.view.ReactViewGroup
-import com.rnmapbox.rnmbx.components.camera.BaseEvent
 
 class RNMBXMarkerViewContent(context: Context): ReactViewGroup(context) {
     var inAdd: Boolean = false
@@ -24,12 +22,6 @@ class RNMBXMarkerViewContent(context: Context): ReactViewGroup(context) {
     fun setStopGesturePropagation(stop: Boolean) {
         stopGesturePropagation = stop
     }
-
-    // Track last reported translation to avoid feedback loop:
-    // Mapbox sets setTranslationX(512) → we fire event → JS sets transform:[{translateX:512}]
-    // → Fabric calls setTranslationX(512) again → same value → no re-fire.
-    private var lastReportedTx = Float.NaN
-    private var lastReportedTy = Float.NaN
 
     init {
         allowRenderingOutside()
@@ -98,37 +90,48 @@ class RNMBXMarkerViewContent(context: Context): ReactViewGroup(context) {
         canScrollHorizontally(1) || canScrollHorizontally(-1) ||
             canScrollVertically(1) || canScrollVertically(-1)
 
-    override fun setTranslationX(translationX: Float) {
-        super.setTranslationX(translationX)
-        maybeFireAnnotationPositionEvent()
-    }
+    private var publishedSurfaceId = View.NO_ID
+    private var publishedTag = View.NO_ID
+    private var publishedX = Float.NaN
+    private var publishedY = Float.NaN
+    private var dropped = false
 
+    // Mapbox always sets translationX then translationY, so publishing on Y alone avoids a
+    // transient (new x, old y) entry.
     override fun setTranslationY(translationY: Float) {
         super.setTranslationY(translationY)
-        maybeFireAnnotationPositionEvent()
+        publishTranslation()
     }
 
-    private fun maybeFireAnnotationPositionEvent() {
-        val tx = translationX
-        val ty = translationY
-        // Dedup: skip if value unchanged (prevents feedback loop when Fabric
-        // re-applies the same transform prop back to setTranslationX/Y).
-        if (tx == lastReportedTx && ty == lastReportedTy) return
-        lastReportedTx = tx
-        lastReportedTy = ty
+    // Mapbox positions the view with translationX/Y, which the shadow tree doesn't see, so measure()
+    // (Pressable's press rect) would be off. The shadow node reads it from this table (#3832).
+    private fun publishTranslation() {
+        if (dropped) return
+        val surfaceId = (context as? ThemedReactContext)?.surfaceId ?: return
+        if (id == View.NO_ID) return
+        val x = PixelUtil.toDIPFromPixel(translationX)
+        val y = PixelUtil.toDIPFromPixel(translationY)
+        if (surfaceId == publishedSurfaceId && id == publishedTag && x == publishedX && y == publishedY) return
+        if (surfaceId != publishedSurfaceId || id != publishedTag) clearTranslation()
+        publishedSurfaceId = surfaceId
+        publishedTag = id
+        publishedX = x
+        publishedY = y
+        RNMBXMarkerViewContentTranslations.set(surfaceId, id, x, y)
+    }
 
-        val reactContext = context as? ReactContext ?: return
-        val dispatcher = UIManagerHelper.getEventDispatcherForReactTag(reactContext, id) ?: return
-        // Use getSurfaceId(view) — more reliable for Fabric than getSurfaceId(context)
-        val surfaceId = UIManagerHelper.getSurfaceId(this)
-        dispatcher.dispatchEvent(
-            BaseEvent(surfaceId, id, "topAnnotationPosition",
-                Arguments.createMap().apply {
-                    putDouble("x", tx.toDouble())
-                    putDouble("y", ty.toDouble())
-                },
-                canCoalesce = true)
-        )
+    private fun clearTranslation() {
+        if (publishedTag == View.NO_ID) return
+        RNMBXMarkerViewContentTranslations.remove(publishedSurfaceId, publishedTag)
+        publishedSurfaceId = View.NO_ID
+        publishedTag = View.NO_ID
+        publishedX = Float.NaN
+        publishedY = Float.NaN
+    }
+
+    fun onDropViewInstance() {
+        dropped = true
+        clearTranslation()
     }
 
     private fun configureParentClipping() {
@@ -162,4 +165,3 @@ private fun ViewGroup.allowRenderingOutside() {
     this.clipChildren = false
     this.clipToPadding = false
 }
-

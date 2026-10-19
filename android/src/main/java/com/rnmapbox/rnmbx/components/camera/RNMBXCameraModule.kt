@@ -83,9 +83,10 @@ class RNMBXCameraModule(context: ReactApplicationContext, val viewTagResolver: V
         promise: Promise
     ) {
         withViewportOnUIThread(viewRef, promise) {
-            it.mapboxMap?.let { map ->
+            it.withMapView { mapView ->
                 val animationOptions = getAnimationOptions(animationMode, animationDuration)
-                map.moveBy(ScreenCoordinate(x, y), animationOptions)
+                mapView.cameraWillMoveMap()
+                mapView.getMapboxMap().moveBy(ScreenCoordinate(x, y), animationOptions)
 
                 promise.resolve(null)
             }
@@ -102,11 +103,12 @@ class RNMBXCameraModule(context: ReactApplicationContext, val viewTagResolver: V
         promise: Promise
     ) {
         withViewportOnUIThread(viewRef, promise) {
-            it.mapboxMap?.let { map ->
+            it.withMapView { mapView ->
                 val animationOptions =
                     getAnimationOptions(animationMode, animationDuration)
 
-                map.scaleBy(scaleFactor, ScreenCoordinate(x, y), animationOptions)
+                mapView.cameraWillMoveMap()
+                mapView.getMapboxMap().scaleBy(scaleFactor, ScreenCoordinate(x, y), animationOptions)
 
                 promise.resolve(null)
             }

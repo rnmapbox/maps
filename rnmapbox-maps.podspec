@@ -2,20 +2,24 @@
 #  $RNMapboxMapsVersion - version specification ("~> 10.4.3", "~> 5.9.0" or "exactVersion 5.12.1" mapblibre/SPM)
 #  $RNMapboxMapsSwiftPackageManager can be either
 #     "manual" - you're responsible for the Mapbox lib dependency either using cocoapods or SPM
-#     Hash - ```
+#     true - get MapboxMaps from https://github.com/mapbox/mapbox-maps-ios.git through Swift Package Manager,
+#            with the requirement derived from $RNMapboxMapsVersion
+#     Hash - same as true, with any of these keys overridden: ```
 #         {
-#           url: "https://github.com/maplibre/maplibre-gl-native-distribution",
+#           url: "https://github.com/mapbox/mapbox-maps-ios.git",
 #           requirement: {
 #             kind: 'exactVersion',
-#             version: 5.12.1,
+#             version: '11.23.1',
 #           },
-#           product_name: "Mapbox"
+#           product_name: "MapboxMaps",
+#           link: false, # only compile against the product, another pod links it (e.g. through the Navigation SDK)
 #         }
 #         ```
 #  $RNMapboxMapsDownloadToken - *deprecated* download token is no longer required
 #  $RNMapboxMapsCustomPods - use a custom pod for mapbox libs
 
 require 'json'
+require 'digest'
 
 package = JSON.parse(File.read(File.join(__dir__, 'package.json')))
 
@@ -114,22 +118,81 @@ def $RNMapboxMaps._check_no_mapbox_spm(project)
   end
 end
 
-def $RNMapboxMaps._add_spm_to_target(project, target, url, requirement, product_name)
-  pkg_class = Xcodeproj::Project::Object::XCRemoteSwiftPackageReference
-  ref_class = Xcodeproj::Project::Object::XCSwiftPackageProductDependency
-  pkg = project.root_object.package_references.find { |p| p.class == pkg_class && p.repositoryURL == url }
-  if !pkg
-    pkg = project.new(pkg_class)
-    pkg.repositoryURL = url
-    pkg.requirement = requirement
+def $RNMapboxMaps._spm_requirement(version)
+  case version.strip
+  when /\A~>\s*(\d+\.\d+\.\d+)\z/ then { kind: 'upToNextMinorVersion', minimumVersion: $1 }
+  when /\A~>\s*(\d+\.\d+)\z/ then { kind: 'upToNextMajorVersion', minimumVersion: "#{$1}.0" }
+  when /\A=?\s*(\d+\.\d+\.\d+)\z/ then { kind: 'exactVersion', version: $1 }
+  else
+    raise "[RNMapbox] Can't turn $RNMapboxMapsVersion '#{version}' into a Swift package requirement, " \
+          "set `requirement:` in $RNMapboxMapsSwiftPackageManager"
+  end
+end
+
+def $RNMapboxMaps._spm_spec
+  return nil if !$RNMapboxMapsSwiftPackageManager || $RNMapboxMapsSwiftPackageManager == "manual"
+  options = $RNMapboxMapsSwiftPackageManager == true ? {} : $RNMapboxMapsSwiftPackageManager
+  {
+    url: 'https://github.com/mapbox/mapbox-maps-ios.git',
+    product_name: 'MapboxMaps',
+    link: true
+  }.merge(options).tap { |spec| spec[:requirement] ||= self._spm_requirement($MapboxImplVersion) }
+end
+
+# With `link: false` the pod only compiles against the package product: it gets a build-order dependency on it
+# and the products dir as a Swift include path, so the product is linked once, by the pod that depends on it.
+def $RNMapboxMaps._add_spm_compile_only_dependency(project, spec)
+  target = project.targets.find { |t| t.name == "rnmapbox-maps" }
+  pkg = project.root_object.package_references.find do |p|
+    p.is_a?(Xcodeproj::Project::Object::XCRemoteSwiftPackageReference) && p.repositoryURL == spec[:url]
+  end
+  unless pkg
+    pkg = self._new_pods_project_object(project, Xcodeproj::Project::Object::XCRemoteSwiftPackageReference, spec[:url])
+    pkg.repositoryURL = spec[:url]
+    pkg.requirement = spec[:requirement]
     project.root_object.package_references << pkg
   end
-  ref = target.package_product_dependencies.find { |r| r.class == ref_class && r.package == pkg && r.product_name == product_name }
-  if !ref
-    ref = project.new(ref_class)
-    ref.package = pkg
-    ref.product_name = product_name
-    target.package_product_dependencies << ref
+  unless target.dependencies.any? { |d| d.product_ref&.package == pkg && d.product_ref.product_name == spec[:product_name] }
+    key = "#{spec[:url]}/#{spec[:product_name]}"
+    product = self._new_pods_project_object(project, Xcodeproj::Project::Object::XCSwiftPackageProductDependency, key)
+    product.package = pkg
+    product.product_name = spec[:product_name]
+    dependency = self._new_pods_project_object(project, Xcodeproj::Project::Object::PBXTargetDependency, key)
+    dependency.product_ref = product
+    target.dependencies << dependency
+  end
+  target.build_configurations.each do |config|
+    include_paths = Array(config.build_settings['SWIFT_INCLUDE_PATHS'] || '$(inherited)')
+    search_path = '${SYMROOT}/${CONFIGURATION}${EFFECTIVE_PLATFORM_NAME}/'
+    config.build_settings['SWIFT_INCLUDE_PATHS'] = include_paths | [search_path]
+  end
+end
+
+# CocoaPods' counter-based UUIDs restart after `stabilize_target_uuids`, so in a post_install hook `project.new` can
+# reuse the UUID of an existing object, e.g. the root PBXProject's.
+def $RNMapboxMaps._new_pods_project_object(project, klass, key)
+  uuid = Digest::MD5.hexdigest("rnmapbox-maps/#{klass.isa}/#{key}").upcase
+  klass.new(project, uuid).tap(&:initialize_defaults)
+end
+
+# @rnmapbox/maps 10.3.8 and earlier also added the package product to the app targets, which now links a second
+# copy next to the pod's and embeds its frameworks twice ("Multiple commands produce").
+def $RNMapboxMaps._remove_spm_from_app_targets(installer, url)
+  installer.aggregate_targets.group_by(&:user_project).each do |project, targets|
+    targets.flat_map(&:user_targets).uniq.each do |target|
+      stale = target.package_product_dependencies.select { |r| r.package.respond_to?(:repositoryURL) && r.package.repositoryURL == url }
+      next if stale.empty?
+      Pod::UI.warn "[RNMapbox] Removing #{stale.map(&:product_name).join(', ')} (#{url}) from #{target.name}, it is linked through the pods"
+      stale.each do |ref|
+        target.frameworks_build_phase.files.select { |f| f.product_ref == ref }.each(&:remove_from_project)
+        target.package_product_dependencies.delete(ref)
+        ref.remove_from_project
+      end
+    end
+    project.root_object.package_references.select { |p| p.respond_to?(:repositoryURL) && p.repositoryURL == url }.each do |pkg|
+      in_use = project.targets.any? { |t| t.package_product_dependencies.any? { |r| r.package == pkg } }
+      pkg.remove_from_project unless in_use
+    end
   end
 end
 
@@ -159,33 +222,10 @@ def $RNMapboxMaps.post_install(installer)
     end
   end
 
-  if $RNMapboxMapsSwiftPackageManager
-    return if $RNMapboxMapsSwiftPackageManager == "manual"
+  spm_spec = self._spm_spec
+  self._remove_spm_from_app_targets(installer, spm_spec[:url]) if spm_spec
 
-    spm_spec = $RNMapboxMapsSwiftPackageManager
-    project = installer.pods_project
-    self._add_spm_to_target(
-      project,
-      project.targets.find { |t| t.name == "rnmapbox-maps"},
-      spm_spec[:url],
-      spm_spec[:requirement],
-      spm_spec[:product_name]
-    )
-
-    installer.aggregate_targets.group_by(&:user_project).each do |project, targets|
-      targets.each do |target|
-        target.user_targets.each do |user_target|
-          self._add_spm_to_target(
-            project,
-            user_target,
-            spm_spec[:url],
-            spm_spec[:requirement],
-            spm_spec[:product_name]
-          )
-        end
-      end
-    end
-  else
+  if !$RNMapboxMapsSwiftPackageManager
     self._check_no_mapbox_spm(installer.pods_project)
     installer.aggregate_targets.group_by(&:user_project).each do |project, targets|
       targets.each do |target|
@@ -195,6 +235,23 @@ def $RNMapboxMaps.post_install(installer)
       end
     end
   end
+end
+
+rnMapboxMapsSPMSpec = $RNMapboxMaps._spm_spec
+
+if rnMapboxMapsSPMSpec
+  require_relative 'ios/rnmapbox_spm'
+end
+
+if rnMapboxMapsSPMSpec && !rnMapboxMapsSPMSpec[:link]
+  module RNMapboxMapsSPMCompileOnly
+    # Runs after the Podfile's post_install hooks, as react_native_post_install removes all package references.
+    def run_podfile_post_install_hooks
+      super
+      $RNMapboxMaps._add_spm_compile_only_dependency(pods_project, $RNMapboxMaps._spm_spec) if pods_project
+    end
+  end
+  Pod::Installer.prepend(RNMapboxMapsSPMCompileOnly) unless Pod::Installer.ancestors.include?(RNMapboxMapsSPMCompileOnly)
 end
 
 $rnMapboxMapsTargetsToChangeToDynamic = rnMapboxMapsTargetsToChangeToDynamic
@@ -263,6 +320,18 @@ Pod::Spec.new do |s|
   end
   s.header_dir = "rnmapbox_maps"
 
+  if rnMapboxMapsSPMSpec&.fetch(:link)
+    spm_frameworks = ['MapboxCommon', 'MapboxCoreMaps', 'Turf']
+    spm_dependency(s,
+      url: rnMapboxMapsSPMSpec[:url],
+      requirement: rnMapboxMapsSPMSpec[:requirement],
+      products: [rnMapboxMapsSPMSpec[:product_name]],
+      **RNMapboxSPM.spm_dependency_options(s.name, spm_frameworks)
+    )
+    RNMapboxSPM.embed_frameworks(s.name, spm_frameworks)
+    s.script_phase = RNMapboxSPM.signature_cleanup_script_phase(s.name)
+  end
+
   unless $RNMapboxMapsSwiftPackageManager
     if $RNMapboxMapsCustomPods
       $RNMapboxMapsCustomPods.each do |dependecy_spec|
@@ -286,11 +355,14 @@ Pod::Spec.new do |s|
   s.subspec 'DynamicLibrary' do |sp|
     case $RNMapboxMapsImpl
     when 'mapbox'
-      sp.source_files = "ios/RNMBX/**/*.{h,m,mm,swift}"
-      sp.private_header_files = 'ios/RNMBX/RNMBXFabricHelpers.h', 'ios/RNMBX/RNMBXFabricPropConvert.h', 'ios/RNMBX/rnmapbox_maps-Swift.pre.h', 'ios/RNMBX/Utils/RNMBXFollyConvert.h'
+      sp.source_files = "ios/RNMBX/**/*.{h,m,mm,swift}", "cpp/**/*.{h,cpp}"
+      sp.private_header_files = 'ios/RNMBX/RNMBXFabricHelpers.h', 'ios/RNMBX/RNMBXFabricPropConvert.h', 'ios/RNMBX/rnmapbox_maps-Swift.pre.h', 'ios/RNMBX/Utils/RNMBXFollyConvert.h', 'cpp/**/*.h'
 
       if new_arch_enabled
-        sp.pod_target_xcconfig = { 'DEFINES_MODULE' => 'YES' }
+        sp.pod_target_xcconfig = {
+          'DEFINES_MODULE' => 'YES',
+          'HEADER_SEARCH_PATHS' => '"$(PODS_TARGET_SRCROOT)/cpp"',
+        }
         install_modules_dependencies(sp)
         dependencies_only_requiring_modular_headers = ["React-Fabric", "React-graphics", "React-utils", "React-debug", "glog"]
         sp.dependencies = sp.dependencies.select { |d| !dependencies_only_requiring_modular_headers.include?(d.name) }.map {|d| [d.name, []]}.to_h
