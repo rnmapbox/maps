@@ -2,7 +2,7 @@
 import Turf
 import MapKit
 
-public typealias RNMBXMapViewFactoryFunc = (String, UIView) -> (MapView?)
+public typealias RNMBXMapViewFactoryFunc = (String, RNMBXMapView) -> (MapView?)
 
 /**
  * InitWaiter: simple waiters gets queued unitl the init happens
@@ -148,6 +148,7 @@ class RNMBXCameraChanged : RNMBXEvent, RCTEvent {
 }
 
 /// Called right before `<Camera>` moves the map, but not for its `defaultSettings` or for user gestures.
+@MainActor
 public protocol RNMBXCameraDelegate: AnyObject {
   func cameraWillMoveMap(_ map: RNMBXMapView)
 }
@@ -300,7 +301,7 @@ open class RNMBXMapView: UIView, RCTInvalidating {
 
   func createAndAddMapViewImpl(_ impl: String, _ view: RNMBXMapView) -> MapView? {
     if let factory = RNMBXMapViewFactory.get(impl) {
-      return factory(impl, view) as? MapView;
+      return factory(impl, view);
     } else {
       Logger.log(level:.error, message: "No mapview factory registered for: \(impl)")
       return nil
