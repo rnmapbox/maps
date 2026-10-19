@@ -116,7 +116,7 @@ data class FeatureEntry(val feature: AbstractMapFeature?, val view: View?, var a
 
 }
 
-typealias Factory = (impl: String, ViewGroup) -> MapView?;
+typealias Factory = (impl: String, RNMBXMapView) -> MapView?;
 public class RNMBXMapViewFactory {
     companion object {
         var factories = mutableMapOf<String,Factory>();
@@ -176,9 +176,13 @@ open class RNMBXMapView(private val mContext: Context, var mManager: RNMBXMapVie
 
     private val cameraWillMoveMapListeners = CopyOnWriteArraySet<OnCameraWillMoveMapListener>()
 
-    /** Lets native code driving the same map, such as a navigation camera, yield when `<Camera>` moves it. */
-    fun addOnCameraWillMoveMapListener(listener: OnCameraWillMoveMapListener) {
+    /**
+     * Lets native code driving the same map, such as a navigation camera, yield when `<Camera>` moves it.
+     * The listener is held strongly until removed.
+     */
+    fun addOnCameraWillMoveMapListener(listener: OnCameraWillMoveMapListener): Cancelable {
         cameraWillMoveMapListeners.add(listener)
+        return Cancelable { removeOnCameraWillMoveMapListener(listener) }
     }
 
     fun removeOnCameraWillMoveMapListener(listener: OnCameraWillMoveMapListener) {
