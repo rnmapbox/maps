@@ -214,6 +214,7 @@ open class RNMBXMapView: UIView, RCTInvalidating {
   var imageManager: ImageManager = ImageManager()
 
   var tapDelegate: IgnoreRNMBXMakerViewGestureDelegate? = nil
+  var longPressDelegate: IgnoreRNMBXMakerViewGestureDelegate? = nil
 
   var eventDispatcher: RCTEventDispatcherProtocol
 
@@ -1395,6 +1396,9 @@ extension RNMBXMapView {
   func applyOnLongPress() {
     if (reactOnLongPress != nil) {
       let longPressGestureRecognizer = UILongPressGestureRecognizer(target: self, action: #selector(doHandleLongPress(_:)))
+      let delegate = IgnoreRNMBXMakerViewGestureDelegate(originalDelegate: longPressGestureRecognizer.delegate)
+      longPressGestureRecognizer.delegate = delegate
+      self.longPressDelegate = delegate
       self.mapView.addGestureRecognizer(longPressGestureRecognizer)
     }
   }
