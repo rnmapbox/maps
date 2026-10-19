@@ -242,8 +242,6 @@ class RNMBXImagesManager(private val mContext: ReactApplicationContext) :
         parent.attachImageViewIfOnMap(childView)
     }
 
-    // mImageViews are not real children of RNMBXImages, so report them here - otherwise Fabric
-    // sees no children and its removeViewAt never reaches us.
     override fun getChildCount(parent: RNMBXImages): Int {
         return parent.mImageViews.size
     }

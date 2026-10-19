@@ -1,13 +1,8 @@
 package com.rnmapbox.rnmbx.components.images
 
-import android.content.Context
 import android.graphics.Bitmap
-import android.graphics.Rect
-import android.os.Build
 import android.view.View
 import android.view.ViewGroup
-import android.view.ViewParent
-import androidx.annotation.RequiresApi
 import com.facebook.react.bridge.ReactApplicationContext
 import com.facebook.react.uimanager.annotations.ReactProp
 import com.facebook.react.views.view.ReactViewGroup
@@ -17,50 +12,6 @@ import com.rnmapbox.rnmbx.components.annotation.RNMBXCallout
 import com.rnmapbox.rnmbx.components.mapview.RNMBXMapView
 import com.rnmapbox.rnmbx.utils.BitmapUtils
 import com.rnmapbox.rnmbx.utils.Logger
-
-/**
- * Holds the child view of an RNMBXImage inside offscreenAnnotationViewContainer, and asks for a
- * new snapshot when something inside the child redraws.
- *
- * The snapshot is otherwise only taken on a layout change or a style load, but the content can
- * change without either - a remote <Image> that finishes loading after the first snapshot is the
- * common case. Invalidations are debounced, so a fade-in produces one snapshot at the end instead
- * of one per frame.
- */
-private class ImageContentContainer(context: Context, private val onContentChanged: () -> Unit) : ViewGroup(context) {
-    private val refreshRunnable = Runnable { onContentChanged() }
-
-    // Layout of the child is applied by React Native, not by us.
-    override fun onLayout(changed: Boolean, l: Int, t: Int, r: Int, b: Int) {}
-
-    // Hardware accelerated invalidation (API 26+).
-    @RequiresApi(Build.VERSION_CODES.O)
-    override fun onDescendantInvalidated(child: View, target: View) {
-        super.onDescendantInvalidated(child, target)
-        scheduleRefresh()
-    }
-
-    // Software invalidation, and hardware accelerated before API 26.
-    @Deprecated("Deprecated in Java")
-    override fun invalidateChildInParent(location: IntArray?, dirty: Rect?): ViewParent? {
-        scheduleRefresh()
-        @Suppress("DEPRECATION")
-        return super.invalidateChildInParent(location, dirty)
-    }
-
-    private fun scheduleRefresh() {
-        removeCallbacks(refreshRunnable)
-        postDelayed(refreshRunnable, REFRESH_DEBOUNCE_MS)
-    }
-
-    fun cancelRefresh() {
-        removeCallbacks(refreshRunnable)
-    }
-
-    companion object {
-        const val REFRESH_DEBOUNCE_MS = 100L
-    }
-}
 
 class RNMBXImage(private val mContext: ReactApplicationContext, private val mManager: RNMBXImageManager): ReactViewGroup(mContext), View.OnLayoutChangeListener {
     var name: String? = null
@@ -77,8 +28,6 @@ class RNMBXImage(private val mContext: ReactApplicationContext, private val mMan
     var nativeImageUpdater: NativeImageUpdater? = null;
 
     var mBitmap : Bitmap? = null
-
-    private val mContainer = ImageContentContainer(mContext) { refresh() }
 
     override fun setId(id: Int) {
         super.setId(id)
@@ -121,44 +70,34 @@ class RNMBXImage(private val mContext: ReactApplicationContext, private val mMan
             Logger.e("RNMBXImage", "expected a single subview got childView:$childView position:$childPosition")
         }
         mChildView?.let { removeChildView() }
-        mContainer.addView(childView)
         mChildView = childView
         childView.addOnLayoutChangeListener(this)
-        placeContainer()
+        placeChildView()
     }
 
-    /**
-     * Fabric removes children through the view manager's removeViewAt, which only reaches this
-     * view because the manager reports mChildView as its child - it is never a real child of ours.
-     */
     fun removeChildView() {
         val childView = mChildView ?: return
         childView.removeOnLayoutChangeListener(this)
-        mContainer.cancelRefresh()
-        mContainer.removeView(childView)
+        (childView.parent as? ViewGroup)?.removeView(childView)
         mChildView = null
     }
 
-    // The child view is usually inserted before we know the map: the child is mounted into this
-    // view before this view is mounted into RNMBXImages. A view that is in no hierarchy is never
-    // attached to a window, and a Drawee controller only submits its request on attach - so an
-    // <Image> inside the child would never load. Place the container as soon as both are known.
-    private fun placeContainer() {
-        if (mChildView == null || mContainer.parent != null) {
-            return
+    // An <Image> inside the child only loads once the child is attached to a window.
+    private fun placeChildView() {
+        val childView = mChildView ?: return
+        if (childView.parent == null) {
+            mMapView?.offscreenAnnotationViewContainer?.addView(childView)
         }
-        mMapView?.offscreenAnnotationViewContainer?.addView(mContainer)
     }
 
     // region add/remove to Map
     fun addToMap(mapView: RNMBXMapView) {
         mMapView = mapView
-        placeContainer()
+        placeChildView()
     }
 
     fun removeFromMap() {
-        mContainer.cancelRefresh()
-        (mContainer.parent as? ViewGroup)?.removeView(mContainer)
+        mChildView?.let { (it.parent as? ViewGroup)?.removeView(it) }
         mMapView = null
     }
     // endregion

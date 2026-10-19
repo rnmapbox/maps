@@ -36,17 +36,12 @@ mContext
         val reactTag = view.id
 
         viewTagResolver.viewRemoved(reactTag)
-        // When a whole <Image> subtree is unmounted, Fabric only deletes the inner views and does
-        // not remove them one by one, so this is the last chance to take our child out of
-        // offscreenAnnotationViewContainer.
         view.removeChildView()
         view.removeFromMap()
         super.onDropViewInstance(view)
     }
 
     // region RNMBXImage child
-    // The child view lives in offscreenAnnotationViewContainer, not in RNMBXImage, so report it
-    // here - otherwise Fabric sees no children and its removeViewAt never reaches us.
     override fun getChildCount(parent: RNMBXImage): Int {
         return if (parent.mChildView != null) 1 else 0
     }
