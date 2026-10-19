@@ -58,6 +58,28 @@ $RNMapboxMapsVersion = '= 11.16.2'
 
 If using expo managed workflow, set the "RNMapboxMapsVersion" variable. See the [expo guide](/plugin/install.md)
 
+## Using Swift Package Manager (experimental)
+
+By default the Mapbox SDK comes from CocoaPods. To get it through Swift Package Manager instead, set this at the top of your `ios/Podfile`:
+
+```ruby
+$RNMapboxMapsSwiftPackageManager = true
+```
+
+The package requirement is derived from `$RNMapboxMapsVersion` (or the default version): `~> 11.23.1` becomes "up to next minor" from `11.23.1`, `= 11.23.1` an exact version. Your Podfile must call `react_native_post_install`, which adds the package. To override parts of the setup, pass a hash instead:
+
+```ruby
+$RNMapboxMapsSwiftPackageManager = {
+  url: 'https://github.com/mapbox/mapbox-maps-ios.git',
+  requirement: { kind: 'exactVersion', version: '11.23.1' },
+  product_name: 'MapboxMaps',
+}
+```
+
+The `rnmapbox-maps` pod links `MapboxMaps`, and `MapboxCommon`, `MapboxCoreMaps` and `Turf` are embedded by CocoaPods' `[CP] Embed Pods Frameworks` phase. Don't add the `mapbox-maps-ios` package to your app target as well, that links a second copy; `pod install` removes it if an earlier `@rnmapbox/maps` version added it.
+
+With Expo, set `"RNMapboxMapsSwiftPackageManager": true` (or the hash as an object) in the plugin options. See the [expo guide](/plugin/install.md).
+
 ## Troubleshooting
 
 ### Pod install fails on upgrade of @rnmapbox/maps with `could not find compatible versions for pod "MapboxMaps"`
