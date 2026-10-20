@@ -76,6 +76,7 @@ class RNMBXImageQueueOperation : Operation {
           return
         }
         let loader : RCTImageLoaderProtocol = bridge.module(forName: "ImageLoader", lazilyLoadIfNecessary: true) as! RCTImageLoaderProtocol
+        RNMBXImageQueue.warmUp(loader)
         
         let cancellationBlock = loader.loadImage(with: weakSelf.urlRequest, size: .zero, scale: CGFloat(weakSelf.scale), clipped: true, resizeMode: .stretch, progressBlock: { _,_  in }, partialLoad: { _ in }) { error, image in
           if let completionHandler = weakSelf.completionHandler {
@@ -126,6 +127,21 @@ class RNMBXImageQueueOperation : Operation {
 }
 
 class RNMBXImageQueue {
+  // RCTImageLoader is not safe for concurrent first use: react/react-native#57297 (fixed in 0.87) and react/react-native#57971.
+  private static let warmUpLock = NSLock()
+  private static weak var warmedUpLoader: AnyObject?
+  private static let warmUpImage = URL(string: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+M9QDwADhgGAWjR9awAAAABJRU5ErkJggg==")!
+
+  static func warmUp(_ loader: RCTImageLoaderProtocol) {
+    warmUpLock.lock()
+    defer { warmUpLock.unlock() }
+    if warmedUpLoader === loader {
+      return
+    }
+    _ = loader.loadImage(with: URLRequest(url: warmUpImage), size: .zero, scale: 1, clipped: false, resizeMode: .stretch, progressBlock: { _,_ in }, partialLoad: { _ in }) { _, _ in }
+    warmedUpLoader = loader
+  }
+
    static let sharedInstance: RNMBXImageQueue = {
         let instance = RNMBXImageQueue()
         // setup code
