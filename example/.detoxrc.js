@@ -23,7 +23,7 @@ module.exports = {
     'ios.debug.ci': {
       type: 'ios.app',
       build:
-        "FORCE_BUNDLING=1 xcodebuild -quiet -workspace ios/RNMapboxExample.xcworkspace -configuration Debug -scheme RNMapboxExample DISABLE_MANUAL_TARGET_ORDER_BUILD_WARNING=1 GCC_PREPROCESSOR_DEFINITIONS='$GCC_PREPROCESSOR_DEFINITIONS DEBUG_RCT_BUNDLE=1' -sdk iphonesimulator -derivedDataPath ios/build -destination 'generic/platform=iOS Simulator'",
+        "FORCE_BUNDLING=1 xcodebuild -quiet -workspace ios/RNMapboxExample.xcworkspace -configuration Debug -scheme RNMapboxExample DISABLE_MANUAL_TARGET_ORDER_BUILD_WARNING=1 GCC_PREPROCESSOR_DEFINITIONS='$GCC_PREPROCESSOR_DEFINITIONS DEBUG_RCT_BUNDLE=1' -sdk iphonesimulator -derivedDataPath ios/build -destination 'generic/platform=iOS Simulator' ARCHS=arm64",
       binaryPath:
         'ios/build/Build/Products/Debug-iphonesimulator/RNMapboxExample.app',
     },
@@ -37,9 +37,10 @@ module.exports = {
     },
     'simulator.ci': {
       type: 'ios.simulator',
-      device: {
-        type: 'iPhone SE (3rd generation)',
-      },
+      // Set by scripts/ci/pick-ios-simulator.sh, as device types differ between runner images
+      device: process.env.DETOX_DEVICE_UDID
+        ? { id: process.env.DETOX_DEVICE_UDID }
+        : { type: 'iPhone 16' },
     },
   },
   configurations: {

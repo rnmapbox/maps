@@ -42,6 +42,7 @@ jobs:
   build:
     name: iOS Example Build ${{ inputs.NEW_ARCH && 'Fabric' || 'Paper' }} ${{ inputs.MAP_IMPL }}
     if: ${{ !inputs.SKIP }}
+    # arm64 only: Metal in the iOS Simulator is unreliable on -intel runners (actions/runner-images#14836)
     runs-on: macos-15
     timeout-minutes: 55
     environment: ${{ inputs.env_name }}
@@ -119,20 +120,23 @@ jobs:
           brew tap wix/brew
           brew trust wix/brew
           brew install applesimutils
-          brew install xcbeautify
 
       - name: Build for detox
         run: |
           xcodebuild -version
           set -o pipefail && NSUnbufferedIO=YES  yarn detox build --configuration ios.debug.ci 2>&1
 
+      - name: Boot simulator
+        run: |
+          UDID=$("$GITHUB_WORKSPACE/scripts/ci/pick-ios-simulator.sh")
+          echo "DETOX_DEVICE_UDID=$UDID" >> "$GITHUB_ENV"
+          xcrun simctl boot "$UDID"
+          time xcrun simctl bootstatus "$UDID"
+
       - name: Test with detox
-        if: inputs.NEW_ARCH != 1
         run: |
           npx detox --version
-          yarn detox test --configuration ios.debug.ci --debug-synchronization 500 --loglevel trace --record-logs all --take-screenshots all  | xcbeautify -qq --renderer github-actions
-        env:
-          SKIP_TESTS_NO_METAL: ${{ inputs.MAP_IMPL == 'mapbox' || inputs.MAP_IMPL == 'mapbox11' }}
+          yarn detox test --configuration ios.debug.ci --cleanup --take-screenshots failing --record-logs failing e2e/firstTest.e2e.js
 
       - name: Store Detox artifacts on test failure
         uses: actions/upload-artifact@v4
