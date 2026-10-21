@@ -119,7 +119,8 @@ jobs:
         run: |
           brew tap wix/brew
           brew trust wix/brew
-          brew install applesimutils
+          for i in 1 2 3; do brew install applesimutils && break; sleep 10; done
+          applesimutils --version
 
       - name: Build for detox
         run: |
