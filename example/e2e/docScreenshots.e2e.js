@@ -1,4 +1,4 @@
-/* global element, by, waitFor, describe, it, expect, beforeAll, afterAll, beforeEach, afterEach */
+/* global element, by, waitFor, describe, it, beforeAll, afterAll, beforeEach, afterEach */
 
 /**
  * @file process the docs/examples.json file and take screenshots of each example and outputs it to <docRoot>/example-screenshots and <docRoot>/example-screenshots/screenshots.json
@@ -152,88 +152,77 @@ class ExampleScreenshots {
   }
 }
 
-if (['true', 1, '1'].includes(process.env.SKIP_TESTS_NO_METAL)) {
-  console.debug(
-    '### Skipping tests as Metal is not available in this environment',
-  );
-  describe('dump-example-screenshots', () => {
-    it('disabled on CI (no metal support)', () => {
-      expect(true).toBe(true);
-    });
+describe('Example screenshots', () => {
+  beforeAll(async () => {
+    await device.launchApp({ permissions: { location: 'always' } });
   });
-} else {
-  describe('Example screenshots', () => {
-    beforeAll(async () => {
+  beforeEach(async () => {
+    if (shouldRestartAppBetweenTests) {
       await device.launchApp({ permissions: { location: 'always' } });
-    });
-    beforeEach(async () => {
-      if (shouldRestartAppBetweenTests) {
-        await device.launchApp({ permissions: { location: 'always' } });
-      }
-      await device.setURLBlacklist([
-        '.*tile.openstreetmap.org.*',
-        '.*mapbox.com.*',
-      ]);
-      await device.reloadReactNative();
-    });
-    afterEach(async () => {
-      if (shouldRestartAppBetweenTests) {
-        await device.terminateApp();
-      }
-    });
-
-    /** @type Screenshots */
-    const screenshots = {};
-
-    examples.forEach(
-      ({ groupName, metadata: groupMetadata, examples: examplesInGroup }) => {
-        describe(`${groupName}`, () => {
-          examplesInGroup.forEach(({ metadata, fullPath: _fullPath, name }) => {
-            if (metadata) {
-              it(`${name}`, async () => {
-                await device.setStatusBar({
-                  time: '11:34',
-                  batteryLevel: 1,
-                  batteryState: 'charged',
-                  dataNetwork: 'wifi',
-                  wifiMode: 'active',
-                  wifiBars: '3',
-                  cellularMode: 'searching',
-                });
-                await setSampleLocation();
-
-                await waitFor(element(by.text(groupMetadata.title)))
-                  .toBeVisible()
-                  .whileElement(by.id('example-list'))
-                  .scroll(200, 'down');
-                await element(by.text(groupMetadata.title)).tap();
-
-                await waitFor(element(by.text(metadata.title)))
-                  .toBeVisible()
-                  .whileElement(by.id('example-list'))
-                  .scroll(50, 'down');
-                if (metadata.disableSync) {
-                  await device.disableSynchronization();
-                }
-                await element(by.text(metadata.title)).tap();
-
-                let shots = new ExampleScreenshots(
-                  { testName: name, groupName },
-                  screenshots,
-                );
-
-                await wait(metadata.disableSync ? 3000 : 1000);
-                await shots.screenshot();
-              });
-            }
-          });
-        });
-      },
-    );
-
-    afterAll(async () => {
-      console.log('Writing screenshots.json', screenshotsJSONPath);
-      fs.writeFileSync(screenshotsJSONPath, JSON.stringify(screenshots));
-    });
+    }
+    await device.setURLBlacklist([
+      '.*tile.openstreetmap.org.*',
+      '.*mapbox.com.*',
+    ]);
+    await device.reloadReactNative();
   });
-}
+  afterEach(async () => {
+    if (shouldRestartAppBetweenTests) {
+      await device.terminateApp();
+    }
+  });
+
+  /** @type Screenshots */
+  const screenshots = {};
+
+  examples.forEach(
+    ({ groupName, metadata: groupMetadata, examples: examplesInGroup }) => {
+      describe(`${groupName}`, () => {
+        examplesInGroup.forEach(({ metadata, fullPath: _fullPath, name }) => {
+          if (metadata) {
+            it(`${name}`, async () => {
+              await device.setStatusBar({
+                time: '11:34',
+                batteryLevel: 1,
+                batteryState: 'charged',
+                dataNetwork: 'wifi',
+                wifiMode: 'active',
+                wifiBars: '3',
+                cellularMode: 'searching',
+              });
+              await setSampleLocation();
+
+              await waitFor(element(by.text(groupMetadata.title)))
+                .toBeVisible()
+                .whileElement(by.id('example-list'))
+                .scroll(200, 'down');
+              await element(by.text(groupMetadata.title)).tap();
+
+              await waitFor(element(by.text(metadata.title)))
+                .toBeVisible()
+                .whileElement(by.id('example-list'))
+                .scroll(50, 'down');
+              if (metadata.disableSync) {
+                await device.disableSynchronization();
+              }
+              await element(by.text(metadata.title)).tap();
+
+              let shots = new ExampleScreenshots(
+                { testName: name, groupName },
+                screenshots,
+              );
+
+              await wait(metadata.disableSync ? 3000 : 1000);
+              await shots.screenshot();
+            });
+          }
+        });
+      });
+    },
+  );
+
+  afterAll(async () => {
+    console.log('Writing screenshots.json', screenshotsJSONPath);
+    fs.writeFileSync(screenshotsJSONPath, JSON.stringify(screenshots));
+  });
+});

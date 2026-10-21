@@ -38,6 +38,8 @@ import BugReportExampleTS from '../examples/BugReportExampleTS';
 import CompilerTestExample from '../examples/CompilerTestExample';
 // Cache Management
 import * as CacheOffline from '../examples/CacheOffline';
+// Screens driven by the Detox tests in example/e2e
+import * as E2E from '../examples/E2E';
 // V10
 import * as V10 from '../examples/V10';
 /*
@@ -306,6 +308,7 @@ const Examples = new ExampleGroup('React Native Mapbox', [
   exampleGroup(Animations),
   exampleGroup(Web),
   exampleGroup(CacheOffline),
+  exampleGroup(E2E),
 ]);
 
 function ExampleGroupComponent({
