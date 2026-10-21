@@ -19,6 +19,8 @@ on:
         required: false
       ENV_MAPBOX_ACCESS_TOKEN:
         required: false
+      PERCY_TOKEN:
+        required: false
 
 concurrency:
   group: ${{ github.head_ref || github.run_id }}-ci-with-tokens
@@ -53,6 +55,7 @@ jobs:
     secrets:
       MAPBOX_ACCESS_TOKEN: ${{ secrets.MAPBOX_ACCESS_TOKEN }}
       ENV_MAPBOX_ACCESS_TOKEN: ${{ secrets.ENV_MAPBOX_ACCESS_TOKEN }}
+      PERCY_TOKEN: ${{ secrets.PERCY_TOKEN }}
 
   call_web_workflow:
     name: "Web/Mapbox"

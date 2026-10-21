@@ -4913,6 +4913,7 @@ __metadata:
     mapbox-gl: ^3.14.0
     metro-config: ^0.84.2
     moment: ^2.30.1
+    pngjs: ^7.0.0
     pod-install: ^1.0.1
     prettier: ^2.8.8
     prop-types: ^15.8.1
