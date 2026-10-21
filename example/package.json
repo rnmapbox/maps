@@ -77,6 +77,7 @@
     "glob-to-regexp": "^0.4.1",
     "jest": "^30.0.5",
     "metro-config": "^0.84.2",
+    "pngjs": "^7.0.0",
     "pod-install": "^1.0.1",
     "prettier": "^2.8.8",
     "react-native-builder-bob": "^0.40.13",

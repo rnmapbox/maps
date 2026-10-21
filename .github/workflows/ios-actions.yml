@@ -25,10 +25,17 @@ on:
         default: false
         required: false
         type: boolean
+      E2E_MODE:
+        description: "test: e2e tests and visual snapshots, doc-screenshots: capture the doc site screenshots"
+        default: test
+        required: false
+        type: string
     secrets:
       MAPBOX_ACCESS_TOKEN:
         required: true
       ENV_MAPBOX_ACCESS_TOKEN:
+        required: false
+      PERCY_TOKEN:
         required: false
 
 jobs:
@@ -140,9 +147,37 @@ jobs:
           time xcrun simctl bootstatus "$UDID"
 
       - name: Test with detox
+        if: inputs.E2E_MODE == 'test'
         run: |
           npx detox --version
-          yarn detox test --configuration ios.debug.ci --cleanup --take-screenshots failing --record-logs failing e2e/firstTest.e2e.js
+          yarn detox test --configuration ios.debug.ci --take-screenshots failing --record-logs failing e2e/firstTest.e2e.js
+
+      # Informational only, the snapshots are compared by the percy job
+      - name: Capture visual snapshots
+        if: ${{ !cancelled() && inputs.E2E_MODE == 'test' }}
+        continue-on-error: true
+        run: yarn detox test --configuration ios.debug.ci e2e/visual.e2e.js
+
+      - name: Store visual snapshots
+        uses: actions/upload-artifact@v4
+        if: ${{ !cancelled() && inputs.E2E_MODE == 'test' }}
+        with:
+          name: visual-snapshots
+          path: example/e2e/artifacts/visual
+          if-no-files-found: ignore
+
+      - name: Capture doc screenshots
+        if: inputs.E2E_MODE == 'doc-screenshots'
+        run: yarn detox test --configuration ios.debug.ci e2e/docScreenshots.e2e.js
+        env:
+          DOCSITE_ROOT_PATH: ${{ runner.temp }}/maps-docs
+
+      - name: Store doc screenshots
+        uses: actions/upload-artifact@v4
+        if: ${{ !cancelled() && inputs.E2E_MODE == 'doc-screenshots' }}
+        with:
+          name: doc-screenshots
+          path: ${{ runner.temp }}/maps-docs/examples-screenshots
 
       - name: Store Detox artifacts on test failure
         uses: actions/upload-artifact@v4
@@ -150,3 +185,51 @@ jobs:
         with:
           name: detox-artifacts
           path: example/artifacts
+
+  percy:
+    name: Percy visual snapshots
+    needs: build
+    # Informational: never fails CI, and runs only where the secret is available
+    # (pushes to main, same-repo PRs, manual runs) so PR builds compare with main.
+    if: >-
+      !cancelled() && !inputs.SKIP && inputs.E2E_MODE == 'test' &&
+      (github.event_name == 'workflow_dispatch' ||
+       (github.event_name == 'push' && github.ref == 'refs/heads/main') ||
+       (github.event_name == 'pull_request' && github.event.pull_request.head.repo.full_name == github.repository))
+    runs-on: ubuntu-latest
+    continue-on-error: true
+    steps:
+      - name: Check for PERCY_TOKEN
+        id: token
+        env:
+          PERCY_TOKEN: ${{ secrets.PERCY_TOKEN }}
+        run: |
+          if [ -n "$PERCY_TOKEN" ]; then
+            echo "present=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "PERCY_TOKEN is not set, skipping the Percy upload"
+          fi
+
+      - uses: actions/download-artifact@v4
+        if: steps.token.outputs.present == 'true'
+        continue-on-error: true
+        with:
+          name: visual-snapshots
+          path: visual
+
+      - uses: actions/setup-node@v4
+        if: steps.token.outputs.present == 'true'
+        with:
+          node-version: ${{ inputs.NVMRC }}
+
+      - name: Upload to Percy
+        if: steps.token.outputs.present == 'true' && hashFiles('visual/*.png') != ''
+        continue-on-error: true
+        run: npx --yes @percy/cli@1.32.11 upload --strip-extensions visual
+        env:
+          PERCY_TOKEN: ${{ secrets.PERCY_TOKEN }}
+          PERCY_BRANCH: ${{ github.head_ref || github.ref_name }}
+          PERCY_COMMIT: ${{ github.event.pull_request.head.sha || github.sha }}
+          PERCY_PULL_REQUEST: ${{ github.event.pull_request.number }}
+          PERCY_TARGET_BRANCH: main
+          PERCY_CLIENT_ERROR_LOGS: false

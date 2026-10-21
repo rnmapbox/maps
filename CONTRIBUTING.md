@@ -24,6 +24,16 @@ The project uses Mapbox Maps SDK v11 and React Native's New Architecture (Fabric
 npx expo start -c --web
 ```
 
+### E2E tests and visual snapshots
+
+CI runs `example/e2e/firstTest.e2e.js` with Detox on an iOS simulator. It also runs `example/e2e/visual.e2e.js`, which opens the `E2E > Screenshot *` scenes (local style and local data only) and writes one PNG per scene to `example/e2e/artifacts/visual/`. The `visual-snapshots` artifact has them, and on `main` and same-repo PRs they are uploaded to Percy to show differences against `main`. The visual snapshots are informational and never fail CI. To add a scene, add it to `example/src/examples/E2E/` and to `SCENES` in `visual.e2e.js`.
+
+```
+cd example
+yarn detox build --configuration ios.debug.ci
+yarn detox test --configuration ios.debug.ci e2e/firstTest.e2e.js e2e/visual.e2e.js
+```
+
 
 ## Best practices for PRs
 - If you plan to work on a bigger feature, please open a discussion, to discuss the best way to address it
@@ -95,7 +105,7 @@ The full documentation generation process looks like this:
   yarn detox test --configuration ios.debug ./e2e/docScreenshots.e2e.js
   ```
 
-  This step is run manually for now
+  This step is run manually for now, locally or with the `iOS e2e (manual)` workflow in `doc-screenshots` mode (artifact `doc-screenshots`)
 
 4.) `<doc-site>/docs/components` Generate component/api documentation (into the docosaurus site)
 
