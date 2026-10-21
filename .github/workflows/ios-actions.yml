@@ -122,6 +122,11 @@ jobs:
           for i in 1 2 3; do brew install applesimutils && break; sleep 10; done
           applesimutils --version
 
+      # Detox's postinstall builds this into ~/Library/Detox, which isn't restored with node_modules
+      - name: Build Detox framework cache
+        if: steps.yarn-cache.outputs.cache-hit == 'true'
+        run: yarn detox build-framework-cache
+
       - name: Build for detox
         run: |
           xcodebuild -version
