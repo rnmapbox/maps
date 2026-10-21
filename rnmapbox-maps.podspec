@@ -141,6 +141,7 @@ end
 
 # With `link: false` the pod only compiles against the package product: it gets a build-order dependency on it
 # and the products dir as a Swift include path, so the product is linked once, by the pod that depends on it.
+# Explicit Swift modules (Xcode 26, react-native 0.87+) find its binary frameworks only on the framework search path.
 def $RNMapboxMaps._add_spm_compile_only_dependency(project, spec)
   target = project.targets.find { |t| t.name == "rnmapbox-maps" }
   pkg = project.root_object.package_references.find do |p|
@@ -161,10 +162,11 @@ def $RNMapboxMaps._add_spm_compile_only_dependency(project, spec)
     dependency.product_ref = product
     target.dependencies << dependency
   end
+  search_path = '${SYMROOT}/${CONFIGURATION}${EFFECTIVE_PLATFORM_NAME}/'
   target.build_configurations.each do |config|
-    include_paths = Array(config.build_settings['SWIFT_INCLUDE_PATHS'] || '$(inherited)')
-    search_path = '${SYMROOT}/${CONFIGURATION}${EFFECTIVE_PLATFORM_NAME}/'
-    config.build_settings['SWIFT_INCLUDE_PATHS'] = include_paths | [search_path]
+    %w[SWIFT_INCLUDE_PATHS FRAMEWORK_SEARCH_PATHS].each do |key|
+      config.build_settings[key] = Array(config.build_settings[key] || '$(inherited)') | [search_path]
+    end
   end
 end
 
