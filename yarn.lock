@@ -4989,7 +4989,7 @@ __metadata:
     node-dir: 0.1.17
     prettier: ^3.6.2
     react: 19.1.0
-    react-docgen: "rnmapbox/react-docgen#rnmapbox-dist-react-docgen-v8"
+    react-docgen: "rnmapbox/react-docgen#rnmapbox-dist-react-docgen-v8.0.4"
     react-native: 0.81.1
     react-native-builder-bob: ^0.40.13
     react-test-renderer: 19.1.0
@@ -18397,9 +18397,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-docgen@rnmapbox/react-docgen#rnmapbox-dist-react-docgen-v8":
-  version: 8.0.3
-  resolution: "react-docgen@https://github.com/rnmapbox/react-docgen.git#commit=444f1b499bb5db2c07fb11eecefdbeb1252bea14"
+"react-docgen@rnmapbox/react-docgen#rnmapbox-dist-react-docgen-v8.0.4":
+  version: 8.0.4
+  resolution: "react-docgen@https://github.com/rnmapbox/react-docgen.git#commit=18817c8844f112aead3ca89c4b8bbfaeeb1280a9"
   dependencies:
     "@babel/core": ^7.28.0
     "@babel/traverse": ^7.28.0
@@ -18411,7 +18411,7 @@ __metadata:
     doctrine: ^3.0.0
     resolve: ^1.22.1
     strip-indent: ^4.0.0
-  checksum: 0265fa8ee37d36c9c503f0fce3f9b5555308059f40f1bc814ce3135cf4661395972b449ca8c45dec78d692fbdd593bf2cbdeb1aa57001a523f5ad324b65c6c06
+  checksum: e4f9d1aaeb566e051c0eecdb3e8351b37e21047ee27e8ef3abe23bba177376f8b8998db90aa9ce1dec1a0a8db21d383fe4f9ff87ddfbad621daf5f7679543b00
   languageName: node
   linkType: hard
 
