@@ -128,11 +128,12 @@ class RNMBXImageQueueOperation : Operation {
 
 class RNMBXImageQueue {
   // RCTImageLoader is not safe for concurrent first use: react/react-native#57297 (fixed in 0.87) and react/react-native#57971.
+  // Remove the warm-up once the minimum supported React Native includes both fixes.
   private static let warmUpLock = NSLock()
   private static weak var warmedUpLoader: AnyObject?
   private static let warmUpImage = URL(string: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+M9QDwADhgGAWjR9awAAAABJRU5ErkJggg==")!
 
-  static func warmUp(_ loader: RCTImageLoaderProtocol) {
+  fileprivate static func warmUp(_ loader: RCTImageLoaderProtocol) {
     warmUpLock.lock()
     defer { warmUpLock.unlock() }
     if warmedUpLoader === loader {
