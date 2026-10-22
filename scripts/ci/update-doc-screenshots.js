@@ -4,7 +4,7 @@
  * examples-screenshots folder, drops screenshots of removed examples, keeps screenshots.json
  * in sync and writes a markdown summary of what changed (empty if nothing did).
  *
- * excludeFromPercy examples differ by 2-80% between runs (animations, timers), so they are only
+ * excludeFromPercy examples differ by up to ~80% between runs (animations, timers), so they are only
  * replaced when new, when the screenshot size changed or with REFRESH_UNSTABLE=true.
  */
 
