@@ -152,7 +152,6 @@ jobs:
       - name: Test with detox
         if: inputs.E2E_MODE == 'test'
         run: |
-          npx detox --version
           yarn detox test --configuration ios.debug.ci --take-screenshots failing --record-logs failing e2e/firstTest.e2e.js
 
       # Informational only, the snapshots are compared by the percy job
