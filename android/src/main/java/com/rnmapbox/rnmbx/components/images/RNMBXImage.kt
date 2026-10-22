@@ -2,6 +2,7 @@ package com.rnmapbox.rnmbx.components.images
 
 import android.graphics.Bitmap
 import android.view.View
+import android.view.ViewGroup
 import com.facebook.react.bridge.ReactApplicationContext
 import com.facebook.react.uimanager.annotations.ReactProp
 import com.facebook.react.views.view.ReactViewGroup
@@ -68,14 +69,36 @@ class RNMBXImage(private val mContext: ReactApplicationContext, private val mMan
         if (childPosition != 0) {
             Logger.e("RNMBXImage", "expected a single subview got childView:$childView position:$childPosition")
         }
-        mMapView?.offscreenAnnotationViewContainer?.addView(childView)
+        mChildView?.let { removeChildView() }
         mChildView = childView
         childView.addOnLayoutChangeListener(this)
+        placeChildView()
+    }
+
+    fun removeChildView() {
+        val childView = mChildView ?: return
+        childView.removeOnLayoutChangeListener(this)
+        (childView.parent as? ViewGroup)?.removeView(childView)
+        mChildView = null
+    }
+
+    // An <Image> inside the child only loads once the child is attached to a window.
+    private fun placeChildView() {
+        val childView = mChildView ?: return
+        if (childView.parent == null) {
+            mMapView?.offscreenAnnotationViewContainer?.addView(childView)
+        }
     }
 
     // region add/remove to Map
     fun addToMap(mapView: RNMBXMapView) {
         mMapView = mapView
+        placeChildView()
+    }
+
+    fun removeFromMap() {
+        mChildView?.let { (it.parent as? ViewGroup)?.removeView(it) }
+        mMapView = null
     }
     // endregion
 }

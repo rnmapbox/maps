@@ -7,7 +7,13 @@ import {
   SymbolLayer,
   ShapeSource,
 } from '@rnmapbox/maps';
-import { type StyleProp, Text, type ViewStyle } from 'react-native';
+import {
+  Image as RNImage,
+  type StyleProp,
+  Text,
+  View,
+  type ViewStyle,
+} from 'react-native';
 import { type FeatureCollection } from 'geojson';
 
 import exampleIcon from '../../assets/example.png';
@@ -94,10 +100,23 @@ const featureCollection: FeatureCollection = {
         coordinates: [-117.205862, 52.180697],
       },
     },
+    {
+      type: 'Feature',
+      id: '9d10456e-bdda-4aa9-9269-04c1667d4556',
+      properties: {
+        icon: 'pin-remote',
+      },
+      geometry: {
+        type: 'Point',
+        coordinates: [-117.205362, 52.180597],
+      },
+    },
   ],
 };
 
 class ShapeSourceIcon extends React.Component {
+  remoteImage = React.createRef<{ refresh: () => void }>();
+
   state = {
     images: {
       example: exampleIcon,
@@ -119,7 +138,7 @@ class ShapeSourceIcon extends React.Component {
           nativeAssetImages={['pin']}
           images={images}
           onImageMissing={(imageKey) => {
-            if (imageKey !== 'pin-rn') {
+            if (imageKey !== 'pin-rn' && imageKey !== 'pin-remote') {
               this.setState({
                 images: { ...this.state.images, [imageKey]: pinIcon },
               });
@@ -143,6 +162,17 @@ class ShapeSourceIcon extends React.Component {
             >
               RN Pin 3
             </Text>
+          </Image>
+          <Image name="pin-remote" ref={this.remoteImage}>
+            <View collapsable={false}>
+              <RNImage
+                source={{ uri: 'https://reactnative.dev/img/tiny_logo.png' }}
+                style={{ width: 48, height: 48 }}
+                onLoad={() => this.remoteImage.current?.refresh()}
+                // Prevent rendering bitmap at unknown animation state
+                fadeDuration={0}
+              />
+            </View>
           </Image>
         </Images>
         <ShapeSource id="exampleShapeSource" shape={featureCollection}>
@@ -169,6 +199,7 @@ const metadata: ExampleWithMetadata['metadata'] = {
 Render icons with various methods.
 
 * pin-rn: Rendered with a React Native View
+* pin-remote: Rendered with a React Native View holding a remote image, refreshed from its onLoad
 * pin: Rendered with a native asset image
 * pin3: Resolved as a result of onImageMissing
 * example: Rendered with a js asset image (require)
