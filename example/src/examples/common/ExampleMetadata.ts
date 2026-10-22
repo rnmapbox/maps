@@ -4,6 +4,7 @@ export type ExampleMetadata = {
   docs: string;
   disableSync?: boolean;
   excludeFromPercy?: boolean;
+  webSupported?: boolean;
 };
 
 export type ExampleWithMetadata = React.ComponentType & {

@@ -47,5 +47,6 @@ const metadata: ExampleWithMetadata['metadata'] = {
   docs: `
 Showing and hiding the the map should not lead to increased memory consumption, use this example to check it on the profiler.
 `,
+  webSupported: true,
 };
 MapUnMount.metadata = metadata;

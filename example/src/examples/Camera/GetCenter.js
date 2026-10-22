@@ -78,5 +78,6 @@ const metadata = {
   docs: `
 Get center of map via Camera#getCenter
 `,
+  webSupported: true,
 };
 GetCenter.metadata = metadata;

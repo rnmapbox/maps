@@ -19,6 +19,9 @@ const endOfExampleMarker = '/* end-example-doc */';
 import type { Examples } from './autogenHelpers/examplesJsonSchema';
 import type { Screenshots } from './autogenHelpers/screenshotsJsonSchema';
 
+// Published by .github/workflows/update-docs.yml; deep links are handled in example/src/App.js
+const webExampleAppURL = 'https://rnmapbox.github.io/example-app/';
+
 const examples: Examples = JSON.parse(
   fs.readFileSync(examplesJSONPath, 'utf8'),
 );
@@ -35,7 +38,7 @@ examples.forEach(({ groupName, examples: _examples, metadata: _metadata }) => {
       return;
     }
 
-    const { title, tags, docs } = metadata;
+    const { title, tags, docs, webSupported } = metadata;
 
     let jscode: string = fs.readFileSync(
       path.join(mapsRootPath, fullPath),
@@ -73,6 +76,10 @@ examples.forEach(({ groupName, examples: _examples, metadata: _metadata }) => {
       },
     );
 
+    const webLink = webSupported
+      ? `\n[Try it on web](${webExampleAppURL}#/${groupName}/${name})`
+      : '';
+
     const md = `---
 title: ${title}
 tags: [${tags.join(', ')}]
@@ -80,7 +87,7 @@ custom_props:
   example_rel_path: ${relPath}
 custom_edit_url: https://github.com/rnmapbox/maps/tree/master/example/src/examples/${relPath}
 ---
-${docs}
+${docs}${webLink}
 
 \`\`\`jsx
 ${jscode}

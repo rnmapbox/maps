@@ -1,6 +1,6 @@
 import React from 'react';
 import Mapbox from '@rnmapbox/maps';
-import { StyleSheet, Text, View } from 'react-native';
+import { Platform, StyleSheet, Text, View } from 'react-native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { NavigationContainer } from '@react-navigation/native';
 import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
@@ -9,7 +9,7 @@ import sheet from './styles/sheet';
 import colors from './styles/colors';
 import { IS_ANDROID } from './utils';
 import config from './utils/config';
-import { Group, Item } from './scenes/GroupAndItem';
+import { Group, Item, exampleNavigationState } from './scenes/GroupAndItem';
 import { ScreenWithoutMap } from './scenes/ScreenWithoutMap';
 import MapInModal from './examples/Map/MapInModal';
 
@@ -54,9 +54,26 @@ function AppStackNavigator() {
   );
 }
 
+// The docs link to examples as /example-app/#/<groupName>/<name>. A hash, not a
+// path, because GitHub Pages has no fallback for unknown paths.
+function webDeepLinkState() {
+  if (Platform.OS !== 'web') {
+    return undefined;
+  }
+  const [groupName, name] = window.location.hash
+    .replace(/^#\/?/, '')
+    .split('/')
+    .map(decodeURIComponent);
+  return groupName && name
+    ? exampleNavigationState(groupName, name)
+    : undefined;
+}
+
+const initialNavigationState = webDeepLinkState();
+
 const AppContainer = () => (
   <SafeAreaProvider>
-    <NavigationContainer>
+    <NavigationContainer initialState={initialNavigationState}>
       <AppStackNavigator />
     </NavigationContainer>
   </SafeAreaProvider>

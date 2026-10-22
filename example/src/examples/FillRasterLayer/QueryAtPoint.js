@@ -110,5 +110,6 @@ const metadata = {
   tags: [],
   docs: '',
   excludeFromPercy: true,
+  webSupported: true,
 };
 QueryAtPoint.metadata = metadata;

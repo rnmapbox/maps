@@ -159,12 +159,14 @@ class ExampleItem implements ExampleNode {
   Component: ItemComponent;
   navigationType: NavigationType;
   path: string[];
+  name?: string;
 
-  constructor(label: string, Component: unknown) {
+  constructor(label: string, Component: unknown, name?: string) {
     this.label = label;
     this.Component = Component as ItemComponent;
     this.navigationType = 'Item';
     this.path = [label];
+    this.name = name;
   }
 
   setParent(parent: string[]) {
@@ -200,12 +202,14 @@ class ExampleGroup implements ExampleNode {
   navigationType: NavigationType;
   path: string[];
   items: ExampleNode[];
+  name?: string;
 
-  constructor(label: string, items: ExampleNode[]) {
+  constructor(label: string, items: ExampleNode[], name?: string) {
     this.label = label;
     this.items = items;
     this.navigationType = 'Group';
     this.path = [label];
+    this.name = name;
     this.setParent([]);
   }
 
@@ -261,10 +265,15 @@ function example(
   return new ExampleItem(
     Component?.metadata?.title ?? title ?? 'n/a',
     Component?.metadata?.page ? Component : PageWrapper(Component),
+    title,
   );
 }
 
+/**
+ * @param name the directory name of the group, matching `groupName` in docs/examples.json
+ */
 function exampleGroup(
+  name: string,
   group: { [key: `${UpercaseLetter}${string}`]: ItemComponent } & {
     metadata: { title: string };
   },
@@ -276,6 +285,7 @@ function exampleGroup(
     Object.entries(components).map(([key, value]) => {
       return example(value, key);
     }),
+    name,
   );
 }
 
@@ -292,24 +302,47 @@ const Examples = new ExampleGroup('React Native Mapbox', [
   new ExampleItem('Bug Report Template', BugReportPage(BugReportExample)),
   new ExampleItem('Bug Report Template TS', BugReportPage(BugReportExampleTS)),
   new ExampleItem('React Compiler Test', BugReportPage(CompilerTestExample)),
-  exampleGroup(V10),
+  exampleGroup('V10', V10),
   new ExampleGroup('V11', [
     example(StyleImportConfig),
     example(RasterParticle),
     example(SnowAndRain),
   ]),
-  exampleGroup(Map),
-  exampleGroup(Camera),
-  exampleGroup(UserLocation),
-  exampleGroup(SymbolCircleLayer),
-  exampleGroup(FillRasterLayer),
-  exampleGroup(LineLayer),
-  exampleGroup(Annotations),
-  exampleGroup(Animations),
-  exampleGroup(Web),
-  exampleGroup(CacheOffline),
-  exampleGroup(E2E),
+  exampleGroup('Map', Map),
+  exampleGroup('Camera', Camera),
+  exampleGroup('UserLocation', UserLocation),
+  exampleGroup('SymbolCircleLayer', SymbolCircleLayer),
+  exampleGroup('FillRasterLayer', FillRasterLayer),
+  exampleGroup('LineLayer', LineLayer),
+  exampleGroup('Annotations', Annotations),
+  exampleGroup('Animations', Animations),
+  exampleGroup('Web', Web),
+  exampleGroup('CacheOffline', CacheOffline),
+  exampleGroup('E2E', E2E),
 ]);
+
+/**
+ * Opens the example on top of its group and the home list, so back still works.
+ * `groupName` and `name` are as in docs/examples.json.
+ */
+export function exampleNavigationState(groupName: string, name: string) {
+  const group = Examples.items.find(
+    (i): i is ExampleGroup => i instanceof ExampleGroup && i.name === groupName,
+  );
+  const item = group?.items.find(
+    (i): i is ExampleItem => i instanceof ExampleItem && i.name === name,
+  );
+  if (!group || !item) {
+    return undefined;
+  }
+  return {
+    routes: [
+      { name: 'Group' },
+      { name: 'Group', params: { path: group.path } },
+      { name: 'Item', params: { path: item.path } },
+    ],
+  };
+}
 
 function ExampleGroupComponent({
   items,

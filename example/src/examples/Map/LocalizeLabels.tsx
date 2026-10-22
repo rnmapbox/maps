@@ -24,5 +24,6 @@ const metadata: ExampleWithMetadata['metadata'] = {
   docs: `
 Localize labels to a specific locale(es).
 `,
+  webSupported: true,
 };
 LocalizeLabels.metadata = metadata;

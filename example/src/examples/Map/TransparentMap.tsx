@@ -127,5 +127,6 @@ Renders the map over coloured stripes. With \`transparent\` on, the stripes show
 
 On Android \`transparent\` is applied when the map is created, so toggling it here has no effect until the screen is reopened.
 `,
+  webSupported: true,
 };
 TransparentMap.metadata = metadata;
