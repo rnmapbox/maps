@@ -119,6 +119,7 @@ The project uses Mapbox Maps SDK v11 and React Native's New Architecture (Fabric
 ### E2E / Doc Screenshots (Detox)
 - Detox tests in `example/e2e/docScreenshots.e2e.js` capture screenshots of every example for documentation
 - Examples with JS timers or animations that block Detox sync should set `disableSync: true` in their metadata
+- Examples whose screenshot isn't the same on every run (animations, label placement, random data) should set `excludeFromPercy: true` in their metadata to keep them out of the nightly Percy build
 - See CONTRIBUTING.md for build and run instructions
 
 ### Documentation

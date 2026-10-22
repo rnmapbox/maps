@@ -51,8 +51,11 @@ jobs:
     if: ${{ !inputs.SKIP }}
     # arm64 only: Metal in the iOS Simulator is unreliable on -intel runners (actions/runner-images#14836)
     runs-on: macos-15
-    timeout-minutes: 55
+    timeout-minutes: ${{ inputs.E2E_MODE == 'doc-screenshots' && 120 || 55 }}
     environment: ${{ inputs.env_name }}
+    env:
+      # Release for the doc screenshots, so they have no "Connect to Metro" banner or LogBox toasts
+      DETOX_CONFIGURATION: ${{ inputs.E2E_MODE == 'doc-screenshots' && 'ios.release.ci' || 'ios.debug.ci' }}
 
     defaults:
       run:
@@ -137,7 +140,7 @@ jobs:
       - name: Build for detox
         run: |
           xcodebuild -version
-          set -o pipefail && NSUnbufferedIO=YES  yarn detox build --configuration ios.debug.ci 2>&1
+          set -o pipefail && NSUnbufferedIO=YES  yarn detox build --configuration "$DETOX_CONFIGURATION" 2>&1
 
       - name: Boot simulator
         run: |
@@ -166,18 +169,30 @@ jobs:
           path: example/e2e/artifacts/visual
           if-no-files-found: ignore
 
+      # Leaves time in the job timeout to upload what was captured
       - name: Capture doc screenshots
         if: inputs.E2E_MODE == 'doc-screenshots'
-        run: yarn detox test --configuration ios.debug.ci e2e/docScreenshots.e2e.js
+        timeout-minutes: 90
+        run: yarn detox test --configuration ios.release.ci e2e/docScreenshots.e2e.js
         env:
           DOCSITE_ROOT_PATH: ${{ runner.temp }}/maps-docs
+          PERCY_DOC_SCREENSHOTS_DIR: ${{ runner.temp }}/percy-doc-screenshots
 
       - name: Store doc screenshots
         uses: actions/upload-artifact@v4
-        if: ${{ !cancelled() && inputs.E2E_MODE == 'doc-screenshots' }}
+        if: ${{ always() && inputs.E2E_MODE == 'doc-screenshots' }}
         with:
           name: doc-screenshots
           path: ${{ runner.temp }}/maps-docs/examples-screenshots
+          if-no-files-found: ignore
+
+      - name: Store Percy doc screenshots
+        uses: actions/upload-artifact@v4
+        if: ${{ always() && inputs.E2E_MODE == 'doc-screenshots' }}
+        with:
+          name: percy-doc-screenshots
+          path: ${{ runner.temp }}/percy-doc-screenshots
+          if-no-files-found: ignore
 
       - name: Store Detox artifacts on test failure
         uses: actions/upload-artifact@v4

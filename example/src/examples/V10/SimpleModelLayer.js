@@ -112,5 +112,6 @@ const metadata = {
   docs: `
 Demonstrate the use of ModelLayer to render, and Models to associate 3D models with names.
 `,
+  excludeFromPercy: true,
 };
 SimpleModelLayer.metadata = metadata;

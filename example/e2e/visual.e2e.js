@@ -12,6 +12,7 @@ const { PNG } = require('pngjs');
 const SCENES = {
   'fill-line': 'Screenshot Fill Line',
   'circle-symbol': 'Screenshot Circle Symbol',
+  'basemap-streets': 'Screenshot Basemap Streets',
 };
 
 const MAP_IDLE_TIMEOUT = 30000;
