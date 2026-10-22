@@ -20,6 +20,13 @@ module.exports = {
       binaryPath:
         'ios/build/Build/Products/Debug-iphonesimulator/RNMapboxExample.app',
     },
+    'ios.release.ci': {
+      type: 'ios.app',
+      build:
+        "xcodebuild -quiet -workspace ios/RNMapboxExample.xcworkspace -configuration Release -scheme RNMapboxExample -sdk iphonesimulator -derivedDataPath ios/build -destination 'generic/platform=iOS Simulator' ARCHS=arm64",
+      binaryPath:
+        'ios/build/Build/Products/Release-iphonesimulator/RNMapboxExample.app',
+    },
     'ios.debug.ci': {
       type: 'ios.app',
       build:
@@ -55,6 +62,10 @@ module.exports = {
     'ios.debug.ci': {
       device: 'simulator.ci',
       app: 'ios.debug.ci',
+    },
+    'ios.release.ci': {
+      device: 'simulator.ci',
+      app: 'ios.release.ci',
     },
   },
 };

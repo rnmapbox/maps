@@ -3,6 +3,7 @@ export type ExampleMetadata = {
   tags: string[];
   docs: string;
   disableSync?: boolean;
+  excludeFromPercy?: boolean;
 };
 
 export type ExampleWithMetadata = React.ComponentType & {

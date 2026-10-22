@@ -22,9 +22,10 @@ const styles = StyleSheet.create({
 });
 
 type Props = {
-  children: ReactNode;
+  children?: ReactNode;
   centerCoordinate?: [number, number];
   zoomLevel?: number;
+  styleURL?: string;
 };
 
 /**
@@ -35,6 +36,7 @@ const ScreenshotMap = ({
   children,
   centerCoordinate = [0, 0],
   zoomLevel = 3,
+  styleURL = STYLE_JSON,
 }: Props) => {
   const [idle, setIdle] = useState(false);
 
@@ -43,7 +45,7 @@ const ScreenshotMap = ({
       <Mapbox.MapView
         style={styles.map}
         testID="screenshot-map"
-        styleURL={STYLE_JSON}
+        styleURL={styleURL}
         projection="mercator"
         logoEnabled={false}
         attributionEnabled={false}

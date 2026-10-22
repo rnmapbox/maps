@@ -7,7 +7,7 @@
 const { mkdir, copyFile } = require('fs/promises');
 const fs = require('fs');
 const path = require('path');
-const { execSync } = require('child_process');
+const { execSync, execFileSync } = require('child_process');
 
 const { device } = require('detox');
 
@@ -19,6 +19,8 @@ const {
   screenshotsJSONPath,
   docSiteRootPath,
 } = require('../../scripts/autogenHelpers/docconfig.js');
+
+const percyScreenshotsPath = process.env.PERCY_DOC_SCREENSHOTS_DIR;
 
 /**
  * @type {import('../../scripts/autogenHelpers/examplesJsonSchema.ts').Examples}
@@ -95,6 +97,33 @@ async function saveImage(basePath, suffix = null) {
   return fullDestPath;
 }
 
+/** @type {{ frame: { width: number }, safeAreaInsets: { top: number } } | undefined} */
+let rootViewAttributes;
+
+async function readRootViewAttributes() {
+  if (!rootViewAttributes) {
+    rootViewAttributes = await element(by.type('RCTSurfaceHostingView'))
+      .atIndex(0)
+      .getAttributes();
+  }
+}
+
+// The status bar can't be fully frozen (the location arrow comes and goes), so
+// the copies sent to Percy leave it out. Cropped in a separate process, as pngjs
+// takes ~40 s per screenshot inside Jest's VM context on CI.
+async function savePercyImage(imagePath, groupName, name) {
+  const { frame, safeAreaInsets } = rootViewAttributes;
+  const destDir = path.join(percyScreenshotsPath, 'doc', groupName);
+  await mkdir(destDir, { recursive: true });
+  execFileSync(process.execPath, [
+    path.join(__dirname, 'cropTop.js'),
+    imagePath,
+    path.join(destDir, `${name}.png`),
+    String(safeAreaInsets.top),
+    String(frame.width),
+  ]);
+}
+
 async function wait(ms) {
   try {
     await waitFor(element(by.id('no-such-view')))
@@ -149,6 +178,7 @@ class ExampleScreenshots {
     screenshotsDict[basename].images.push(
       path.relative(docSiteRootPath, path.resolve(imgPath)),
     );
+    return imgPath;
   }
 }
 
@@ -183,14 +213,18 @@ describe('Example screenshots', () => {
             it(`${name}`, async () => {
               await device.setStatusBar({
                 time: '11:34',
-                batteryLevel: 1,
+                batteryLevel: '100',
                 batteryState: 'charged',
                 dataNetwork: 'wifi',
                 wifiMode: 'active',
                 wifiBars: '3',
-                cellularMode: 'searching',
+                cellularMode: 'active',
+                cellularBars: '4',
               });
               await setSampleLocation();
+              if (percyScreenshotsPath) {
+                await readRootViewAttributes();
+              }
 
               await waitFor(element(by.text(groupMetadata.title)))
                 .toBeVisible()
@@ -213,7 +247,10 @@ describe('Example screenshots', () => {
               );
 
               await wait(metadata.disableSync ? 3000 : 1000);
-              await shots.screenshot();
+              const imagePath = await shots.screenshot();
+              if (percyScreenshotsPath && !metadata.excludeFromPercy) {
+                await savePercyImage(imagePath, groupName, name);
+              }
             });
           }
         });

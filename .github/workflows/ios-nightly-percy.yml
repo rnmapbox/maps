@@ -1,0 +1,91 @@
+name: iOS doc screenshots to Percy (nightly)
+
+on:
+  schedule:
+    - cron: "0 2 * * *"
+  workflow_dispatch:
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    permissions:
+      actions: read
+    outputs:
+      NVMRC: ${{ steps.nvm.outputs.NVMRC }}
+      run: ${{ steps.changed.outputs.run }}
+    steps:
+      - uses: actions/checkout@v4
+      - id: nvm
+        run: echo "NVMRC=$(cat .nvmrc)" >> "$GITHUB_OUTPUT"
+      - id: changed
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          if [ "$GITHUB_EVENT_NAME" = schedule ]; then
+            LAST=$(gh run list --repo "$GITHUB_REPOSITORY" --workflow ios-nightly-percy.yml \
+              --branch main --status success --limit 1 --json headSha --jq '.[0].headSha')
+            if [ "$LAST" = "$GITHUB_SHA" ]; then
+              echo "No new commits on main since the last successful nightly ($LAST)"
+              echo "run=false" >> "$GITHUB_OUTPUT"
+              exit 0
+            fi
+          fi
+          echo "run=true" >> "$GITHUB_OUTPUT"
+
+  ios:
+    name: "iOS/Mapbox11/Fabric"
+    needs: check
+    if: needs.check.outputs.run == 'true'
+    uses: ./.github/workflows/ios-actions.yml
+    with:
+      NVMRC: ${{ needs.check.outputs.NVMRC }}
+      env_name: default
+      MAP_IMPL: mapbox11
+      NEW_ARCH: true
+      E2E_MODE: doc-screenshots
+    secrets:
+      MAPBOX_ACCESS_TOKEN: ${{ secrets.MAPBOX_ACCESS_TOKEN }}
+
+  percy:
+    name: Percy doc screenshots
+    needs: [check, ios]
+    # Uploads whatever was captured, also when the capture failed or timed out
+    if: always() && needs.check.outputs.run == 'true'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check for PERCY_TOKEN
+        id: token
+        env:
+          PERCY_TOKEN: ${{ secrets.PERCY_TOKEN }}
+        run: |
+          if [ -n "$PERCY_TOKEN" ]; then
+            echo "present=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "PERCY_TOKEN is not set, skipping the Percy upload"
+          fi
+
+      - uses: actions/download-artifact@v4
+        if: steps.token.outputs.present == 'true'
+        continue-on-error: true
+        with:
+          name: percy-doc-screenshots
+          path: percy
+
+      - uses: actions/setup-node@v4
+        if: steps.token.outputs.present == 'true'
+        with:
+          node-version: ${{ needs.check.outputs.NVMRC }}
+
+      # Own Percy branch, so these builds and the per-commit visual snapshot builds on main are
+      # never each other's baseline.
+      # diffIgnorePercentage is a fraction: diffs under 0.5% of the pixels (e.g. a timestamp) are ignored.
+      - name: Upload to Percy
+        if: steps.token.outputs.present == 'true' && hashFiles('percy/**/*.png') != ''
+        run: npx --yes @percy/cli@1.32.11 upload --strip-extensions percy
+        env:
+          PERCY_TOKEN: ${{ secrets.PERCY_TOKEN }}
+          PERCY_BRANCH: doc-screenshots
+          PERCY_TARGET_BRANCH: doc-screenshots
+          PERCY_COMMIT: ${{ github.sha }}
+          PERCY_VISUAL_CONFIG: '{"diffIgnoreEnabled":true,"diffIgnorePercentage":0.005}'
+          PERCY_CLIENT_ERROR_LOGS: false

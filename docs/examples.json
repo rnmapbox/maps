@@ -180,7 +180,8 @@
             "LocationPuck#topImage",
             "LocationPuck#scale"
           ],
-          "docs": "\n  Demonstrates use of images to customize LocationPuck\n  "
+          "docs": "\n  Demonstrates use of images to customize LocationPuck\n  ",
+          "excludeFromPercy": true
         },
         "fullPath": "example/src/examples/UserLocation/CustomNativeUserLocation.tsx",
         "relPath": "UserLocation/CustomNativeUserLocation.tsx",
@@ -454,7 +455,8 @@
             "Camera#followZoomLevel",
             "UserLocation#onPress"
           ],
-          "docs": "\nShows a map with the user location annotation enabled, and on press of the user location annotation, an alert is shown.\n"
+          "docs": "\nShows a map with the user location annotation enabled, and on press of the user location annotation, an alert is shown.\n",
+          "excludeFromPercy": true
         },
         "fullPath": "example/src/examples/Map/ShowMap.tsx",
         "relPath": "Map/ShowMap.tsx",
@@ -598,7 +600,8 @@
           "tags": [
             "MarkerView"
           ],
-          "docs": "\nTest view for MarkerViews\n"
+          "docs": "\nTest view for MarkerViews\n",
+          "excludeFromPercy": true
         },
         "fullPath": "example/src/examples/V10/Markers.tsx",
         "relPath": "V10/Markers.tsx",
@@ -613,7 +616,8 @@
             "AnimatedRouteCoordinatesArray",
             "AnimatedExtractCoordinateFromArray"
           ],
-          "docs": "\nThis is a fairly complex example demonstrating the use of AnimatedShape, Camera animation, queryTerrainElevation and AnimatedMarkerView\n"
+          "docs": "\nThis is a fairly complex example demonstrating the use of AnimatedShape, Camera animation, queryTerrainElevation and AnimatedMarkerView\n",
+          "excludeFromPercy": true
         },
         "fullPath": "example/src/examples/V10/QueryTerrainElevation.js",
         "relPath": "V10/QueryTerrainElevation.js",
@@ -626,7 +630,8 @@
             "Models",
             "ModelLayer"
           ],
-          "docs": "\nDemonstrate the use of ModelLayer to render, and Models to associate 3D models with names.\n"
+          "docs": "\nDemonstrate the use of ModelLayer to render, and Models to associate 3D models with names.\n",
+          "excludeFromPercy": true
         },
         "fullPath": "example/src/examples/V10/SimpleModelLayer.js",
         "relPath": "V10/SimpleModelLayer.js",
@@ -718,7 +723,8 @@
             "PointAnnotation",
             "slot"
           ],
-          "docs": "\nDemonstrates multiple PointAnnotationManager instances, each owning its own\nannotation layer in a different slot of the Mapbox Standard style. The bottom-slot\npins (B) render behind the 3D buildings while the top-slot pins (T) render in front.\n  "
+          "docs": "\nDemonstrates multiple PointAnnotationManager instances, each owning its own\nannotation layer in a different slot of the Mapbox Standard style. The bottom-slot\npins (B) render behind the 3D buildings while the top-slot pins (T) render in front.\n  ",
+          "excludeFromPercy": true
         },
         "fullPath": "example/src/examples/Annotations/PointAnnotationManagerMultiple.tsx",
         "relPath": "Annotations/PointAnnotationManagerMultiple.tsx",
@@ -732,7 +738,8 @@
             "PointAnnotation",
             "slot"
           ],
-          "docs": "\nDemonstrates using PointAnnotationManager to position annotations\nin different slots of the Mapbox Standard style.\n  "
+          "docs": "\nDemonstrates using PointAnnotationManager to position annotations\nin different slots of the Mapbox Standard style.\n  ",
+          "excludeFromPercy": true
         },
         "fullPath": "example/src/examples/Annotations/PointAnnotationManagerSlot.tsx",
         "relPath": "Annotations/PointAnnotationManagerSlot.tsx",
@@ -817,7 +824,8 @@
             "ImageSource"
           ],
           "docs": "",
-          "disableSync": true
+          "disableSync": true,
+          "excludeFromPercy": true
         },
         "fullPath": "example/src/examples/FillRasterLayer/ImageOverlay.js",
         "relPath": "FillRasterLayer/ImageOverlay.js",
@@ -837,7 +845,8 @@
         "metadata": {
           "title": "Query Feature Point",
           "tags": [],
-          "docs": ""
+          "docs": "",
+          "excludeFromPercy": true
         },
         "fullPath": "example/src/examples/FillRasterLayer/QueryAtPoint.js",
         "relPath": "FillRasterLayer/QueryAtPoint.js",
@@ -872,7 +881,8 @@
         "metadata": {
           "title": "Raster Source",
           "tags": [],
-          "docs": ""
+          "docs": "",
+          "excludeFromPercy": true
         },
         "fullPath": "example/src/examples/FillRasterLayer/RasterSource.js",
         "relPath": "FillRasterLayer/RasterSource.js",
@@ -968,7 +978,8 @@
           "tags": [
             "Camera"
           ],
-          "docs": "\nChange camera via change of camera properties\n"
+          "docs": "\nChange camera via change of camera properties\n",
+          "excludeFromPercy": true
         },
         "fullPath": "example/src/examples/Camera/FlyTo.js",
         "relPath": "Camera/FlyTo.js",
