@@ -54,6 +54,7 @@ jobs:
           # yarn skips postinstall when nothing changed, so write env.json explicitly
           node scripts/set_access_token.js
           npx expo export -p web --output-dir ../../maps-docs/static/example-app
+          node scripts/web_route_pages.js ../../maps-docs/static/example-app
         working-directory: maps
         env:
           MAPBOX_WEB_ACCESS_TOKEN: ${{ secrets.MAPBOX_WEB_ACCESS_TOKEN }}

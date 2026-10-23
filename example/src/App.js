@@ -9,7 +9,7 @@ import sheet from './styles/sheet';
 import colors from './styles/colors';
 import { IS_ANDROID } from './utils';
 import config from './utils/config';
-import { Group, Item, exampleNavigationState } from './scenes/GroupAndItem';
+import { exampleLinkingScreens, exampleScreens } from './scenes/GroupAndItem';
 import { ScreenWithoutMap } from './scenes/ScreenWithoutMap';
 import MapInModal from './examples/Map/MapInModal';
 
@@ -37,11 +37,10 @@ const Stack = createNativeStackNavigator();
 function AppStackNavigator() {
   return (
     <Stack.Navigator
-      initialRouteName="Group"
+      initialRouteName="Home"
       screenOptions={{ gestureEnabled: false, headerShown: false }}
     >
-      <Stack.Screen name="Group" component={Group} />
-      <Stack.Screen name="Item" component={Item} />
+      {exampleScreens()}
       <Stack.Screen name="ScreenWithoutMap" component={ScreenWithoutMap} />
       <Stack.Group
         screenOptions={() => ({
@@ -54,26 +53,26 @@ function AppStackNavigator() {
   );
 }
 
-// The docs link to examples as /example-app/#/<groupName>/<name>. A hash, not a
-// path, because GitHub Pages has no fallback for unknown paths.
-function webDeepLinkState() {
-  if (Platform.OS !== 'web') {
-    return undefined;
-  }
-  const [groupName, name] = window.location.hash
-    .replace(/^#\/?/, '')
-    .split('/')
-    .map(decodeURIComponent);
-  return groupName && name
-    ? exampleNavigationState(groupName, name)
+// Web only: on native this would also start handling incoming app links.
+// The base URL is part of the screen paths, as React Navigation's `config.path`
+// doesn't match the bare base URL.
+const linking =
+  Platform.OS === 'web'
+    ? {
+        prefixes: [],
+        config: {
+          initialRouteName: 'Home',
+          screens: exampleLinkingScreens(process.env.EXPO_BASE_URL ?? '', [
+            'ScreenWithoutMap',
+            'MapInModal',
+          ]),
+        },
+      }
     : undefined;
-}
-
-const initialNavigationState = webDeepLinkState();
 
 const AppContainer = () => (
   <SafeAreaProvider>
-    <NavigationContainer initialState={initialNavigationState}>
+    <NavigationContainer linking={linking}>
       <AppStackNavigator />
     </NavigationContainer>
   </SafeAreaProvider>
