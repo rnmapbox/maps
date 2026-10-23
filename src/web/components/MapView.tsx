@@ -44,12 +44,19 @@ const reloadWholeStyle = { diff: false } as Parameters<
   mapboxgl.Map['setStyle']
 >[1];
 
+function parseStyleJSON(json: string) {
+  return JSON.parse(json) as mapboxgl.StyleSpecification;
+}
+
 function styleFromProps({ styleURL, styleJSON }: Props) {
   if (styleURL) {
-    return styleURL;
+    // Native accepts a style JSON string in styleURL as well
+    return styleURL.trimStart().startsWith('{')
+      ? parseStyleJSON(styleURL)
+      : styleURL;
   }
   if (styleJSON) {
-    return JSON.parse(styleJSON) as mapboxgl.StyleSpecification;
+    return parseStyleJSON(styleJSON);
   }
   return defaultStyleURL;
 }
