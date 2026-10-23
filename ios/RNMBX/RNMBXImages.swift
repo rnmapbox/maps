@@ -66,7 +66,12 @@ open class RNMBXImages : UIView, RNMBXMapComponent {
     }
     super.removeReactSubview(subview)
   }
-  
+
+  // Ignore hit-tests so this view doesn't consume gestures.
+  open override func hitTest(_ point: CGPoint, with event: UIEvent?) -> UIView? {
+    return nil
+  }
+
   // MARK: - RNMBXMapComponent
 
   public func waitForStyleLoad() -> Bool {
