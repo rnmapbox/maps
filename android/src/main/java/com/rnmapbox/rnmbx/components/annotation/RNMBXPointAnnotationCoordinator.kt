@@ -6,11 +6,11 @@ import com.mapbox.maps.plugin.annotation.AnnotationConfig
 import com.mapbox.maps.plugin.annotation.annotations
 import com.mapbox.maps.plugin.annotation.generated.OnPointAnnotationClickListener
 import com.mapbox.maps.plugin.annotation.generated.OnPointAnnotationDragListener
+import com.mapbox.maps.plugin.annotation.generated.OnPointAnnotationLongClickListener
 import com.mapbox.maps.plugin.annotation.generated.PointAnnotation
 import com.mapbox.maps.plugin.annotation.generated.PointAnnotationManager
 import com.mapbox.maps.plugin.annotation.generated.PointAnnotationOptions
 import com.mapbox.maps.plugin.annotation.generated.createPointAnnotationManager
-import com.rnmapbox.rnmbx.components.annotation.RNMBXPointAnnotation
 import com.rnmapbox.rnmbx.utils.Logger
 
 class RNMBXPointAnnotationCoordinator(val mapView: MapView, layerId: String? = "RNMBX-mapview-annotations") {
@@ -30,6 +30,10 @@ class RNMBXPointAnnotationCoordinator(val mapView: MapView, layerId: String? = "
             mapView.annotations.createPointAnnotationManager()
         }
         manager.addClickListener(OnPointAnnotationClickListener { pointAnnotation ->
+            onAnnotationClick(pointAnnotation)
+            false
+        })
+        manager.addLongClickListener(OnPointAnnotationLongClickListener { pointAnnotation ->
             onAnnotationClick(pointAnnotation)
             false
         })
