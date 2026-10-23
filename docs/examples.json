@@ -923,6 +923,20 @@
       },
       {
         "metadata": {
+          "title": "Raster Source tile requests",
+          "tags": [
+            "RasterSource",
+            "RasterSource#prefetchZoomDelta",
+            "RasterSource#tileNetworkRequestsDelay"
+          ],
+          "docs": "\nFetches only the tiles of the current zoom level (no parent tiles as a placeholder) and waits 200 ms\nbefore requesting tiles while the map pans, so tiles that leave the screen during a fast pan are\nnever requested. Watch the network log while panning to compare with the Raster Source example.\n"
+        },
+        "fullPath": "example/src/examples/FillRasterLayer/RasterSourceTileRequests.js",
+        "relPath": "FillRasterLayer/RasterSourceTileRequests.js",
+        "name": "RasterSourceTileRequests"
+      },
+      {
+        "metadata": {
           "title": "Watercolor Raster Tiles",
           "tags": [
             "RasterSource",
