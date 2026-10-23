@@ -1,15 +1,12 @@
 {
   "version": 8,
   "name": "Basic",
-  "constants": {},
   "sources": {
     "mapbox": {
       "type": "vector",
       "url": "mapbox://mapbox.mapbox-streets-v6"
     }
   },
-  "sprite": "",
-  "glyphs": "",
   "layers": [{
     "id": "background",
     "type": "background",
