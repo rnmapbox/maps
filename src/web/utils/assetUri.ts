@@ -8,14 +8,16 @@ type PackagerAsset = {
   scales: number[];
 };
 
-export function assetUri(
-  source: number | string | { uri: string } | undefined,
-) {
+export type AssetSource = number | string | { uri: string };
+
+export function resolveAsset(
+  source: AssetSource | undefined,
+): { uri: string; scale: number } | undefined {
   if (typeof source === 'object') {
-    return source.uri;
+    return { uri: source.uri, scale: 1 };
   }
   if (typeof source !== 'number') {
-    return source;
+    return source === undefined ? undefined : { uri: source, scale: 1 };
   }
   const asset = getAssetByID(source) as PackagerAsset | undefined;
   if (!asset) {
@@ -23,5 +25,12 @@ export function assetUri(
   }
   const scale = asset.scales[0] ?? 1;
   const scaleSuffix = scale === 1 ? '' : `@${scale}x`;
-  return `${asset.httpServerLocation}/${asset.name}${scaleSuffix}.${asset.type}`;
+  return {
+    uri: `${asset.httpServerLocation}/${asset.name}${scaleSuffix}.${asset.type}`,
+    scale,
+  };
+}
+
+export function assetUri(source: AssetSource | undefined) {
+  return resolveAsset(source)?.uri;
 }

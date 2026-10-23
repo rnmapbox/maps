@@ -8,6 +8,7 @@ import Camera from './components/Camera';
 import MapView from './components/MapView';
 import MarkerView from './components/MarkerView';
 import ImageSource from './components/ImageSource';
+import Images from './components/Images';
 import ShapeSource from './components/ShapeSource';
 import StyleImport from './components/StyleImport';
 import {
@@ -58,7 +59,6 @@ const UserLocation = UnimplementedComponent('UserLocation');
 const LocationPuck = UnimplementedComponent('LocationPuck');
 const Viewport = UnimplementedComponent('Viewport');
 const Models = UnimplementedComponent('Models');
-const Images = UnimplementedComponent('Images');
 const Image = UnimplementedComponent('Image');
 const CustomLocationProvider = UnimplementedComponent('CustomLocationProvider');
 const CameraGestureObserver = UnimplementedComponent('CameraGestureObserver');
