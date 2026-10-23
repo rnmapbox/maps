@@ -5,6 +5,7 @@ import android.graphics.BitmapFactory
 import android.graphics.Region
 import android.os.Handler
 import android.os.Looper
+import android.os.SystemClock
 import android.view.Gravity
 import android.view.View
 import android.view.View.OnLayoutChangeListener
@@ -51,6 +52,7 @@ import com.rnmapbox.rnmbx.components.location.LocationComponentManager
 import com.rnmapbox.rnmbx.components.location.RNMBXNativeUserLocation
 import com.rnmapbox.rnmbx.components.mapview.helpers.CameraChangeReason
 import com.rnmapbox.rnmbx.components.mapview.helpers.CameraChangeTracker
+import com.rnmapbox.rnmbx.components.mapview.helpers.LongPressCameraGesture
 import com.rnmapbox.rnmbx.components.styles.layers.RNMBXLayer
 import com.rnmapbox.rnmbx.components.styles.light.RNMBXLight
 import com.rnmapbox.rnmbx.components.styles.sources.RNMBXSource
@@ -207,6 +209,10 @@ open class RNMBXMapView(private val mContext: Context, var mManager: RNMBXMapVie
     private var mStyleURL: String? = null
     val isDestroyed = false
     private var mCamera: RNMBXCamera? = null
+    private val longPressCameraGesture = LongPressCameraGesture()
+    private val longPressCameraSubscription = addOnCameraWillMoveMapListener {
+        if (longPressCameraGesture.onCameraWillMoveMap()) isGestureActive = false
+    }
     private val mFeatures = mutableListOf<FeatureEntry>()
     private var mQueuedFeatures: MutableList<AbstractMapFeature>? = ArrayList()
     private val mCameraChangeTracker = CameraChangeTracker()
@@ -347,14 +353,17 @@ open class RNMBXMapView(private val mContext: Context, var mManager: RNMBXMapVie
 
         gesturesPlugin.addOnMoveListener(object : OnMoveListener {
             override fun onMoveBegin(moveGestureDetector: MoveGestureDetector) {
+                if (moveGestureDetector.currentEvent?.let { longPressCameraGesture.onMove(it.downTime) } == true) return
                 mapGestureBegin(MapGestureType.Move, moveGestureDetector)
             }
 
             override fun onMove(moveGestureDetector: MoveGestureDetector): Boolean {
+                if (moveGestureDetector.currentEvent?.let { longPressCameraGesture.onMove(it.downTime) } == true) return true
                 return mapGesture(MapGestureType.Move, moveGestureDetector)
             }
 
             override fun onMoveEnd(moveGestureDetector: MoveGestureDetector) {
+                longPressCameraGesture.onMoveEnd()
                 mapGestureEnd(MapGestureType.Move, moveGestureDetector)
             }
         })
@@ -841,6 +850,7 @@ open class RNMBXMapView(private val mContext: Context, var mManager: RNMBXMapVie
         if (screenPointPx != null) {
             val screenPointDp = toDp(screenPointPx)
             val event = MapClickEvent(_this, LatLng(point), screenPointDp, EventTypes.MAP_LONG_CLICK)
+            longPressCameraGesture.onLongPress(SystemClock.uptimeMillis())
             mManager.handleEvent(event)
         }
 
@@ -1640,6 +1650,7 @@ open class RNMBXMapView(private val mContext: Context, var mManager: RNMBXMapVie
      */
 
     fun onDropViewInstance() {
+        longPressCameraSubscription.cancel()
         languageRejectionSubscription?.cancel()
         languageRejectionSubscription = null
         mapLoadingErrorSubscription?.cancel()
