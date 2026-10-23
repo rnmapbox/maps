@@ -18,21 +18,6 @@ Some notes about example app:
 
 The project uses Mapbox Maps SDK v11 and React Native's New Architecture (Fabric/TurboModules) exclusively.
 
-### iOS long-press camera regression
-
-Install the example app on a booted iOS simulator, then run the native UI suite from the repository root. For a debug app, keep Metro running and set its host below; omit `TEST_RUNNER_RNMBX_METRO_HOST` for an app with a bundled JavaScript build. Replace `<simulator-udid>` with the installed app's simulator ID from `xcrun simctl list devices booted`.
-
-```sh
-TEST_RUNNER_RNMBX_METRO_HOST=localhost:8081 xcodebuild test \
-  -project example/ios/RNMapboxExample.xcodeproj \
-  -scheme LongPressCamera \
-  -destination 'platform=iOS Simulator,id=<simulator-udid>' \
-  -parallel-testing-enabled NO \
-  CODE_SIGN_IDENTITY=- CODE_SIGN_STYLE=Manual
-```
-
-The scheme builds only the UI test runner and launches the installed example app. It opens **Camera > Long Press Camera** and checks `flyTo`, eased and immediate `setCamera`, `moveBy`, and `scaleBy` using native held-finger drift, camera readings after release, and panning on the next touch. This suite runs separately from `yarn test` and the Detox screenshot suite.
-
 ### Running example app for Web
 
 ```

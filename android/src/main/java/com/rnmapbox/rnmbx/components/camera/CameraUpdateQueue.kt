@@ -60,7 +60,6 @@ class CameraUpdateQueue {
         }
         val stop = mQueue.poll() ?: return
         val item = stop.toCameraUpdate(map!!)
-        map.cancelLongPressForCameraUpdate()
         item.run()
         execute(map)
     }

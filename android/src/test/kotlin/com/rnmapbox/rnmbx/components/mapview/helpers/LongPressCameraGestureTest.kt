@@ -1,57 +1,24 @@
 package com.rnmapbox.rnmbx.components.mapview.helpers
 
-import android.view.MotionEvent
-import org.junit.jupiter.api.Assertions.*
+import org.junit.jupiter.api.Assertions.assertFalse
+import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test
 
 class LongPressCameraGestureTest {
     @Test
-    fun `camera command during long press consumes remaining touch sequence`() {
+    fun `only camera moves from the held long press suppress that touch`() {
         val gesture = LongPressCameraGesture()
-        assertFalse(gesture.onTouch(MotionEvent.ACTION_DOWN))
-        gesture.onLongPress()
-        assertTrue(gesture.takeCameraControl())
-        assertFalse(gesture.takeCameraControl())
-        assertTrue(gesture.onTouch(MotionEvent.ACTION_MOVE))
-        assertTrue(gesture.onTouch(MotionEvent.ACTION_POINTER_DOWN))
-        assertTrue(gesture.onTouch(MotionEvent.ACTION_POINTER_UP))
-        assertTrue(gesture.onTouch(MotionEvent.ACTION_UP))
-        assertFalse(gesture.onTouch(MotionEvent.ACTION_DOWN))
-        assertFalse(gesture.onTouch(MotionEvent.ACTION_MOVE))
-    }
+        assertFalse(gesture.onMove(100))
+        gesture.onLongPress(200)
+        assertFalse(gesture.onMove(100))
+        assertTrue(gesture.onCameraWillMoveMap())
+        assertTrue(gesture.onMove(100))
+        gesture.onMoveEnd()
+        assertFalse(gesture.onMove(100))
 
-    @Test
-    fun `long press without camera command still pans`() {
-        val gesture = LongPressCameraGesture()
-        gesture.onTouch(MotionEvent.ACTION_DOWN)
-        gesture.onLongPress()
-        assertFalse(gesture.onTouch(MotionEvent.ACTION_MOVE))
-        assertFalse(gesture.onTouch(MotionEvent.ACTION_UP))
-        assertFalse(gesture.takeCameraControl())
-    }
-
-    @Test
-    fun `ordinary touch and late long press do not cancel gestures`() {
-        val gesture = LongPressCameraGesture()
-        gesture.onTouch(MotionEvent.ACTION_DOWN)
-        assertFalse(gesture.takeCameraControl())
-        gesture.onTouch(MotionEvent.ACTION_UP)
-        gesture.onLongPress()
-        assertFalse(gesture.takeCameraControl())
-        gesture.onTouch(MotionEvent.ACTION_DOWN)
-        assertFalse(gesture.takeCameraControl())
-    }
-
-    @Test
-    fun `touch cancellation releases camera control`() {
-        val gesture = LongPressCameraGesture()
-        gesture.onTouch(MotionEvent.ACTION_DOWN)
-        gesture.onLongPress()
-        gesture.takeCameraControl()
-        assertTrue(gesture.onTouch(MotionEvent.ACTION_CANCEL))
-        assertFalse(gesture.takeCameraControl())
-        assertFalse(gesture.onTouch(MotionEvent.ACTION_DOWN))
-        gesture.onLongPress()
-        assertTrue(gesture.takeCameraControl())
+        gesture.onLongPress(400)
+        assertTrue(gesture.onCameraWillMoveMap())
+        assertFalse(gesture.onMove(500)) // A new touch after release.
+        assertFalse(gesture.onMove(100))
     }
 }

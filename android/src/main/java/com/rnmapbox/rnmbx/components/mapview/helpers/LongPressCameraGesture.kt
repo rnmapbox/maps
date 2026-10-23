@@ -1,34 +1,31 @@
 package com.rnmapbox.rnmbx.components.mapview.helpers
 
-import android.view.MotionEvent
-
 internal class LongPressCameraGesture {
-    private var touchActive = false
-    private var longPressActive = false
-    private var cameraOwnsTouch = false
+    private var longPressTime: Long? = null
+    private var suppressedTouch: Long? = null
 
-    fun onTouch(action: Int): Boolean {
-        if (action == MotionEvent.ACTION_DOWN) {
-            touchActive = true
-            longPressActive = false
-            cameraOwnsTouch = false
-        }
-        val consume = cameraOwnsTouch
-        if (action == MotionEvent.ACTION_UP || action == MotionEvent.ACTION_CANCEL) {
-            touchActive = false
-            longPressActive = false
-            cameraOwnsTouch = false
-        }
-        return consume
+    fun onLongPress(time: Long) {
+        longPressTime = time
     }
 
-    fun onLongPress() {
-        longPressActive = touchActive
+    fun onCameraWillMoveMap(): Boolean {
+        suppressedTouch = longPressTime
+        return suppressedTouch != null
     }
 
-    fun takeCameraControl(): Boolean {
-        if (!longPressActive || cameraOwnsTouch) return false
-        cameraOwnsTouch = true
-        return true
+    fun onMove(downTime: Long): Boolean {
+        val longPress = suppressedTouch ?: return false
+        if (downTime <= longPress) return true
+        clear()
+        return false
+    }
+
+    fun onMoveEnd() {
+        clear()
+    }
+
+    private fun clear() {
+        longPressTime = null
+        suppressedTouch = null
     }
 }
