@@ -122,5 +122,6 @@ const metadata = {
   docs: '',
   disableSync: true,
   excludeFromPercy: true,
+  webSupported: true,
 };
 ImageOverlay.metadata = metadata;

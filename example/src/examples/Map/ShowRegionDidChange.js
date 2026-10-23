@@ -167,5 +167,6 @@ const metadata = {
   docs: `
 Demonstrates MapView region change events.
 `,
+  webSupported: true,
 };
 ShowRegionDidChange.metadata = metadata;

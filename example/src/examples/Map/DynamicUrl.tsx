@@ -88,5 +88,6 @@ const metadata: ExampleWithMetadata['metadata'] = {
   docs: `
 Change shape source URL on press of the bubble.
 `,
+  webSupported: true,
 };
 DynamicUrl.metadata = metadata;

@@ -206,6 +206,7 @@ const metadata = {
   The crosshair is an overlay that is positioned using \`onLayout\` and \`getCoordinateFromView\`.
 
   The \`ShapeSource\` is updated with the new coordinates and the \`LineLayer\` is updated with the new coordinates.`,
+  webSupported: true,
 };
 
 DrawPolyline.metadata = metadata;

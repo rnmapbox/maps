@@ -88,6 +88,7 @@ const metadata = {
   title: 'Gradient Line',
   tags: ['LineLayer', 'LineLayer#lineGradient'],
   docs: 'This example demonstrates how to use interpolate expression in the `lineGradient` property of a `LineLayer` to create a gradient line.',
+  webSupported: true,
 };
 
 GradientLine.metadata = metadata;

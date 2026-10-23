@@ -324,5 +324,6 @@ const metadata = {
   title: 'Fit',
   tags: ['Camera', 'Camera#zoomTo'],
   docs: `Change camera via imperative methods`,
+  webSupported: true,
 };
 (Fit as unknown as ExampleWithMetadata).metadata = metadata;

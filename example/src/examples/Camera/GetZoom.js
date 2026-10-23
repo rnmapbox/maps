@@ -59,5 +59,6 @@ const metadata = {
   docs: `
 Get zoom level of map via Camera#getZoom
 `,
+  webSupported: true,
 };
 GetZoom.metadata = metadata;

@@ -67,5 +67,6 @@ const metadata = {
   title: 'GeoJSON Source',
   tags: [],
   docs: '',
+  webSupported: true,
 };
 GeoJSONSource.metadata = metadata;

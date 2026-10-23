@@ -1,6 +1,6 @@
 import React from 'react';
 import Mapbox from '@rnmapbox/maps';
-import { StyleSheet, Text, View } from 'react-native';
+import { Platform, StyleSheet, Text, View } from 'react-native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { NavigationContainer } from '@react-navigation/native';
 import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
@@ -9,7 +9,7 @@ import sheet from './styles/sheet';
 import colors from './styles/colors';
 import { IS_ANDROID } from './utils';
 import config from './utils/config';
-import { Group, Item } from './scenes/GroupAndItem';
+import { exampleLinkingScreens, exampleScreens } from './scenes/GroupAndItem';
 import { ScreenWithoutMap } from './scenes/ScreenWithoutMap';
 import MapInModal from './examples/Map/MapInModal';
 
@@ -37,11 +37,10 @@ const Stack = createNativeStackNavigator();
 function AppStackNavigator() {
   return (
     <Stack.Navigator
-      initialRouteName="Group"
+      initialRouteName="Home"
       screenOptions={{ gestureEnabled: false, headerShown: false }}
     >
-      <Stack.Screen name="Group" component={Group} />
-      <Stack.Screen name="Item" component={Item} />
+      {exampleScreens()}
       <Stack.Screen name="ScreenWithoutMap" component={ScreenWithoutMap} />
       <Stack.Group
         screenOptions={() => ({
@@ -54,9 +53,26 @@ function AppStackNavigator() {
   );
 }
 
+// Web only: on native this would also start handling incoming app links.
+// The base URL is part of the screen paths, as React Navigation's `config.path`
+// doesn't match the bare base URL.
+const linking =
+  Platform.OS === 'web'
+    ? {
+        prefixes: [],
+        config: {
+          initialRouteName: 'Home',
+          screens: exampleLinkingScreens(process.env.EXPO_BASE_URL ?? '', [
+            'ScreenWithoutMap',
+            'MapInModal',
+          ]),
+        },
+      }
+    : undefined;
+
 const AppContainer = () => (
   <SafeAreaProvider>
-    <NavigationContainer>
+    <NavigationContainer linking={linking}>
       <AppStackNavigator />
     </NavigationContainer>
   </SafeAreaProvider>
