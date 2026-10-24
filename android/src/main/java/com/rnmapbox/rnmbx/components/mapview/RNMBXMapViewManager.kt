@@ -13,6 +13,7 @@ import com.rnmapbox.rnmbx.events.constants.EventKeys
 import com.facebook.react.uimanager.ViewManagerDelegate
 import com.facebook.react.viewmanagers.RNMBXMapViewManagerDelegate
 import com.facebook.react.viewmanagers.RNMBXMapViewManagerInterface
+import com.mapbox.maps.ScreenCoordinate
 import com.mapbox.maps.extension.style.layers.properties.generated.ProjectionName
 import com.mapbox.maps.plugin.gestures.gestures
 import com.rnmapbox.rnmbx.events.constants.eventMapOf
@@ -20,6 +21,7 @@ import com.rnmapbox.rnmbx.utils.Logger
 import com.rnmapbox.rnmbx.utils.ViewTagResolver
 import com.rnmapbox.rnmbx.utils.extensions.getAndLogIfNotBoolean
 import com.rnmapbox.rnmbx.utils.extensions.getAndLogIfNotDouble
+import com.rnmapbox.rnmbx.utils.extensions.getAndLogIfNotMap
 import java.lang.Exception
 import java.util.HashMap
 
@@ -170,10 +172,20 @@ open class RNMBXMapViewManager(context: ReactApplicationContext, val viewTagReso
            it.gesturesPlugin {
                val map = settings.asMap()
                if (map == null) {
-                   Logger.e(LOG_TAG, "gestureSettings map is null")
+                   this.updateSettings { this.focalPoint = null }
                    return@gesturesPlugin Unit
                }
                this.updateSettings {
+                   val focalPoint = map.takeIf { it.hasKey("focalPoint") && !it.isNull("focalPoint") }
+                       ?.getAndLogIfNotMap("focalPoint", LOG_TAG)
+                   val x = focalPoint?.getAndLogIfNotDouble("x", LOG_TAG)
+                   val y = focalPoint?.getAndLogIfNotDouble("y", LOG_TAG)
+                   this.focalPoint = if (x != null && y != null) {
+                       val density = mapView.resources.displayMetrics.density
+                       ScreenCoordinate(x * density, y * density)
+                   } else {
+                       null
+                   }
                    map.getAndLogIfNotBoolean("doubleTapToZoomInEnabled", LOG_TAG)?.let {
                        this.doubleTapToZoomInEnabled = it
                    }
