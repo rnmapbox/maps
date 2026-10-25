@@ -12,6 +12,7 @@ type Props = {
   cluster?: boolean;
   clusterRadius?: number;
   clusterMaxZoomLevel?: number;
+  clusterMinPoints?: number;
   clusterProperties?: object;
   maxZoomLevel?: number;
   buffer?: number;
@@ -47,6 +48,7 @@ export function ShapeSource(props: Props) {
         cluster: props.cluster,
         clusterRadius: props.clusterRadius,
         clusterMaxZoom: props.clusterMaxZoomLevel,
+        clusterMinPoints: props.clusterMinPoints,
         clusterProperties: props.clusterProperties,
         maxzoom: props.maxZoomLevel,
         buffer: props.buffer,
@@ -57,6 +59,7 @@ export function ShapeSource(props: Props) {
         props.cluster,
         props.clusterRadius,
         props.clusterMaxZoomLevel,
+        props.clusterMinPoints,
       ]}
     >
       {props.children}

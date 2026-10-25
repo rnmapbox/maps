@@ -7820,6 +7820,13 @@
         "description": "Specifies the maximum zoom level at which to cluster points if clustering is enabled.\nDefaults to one zoom level less than the value of maxZoomLevel so that, at the maximum zoom level,\nthe shapes are not clustered."
       },
       {
+        "name": "clusterMinPoints",
+        "required": false,
+        "type": "number",
+        "default": "none",
+        "description": "Specifies the minimum number of points to form a cluster if clustering is enabled.\nThe default value is 2. It is applied when the source is added to the map; changing it\nlater requires remounting the ShapeSource."
+      },
+      {
         "name": "clusterProperties",
         "required": false,
         "type": "object",

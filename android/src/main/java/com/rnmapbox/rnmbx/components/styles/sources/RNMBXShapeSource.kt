@@ -32,6 +32,7 @@ class RNMBXShapeSource(context: Context, private val mManager: RNMBXShapeSourceM
     private var mCluster: Boolean? = null
     private var mClusterRadius: Long? = null
     private var mClusterMaxZoom: Long? = null
+    private var mClusterMinPoints: Long? = null
     private var mClusterProperties: HashMap<String, Any>? = null
     private var mMaxZoom: Long? = null
     private var mMinZoom: Long? = null
@@ -151,6 +152,10 @@ class RNMBXShapeSource(context: Context, private val mManager: RNMBXShapeSourceM
         }
     }
 
+    fun setClusterMinPoints(clusterMinPoints: Long) {
+        mClusterMinPoints = clusterMinPoints
+    }
+
     fun setClusterProperties(clusterProperties: HashMap<String, Any>) {
         mClusterProperties = clusterProperties
     }
@@ -188,6 +193,9 @@ class RNMBXShapeSource(context: Context, private val mManager: RNMBXShapeSourceM
         }
         if (mClusterMaxZoom != null) {
             builder.clusterMaxZoom(mClusterMaxZoom!!)
+        }
+        if (mClusterMinPoints != null) {
+            builder.clusterMinPoints(mClusterMinPoints!!)
         }
         if (mClusterProperties != null) {
             builder.clusterProperties(mClusterProperties!!)

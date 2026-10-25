@@ -12,7 +12,7 @@ import { type FeatureCollection } from 'geojson';
 import React, { useRef, useState } from 'react';
 import { FAB, Icon, ListItem } from '@rneui/base';
 import moment from 'moment';
-import { FlatList, Modal } from 'react-native';
+import { Button, FlatList, Modal } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import earthQuakesJSON from '../../assets/earthquakes.json';
@@ -145,9 +145,14 @@ export const EarthquakesDetailsModal: React.FC<{
 const Earthquakes: React.FC<Partial<BaseExampleProps>> = () => {
   const shapeSource = useRef<ShapeSource>(null);
   const [selectedCluster, setSelectedCluster] = useState<FeatureCollection>();
+  const [clusterMinPoints, setClusterMinPoints] = useState(2);
 
   return (
     <>
+      <Button
+        title={`clusterMinPoints: ${clusterMinPoints}`}
+        onPress={() => setClusterMinPoints((prev) => (prev === 2 ? 10 : 2))}
+      />
       <MapView style={styles.matchParent} styleURL={StyleURL.Dark}>
         <Camera
           defaultSettings={{
@@ -156,6 +161,7 @@ const Earthquakes: React.FC<Partial<BaseExampleProps>> = () => {
           }}
         />
         <ShapeSource
+          key={`earthquakes-${clusterMinPoints}`}
           id="earthquakes"
           onPress={async (pressedShape) => {
             if (shapeSource.current) {
@@ -183,6 +189,7 @@ const Earthquakes: React.FC<Partial<BaseExampleProps>> = () => {
           cluster
           clusterRadius={50}
           clusterMaxZoomLevel={14}
+          clusterMinPoints={clusterMinPoints}
           clusterProperties={{
             mag1: [
               ['+', ['accumulated'], ['get', 'mag1']],
@@ -247,6 +254,7 @@ const metadata: ExampleWithMetadata['metadata'] = {
     'ShapeSource',
     'SymbolLayer',
     'ShapeSource#getClusterLeaves',
+    'ShapeSource#clusterMinPoints',
     'CircleLayer',
     'CircleLayer#clusterProperties',
     'expressions',
@@ -255,6 +263,7 @@ const metadata: ExampleWithMetadata['metadata'] = {
 Renders earthquake with clustering.
 
 Click a cluster to show list of contents in the cluster \`getClusterLeaves\`.
+Toggle \`clusterMinPoints\` to only cluster groups of at least 10 points.
 `,
   webSupported: true,
 };
