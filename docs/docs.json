@@ -5526,6 +5526,13 @@
         "description": "Set map's label locale, e.g. `{ \"locale\": \"es\" }` will localize labels to Spanish, `{ \"locale\": \"current\" }` will localize labels to system locale.\nLabels are localized on the device for this map only, into `ar`, `de`, `en`, `es`, `fr`, `it`, `ja`, `ko`, `pt`, `ru`, `vi`, `zh-Hans` or `zh-Hant`, and not on the Standard style.\nFor any language Mapbox supports and for the Standard style, use the app-wide `Mapbox.setLanguage`.\nRemoving the prop stops localizing labels from the next style load."
       },
       {
+        "name": "symbolScaleBehavior",
+        "required": false,
+        "type": "'system' \\| { fixed: number }",
+        "default": "none",
+        "description": "How map symbols (icons and text) scale with the system text size setting.\n`'system'` follows the device's text size, from 0.8x up to 2.0x for accessibility sizes.\n`{ fixed: number }` uses a constant scale factor, recommended range 0.8–2.0.\nDefaults to `{ fixed: 1.0 }`.\n\n@experimental Uses an experimental Mapbox API that may change in a future SDK release."
+      },
+      {
         "name": "gestureSettings",
         "required": false,
         "type": {

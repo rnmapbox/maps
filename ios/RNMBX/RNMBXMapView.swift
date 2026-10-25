@@ -1,4 +1,4 @@
-@_spi(Restricted) import MapboxMaps
+@_spi(Restricted) @_spi(Experimental) import MapboxMaps
 import Turf
 import MapKit
 
@@ -478,6 +478,7 @@ open class RNMBXMapView: UIView, RCTInvalidating {
     case gestureSettings
     case preferredFramesPerSecond
     case transparent
+    case symbolScaleBehavior
 
     func apply(_ map: RNMBXMapView) -> Void {
       switch self {
@@ -518,6 +519,8 @@ open class RNMBXMapView: UIView, RCTInvalidating {
         map.applyPreferredFramesPerSecond()
       case .transparent:
         map.applyTransparent()
+      case .symbolScaleBehavior:
+        map.applySymbolScaleBehavior()
       }
     }
   }
@@ -589,6 +592,23 @@ open class RNMBXMapView: UIView, RCTInvalidating {
         self.mapView.preferredFramesPerSecond = value
       }
     }
+  }
+
+  var symbolScaleBehavior: SymbolScaleBehavior? = nil
+
+  @objc public func setReactSymbolScaleBehavior(_ value: Any?) {
+    if let mode = value as? String, mode == "system" {
+      symbolScaleBehavior = .system
+    } else if let fixed = (value as? [String: Any])?["fixed"] as? NSNumber {
+      symbolScaleBehavior = .fixed(scaleFactor: fixed.doubleValue)
+    } else {
+      symbolScaleBehavior = nil
+    }
+    changed(.symbolScaleBehavior)
+  }
+
+  func applySymbolScaleBehavior() {
+    self.mapboxMap.symbolScaleBehavior = symbolScaleBehavior ?? .fixed(scaleFactor: 1.0)
   }
 
   var maxPitch: Double? = nil

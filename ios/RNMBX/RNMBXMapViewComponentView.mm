@@ -224,6 +224,13 @@ using namespace facebook::react;
         _view.reactLocalizeLabels = nil;
     }
 
+    id symbolScaleBehavior = RNMBXConvertFollyDynamicToId(newViewProps.symbolScaleBehavior);
+    if (symbolScaleBehavior != nil) {
+        _view.reactSymbolScaleBehavior = symbolScaleBehavior;
+    } else if (oldProps && RNMBXConvertFollyDynamicToId(oldViewProps.symbolScaleBehavior) != nil) {
+        _view.reactSymbolScaleBehavior = nil;
+    }
+
     RNMBX_OPTIONAL_PROP_BOOL(deselectAnnotationOnTap);
 
     // Has to be set before -didSetProps: below, which is where the MapView is created.

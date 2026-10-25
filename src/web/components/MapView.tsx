@@ -3,6 +3,7 @@ import { View, type StyleProp, type ViewStyle } from 'react-native';
 import mapboxgl from 'mapbox-gl';
 
 import MapContext from '../MapContext';
+import { warnUnimplemented } from '../UnimplementedComponent';
 import type {
   MapState,
   RegionPayload,
@@ -20,6 +21,7 @@ type Props = {
   style?: StyleProp<ViewStyle>;
   styleURL?: string;
   styleJSON?: string;
+  symbolScaleBehavior?: 'system' | { fixed: number };
   children?: ReactNode;
   onPress?: (feature: PressFeature) => void;
   onLongPress?: (feature: PressFeature) => void;
@@ -59,6 +61,14 @@ function styleFromProps({ styleURL, styleJSON }: Props) {
     return parseStyleJSON(styleJSON);
   }
   return defaultStyleURL;
+}
+
+function symbolScaleFactor({ symbolScaleBehavior }: Props) {
+  if (symbolScaleBehavior === 'system') {
+    warnUnimplemented("MapView symbolScaleBehavior 'system'");
+    return 1;
+  }
+  return symbolScaleBehavior?.fixed ?? 1;
 }
 
 function toPosition(lngLat: mapboxgl.LngLat): Position {
@@ -155,6 +165,7 @@ class MapView extends React.Component<
     const map = new mapboxgl.Map({
       container: this.mapContainer,
       style: styleFromProps(this.props),
+      scaleFactor: symbolScaleFactor(this.props),
     });
     this.map = map;
     this.setState({ map });
@@ -205,12 +216,18 @@ class MapView extends React.Component<
   }
 
   componentDidUpdate(prevProps: Props) {
+    if (!this.map) {
+      return;
+    }
     if (
-      this.map &&
-      (prevProps.styleURL !== this.props.styleURL ||
-        prevProps.styleJSON !== this.props.styleJSON)
+      prevProps.styleURL !== this.props.styleURL ||
+      prevProps.styleJSON !== this.props.styleJSON
     ) {
       this.map.setStyle(styleFromProps(this.props), reloadWholeStyle);
+    }
+    const scaleFactor = symbolScaleFactor(this.props);
+    if (this.map.getScaleFactor() !== scaleFactor) {
+      this.map.setScaleFactor(scaleFactor);
     }
   }
 
