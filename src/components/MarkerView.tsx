@@ -37,6 +37,29 @@ type Props = ViewProps & {
   isSelected?: boolean;
 
   /**
+   * Places the marker on the roof of the 3D building (fill extrusion or model) under it
+   * instead of at ground level. Defaults to false.
+   */
+  allowZElevate?: boolean;
+
+  /**
+   * Placement order among markers: higher priority markers are placed first, so they win
+   * when markers collide and `allowOverlap` is false. Negative values are allowed.
+   * Defaults to 0. Use either this or `isSelected`, not both.
+   */
+  priority?: number;
+
+  /**
+   * Minimum zoom level, in the range [0, 22], at which the marker is shown. Defaults to 0.
+   */
+  minZoom?: number;
+
+  /**
+   * Maximum zoom level, in the range [0, 22], at which the marker is shown. Defaults to 22.
+   */
+  maxZoom?: number;
+
+  /**
    * Keep pan/pinch/drag gestures that start on this marker inside the marker instead of
    * letting them reach the map. Enable this for markers whose children handle their own
    * drags in JavaScript (e.g. a PanResponder-based slider), which otherwise race the map's
@@ -75,6 +98,10 @@ const MarkerView = ({
   allowOverlap = false,
   allowOverlapWithPuck = false,
   isSelected = false,
+  allowZElevate,
+  priority,
+  minZoom,
+  maxZoom,
   coordinate,
   style,
   pointerEvents,
@@ -112,6 +139,10 @@ const MarkerView = ({
       allowOverlap={allowOverlap}
       allowOverlapWithPuck={allowOverlapWithPuck}
       isSelected={isSelected}
+      allowZElevate={allowZElevate}
+      priority={priority}
+      minZoom={minZoom}
+      maxZoom={maxZoom}
       pointerEvents={pointerEvents}
       stopGesturePropagation={stopGesturePropagation}
       onTouchEnd={handleTouchEnd}
