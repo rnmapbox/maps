@@ -10,7 +10,7 @@ CameraGestureObserver
 ```
 CameraGestureObserver
 
-Unified native observer optimized for onMapSteady.
+Unified native observer optimized for onMapSteady and onCameraChanged.
 
 ## props
 
@@ -41,6 +41,20 @@ func
 ```
 Callback when the map reaches a steady state (no active gestures or animations).
 *signature:*`(event:{nativeEvent: OnMapSteadyEvent}) =&gt; void`
+
+[Camera Gesture Observer](../examples/Map/CameraGestureObserver)
+  
+### onCameraChanged
+
+```tsx
+func
+```
+Callback on every camera change. The state matches MapView#onCameraChanged, plus `properties.isUserInteraction`.
+
+`properties.isUserInteraction` is true while a user gesture is active or the map is still
+animating from one (fling/deceleration, double-tap zoom). Camera changes from your own code,
+like Camera#setCamera or a following Viewport, are not user interaction.
+*signature:*`(event:{nativeEvent: OnCameraChangedEvent}) =&gt; void`
 
 [Camera Gesture Observer](../examples/Map/CameraGestureObserver)
   

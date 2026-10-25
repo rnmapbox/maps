@@ -1028,7 +1028,7 @@
     "name": "Camera"
   },
   "CameraGestureObserver": {
-    "description": "CameraGestureObserver\n\nUnified native observer optimized for onMapSteady.",
+    "description": "CameraGestureObserver\n\nUnified native observer optimized for onMapSteady and onCameraChanged.",
     "methods": [],
     "props": [
       {
@@ -1054,6 +1054,16 @@
         },
         "default": "none",
         "description": "Callback when the map reaches a steady state (no active gestures or animations).\n*signature:*`(event:{nativeEvent: OnMapSteadyEvent}) => void`"
+      },
+      {
+        "name": "onCameraChanged",
+        "required": false,
+        "type": {
+          "name": "func",
+          "funcSignature": "(event:{nativeEvent: OnCameraChangedEvent}) => void"
+        },
+        "default": "none",
+        "description": "Callback on every camera change. The state matches MapView#onCameraChanged, plus `properties.isUserInteraction`.\n\n`properties.isUserInteraction` is true while a user gesture is active or the map is still\nanimating from one (fling/deceleration, double-tap zoom). Camera changes from your own code,\nlike Camera#setCamera or a following Viewport, are not user interaction.\n*signature:*`(event:{nativeEvent: OnCameraChangedEvent}) => void`"
       }
     ],
     "fileNameWithExt": "CameraGestureObserver.tsx",
@@ -5627,7 +5637,7 @@
           "funcSignature": "(feature:GeoJSON.Feature) => void"
         },
         "default": "none",
-        "description": "This event is triggered whenever the currently displayed map region is changing.\n\n- `feature`: `PointFeature`  - The geojson point feature at the camera center, properties contains zoomLevel, visibleBounds\n*signature:*`(feature:GeoJSON.Feature) => void`"
+        "description": "This event is triggered whenever the currently displayed map region is changing.\n`properties.isUserInteraction` is deprecated, use CameraGestureObserver#onCameraChanged to tell user gestures from programmatic camera changes.\n\n- `feature`: `PointFeature`  - The geojson point feature at the camera center, properties contains zoomLevel, visibleBounds\n*signature:*`(feature:GeoJSON.Feature) => void`"
       },
       {
         "name": "onRegionDidChange",
