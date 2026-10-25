@@ -34,6 +34,10 @@ class RNMBXMarkerView(context: Context?, private val mManager: RNMBXMarkerViewMa
     private var mAllowOverlap = false
     private var mAllowOverlapWithPuck = false
     private var mIsSelected = false
+    private var mAllowZElevate: Boolean? = null
+    private var mPriority: Long? = null
+    private var mMinZoom: Double? = null
+    private var mMaxZoom: Double? = null
     private var mPointerEvents: PointerEvents = PointerEvents.AUTO
     private var mStopGesturePropagation = false
 
@@ -59,6 +63,26 @@ class RNMBXMarkerView(context: Context?, private val mManager: RNMBXMarkerViewMa
 
     fun setIsSelected(isSelected: Boolean) {
         mIsSelected = isSelected
+        update()
+    }
+
+    fun setAllowZElevate(allowZElevate: Boolean?) {
+        mAllowZElevate = allowZElevate
+        update()
+    }
+
+    fun setPriority(priority: Long?) {
+        mPriority = priority
+        update()
+    }
+
+    fun setMinZoom(minZoom: Double?) {
+        mMinZoom = minZoom
+        update()
+    }
+
+    fun setMaxZoom(maxZoom: Double?) {
+        mMaxZoom = maxZoom
         update()
     }
 
@@ -233,6 +257,10 @@ class RNMBXMarkerView(context: Context?, private val mManager: RNMBXMarkerViewMa
             allowOverlapWithPuck(mAllowOverlapWithPuck)
             offsets(offset.dx, offset.dy)
             selected(mIsSelected)
+            mAllowZElevate?.let { allowZElevate(it) }
+            mPriority?.let { priority(it) }
+            mMinZoom?.let { minZoom(it.toFloat()) }
+            mMaxZoom?.let { maxZoom(it.toFloat()) }
             ignoreCameraPadding(true)
         }
         return options

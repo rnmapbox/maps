@@ -84,6 +84,30 @@ public class RNMBXMarkerView: UIView, RNMBXMapComponent {
     }
   }
 
+  @objc public var allowZElevate: NSNumber? {
+    didSet {
+      update()
+    }
+  }
+
+  @objc public var priority: NSNumber? {
+    didSet {
+      update()
+    }
+  }
+
+  @objc public var minZoom: NSNumber? {
+    didSet {
+      update()
+    }
+  }
+
+  @objc public var maxZoom: NSNumber? {
+    didSet {
+      update()
+    }
+  }
+
   // MARK: - Derived variables
   
   var annotationManager: ViewAnnotationManager? {
@@ -240,6 +264,10 @@ public class RNMBXMarkerView: UIView, RNMBXMapComponent {
       selected: isSelected
     )
     options.allowOverlapWithPuck = allowOverlapWithPuck
+    options.allowZElevate = allowZElevate?.boolValue
+    options.priority = priority?.intValue
+    options.minZoom = minZoom?.doubleValue
+    options.maxZoom = maxZoom?.doubleValue
     options.ignoreCameraPadding = true
     return options
   }

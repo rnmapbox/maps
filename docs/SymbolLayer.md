@@ -1017,7 +1017,7 @@ Name: `textVariableAnchor`
 Mapbox spec: [text-variable-anchor](https://docs.mapbox.com/style-spec/reference/layers/#layout-symbol-text-variable-anchor)
 
 #### Description
-To increase the chance of placing highPriority labels on the map, you can provide an array of `textAnchor` locations: the renderer will attempt to place the label at each location, in order, before moving onto the next label. Use `textJustify: auto` to choose justification based on anchor position. To apply an offset, use the `textRadialOffset` or the twoDimensional `textOffset`.
+To increase the chance of placing highPriority labels on the map, you can provide an array of `textAnchor` locations: the renderer will attempt to place the label at each location, in order, before moving onto the next label. Use `textJustify: auto` to choose justification based on anchor position. To apply an offset, use the `textRadialOffset` or the twoDimensional `textOffset`. Known issue: at the moment having both `appearances` and `textVariableAnchor` in the same layer doesn't work correctly.
 
 #### Type
 `array<enum>`
@@ -2277,12 +2277,15 @@ Name: `symbolZOffset`
 Mapbox spec: [symbol-z-offset](https://docs.mapbox.com/style-spec/reference/layers/#paint-symbol-symbol-z-offset)
 
 #### Description
-Specifies an uniform elevation from the ground, in meters.
+Specifies an uniform elevation from the ground.
 
 #### Type
 `number`
 #### Default Value
 `0`
+
+#### Units
+`meters`
 
 #### Minimum
 `0`

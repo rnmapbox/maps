@@ -117,6 +117,11 @@ class RNMBXShapeSourceManager(private val mContext: ReactApplicationContext, val
         source.setClusterMinPoints(clusterMinPoints.asInt().toLong())
     }
 
+    @ReactProp(name = "promoteId")
+    override fun setPromoteId(source: RNMBXShapeSource, value: Dynamic) {
+        source.promoteId = promoteIdFrom(value)
+    }
+
     @ReactProp(name = "clusterProperties")
     override fun setClusterProperties(source: RNMBXShapeSource, map: Dynamic) {
         val mapValue = map.asMap()

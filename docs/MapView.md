@@ -381,6 +381,7 @@ This event is triggered whenever the currently displayed map region is about to 
 func
 ```
 This event is triggered whenever the currently displayed map region is changing.
+`properties.isUserInteraction` is deprecated, use CameraGestureObserver#onCameraChanged to tell user gestures from programmatic camera changes.
 
 - `feature`: `PointFeature`  - The geojson point feature at the camera center, properties contains zoomLevel, visibleBounds
 *signature:*`(feature:GeoJSON.Feature) =&gt; void`

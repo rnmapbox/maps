@@ -330,11 +330,12 @@
         "type": "array<number>",
         "values": [],
         "minimum": 0,
+        "units": "meters",
         "default": [
           0,
           0
         ],
-        "description": "An array of two number values, specifying the vertical range, measured in meters, over which the fog should gradually fade out. When both parameters are set to zero, the fog will be rendered without any vertical constraints.",
+        "description": "An array of two number values, specifying the vertical range over which the fog should gradually fade out. When both parameters are set to zero, the fog will be rendered without any vertical constraints.",
         "requires": [],
         "disabledBy": [],
         "allowedFunctionTypes": [],
@@ -1028,7 +1029,7 @@
     "name": "Camera"
   },
   "CameraGestureObserver": {
-    "description": "CameraGestureObserver\n\nUnified native observer optimized for onMapSteady.",
+    "description": "CameraGestureObserver\n\nUnified native observer optimized for onMapSteady and onCameraChanged.",
     "methods": [],
     "props": [
       {
@@ -1054,6 +1055,16 @@
         },
         "default": "none",
         "description": "Callback when the map reaches a steady state (no active gestures or animations).\n*signature:*`(event:{nativeEvent: OnMapSteadyEvent}) => void`"
+      },
+      {
+        "name": "onCameraChanged",
+        "required": false,
+        "type": {
+          "name": "func",
+          "funcSignature": "(event:{nativeEvent: OnCameraChangedEvent}) => void"
+        },
+        "default": "none",
+        "description": "Callback on every camera change. The state matches MapView#onCameraChanged, plus `properties.isUserInteraction`.\n\n`properties.isUserInteraction` is true while a user gesture is active or the map is still\nanimating from one (fling/deceleration, double-tap zoom). Camera changes from your own code,\nlike Camera#setCamera or a following Viewport, are not user interaction.\n*signature:*`(event:{nativeEvent: OnCameraChangedEvent}) => void`"
       }
     ],
     "fileNameWithExt": "CameraGestureObserver.tsx",
@@ -1710,8 +1721,9 @@
         "values": [],
         "minimum": 0,
         "maximum": 1,
+        "units": "meters",
         "default": 0,
-        "description": "Radius of a fill extrusion edge in meters. If not zero, rounds extrusion edges for a smoother appearance.",
+        "description": "Radius of a fill extrusion edge. If not zero, rounds extrusion edges for a smoother appearance.",
         "requires": [],
         "disabledBy": [],
         "allowedFunctionTypes": [],
@@ -1731,7 +1743,7 @@
         "minimum": 0,
         "maximum": 1,
         "default": 1,
-        "description": "The opacity of the entire fill extrusion layer. This is rendered on a perLayer, not perFeature, basis, and dataDriven styling is not available.",
+        "description": "The opacity of the entire fill extrusion layer. This is rendered on a perLayer, not perFeature, basis, and dataDriven styling is not available. When consecutive `fillExtrusion` and `building` layers are semiTransparent, they are rendered together: they occlude each other and are only transparent against other layers. If another layer type is placed between them, each layer is blended separately and later layers are visible through earlier ones.",
         "requires": [],
         "disabledBy": [],
         "allowedFunctionTypes": [],
@@ -1864,7 +1876,7 @@
         "default": 0,
         "description": "Controls the transition progress between the image variants of fillExtrusionPattern. Zero means the first variant is used, one is the second, and in between they are blended together. Both images should be the same size and have the same type (either raster or vector).",
         "requires": [
-          "linePattern"
+          "fillExtrusionPattern"
         ],
         "disabledBy": [],
         "allowedFunctionTypes": [],
@@ -2089,8 +2101,9 @@
         "type": "number",
         "values": [],
         "minimum": 0,
+        "units": "meters",
         "default": 3,
-        "description": "The extent of the ambient occlusion effect on the ground beneath the extruded buildings in meters.",
+        "description": "The extent of the ambient occlusion effect on the ground beneath the extruded buildings.",
         "requires": [
           "lights"
         ],
@@ -2194,7 +2207,7 @@
         "minimum": 0,
         "units": "meters",
         "default": 0,
-        "description": "The extent of the flood light effect on the walls of the extruded buildings in meters.",
+        "description": "The extent of the flood light effect on the walls of the extruded buildings.",
         "requires": [
           "lights"
         ],
@@ -2220,7 +2233,7 @@
         "values": [],
         "units": "meters",
         "default": 0,
-        "description": "The extent of the flood light effect on the ground beneath the extruded buildings in meters. Note: this experimental property is evaluated once per tile, during tile initialization. Changing the property value could trigger tile reload. The `featureState` styling is deprecated and will get removed soon.",
+        "description": "The extent of the flood light effect on the ground beneath the extruded buildings. Note: this experimental property is evaluated once per tile, during tile initialization. Changing the property value could trigger tile reload. The `featureState` styling is deprecated and will get removed soon.",
         "requires": [
           "lights"
         ],
@@ -2742,7 +2755,7 @@
         "default": 0,
         "description": "Controls the transition progress between the image variants of fillPattern. Zero means the first variant is used, one is the second, and in between they are blended together. Both images should be the same size and have the same type (either raster or vector).",
         "requires": [
-          "linePattern"
+          "fillPattern"
         ],
         "disabledBy": [],
         "allowedFunctionTypes": [],
@@ -2936,7 +2949,7 @@
         "minimum": 1,
         "units": "pixels",
         "default": 30,
-        "description": "Radius of influence of one heatmap point in pixels. Increasing the value makes the heatmap smoother, but less detailed. `queryRenderedFeatures` on heatmap layers will return points within this radius.",
+        "description": "Radius of influence of one heatmap point. Increasing the value makes the heatmap smoother, but less detailed. `queryRenderedFeatures` on heatmap layers will return points within this radius.",
         "requires": [],
         "disabledBy": [],
         "allowedFunctionTypes": [],
@@ -3203,6 +3216,7 @@
         "values": [],
         "minimum": 0,
         "maximum": 359,
+        "units": "degrees",
         "default": 335,
         "description": "The direction of the light source used to generate the hillshading with 0 as the top of the viewport if `hillshadeIlluminationAnchor` is set to `viewport` and due north if `hillshadeIlluminationAnchor` is set to `map` and no 3d lights enabled. If `hillshadeIlluminationAnchor` is set to `map` and 3d lights enabled, the direction from 3d lights is used instead.",
         "requires": [],
@@ -3901,8 +3915,9 @@
         "name": "lineZOffset",
         "type": "number",
         "values": [],
+        "units": "meters",
         "default": 0,
-        "description": "Vertical offset from ground, in meters. Not supported for globe projection at the moment.",
+        "description": "Vertical offset from ground. Not supported for globe projection at the moment.",
         "requires": [
           "lineElevationReference"
         ],
@@ -4025,7 +4040,6 @@
             "line-progress"
           ]
         },
-        "transition": true,
         "mbx": {
           "fullName": "layout-line-line-elevation-ground-scale",
           "name": "line-elevation-ground-scale",
@@ -4234,7 +4248,7 @@
         "minimum": 0,
         "units": "pixels",
         "default": 0,
-        "description": "Blur applied to the line, in pixels.",
+        "description": "Blur applied to the line.",
         "requires": [],
         "disabledBy": [],
         "allowedFunctionTypes": [],
@@ -4472,6 +4486,7 @@
         "type": "number",
         "values": [],
         "minimum": 0,
+        "units": "pixels",
         "default": 0,
         "description": "The width of the line border. A value of zero means no border.",
         "requires": [],
@@ -4513,6 +4528,29 @@
         "mbx": {
           "fullName": "paint-line-line-border-color",
           "name": "line-border-color",
+          "namespace": "paint"
+        }
+      },
+      {
+        "name": "lineBorderGradient",
+        "type": "color",
+        "values": [],
+        "description": "A gradient used to color the border of a line feature at various distances along its length. Defined using a `step` or `interpolate` expression which outputs a color for each corresponding `lineProgress` input value. `lineProgress` is a percentage of the line feature's total length as measured on the webmercator projected coordinate plane (a `number` between `0` and `1`). Takes precedence over `lineBorderColor`. Has no effect unless `lineBorderWidth` is greater than zero. Can only be used with GeoJSON sources that specify `\"lineMetrics\": true`.",
+        "requires": [],
+        "disabledBy": [
+          "linePattern"
+        ],
+        "allowedFunctionTypes": [],
+        "expression": {
+          "interpolated": true,
+          "parameters": [
+            "line-progress"
+          ]
+        },
+        "transition": false,
+        "mbx": {
+          "fullName": "paint-line-line-border-gradient",
+          "name": "line-border-gradient",
           "namespace": "paint"
         }
       },
@@ -5627,7 +5665,7 @@
           "funcSignature": "(feature:GeoJSON.Feature) => void"
         },
         "default": "none",
-        "description": "This event is triggered whenever the currently displayed map region is changing.\n\n- `feature`: `PointFeature`  - The geojson point feature at the camera center, properties contains zoomLevel, visibleBounds\n*signature:*`(feature:GeoJSON.Feature) => void`"
+        "description": "This event is triggered whenever the currently displayed map region is changing.\n`properties.isUserInteraction` is deprecated, use CameraGestureObserver#onCameraChanged to tell user gestures from programmatic camera changes.\n\n- `feature`: `PointFeature`  - The geojson point feature at the camera center, properties contains zoomLevel, visibleBounds\n*signature:*`(feature:GeoJSON.Feature) => void`"
       },
       {
         "name": "onRegionDidChange",
@@ -5862,6 +5900,34 @@
         "type": "boolean",
         "default": "false",
         "description": "FIX ME NO DESCRIPTION"
+      },
+      {
+        "name": "allowZElevate",
+        "required": false,
+        "type": "boolean",
+        "default": "none",
+        "description": "Places the marker on the roof of the 3D building (fill extrusion or model) under it\ninstead of at ground level. Defaults to false."
+      },
+      {
+        "name": "priority",
+        "required": false,
+        "type": "number",
+        "default": "none",
+        "description": "Placement order among markers: higher priority markers are placed first, so they win\nwhen markers collide and `allowOverlap` is false. Negative values are allowed.\nDefaults to 0. Use either this or `isSelected`, not both."
+      },
+      {
+        "name": "minZoom",
+        "required": false,
+        "type": "number",
+        "default": "none",
+        "description": "Minimum zoom level, in the range [0, 22], at which the marker is shown. Defaults to 0."
+      },
+      {
+        "name": "maxZoom",
+        "required": false,
+        "type": "number",
+        "default": "none",
+        "description": "Maximum zoom level, in the range [0, 22], at which the marker is shown. Defaults to 22."
       },
       {
         "name": "stopGesturePropagation",
@@ -6132,12 +6198,13 @@
         "name": "modelTranslation",
         "type": "array<number>",
         "values": [],
+        "units": "meters",
         "default": [
           0,
           0,
           0
         ],
-        "description": "The translation of the model in meters in form of [longitudal, latitudal, altitude] offsets.",
+        "description": "The translation of the model in form of [longitudal, latitudal, altitude] offsets.",
         "requires": [],
         "disabledBy": [],
         "allowedFunctionTypes": [],
@@ -6991,7 +7058,7 @@
         "name": "rasterColor",
         "type": "color",
         "values": [],
-        "description": "Defines a color map by which to colorize a raster layer, parameterized by the `[\"rasterValue\"]` expression and evaluated at 256 uniformly spaced steps over the range specified by `rasterColorRange`.",
+        "description": "Defines the color ramp used to colorize a raster layer, parameterized by the `[\"rasterValue\"]` expression and evaluated over the range specified by `rasterColorRange`. Raster values are spaced evenly across the range by default.",
         "requires": [],
         "disabledBy": [],
         "allowedFunctionTypes": [],
@@ -7018,7 +7085,7 @@
           0.0722,
           0
         ],
-        "description": "When `rasterColor` is active, specifies the combination of source RGB channels used to compute the raster value. Computed using the equation `mix.r * src.r + mix.g * src.g + mix.b * src.b + mix.a`. The first three components specify the mix of source red, green, and blue channels, respectively. The fourth component serves as a constant offset and is *not* multipled by source alpha. Source alpha is instead carried through and applied as opacity to the colorized result. Default value corresponds to RGB luminosity.",
+        "description": "When `rasterColor` is active, specifies how the raster value is computed from a non`rasterarray` source's channels, using the equation `mix.r * src.r + mix.g * src.g + mix.b * src.b + mix.a`. The first three components weight the source's red, green, and blue channels; the fourth is a constant offset and is not multiplied by source alpha. Source alpha is carried through and applied as opacity to the colorized result. The default corresponds to RGB luminosity. `rasterarray` sources ignore this property, as their raster value is decoded directly from the source data.",
         "requires": [
           "rasterColor"
         ],
@@ -7041,7 +7108,7 @@
         "name": "rasterColorRange",
         "type": "array<number>",
         "values": [],
-        "description": "When `rasterColor` is active, specifies the range over which `rasterColor` is tabulated. Units correspond to the computed raster value via `rasterColorMix`. For `rasterarray` sources, if `rasterColorRange` is unspecified, the source's stated data range is used.",
+        "description": "When `rasterColor` is active, specifies the range of raster values mapped onto the color ramp, from the start of the ramp (low bound) to its end (high bound). For `rasterarray` sources the raster value is the decoded source data in the source's own units, and the source's stated data range is used when this property is unspecified. For other raster sources the raster value is computed from the source's channels via `rasterColorMix`. Defaults to `[0, 1]` when no range is otherwise available.",
         "requires": [
           "rasterColor"
         ],
@@ -7057,6 +7124,36 @@
         "mbx": {
           "fullName": "paint-raster-raster-color-range",
           "name": "raster-color-range",
+          "namespace": "paint"
+        }
+      },
+      {
+        "name": "rasterColorScale",
+        "type": "enum",
+        "values": [
+          {
+            "value": "linear",
+            "doc": "Raster values are spaced evenly across the color ramp."
+          },
+          {
+            "value": "log",
+            "doc": "Raster values are spaced logarithmically, giving more of the color ramp to smaller values. Useful for data concentrated near the low end of a wide range."
+          }
+        ],
+        "default": "linear",
+        "description": "When `rasterColor` is active, specifies how raster values are distributed across the color ramp over the range specified by `rasterColorRange`.",
+        "requires": [
+          "rasterColor"
+        ],
+        "disabledBy": [],
+        "allowedFunctionTypes": [],
+        "expression": {
+          "interpolated": false,
+          "parameters": []
+        },
+        "mbx": {
+          "fullName": "paint-raster-raster-color-scale",
+          "name": "raster-color-scale",
           "namespace": "paint"
         }
       },
@@ -7280,8 +7377,9 @@
         "type": "number",
         "values": [],
         "minimum": 0,
+        "units": "meters",
         "default": 0,
-        "description": "Defines an uniform elevation from the base specified in rasterElevationReference, in meters.",
+        "description": "Defines an uniform elevation from the base specified in rasterElevationReference.",
         "requires": [],
         "disabledBy": [],
         "allowedFunctionTypes": [],
@@ -7834,6 +7932,13 @@
         "description": "[`mapbox-gl` (v8) implementation only]\nSpecifies custom properties on the generated clusters if clustering\nis enabled, aggregating values from clustered points.\n\nHas the form `{ \"property_name\": [operator, map_expression]}`, where\n `operator` is a custom reduce expression that references a special `[\"accumulated\"]` value -\n  it accumulates the property value from clusters/points the cluster contains\n `map_expression` produces the value of a single point\n\nExample: `{ \"resultingSum\": [[\"+\", [\"accumulated\"], [\"get\", \"resultingSum\"]], [\"get\", \"scalerank\"]] }`"
       },
       {
+        "name": "promoteId",
+        "required": false,
+        "type": "string \\| Expression",
+        "default": "none",
+        "description": "A feature property to use as the feature id, for example with `setFeatureState`.\nEither a property name or an expression that evaluates to the id."
+      },
+      {
         "name": "maxZoomLevel",
         "required": false,
         "type": "number",
@@ -8129,8 +8234,9 @@
         "values": [],
         "minimum": 0,
         "maximum": 180,
+        "units": "degrees",
         "default": 90,
-        "description": "The angular distance (measured in degrees) from `skyGradientCenter` up to which the gradient extends. A value of 180 causes the gradient to wrap around to the opposite direction from `skyGradientCenter`.",
+        "description": "The angular distance from `skyGradientCenter` up to which the gradient extends. A value of 180 causes the gradient to wrap around to the opposite direction from `skyGradientCenter`.",
         "requires": [],
         "disabledBy": [],
         "allowedFunctionTypes": [],
@@ -9491,7 +9597,7 @@
         "name": "textVariableAnchor",
         "type": "array<enum>",
         "values": [],
-        "description": "To increase the chance of placing highPriority labels on the map, you can provide an array of `textAnchor` locations: the renderer will attempt to place the label at each location, in order, before moving onto the next label. Use `textJustify: auto` to choose justification based on anchor position. To apply an offset, use the `textRadialOffset` or the twoDimensional `textOffset`.",
+        "description": "To increase the chance of placing highPriority labels on the map, you can provide an array of `textAnchor` locations: the renderer will attempt to place the label at each location, in order, before moving onto the next label. Use `textJustify: auto` to choose justification based on anchor position. To apply an offset, use the `textRadialOffset` or the twoDimensional `textOffset`. Known issue: at the moment having both `appearances` and `textVariableAnchor` in the same layer doesn't work correctly.",
         "requires": [
           "textField"
         ],
@@ -10490,8 +10596,9 @@
         "type": "number",
         "values": [],
         "minimum": 0,
+        "units": "meters",
         "default": 0,
-        "description": "Specifies an uniform elevation from the ground, in meters.",
+        "description": "Specifies an uniform elevation from the ground.",
         "requires": [],
         "disabledBy": [],
         "allowedFunctionTypes": [],
@@ -10791,6 +10898,13 @@
         "type": "string",
         "default": "none",
         "description": "An HTML or literal text string defining the buttons to be displayed in an action sheet when the\nsource is part of a map view’s style and the map view’s attribution button is pressed."
+      },
+      {
+        "name": "promoteId",
+        "required": false,
+        "type": "string \\| Expression",
+        "default": "none",
+        "description": "A feature property to use as the feature id, for example with `setFeatureState`.\nEither a property name or an expression that evaluates to the id."
       },
       {
         "name": "onPress",

@@ -285,9 +285,10 @@
           "tags": [
             "CameraGestureObserver#onMapSteady",
             "CameraGestureObserver#quietPeriodMs",
-            "CameraGestureObserver#maxIntervalMs"
+            "CameraGestureObserver#maxIntervalMs",
+            "CameraGestureObserver#onCameraChanged"
           ],
-          "docs": "\nDemonstrates how to detect when the map becomes steady after user gestures (pan, zoom, rotate). The CameraGestureObserver component fires the onMapSteady event after a configurable quiet period, providing information about the last gesture type and idle duration.\n"
+          "docs": "\nDemonstrates how to detect when the map becomes steady after user gestures (pan, zoom, rotate). The CameraGestureObserver component fires the onMapSteady event after a configurable quiet period, providing information about the last gesture type and idle duration. onCameraChanged reports whether the camera is moving because of the user.\n"
         },
         "fullPath": "example/src/examples/Map/CameraGestureObserver.tsx",
         "relPath": "Map/CameraGestureObserver.tsx",
@@ -580,9 +581,10 @@
             "MapView",
             "MapView#setFeatureState",
             "MapView#getFeatureState",
-            "MapView#removeFeatureState"
+            "MapView#removeFeatureState",
+            "ShapeSource#promoteId"
           ],
-          "docs": "\nDemonstrates modifying the feature state.\n",
+          "docs": "\nDemonstrates modifying the feature state. `promoteId` makes the `name` property the\nfeature id, so the state is keyed by name. Tap a shape to toggle its selected state.\n",
           "webSupported": true
         },
         "fullPath": "example/src/examples/V10/FeatureState.tsx",
@@ -726,6 +728,21 @@
         "fullPath": "example/src/examples/Annotations/MarkerView.tsx",
         "relPath": "Annotations/MarkerView.tsx",
         "name": "MarkerView"
+      },
+      {
+        "metadata": {
+          "title": "Marker View Placement",
+          "tags": [
+            "MarkerView",
+            "MarkerView#priority",
+            "MarkerView#minZoom",
+            "MarkerView#allowZElevate"
+          ],
+          "docs": "\nTwo overlapping markers where `priority` picks the one that is shown, a marker hidden\nbelow `minZoom`, and a marker on a 3D building that `allowZElevate` lifts to the roof.\n"
+        },
+        "fullPath": "example/src/examples/Annotations/MarkerViewPlacement.tsx",
+        "relPath": "Annotations/MarkerViewPlacement.tsx",
+        "name": "MarkerViewPlacement"
       },
       {
         "metadata": {

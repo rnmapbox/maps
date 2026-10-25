@@ -350,12 +350,15 @@ Name: `modelTranslation`
 Mapbox spec: [model-translation](https://docs.mapbox.com/style-spec/reference/layers/#paint-model-model-translation)
 
 #### Description
-The translation of the model in meters in form of [longitudal, latitudal, altitude] offsets.
+The translation of the model in form of [longitudal, latitudal, altitude] offsets.
 
 #### Type
 `array<number>`
 #### Default Value
 `[0,0,0]`
+
+#### Units
+`meters`
 
 
 #### Expression

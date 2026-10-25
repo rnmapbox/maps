@@ -147,6 +147,10 @@ public class RNMBXShapeSource : RNMBXSource {
 
     result.lineMetrics = lineMetrics
 
+    if let promoteId = promoteIdValue() {
+      result.promoteId2 = promoteId
+    }
+
     return result
   }
 

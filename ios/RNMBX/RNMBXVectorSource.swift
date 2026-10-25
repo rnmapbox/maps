@@ -33,6 +33,9 @@ public class RNMBXVectorSource : RNMBXTileSource {
     if tms {
       result.scheme = .tms
     }
+    if let promoteId = promoteIdValue() {
+      result.promoteId2 = .global(promoteId)
+    }
     return result
   }
   

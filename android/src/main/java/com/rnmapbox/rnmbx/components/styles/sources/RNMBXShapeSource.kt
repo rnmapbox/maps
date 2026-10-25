@@ -185,6 +185,7 @@ class RNMBXShapeSource(context: Context, private val mManager: RNMBXShapeSourceM
     }
 
     private fun getOptions(builder: GeoJsonSource.Builder) {
+        promoteId?.let { builder.promoteId(it) }
         if (mCluster != null) {
             builder.cluster(mCluster!!)
         }

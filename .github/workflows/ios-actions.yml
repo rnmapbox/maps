@@ -50,7 +50,7 @@ jobs:
     name: iOS Example Build ${{ inputs.NEW_ARCH && 'Fabric' || 'Paper' }} ${{ inputs.MAP_IMPL }}
     if: ${{ !inputs.SKIP }}
     # arm64 only: Metal in the iOS Simulator is unreliable on -intel runners (actions/runner-images#14836)
-    runs-on: macos-15
+    runs-on: macos-26
     timeout-minutes: ${{ inputs.E2E_MODE == 'doc-screenshots' && 120 || 55 }}
     environment: ${{ inputs.env_name }}
     env:
