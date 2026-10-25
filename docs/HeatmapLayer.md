@@ -175,7 +175,7 @@ Name: `heatmapRadius`
 Mapbox spec: [heatmap-radius](https://docs.mapbox.com/style-spec/reference/layers/#paint-heatmap-heatmap-radius)
 
 #### Description
-Radius of influence of one heatmap point in pixels. Increasing the value makes the heatmap smoother, but less detailed. `queryRenderedFeatures` on heatmap layers will return points within this radius.
+Radius of influence of one heatmap point. Increasing the value makes the heatmap smoother, but less detailed. `queryRenderedFeatures` on heatmap layers will return points within this radius.
 
 #### Type
 `number`

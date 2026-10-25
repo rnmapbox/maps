@@ -193,8 +193,6 @@ object RNMBXStyleFactory {
                 setLineCrossSlope(layer, styleValue)
               "lineElevationGroundScale" ->
                 setLineElevationGroundScale(layer, styleValue)
-                "lineElevationGroundScaleTransition" ->
-                setLineElevationGroundScaleTransition(layer, styleValue)
               "linePatternCrossFade" ->
                 style.addImage(styleValue!!, styleKey, object : OnAllImagesLoaded {
                     override fun onAllImagesLoaded() {
@@ -215,6 +213,8 @@ object RNMBXStyleFactory {
                 setLineEmissiveStrength(layer, styleValue)
                 "lineEmissiveStrengthTransition" ->
                 setLineEmissiveStrengthTransition(layer, styleValue)
+              "lineBorderGradient" ->
+                setLineBorderGradient(layer, styleValue)
               "lineOcclusionOpacity" ->
                 setLineOcclusionOpacity(layer, styleValue)
                 "lineOcclusionOpacityTransition" ->
@@ -711,6 +711,8 @@ object RNMBXStyleFactory {
                 setRasterColorRange(layer, styleValue)
                 "rasterColorRangeTransition" ->
                 setRasterColorRangeTransition(layer, styleValue)
+              "rasterColorScale" ->
+                setRasterColorScale(layer, styleValue)
               "rasterEmissiveStrength" ->
                 setRasterEmissiveStrength(layer, styleValue)
                 "rasterEmissiveStrengthTransition" ->
@@ -821,12 +823,12 @@ object RNMBXStyleFactory {
           val styleValue = style.getStyleValueForKey(styleKey)
 
           when (styleKey) {
-              "modelAllowDensityReduction" ->
-                setModelAllowDensityReduction(layer, styleValue)
               "visibility" ->
                 setVisibility(layer, styleValue)
               "modelId" ->
                 setModelId(layer, styleValue)
+              "modelAllowDensityReduction" ->
+                setModelAllowDensityReduction(layer, styleValue)
               "modelOpacity" ->
                 setModelOpacity(layer, styleValue)
                 "modelOpacityTransition" ->
@@ -1880,14 +1882,6 @@ object RNMBXStyleFactory {
       }
     }
 
-
-    fun setLineElevationGroundScaleTransition(layer: LineLayer, styleValue: RNMBXStyleValue) {
-      val transition = styleValue.transition
-      if (transition != null) {
-        layer.lineElevationGroundScaleTransition(transition);
-      }
-    }
-
     fun setLinePatternCrossFade(layer: LineLayer, styleValue: RNMBXStyleValue ) {
       if (styleValue.isExpression()) {
         val expression = styleValue.getExpression()
@@ -1973,6 +1967,24 @@ object RNMBXStyleFactory {
       val transition = styleValue.transition
       if (transition != null) {
         layer.lineEmissiveStrengthTransition(transition);
+      }
+    }
+
+    fun setLineBorderGradient(layer: LineLayer, styleValue: RNMBXStyleValue ) {
+      if (styleValue.isExpression()) {
+        val expression = styleValue.getExpression()
+        if (expression != null) {
+          layer.lineBorderGradient(expression)
+        } else {
+          Logger.e("RNMBXLine", "Expression for lineBorderGradient is null")
+        }
+      } else {
+          val value = styleValue.getInt(VALUE_KEY)
+          if (value != null) {
+            layer.lineBorderGradient(value)
+          } else {
+            Logger.e("RNMBXLine", "value for lineBorderGradient is null")
+          }
       }
     }
 
@@ -4615,6 +4627,19 @@ object RNMBXStyleFactory {
       }
     }
 
+    fun setRasterColorScale(layer: RasterLayer, styleValue: RNMBXStyleValue ) {
+      if (styleValue.isExpression()) {
+        val expression = styleValue.getExpression()
+        if (expression != null) {
+          layer.rasterColorScale(expression)
+        } else {
+          Logger.e("RNMBXRaster", "Expression for rasterColorScale is null")
+        }
+      } else {
+          layer.rasterColorScale(RasterColorScale.valueOf(styleValue.getEnumName()))
+      }
+    }
+
     fun setRasterEmissiveStrength(layer: RasterLayer, styleValue: RNMBXStyleValue ) {
       if (styleValue.isExpression()) {
         val expression = styleValue.getExpression()
@@ -4991,24 +5016,6 @@ object RNMBXStyleFactory {
       }
     }
 
-    fun setModelAllowDensityReduction(layer: ModelLayer, styleValue: RNMBXStyleValue ) {
-      if (styleValue.isExpression()) {
-        val expression = styleValue.getExpression()
-        if (expression != null) {
-          layer.modelAllowDensityReduction(expression)
-        } else {
-          Logger.e("RNMBXModel", "Expression for modelAllowDensityReduction is null")
-        }
-      } else {
-          val value = styleValue.getBoolean(VALUE_KEY)
-          if (value != null) {
-            layer.modelAllowDensityReduction(value)
-          } else {
-            Logger.e("RNMBXModel", "value for modelAllowDensityReduction is null")
-          }
-      }
-    }
-
     fun setVisibility(layer: ModelLayer, styleValue: RNMBXStyleValue ) {
         layer.visibility(Visibility.valueOf(styleValue.getEnumName()));
     }
@@ -5027,6 +5034,24 @@ object RNMBXStyleFactory {
             layer.modelId(value)
           } else {
             Logger.e("RNMBXModel", "value for modelId is null")
+          }
+      }
+    }
+
+    fun setModelAllowDensityReduction(layer: ModelLayer, styleValue: RNMBXStyleValue ) {
+      if (styleValue.isExpression()) {
+        val expression = styleValue.getExpression()
+        if (expression != null) {
+          layer.modelAllowDensityReduction(expression)
+        } else {
+          Logger.e("RNMBXModel", "Expression for modelAllowDensityReduction is null")
+        }
+      } else {
+          val value = styleValue.getBoolean(VALUE_KEY)
+          if (value != null) {
+            layer.modelAllowDensityReduction(value)
+          } else {
+            Logger.e("RNMBXModel", "value for modelAllowDensityReduction is null")
           }
       }
     }

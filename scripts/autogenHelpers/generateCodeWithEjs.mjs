@@ -329,7 +329,7 @@ function isTranslate(attrName) {
 const UnsupportedProperties = [
   'raster-particle-elevation', // should be supported in v11 11.7.0 but it's not yet implemented in SDK
 
-  'raster-elevation-reference', // spec says ios 11.19.0 but not present in SDK 11.23.1
+  'raster-elevation-reference', // spec says ios 11.19.0 but not present in SDK 11.33.0
 ];
 
 // Properties marked as private in the style-spec but supported by native SDKs

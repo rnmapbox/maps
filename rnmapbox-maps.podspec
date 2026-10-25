@@ -9,7 +9,7 @@
 #           url: "https://github.com/mapbox/mapbox-maps-ios.git",
 #           requirement: {
 #             kind: 'exactVersion',
-#             version: '11.23.1',
+#             version: '11.33.0',
 #           },
 #           product_name: "MapboxMaps",
 #           link: false, # only compile against the product, another pod links it (e.g. through the Navigation SDK)
