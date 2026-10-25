@@ -271,6 +271,7 @@ open class RNMBXMapView(private val mContext: Context, var mManager: RNMBXMapVie
         mCompassImage?.let { name -> style.getStyleImage(name)?.let { setCompassImage(it) } }
         addFeaturesToMap(true)
         applyLocalizeLabels()
+        applyStyleGlyphURL()
         style.setProjection(Projection(mProjection))
     }
 
@@ -582,7 +583,8 @@ open class RNMBXMapView(private val mContext: Context, var mManager: RNMBXMapVie
         SCALEBAR(RNMBXMapView::applyScaleBar),
         COMPASS(RNMBXMapView::applyCompass),
         MAX_PITCH(RNMBXMapView::applyMaxPitch),
-        SYMBOL_SCALE_BEHAVIOR(RNMBXMapView::applySymbolScaleBehavior),;
+        SYMBOL_SCALE_BEHAVIOR(RNMBXMapView::applySymbolScaleBehavior),
+        STYLE_GLYPH_URL(RNMBXMapView::applyStyleGlyphURL),;
 
         override fun apply(mapView: RNMBXMapView) {
            _apply(mapView)
@@ -658,6 +660,19 @@ open class RNMBXMapView(private val mContext: Context, var mManager: RNMBXMapVie
         mLocaleString = localeStr
         mLocaleLayerIds = layerIds
         changes.add(Property.LOCALIZE_LABELS)
+    }
+
+    private var mStyleGlyphURL: String? = null
+
+    fun setReactStyleGlyphURL(url: String?) {
+        mStyleGlyphURL = url
+        changes.add(Property.STYLE_GLYPH_URL)
+    }
+
+    @OptIn(MapboxExperimental::class)
+    fun applyStyleGlyphURL() {
+        val url = mStyleGlyphURL ?: return
+        savedStyle?.setStyleGlyphURL(url)
     }
 
     fun setReactPreferredFramesPerSecond(preferredFramesPerSecond: Int) {

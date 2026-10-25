@@ -5533,6 +5533,13 @@
         "description": "How map symbols (icons and text) scale with the system text size setting.\n`'system'` follows the device's text size, from 0.8x up to 2.0x for accessibility sizes.\n`{ fixed: number }` uses a constant scale factor, recommended range 0.8–2.0.\nDefaults to `{ fixed: 1.0 }`.\n\n@experimental Uses an experimental Mapbox API that may change in a future SDK release."
       },
       {
+        "name": "styleGlyphURL",
+        "required": false,
+        "type": "string",
+        "default": "none",
+        "description": "Overrides the glyph URL of the style, so labels use fonts from another glyph server, e.g.\n`https://example.com/fonts/{fontstack}/{range}.pbf`. It is re-applied on every style load.\nRemoving the prop restores the style's own glyphs from the next style load.\n\n@experimental Uses an experimental Mapbox API that may change in a future SDK release."
+      },
+      {
         "name": "gestureSettings",
         "required": false,
         "type": {

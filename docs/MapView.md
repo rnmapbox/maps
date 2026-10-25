@@ -324,6 +324,19 @@ Defaults to `{ fixed: 1.0 }`.
 
 [Symbol Scale Behavior](../examples/Map/SymbolScaleBehavior)
   
+### styleGlyphURL
+
+```tsx
+string
+```
+Overrides the glyph URL of the style, so labels use fonts from another glyph server, e.g.
+`https://example.com/fonts/{fontstack}/{range}.pbf`. It is re-applied on every style load.
+Removing the prop restores the style's own glyphs from the next style load.
+
+@experimental Uses an experimental Mapbox API that may change in a future SDK release.
+
+
+  
 ### gestureSettings
 
 ```tsx
