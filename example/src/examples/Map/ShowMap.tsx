@@ -67,5 +67,7 @@ const metadata: ExampleWithMetadata['metadata'] = {
   docs: `
 Shows a map with the user location annotation enabled, and on press of the user location annotation, an alert is shown.
 `,
+  excludeFromPercy: true,
+  webSupported: true,
 };
 ShowMap.metadata = metadata;

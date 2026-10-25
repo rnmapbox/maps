@@ -12,6 +12,7 @@
 #import "rnmapbox_maps-Swift.pre.h"
 
 #import "RNMBXFollyConvert.h"
+#import "RNMBXFabricHelpers.h"
 
 
 // TODO: use generated RNMBXViewportEventEmitter, but need 0.73+ for dynamic support
@@ -34,23 +35,6 @@ class RNMBXViewportEventEmitter : public facebook::react::ViewEventEmitter {
 };
 
 using namespace facebook::react;
-
-NSNumber* convertDynamicToOptional_boolean(const folly::dynamic &dyn, NSString* propertyName) {
-  switch (dyn.type()) {
-    case folly::dynamic::NULLT:
-      return NULL;
-    case folly::dynamic::BOOL:
-      return [NSNumber numberWithBool:dyn.getBool()];
-    default:
-      std::stringstream ss;
-      ss << dyn;
-      [RNMBXLogger error:[NSString stringWithFormat:@"Property %@ expected to be a boolean or nil but was: $d",
-                          propertyName,
-                          ss.str().c_str()
-                         ]];
-      return NULL;
-  }
-}
 
 @implementation RNMBXViewportComponentView {
     RNMBXViewport *_view;
@@ -106,7 +90,7 @@ NSNumber* convertDynamicToOptional_boolean(const folly::dynamic &dyn, NSString* 
   const auto &newViewProps = static_cast<const RNMBXViewportProps &>(*props);
 
   if (!oldProps.get() || oldViewProps.transitionsToIdleUponUserInteraction != newViewProps.transitionsToIdleUponUserInteraction) {
-    _view.transitionsToIdleUponUserInteraction = convertDynamicToOptional_boolean(newViewProps.transitionsToIdleUponUserInteraction, @"transitionsToIdleUponUserInteraction");
+    _view.transitionsToIdleUponUserInteraction = RNMBXConvertFollyDynamicToId(newViewProps.transitionsToIdleUponUserInteraction);
   }
   if (!oldProps.get() ||
       oldViewProps.hasStatusChanged !=

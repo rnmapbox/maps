@@ -1,4 +1,4 @@
-/* global element, by, waitFor, describe, it, expect, beforeAll, afterAll, beforeEach, afterEach */
+/* global element, by, waitFor, describe, it, beforeAll, afterAll, beforeEach, afterEach */
 
 /**
  * @file process the docs/examples.json file and take screenshots of each example and outputs it to <docRoot>/example-screenshots and <docRoot>/example-screenshots/screenshots.json
@@ -7,7 +7,7 @@
 const { mkdir, copyFile } = require('fs/promises');
 const fs = require('fs');
 const path = require('path');
-const { execSync } = require('child_process');
+const { execSync, execFileSync } = require('child_process');
 
 const { device } = require('detox');
 
@@ -19,6 +19,8 @@ const {
   screenshotsJSONPath,
   docSiteRootPath,
 } = require('../../scripts/autogenHelpers/docconfig.js');
+
+const percyScreenshotsPath = process.env.PERCY_DOC_SCREENSHOTS_DIR;
 
 /**
  * @type {import('../../scripts/autogenHelpers/examplesJsonSchema.ts').Examples}
@@ -95,6 +97,33 @@ async function saveImage(basePath, suffix = null) {
   return fullDestPath;
 }
 
+/** @type {{ frame: { width: number }, safeAreaInsets: { top: number } } | undefined} */
+let rootViewAttributes;
+
+async function readRootViewAttributes() {
+  if (!rootViewAttributes) {
+    rootViewAttributes = await element(by.type('RCTSurfaceHostingView'))
+      .atIndex(0)
+      .getAttributes();
+  }
+}
+
+// The status bar can't be fully frozen (the location arrow comes and goes), so
+// the copies sent to Percy leave it out. Cropped in a separate process, as pngjs
+// takes ~40 s per screenshot inside Jest's VM context on CI.
+async function savePercyImage(imagePath, groupName, name) {
+  const { frame, safeAreaInsets } = rootViewAttributes;
+  const destDir = path.join(percyScreenshotsPath, 'doc', groupName);
+  await mkdir(destDir, { recursive: true });
+  execFileSync(process.execPath, [
+    path.join(__dirname, 'cropTop.js'),
+    imagePath,
+    path.join(destDir, `${name}.png`),
+    String(safeAreaInsets.top),
+    String(frame.width),
+  ]);
+}
+
 async function wait(ms) {
   try {
     await waitFor(element(by.id('no-such-view')))
@@ -149,91 +178,88 @@ class ExampleScreenshots {
     screenshotsDict[basename].images.push(
       path.relative(docSiteRootPath, path.resolve(imgPath)),
     );
+    return imgPath;
   }
 }
 
-if (['true', 1, '1'].includes(process.env.SKIP_TESTS_NO_METAL)) {
-  console.debug(
-    '### Skipping tests as Metal is not available in this environment',
-  );
-  describe('dump-example-screenshots', () => {
-    it('disabled on CI (no metal support)', () => {
-      expect(true).toBe(true);
-    });
+describe('Example screenshots', () => {
+  beforeAll(async () => {
+    await device.launchApp({ permissions: { location: 'always' } });
   });
-} else {
-  describe('Example screenshots', () => {
-    beforeAll(async () => {
+  beforeEach(async () => {
+    if (shouldRestartAppBetweenTests) {
       await device.launchApp({ permissions: { location: 'always' } });
-    });
-    beforeEach(async () => {
-      if (shouldRestartAppBetweenTests) {
-        await device.launchApp({ permissions: { location: 'always' } });
-      }
-      await device.setURLBlacklist([
-        '.*tile.openstreetmap.org.*',
-        '.*mapbox.com.*',
-      ]);
-      await device.reloadReactNative();
-    });
-    afterEach(async () => {
-      if (shouldRestartAppBetweenTests) {
-        await device.terminateApp();
-      }
-    });
-
-    /** @type Screenshots */
-    const screenshots = {};
-
-    examples.forEach(
-      ({ groupName, metadata: groupMetadata, examples: examplesInGroup }) => {
-        describe(`${groupName}`, () => {
-          examplesInGroup.forEach(({ metadata, fullPath: _fullPath, name }) => {
-            if (metadata) {
-              it(`${name}`, async () => {
-                await device.setStatusBar({
-                  time: '11:34',
-                  batteryLevel: 1,
-                  batteryState: 'charged',
-                  dataNetwork: 'wifi',
-                  wifiMode: 'active',
-                  wifiBars: '3',
-                  cellularMode: 'searching',
-                });
-                await setSampleLocation();
-
-                await waitFor(element(by.text(groupMetadata.title)))
-                  .toBeVisible()
-                  .whileElement(by.id('example-list'))
-                  .scroll(200, 'down');
-                await element(by.text(groupMetadata.title)).tap();
-
-                await waitFor(element(by.text(metadata.title)))
-                  .toBeVisible()
-                  .whileElement(by.id('example-list'))
-                  .scroll(50, 'down');
-                if (metadata.disableSync) {
-                  await device.disableSynchronization();
-                }
-                await element(by.text(metadata.title)).tap();
-
-                let shots = new ExampleScreenshots(
-                  { testName: name, groupName },
-                  screenshots,
-                );
-
-                await wait(metadata.disableSync ? 3000 : 1000);
-                await shots.screenshot();
-              });
-            }
-          });
-        });
-      },
-    );
-
-    afterAll(async () => {
-      console.log('Writing screenshots.json', screenshotsJSONPath);
-      fs.writeFileSync(screenshotsJSONPath, JSON.stringify(screenshots));
-    });
+    }
+    await device.setURLBlacklist([
+      '.*tile.openstreetmap.org.*',
+      '.*mapbox.com.*',
+    ]);
+    await device.reloadReactNative();
   });
-}
+  afterEach(async () => {
+    if (shouldRestartAppBetweenTests) {
+      await device.terminateApp();
+    }
+  });
+
+  /** @type Screenshots */
+  const screenshots = {};
+
+  examples.forEach(
+    ({ groupName, metadata: groupMetadata, examples: examplesInGroup }) => {
+      describe(`${groupName}`, () => {
+        examplesInGroup.forEach(({ metadata, fullPath: _fullPath, name }) => {
+          if (metadata) {
+            it(`${name}`, async () => {
+              await device.setStatusBar({
+                time: '11:34',
+                batteryLevel: '100',
+                batteryState: 'charged',
+                dataNetwork: 'wifi',
+                wifiMode: 'active',
+                wifiBars: '3',
+                cellularMode: 'active',
+                cellularBars: '4',
+              });
+              await setSampleLocation();
+              if (percyScreenshotsPath) {
+                await readRootViewAttributes();
+              }
+
+              await waitFor(element(by.text(groupMetadata.title)))
+                .toBeVisible()
+                .whileElement(by.id('example-list'))
+                .scroll(200, 'down');
+              await element(by.text(groupMetadata.title)).tap();
+
+              await waitFor(element(by.text(metadata.title)))
+                .toBeVisible()
+                .whileElement(by.id('example-list'))
+                .scroll(50, 'down');
+              if (metadata.disableSync) {
+                await device.disableSynchronization();
+              }
+              await element(by.text(metadata.title)).tap();
+
+              let shots = new ExampleScreenshots(
+                { testName: name, groupName },
+                screenshots,
+              );
+
+              await wait(metadata.disableSync ? 3000 : 1000);
+              const imagePath = await shots.screenshot();
+              if (percyScreenshotsPath && !metadata.excludeFromPercy) {
+                await savePercyImage(imagePath, groupName, name);
+              }
+            });
+          }
+        });
+      });
+    },
+  );
+
+  afterAll(async () => {
+    console.log('Writing screenshots.json', screenshotsJSONPath);
+    fs.writeFileSync(screenshotsJSONPath, JSON.stringify(screenshots));
+  });
+});

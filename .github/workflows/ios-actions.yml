@@ -25,10 +25,17 @@ on:
         default: false
         required: false
         type: boolean
+      E2E_MODE:
+        description: "test: e2e tests and visual snapshots, doc-screenshots: capture the doc site screenshots"
+        default: test
+        required: false
+        type: string
     secrets:
       MAPBOX_ACCESS_TOKEN:
         required: true
       ENV_MAPBOX_ACCESS_TOKEN:
+        required: false
+      PERCY_TOKEN:
         required: false
 
 jobs:
@@ -42,9 +49,13 @@ jobs:
   build:
     name: iOS Example Build ${{ inputs.NEW_ARCH && 'Fabric' || 'Paper' }} ${{ inputs.MAP_IMPL }}
     if: ${{ !inputs.SKIP }}
+    # arm64 only: Metal in the iOS Simulator is unreliable on -intel runners (actions/runner-images#14836)
     runs-on: macos-15
-    timeout-minutes: 55
+    timeout-minutes: ${{ inputs.E2E_MODE == 'doc-screenshots' && 120 || 55 }}
     environment: ${{ inputs.env_name }}
+    env:
+      # Release for the doc screenshots, so they have no "Connect to Metro" banner or LogBox toasts
+      DETOX_CONFIGURATION: ${{ inputs.E2E_MODE == 'doc-screenshots' && 'ios.release.ci' || 'ios.debug.ci' }}
 
     defaults:
       run:
@@ -118,21 +129,70 @@ jobs:
         run: |
           brew tap wix/brew
           brew trust wix/brew
-          brew install applesimutils
-          brew install xcbeautify
+          for i in 1 2 3; do brew install applesimutils && break; sleep 10; done
+          applesimutils --version
+
+      # Detox's postinstall builds this into ~/Library/Detox, which isn't restored with node_modules
+      - name: Build Detox framework cache
+        if: steps.yarn-cache.outputs.cache-hit == 'true'
+        run: yarn detox build-framework-cache
 
       - name: Build for detox
         run: |
           xcodebuild -version
-          set -o pipefail && NSUnbufferedIO=YES  yarn detox build --configuration ios.debug.ci 2>&1
+          set -o pipefail && NSUnbufferedIO=YES  yarn detox build --configuration "$DETOX_CONFIGURATION" 2>&1
+
+      - name: Boot simulator
+        run: |
+          UDID=$("$GITHUB_WORKSPACE/scripts/ci/pick-ios-simulator.sh")
+          echo "DETOX_DEVICE_UDID=$UDID" >> "$GITHUB_ENV"
+          xcrun simctl boot "$UDID"
+          time xcrun simctl bootstatus "$UDID"
 
       - name: Test with detox
-        if: inputs.NEW_ARCH != 1
+        if: inputs.E2E_MODE == 'test'
         run: |
           npx detox --version
-          yarn detox test --configuration ios.debug.ci --debug-synchronization 500 --loglevel trace --record-logs all --take-screenshots all  | xcbeautify -qq --renderer github-actions
+          yarn detox test --configuration ios.debug.ci --take-screenshots failing --record-logs failing e2e/firstTest.e2e.js
+
+      # Informational only, the snapshots are compared by the percy job
+      - name: Capture visual snapshots
+        if: ${{ !cancelled() && inputs.E2E_MODE == 'test' }}
+        continue-on-error: true
+        run: yarn detox test --configuration ios.debug.ci e2e/visual.e2e.js
+
+      - name: Store visual snapshots
+        uses: actions/upload-artifact@v4
+        if: ${{ !cancelled() && inputs.E2E_MODE == 'test' }}
+        with:
+          name: visual-snapshots
+          path: example/e2e/artifacts/visual
+          if-no-files-found: ignore
+
+      # Leaves time in the job timeout to upload what was captured
+      - name: Capture doc screenshots
+        if: inputs.E2E_MODE == 'doc-screenshots'
+        timeout-minutes: 90
+        run: yarn detox test --configuration ios.release.ci e2e/docScreenshots.e2e.js
         env:
-          SKIP_TESTS_NO_METAL: ${{ inputs.MAP_IMPL == 'mapbox' || inputs.MAP_IMPL == 'mapbox11' }}
+          DOCSITE_ROOT_PATH: ${{ runner.temp }}/maps-docs
+          PERCY_DOC_SCREENSHOTS_DIR: ${{ runner.temp }}/percy-doc-screenshots
+
+      - name: Store doc screenshots
+        uses: actions/upload-artifact@v4
+        if: ${{ always() && inputs.E2E_MODE == 'doc-screenshots' }}
+        with:
+          name: doc-screenshots
+          path: ${{ runner.temp }}/maps-docs/examples-screenshots
+          if-no-files-found: ignore
+
+      - name: Store Percy doc screenshots
+        uses: actions/upload-artifact@v4
+        if: ${{ always() && inputs.E2E_MODE == 'doc-screenshots' }}
+        with:
+          name: percy-doc-screenshots
+          path: ${{ runner.temp }}/percy-doc-screenshots
+          if-no-files-found: ignore
 
       - name: Store Detox artifacts on test failure
         uses: actions/upload-artifact@v4
@@ -140,3 +200,51 @@ jobs:
         with:
           name: detox-artifacts
           path: example/artifacts
+
+  percy:
+    name: Percy visual snapshots
+    needs: build
+    # Informational: never fails CI, and runs only where the secret is available
+    # (pushes to main, same-repo PRs, manual runs) so PR builds compare with main.
+    if: >-
+      !cancelled() && !inputs.SKIP && inputs.E2E_MODE == 'test' &&
+      (github.event_name == 'workflow_dispatch' ||
+       (github.event_name == 'push' && github.ref == 'refs/heads/main') ||
+       (github.event_name == 'pull_request' && github.event.pull_request.head.repo.full_name == github.repository))
+    runs-on: ubuntu-latest
+    continue-on-error: true
+    steps:
+      - name: Check for PERCY_TOKEN
+        id: token
+        env:
+          PERCY_TOKEN: ${{ secrets.PERCY_TOKEN }}
+        run: |
+          if [ -n "$PERCY_TOKEN" ]; then
+            echo "present=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "PERCY_TOKEN is not set, skipping the Percy upload"
+          fi
+
+      - uses: actions/download-artifact@v4
+        if: steps.token.outputs.present == 'true'
+        continue-on-error: true
+        with:
+          name: visual-snapshots
+          path: visual
+
+      - uses: actions/setup-node@v4
+        if: steps.token.outputs.present == 'true'
+        with:
+          node-version: ${{ inputs.NVMRC }}
+
+      - name: Upload to Percy
+        if: steps.token.outputs.present == 'true' && hashFiles('visual/*.png') != ''
+        continue-on-error: true
+        run: npx --yes @percy/cli@1.32.11 upload --strip-extensions visual
+        env:
+          PERCY_TOKEN: ${{ secrets.PERCY_TOKEN }}
+          PERCY_BRANCH: ${{ github.head_ref || github.ref_name }}
+          PERCY_COMMIT: ${{ github.event.pull_request.head.sha || github.sha }}
+          PERCY_PULL_REQUEST: ${{ github.event.pull_request.number }}
+          PERCY_TARGET_BRANCH: main
+          PERCY_CLIENT_ERROR_LOGS: false

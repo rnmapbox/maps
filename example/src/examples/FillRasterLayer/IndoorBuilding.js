@@ -102,5 +102,6 @@ const metadata = {
   title: 'Indoor Building Map',
   tags: [],
   docs: '',
+  webSupported: true,
 };
 IndoorBuilding.metadata = metadata;

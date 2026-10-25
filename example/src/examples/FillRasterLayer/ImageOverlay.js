@@ -121,5 +121,7 @@ const metadata = {
   tags: ['RasterLayer', 'ImageSource'],
   docs: '',
   disableSync: true,
+  excludeFromPercy: true,
+  webSupported: true,
 };
 ImageOverlay.metadata = metadata;

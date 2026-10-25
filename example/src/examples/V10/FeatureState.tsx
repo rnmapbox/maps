@@ -142,6 +142,7 @@ const metadata: ExampleWithMetadata['metadata'] = {
   docs: `
 Demonstrates modifying the feature state.
 `,
+  webSupported: true,
 };
 
 FeatureState.metadata = metadata;

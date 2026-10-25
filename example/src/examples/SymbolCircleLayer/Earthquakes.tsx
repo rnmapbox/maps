@@ -256,6 +256,7 @@ Renders earthquake with clustering.
 
 Click a cluster to show list of contents in the cluster \`getClusterLeaves\`.
 `,
+  webSupported: true,
 };
 
 (Earthquakes as unknown as ExampleWithMetadata).metadata = metadata;

@@ -1,4 +1,8 @@
-import type { NativeStackScreenProps } from '@react-navigation/native-stack';
+import type { ParamListBase, PathConfigMap } from '@react-navigation/native';
+import {
+  createNativeStackNavigator,
+  type NativeStackScreenProps,
+} from '@react-navigation/native-stack';
 import { Icon } from '@rneui/base';
 import React, { useState, useCallback, useEffect } from 'react';
 import {
@@ -38,16 +42,10 @@ import BugReportExampleTS from '../examples/BugReportExampleTS';
 import CompilerTestExample from '../examples/CompilerTestExample';
 // Cache Management
 import * as CacheOffline from '../examples/CacheOffline';
+// Screens driven by the Detox tests in example/e2e
+import * as E2E from '../examples/E2E';
 // V10
 import * as V10 from '../examples/V10';
-/*
-import CameraAnimation from '../examples/V10/CameraAnimation';
-import GlobeProjection from '../examples/V10/GlobeProjection';
-import MapHandlers from '../examples/V10/MapHandlers';
-import Markers from '../examples/V10/Markers';
-import QueryTerrainElevation from '../examples/V10/QueryTerrainElevation';
-import TerrainSkyAtmosphere from '../examples/V10/TerrainSkyAtmosphere';
-*/
 // V11
 import StyleImportConfig from '../examples/V11/StyleImportConfig';
 import RasterParticle from '../examples/V11/RasterParticle';
@@ -100,140 +98,64 @@ const styles = StyleSheet.create({
   },
 });
 
-type NavigationType = 'Group' | 'Item';
+export type ItemProps = NativeStackScreenProps<ParamListBase>;
 
-type ItemComponentProps = BaseExampleProps;
+type ItemComponent = React.ComponentType<Partial<BaseExampleProps>>;
 
-type ItemComponent = React.ComponentType<Partial<ItemComponentProps>>;
+const Stack = createNativeStackNavigator();
 
-interface ExampleNode {
-  label: string;
-  navigationType: NavigationType;
-  path: string[];
+const screenOptions = { gestureEnabled: false, headerShown: false };
 
-  updateIfNeeded(updated: () => void): void;
-  setParent(parent: string[]): void;
-  find(path: string[]): ExampleNode | undefined;
+class ExampleItem {
+  Component: ItemComponent;
+  group?: ExampleGroup;
+
+  constructor(
+    readonly label: string,
+    readonly name: string,
+    Component: unknown,
+  ) {
+    this.Component = Component as ItemComponent;
+  }
+
+  get route() {
+    return this.group ? `${this.group.name}/${this.name}` : this.name;
+  }
 }
 
-class MostRecentExampleItem implements ExampleNode {
-  label: string;
-  navigationType: NavigationType;
-  path: string[];
+class ExampleGroup {
+  listRoute: string;
 
-  constructor() {
-    this.label = 'Most recent';
-    this.navigationType = 'Item';
-    this.path = [];
+  constructor(
+    readonly label: string,
+    readonly name: string,
+    readonly items: ExampleItem[],
+  ) {
+    this.listRoute = `${name}/List`;
+    items.forEach((item) => {
+      item.group = this;
+    });
   }
+}
 
-  setParent(parent: string[]) {
-    this.path = [...parent, this.label];
-  }
-
-  find(path: string[]) {
-    if (path.length === 1 && path[0] === this.label) {
-      return this;
-    } else {
-      return undefined;
-    }
-  }
+class MostRecentExampleItem {
+  label = 'Most recent';
+  item?: ExampleItem;
 
   updateIfNeeded(updated: () => void): void {
     (async () => {
-      const pathJSON = await AsyncStorage.getItem(MostRecentExampleKey);
-      if (pathJSON) {
-        const path = JSON.parse(pathJSON);
-        this.label = `Most recent: ${path.slice(-1)}`;
-        this.path = path;
+      const route = await AsyncStorage.getItem(MostRecentExampleKey);
+      const item = route ? itemsByRoute[route] : undefined;
+      if (item) {
+        this.label = `Most recent: ${item.label}`;
+        this.item = item;
         updated();
       }
     })();
   }
 }
 
-class ExampleItem implements ExampleNode {
-  label: string;
-  Component: ItemComponent;
-  navigationType: NavigationType;
-  path: string[];
-
-  constructor(label: string, Component: unknown) {
-    this.label = label;
-    this.Component = Component as ItemComponent;
-    this.navigationType = 'Item';
-    this.path = [label];
-  }
-
-  setParent(parent: string[]) {
-    this.path = [...parent, this.label];
-  }
-
-  find(path: string[]) {
-    if (path.length === 1 && path[0] === this.label) {
-      return this;
-    } else {
-      return undefined;
-    }
-  }
-
-  async getPath(): Promise<string[]> {
-    return this.path;
-  }
-
-  updateIfNeeded(_updated: () => void): void {}
-}
-
-type RootStackParamList = {
-  Group: { path: string[] };
-  Item: { path: string[] };
-  Earthquakes: { path: string[] };
-};
-
-type GroupProps = NativeStackScreenProps<RootStackParamList, 'Group'>;
-export type ItemProps = NativeStackScreenProps<RootStackParamList, 'Item'>;
-
-class ExampleGroup implements ExampleNode {
-  label: string;
-  navigationType: NavigationType;
-  path: string[];
-  items: ExampleNode[];
-
-  constructor(label: string, items: ExampleNode[]) {
-    this.label = label;
-    this.items = items;
-    this.navigationType = 'Group';
-    this.path = [label];
-    this.setParent([]);
-  }
-
-  setParent(parent: string[]) {
-    this.path = [...parent, this.label];
-    this.items.forEach((i) => i.setParent(this.path));
-  }
-
-  find(path: string[]): ExampleNode | undefined {
-    const [root, ...rest] = path;
-    if (root === this.label) {
-      if (rest.length > 0) {
-        return this.items.reduce<ExampleNode | undefined>(
-          (prev, act) => prev || act.find(rest),
-          undefined,
-        );
-      } else {
-        return this;
-      }
-    } else {
-      return undefined;
-    }
-  }
-
-  async getPath(): Promise<string[]> {
-    return this.path;
-  }
-
-  updateIfNeeded(_updated: () => void): void {}
-}
+type ExampleNode = ExampleItem | ExampleGroup | MostRecentExampleItem;
 
 const PageWrapper = (Component: ItemComponent) => (props: BaseExampleProps) => (
   <Page
@@ -254,15 +176,20 @@ function example(
       page?: boolean;
     };
   },
-  title: string | undefined = undefined,
+  name: string,
 ) {
   return new ExampleItem(
-    Component?.metadata?.title ?? title ?? 'n/a',
+    Component?.metadata?.title ?? name,
+    name,
     Component?.metadata?.page ? Component : PageWrapper(Component),
   );
 }
 
+/**
+ * @param name the directory name of the group, matching `groupName` in docs/examples.json
+ */
 function exampleGroup(
+  name: string,
   group: { [key: `${UpercaseLetter}${string}`]: ItemComponent } & {
     metadata: { title: string };
   },
@@ -271,9 +198,8 @@ function exampleGroup(
 
   return new ExampleGroup(
     metadata.title,
-    Object.entries(components).map(([key, value]) => {
-      return example(value, key);
-    }),
+    name,
+    Object.entries(components).map(([key, value]) => example(value, key)),
   );
 }
 
@@ -285,44 +211,76 @@ const BugReportPage =
     </Page>
   );
 
-const Examples = new ExampleGroup('React Native Mapbox', [
-  new MostRecentExampleItem(),
-  new ExampleItem('Bug Report Template', BugReportPage(BugReportExample)),
-  new ExampleItem('Bug Report Template TS', BugReportPage(BugReportExampleTS)),
-  new ExampleItem('React Compiler Test', BugReportPage(CompilerTestExample)),
-  exampleGroup(V10),
-  new ExampleGroup('V11', [
-    example(StyleImportConfig),
-    example(RasterParticle),
-    example(SnowAndRain),
-  ]),
-  exampleGroup(Map),
-  exampleGroup(Camera),
-  exampleGroup(UserLocation),
-  exampleGroup(SymbolCircleLayer),
-  exampleGroup(FillRasterLayer),
-  exampleGroup(LineLayer),
-  exampleGroup(Annotations),
-  exampleGroup(Animations),
-  exampleGroup(Web),
-  exampleGroup(CacheOffline),
-]);
+const mostRecent = new MostRecentExampleItem();
 
-function ExampleGroupComponent({
+const Examples: ExampleNode[] = [
+  mostRecent,
+  new ExampleItem(
+    'Bug Report Template',
+    'BugReportExample',
+    BugReportPage(BugReportExample),
+  ),
+  new ExampleItem(
+    'Bug Report Template TS',
+    'BugReportExampleTS',
+    BugReportPage(BugReportExampleTS),
+  ),
+  new ExampleItem(
+    'React Compiler Test',
+    'CompilerTestExample',
+    BugReportPage(CompilerTestExample),
+  ),
+  exampleGroup('V10', V10),
+  new ExampleGroup('V11', 'V11', [
+    example(StyleImportConfig, 'StyleImportConfig'),
+    example(RasterParticle, 'RasterParticle'),
+    example(SnowAndRain, 'SnowAndRain'),
+  ]),
+  exampleGroup('Map', Map),
+  exampleGroup('Camera', Camera),
+  exampleGroup('UserLocation', UserLocation),
+  exampleGroup('SymbolCircleLayer', SymbolCircleLayer),
+  exampleGroup('FillRasterLayer', FillRasterLayer),
+  exampleGroup('LineLayer', LineLayer),
+  exampleGroup('Annotations', Annotations),
+  exampleGroup('Animations', Animations),
+  exampleGroup('Web', Web),
+  exampleGroup('CacheOffline', CacheOffline),
+  exampleGroup('E2E', E2E),
+];
+
+const itemsByRoute: Record<string, ExampleItem> = {};
+const groupsByRoute: Record<string, ExampleGroup> = {};
+Examples.forEach((node) => {
+  if (node instanceof ExampleGroup) {
+    groupsByRoute[node.name] = node;
+    groupsByRoute[node.listRoute] = node;
+    node.items.forEach((item) => (itemsByRoute[item.route] = item));
+  } else if (node instanceof ExampleItem) {
+    itemsByRoute[node.route] = node;
+  }
+});
+
+function ExampleList({
   items,
   navigation,
   showBack,
   title,
 }: {
   items: ExampleNode[];
-  navigation: GroupProps['navigation'];
+  navigation: ItemProps['navigation'];
   showBack?: boolean;
   title: string;
 }) {
-  async function itemPress(item: ExampleNode) {
-    const { path } = item;
-    if (path.length > 0) {
-      navigation.push(item.navigationType, { path });
+  function itemPress(node: ExampleNode) {
+    if (node instanceof ExampleGroup) {
+      navigation.push(node.name);
+    } else if (node instanceof ExampleItem) {
+      navigation.push(node.route);
+    } else if (node.item?.group) {
+      navigation.push(node.item.group.name, { screen: node.item.route });
+    } else if (node.item) {
+      navigation.push(node.item.route);
     }
   }
 
@@ -351,10 +309,8 @@ function ExampleGroupComponent({
   const forceUpdate = useCallback(() => updateState({}), []);
 
   useEffect(() => {
-    items.forEach((item) => {
-      item.updateIfNeeded(forceUpdate);
-    });
-  }, [items, forceUpdate]);
+    mostRecent.updateIfNeeded(forceUpdate);
+  }, [forceUpdate]);
 
   return (
     <View style={sheet.matchParent}>
@@ -372,42 +328,44 @@ function ExampleGroupComponent({
   );
 }
 
-export const Group = ({ route, navigation }: GroupProps) => {
-  const path = route?.params?.path || [Examples.label];
-  const item = Examples.find(path);
-  if (!(item instanceof ExampleGroup)) {
-    throw Error(`error:Expected group not node! path:${path} item:${item}`);
-  }
-  const { items } = item;
+const Home = ({ navigation }: ItemProps) => (
+  <ExampleList
+    title="React Native Mapbox"
+    items={Examples}
+    navigation={navigation}
+  />
+);
+
+const GroupList = ({ route, navigation }: ItemProps) => {
+  const { label, items } = groupsByRoute[route.name]!;
   return (
-    <ExampleGroupComponent
-      items={items}
-      navigation={navigation}
-      showBack={path.length > 1}
-      title={item.label}
-    />
+    <ExampleList title={label} items={items} navigation={navigation} showBack />
   );
 };
 
-export const Item = ({ route, navigation }: ItemProps) => {
+const GroupNavigator = ({ route }: ItemProps) => {
+  const { label, listRoute, items } = groupsByRoute[route.name]!;
+  return (
+    <Stack.Navigator initialRouteName={listRoute} screenOptions={screenOptions}>
+      <Stack.Screen
+        name={listRoute}
+        component={GroupList}
+        options={{ title: label }}
+      />
+      {items.map(itemScreen)}
+    </Stack.Navigator>
+  );
+};
+
+const ExampleScreen = ({ route, navigation }: ItemProps) => {
+  const { label, Component } = itemsByRoute[route.name]!;
   const onDismissExample = useCallback(() => {
     navigation.goBack();
   }, [navigation]);
 
   useEffect(() => {
-    AsyncStorage.setItem(
-      MostRecentExampleKey,
-      JSON.stringify(route.params.path),
-    );
-  }, [route.params.path]);
-  const { path } = route.params;
-  const item = Examples.find(path);
-  if (!(item instanceof ExampleItem)) {
-    throw Error(
-      `error:Expected item not group|undefined! path:${path} item:${item}`,
-    );
-  }
-  const { label, Component } = item;
+    AsyncStorage.setItem(MostRecentExampleKey, route.name);
+  }, [route.name]);
 
   return (
     <Component
@@ -417,3 +375,73 @@ export const Item = ({ route, navigation }: ItemProps) => {
     />
   );
 };
+
+function itemScreen(item: ExampleItem) {
+  return (
+    <Stack.Screen
+      key={item.route}
+      name={item.route}
+      component={ExampleScreen}
+      options={{ title: item.label }}
+    />
+  );
+}
+
+/**
+ * Screens for the root stack: the example list, one nested stack per group,
+ * and the examples that aren't in a group.
+ */
+export function exampleScreens() {
+  return [
+    <Stack.Screen
+      key="Home"
+      name="Home"
+      component={Home}
+      options={{ title: 'React Native Mapbox' }}
+    />,
+    ...Examples.map((node) => {
+      if (node instanceof ExampleGroup) {
+        return (
+          <Stack.Screen
+            key={node.name}
+            name={node.name}
+            component={GroupNavigator}
+            options={{ title: node.label }}
+          />
+        );
+      }
+      return node instanceof ExampleItem ? itemScreen(node) : null;
+    }),
+  ];
+}
+
+/**
+ * Paths are `<basePath>/<groupName>/<name>`, with the names from docs/examples.json.
+ * `otherScreens` are root stack screens outside the example tree.
+ */
+export function exampleLinkingScreens(
+  basePath: string,
+  otherScreens: string[],
+): PathConfigMap<ParamListBase> {
+  const base = basePath.replace(/^\/|\/$/g, '');
+  const at = (path: string) => [base, path].filter(Boolean).join('/');
+  return Object.fromEntries([
+    ['Home', at('')],
+    ...Examples.flatMap((node) => {
+      if (node instanceof ExampleGroup) {
+        const screens = Object.fromEntries([
+          [node.listRoute, ''],
+          ...node.items.map((item) => [item.route, item.name]),
+        ]);
+        return [
+          [
+            node.name,
+            { path: at(node.name), initialRouteName: node.listRoute, screens },
+          ],
+        ];
+      }
+      return node instanceof ExampleItem ? [[node.route, at(node.route)]] : [];
+    }),
+    ...otherScreens.map((name) => [name, at(name)]),
+  ]);
+}

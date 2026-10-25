@@ -14,7 +14,7 @@ jobs:
         working-directory: maps
     steps:
       - name: Install ImageMagick
-        run: sudo apt-get install -y imagemagick
+        run: sudo apt-get update && sudo apt-get install -y --no-install-recommends imagemagick
         working-directory: /
       - name: test convert
         run: convert -version
@@ -54,6 +54,7 @@ jobs:
           # yarn skips postinstall when nothing changed, so write env.json explicitly
           node scripts/set_access_token.js
           npx expo export -p web --output-dir ../../maps-docs/static/example-app
+          node scripts/web_route_pages.js ../../maps-docs/static/example-app
         working-directory: maps
         env:
           MAPBOX_WEB_ACCESS_TOKEN: ${{ secrets.MAPBOX_WEB_ACCESS_TOKEN }}

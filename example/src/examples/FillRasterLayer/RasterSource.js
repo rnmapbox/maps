@@ -42,5 +42,7 @@ const metadata = {
   title: 'Raster Source',
   tags: [],
   docs: '',
+  excludeFromPercy: true,
+  webSupported: true,
 };
 RasterSourceExample.metadata = metadata;
