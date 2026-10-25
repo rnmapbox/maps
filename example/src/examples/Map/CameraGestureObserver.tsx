@@ -1,6 +1,12 @@
 import { useCallback, useState } from 'react';
 import { View, StyleSheet, Text } from 'react-native';
-import { MapView, Camera, CameraGestureObserver, type OnMapSteadyEvent } from '@rnmapbox/maps';
+import {
+  MapView,
+  Camera,
+  CameraGestureObserver,
+  type OnCameraChangedEvent,
+  type OnMapSteadyEvent,
+} from '@rnmapbox/maps';
 
 import { type ExampleWithMetadata } from '../common/ExampleMetadata'; // exclude-from-doc
 
@@ -44,6 +50,14 @@ const styles = StyleSheet.create({
 
 const CameraGestureObserverExample = () => {
   const [status, setStatus] = useState('Waiting for interaction...');
+  const [isUserInteraction, setIsUserInteraction] = useState(false);
+
+  const onCameraChanged = useCallback(
+    ({ nativeEvent }: { nativeEvent: OnCameraChangedEvent }) => {
+      setIsUserInteraction(nativeEvent.properties.isUserInteraction);
+    },
+    [],
+  );
 
   const onMapSteady = useCallback(({ nativeEvent } : { nativeEvent: OnMapSteadyEvent }) => {
     const { reason, idleDurationMs, lastGestureType, timestamp } = nativeEvent;
@@ -77,11 +91,15 @@ const CameraGestureObserverExample = () => {
           quietPeriodMs={200}
           maxIntervalMs={5000}
           onMapSteady={onMapSteady}
+          onCameraChanged={onCameraChanged}
         />
       </MapView>
       <View style={styles.statusBar}>
         <Text style={styles.title}>Map Steady State</Text>
         <Text style={styles.statusText}>{status}</Text>
+        <Text style={styles.statusText}>
+          User interaction: {isUserInteraction ? 'yes' : 'no'}
+        </Text>
         <Text style={styles.hint}>
           Pan, zoom, or rotate the map to see the steady state detection
         </Text>
@@ -100,9 +118,10 @@ const metadata: ExampleWithMetadata['metadata'] = {
     'CameraGestureObserver#onMapSteady',
     'CameraGestureObserver#quietPeriodMs',
     'CameraGestureObserver#maxIntervalMs',
+    'CameraGestureObserver#onCameraChanged',
   ],
   docs: `
-Demonstrates how to detect when the map becomes steady after user gestures (pan, zoom, rotate). The CameraGestureObserver component fires the onMapSteady event after a configurable quiet period, providing information about the last gesture type and idle duration.
+Demonstrates how to detect when the map becomes steady after user gestures (pan, zoom, rotate). The CameraGestureObserver component fires the onMapSteady event after a configurable quiet period, providing information about the last gesture type and idle duration. onCameraChanged reports whether the camera is moving because of the user.
 `,
 };
 CameraGestureObserverExample.metadata = metadata;

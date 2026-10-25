@@ -55,6 +55,9 @@ export type RegionPayload = {
   zoomLevel: number;
   heading: number;
   animated: boolean;
+  /**
+   * @deprecated use CameraGestureObserver#onCameraChanged `properties.isUserInteraction` instead. On Android it can stay `true` after a gesture until the map becomes idle.
+   */
   isUserInteraction: boolean;
   visibleBounds: GeoJSON.Position[];
   pitch: number;
@@ -369,6 +372,7 @@ type Props = ViewProps & {
   /**
    *
    * This event is triggered whenever the currently displayed map region is changing.
+   * `properties.isUserInteraction` is deprecated, use CameraGestureObserver#onCameraChanged to tell user gestures from programmatic camera changes.
    *
    * @param {PointFeature} feature - The geojson point feature at the camera center, properties contains zoomLevel, visibleBounds
    */
