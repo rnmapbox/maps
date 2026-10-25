@@ -43,14 +43,14 @@
       "default": 0,
       "period": 360,
       "units": "degrees",
-      "doc": "Default bearing, in degrees. The bearing is the compass direction that is \"up\"; for example, a bearing of 90° orients the map so that east is up. This value will be used only if the map has not been positioned by other means (e.g. map options or user interaction).",
+      "doc": "Default bearing. The bearing is the compass direction that is \"up\"; for example, a bearing of 90° orients the map so that east is up. This value will be used only if the map has not been positioned by other means (e.g. map options or user interaction).",
       "example": 29
     },
     "pitch": {
       "type": "number",
       "default": 0,
       "units": "degrees",
-      "doc": "Default pitch, in degrees. Zero is perpendicular to the surface, for a look straight down at the map, while a greater value like 60 looks ahead towards the horizon. The style pitch will be used only if the map has not been positioned by other means (e.g. map options or user interaction).",
+      "doc": "Default pitch. Zero is perpendicular to the surface, for a look straight down at the map, while a greater value like 60 looks ahead towards the horizon. The style pitch will be used only if the map has not been positioned by other means (e.g. map options or user interaction).",
       "example": 50
     },
     "light": {
@@ -196,7 +196,7 @@
     },
     "projection": {
       "type": "projection",
-      "doc": "The projection the map should be rendered in. Supported projections are Mercator, Globe, Albers, Equal Earth, Equirectangular (WGS84), Lambert conformal conic, Natural Earth, and Winkel Tripel. Terrain, sky and fog are supported by only Mercator and globe. CustomLayerInterface is not supported outside of Mercator.",
+      "doc": "The projection the map should be rendered in. Supported projections are Mercator, Globe, Albers, Equal Earth, Equirectangular (WGS84), Lambert conformal conic, Natural Earth, and Winkel Tripel. Terrain, sky and fog are supported by only Mercator and globe. CustomLayerInterface is supported by only Mercator and globe.",
       "example": {
         "name": "albers",
         "center": [-154, 50],
@@ -380,6 +380,16 @@
         },
         "color": {
           "doc": "The result will be coerced to a color."
+        },
+        "object": {
+          "doc": "The result will be coerced to an object.",
+          "sdk-support": {
+            "basic functionality": {
+              "js": "3.29.0",
+              "android": "11.29.0",
+              "ios": "11.29.0"
+            }
+          }
         }
       }
     },
@@ -1336,6 +1346,24 @@
          "doc": "Override the orientation of the model node in euler angles [x, y, z]."
        }
   },
+   "modelLightOverrides": {
+    "light-ambient-color": {
+      "type": "color",
+      "doc": "Override the color of ambient lights."
+    },
+    "light-ambient-intensity": {
+      "type": "number",
+      "doc": "Override the intensity of light-ambient-color (on a scale from 0 to 1)."
+    },
+     "light-directional-color": {
+      "type": "color",
+      "doc": "Override the color of directional lights."
+    },
+    "light-directional-intensity": {
+      "type": "number",
+      "doc": "Override the intensity of light-directional-color (on a scale from 0 to 1)."
+    }
+  },
   "modelNodeOverrides": {
     "*": {
        "type": "modelNodeOverride",
@@ -1392,6 +1420,11 @@
         "period": 360,
         "units": "degrees",
         "doc": "Orientation of the model in euler angles [x, y, z]."
+      },
+      "lightOverrides": {
+        "type": "modelLightOverrides",
+        "required": false,
+        "doc": "A collection of light overrides."
       },
       "nodeOverrides": {
         "type": "modelNodeOverrides",
@@ -1459,6 +1492,28 @@
       "type": "array",
       "value": "string",
       "doc": "An array of one or more tile source URLs, as in the TileJSON spec. Requires `batched-model` source type."
+    },
+    "bounds": {
+      "type": "array",
+      "value": "number",
+      "length": 4,
+      "default": [
+        -180,
+        -85.051129,
+        180,
+        85.051129
+      ],
+      "doc": "An array containing the longitude and latitude of the southwest and northeast corners of the source's bounding box in the following order: `[sw.lng, sw.lat, ne.lng, ne.lat]`. When this property is included in a source, no tiles outside of the given bounds are requested by Mapbox GL. Requires `batched-model` source type."
+    },
+    "extra_bounds": {
+      "type": "array",
+      "value": {
+        "type": "array",
+        "value": "number",
+        "length": 4,
+        "doc": "An array containing the longitude and latitude of the southwest and northeast corners of the source's bounding box in the following order: `[sw.lng, sw.lat, ne.lng, ne.lat]`."
+      },
+      "doc": "An array of additional discrete geographic regions where tiles are available. When used alongside the `bounds` property, these regions act as an additional filter - Mapbox GL will only request tiles that are both within the `bounds` and any of the regions defined in `extra_bounds`. When used independently (without `bounds`), Mapbox GL will request tiles that fall within any of the regions in `extra_bounds`. This allows for more fine-grained control over tile requests, particularly when dealing with sparse data coverage. Requires `batched-model` source type."
     },
     "models": {
       "type": "modelSourceModels",
@@ -1614,6 +1669,14 @@
             }
           }
         },
+        "placement-group": {
+          "doc": "Marks a placement priority group relative to other layers, going from lower to higher priority. Symbols from groups with higher priorities will be placed first",
+          "sdk-support": {
+            "basic functionality": {}
+          },
+          "private": true,
+          "experimental": true
+        },
         "clip": {
           "doc": "Layer that removes 3D content from map.",
           "sdk-support": {
@@ -1634,7 +1697,7 @@
     },
     "source": {
       "type": "string",
-      "doc": "Name of a source description to be used for this layer. Required for all layer types except `background` and `slot`."
+      "doc": "Name of a source description to be used for this layer. Required for all layer types except `background`, `slot`, and `placement-group`."
     },
     "source-layer": {
       "type": "string",
@@ -1679,8 +1742,7 @@
       "type": "array",
       "value": "appearance",
       "supported-layer-types": ["symbol"],
-      "experimental": true,
-      "doc": "Conditional styling applied to symbol layer features based on dynamic conditions. If multiple conditions are true, only the first matching appearance will be applied. Only properties marked with 'Works with appearances' are supported."
+      "doc": "Conditional styling applied to symbol layer features based on dynamic conditions. If multiple conditions are true, only the first matching appearance will be applied. Only properties marked with 'Works with appearances' are supported. Known issue: at the moment having both `appearances` and `text-variable-anchor` in the same layer doesn't work correctly."
     }
   },
   "appearance": {
@@ -1854,9 +1916,9 @@
       "doc": "If true, the models will be reduced in density based on the zoom level. This is useful for large datasets that may be slow to render.",
       "sdk-support": {
         "basic functionality": {
-          "js": "0.10.0",
-          "android": "2.0.1",
-          "ios": "2.0.0"
+          "js": "3.18.0",
+          "android": "11.20.0",
+          "ios": "11.18.0"
         }
       },
       "property-type": "data-constant"
@@ -2190,7 +2252,8 @@
       "default": 0,
       "minimum": 0,
       "maximum": 1,
-      "doc": "Radius of a fill extrusion edge in meters. If not zero, rounds extrusion edges for a smoother appearance.",
+      "doc": "Radius of a fill extrusion edge. If not zero, rounds extrusion edges for a smoother appearance.",
+      "units": "meters",
       "sdk-support": {
         "basic functionality": {
           "js": "3.0.0",
@@ -2312,6 +2375,7 @@
       "maximum": 20.0,
       "default": 3.1,
       "doc": "Width of a floor. Think of this as measure how wide each unit should be. This effectively determines the number of units per each floor. Note that this does not affect the ground level facades (i.e. number of windows).",
+      "units": "meters",
       "private": true,
       "property-type": "data-driven",
       "sdk-support": {
@@ -2422,7 +2486,6 @@
       "minimum": 0,
       "units": "meters",
       "doc": "The height of the procedural buildings.",
-      "transition": true,
       "private": true,
       "sdk-support": {
         "basic functionality": {
@@ -2447,7 +2510,6 @@
       "minimum": 0,
       "units": "meters",
       "doc": "The height with which to extrude the base of this layer. Must be less than or equal to `building-height`.",
-      "transition": true,
       "requires": [
         "building-height"
       ],
@@ -2476,11 +2538,10 @@
       "units": "meters",
       "default": 0,
       "minimum": 0,
-      "doc": "The extent of the flood light effect on the walls of the buildings in meters.",
+      "doc": "The extent of the flood light effect on the walls of the buildings.",
       "requires": [
         "lights"
       ],
-      "transition": true,
       "expression": {
         "interpolated": true,
         "parameters": [
@@ -2507,11 +2568,10 @@
       "private": true,
       "units": "meters",
       "default": 0,
-      "doc": "The extent of the flood light effect on the ground beneath the buildings in meters.",
+      "doc": "The extent of the flood light effect on the ground beneath the buildings.",
       "requires": [
         "lights"
       ],
-      "transition": true,
       "expression": {
         "interpolated": true,
         "parameters": [
@@ -2536,10 +2596,8 @@
       "property-type": "data-driven",
       "type": "boolean",
       "private": true,
-      "units": "meters",
       "default": false,
       "doc": "Flips the orientation of the roofs for the buildings. This only affects simple geometries. Namely buildings whose footprints form a quadrilateral. By default (false), the roof ridge takes the direction of the longer edge of the quadrilateral.",
-      "transition": true,
       "requires": [
         "building-roof-shape"
       ],
@@ -2717,8 +2775,9 @@
     },
     "line-z-offset": {
       "type": "number",
-      "doc": "Vertical offset from ground, in meters. Not supported for globe projection at the moment.",
+      "doc": "Vertical offset from ground. Not supported for globe projection at the moment.",
       "default": 0,
+      "units": "meters",
       "requires": [
         "line-elevation-reference"
       ],
@@ -2882,7 +2941,6 @@
       "requires": [
         "line-z-offset"
       ],
-      "transition": true,
       "property-type": "data-driven"
     }
   },
@@ -3070,6 +3128,7 @@
       "experimental": true,
       "sdk-support": {
         "basic functionality": {
+          "js": "3.7.0",
           "android": "11.9.0",
           "ios": "11.9.0"
         }
@@ -3970,7 +4029,7 @@
           ]
         }
       ],
-      "doc": "To increase the chance of placing high-priority labels on the map, you can provide an array of `text-anchor` locations: the renderer will attempt to place the label at each location, in order, before moving onto the next label. Use `text-justify: auto` to choose justification based on anchor position. To apply an offset, use the `text-radial-offset` or the two-dimensional `text-offset`.",
+      "doc": "To increase the chance of placing high-priority labels on the map, you can provide an array of `text-anchor` locations: the renderer will attempt to place the label at each location, in order, before moving onto the next label. Use `text-justify: auto` to choose justification based on anchor position. To apply an offset, use the `text-radial-offset` or the two-dimensional `text-offset`. Known issue: at the moment having both `appearances` and `text-variable-anchor` in the same layer doesn't work correctly.",
       "sdk-support": {
         "basic functionality": {
           "js": "0.54.0",
@@ -5614,13 +5673,18 @@
         }
       },
       "distance": {
-        "doc": "Returns the shortest distance in meters between the evaluated feature and the input geometry. The input value can be a valid GeoJSON of type `Point`, `MultiPoint`, `LineString`, `MultiLineString`, `Polygon`, `MultiPolygon`, `Feature`, or `FeatureCollection`. Distance values returned may vary in precision due to loss in precision from encoding geometries, particularly below zoom level 13.",
+        "doc": "Returns the shortest distance in meters between the evaluated feature and the input geometry. The input value can be a valid GeoJSON of type `Point`, `MultiPoint`, `LineString`, `MultiLineString`, `Polygon`, `MultiPolygon`, `Feature`, or `FeatureCollection`, or expression that returns a valid GeoJSON. Distance values returned may vary in precision due to loss in precision from encoding geometries, particularly below zoom level 13.",
         "group": "Math",
         "sdk-support": {
           "basic functionality": {
             "js": "3.0.0",
             "android": "9.2.0",
             "ios": "5.9.0"
+          },
+          "expressions support": {
+            "js": "3.29.0",
+            "android": "11.29.0",
+            "ios": "11.29.0"
           }
         }
       },
@@ -6073,7 +6137,8 @@
         ],
         "relaxZoomRestriction": true
       },
-      "doc": "An array of two number values, specifying the vertical range, measured in meters, over which the fog should gradually fade out. When both parameters are set to zero, the fog will be rendered without any vertical constraints.",
+      "doc": "An array of two number values, specifying the vertical range over which the fog should gradually fade out. When both parameters are set to zero, the fog will be rendered without any vertical constraints.",
+      "units": "meters",
       "sdk-support": {
         "basic functionality": {
           "js": "3.0.0",
@@ -6653,13 +6718,6 @@
           "doc": "Projection where objects are of the same scale regardless of whether they are far away or near to the camera. Parallel lines remains parallel and there is no vanishing point."
         }
       },
-      "transition": true,
-      "expression": {
-        "interpolated": true,
-        "parameters": [
-          "zoom"
-        ]
-      },
       "sdk-support": {
         "basic functionality": {
           "js": "3.0.0",
@@ -7178,7 +7236,7 @@
         ]
       },
       "requires": [
-        "line-pattern"
+        "fill-pattern"
       ],
       "sdk-support": {
         "basic functionality": {
@@ -7217,7 +7275,8 @@
     },
     "fill-z-offset": {
       "type": "number",
-      "doc": "Specifies an uniform elevation in meters. Note: If the value is zero, the layer will be rendered on the ground. Non-zero values will elevate the layer from the sea level, which can cause it to be rendered below the terrain.",
+      "doc": "Specifies an uniform elevation. Note: If the value is zero, the layer will be rendered on the ground. Non-zero values will elevate the layer from the sea level, which can cause it to be rendered below the terrain.",
+      "units": "meters",
       "default": 0,
       "minimum": 0,
       "transition": true,
@@ -7306,7 +7365,7 @@
       "default": 1,
       "minimum": 0,
       "maximum": 1,
-      "doc": "The opacity of the entire fill extrusion layer. This is rendered on a per-layer, not per-feature, basis, and data-driven styling is not available.",
+      "doc": "The opacity of the entire fill extrusion layer. This is rendered on a per-layer, not per-feature, basis, and data-driven styling is not available. When consecutive `fill-extrusion` and `building` layers are semi-transparent, they are rendered together: they occlude each other and are only transparent against other layers. If another layer type is placed between them, each layer is blended separately and later layers are visible through earlier ones.",
       "transition": true,
       "sdk-support": {
         "basic functionality": {
@@ -7452,7 +7511,7 @@
         ]
       },
       "requires": [
-        "line-pattern"
+        "fill-extrusion-pattern"
       ],
       "sdk-support": {
         "basic functionality": {
@@ -7679,7 +7738,8 @@
         ]
       },
       "transition": true,
-      "doc": "The extent of the ambient occlusion effect on the ground beneath the extruded buildings in meters.",
+      "doc": "The extent of the ambient occlusion effect on the ground beneath the extruded buildings.",
+      "units": "meters",
       "requires": [
         "lights"
       ],
@@ -7777,7 +7837,7 @@
       "units": "meters",
       "default": 0,
       "minimum": 0,
-      "doc": "The extent of the flood light effect on the walls of the extruded buildings in meters.",
+      "doc": "The extent of the flood light effect on the walls of the extruded buildings.",
       "requires": [
         "lights"
       ],
@@ -7808,7 +7868,7 @@
       "experimental": true,
       "units": "meters",
       "default": 0,
-      "doc": "The extent of the flood light effect on the ground beneath the extruded buildings in meters. Note: this experimental property is evaluated once per tile, during tile initialization. Changing the property value could trigger tile reload. The `feature-state` styling is deprecated and will get removed soon.",
+      "doc": "The extent of the flood light effect on the ground beneath the extruded buildings. Note: this experimental property is evaluated once per tile, during tile initialization. Changing the property value could trigger tile reload. The `feature-state` styling is deprecated and will get removed soon.",
       "requires": [
         "lights"
       ],
@@ -8033,7 +8093,7 @@
       "default": 1,
       "minimum": 0,
       "maximum": 1,
-      "doc": "The opacity of the entire procedural buildings layer. This is rendered on a per-layer, not per-feature, basis, and data-driven styling is not available.",
+      "doc": "The opacity of the entire procedural buildings layer. This is rendered on a per-layer, not per-feature, basis, and data-driven styling is not available. When consecutive `fill-extrusion` and `building` layers are semi-transparent, they are rendered together: they occlude each other and are only transparent against other layers. If another layer type is placed between them, each layer is blended separately and later layers are visible through earlier ones.",
       "transition": true,
       "private": true,
       "sdk-support": {
@@ -8109,7 +8169,8 @@
         ]
       },
       "transition": true,
-      "doc": "The extent of the ambient occlusion effect on the ground beneath the procedural buildings in meters.",
+      "doc": "The extent of the ambient occlusion effect on the ground beneath the procedural buildings.",
+      "units": "meters",
       "sdk-support": {
         "basic functionality": {
           "js": "3.16.0",
@@ -8601,7 +8662,7 @@
       "minimum": 0,
       "transition": true,
       "units": "pixels",
-      "doc": "Blur applied to the line, in pixels.",
+      "doc": "Blur applied to the line.",
       "sdk-support": {
         "basic functionality": {
           "js": "0.10.0",
@@ -8882,11 +8943,11 @@
     },
     "line-border-width": {
       "type": "number",
-      "private": true,
       "doc": "The width of the line border. A value of zero means no border.",
       "default": 0.0,
       "minimum": 0.0,
       "transition": true,
+      "units": "pixels",
       "sdk-support": {
         "basic functionality": {
           "js": "3.0.0",
@@ -8911,7 +8972,6 @@
     },
     "line-border-color": {
       "type": "color",
-      "private": true,
       "doc": "The color of the line border. If line-border-width is greater than zero and the alpha value of this color is 0 (default), the color for the border will be selected automatically based on the line color.",
       "default": "rgba(0, 0, 0, 0)",
       "use-theme": true,
@@ -8937,6 +8997,48 @@
         ]
       },
       "property-type": "data-driven"
+    },
+    "line-border-gradient": {
+      "type": "color",
+      "experimental": true,
+      "doc": "A gradient used to color the border of a line feature at various distances along its length. Defined using a `step` or `interpolate` expression which outputs a color for each corresponding `line-progress` input value. `line-progress` is a percentage of the line feature's total length as measured on the webmercator projected coordinate plane (a `number` between `0` and `1`). Takes precedence over `line-border-color`. Has no effect unless `line-border-width` is greater than zero. Can only be used with GeoJSON sources that specify `\"lineMetrics\": true`.",
+      "example": [
+        "step",
+        [
+          "line-progress"
+        ],
+        "blue",
+        0.5,
+        "gray"
+      ],
+      "use-theme": true,
+      "transition": false,
+      "requires": [
+        {
+          "!": "line-pattern"
+        },
+        {
+          "source": "geojson",
+          "has": {
+            "lineMetrics": true
+          }
+        }
+      ],
+      "sdk-support": {
+        "basic functionality": {
+          "js": "3.28.0",
+          "android": "11.28.0",
+          "ios": "11.28.0"
+        },
+        "data-driven styling": {}
+      },
+      "expression": {
+        "interpolated": true,
+        "parameters": [
+          "line-progress"
+        ]
+      },
+      "property-type": "color-ramp"
     },
     "line-occlusion-opacity": {
       "type": "number",
@@ -8994,6 +9096,29 @@
       "sdk-support": {
         "basic functionality": {
           "js": "3.21.0"
+        }
+      },
+      "expression": {
+        "interpolated": true,
+        "parameters": [
+          "zoom"
+        ]
+      },
+      "property-type": "data-constant"
+    },
+    "line-cutout-depth": {
+      "type": "number",
+      "default": 0,
+      "minimum": 0,
+      "units": "meters",
+      "doc": "Depth offset along the camera. When set to a non-zero value, applied cutout opacity is 0.",
+      "experimental": true,
+      "private": true,
+      "transition": true,
+      "sdk-support": {
+        "basic functionality": {
+          "android": "11.29.0",
+          "ios": "11.29.0"
         }
       },
       "expression": {
@@ -9356,7 +9481,7 @@
       "minimum": 1,
       "transition": true,
       "units": "pixels",
-      "doc": "Radius of influence of one heatmap point in pixels. Increasing the value makes the heatmap smoother, but less detailed. `queryRenderedFeatures` on heatmap layers will return points within this radius.",
+      "doc": "Radius of influence of one heatmap point. Increasing the value makes the heatmap smoother, but less detailed. `queryRenderedFeatures` on heatmap layers will return points within this radius.",
       "sdk-support": {
         "basic functionality": {
           "js": "0.41.0",
@@ -10192,11 +10317,11 @@
     },
     "symbol-z-offset": {
       "type": "number",
-      "doc": "Specifies an uniform elevation from the ground, in meters.",
+      "doc": "Specifies an uniform elevation from the ground.",
+      "units": "meters",
       "default": 0,
       "minimum": 0,
       "transition": true,
-      "experimental": true,
       "appearance": true,
       "sdk-support": {
         "basic functionality": {
@@ -10223,6 +10348,56 @@
         ]
       },
       "property-type": "data-driven"
+    },
+    "placement-priority": {
+      "type": "number",
+      "doc": "In-group placement priority. Higher values are placed first within the symbol's placement group.",
+      "default": 0,
+      "minimum": 0,
+      "transition": false,
+      "appearance": true,
+      "expression": {
+        "interpolated": true,
+        "parameters": [
+          "zoom",
+          "pitch",
+          "feature",
+          "feature-state",
+          "measure-light",
+          "distance-from-center"
+        ]
+      },
+      "property-type": "data-driven",
+      "sdk-support": {
+        "basic functionality": {},
+        "data-driven styling": {}
+      },
+      "private": true,
+      "experimental": true
+    },
+    "placement-group": {
+      "type": "string",
+      "doc": "Assigns this symbol layer to the specified placement-group layer, placing its symbols as if they were drawn within that group. When unset, the layer's symbols use an implicitly created placement group located at the same position as the symbol layer.",
+      "transition": false,
+      "appearance": true,
+      "expression": {
+        "interpolated": false,
+        "parameters": [
+          "zoom",
+          "pitch",
+          "feature",
+          "feature-state",
+          "measure-light",
+          "distance-from-center"
+        ]
+      },
+      "property-type": "data-driven",
+      "sdk-support": {
+        "basic functionality": {},
+        "data-driven styling": {}
+      },
+      "private": true,
+      "experimental": true
     }
   },
   "paint_raster": {
@@ -10250,7 +10425,7 @@
     },
     "raster-color": {
       "type": "color",
-      "doc": "Defines a color map by which to colorize a raster layer, parameterized by the `[\"raster-value\"]` expression and evaluated at 256 uniformly spaced steps over the range specified by `raster-color-range`.",
+      "doc": "Defines the color ramp used to colorize a raster layer, parameterized by the `[\"raster-value\"]` expression and evaluated over the range specified by `raster-color-range`. Raster values are spaced evenly across the range by default.",
       "use-theme": true,
       "transition": false,
       "sdk-support": {
@@ -10290,7 +10465,7 @@
           "zoom"
         ]
       },
-      "doc": "When `raster-color` is active, specifies the combination of source RGB channels used to compute the raster value. Computed using the equation `mix.r * src.r + mix.g * src.g + mix.b * src.b + mix.a`. The first three components specify the mix of source red, green, and blue channels, respectively. The fourth component serves as a constant offset and is *not* multipled by source alpha. Source alpha is instead carried through and applied as opacity to the colorized result. Default value corresponds to RGB luminosity.",
+      "doc": "When `raster-color` is active, specifies how the raster value is computed from a non-`rasterarray` source's channels, using the equation `mix.r * src.r + mix.g * src.g + mix.b * src.b + mix.a`. The first three components weight the source's red, green, and blue channels; the fourth is a constant offset and is not multiplied by source alpha. Source alpha is carried through and applied as opacity to the colorized result. The default corresponds to RGB luminosity. `rasterarray` sources ignore this property, as their raster value is decoded directly from the source data.",
       "example": [
         0.2126,
         0.7152,
@@ -10320,7 +10495,7 @@
           "zoom"
         ]
       },
-      "doc": "When `raster-color` is active, specifies the range over which `raster-color` is tabulated. Units correspond to the computed raster value via `raster-color-mix`. For `rasterarray` sources, if `raster-color-range` is unspecified, the source's stated data range is used.",
+      "doc": "When `raster-color` is active, specifies the range of raster values mapped onto the color ramp, from the start of the ramp (low bound) to its end (high bound). For `rasterarray` sources the raster value is the decoded source data in the source's own units, and the source's stated data range is used when this property is unspecified. For other raster sources the raster value is computed from the source's channels via `raster-color-mix`. Defaults to `[0, 1]` when no range is otherwise available.",
       "example": [
         0.5,
         10
@@ -10330,6 +10505,36 @@
           "js": "3.0.0",
           "android": "11.0.0",
           "ios": "11.0.0"
+        }
+      }
+    },
+    "raster-color-scale": {
+      "type": "enum",
+      "doc": "When `raster-color` is active, specifies how raster values are distributed across the color ramp over the range specified by `raster-color-range`.",
+      "values": {
+        "linear": {
+          "doc": "Raster values are spaced evenly across the color ramp."
+        },
+        "log": {
+          "doc": "Raster values are spaced logarithmically, giving more of the color ramp to smaller values. Useful for data concentrated near the low end of a wide range."
+        }
+      },
+      "default": "linear",
+      "requires": [
+        "raster-color",
+        {"source": "raster-array"}
+      ],
+      "expression": {
+        "interpolated": false,
+        "parameters": []
+      },
+      "property-type": "data-constant",
+      "experimental": true,
+      "sdk-support": {
+        "basic functionality": {
+          "js": "3.29.0",
+          "android": "11.30.0",
+          "ios": "11.30.0"
         }
       }
     },
@@ -10541,10 +10746,11 @@
     },
     "raster-elevation": {
       "type": "number",
-      "doc": "Defines an uniform elevation from the base specified in raster-elevation-reference, in meters.",
+      "doc": "Defines an uniform elevation from the base specified in raster-elevation-reference.",
       "default": 0,
       "minimum": 0,
       "transition": true,
+      "units": "meters",
       "experimental": true,
       "sdk-support": {
         "basic functionality": {
@@ -10584,6 +10790,64 @@
       },
       "expression": {
         "interpolated": false
+      },
+      "property-type": "data-constant"
+    },
+    "raster-mask": {
+      "type": "string",
+      "required": false,
+      "experimental": true,
+      "private": true,
+      "doc": "The id of a `fill` layer in the same style whose polygons should clip this layer. Only the geometry is used: set `fill-opacity` to 0 to keep the layer invisible, but don't hide it with `visibility`, `minzoom` or `maxzoom`. To use a featureset from another import, see `raster-mask-import`. Elevated `fill` layers and `raster-elevation` are not supported. This layer is only drawn where the mask's data has loaded, and not at all if the mask can't be used.",
+      "example": "water",
+      "transition": false,
+      "sdk-support": {
+        "basic functionality": {
+          "js": "3.34.0"
+        }
+      },
+      "property-type": "data-constant"
+    },
+    "raster-mask-import": {
+      "type": "string",
+      "required": false,
+      "experimental": true,
+      "private": true,
+      "doc": "The id of an import of this style. When set, `raster-mask` is the id of a featureset of that import instead of a layer id, and the mask is made of the `fill` layers the featureset selects. If the featureset can't be found, or selects no `fill` layers, this layer is not drawn.",
+      "example": "basemap",
+      "transition": false,
+      "requires": [
+        "raster-mask"
+      ],
+      "sdk-support": {
+        "basic functionality": {
+          "js": "3.34.0"
+        }
+      },
+      "property-type": "data-constant"
+    },
+    "raster-mask-mode": {
+      "type": "enum",
+      "doc": "Whether this layer is drawn inside or outside the mask.",
+      "values": {
+        "clip-path-intersect": {
+          "doc": "Draw only where the mask layer's geometry covers the map."
+        },
+        "clip-path-exclude": {
+          "doc": "Draw only where the mask layer's geometry does not cover the map."
+        }
+      },
+      "default": "clip-path-intersect",
+      "experimental": true,
+      "private": true,
+      "transition": false,
+      "requires": [
+        "raster-mask"
+      ],
+      "sdk-support": {
+        "basic functionality": {
+          "js": "3.34.0"
+        }
       },
       "property-type": "data-constant"
     }
@@ -10717,10 +10981,11 @@
     },
     "raster-particle-elevation": {
       "type": "number",
-      "doc": "Defines an uniform elevation from sea level, in meters.",
+      "doc": "Defines an uniform elevation from sea level.",
       "default": 0,
       "minimum": 0,
       "transition": true,
+      "units": "meters",
       "sdk-support": {
         "basic functionality": {
           "js": "3.7.0",
@@ -10744,6 +11009,7 @@
       "minimum": 0,
       "maximum": 359,
       "doc": "The direction of the light source used to generate the hillshading with 0 as the top of the viewport if `hillshade-illumination-anchor` is set to `viewport` and due north if `hillshade-illumination-anchor` is set to `map` and no 3d lights enabled. If `hillshade-illumination-anchor` is set to `map` and 3d lights enabled, the direction from 3d lights is used instead.",
+      "units": "degrees",
       "transition": false,
       "sdk-support": {
         "basic functionality": {
@@ -11146,7 +11412,8 @@
       "minimum": 0,
       "maximum": 180,
       "transition": false,
-      "doc": "The angular distance (measured in degrees) from `sky-gradient-center` up to which the gradient extends. A value of 180 causes the gradient to wrap around to the opposite direction from `sky-gradient-center`.",
+      "doc": "The angular distance from `sky-gradient-center` up to which the gradient extends. A value of 180 causes the gradient to wrap around to the opposite direction from `sky-gradient-center`.",
+      "units": "degrees",
       "sdk-support": {
         "basic functionality": {
           "js": "2.0.0",
@@ -11365,7 +11632,8 @@
         }
       },
       "transition": true,
-      "doc": "The translation of the model in meters in form of [longitudal, latitudal, altitude] offsets."
+      "units": "meters",
+      "doc": "The translation of the model in form of [longitudal, latitudal, altitude] offsets."
     },
     "model-color": {
       "type": "color",
@@ -11414,27 +11682,6 @@
           "ios": "11.0.0"
         }
       },
-      "transition": true
-    },
-    "model-lightmap-intensity": {
-      "type": "number",
-      "default": 0.0,
-      "minimum": 0,
-      "doc": "Controls the intensity of the model lightmap contribution. Values less than or equal to 0.001 are treated as off.",
-      "private": true,
-      "experimental": true,
-      "expression": {
-        "interpolated": true,
-        "parameters": ["zoom"]
-      },
-      "sdk-support": {
-          "basic functionality": {
-          "js": "3.25.0",
-          "android": "11.25.0",
-          "ios": "11.25.0"
-        }
-      },
-      "property-type": "data-constant",
       "transition": true
     },
     "model-type": {
@@ -11656,10 +11903,21 @@
         }
       }
     },
-    "model-ignore-line-cutout": {
-      "type": "boolean",
-      "doc": "When set to true, the layer is not going to be affected by the line cutout effect.",
-      "default": false,
+    "model-line-cutout-mode": {
+      "type": "enum",
+      "doc": "Selects the way the line cutout effect is applied to the model.",
+      "default": "enabled",
+      "values": {
+        "enabled": {
+          "doc": "The model receives the cutout without any special handling."
+        },
+        "disabled": {
+          "doc": "The cutout effect is disabled for the model."
+        },
+        "enabled-above-cutout": {
+          "doc": "Only enabled if the model is above the cutout plane, such as for models above cut tunnels."
+        }
+      },
       "transition": false,
       "expression": {
         "interpolated": false
@@ -11669,8 +11927,9 @@
       "private": true,
       "sdk-support": {
         "basic functionality": {
-          "android": "11.21.0",
-          "ios": "11.21.0"
+          "js": "3.26.0",
+          "android": "11.26.0",
+          "ios": "11.26.0"
         }
       }
     }

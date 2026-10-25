@@ -447,7 +447,7 @@ Controls the transition progress between the image variants of fillPattern. Zero
 `1`
 
 #### Requires
-`linePattern`
+`fillPattern`
 
 #### Expression
 

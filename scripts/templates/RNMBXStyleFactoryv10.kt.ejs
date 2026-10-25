@@ -126,7 +126,7 @@ object RNMBXStyleFactory {
       } else {
         <%_ if (prop.type === 'enum') { _%>
           layer.<%- prop.name -%>(<%- pascelCase(prop.name) %>.valueOf(styleValue.getEnumName()))
-        <%_ } else if (prop.name === 'lineGradient' || prop.name === 'heatmapColor' || prop.name === 'skyGradient' || prop.name === 'rasterParticleColor') { _%>
+        <%_ } else if (prop.name === 'lineGradient' || prop.name === 'lineBorderGradient' || prop.name === 'heatmapColor' || prop.name === 'skyGradient' || prop.name === 'rasterParticleColor') { _%>
           layer.<%- prop.name -%>(styleValue.getIntExpression(VALUE_KEY))
         <%_ } else if (prop.name === 'position') { _%>
           layer.<%- prop.name -%>(styleValue.getLightPosition())

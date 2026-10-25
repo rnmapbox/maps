@@ -51,12 +51,12 @@ describe('applyCocoaPodsModifications', () => {
     expect(
       applyCocoaPodsModifications(iosFixtures.expoTemplatePodfile, {
         RNMapboxMapsSwiftPackageManager: {
-          requirement: { kind: 'exactVersion', version: '11.23.1' },
+          requirement: { kind: 'exactVersion', version: '11.33.0' },
           product_name: 'MapboxMaps',
         },
       }),
     ).toContain(
-      `$RNMapboxMapsSwiftPackageManager = { requirement: { kind: "exactVersion", version: "11.23.1" }, product_name: "MapboxMaps" }\n`,
+      `$RNMapboxMapsSwiftPackageManager = { requirement: { kind: "exactVersion", version: "11.33.0" }, product_name: "MapboxMaps" }\n`,
     );
     expect(
       applyCocoaPodsModifications(iosFixtures.expoTemplatePodfile, {

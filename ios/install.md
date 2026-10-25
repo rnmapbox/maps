@@ -66,12 +66,12 @@ By default the Mapbox SDK comes from CocoaPods. To get it through Swift Package 
 $RNMapboxMapsSwiftPackageManager = true
 ```
 
-The package requirement is derived from `$RNMapboxMapsVersion` (or the default version): `~> 11.23.1` becomes "up to next minor" from `11.23.1`, `= 11.23.1` an exact version. Your Podfile must call `react_native_post_install`, which adds the package. To override parts of the setup, pass a hash instead:
+The package requirement is derived from `$RNMapboxMapsVersion` (or the default version): `~> 11.33.0` becomes "up to next minor" from `11.33.0`, `= 11.33.0` an exact version. Your Podfile must call `react_native_post_install`, which adds the package. To override parts of the setup, pass a hash instead:
 
 ```ruby
 $RNMapboxMapsSwiftPackageManager = {
   url: 'https://github.com/mapbox/mapbox-maps-ios.git',
-  requirement: { kind: 'exactVersion', version: '11.23.1' },
+  requirement: { kind: 'exactVersion', version: '11.33.0' },
   product_name: 'MapboxMaps',
 }
 ```
