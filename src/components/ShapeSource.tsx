@@ -16,6 +16,7 @@ import {
 import { copyPropertiesAsDeprecated } from '../utils/deprecation';
 import { type OnPressEvent } from '../types/OnPressEvent';
 import { type ShapeAnimatorInterface } from '../shapeAnimators';
+import { type Expression } from '../utils/MapboxStyles';
 
 import AbstractSource from './AbstractSource';
 import NativeBridgeComponent from './NativeBridgeComponent';
@@ -85,6 +86,12 @@ export type Props = {
    *
    */
   clusterProperties?: object;
+
+  /**
+   * A feature property to use as the feature id, for example with `setFeatureState`.
+   * Either a property name or an expression that evaluates to the id.
+   */
+  promoteId?: string | Expression;
 
   /**
    * Specifies the maximum zoom level at which to create vector tiles.
@@ -317,6 +324,7 @@ export class ShapeSource extends NativeBridgeComponent(
       clusterRadius: this.props.clusterRadius,
       clusterMaxZoomLevel: this.props.clusterMaxZoomLevel,
       clusterProperties: this.props.clusterProperties,
+      promoteId: this.props.promoteId,
       maxZoomLevel: this.props.maxZoomLevel,
       minZoomLevel: this.props.minZoomLevel,
       buffer: this.props.buffer,

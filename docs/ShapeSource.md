@@ -104,6 +104,16 @@ Example: `{ "resultingSum": [["+", ["accumulated"], ["get", "resultingSum"]], ["
 
 
   
+### promoteId
+
+```tsx
+string | Expression
+```
+A feature property to use as the feature id, for example with `setFeatureState`.
+Either a property name or an expression that evaluates to the id.
+
+[Feature State](../examples/V10/FeatureState)
+  
 ### maxZoomLevel
 
 ```tsx

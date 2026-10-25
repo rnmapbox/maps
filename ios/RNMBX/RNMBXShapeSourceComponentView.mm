@@ -108,6 +108,10 @@ using namespace facebook::react;
   RNMBX_OPTIONAL_PROP_BOOL(lineMetrics)
   RNMBX_OPTIONAL_PROP_BOOL(hasPressListener)
   RNMBX_OPTIONAL_PROP_NSDictionary(hitbox)
+  id promoteId = RNMBXConvertFollyDynamicToId(newViewProps.promoteId);
+  if (promoteId != nil) {
+    _view.promoteId = promoteId;
+  }
   
   [super updateProps:props oldProps:oldProps];
 }

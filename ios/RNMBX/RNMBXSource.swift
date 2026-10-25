@@ -10,6 +10,19 @@ public class RNMBXSource : RNMBXInteractiveElement {
   var ownsSource : Bool = false
 
   @objc public var existing: Bool = false
+
+  @objc public var promoteId: Any?
+
+  func promoteIdValue() -> Value<String>? {
+    guard let promoteId = promoteId else { return nil }
+    do {
+      let data = try JSONSerialization.data(withJSONObject: promoteId, options: .fragmentsAllowed)
+      return try JSONDecoder().decode(Value<String>.self, from: data)
+    } catch {
+      Logger.log(level: .error, message: "Invalid promoteId: \(promoteId)", error: error)
+      return nil
+    }
+  }
   
   override func getLayerIDs() -> [String] {
     layers.compactMap {

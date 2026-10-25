@@ -45,6 +45,11 @@ class RNMBXVectorSourceManager(reactApplicationContext: ReactApplicationContext)
         source.setHitbox(mapValue)
     }
 
+    @ReactProp(name = "promoteId")
+    override fun setPromoteId(source: RNMBXVectorSource, value: Dynamic) {
+        source.promoteId = promoteIdFrom(value)
+    }
+
     @ReactProp(name = "existing")
     override fun setExisting(view: RNMBXVectorSource, value: Dynamic) {
         view.mExisting = value.asBoolean()
