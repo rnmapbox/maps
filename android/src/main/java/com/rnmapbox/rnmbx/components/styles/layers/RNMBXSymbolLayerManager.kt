@@ -7,6 +7,7 @@ import com.facebook.react.uimanager.annotations.ReactProp
 import com.facebook.react.viewmanagers.RNMBXSymbolLayerManagerInterface
 import com.facebook.react.uimanager.ViewManagerDelegate
 import com.facebook.react.viewmanagers.RNMBXSymbolLayerManagerDelegate
+import com.rnmapbox.rnmbx.utils.extensions.asStringOrNull
 
 class RNMBXSymbolLayerManager : ViewGroupManager<RNMBXSymbolLayer>(),
     RNMBXSymbolLayerManagerInterface<RNMBXSymbolLayer> {
@@ -40,12 +41,12 @@ class RNMBXSymbolLayerManager : ViewGroupManager<RNMBXSymbolLayer>(),
 
     @ReactProp(name = "aboveLayerID")
     override fun setAboveLayerID(layer: RNMBXSymbolLayer, aboveLayerID: Dynamic) {
-        layer.setAboveLayerID(aboveLayerID.asString())
+        layer.setAboveLayerID(aboveLayerID.asStringOrNull())
     }
 
     @ReactProp(name = "belowLayerID")
     override fun setBelowLayerID(layer: RNMBXSymbolLayer, belowLayerID: Dynamic) {
-        layer.setBelowLayerID(belowLayerID.asString())
+        layer.setBelowLayerID(belowLayerID.asStringOrNull())
     }
 
     @ReactProp(name = "layerIndex")
@@ -70,7 +71,7 @@ class RNMBXSymbolLayerManager : ViewGroupManager<RNMBXSymbolLayer>(),
 
     @ReactProp(name = "sourceLayerID")
     override fun setSourceLayerID(layer: RNMBXSymbolLayer, sourceLayerID: Dynamic) {
-        layer.setSourceLayerID(sourceLayerID.asString())
+        layer.setSourceLayerID(sourceLayerID.asStringOrNull())
     }
 
     @ReactProp(name = "filter")
@@ -80,7 +81,7 @@ class RNMBXSymbolLayerManager : ViewGroupManager<RNMBXSymbolLayer>(),
 
     @ReactProp(name = "slot")
     override fun setSlot(layer: RNMBXSymbolLayer, slot: Dynamic) {
-        layer.setSlot(slot.asString())
+        layer.setSlot(slot.asStringOrNull())
     }
 
     // @{codepart-replace-end}
