@@ -48,5 +48,6 @@ const metadata: ExampleWithMetadata['metadata'] = {
   docs: `
 Scales map labels and icons by a fixed factor, or with the system text size setting.
 `,
+  webSupported: true,
 };
 SymbolScaleBehavior.metadata = metadata;
