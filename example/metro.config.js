@@ -22,6 +22,20 @@ const config = withMetroConfig(getDefaultConfig(__dirname), {
 });
 
 config.resolver.unstable_enablePackageExports = true;
+
+// Examples get a MapView that reports when it's idle, so e2e/docScreenshots.e2e.js can wait for it
+const mapsIdleTracker = path.join(__dirname, 'src/utils/MapsIdleTracker.tsx');
+const { resolveRequest } = config.resolver;
+config.resolver.resolveRequest = (context, moduleName, platform) => {
+  if (
+    moduleName === '@rnmapbox/maps' &&
+    context.originModulePath !== mapsIdleTracker &&
+    context.originModulePath.startsWith(path.join(__dirname, 'src'))
+  ) {
+    return { type: 'sourceFile', filePath: mapsIdleTracker };
+  }
+  return resolveRequest(context, moduleName, platform);
+};
 if (config.resolver.assetExts == null) {
   config.resolver.assetExts = [];
 }

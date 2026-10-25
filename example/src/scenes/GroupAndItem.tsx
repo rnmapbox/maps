@@ -18,6 +18,7 @@ import type { BaseExampleProps } from '../examples/common/BaseExamplePropTypes';
 import MapHeader from '../examples/common/MapHeader';
 import Page, { type PageProps } from '../examples/common/Page';
 import sheet from '../styles/sheet';
+import { MapsIdleMarker } from '../utils/MapsIdleTracker';
 // ANIMATIONS
 import * as Animations from '../examples/Animations';
 // ANNOTATIONS
@@ -368,11 +369,14 @@ const ExampleScreen = ({ route, navigation }: ItemProps) => {
   }, [route.name]);
 
   return (
-    <Component
-      label={label}
-      onDismissExample={onDismissExample}
-      navigation={navigation}
-    />
+    <>
+      <Component
+        label={label}
+        onDismissExample={onDismissExample}
+        navigation={navigation}
+      />
+      <MapsIdleMarker />
+    </>
   );
 };
 

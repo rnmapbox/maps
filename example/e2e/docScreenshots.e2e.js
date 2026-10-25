@@ -124,13 +124,16 @@ async function savePercyImage(imagePath, groupName, name) {
   ]);
 }
 
-async function wait(ms) {
+// Rendered by example/src/utils/MapsIdleTracker.tsx once every mounted MapView is idle
+async function waitForMapsIdle(timeout) {
   try {
-    await waitFor(element(by.id('no-such-view')))
-      .toBeVisible()
-      .withTimeout(ms);
-  } catch (_e) {
-    console.log('e', _e);
+    await waitFor(element(by.id('e2e-maps-idle')))
+      .toExist()
+      .withTimeout(timeout);
+  } catch {
+    console.log(
+      `Maps not idle after ${timeout} ms, taking the screenshot anyway`,
+    );
   }
 }
 
@@ -246,7 +249,7 @@ describe('Example screenshots', () => {
                 screenshots,
               );
 
-              await wait(metadata.disableSync ? 3000 : 1000);
+              await waitForMapsIdle(20000);
               const imagePath = await shots.screenshot();
               if (percyScreenshotsPath && !metadata.excludeFromPercy) {
                 await savePercyImage(imagePath, groupName, name);
