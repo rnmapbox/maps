@@ -310,6 +310,20 @@ Removing the prop stops localizing labels from the next style load.
 
 [Localize Labels](../examples/Map/LocalizeLabels)
   
+### symbolScaleBehavior
+
+```tsx
+'system' | { fixed: number }
+```
+How map symbols (icons and text) scale with the system text size setting.
+`'system'` follows the device's text size, from 0.8x up to 2.0x for accessibility sizes.
+`{ fixed: number }` uses a constant scale factor, recommended range 0.8–2.0.
+Defaults to `{ fixed: 1.0 }`.
+
+@experimental Uses an experimental Mapbox API that may change in a future SDK release.
+
+[Symbol Scale Behavior](../examples/Map/SymbolScaleBehavior)
+  
 ### gestureSettings
 
 ```tsx

@@ -13,6 +13,8 @@ import com.rnmapbox.rnmbx.events.constants.EventKeys
 import com.facebook.react.uimanager.ViewManagerDelegate
 import com.facebook.react.viewmanagers.RNMBXMapViewManagerDelegate
 import com.facebook.react.viewmanagers.RNMBXMapViewManagerInterface
+import com.mapbox.maps.MapboxExperimental
+import com.mapbox.maps.SymbolScaleBehavior
 import com.mapbox.maps.extension.style.layers.properties.generated.ProjectionName
 import com.mapbox.maps.plugin.gestures.gestures
 import com.rnmapbox.rnmbx.events.constants.eventMapOf
@@ -255,6 +257,20 @@ open class RNMBXMapViewManager(context: ReactApplicationContext, val viewTagReso
         map.withMapView {
             it.gestures.pitchEnabled = pitchEnabled.asBoolean()
         }
+    }
+
+    @OptIn(MapboxExperimental::class)
+    @ReactProp(name = "symbolScaleBehavior")
+    override fun setSymbolScaleBehavior(map: RNMBXMapView, value: Dynamic) {
+        map.setReactSymbolScaleBehavior(
+            when (value.type) {
+                ReadableType.String -> if (value.asString() == "system") SymbolScaleBehavior.system else null
+                ReadableType.Map -> value.asMap()?.takeIf { it.hasKey("fixed") }?.let {
+                    SymbolScaleBehavior.fixed(it.getDouble("fixed").toFloat())
+                }
+                else -> null
+            }
+        )
     }
 
     @ReactProp(name = "maxPitch")

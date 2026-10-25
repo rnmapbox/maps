@@ -576,7 +576,8 @@ open class RNMBXMapView(private val mContext: Context, var mManager: RNMBXMapVie
         LOGO(RNMBXMapView::applyLogo),
         SCALEBAR(RNMBXMapView::applyScaleBar),
         COMPASS(RNMBXMapView::applyCompass),
-        MAX_PITCH(RNMBXMapView::applyMaxPitch),;
+        MAX_PITCH(RNMBXMapView::applyMaxPitch),
+        SYMBOL_SCALE_BEHAVIOR(RNMBXMapView::applySymbolScaleBehavior),;
 
         override fun apply(mapView: RNMBXMapView) {
            _apply(mapView)
@@ -658,6 +659,21 @@ open class RNMBXMapView(private val mContext: Context, var mManager: RNMBXMapVie
         if (this::mMapView.isInitialized) {
             mMapView.setMaximumFps(preferredFramesPerSecond)
         }
+    }
+
+    private var mSymbolScaleBehavior: SymbolScaleBehavior? = null
+
+    fun setReactSymbolScaleBehavior(behavior: SymbolScaleBehavior?) {
+        mSymbolScaleBehavior = behavior
+        changes.add(Property.SYMBOL_SCALE_BEHAVIOR)
+    }
+
+    @OptIn(MapboxExperimental::class)
+    private fun applySymbolScaleBehavior() {
+        if (!this::mMap.isInitialized) {
+            return
+        }
+        mMap.symbolScaleBehavior = mSymbolScaleBehavior ?: SymbolScaleBehavior.fixed(1.0f)
     }
 
     fun setReactMaxPitch(maxPitch: Double?) {

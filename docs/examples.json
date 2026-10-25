@@ -526,6 +526,18 @@
       },
       {
         "metadata": {
+          "title": "Symbol Scale Behavior",
+          "tags": [
+            "MapView#symbolScaleBehavior"
+          ],
+          "docs": "\nScales map labels and icons by a fixed factor, or with the system text size setting.\n"
+        },
+        "fullPath": "example/src/examples/Map/SymbolScaleBehavior.tsx",
+        "relPath": "Map/SymbolScaleBehavior.tsx",
+        "name": "SymbolScaleBehavior"
+      },
+      {
+        "metadata": {
           "title": "Transparent Map",
           "tags": [
             "MapView#transparent"

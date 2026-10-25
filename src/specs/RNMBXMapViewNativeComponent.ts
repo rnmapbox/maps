@@ -65,6 +65,7 @@ export interface NativeProps extends ViewProps {
   localizeLabels?: UnsafeMixed<LocalizeLabels>;
 
   styleURL?: OptionalProp<string>;
+  symbolScaleBehavior?: UnsafeMixed<any>;
 
   gestureSettings?: UnsafeMixed<GestureSettings>;
 
