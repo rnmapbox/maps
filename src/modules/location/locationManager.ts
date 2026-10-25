@@ -14,10 +14,7 @@ import type { Spec as NativeRNMBXLocationModuleSpec } from '../../specs/NativeRN
 
 const Mapbox = NativeModules.RNMBXModule;
 
-// Read the native module on first use, not when the package loads: on iOS the first
-// read creates it on the main thread, and its init reads
-// CLLocationManager.accuracyAuthorization, which can block for seconds.
-// stop() runs on every background transition, so it must not be the first read.
+// Loaded lazily (#4388); stop() runs on every background transition, so it must not be the first read.
 let mapboxLocationManager: NativeRNMBXLocationModuleSpec | undefined;
 
 function getMapboxLocationManager(): NativeRNMBXLocationModuleSpec {
