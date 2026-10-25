@@ -223,7 +223,7 @@ Add margins to the compass with x and y values
 ```tsx
 string
 ```
-[iOS, `mapbox` (v10) implementation only] A string referencing an image key. Requires an `Images` component.
+[`mapbox` (v10) implementation only] A string referencing an image key. Requires an `Images` component.
 
 [Ornaments](../examples/Map/Ornaments)
   

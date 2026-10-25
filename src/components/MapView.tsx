@@ -283,7 +283,7 @@ type Props = ViewProps & {
   compassViewMargins?: Point;
 
   /**
-   * [iOS, `mapbox` (v10) implementation only] A string referencing an image key. Requires an `Images` component.
+   * [`mapbox` (v10) implementation only] A string referencing an image key. Requires an `Images` component.
    */
   compassImage?: string;
 

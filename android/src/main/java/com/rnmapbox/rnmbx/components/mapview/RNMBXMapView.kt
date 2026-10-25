@@ -34,6 +34,7 @@ import com.mapbox.maps.extension.style.projection.generated.Projection
 import com.mapbox.maps.extension.style.projection.generated.setProjection
 import com.mapbox.maps.plugin.attribution.attribution
 import com.mapbox.maps.plugin.compass.compass
+import com.mapbox.maps.plugin.compass.R as CR
 import com.mapbox.maps.plugin.delegates.listeners.*
 import com.mapbox.maps.plugin.gestures.*
 import com.mapbox.maps.plugin.logo.logo
@@ -68,9 +69,12 @@ import java.util.concurrent.CopyOnWriteArraySet
 import com.rnmapbox.rnmbx.components.annotation.RNMBXPointAnnotationCoordinator
 import com.rnmapbox.rnmbx.components.annotation.RNMBXPointAnnotationManagerView
 import com.rnmapbox.rnmbx.components.images.ImageManager
+import com.rnmapbox.rnmbx.components.images.Subscription
 import com.rnmapbox.rnmbx.utils.extensions.toStringKeyPairs
 
 import com.rnmapbox.rnmbx.v11compat.event.*
+import com.rnmapbox.rnmbx.v11compat.image.ImageHolder
+import com.rnmapbox.rnmbx.v11compat.image.toImageHolder
 import com.rnmapbox.rnmbx.v11compat.feature.*
 import com.rnmapbox.rnmbx.v11compat.mapboxmap.*
 import com.rnmapbox.rnmbx.v11compat.ornamentsettings.*
@@ -264,6 +268,7 @@ open class RNMBXMapView(private val mContext: Context, var mManager: RNMBXMapVie
         savedStyle = style
         styleLoaded = true
         setUpImage(style)
+        mCompassImage?.let { name -> style.getStyleImage(name)?.let { setCompassImage(it) } }
         addFeaturesToMap(true)
         applyLocalizeLabels()
         style.setProjection(Projection(mProjection))
@@ -1461,12 +1466,36 @@ open class RNMBXMapView(private val mContext: Context, var mManager: RNMBXMapVie
         changes.add(Property.COMPASS)
     }
 
+    var mCompassImage: String? = null
+    private var mCompassImageSubscription: Subscription? = null
+
+    fun setReactCompassImage(compassImage: String?) {
+        mCompassImage = compassImage?.ifEmpty { null }
+        changes.add(Property.COMPASS)
+    }
+
     private fun applyCompass() {
         mapView.compass.updateSettings {
             fadeWhenFacingNorth = mCompassFadeWhenNorth
             updateOrnament("compass", mCompassSettings, this.toGenericOrnamentSettings())
         }
+        applyCompassImage()
         workaroundToRelayoutChildOfMapView()
+    }
+
+    private fun applyCompassImage() {
+        mCompassImageSubscription?.cancel()
+        // Images from <Images> can be added (or finish downloading) later, and again on style reload.
+        mCompassImageSubscription = mCompassImage?.let { name ->
+            imageManager.subscribe(name) { _, image -> setCompassImage(image) }
+        }
+        setCompassImage(mCompassImage?.let { savedStyle?.getStyleImage(it) })
+    }
+
+    private fun setCompassImage(image: Image?) {
+        mapView.compass.updateSettings {
+            this.image = image?.toImageHolder() ?: ImageHolder.from(CR.drawable.mapbox_compass_icon)
+        }
     }
 
     var mScaleBarSettings = OrnamentSettings(enabled = false)
