@@ -1,12 +1,19 @@
 package com.rnmapbox.rnmbx.components.location
 
+import android.animation.ValueAnimator
 import android.content.Context
 import android.graphics.BitmapFactory
 import android.graphics.Color
 import android.graphics.drawable.BitmapDrawable
+import android.os.Handler
+import android.os.Looper
 import androidx.lifecycle.Lifecycle
+import com.mapbox.common.location.LocationError
+import com.mapbox.geojson.Point
 import com.mapbox.maps.extension.style.expressions.dsl.generated.interpolate
 import com.mapbox.maps.plugin.LocationPuck2D
+import com.mapbox.maps.plugin.locationcomponent.LocationConsumer
+import com.mapbox.maps.plugin.locationcomponent.LocationProvider
 import com.mapbox.maps.plugin.locationcomponent.location
 import com.rnmapbox.rnmbx.R
 import com.rnmapbox.rnmbx.components.mapview.RNMBXMapView
@@ -45,6 +52,22 @@ class LocationComponentManager(mapView: RNMBXMapView, context: Context) {
     private var mNeedsFullUpdate = true
 
     private var mLocationManagerStarted = false
+
+    private val mHandler = Handler(Looper.getMainLooper())
+    private var mHeldProvider: LocationProvider? = null
+    private val mHoldConsumer = object : LocationConsumer {
+        override fun onLocationUpdated(vararg location: Point, options: (ValueAnimator.() -> Unit)?) {}
+        override fun onBearingUpdated(vararg bearing: Double, options: (ValueAnimator.() -> Unit)?) {}
+        override fun onPuckLocationAnimatorDefaultOptionsUpdated(options: ValueAnimator.() -> Unit) {}
+        override fun onPuckBearingAnimatorDefaultOptionsUpdated(options: ValueAnimator.() -> Unit) {}
+        override fun onHorizontalAccuracyRadiusUpdated(vararg radius: Double, options: (ValueAnimator.() -> Unit)?) {}
+        override fun onPuckAccuracyRadiusAnimatorDefaultOptionsUpdated(options: ValueAnimator.() -> Unit) {}
+        override fun onError(error: LocationError) {}
+    }
+    private val mReleaseHeldProvider = Runnable {
+        mHeldProvider?.unRegisterLocationConsumer(mHoldConsumer)
+        mHeldProvider = null
+    }
 
     data class State(
         val showUserLocation: Boolean,
@@ -92,6 +115,9 @@ class LocationComponentManager(mapView: RNMBXMapView, context: Context) {
                 stopLocationManager()
             }
             return
+        }
+        if (oldState.enabled && !newState.enabled) {
+            holdLocationProviderBriefly()
         }
         mapView.location.updateSettings {
             enabled = newState.enabled
@@ -197,7 +223,32 @@ class LocationComponentManager(mapView: RNMBXMapView, context: Context) {
         update { it }
     }
 
+    // All maps share one Mapbox device location provider, and restarting it before its stop completes leaks a
+    // fusedLocationClientHandlerThread (#4225), so stay subscribed briefly in case another map takes over in the same frame.
+    private fun holdLocationProviderBriefly() {
+        if (mHeldProvider == null) {
+            val provider = mMapView.mapView.location.getLocationProvider() ?: return
+            provider.registerLocationConsumer(mHoldConsumer)
+            mHeldProvider = provider
+        }
+        mHandler.removeCallbacks(mReleaseHeldProvider)
+        mHandler.postDelayed(mReleaseHeldProvider, PROVIDER_HOLD_MS)
+    }
+
+    fun onDetachedFromWindow() {
+        if (mState.enabled) {
+            holdLocationProviderBriefly()
+        }
+    }
+
     fun onDestroy() {
+        if (mState.enabled) {
+            holdLocationProviderBriefly()
+        }
         stopLocationManager();
+    }
+
+    companion object {
+        private const val PROVIDER_HOLD_MS = 1000L
     }
 }

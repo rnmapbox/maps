@@ -1626,6 +1626,7 @@ open class RNMBXMapView(private val mContext: Context, var mManager: RNMBXMapVie
     }
 
     override fun onDetachedFromWindow() {
+        mLocationComponentManager?.onDetachedFromWindow()
         lifecycle.onDetachedFromWindow()
         super.onDetachedFromWindow();
     }
@@ -1649,6 +1650,7 @@ open class RNMBXMapView(private val mContext: Context, var mManager: RNMBXMapVie
         mapLoadingErrorSubscription = null
         removeAllFeaturesFromMap(RemovalReason.ON_DESTROY)
         mapView.viewAnnotationManager.removeAllViewAnnotations()
+        mLocationComponentManager?.onDestroy()
         lifecycle.onDestroy()
     }
 
