@@ -579,9 +579,10 @@
             "MapView",
             "MapView#setFeatureState",
             "MapView#getFeatureState",
-            "MapView#removeFeatureState"
+            "MapView#removeFeatureState",
+            "ShapeSource#promoteId"
           ],
-          "docs": "\nDemonstrates modifying the feature state.\n",
+          "docs": "\nDemonstrates modifying the feature state. `promoteId` makes the `name` property the\nfeature id, so the state is keyed by name. Tap a shape to toggle its selected state.\n",
           "webSupported": true
         },
         "fullPath": "example/src/examples/V10/FeatureState.tsx",

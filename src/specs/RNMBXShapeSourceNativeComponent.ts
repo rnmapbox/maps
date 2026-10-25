@@ -27,6 +27,7 @@ export interface NativeProps extends ViewProps {
   lineMetrics: UnsafeMixed<boolean>;
   hasPressListener: UnsafeMixed<boolean>;
   hitbox: UnsafeMixed<any>;
+  promoteId?: UnsafeMixed<any>;
   onMapboxShapeSourcePress: DirectEventHandler<OnMapboxShapeSourcePressEventType>;
 }
 

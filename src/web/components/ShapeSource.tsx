@@ -1,5 +1,9 @@
 import { type ReactNode, useContext } from 'react';
-import type { GeoJSONSource, GeoJSONSourceSpecification } from 'mapbox-gl';
+import type {
+  ExpressionSpecification,
+  GeoJSONSource,
+  GeoJSONSourceSpecification,
+} from 'mapbox-gl';
 
 import MapContext from '../MapContext';
 import { useOnChange } from '../useOnChange';
@@ -13,6 +17,7 @@ type Props = {
   clusterRadius?: number;
   clusterMaxZoomLevel?: number;
   clusterProperties?: object;
+  promoteId?: string | readonly unknown[];
   maxZoomLevel?: number;
   buffer?: number;
   tolerance?: number;
@@ -48,6 +53,7 @@ export function ShapeSource(props: Props) {
         clusterRadius: props.clusterRadius,
         clusterMaxZoom: props.clusterMaxZoomLevel,
         clusterProperties: props.clusterProperties,
+        promoteId: props.promoteId as string | ExpressionSpecification,
         maxzoom: props.maxZoomLevel,
         buffer: props.buffer,
         tolerance: props.tolerance,

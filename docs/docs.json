@@ -7827,6 +7827,13 @@
         "description": "[`mapbox-gl` (v8) implementation only]\nSpecifies custom properties on the generated clusters if clustering\nis enabled, aggregating values from clustered points.\n\nHas the form `{ \"property_name\": [operator, map_expression]}`, where\n `operator` is a custom reduce expression that references a special `[\"accumulated\"]` value -\n  it accumulates the property value from clusters/points the cluster contains\n `map_expression` produces the value of a single point\n\nExample: `{ \"resultingSum\": [[\"+\", [\"accumulated\"], [\"get\", \"resultingSum\"]], [\"get\", \"scalerank\"]] }`"
       },
       {
+        "name": "promoteId",
+        "required": false,
+        "type": "string \\| Expression",
+        "default": "none",
+        "description": "A feature property to use as the feature id, for example with `setFeatureState`.\nEither a property name or an expression that evaluates to the id."
+      },
+      {
         "name": "maxZoomLevel",
         "required": false,
         "type": "number",
@@ -10784,6 +10791,13 @@
         "type": "string",
         "default": "none",
         "description": "An HTML or literal text string defining the buttons to be displayed in an action sheet when the\nsource is part of a map view’s style and the map view’s attribution button is pressed."
+      },
+      {
+        "name": "promoteId",
+        "required": false,
+        "type": "string \\| Expression",
+        "default": "none",
+        "description": "A feature property to use as the feature id, for example with `setFeatureState`.\nEither a property name or an expression that evaluates to the id."
       },
       {
         "name": "onPress",
