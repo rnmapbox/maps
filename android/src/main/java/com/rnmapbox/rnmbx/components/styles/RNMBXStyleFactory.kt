@@ -1979,12 +1979,7 @@ object RNMBXStyleFactory {
           Logger.e("RNMBXLine", "Expression for lineBorderGradient is null")
         }
       } else {
-          val value = styleValue.getInt(VALUE_KEY)
-          if (value != null) {
-            layer.lineBorderGradient(value)
-          } else {
-            Logger.e("RNMBXLine", "value for lineBorderGradient is null")
-          }
+          layer.lineBorderGradient(styleValue.getIntExpression(VALUE_KEY))
       }
     }
 
