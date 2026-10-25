@@ -728,6 +728,21 @@
       },
       {
         "metadata": {
+          "title": "Marker View Placement",
+          "tags": [
+            "MarkerView",
+            "MarkerView#priority",
+            "MarkerView#minZoom",
+            "MarkerView#allowZElevate"
+          ],
+          "docs": "\nTwo overlapping markers where `priority` picks the one that is shown, a marker hidden\nbelow `minZoom`, and a marker on a 3D building that `allowZElevate` lifts to the roof.\n"
+        },
+        "fullPath": "example/src/examples/Annotations/MarkerViewPlacement.tsx",
+        "relPath": "Annotations/MarkerViewPlacement.tsx",
+        "name": "MarkerViewPlacement"
+      },
+      {
+        "metadata": {
           "title": "Point Annotation Anchors",
           "tags": [
             "PointAnnotation"

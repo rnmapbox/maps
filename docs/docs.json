@@ -5864,6 +5864,34 @@
         "description": "FIX ME NO DESCRIPTION"
       },
       {
+        "name": "allowZElevate",
+        "required": false,
+        "type": "boolean",
+        "default": "none",
+        "description": "Places the marker on the roof of the 3D building (fill extrusion or model) under it\ninstead of at ground level. Defaults to false."
+      },
+      {
+        "name": "priority",
+        "required": false,
+        "type": "number",
+        "default": "none",
+        "description": "Placement order among markers: higher priority markers are placed first, so they win\nwhen markers collide and `allowOverlap` is false. Negative values are allowed.\nDefaults to 0. Use either this or `isSelected`, not both."
+      },
+      {
+        "name": "minZoom",
+        "required": false,
+        "type": "number",
+        "default": "none",
+        "description": "Minimum zoom level, in the range [0, 22], at which the marker is shown. Defaults to 0."
+      },
+      {
+        "name": "maxZoom",
+        "required": false,
+        "type": "number",
+        "default": "none",
+        "description": "Maximum zoom level, in the range [0, 22], at which the marker is shown. Defaults to 22."
+      },
+      {
         "name": "stopGesturePropagation",
         "required": false,
         "type": "boolean",

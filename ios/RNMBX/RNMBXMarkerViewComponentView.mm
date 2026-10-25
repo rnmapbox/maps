@@ -172,6 +172,10 @@ using namespace facebook::react;
     RNMBX_REMAP_OPTIONAL_PROP_BOOL(allowOverlap, allowOverlap);
     RNMBX_REMAP_OPTIONAL_PROP_BOOL(allowOverlapWithPuck, allowOverlapWithPuck);
     RNMBX_REMAP_OPTIONAL_PROP_BOOL(isSelected, isSelected);
+    RNMBX_OPTIONAL_PROP_BOOL_NSNumber(allowZElevate);
+    RNMBX_OPTIONAL_PROP_NSNumber(priority);
+    RNMBX_OPTIONAL_PROP_NSNumber(minZoom);
+    RNMBX_OPTIONAL_PROP_NSNumber(maxZoom);
 
   [super updateProps:props oldProps:oldProps];
 }

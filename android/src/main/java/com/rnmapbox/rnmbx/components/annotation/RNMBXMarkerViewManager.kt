@@ -75,6 +75,26 @@ class RNMBXMarkerViewManager(reactApplicationContext: ReactApplicationContext) :
         markerView.setIsSelected(isSelected.asBoolean())
     }
 
+    @ReactProp(name = "allowZElevate")
+    override fun setAllowZElevate(markerView: RNMBXMarkerView, value: Dynamic) {
+        markerView.setAllowZElevate(if (value.isNull) null else value.asBoolean())
+    }
+
+    @ReactProp(name = "priority")
+    override fun setPriority(markerView: RNMBXMarkerView, value: Dynamic) {
+        markerView.setPriority(if (value.isNull) null else value.asInt().toLong())
+    }
+
+    @ReactProp(name = "minZoom")
+    override fun setMinZoom(markerView: RNMBXMarkerView, value: Dynamic) {
+        markerView.setMinZoom(if (value.isNull) null else value.asDouble())
+    }
+
+    @ReactProp(name = "maxZoom")
+    override fun setMaxZoom(markerView: RNMBXMarkerView, value: Dynamic) {
+        markerView.setMaxZoom(if (value.isNull) null else value.asDouble())
+    }
+
     @ReactProp(name = "stopGesturePropagation")
     override fun setStopGesturePropagation(markerView: RNMBXMarkerView, value: Dynamic) {
         markerView.setStopGesturePropagation(!value.isNull && value.asBoolean())
