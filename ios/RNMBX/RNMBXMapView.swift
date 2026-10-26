@@ -205,8 +205,10 @@ open class RNMBXMapView: UIView, RCTInvalidating {
     cancelables.forEach { $0.cancel() }
     cancelables.removeAll()
 
-    _mapView.gestures.delegate = nil
-    _mapView.removeFromSuperview()
+    if ownsMapView {
+      _mapView.gestures.delegate = nil
+      _mapView.removeFromSuperview()
+    }
     _mapView = nil
 
     self.removeFromSuperview()
@@ -284,6 +286,11 @@ open class RNMBXMapView: UIView, RCTInvalidating {
     return manager
   }()
 
+  /// Set to false by a `RNMBXMapViewFactory` handing over a map that lives elsewhere, such as a car screen's.
+  /// Such a map keeps its own style, ornaments, gestures and frame and outlives this view, which only adds its
+  /// sources, layers and images and removes them again.
+  public var ownsMapView = true
+
   var _mapView: MapView! = nil
   func createMapView() -> MapView {
     if let mapViewImpl = mapViewImpl, let mapViewInstance = createAndAddMapViewImpl(mapViewImpl, self) {
@@ -294,11 +301,17 @@ open class RNMBXMapView: UIView, RCTInvalidating {
       addSubview(_mapView)
     }
 
-    if let delegate = _mapView.gestures.delegate, delegate !== self {
-      addGestureDelegate(delegate)
+    if ownsMapView {
+      if let delegate = _mapView.gestures.delegate, delegate !== self {
+        addGestureDelegate(delegate)
+      }
+      _mapView.gestures.delegate = self
     }
-    _mapView.gestures.delegate = self
     setupEvents()
+    if !ownsMapView, _mapView.mapboxMap.isStyleLoaded {
+      // No styleLoaded event follows for a style its owner already loaded.
+      styleLoadWaiters.onInit(_mapView.mapboxMap)
+    }
     afterMapViewAdded()
     return _mapView
   }
@@ -482,6 +495,12 @@ open class RNMBXMapView: UIView, RCTInvalidating {
     case styleGlyphURL
 
     func apply(_ map: RNMBXMapView) -> Void {
+      if !map.ownsMapView {
+        switch self {
+        case .onPress, .onLongPress, .onMapChange: break
+        default: return
+        }
+      }
       switch self {
       case .projection:
         map.applyProjection()
@@ -1345,6 +1364,10 @@ extension RNMBXMapView {
     })
 
     self.onEvery(event: .styleLoaded, handler: { (self, event) in
+      if !self.ownsMapView && self.styleLoadWaiters.hasInited() {
+        // The owner replaced the style, and with it the features added to the previous one.
+        self.removeAllFeaturesFromMap(reason: .StyleChange)
+      }
       self.addFeaturesToMap(style: self.mapboxMap.style)
 
       if !self.styleLoadWaiters.hasInited(), let mapboxMap = self.mapboxMap {
