@@ -111,7 +111,8 @@ export const {
 
 /**
  * Sets the URL mapbox-gl loads its web worker from (`mapboxgl.workerUrl`), for environments where its
- * built-in worker fails, like Expo Snack. Web only, does nothing on iOS and Android.
+ * built-in worker fails, like Expo Snack. The worker is started as a classic (non-module) worker.
+ * Web only, does nothing on iOS and Android.
  * @param url - URL of a mapbox-gl CSP worker build, e.g. a blob URL of `mapbox-gl-csp-worker.js`
  */
 function setWorkerUrl(_url: string): void {}

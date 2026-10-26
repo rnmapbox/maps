@@ -28,7 +28,7 @@ module.exports = async function (env, argv) {
 
 ### Expo Snack
 
-mapbox-gl's built-in worker fails in Expo Snack (`_ is not defined`). Load the CSP worker build instead with `Mapbox.setWorkerUrl` before rendering a `MapView`. It does nothing on iOS and Android.
+mapbox-gl's built-in worker fails in Expo Snack (`_ is not defined`). Load the CSP worker build instead with `Mapbox.setWorkerUrl` before rendering a `MapView`. It starts the worker as a classic worker, which the CSP worker build needs, and does nothing on iOS and Android.
 
 ```js
 import { Platform } from 'react-native';

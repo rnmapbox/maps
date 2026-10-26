@@ -1,6 +1,3 @@
-// @ts-expect-error untyped module
-import { getAssetByID } from '@react-native/assets-registry/registry';
-
 type PackagerAsset = {
   httpServerLocation: string;
   name: string;
@@ -9,6 +6,16 @@ type PackagerAsset = {
 };
 
 export type AssetSource = number | string | { uri: string };
+
+// Required lazily: Expo Snack's web bundler maps the registry to react-native's
+// AssetRegistry, which react-native-web lacks, so evaluating it throws.
+function getAssetByID(id: number): PackagerAsset | undefined {
+  try {
+    return require('@react-native/assets-registry/registry').getAssetByID(id);
+  } catch {
+    return undefined;
+  }
+}
 
 export function resolveAsset(
   source: AssetSource | undefined,
@@ -19,7 +26,7 @@ export function resolveAsset(
   if (typeof source !== 'number') {
     return source === undefined ? undefined : { uri: source, scale: 1 };
   }
-  const asset = getAssetByID(source) as PackagerAsset | undefined;
+  const asset = getAssetByID(source);
   if (!asset) {
     return undefined;
   }

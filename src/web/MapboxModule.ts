@@ -57,6 +57,13 @@ export const getAccessToken = async () => mapboxgl.accessToken;
 
 export const setWorkerUrl = (url: string) => {
   mapboxgl.workerUrl = url;
+  // Newer mapbox-gl starts workerUrl as a module worker, where the CSP
+  // worker's importScripts() throws; workerClass takes precedence.
+  mapboxgl.workerClass = class {
+    constructor() {
+      return new Worker(url);
+    }
+  } as unknown as new () => Worker;
 };
 
 // Custom headers would need transformRequest, and extra headers on
