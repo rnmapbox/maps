@@ -479,6 +479,7 @@ open class RNMBXMapView: UIView, RCTInvalidating {
     case preferredFramesPerSecond
     case transparent
     case symbolScaleBehavior
+    case styleGlyphURL
 
     func apply(_ map: RNMBXMapView) -> Void {
       switch self {
@@ -509,6 +510,7 @@ open class RNMBXMapView: UIView, RCTInvalidating {
       case .styleURL:
         map.applyStyleURL()
         map.applyLocalizeLabels()
+        map.applyStyleGlyphURL()
       case .pitchEnabled:
         map.applyPitchEnabled()
       case .maxPitch:
@@ -521,6 +523,8 @@ open class RNMBXMapView: UIView, RCTInvalidating {
         map.applyTransparent()
       case .symbolScaleBehavior:
         map.applySymbolScaleBehavior()
+      case .styleGlyphURL:
+        map.applyStyleGlyphURL()
       }
     }
   }
@@ -669,6 +673,21 @@ open class RNMBXMapView: UIView, RCTInvalidating {
         if let locale = self.locale {
           try self.mapboxMap.style.localizeLabels(into: locale.locale, forLayerIds: locale.layerIds)
         }
+      }
+    }
+  }
+
+  var styleGlyphURL: String? = nil
+
+  @objc public func setReactStyleGlyphURL(_ value: String?) {
+    styleGlyphURL = value
+    changed(.styleGlyphURL)
+  }
+
+  func applyStyleGlyphURL() {
+    onMapStyleLoaded { mapboxMap in
+      if let styleGlyphURL = self.styleGlyphURL {
+        mapboxMap.styleGlyphURL = styleGlyphURL
       }
     }
   }

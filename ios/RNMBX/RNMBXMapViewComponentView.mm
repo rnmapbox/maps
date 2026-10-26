@@ -231,6 +231,13 @@ using namespace facebook::react;
         _view.reactSymbolScaleBehavior = nil;
     }
 
+    id styleGlyphURL = RNMBXConvertFollyDynamicToId(newViewProps.styleGlyphURL);
+    if (styleGlyphURL != nil) {
+        _view.reactStyleGlyphURL = styleGlyphURL;
+    } else if (oldProps && RNMBXConvertFollyDynamicToId(oldViewProps.styleGlyphURL) != nil) {
+        _view.reactStyleGlyphURL = nil;
+    }
+
     RNMBX_OPTIONAL_PROP_BOOL(deselectAnnotationOnTap);
 
     // Has to be set before -didSetProps: below, which is where the MapView is created.

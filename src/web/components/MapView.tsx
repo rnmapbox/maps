@@ -22,6 +22,7 @@ type Props = {
   styleURL?: string;
   styleJSON?: string;
   symbolScaleBehavior?: 'system' | { fixed: number };
+  styleGlyphURL?: string;
   children?: ReactNode;
   onPress?: (feature: PressFeature) => void;
   onLongPress?: (feature: PressFeature) => void;
@@ -170,6 +171,7 @@ class MapView extends React.Component<
     this.map = map;
     this.setState({ map });
     map.on('style.load', () => {
+      this.applyStyleGlyphURL(map);
       this.setState(({ styleGeneration }) => ({
         styleGeneration: styleGeneration + 1,
       }));
@@ -215,6 +217,12 @@ class MapView extends React.Component<
     map.on('render', () => this.props.onDidFinishRenderingFrame?.());
   }
 
+  applyStyleGlyphURL(map: mapboxgl.Map) {
+    if (this.props.styleGlyphURL) {
+      map.setGlyphsUrl(this.props.styleGlyphURL);
+    }
+  }
+
   componentDidUpdate(prevProps: Props) {
     if (!this.map) {
       return;
@@ -224,6 +232,11 @@ class MapView extends React.Component<
       prevProps.styleJSON !== this.props.styleJSON
     ) {
       this.map.setStyle(styleFromProps(this.props), reloadWholeStyle);
+    } else if (
+      prevProps.styleGlyphURL !== this.props.styleGlyphURL &&
+      this.state.styleGeneration > 0
+    ) {
+      this.applyStyleGlyphURL(this.map);
     }
     const scaleFactor = symbolScaleFactor(this.props);
     if (this.map.getScaleFactor() !== scaleFactor) {
