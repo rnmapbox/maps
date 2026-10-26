@@ -3,6 +3,7 @@ export type ExampleMetadata = {
   tags: string[];
   docs: string;
   disableSync?: boolean;
+  waitForMapIdle?: boolean;
   excludeFromPercy?: boolean;
   webSupported?: boolean;
 };

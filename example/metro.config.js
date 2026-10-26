@@ -22,6 +22,31 @@ const config = withMetroConfig(getDefaultConfig(__dirname), {
 });
 
 config.resolver.unstable_enablePackageExports = true;
+
+// RNMBX_E2E_MAPS_IDLE=1 gives the examples a MapView that reports when it's idle, so
+// e2e/docScreenshots.e2e.js can wait for it. Off by default, the example app is also documentation.
+if (process.env.RNMBX_E2E_MAPS_IDLE === '1') {
+  const mapsIdleTracker = path.join(__dirname, 'src/utils/MapsIdleTracker.tsx');
+  const mapsIdleMarker = path.join(__dirname, 'src/utils/MapsIdleMarker.tsx');
+  const { resolveRequest } = config.resolver;
+  config.resolver.resolveRequest = (context, moduleName, platform) => {
+    if (
+      moduleName === '@rnmapbox/maps' &&
+      context.originModulePath !== mapsIdleTracker &&
+      context.originModulePath.startsWith(path.join(__dirname, 'src'))
+    ) {
+      return { type: 'sourceFile', filePath: mapsIdleTracker };
+    }
+    const resolution = resolveRequest(context, moduleName, platform);
+    if (
+      resolution.type === 'sourceFile' &&
+      resolution.filePath === mapsIdleMarker
+    ) {
+      return { type: 'sourceFile', filePath: mapsIdleTracker };
+    }
+    return resolution;
+  };
+}
 if (config.resolver.assetExts == null) {
   config.resolver.assetExts = [];
 }

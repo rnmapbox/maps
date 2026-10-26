@@ -183,7 +183,8 @@
             "LocationPuck#scale"
           ],
           "docs": "\n  Demonstrates use of images to customize LocationPuck\n  ",
-          "excludeFromPercy": true
+          "excludeFromPercy": true,
+          "waitForMapIdle": false
         },
         "fullPath": "example/src/examples/UserLocation/CustomNativeUserLocation.tsx",
         "relPath": "UserLocation/CustomNativeUserLocation.tsx",
@@ -196,7 +197,8 @@
             "LocationPuck",
             "LocationPuck#model"
           ],
-          "docs": "\n  Renders the user location as a 3D model that rotates with the course\n  "
+          "docs": "\n  Renders the user location as a 3D model that rotates with the course\n  ",
+          "waitForMapIdle": false
         },
         "fullPath": "example/src/examples/UserLocation/LocationPuck3D.tsx",
         "relPath": "UserLocation/LocationPuck3D.tsx",
@@ -209,7 +211,8 @@
             "UserLocation",
             "UserLocation#minDisplacement"
           ],
-          "docs": "\nChange the minimum displacement required to update the user location.\n"
+          "docs": "\nChange the minimum displacement required to update the user location.\n",
+          "waitForMapIdle": false
         },
         "fullPath": "example/src/examples/UserLocation/SetDisplacement.js",
         "relPath": "UserLocation/SetDisplacement.js",
@@ -221,7 +224,8 @@
           "tags": [
             "MapView#tintColor"
           ],
-          "docs": "\nChange the tint color of the map. This will change the color of the user location icon and the compass.\n"
+          "docs": "\nChange the tint color of the map. This will change the color of the user location icon and the compass.\n",
+          "waitForMapIdle": false
         },
         "fullPath": "example/src/examples/UserLocation/SetTintColor.js",
         "relPath": "UserLocation/SetTintColor.js",
@@ -236,7 +240,8 @@
             "Images#stretchY",
             "Images#content"
           ],
-          "docs": "\nDemonstrates Scalable images.\n\nYou can use stretchX, stretchY and content to scale a bitmap image - keep parts of it fixed while only scale specific parts.\n"
+          "docs": "\nDemonstrates Scalable images.\n\nYou can use stretchX, stretchY and content to scale a bitmap image - keep parts of it fixed while only scale specific parts.\n",
+          "waitForMapIdle": false
         },
         "fullPath": "example/src/examples/UserLocation/UserLocationPadding.tsx",
         "relPath": "UserLocation/UserLocationPadding.tsx",
@@ -251,7 +256,8 @@
             "UserLocation#visible",
             "UserLocation#onUserTrackingModeChange"
           ],
-          "docs": "\nDemonstrates UserLocation render modes, follow modes\n"
+          "docs": "\nDemonstrates UserLocation render modes, follow modes\n",
+          "waitForMapIdle": false
         },
         "fullPath": "example/src/examples/UserLocation/UserLocationRenderMode.tsx",
         "relPath": "UserLocation/UserLocationRenderMode.tsx",
@@ -264,7 +270,8 @@
             "UserLocation",
             "UserLocation#onUpdate"
           ],
-          "docs": "\nRetrieves and shows location updates from UserLocation component via the `onUpdate` callback\n"
+          "docs": "\nRetrieves and shows location updates from UserLocation component via the `onUpdate` callback\n",
+          "waitForMapIdle": false
         },
         "fullPath": "example/src/examples/UserLocation/UserLocationUpdates.tsx",
         "relPath": "UserLocation/UserLocationUpdates.tsx",
@@ -339,7 +346,8 @@
           "tags": [
             "MapView"
           ],
-          "docs": "\nDemonstrates various ways to embed map via (Navigation, Page, modal, etc)\n"
+          "docs": "\nDemonstrates various ways to embed map via (Navigation, Page, modal, etc)\n",
+          "waitForMapIdle": false
         },
         "fullPath": "example/src/examples/Map/MapAndRNNavigation.js",
         "relPath": "Map/MapAndRNNavigation.js",
@@ -350,7 +358,8 @@
           "title": "Map FPS",
           "tags": [],
           "docs": "Toggles preferredFramesPerSecond between 10 fps and 60 fps, move the map around to feel the difference.",
-          "webSupported": true
+          "webSupported": true,
+          "waitForMapIdle": false
         },
         "fullPath": "example/src/examples/Map/MapFps.tsx",
         "relPath": "Map/MapFps.tsx",
@@ -361,7 +370,8 @@
           "title": "Map (un-)mount",
           "tags": [],
           "docs": "\nShowing and hiding the the map should not lead to increased memory consumption, use this example to check it on the profiler.\n",
-          "webSupported": true
+          "webSupported": true,
+          "waitForMapIdle": false
         },
         "fullPath": "example/src/examples/Map/MapUnMount.tsx",
         "relPath": "Map/MapUnMount.tsx",
@@ -469,7 +479,8 @@
           ],
           "docs": "\nShows a map with the user location annotation enabled, and on press of the user location annotation, an alert is shown.\n",
           "excludeFromPercy": true,
-          "webSupported": true
+          "webSupported": true,
+          "waitForMapIdle": false
         },
         "fullPath": "example/src/examples/Map/ShowMap.tsx",
         "relPath": "Map/ShowMap.tsx",
@@ -479,7 +490,8 @@
         "metadata": {
           "title": "Show Map Local Style",
           "tags": [],
-          "docs": "\nCustomize ornaments of the map(logo, compass, scalebar, attribution)\n"
+          "docs": "\nCustomize ornaments of the map(logo, compass, scalebar, attribution)\n",
+          "waitForMapIdle": false
         },
         "fullPath": "example/src/examples/Map/ShowMapLocalStyle.tsx",
         "relPath": "Map/ShowMapLocalStyle.tsx",
