@@ -100,6 +100,7 @@ using namespace facebook::react;
   RNMBX_OPTIONAL_PROP_NSNumber(cluster)
   RNMBX_OPTIONAL_PROP_NSNumber(clusterRadius)
   RNMBX_OPTIONAL_PROP_NSNumber(clusterMaxZoomLevel)
+  RNMBX_OPTIONAL_PROP_NSNumber(clusterMinPoints)
   RNMBX_OPTIONAL_PROP_NSDictionary(clusterProperties)
   RNMBX_OPTIONAL_PROP_NSNumber(maxZoomLevel)
   RNMBX_OPTIONAL_PROP_NSNumber(minZoomLevel)

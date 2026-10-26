@@ -77,6 +77,7 @@ public class RNMBXShapeSource : RNMBXSource {
       }
     }
   }
+  @objc public var clusterMinPoints : NSNumber?
   @objc public var clusterProperties : [String: [Any]]?;
 
   @objc public var maxZoomLevel : NSNumber?
@@ -109,6 +110,10 @@ public class RNMBXShapeSource : RNMBXSource {
 
     if let clusterMaxZoomLevel = clusterMaxZoomLevel {
       result.clusterMaxZoom = clusterMaxZoomLevel.doubleValue
+    }
+
+    if let clusterMinPoints = clusterMinPoints {
+      result.clusterMinPoints = clusterMinPoints.doubleValue
     }
 
     do {

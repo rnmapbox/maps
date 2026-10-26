@@ -124,11 +124,12 @@
             "ShapeSource",
             "SymbolLayer",
             "ShapeSource#getClusterLeaves",
+            "ShapeSource#clusterMinPoints",
             "CircleLayer",
             "CircleLayer#clusterProperties",
             "expressions"
           ],
-          "docs": "\nRenders earthquake with clustering.\n\nClick a cluster to show list of contents in the cluster `getClusterLeaves`.\n",
+          "docs": "\nRenders earthquake with clustering.\n\nClick a cluster to show list of contents in the cluster `getClusterLeaves`.\nToggle `clusterMinPoints` to only cluster groups of at least 10 points.\n",
           "webSupported": true
         },
         "fullPath": "example/src/examples/SymbolCircleLayer/Earthquakes.tsx",

@@ -111,6 +111,12 @@ class RNMBXShapeSourceManager(private val mContext: ReactApplicationContext, val
         source.setClusterMaxZoom(clusterMaxZoom.asInt().toLong())
     }
 
+    @ReactProp(name = "clusterMinPoints")
+    override fun setClusterMinPoints(source: RNMBXShapeSource, clusterMinPoints: Dynamic) {
+        if (clusterMinPoints.isNull) return
+        source.setClusterMinPoints(clusterMinPoints.asInt().toLong())
+    }
+
     @ReactProp(name = "promoteId")
     override fun setPromoteId(source: RNMBXShapeSource, value: Dynamic) {
         source.promoteId = promoteIdFrom(value)
