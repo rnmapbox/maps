@@ -5,6 +5,11 @@ on:
     branches:
       - main
 
+# Each run regenerates the full docs from its maps commit, so only the newest one needs to publish.
+concurrency:
+  group: update-docs
+  cancel-in-progress: true
+
 jobs:
   update_docs:
     name: Update docs on maps-docs repo
@@ -72,15 +77,32 @@ jobs:
             echo "No changes to commit"
             exit 0
           fi
-          git commit -m "Update docs from maps  rnmapbox/maps@${GITHUB_SHA::7}"
+          MESSAGE="Update docs from maps  rnmapbox/maps@${GITHUB_SHA::7}"
+          git commit -q -m "$MESSAGE"
           PUSHED=false
           for i in 1 2 3; do
-            if git pull --rebase -X ours origin main && git push origin main; then
+            if git push origin HEAD:main; then
               PUSHED=true
               break
             fi
             echo "Attempt $i failed, retrying in $((i * 10))s..."
             sleep $((i * 10))
+            # Replay our generated files onto the new main instead of rebasing: hashed web bundles
+            # make rebases hit rename/rename conflicts, and the export dir is owned by this job.
+            GENERATED=$(git rev-parse HEAD)
+            BASE=$(git rev-parse HEAD~1)
+            git fetch -q origin main
+            git reset -q --hard FETCH_HEAD
+            git rm -r -q --ignore-unmatch static/example-app
+            git diff --no-renames --name-only --diff-filter=D -z "$BASE" "$GENERATED" | xargs -0 -r git rm -q --ignore-unmatch --
+            git diff --no-renames --name-only --diff-filter=d -z "$BASE" "$GENERATED" | xargs -0 -r git checkout "$GENERATED" --
+            git checkout "$GENERATED" -- static/example-app
+            if git diff --cached --quiet; then
+              echo "origin/main already has these docs"
+              PUSHED=true
+              break
+            fi
+            git commit -q -m "$MESSAGE"
           done
           if [ "$PUSHED" != "true" ]; then
             echo "All push attempts failed"
