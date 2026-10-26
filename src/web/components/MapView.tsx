@@ -23,6 +23,7 @@ type Props = {
   styleJSON?: string;
   symbolScaleBehavior?: 'system' | { fixed: number };
   styleGlyphURL?: string;
+  projection?: 'mercator' | 'globe';
   children?: ReactNode;
   onPress?: (feature: PressFeature) => void;
   onLongPress?: (feature: PressFeature) => void;
@@ -167,6 +168,7 @@ class MapView extends React.Component<
       container: this.mapContainer,
       style: styleFromProps(this.props),
       scaleFactor: symbolScaleFactor(this.props),
+      projection: this.props.projection,
     });
     this.map = map;
     this.setState({ map });
@@ -241,6 +243,9 @@ class MapView extends React.Component<
     const scaleFactor = symbolScaleFactor(this.props);
     if (this.map.getScaleFactor() !== scaleFactor) {
       this.map.setScaleFactor(scaleFactor);
+    }
+    if (prevProps.projection !== this.props.projection) {
+      this.map.setProjection(this.props.projection ?? null);
     }
   }
 
