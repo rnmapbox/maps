@@ -107,7 +107,7 @@ class LocationComponentManager(mapView: RNMBXMapView, context: Context) {
     }
 
     private fun applyStateChanges(map: RNMBXMapView, oldState: State, newState: State, fullUpdate: Boolean) {
-        val mapView = map.mapView
+        val mapView = map.mapPlugins
         if (map.getLifecycleState() != Lifecycle.State.STARTED && map.getLifecycleState() != Lifecycle.State.INITIALIZED) {
             // In case lifecycle was already stopped, so we're part of shutdown, do not call updateSettings as it'll just restart
             // the loationComponent that will not be stopped. See https://github.com/mapbox/mapbox-maps-android/issues/2017
@@ -200,7 +200,7 @@ class LocationComponentManager(mapView: RNMBXMapView, context: Context) {
     }
 
     private fun useMapLocationProvider(mapView: RNMBXMapView) {
-        val provider = mapView.mapView.location.getLocationProvider()
+        val provider = mapView.mapPlugins.location.getLocationProvider()
         if (provider != null) {
             mLocationManager.provider = provider
         }
@@ -227,7 +227,7 @@ class LocationComponentManager(mapView: RNMBXMapView, context: Context) {
     // fusedLocationClientHandlerThread (#4225), so stay subscribed briefly in case another map takes over in the same frame.
     private fun holdLocationProviderBriefly() {
         if (mHeldProvider == null) {
-            val provider = mMapView.mapView.location.getLocationProvider() ?: return
+            val provider = mMapView.mapPlugins.location.getLocationProvider() ?: return
             provider.registerLocationConsumer(mHoldConsumer)
             mHeldProvider = provider
         }

@@ -1,5 +1,6 @@
 package com.rnmapbox.rnmbx.components.camera
 
+import com.mapbox.maps.plugin.delegates.MapPluginProviderDelegate
 import android.content.Context
 import android.util.Log
 import androidx.annotation.RequiresPermission.Read
@@ -79,7 +80,7 @@ mContext
     private var gestureIdlePending = false
 
     fun applyTransitionsToIdleUponUserIntraction(map: RNMBXMapView) {
-        val mapView = map.mapView
+        val mapView = map.mapPlugins
         val idleGestures = this.idleGestures
         val transitionsToIdle = this.transitionsToIdleUponUserInteraction
         if (idleGestures != null) {
@@ -106,7 +107,7 @@ mContext
     // The map's value before this Viewport changed it, restored on removal so the option doesn't outlive the component.
     private var savedTransitionsToIdleUponUserInteraction: Boolean? = null
 
-    private fun setSdkTransitionsToIdle(mapView: MapView, value: Boolean) {
+    private fun setSdkTransitionsToIdle(mapView: MapPluginProviderDelegate, value: Boolean) {
         val options = mapView.viewport.options
         if (savedTransitionsToIdleUponUserInteraction == null) {
             savedTransitionsToIdleUponUserInteraction = options.transitionsToIdleUponUserInteraction
@@ -114,7 +115,7 @@ mContext
         mapView.viewport.options = options.toBuilder().transitionsToIdleUponUserInteraction(value).build()
     }
 
-    private fun restoreTransitionsToIdleUponUserInteraction(mapView: MapView) {
+    private fun restoreTransitionsToIdleUponUserInteraction(mapView: MapPluginProviderDelegate) {
         savedTransitionsToIdleUponUserInteraction?.let {
             mapView.viewport.options = mapView.viewport.options.toBuilder().transitionsToIdleUponUserInteraction(it).build()
             savedTransitionsToIdleUponUserInteraction = null
@@ -124,11 +125,11 @@ mContext
     var hasStatusChanged: Boolean = false
         set(value: Boolean) {
             field = value
-            mMapView?.let { applyHasStatusChanged(it.mapView) }
+            mMapView?.let { applyHasStatusChanged(it.mapPlugins) }
         }
     private var statusObserver: ViewportStatusObserver? = null
 
-    private fun applyHasStatusChanged(mapView: MapView) {
+    private fun applyHasStatusChanged(mapView: MapPluginProviderDelegate) {
         val viewport = mapView.viewport
         if (hasStatusChanged) {
             if (statusObserver == null) {
@@ -165,13 +166,13 @@ mContext
     override fun addToMap(mapView: RNMBXMapView) {
         super.addToMap(mapView)
         applyTransitionsToIdleUponUserIntraction(mapView)
-        applyHasStatusChanged(mapView.mapView)
+        applyHasStatusChanged(mapView.mapPlugins)
     }
 
     override fun removeFromMap(mapView: RNMBXMapView, reason: RemovalReason): Boolean {
         gestureHandler?.detach()
         gestureHandler = null
-        restoreTransitionsToIdleUponUserInteraction(mapView.mapView)
+        restoreTransitionsToIdleUponUserInteraction(mapView.mapPlugins)
         return super.removeFromMap(mapView, reason)
     }
 
@@ -362,14 +363,14 @@ mContext
             return
         }
 
-        val toState = toState(mapView.mapView.viewport, state)
+        val toState = toState(mapView.mapPlugins.viewport, state)
         if (toState == null) {
             Logger.e(LOG_TAG, "transitionTo: no state to transition to: $state")
             return;
         }
-        val transition = toTransition(mapView.mapView.viewport, transition)
+        val transition = toTransition(mapView.mapPlugins.viewport, transition)
 
-        mapView.mapView.viewport.transitionTo(toState, transition, CompletionListener { promise.resolve(it) } )
+        mapView.mapPlugins.viewport.transitionTo(toState, transition, CompletionListener { promise.resolve(it) } )
     }
 
     fun idle() {
@@ -379,7 +380,7 @@ mContext
             return
         }
 
-        mapView.mapView.viewport.idle()
+        mapView.mapPlugins.viewport.idle()
     }
 
     private fun transitionToMap(transition: ViewportTransition): WritableMap? {
@@ -448,7 +449,7 @@ mContext
             Logger.e(LOG_TAG, "getState: mapView is null")
             return null
         }
-        return statusToMap(mapView.mapView.viewport.status)
+        return statusToMap(mapView.mapPlugins.viewport.status)
     }
 
     companion object {

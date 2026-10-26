@@ -21,7 +21,7 @@ class RNMBXModels(context: Context?) : AbstractMapFeature(context) {
     }
 
     private fun applyModels(){
-        mMapView?.mapView?.getMapboxMap()?.getStyle()?.let { style ->
+        mMapView?.getMapboxMap()?.getStyle()?.let { style ->
             models?.forEach { (modelId,modelUri) ->
                 val uri = URI.create(modelUri)
                 val modelUriWithoutQuery = URI(uri.scheme, uri.userInfo, uri.host, uri.port, uri.path, null, uri.fragment).toString()

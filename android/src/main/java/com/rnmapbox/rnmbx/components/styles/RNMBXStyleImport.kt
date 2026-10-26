@@ -27,7 +27,7 @@ class RNMBXStyleImport(context: Context) : AbstractMapFeature(context) {
             id?.let { id ->
                 val config = this.config
                 if (config.isNotEmpty()) {
-                    mapView.mapView.getMapboxMap().getStyle()
+                    mapView.getMapboxMap().getStyle()
                         ?.setStyleImportConfigProperties(id, config)
                 }
             }

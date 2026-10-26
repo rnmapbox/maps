@@ -58,7 +58,7 @@ class RNMBXViewportGestureHandler(
             updateZoomOverrides()
         }
 
-    private val mapView = map.mapView
+    private val mapView = map.mapPlugins
     private val handler = Handler(Looper.getMainLooper())
 
     private var cameraChangedCancelable: Cancelable? = null
@@ -194,7 +194,7 @@ class RNMBXViewportGestureHandler(
             managesPinchScroll = true
         }
 
-        cameraChangedCancelable = mapView.mapboxMap.subscribeCameraChanged {
+        cameraChangedCancelable = map.getMapboxMap().subscribeCameraChanged {
             val managed = managedFocalPoint ?: return@subscribeCameraChanged
             if (mapView.gestures.focalPoint != managed) {
                 // someone else set a focal point, theirs wins
@@ -226,10 +226,12 @@ class RNMBXViewportGestureHandler(
 
     /** While following, the puck is at the centre of the padded viewport. Both are in pixels. */
     private fun puckScreenPoint(): ScreenCoordinate {
-        val padding = mapView.mapboxMap.cameraState.padding
+        val mapboxMap = map.getMapboxMap()
+        val padding = mapboxMap.cameraState.padding
+        val size = mapboxMap.getSize()
         return ScreenCoordinate(
-            padding.left + (mapView.width - padding.left - padding.right) / 2.0,
-            padding.top + (mapView.height - padding.top - padding.bottom) / 2.0
+            padding.left + (size.width - padding.left - padding.right) / 2.0,
+            padding.top + (size.height - padding.top - padding.bottom) / 2.0
         )
     }
 
