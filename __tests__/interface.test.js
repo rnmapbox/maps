@@ -98,6 +98,7 @@ describe('Public Interface', () => {
       'clearData',
       'setAccessToken',
       'getAccessToken',
+      'setWorkerUrl',
       'setTelemetryEnabled',
       'setConnected',
       'setLanguage',
