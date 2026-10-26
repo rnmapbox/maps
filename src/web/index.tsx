@@ -1,5 +1,3 @@
-import 'mapbox-gl/dist/mapbox-gl.css';
-
 import MapboxModule from './MapboxModule';
 import UnimplementedComponent, {
   warnUnimplemented,

@@ -3,6 +3,7 @@ import { View, type StyleProp, type ViewStyle } from 'react-native';
 import mapboxgl from 'mapbox-gl';
 
 import MapContext from '../MapContext';
+import { injectMapboxGLStyles } from '../injectMapboxGLStyles';
 import { warnUnimplemented } from '../UnimplementedComponent';
 import type {
   MapState,
@@ -164,6 +165,7 @@ class MapView extends React.Component<
       console.error('MapView - mapContainer is null');
       return;
     }
+    injectMapboxGLStyles();
     const map = new mapboxgl.Map({
       container: this.mapContainer,
       style: styleFromProps(this.props),

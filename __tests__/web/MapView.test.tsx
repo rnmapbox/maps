@@ -1,3 +1,6 @@
+/**
+ * @jest-environment jsdom
+ */
 import * as React from 'react';
 import TestRenderer, { act } from 'react-test-renderer';
 import mapboxgl from 'mapbox-gl';
@@ -57,5 +60,18 @@ describe('web MapView', () => {
     });
     expect(map.setProjection).toHaveBeenLastCalledWith(null);
     expect(map.setStyle).not.toHaveBeenCalled();
+  });
+
+  test('injects the mapbox-gl CSS once across maps and remounts', () => {
+    const first = renderMapView({});
+    renderMapView({});
+    act(() => {
+      first.unmount();
+    });
+    renderMapView({});
+
+    expect(
+      document.querySelectorAll('style#rnmapbox-mapbox-gl-css'),
+    ).toHaveLength(1);
   });
 });

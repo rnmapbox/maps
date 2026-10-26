@@ -23,3 +23,22 @@ module.exports = async function (env, argv) {
 };
 
 ```
+
+3. The web `MapView` adds mapbox-gl's CSS to the page itself, so no CSS loader is needed. If your app already loads `mapbox-gl/dist/mapbox-gl.css`, that stylesheet is used instead.
+
+### Expo Snack
+
+mapbox-gl's built-in worker fails in Expo Snack (`_ is not defined`). Load the CSP worker build instead with `Mapbox.setWorkerUrl` before rendering a `MapView`. It does nothing on iOS and Android.
+
+```js
+import { Platform } from 'react-native';
+import Mapbox from '@rnmapbox/maps';
+import mapboxgl from 'mapbox-gl';
+
+if (Platform.OS === 'web') {
+  const worker = `importScripts('https://api.mapbox.com/mapbox-gl-js/v${mapboxgl.version}/mapbox-gl-csp-worker.js');`;
+  Mapbox.setWorkerUrl(
+    URL.createObjectURL(new Blob([worker], { type: 'text/javascript' })),
+  );
+}
+```

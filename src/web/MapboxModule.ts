@@ -55,6 +55,10 @@ export const setAccessToken = (token: string) => {
 
 export const getAccessToken = async () => mapboxgl.accessToken;
 
+export const setWorkerUrl = (url: string) => {
+  mapboxgl.workerUrl = url;
+};
+
 // Custom headers would need transformRequest, and extra headers on
 // cross-origin tile requests trigger CORS preflights that api.mapbox.com
 // rejects, so these are no-ops on web for now.
@@ -95,6 +99,7 @@ const MapboxModule = {
   UserLocationRenderMode,
   setAccessToken,
   getAccessToken,
+  setWorkerUrl,
   addCustomHeader,
   removeCustomHeader,
   setTelemetryEnabled,
