@@ -45,9 +45,7 @@ class RNMBXLocationModule(reactContext: ReactApplicationContext) :
             stopHeadingUpdates()
         }
 
-        override fun onHostDestroy() {
-            locationManager?.destroy()
-        }
+        override fun onHostDestroy() {}
     }
 
     private val onUserLocationChangeCallback: OnUserLocationChange = object : OnUserLocationChange {
@@ -119,11 +117,17 @@ class RNMBXLocationModule(reactContext: ReactApplicationContext) :
         return REACT_CLASS
     }
 
+    override fun invalidate() {
+        reactApplicationContext.removeLifecycleEventListener(lifecycleEventListener)
+        stopLocationManager()
+        super.invalidate()
+    }
+
     @ReactMethod
     override fun start(minDisplacement: Double) {
-        isEnabled = true
         mMinDisplacement = minDisplacement.toFloat()
-        locationManager?.startCounted()
+        if (isEnabled) return
+        isEnabled = true
         startLocationManager()
     }
 
