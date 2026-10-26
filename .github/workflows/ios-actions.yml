@@ -56,6 +56,8 @@ jobs:
     env:
       # Release for the doc screenshots, so they have no "Connect to Metro" banner or LogBox toasts
       DETOX_CONFIGURATION: ${{ inputs.E2E_MODE == 'doc-screenshots' && 'ios.release.ci' || 'ios.debug.ci' }}
+      # Read by example/metro.config.js when the build bundles the JS, so docScreenshots.e2e.js can wait for idle maps
+      RNMBX_E2E_MAPS_IDLE: ${{ inputs.E2E_MODE == 'doc-screenshots' && '1' || '' }}
 
     defaults:
       run:

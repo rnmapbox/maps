@@ -45,5 +45,6 @@ const metadata: ExampleWithMetadata['metadata'] = {
   tags: [],
   docs: `Toggles preferredFramesPerSecond between 10 fps and 60 fps, move the map around to feel the difference.`,
   webSupported: true,
+  waitForMapIdle: false,
 };
 MapFps.metadata = metadata;

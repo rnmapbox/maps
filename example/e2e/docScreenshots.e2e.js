@@ -124,15 +124,45 @@ async function savePercyImage(imagePath, groupName, name) {
   ]);
 }
 
-// Rendered by example/src/utils/MapsIdleTracker.tsx once every mounted MapView is idle
-async function waitForMapsIdle(timeout) {
+async function wait(ms) {
+  try {
+    await waitFor(element(by.id('no-such-view')))
+      .toBeVisible()
+      .withTimeout(ms);
+  } catch (_e) {
+    console.log('e', _e);
+  }
+}
+
+/** @type {boolean | undefined} */
+let mapsIdleTrackerEnabled;
+
+// example/src/utils/MapsIdleTracker.tsx is only in bundles built with RNMBX_E2E_MAPS_IDLE=1
+async function isMapsIdleTrackerEnabled() {
+  if (mapsIdleTrackerEnabled === undefined) {
+    try {
+      await waitFor(element(by.id('e2e-maps-idle-tracker')))
+        .toExist()
+        .withTimeout(5000);
+      mapsIdleTrackerEnabled = true;
+    } catch {
+      mapsIdleTrackerEnabled = false;
+      console.warn(
+        'The maps idle tracker is not in the app, build it with RNMBX_E2E_MAPS_IDLE=1 to wait for idle maps. Falling back to a fixed delay before each screenshot.',
+      );
+    }
+  }
+  return mapsIdleTrackerEnabled;
+}
+
+async function waitForMapsIdle(name, timeout) {
   try {
     await waitFor(element(by.id('e2e-maps-idle')))
       .toExist()
       .withTimeout(timeout);
   } catch {
-    console.log(
-      `Maps not idle after ${timeout} ms, taking the screenshot anyway`,
+    console.warn(
+      `${name}: maps not idle after ${timeout} ms, taking the screenshot anyway. Set waitForMapIdle: false in its metadata if it never goes idle.`,
     );
   }
 }
@@ -249,7 +279,14 @@ describe('Example screenshots', () => {
                 screenshots,
               );
 
-              await waitForMapsIdle(20000);
+              if (
+                metadata.waitForMapIdle !== false &&
+                (await isMapsIdleTrackerEnabled())
+              ) {
+                await waitForMapsIdle(name, 20000);
+              } else {
+                await wait(metadata.disableSync ? 3000 : 1000);
+              }
               const imagePath = await shots.screenshot();
               if (percyScreenshotsPath && !metadata.excludeFromPercy) {
                 await savePercyImage(imagePath, groupName, name);

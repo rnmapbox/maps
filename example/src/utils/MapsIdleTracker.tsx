@@ -1,4 +1,5 @@
-// example/metro.config.js resolves `@rnmapbox/maps` in example/src to this module
+// With RNMBX_E2E_MAPS_IDLE=1, example/metro.config.js resolves `@rnmapbox/maps` and
+// MapsIdleMarker.tsx in example/src to this module
 
 import { forwardRef, useEffect, useState, useSyncExternalStore } from 'react';
 import { View } from 'react-native';
@@ -88,17 +89,26 @@ const MapView = forwardRef<Mapbox.MapView, MapViewProps>(
   },
 );
 
-/** Renders the `e2e-maps-idle` view, which the doc screenshot test waits for. */
+const markerStyle = { position: 'absolute', width: 1, height: 1 } as const;
+
+/**
+ * Renders the `e2e-maps-idle-tracker` view, and inside it the `e2e-maps-idle` view once every map is
+ * idle, which the doc screenshot test waits for.
+ */
 export function MapsIdleMarker() {
   const idle = useSyncExternalStore(subscribe, allMapsIdle);
-  return idle ? (
+  return (
     <View
-      testID="e2e-maps-idle"
+      testID="e2e-maps-idle-tracker"
       collapsable={false}
       pointerEvents="none"
-      style={{ position: 'absolute', width: 1, height: 1 }}
-    />
-  ) : null;
+      style={markerStyle}
+    >
+      {idle && (
+        <View testID="e2e-maps-idle" collapsable={false} style={markerStyle} />
+      )}
+    </View>
+  );
 }
 
 export * from '@rnmapbox/maps';

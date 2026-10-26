@@ -101,9 +101,11 @@ The full documentation generation process looks like this:
   We use detox tests to capture screenshots of examples
   ```
   cd example
-  yarn detox build --configuration ios.debug
+  RNMBX_E2E_MAPS_IDLE=1 yarn detox build --configuration ios.debug
   yarn detox test --configuration ios.debug ./e2e/docScreenshots.e2e.js
   ```
+
+  `RNMBX_E2E_MAPS_IDLE=1` bundles the examples with a `MapView` that reports when the maps are idle, so the screenshots wait for them instead of a fixed delay.
 
   This step is run manually for now, locally or with the `iOS e2e (manual)` workflow in `doc-screenshots` mode (artifact `doc-screenshots`)
 

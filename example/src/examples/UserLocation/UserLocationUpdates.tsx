@@ -47,5 +47,6 @@ const metadata: ExampleWithMetadata['metadata'] = {
   docs: `
 Retrieves and shows location updates from UserLocation component via the \`onUpdate\` callback
 `,
+  waitForMapIdle: false,
 };
 UserLocationUpdates.metadata = metadata;

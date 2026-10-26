@@ -69,5 +69,6 @@ Shows a map with the user location annotation enabled, and on press of the user 
 `,
   excludeFromPercy: true,
   webSupported: true,
+  waitForMapIdle: false,
 };
 ShowMap.metadata = metadata;
