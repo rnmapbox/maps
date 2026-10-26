@@ -366,8 +366,6 @@ Pod::Spec.new do |s|
           'HEADER_SEARCH_PATHS' => '"$(PODS_TARGET_SRCROOT)/cpp"',
         }
         install_modules_dependencies(sp)
-        dependencies_only_requiring_modular_headers = ["React-Fabric", "React-graphics", "React-utils", "React-debug", "glog"]
-        sp.dependencies = sp.dependencies.select { |d| !dependencies_only_requiring_modular_headers.include?(d.name) }.map {|d| [d.name, []]}.to_h
         if $RNMapobxMaps._rn_72_or_earlier()
           $RNMapboxMaps._add_compiler_flags(sp, "-DRNMBX_RN_72=1")
         end
