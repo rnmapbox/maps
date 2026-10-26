@@ -63,6 +63,22 @@ Manually selects/deselects annotation
 boolean
 ```
 Enable or disable dragging. Defaults to false.
+When enabled, a long press is required to begin dragging (iOS and Android).
+On Android, set `androidInstantDraggable` to start dragging on touch-move instead.
+
+  _defaults to:_ `false`
+
+  
+### androidInstantDraggable
+
+```tsx
+boolean
+```
+Android only. When `draggable` is true, start dragging on touch-move instead of
+waiting for a long press. This restores the previous Android behavior.
+Defaults to false. Has no effect on iOS, which always requires a long press.
+
+@platform android
 
   _defaults to:_ `false`
 

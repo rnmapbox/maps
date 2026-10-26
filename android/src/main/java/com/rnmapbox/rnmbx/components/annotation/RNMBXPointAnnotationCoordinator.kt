@@ -1,6 +1,7 @@
 package com.rnmapbox.rnmbx.components.annotation
 
 import com.mapbox.maps.MapView
+import com.mapbox.maps.ScreenCoordinate
 import com.mapbox.maps.plugin.annotation.Annotation
 import com.mapbox.maps.plugin.annotation.AnnotationConfig
 import com.mapbox.maps.plugin.annotation.annotations
@@ -10,18 +11,22 @@ import com.mapbox.maps.plugin.annotation.generated.PointAnnotation
 import com.mapbox.maps.plugin.annotation.generated.PointAnnotationManager
 import com.mapbox.maps.plugin.annotation.generated.PointAnnotationOptions
 import com.mapbox.maps.plugin.annotation.generated.createPointAnnotationManager
-import com.rnmapbox.rnmbx.components.annotation.RNMBXPointAnnotation
 import com.rnmapbox.rnmbx.utils.Logger
 
 class RNMBXPointAnnotationCoordinator(val mapView: MapView, layerId: String? = "RNMBX-mapview-annotations") {
     val manager: PointAnnotationManager;
     var annotationClicked = false
-    var annotationDragged = false
+    private var annotationDragged = false
 
     var selected: RNMBXPointAnnotation? = null
 
+    private var draggedAnnotation: RNMBXPointAnnotation? = null
+
     val annotations: MutableMap<String, RNMBXPointAnnotation> = hashMapOf()
     val callouts: MutableMap<String, RNMBXPointAnnotation> = hashMapOf()
+
+    val isDragging: Boolean
+        get() = draggedAnnotation != null
 
     init {
         manager = if (layerId != null) {
@@ -33,43 +38,20 @@ class RNMBXPointAnnotationCoordinator(val mapView: MapView, layerId: String? = "
             onAnnotationClick(pointAnnotation)
             false
         })
+        // SDK drag only runs for androidInstantDraggable annotations (isDraggable = true).
         manager.addDragListener(object : OnPointAnnotationDragListener {
-            override fun onAnnotationDragStarted(_annotation: Annotation<*>) {
-                annotationDragged = true;
-                var reactAnnotation: RNMBXPointAnnotation? = null
-                for (key in annotations.keys) {
-                    val annotation = annotations[key]
-                    val curMarkerID = annotation?.mapboxID
-                    if (_annotation.id == curMarkerID) {
-                        reactAnnotation = annotation
-                    }
-                }
-                reactAnnotation?.let { it.onDragStart() }
+            override fun onAnnotationDragStarted(annotation: Annotation<*>) {
+                annotationDragged = true
+                lookupDragged(annotation)?.onDragStart()
             }
 
-            override fun onAnnotationDrag(_annotation: Annotation<*>) {
-                var reactAnnotation: RNMBXPointAnnotation? = null
-                for (key in annotations.keys) {
-                    val annotation = annotations[key]
-                    val curMarkerID = annotation?.mapboxID
-                    if (_annotation.id == curMarkerID) {
-                        reactAnnotation = annotation
-                    }
-                }
-                reactAnnotation?.let { it.onDrag() }
+            override fun onAnnotationDrag(annotation: Annotation<*>) {
+                lookupDragged(annotation)?.onDrag()
             }
 
-            override fun onAnnotationDragFinished(_annotation: Annotation<*>) {
-                annotationDragged = false;
-                var reactAnnotation: RNMBXPointAnnotation? = null
-                for (key in annotations.keys) {
-                    val annotation = annotations[key]
-                    val curMarkerID = annotation?.mapboxID
-                    if (_annotation.id == curMarkerID) {
-                        reactAnnotation = annotation
-                    }
-                }
-                reactAnnotation?.let { it.onDragEnd() }
+            override fun onAnnotationDragFinished(annotation: Annotation<*>) {
+                annotationDragged = false
+                lookupDragged(annotation)?.onDragEnd()
             }
         })
     }
@@ -88,6 +70,49 @@ class RNMBXPointAnnotationCoordinator(val mapView: MapView, layerId: String? = "
             return true
         }
         return false
+    }
+
+    /**
+     * Starts a custom long-press drag if a draggable RN PointAnnotation is under [screenCoordinate].
+     * androidInstantDraggable annotations use Mapbox SDK drag instead.
+     */
+    fun handleLongPress(screenCoordinate: ScreenCoordinate): Boolean {
+        if (draggedAnnotation != null) {
+            return true
+        }
+        val pointAnnotation = manager.queryMapForFeatures(screenCoordinate) ?: return false
+        val reactAnnotation = lookupForClick(pointAnnotation) ?: return false
+        if (!reactAnnotation.isDraggable || reactAnnotation.isAndroidInstantDraggable) {
+            return false
+        }
+        draggedAnnotation = reactAnnotation
+        reactAnnotation.onDragStart()
+        return true
+    }
+
+    fun handleDragMove(screenCoordinate: ScreenCoordinate): Boolean {
+        val reactAnnotation = draggedAnnotation ?: return false
+        val mapboxMap = mapView.mapboxMap
+        val point = mapboxMap.coordinateForPixel(screenCoordinate)
+        reactAnnotation.setCoordinate(point)
+        reactAnnotation.onDrag()
+        return true
+    }
+
+    fun handleDragEnd(): Boolean {
+        val reactAnnotation = draggedAnnotation ?: return false
+        draggedAnnotation = null
+        reactAnnotation.onDragEnd()
+        return true
+    }
+
+    private fun lookupDragged(annotation: Annotation<*>): RNMBXPointAnnotation? {
+        for (reactAnnotation in annotations.values) {
+            if (annotation.id == reactAnnotation.mapboxID) {
+                return reactAnnotation
+            }
+        }
+        return null
     }
 
     fun lookupForClick(point: PointAnnotation): RNMBXPointAnnotation? {
@@ -146,6 +171,9 @@ class RNMBXPointAnnotationCoordinator(val mapView: MapView, layerId: String? = "
         if (annotation == selected) {
             selected = null
         }
+        if (annotation == draggedAnnotation) {
+            draggedAnnotation = null
+        }
         annotations.remove(annotation.iD)
     }
 
@@ -166,6 +194,7 @@ class RNMBXPointAnnotationCoordinator(val mapView: MapView, layerId: String? = "
     }
 
     fun destroy() {
+        draggedAnnotation = null
         mapView.annotations.removeAnnotationManager(manager)
     }
 

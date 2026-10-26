@@ -41,6 +41,7 @@ class RNMBXPointAnnotation(private val mContext: Context, private val mManager: 
     private var mAnchor: Array<Float>? = null
     private var mIsSelected = false
     private var mDraggable = false
+    private var mAndroidInstantDraggable = false
     private var mChildView: View? = null
     private var mChildBitmap: Bitmap? = null
     private var mChildBitmapId: String? = null
@@ -183,10 +184,26 @@ class RNMBXPointAnnotation(private val mContext: Context, private val mManager: 
         }
     }
 
+    val isDraggable: Boolean
+        get() = mDraggable
+
+    val isAndroidInstantDraggable: Boolean
+        get() = mAndroidInstantDraggable
+
     fun setDraggable(draggable: Boolean) {
         mDraggable = draggable
+        applyMapboxDraggable()
+    }
+
+    fun setAndroidInstantDraggable(enabled: Boolean) {
+        mAndroidInstantDraggable = enabled
+        applyMapboxDraggable()
+    }
+
+    private fun applyMapboxDraggable() {
+        // SDK drag only for the instant opt-in. Otherwise long-press drag handles it.
         annotation?.let { annotation ->
-            annotation.isDraggable = draggable
+            annotation.isDraggable = mDraggable && mAndroidInstantDraggable
             pointAnnotations?.update(annotation)
         }
     }
@@ -239,7 +256,8 @@ class RNMBXPointAnnotation(private val mContext: Context, private val mManager: 
         val options = mCoordinate?.let {
             PointAnnotationOptions()
                 .withPoint(it)
-                .withDraggable(mDraggable)
+                // SDK drag is the androidInstantDraggable opt-in. Otherwise long-press drag handles it.
+                .withDraggable(mDraggable && mAndroidInstantDraggable)
                 .withIconSize(1.0)
                 .withSymbolSortKey(10.0)
         }

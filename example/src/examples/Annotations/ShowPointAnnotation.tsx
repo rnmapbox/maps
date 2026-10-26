@@ -1,5 +1,5 @@
 import { useRef, useState } from 'react';
-import { View, Text, StyleSheet, Image } from 'react-native';
+import { View, Text, StyleSheet, Image, Platform, Switch } from 'react-native';
 import {
   Callout,
   Camera,
@@ -38,12 +38,14 @@ type AnnotationWithRemoteImageProps = {
   id: string;
   title: string;
   coordinate: Position;
+  androidInstantDraggable: boolean;
 };
 
 const AnnotationWithRemoteImage = ({
   id,
   coordinate,
   title,
+  androidInstantDraggable,
 }: AnnotationWithRemoteImageProps) => {
   const pointAnnotation = useRef<PointAnnotation>(null);
 
@@ -53,6 +55,7 @@ const AnnotationWithRemoteImage = ({
       coordinate={coordinate}
       title={title}
       draggable
+      androidInstantDraggable={androidInstantDraggable}
       onSelected={(feature) =>
         console.log('onSelected:', feature.id, feature.geometry.coordinates)
       }
@@ -89,6 +92,7 @@ const ShowPointAnnotation = () => {
   const [layerRendering, setLayerRendering] = useState<'below' | 'above'>(
     'below',
   );
+  const [instantDraggable, setInstantDraggable] = useState(false);
 
   const renderAnnotations = () => {
     const items = [];
@@ -107,6 +111,7 @@ const ShowPointAnnotation = () => {
             id={id}
             coordinate={coordinate}
             title={title}
+            androidInstantDraggable={instantDraggable}
           />,
         );
       } else {
@@ -189,6 +194,22 @@ const ShowPointAnnotation = () => {
         >
           Render Polygon {{ above: 'below', below: 'above' }[layerRendering]}
         </Button>
+        {Platform.OS === 'android' && (
+          <View
+            style={{
+              marginTop: 10,
+              flexDirection: 'row',
+              alignItems: 'center',
+              justifyContent: 'space-between',
+            }}
+          >
+            <Text>Android: Instant draggable</Text>
+            <Switch
+              value={instantDraggable}
+              onValueChange={setInstantDraggable}
+            />
+          </View>
+        )}
       </Bubble>
     </>
   );
