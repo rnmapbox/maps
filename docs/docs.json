@@ -4700,7 +4700,7 @@
     "name": "LocationPuck"
   },
   "MapView": {
-    "description": "MapView backed by Mapbox Native GL",
+    "description": "MapView renders an interactive Mapbox map in a React Native app on iOS and Android.\nIt is the root component of a map: add a Camera, sources, layers, annotations and the user location as its children.",
     "displayName": "MapView",
     "methods": [
       {

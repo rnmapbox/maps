@@ -73,7 +73,7 @@
   "bugs": {
     "url": "https://github.com/rnmapbox/maps/issues"
   },
-  "homepage": "https://github.com/rnmapbox/maps#readme",
+  "homepage": "https://rnmapbox.github.io/",
   "mapbox": {
     "ios": "~> 11.33.0",
     "android": "11.33.0"
