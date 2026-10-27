@@ -28,7 +28,12 @@ RCT_EXPORT_MODULE();
                     delegate:self
                     expectedClass:[RNMBXMapView class]
                     block:^(UIView *view) {
-                        block((RNMBXMapView *)view);
+                        RNMBXMapView *mapView = (RNMBXMapView *)view;
+                        if (!mapView.hasMap) {
+                            reject(methodName, @"The MapView has no map", nil);
+                            return;
+                        }
+                        block(mapView);
                     }
                     reject:reject
                     methodName:methodName];

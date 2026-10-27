@@ -149,6 +149,7 @@ class RNMBXExternalMap(val mapboxMap: MapboxMap, val plugins: MapPluginProviderD
     }
 }
 
+/** Returning null, e.g. for a map that no longer exists, leaves the `RNMBXMapView` without a map until it's remounted. */
 typealias ExternalMapFactory = (impl: String, RNMBXMapView) -> RNMBXExternalMap?;
 
 public class RNMBXMapViewFactory {
@@ -260,6 +261,7 @@ open class RNMBXMapView(private val mContext: Context, var mManager: RNMBXMapVie
     private lateinit var mMapView: MapView
     private var mExternalMap: RNMBXExternalMap? = null
     private var mapReleased = false
+    private var mapUnavailable = false
     val isInitialized: Boolean
         get() = this::mMap.isInitialized
 
@@ -671,6 +673,7 @@ open class RNMBXMapView(private val mContext: Context, var mManager: RNMBXMapVie
 
     var withMapWaiters = mutableListOf<()->Unit>();
     fun withMap(callback: (map: MapboxMap) -> Unit) {
+        if (mapUnavailable) return
         if (! this::mMap.isInitialized) {
             withMapWaiters.add { callback(mMap) }
         } else {
@@ -680,6 +683,7 @@ open class RNMBXMapView(private val mContext: Context, var mManager: RNMBXMapVie
 
     /** Not called for an external map without a `MapView`. */
     fun withMapView(callback: (map: MapView) -> Unit) {
+        if (mapUnavailable) return
         if (! this::mMap.isInitialized) {
             withMapWaiters.add { mapView?.let(callback) }
         } else {
@@ -687,12 +691,14 @@ open class RNMBXMapView(private val mContext: Context, var mManager: RNMBXMapVie
         }
     }
     fun applyAllChanges() {
-        if (! this::mMap.isInitialized) {
+        if (! this::mMap.isInitialized && !mapUnavailable) {
             createMap()
-            withMapWaiters.forEach { it() }
+            if (!mapUnavailable) withMapWaiters.forEach { it() }
             withMapWaiters.clear()
         }
-        if (ownsMap) {
+        if (mapUnavailable) {
+            changes.changes.clear()
+        } else if (ownsMap) {
             changes.apply(this)
         } else {
             // The owner styles the map; props like styleURL and the ornaments don't apply.
@@ -1428,7 +1434,16 @@ open class RNMBXMapView(private val mContext: Context, var mManager: RNMBXMapVie
     }
 
     private fun createMap() {
-        mapViewImpl?.let { impl -> RNMBXMapViewFactory.getExternalMap(impl)?.invoke(impl, this) }?.let { external ->
+        val impl = mapViewImpl
+        val externalMapFactory = impl?.let { RNMBXMapViewFactory.getExternalMap(it) }
+        if (impl != null && externalMapFactory != null) {
+            val external = externalMapFactory(impl, this)
+            if (external == null) {
+                Logger.w(LOG_TAG, "The ${impl} factory has no map for this MapView, it stays empty")
+                mapUnavailable = true
+                mapReleased = true
+                return
+            }
             mExternalMap = external
             external.attach(this)
             mMap = external.mapboxMap

@@ -2,6 +2,7 @@
 import Turf
 import MapKit
 
+/// Returning nil, e.g. for a map that no longer exists, leaves the `RNMBXMapView` without a map until it's remounted.
 public typealias RNMBXMapViewFactoryFunc = (String, RNMBXMapView) -> (MapView?)
 
 /**
@@ -205,9 +206,9 @@ open class RNMBXMapView: UIView, RCTInvalidating {
     cancelables.forEach { $0.cancel() }
     cancelables.removeAll()
 
-    if ownsMapView {
-      _mapView.gestures.delegate = nil
-      _mapView.removeFromSuperview()
+    if ownsMapView, let mapView = _mapView {
+      mapView.gestures.delegate = nil
+      mapView.removeFromSuperview()
     }
     _mapView = nil
 
@@ -292,10 +293,22 @@ open class RNMBXMapView: UIView, RCTInvalidating {
   public var ownsMapView = true
 
   var _mapView: MapView! = nil
-  func createMapView() -> MapView {
-    if let mapViewImpl = mapViewImpl, let mapViewInstance = createAndAddMapViewImpl(mapViewImpl, self) {
+  private var mapUnavailable = false
+
+  @objc public var hasMap: Bool { _mapView != nil }
+
+  func createMapView() -> MapView? {
+    if let mapViewImpl = mapViewImpl, let factory = RNMBXMapViewFactory.get(mapViewImpl) {
+      guard let mapViewInstance = factory(mapViewImpl, self) else {
+        Logger.log(level: .warn, message: "The \(mapViewImpl) factory has no map for this MapView, it stays empty")
+        mapUnavailable = true
+        return nil
+      }
       _mapView = mapViewInstance
     } else {
+      if let mapViewImpl = mapViewImpl {
+        Logger.log(level:.error, message: "No mapview factory registered for: \(mapViewImpl)")
+      }
       _mapView = MapView(frame: self.bounds, mapInitOptions:  MapInitOptions())
       _mapView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
       addSubview(_mapView)
@@ -314,15 +327,6 @@ open class RNMBXMapView: UIView, RCTInvalidating {
     }
     afterMapViewAdded()
     return _mapView
-  }
-
-  func createAndAddMapViewImpl(_ impl: String, _ view: RNMBXMapView) -> MapView? {
-    if let factory = RNMBXMapViewFactory.get(impl) {
-      return factory(impl, view);
-    } else {
-      Logger.log(level:.error, message: "No mapview factory registered for: \(impl)")
-      return nil
-    }
   }
 
   @available(*, deprecated, renamed: "withMapView", message: "mapView can be nil if the map initialization has not finished, use withMapView instead")
@@ -1006,10 +1010,14 @@ open class RNMBXMapView: UIView, RCTInvalidating {
   }
 
   @objc override public func didSetProps(_ props: [String]) {
-    if (_mapView == nil) {
-      let view = createMapView()
-
-      mapViewWaiters.onInit(view)
+    if (_mapView == nil && !mapUnavailable) {
+      if let view = createMapView() {
+        mapViewWaiters.onInit(view)
+      }
+    }
+    if mapUnavailable {
+      changes.changes.removeAll()
+      return
     }
     changes.apply(self)
   }
