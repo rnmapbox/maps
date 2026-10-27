@@ -26,14 +26,14 @@ allprojects {
 
 ### Using non default mapbox version
 
-*Warning*: If you set a custom version, make sure you revisit any time you update @rnmapbox/maps. Setting it to an earlier version than what we expect will likely result in a build error.
+*Warning*: If you set a custom version, make sure you revisit any time you update @rnmapbox/maps. Setting it to an earlier version than what we expect will likely result in a build error: @rnmapbox/maps 10.3.12 and later need Mapbox Maps SDK 11.33.0 or newer.
 
 Set `RNMapboxMapsVersion` in `android/build.gradle > buildscript > ext` section
 
 ```groovy
 buildscript {
     ext {
-        RNMapboxMapsVersion = '11.16.2'
+        RNMapboxMapsVersion = '11.33.0'
     }
 }
 ```
