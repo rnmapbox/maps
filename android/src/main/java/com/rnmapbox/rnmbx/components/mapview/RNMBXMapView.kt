@@ -127,7 +127,27 @@ typealias Factory = (impl: String, RNMBXMapView) -> MapView?;
  * A map owned by native code, e.g. a `MapSurface` on a car screen: `RNMBXMapView` adds its children to it but doesn't
  * load a style, change its ornaments or gestures, or destroy it. `mapView` is null if the map isn't drawn by a `MapView`.
  */
-class RNMBXExternalMap(val mapboxMap: MapboxMap, val plugins: MapPluginProviderDelegate, val mapView: MapView? = null)
+class RNMBXExternalMap(val mapboxMap: MapboxMap, val plugins: MapPluginProviderDelegate, val mapView: MapView? = null) {
+    private val mapViews = mutableSetOf<RNMBXMapView>()
+
+    internal fun attach(mapView: RNMBXMapView) {
+        mapViews.add(mapView)
+    }
+
+    internal fun detach(mapView: RNMBXMapView) {
+        mapViews.remove(mapView)
+    }
+
+    /**
+     * Call before destroying the map, so the `RNMBXMapView`s showing it remove their children while it's still alive,
+     * not when React unmounts them later.
+     */
+    fun invalidate() {
+        val mapViews = mapViews.toList()
+        this.mapViews.clear()
+        mapViews.forEach { it.releaseMap() }
+    }
+}
 
 typealias ExternalMapFactory = (impl: String, RNMBXMapView) -> RNMBXExternalMap?;
 
@@ -239,6 +259,7 @@ open class RNMBXMapView(private val mContext: Context, var mManager: RNMBXMapVie
 
     private lateinit var mMapView: MapView
     private var mExternalMap: RNMBXExternalMap? = null
+    private var mapReleased = false
     val isInitialized: Boolean
         get() = this::mMap.isInitialized
 
@@ -483,7 +504,7 @@ open class RNMBXMapView(private val mContext: Context, var mManager: RNMBXMapVie
             //}
         }
 
-        val addToMap = styleLoaded || (feature?.requiresStyleLoad == false)
+        val addToMap = !mapReleased && (styleLoaded || (feature?.requiresStyleLoad == false))
 
         var entry = FeatureEntry(feature, childView, false)
         if (addToMap) {
@@ -1409,6 +1430,7 @@ open class RNMBXMapView(private val mContext: Context, var mManager: RNMBXMapVie
     private fun createMap() {
         mapViewImpl?.let { impl -> RNMBXMapViewFactory.getExternalMap(impl)?.invoke(impl, this) }?.let { external ->
             mExternalMap = external
+            external.attach(this)
             mMap = external.mapboxMap
             setUpMap(mMap)
             return
@@ -1782,6 +1804,14 @@ open class RNMBXMapView(private val mContext: Context, var mManager: RNMBXMapVie
      */
 
     fun onDropViewInstance() {
+        mExternalMap?.detach(this)
+        releaseMap()
+        lifecycle.onDestroy()
+    }
+
+    internal fun releaseMap() {
+        if (mapReleased) return
+        mapReleased = true
         languageRejectionSubscription?.cancel()
         languageRejectionSubscription = null
         mapLoadingErrorSubscription?.cancel()
@@ -1789,7 +1819,6 @@ open class RNMBXMapView(private val mContext: Context, var mManager: RNMBXMapVie
         removeAllFeaturesFromMap(RemovalReason.ON_DESTROY)
         mapView?.viewAnnotationManager?.removeAllViewAnnotations()
         mLocationComponentManager?.onDestroy()
-        lifecycle.onDestroy()
     }
 
     override fun onAttachedToWindow() {
