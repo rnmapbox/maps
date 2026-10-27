@@ -4,6 +4,41 @@ import Mapbox from '@rnmapbox/maps';
 
 import sheet from '../../styles/sheet';
 
+// Needs no network, so the e2e test checks the map itself, not the runner's connection to Mapbox
+const styleJSON = JSON.stringify({
+  version: 8,
+  sources: {
+    square: {
+      type: 'geojson',
+      data: {
+        type: 'Polygon',
+        coordinates: [
+          [
+            [19.02, 47.49],
+            [19.06, 47.49],
+            [19.06, 47.51],
+            [19.02, 47.51],
+            [19.02, 47.49],
+          ],
+        ],
+      },
+    },
+  },
+  layers: [
+    {
+      id: 'background',
+      type: 'background',
+      paint: { 'background-color': '#dfe8d4' },
+    },
+    {
+      id: 'square',
+      type: 'fill',
+      source: 'square',
+      paint: { 'fill-color': '#3b82f6' },
+    },
+  ],
+});
+
 const MapLoaded = () => {
   const [loaded, setLoaded] = useState(false);
 
@@ -11,6 +46,7 @@ const MapLoaded = () => {
     <>
       <Mapbox.MapView
         style={sheet.matchParent}
+        styleJSON={styleJSON}
         testID="e2e-map"
         onDidFinishLoadingMap={() => setLoaded(true)}
       >
