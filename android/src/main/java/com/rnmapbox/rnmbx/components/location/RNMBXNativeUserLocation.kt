@@ -278,7 +278,7 @@ class RNMBXNativeUserLocation(context: Context) : AbstractMapFeature(context), O
     }
 
     private fun _fetchImages(map: RNMBXMapView) {
-        map.mapView?.getMapboxMap()?.getStyle()?.let { style ->
+        map.getMapboxMap().getStyle()?.let { style ->
             imageNames.forEach { (part,name) ->
                 if (name != null) {
                     if (style.hasStyleImage(name)) {
