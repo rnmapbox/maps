@@ -203,6 +203,7 @@ open class RNMBXMapView: UIView, RCTInvalidating {
   public func invalidate() {
     self.removeAllFeaturesFromMap(reason: .OnDestroy)
 
+    cancelExternalStyleObservers()
     cancelables.forEach { $0.cancel() }
     cancelables.removeAll()
 
@@ -321,9 +322,8 @@ open class RNMBXMapView: UIView, RCTInvalidating {
       _mapView.gestures.delegate = self
     }
     setupEvents()
-    if !ownsMapView, _mapView.mapboxMap.isStyleLoaded {
-      // No styleLoaded event follows for a style its owner already loaded.
-      styleLoadWaiters.onInit(_mapView.mapboxMap)
+    if !ownsMapView {
+      initWhenExternalStyleLoaded()
     }
     afterMapViewAdded()
     return _mapView
@@ -337,6 +337,31 @@ open class RNMBXMapView: UIView, RCTInvalidating {
   @available(*, deprecated, renamed: "withMapboxMap", message: "mapboxMap can be nil if the map initialization has not finished, use withMapboxMap instead")
   var mapboxMap: MapboxMap! {
     get { _mapView?.mapboxMap }
+  }
+
+  private var externalStyleObservers: [AnyCancelable] = []
+
+  // No styleLoaded event follows for a style the owner already loaded, and `isStyleLoaded` can be false until its sources load.
+  private func initWhenExternalStyleLoaded() {
+    let initIfStyleLoaded = { [weak self] in
+      guard let self = self, let mapboxMap = self._mapView?.mapboxMap else { return }
+      if !self.styleLoadWaiters.hasInited() {
+        guard mapboxMap.isStyleLoaded else { return }
+        self.addFeaturesToMap(style: mapboxMap.style)
+        self.styleLoadWaiters.onInit(mapboxMap)
+      }
+      self.cancelExternalStyleObservers()
+    }
+    externalStyleObservers = [
+      _mapView.mapboxMap.onSourceDataLoaded.observe { _ in initIfStyleLoaded() },
+      _mapView.mapboxMap.onStyleDataLoaded.observe { _ in initIfStyleLoaded() },
+    ]
+    initIfStyleLoaded()
+  }
+
+  private func cancelExternalStyleObservers() {
+    externalStyleObservers.forEach { $0.cancel() }
+    externalStyleObservers.removeAll()
   }
 
   @objc public func addToMap(_ subview: UIView) {
