@@ -288,6 +288,27 @@ open class RNMBXMapView(private val mContext: Context, var mManager: RNMBXMapVie
 
     private var wasGestureActive = false
     private var isGestureActive = false
+    private val startupCameraEvents = object {
+        private var isReady = false
+        private var hasPendingChange = false
+
+        fun onCameraChanged() {
+            if (!isReady) {
+                hasPendingChange = true
+                return
+            }
+            sendCameraChangedEvents()
+        }
+
+        fun markReady() {
+            if (isReady) return
+            isReady = true
+            if (hasPendingChange) {
+                hasPendingChange = false
+                sendCameraChangedEvents()
+            }
+        }
+    }
 
     var mapViewImpl: String? = null
 
@@ -356,8 +377,7 @@ open class RNMBXMapView(private val mContext: Context, var mManager: RNMBXMapVie
         val _this = this
 
         map.addOnCameraChangeListener(OnCameraChangeListener { cameraChangedEventData ->
-            handleMapChangedEvent(EventTypes.REGION_IS_CHANGING)
-            handleMapChangedEvent(EventTypes.CAMERA_CHANGED)
+            startupCameraEvents.onCameraChanged()
         })
 
         map.addOnMapIdleListener(OnMapIdleListener { mapIdleEventData ->
@@ -1013,6 +1033,11 @@ open class RNMBXMapView(private val mContext: Context, var mManager: RNMBXMapVie
     }
 
     // region Events
+
+    private fun sendCameraChangedEvents() {
+        handleMapChangedEvent(EventTypes.REGION_IS_CHANGING)
+        handleMapChangedEvent(EventTypes.CAMERA_CHANGED)
+    }
 
     fun sendRegionDidChangeEvent() {
         handleMapChangedEvent(EventTypes.REGION_DID_CHANGE)
@@ -1841,6 +1866,8 @@ open class RNMBXMapView(private val mContext: Context, var mManager: RNMBXMapVie
         super.onAttachedToWindow()
         Handler(Looper.getMainLooper()).post {
             lifecycle.afterAttachFromLooper()
+            // Camera.addToMap applies defaultSettings in the attach callbacks (#4213).
+            startupCameraEvents.markReady()
         }
     }
 
