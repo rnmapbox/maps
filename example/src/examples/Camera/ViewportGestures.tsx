@@ -150,5 +150,6 @@ Follows a simulated moving location, and chooses which gestures stop following w
 In the object form, pan stops following, while zooming, rotating and pitching keep following and keep the user's value.
 `,
   disableSync: true,
+  webSupported: true,
 };
 ViewportGestures.metadata = metadata;

@@ -56,5 +56,6 @@ const metadata: ExampleWithMetadata['metadata'] = {
   docs: `
 Sets the label language for all maps in the app with \`Mapbox.setLanguage\`, which works with any language Mapbox supports and with the Standard style.
 `,
+  webSupported: true,
 };
 SetLanguage.metadata = metadata;

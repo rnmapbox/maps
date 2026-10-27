@@ -123,5 +123,6 @@ const metadata: ExampleWithMetadata['metadata'] = {
   docs: `
 Demonstrates how to detect when the map becomes steady after user gestures (pan, zoom, rotate). The CameraGestureObserver component fires the onMapSteady event after a configurable quiet period, providing information about the last gesture type and idle duration. onCameraChanged reports whether the camera is moving because of the user.
 `,
+  webSupported: true,
 };
 CameraGestureObserverExample.metadata = metadata;

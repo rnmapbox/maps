@@ -38,7 +38,7 @@ examples.forEach(({ groupName, examples: _examples, metadata: _metadata }) => {
       return;
     }
 
-    const { title, tags, docs, webSupported } = metadata;
+    const { title, tags, docs, webSupported, snackSupported } = metadata;
 
     let jscode: string = fs.readFileSync(
       path.join(mapsRootPath, fullPath),
@@ -85,6 +85,7 @@ title: ${title}
 tags: [${tags.join(', ')}]
 custom_props:
   example_rel_path: ${relPath}
+  snack_supported: ${snackSupported ?? webSupported ?? false}
 custom_edit_url: https://github.com/rnmapbox/maps/tree/master/example/src/examples/${relPath}
 ---
 ${docs}${webLink}

@@ -128,5 +128,6 @@ const metadata = {
 Two overlapping markers where \`priority\` picks the one that is shown, a marker hidden
 below \`minZoom\`, and a marker on a 3D building that \`allowZElevate\` lifts to the roof.
 `,
+  webSupported: true,
 };
 MarkerViewPlacement.metadata = metadata;
