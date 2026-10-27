@@ -155,7 +155,7 @@ jobs:
         if: inputs.E2E_MODE == 'test'
         run: |
           npx detox --version
-          yarn detox test --configuration ios.debug.ci --take-screenshots failing --record-logs failing e2e/firstTest.e2e.js
+          yarn detox test --configuration ios.debug.ci --take-screenshots failing --record-logs failing --capture-view-hierarchy enabled e2e/firstTest.e2e.js
 
       # Informational only, the snapshots are compared by the percy job
       - name: Capture visual snapshots
@@ -196,12 +196,29 @@ jobs:
           path: ${{ runner.temp }}/percy-doc-screenshots
           if-no-files-found: ignore
 
+      # e2e/environment.js has already captured the runner state at the moment a test failed
+      - name: Collect simulator diagnostics on failure
+        if: failure()
+        continue-on-error: true
+        run: |
+          mkdir -p artifacts/diagnostics/crash-reports
+          cp ~/Library/Logs/DiagnosticReports/RNMapboxExample* artifacts/diagnostics/crash-reports/ 2>/dev/null || true
+          uptime > artifacts/diagnostics/uptime.txt
+          /usr/bin/log show --last 15m --style compact --predicate 'process == "CoreSimulatorService" OR process == "simctl"' \
+            > artifacts/diagnostics/host-coresimulator.log 2>&1 || true
+          if [ -n "$DETOX_DEVICE_UDID" ]; then
+            xcrun simctl spawn "$DETOX_DEVICE_UDID" log show --last 15m --style compact \
+              --predicate 'process == "RNMapboxExample" OR process == "SpringBoard"' \
+              > artifacts/diagnostics/simulator.log 2>&1 || true
+          fi
+
       - name: Store Detox artifacts on test failure
         uses: actions/upload-artifact@v4
         if: failure()
         with:
-          name: detox-artifacts
+          name: detox-artifacts-attempt-${{ github.run_attempt }}
           path: example/artifacts
+          retention-days: 14
 
   percy:
     name: Percy visual snapshots
