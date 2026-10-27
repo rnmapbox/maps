@@ -8,7 +8,8 @@ import { MapView } from '@rnmapbox/maps';
 MapView
 
 ```
-MapView backed by Mapbox Native GL
+MapView renders an interactive Mapbox map in a React Native app on iOS and Android.
+It is the root component of a map: add a Camera, sources, layers, annotations and the user location as its children.
 
 ## props
 

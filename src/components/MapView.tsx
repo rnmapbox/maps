@@ -536,7 +536,8 @@ type CallbablePropKeysWithoutOn = CallbablePropKeys extends `on${infer C}`
 type Debounced<F> = F & { clear(): void; flush(): void };
 
 /**
- * MapView backed by Mapbox Native GL
+ * MapView renders an interactive Mapbox map in a React Native app on iOS and Android.
+ * It is the root component of a map: add a Camera, sources, layers, annotations and the user location as its children.
  */
 class MapView extends NativeBridgeComponent(
   React.PureComponent<Props>,

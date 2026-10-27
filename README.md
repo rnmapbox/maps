@@ -79,7 +79,7 @@ We support Mapbox Maps SDK v11. See [iOS](ios/install.md) & [Android](android/in
 Check our [Installation instructions](https://rnmapbox.github.io/docs/install)
 
 ### Getting Started
-For more information, check out our [Getting Started](/docs/GettingStarted.md) section
+For more information, check out our [Getting Started](https://rnmapbox.github.io/docs/install) section
 
 ## Run Project
 Before you run your project be sure you have completed the Installation Guides for Android or iOS.
@@ -142,49 +142,49 @@ const styles = StyleSheet.create({
 
 ### Components
 
-- [MapView](/docs/MapView.md)
-- [StyleImport](/docs/StyleImport.md)
-- [Light](/docs/Light.md)
+- [MapView](https://rnmapbox.github.io/docs/components/MapView)
+- [StyleImport](https://rnmapbox.github.io/docs/components/StyleImport)
+- [Light](https://rnmapbox.github.io/docs/components/Light)
 - [StyleSheet](/docs/StyleSheet.md)
-- [PointAnnotation](/docs/PointAnnotation.md)
-- [MarkerView](/docs/MarkerView.md)
-- [Callout](/docs/Callout.md)
-- [Camera](docs/Camera.md)
-- [UserLocation](docs/UserLocation.md)
-- [LocationPuck](docs/LocationPuck.md)
-- [Images](docs/Images.md)
-- [Image](docs/Image.md)
-- [Models](docs/Models.md)
+- [PointAnnotation](https://rnmapbox.github.io/docs/components/PointAnnotation)
+- [MarkerView](https://rnmapbox.github.io/docs/components/MarkerView)
+- [Callout](https://rnmapbox.github.io/docs/components/Callout)
+- [Camera](https://rnmapbox.github.io/docs/components/Camera)
+- [UserLocation](https://rnmapbox.github.io/docs/components/UserLocation)
+- [LocationPuck](https://rnmapbox.github.io/docs/components/LocationPuck)
+- [Images](https://rnmapbox.github.io/docs/components/Images)
+- [Image](https://rnmapbox.github.io/docs/components/Image)
+- [Models](https://rnmapbox.github.io/docs/components/Models)
 
 ### Sources
 
-- [VectorSource](/docs/VectorSource.md)
-- [ShapeSource](/docs/ShapeSource.md)
-- [RasterSource](/docs/RasterSource.md)
-- [RasterDemSource](/docs/RasterDemSource.md)
+- [VectorSource](https://rnmapbox.github.io/docs/components/VectorSource)
+- [ShapeSource](https://rnmapbox.github.io/docs/components/ShapeSource)
+- [RasterSource](https://rnmapbox.github.io/docs/components/RasterSource)
+- [RasterDemSource](https://rnmapbox.github.io/docs/components/RasterDemSource)
 
 ### Layers
 
-- [BackgroundLayer](/docs/BackgroundLayer.md)
-- [CircleLayer](/docs/CircleLayer.md)
-- [FillExtrusionLayer](/docs/FillExtrusionLayer.md)
-- [FillLayer](/docs/FillLayer.md)
-- [LineLayer](/docs/LineLayer.md)
-- [RasterLayer](/docs/RasterLayer.md)
-- [SymbolLayer](/docs/SymbolLayer.md)
-- [HeatmapLayer](/docs/HeatmapLayer.md)
-- [SkyLayer](/docs/SkyLayer.md)
-- [ModelLayer](/docs/ModelLayer.md)
+- [BackgroundLayer](https://rnmapbox.github.io/docs/components/BackgroundLayer)
+- [CircleLayer](https://rnmapbox.github.io/docs/components/CircleLayer)
+- [FillExtrusionLayer](https://rnmapbox.github.io/docs/components/FillExtrusionLayer)
+- [FillLayer](https://rnmapbox.github.io/docs/components/FillLayer)
+- [LineLayer](https://rnmapbox.github.io/docs/components/LineLayer)
+- [RasterLayer](https://rnmapbox.github.io/docs/components/RasterLayer)
+- [SymbolLayer](https://rnmapbox.github.io/docs/components/SymbolLayer)
+- [HeatmapLayer](https://rnmapbox.github.io/docs/components/HeatmapLayer)
+- [SkyLayer](https://rnmapbox.github.io/docs/components/SkyLayer)
+- [ModelLayer](https://rnmapbox.github.io/docs/components/ModelLayer)
 
 ### Terrain
 
-- [Terrain](/docs/Terrain.md)
-- [Atmosphere](/docs/Atmosphere.md)
+- [Terrain](https://rnmapbox.github.io/docs/components/Terrain)
+- [Atmosphere](https://rnmapbox.github.io/docs/components/Atmosphere)
 
 ### Offline
 
-- [OfflineManager](/docs/OfflineManager.md)
-- [SnapshotManager](/docs/snapshotManager.md)
+- [OfflineManager](https://rnmapbox.github.io/docs/components/offlineManager)
+- [SnapshotManager](https://rnmapbox.github.io/docs/components/snapshotManager)
 
 ### Misc
 
