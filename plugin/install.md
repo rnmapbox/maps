@@ -20,7 +20,7 @@ After installing this package, add the [config plugin](https://docs.expo.io/guid
       [
         "@rnmapbox/maps",
         {
-          "RNMapboxMapsVersion": "11.20.1"
+          "RNMapboxMapsVersion": "11.33.0"
         }
       ]
     ]
@@ -49,7 +49,7 @@ Next, rebuild your app as described in the ["Adding custom native code"](https:/
 
 ### Advanced Configuration
 
-It's possible to overwrite the native SDK version with `RNMapboxMapsVersion`:
+It's possible to overwrite the native SDK version with `RNMapboxMapsVersion`. @rnmapbox/maps 10.3.12 and later need Mapbox Maps SDK 11.33.0 or newer:
 
 ```json
 {
@@ -58,7 +58,7 @@ It's possible to overwrite the native SDK version with `RNMapboxMapsVersion`:
       [
         "@rnmapbox/maps",
         {
-          "RNMapboxMapsVersion": "11.20.1"
+          "RNMapboxMapsVersion": "11.33.0"
         }
       ]
     ]
