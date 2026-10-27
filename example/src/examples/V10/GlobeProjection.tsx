@@ -81,5 +81,6 @@ const metadata: ExampleWithMetadata['metadata'] = {
   docs: `
 Shows map with globe projection
 `,
+  webSupported: true,
 };
 GlobeProjection.metadata = metadata;

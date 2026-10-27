@@ -6,6 +6,8 @@ export type ExampleMetadata = {
   waitForMapIdle?: boolean;
   excludeFromPercy?: boolean;
   webSupported?: boolean;
+  /** Whether the docs show an "Edit in Snack" link; defaults to `webSupported`. */
+  snackSupported?: boolean;
 };
 
 export type ExampleWithMetadata = React.ComponentType & {

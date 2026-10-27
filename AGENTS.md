@@ -121,7 +121,7 @@ The project uses Mapbox Maps SDK v11 and React Native's New Architecture (Fabric
 - Examples with JS timers or animations that block Detox sync should set `disableSync: true` in their metadata
 - Examples whose maps never go idle (following the user location, continuous animations) should set `waitForMapIdle: false` in their metadata, so the screenshot is taken after a fixed delay instead of the 20 s idle timeout
 - Examples whose screenshot isn't the same on every run (animations, label placement, random data) should set `excludeFromPercy: true` in their metadata to keep them out of the nightly Percy build
-- Examples that work in the web build of the example app should set `webSupported: true` in their metadata; their doc page then links to the example in the hosted web app (https://rnmapbox.github.io/example-app/)
+- Examples that work in the web build of the example app should set `webSupported: true` in their metadata; their doc page then links to the example in the hosted web app (https://rnmapbox.github.io/example-app/). The "Edit in Snack" link follows `webSupported` too; set `snackSupported` only where Snack differs from the web example app
 - See CONTRIBUTING.md for build and run instructions
 
 ### Documentation

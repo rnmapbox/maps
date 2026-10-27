@@ -145,7 +145,8 @@
             "Images#stretchY",
             "Images#content"
           ],
-          "docs": "\nDemonstrates Scalable images.\n\nYou can use stretchX, stretchY and content to scale a bitmap image - keep parts of it fixed while only scale specific parts.\n"
+          "docs": "\nDemonstrates Scalable images.\n\nYou can use stretchX, stretchY and content to scale a bitmap image - keep parts of it fixed while only scale specific parts.\n",
+          "webSupported": true
         },
         "fullPath": "example/src/examples/SymbolCircleLayer/ScalableImages.tsx",
         "relPath": "SymbolCircleLayer/ScalableImages.tsx",
@@ -295,7 +296,8 @@
             "CameraGestureObserver#maxIntervalMs",
             "CameraGestureObserver#onCameraChanged"
           ],
-          "docs": "\nDemonstrates how to detect when the map becomes steady after user gestures (pan, zoom, rotate). The CameraGestureObserver component fires the onMapSteady event after a configurable quiet period, providing information about the last gesture type and idle duration. onCameraChanged reports whether the camera is moving because of the user.\n"
+          "docs": "\nDemonstrates how to detect when the map becomes steady after user gestures (pan, zoom, rotate). The CameraGestureObserver component fires the onMapSteady event after a configurable quiet period, providing information about the last gesture type and idle duration. onCameraChanged reports whether the camera is moving because of the user.\n",
+          "webSupported": true
         },
         "fullPath": "example/src/examples/Map/CameraGestureObserver.tsx",
         "relPath": "Map/CameraGestureObserver.tsx",
@@ -436,7 +438,8 @@
           "tags": [
             "Mapbox#setLanguage"
           ],
-          "docs": "\nSets the label language for all maps in the app with `Mapbox.setLanguage`, which works with any language Mapbox supports and with the Standard style.\n"
+          "docs": "\nSets the label language for all maps in the app with `Mapbox.setLanguage`, which works with any language Mapbox supports and with the Standard style.\n",
+          "webSupported": true
         },
         "fullPath": "example/src/examples/Map/SetLanguage.tsx",
         "relPath": "Map/SetLanguage.tsx",
@@ -492,7 +495,8 @@
           "title": "Show Map Local Style",
           "tags": [],
           "docs": "\nCustomize ornaments of the map(logo, compass, scalebar, attribution)\n",
-          "waitForMapIdle": false
+          "waitForMapIdle": false,
+          "webSupported": true
         },
         "fullPath": "example/src/examples/Map/ShowMapLocalStyle.tsx",
         "relPath": "Map/ShowMapLocalStyle.tsx",
@@ -532,7 +536,8 @@
           "tags": [
             "Style#json"
           ],
-          "docs": "\nChange style of a MapView on the fly.\n"
+          "docs": "\nChange style of a MapView on the fly.\n",
+          "webSupported": true
         },
         "fullPath": "example/src/examples/Map/StyleJson.js",
         "relPath": "Map/StyleJson.js",
@@ -622,7 +627,8 @@
           "tags": [
             "MapView#projection"
           ],
-          "docs": "\nShows map with globe projection\n"
+          "docs": "\nShows map with globe projection\n",
+          "webSupported": true
         },
         "fullPath": "example/src/examples/V10/GlobeProjection.tsx",
         "relPath": "V10/GlobeProjection.tsx",
@@ -748,7 +754,8 @@
             "Interactive",
             "pointerEvents"
           ],
-          "docs": "\nShows marker view and point annotations, including an interactive marker with\nsliders, switch, counter, text input, and pressable button to verify complex\ntouch interactions inside a MarkerView. Toggle pointerEvents=\"none\" to make\nthe marker transparent to all touch events, passing them through to the map.\n"
+          "docs": "\nShows marker view and point annotations, including an interactive marker with\nsliders, switch, counter, text input, and pressable button to verify complex\ntouch interactions inside a MarkerView. Toggle pointerEvents=\"none\" to make\nthe marker transparent to all touch events, passing them through to the map.\n",
+          "webSupported": true
         },
         "fullPath": "example/src/examples/Annotations/MarkerView.tsx",
         "relPath": "Annotations/MarkerView.tsx",
@@ -763,7 +770,8 @@
             "MarkerView#minZoom",
             "MarkerView#allowZElevate"
           ],
-          "docs": "\nTwo overlapping markers where `priority` picks the one that is shown, a marker hidden\nbelow `minZoom`, and a marker on a 3D building that `allowZElevate` lifts to the roof.\n"
+          "docs": "\nTwo overlapping markers where `priority` picks the one that is shown, a marker hidden\nbelow `minZoom`, and a marker on a 3D building that `allowZElevate` lifts to the roof.\n",
+          "webSupported": true
         },
         "fullPath": "example/src/examples/Annotations/MarkerViewPlacement.tsx",
         "relPath": "Annotations/MarkerViewPlacement.tsx",
@@ -866,7 +874,8 @@
           "title": "GeoJSON Source",
           "tags": [],
           "docs": "",
-          "webSupported": true
+          "webSupported": true,
+          "snackSupported": false
         },
         "fullPath": "example/src/examples/FillRasterLayer/GeoJSONSource.js",
         "relPath": "FillRasterLayer/GeoJSONSource.js",
@@ -896,7 +905,8 @@
           "docs": "",
           "disableSync": true,
           "excludeFromPercy": true,
-          "webSupported": true
+          "webSupported": true,
+          "snackSupported": false
         },
         "fullPath": "example/src/examples/FillRasterLayer/ImageOverlay.js",
         "relPath": "FillRasterLayer/ImageOverlay.js",
@@ -1103,7 +1113,8 @@
             "Viewport#transitionsToIdleUponUserInteraction"
           ],
           "docs": "\nFollows a simulated moving location, and chooses which gestures stop following with `transitionsToIdleUponUserInteraction`.\n\nIn the object form, pan stops following, while zooming, rotating and pitching keep following and keep the user's value.\n",
-          "disableSync": true
+          "disableSync": true,
+          "webSupported": true
         },
         "fullPath": "example/src/examples/Camera/ViewportGestures.tsx",
         "relPath": "Camera/ViewportGestures.tsx",
