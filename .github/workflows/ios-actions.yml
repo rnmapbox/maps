@@ -101,12 +101,14 @@ jobs:
       - run: yarn postinstall
         working-directory: example
 
-      - name: Cache Pods
+      # pod install downloads these from repo1.maven.org, which can stall for minutes
+      - name: Cache React Native prebuilt tarballs
         uses: actions/cache@v4
-        id: pods-cache
         with:
-          path: ios/Pods
-          key: pods-${{ hashFiles('**/Podfile.lock') }}-${{ inputs.MAP_IMPL }}-${{ inputs.NEW_ARCH }}}
+          path: |
+            example/ios/Pods/ReactNativeCore-artifacts
+            example/ios/Pods/ReactNativeDependencies-artifacts
+          key: rn-prebuilt-${{ hashFiles('example/node_modules/react-native/package.json') }}
 
       - name: Check CocoaPods version
         id: cocoapods-version
@@ -120,7 +122,6 @@ jobs:
         run: sudo gem install cocoapods -v 1.15.2
 
       - name: Install Pod Dependencies
-        if: steps.pods-cache.outputs.cache-hit != 'true'
         run: cd ios && pod --version && pod update MapboxMaps hermes-engine Turf && pod install
         env:
           CI_MAP_IMPL: ${{ inputs.MAP_IMPL }}
