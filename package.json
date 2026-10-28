@@ -157,7 +157,8 @@
   ],
   "resolutions": {
     "@typescript-eslint/eslint-plugin": "^7.18.0",
-    "@typescript-eslint/parser": "^7.18.0"
+    "@typescript-eslint/parser": "^7.18.0",
+    "detox@^20.51.4": "patch:detox@npm%3A20.51.4#./.yarn/patches/detox-npm-20.51.4-f0776917eb.patch"
   },
   "packageManager": "yarn@3.6.1",
   "react-native-builder-bob": {

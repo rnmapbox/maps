@@ -1,0 +1,14 @@
+diff --git a/src/devices/common/drivers/ios/tools/AppleSimUtils.js b/src/devices/common/drivers/ios/tools/AppleSimUtils.js
+index e722f16e58de4f9447eed0ebac0476c30d8e292e..5daf3f4749ec93eec56dd77acf3994c37396cb6d 100644
+--- a/src/devices/common/drivers/ios/tools/AppleSimUtils.js
++++ b/src/devices/common/drivers/ios/tools/AppleSimUtils.js
+@@ -252,7 +252,8 @@ class AppleSimUtils {
+     const frameworkPath = await environment.getFrameworkPath();
+     const effectiveArch = arch && (await this._isArchArgumentAccessible(udid)) ? arch : undefined;
+     const result = await this._launchMagically(frameworkPath, udid, bundleId, launchArgs, languageAndLocale, effectiveArch);
+-    await this._printLoggingHint(udid, bundleId);
++    // `simctl get_app_container` can stall for minutes right after a launch on loaded CI runners
++    this._printLoggingHint(udid, bundleId).catch(() => {});
+ 
+     return this._parseLaunchId(result);
+   }

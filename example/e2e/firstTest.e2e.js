@@ -1,6 +1,7 @@
 /* global device, element, by, waitFor, describe, it, expect, beforeAll, afterEach */
 
 const MAP_LOAD_TIMEOUT = 60000;
+const TAP_ATTEMPTS = 3;
 
 async function openExample(groupTitle, exampleTitle) {
   await waitFor(element(by.text(groupTitle)))
@@ -15,9 +16,31 @@ async function openExample(groupTitle, exampleTitle) {
   await element(by.text(exampleTitle)).tap();
 }
 
+// A main thread stall between Detox's touch down and up turns a tap into a
+// long press, which the map doesn't report as a press, so tap again.
+async function tapUntilVisible(target, expected) {
+  for (let attempt = 1; ; attempt++) {
+    await element(target).tap();
+    try {
+      await waitFor(element(expected)).toBeVisible().withTimeout(10000);
+      return;
+    } catch (e) {
+      if (attempt === TAP_ATTEMPTS) {
+        throw e;
+      }
+    }
+  }
+}
+
 describe('Maps Example App', () => {
   beforeAll(async () => {
-    await device.launchApp({ permissions: { location: 'always' } });
+    await device.launchApp({
+      permissions: { location: 'always' },
+      launchArgs: { e2eIgnoreAllLogs: true },
+    });
+    // Don't wait for slow or stuck Mapbox requests: the map tests wait for
+    // what they need, and the others don't need the network
+    await device.setURLBlacklist(['.*\\.mapbox\\.com/.*']);
   });
 
   afterEach(async () => {
@@ -46,9 +69,9 @@ describe('Maps Example App', () => {
   it('should show click location', async () => {
     await openExample('Map', 'Show Click');
     await expect(element(by.id('show-click-map-view'))).toBeVisible();
-    await element(by.id('show-click-map-view')).tap();
-    await waitFor(element(by.id('location-bubble-latitude')))
-      .toBeVisible()
-      .withTimeout(10000);
+    await tapUntilVisible(
+      by.id('show-click-map-view'),
+      by.id('location-bubble-latitude'),
+    );
   });
 });
