@@ -53,6 +53,9 @@ open class RNMBXImages : UIView, RNMBXMapComponent {
   @objc public func removeImageView(_ image: RNMBXImage) {
     imageViews.removeAll { $0 == image }
     image.images = nil
+    if let style = style {
+      removeImages(style: style, names: [image.name])
+    }
   }
 
   @objc open override func insertReactSubview(_ subview: UIView!, at atIndex: Int) {
@@ -88,10 +91,22 @@ open class RNMBXImages : UIView, RNMBXMapComponent {
   }
   
   public func removeFromMap(_ map: RNMBXMapView, reason: RemovalReason) -> Bool {
+    map.images.removeAll { $0 === self }
+    if reason == .ViewRemoval, let style = style {
+      removeImages(style: style, names: Array(images.keys) + nativeImageInfos.map { $0.name } + imageViews.map { $0.name })
+    }
     self.style = nil
     imageManager = nil
-    // v10todo
     return true
+  }
+
+  // Another RNMBXImages providing the same name re-adds it via addMissingImageToStyle.
+  private func removeImages(style: Style, names: [String]) {
+    for name in names where hasImage(style: style, name: name) {
+      logged("RNMBXImages.removeImage: \(name)") {
+        try style.removeImage(withId: name)
+      }
+    }
   }
   
   func sameImage(oldValue: Any?, newValue: Any?) -> Bool {
@@ -163,6 +178,10 @@ open class RNMBXImages : UIView, RNMBXMapComponent {
     if let image = images[imageName] {
       addImages(style: style, images: [imageName: image], oldImages: [:])
       return true
+    }
+
+    if let imageView = imageViews.first(where: { $0.name == imageName }), let image = imageView.image {
+      return addImage(name: imageName, image: image, sdf: imageView.sdf, stretchX: imageView.stretchX, stretchY: imageView.stretchY, content: imageView.content, log: "RNMBXImages.addMissingImageToStyle")
     }
     return false
   }
