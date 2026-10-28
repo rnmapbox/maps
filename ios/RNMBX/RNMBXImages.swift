@@ -44,6 +44,10 @@ open class RNMBXImages : UIView, RNMBXMapComponent {
   
   @objc public func addImageView(_ image: RNMBXImage) {
     imageViews.append(image)
+    // addImageViews only runs from addToMap, so wire an image mounted after that here
+    if style != nil {
+      image.images = self
+    }
   }
 
   @objc public func removeImageView(_ image: RNMBXImage) {
