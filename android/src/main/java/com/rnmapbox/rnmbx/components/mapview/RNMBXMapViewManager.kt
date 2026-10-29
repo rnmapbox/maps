@@ -278,6 +278,12 @@ open class RNMBXMapViewManager(context: ReactApplicationContext, val viewTagReso
         map.setReactStyleGlyphURL(if (value.type == ReadableType.String) value.asString() else null)
     }
 
+    @ReactProp(name = "debugOptions")
+    override fun setDebugOptions(map: RNMBXMapView, value: Dynamic) {
+        val names = if (value.type == ReadableType.Array) value.asArray()?.toArrayList()?.map { "$it" } else null
+        map.setReactDebugOptions(names ?: emptyList())
+    }
+
     @ReactProp(name = "maxPitch")
     override fun setMaxPitch(map: RNMBXMapView, maxPitch: Dynamic) {
         // Allow clearing the limit by passing null from JS

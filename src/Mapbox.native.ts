@@ -15,6 +15,7 @@ export {
   default as MapView,
   type MapState,
   type ScreenPointPayload,
+  type DebugOption,
 } from './components/MapView';
 export { default as Light } from './components/Light';
 export { default as PointAnnotation } from './components/PointAnnotation';
