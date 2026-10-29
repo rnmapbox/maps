@@ -56,6 +56,20 @@ type Props = BaseProps & {
   tileSize?: number;
 
   /**
+   * When a tile for the current zoom level is not loaded yet, tiles up to this many zoom levels
+   * above it are requested and rendered in its place. 0 turns this off, so only tiles for the
+   * current zoom level are requested. The default value for this option is 4.
+   */
+  prefetchZoomDelta?: number;
+
+  /**
+   * Delay in milliseconds before a tile's network request is sent while a gesture or a camera
+   * animation is in progress. Tiles that leave the viewport before the delay elapses are never
+   * requested. Has no effect on an idle map. The default value for this option is 0.
+   */
+  tileNetworkRequestsDelay?: number;
+
+  /**
    * Influences the y direction of the tile coordinates. (tms inverts y axis)
    */
   tms?: boolean;
@@ -116,6 +130,8 @@ class RasterSource extends AbstractSource<Props, NativeProps> {
       minZoomLevel: this.props.minZoomLevel,
       maxZoomLevel: this.props.maxZoomLevel,
       tileSize: this.props.tileSize,
+      prefetchZoomDelta: this.props.prefetchZoomDelta,
+      tileNetworkRequestsDelay: this.props.tileNetworkRequestsDelay,
       tms: this.props.tms,
       attribution: this.props.attribution,
     };
