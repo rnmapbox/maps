@@ -6,6 +6,7 @@ import android.graphics.Region
 import android.os.Handler
 import android.os.Looper
 import android.view.Gravity
+import android.view.MotionEvent
 import android.view.View
 import android.view.View.OnLayoutChangeListener
 import android.view.ViewGroup
@@ -311,6 +312,18 @@ open class RNMBXMapView(private val mContext: Context, var mManager: RNMBXMapVie
         }
     }
 
+    private var mAfterLongPress = false
+
+    override fun dispatchTouchEvent(ev: MotionEvent): Boolean {
+        if (mAfterLongPress) {
+            val action = ev.actionMasked
+            if (action == MotionEvent.ACTION_UP || action == MotionEvent.ACTION_CANCEL) {
+                mAfterLongPress = false
+            }
+        }
+        return super.dispatchTouchEvent(ev)
+    }
+
     var mapViewImpl: String? = null
 
     /** Null before the map is created, and for an external map that isn't drawn by a `MapView` (e.g. a car screen `MapSurface`). */
@@ -440,10 +453,17 @@ open class RNMBXMapView(private val mContext: Context, var mManager: RNMBXMapVie
             }
 
             override fun onMove(moveGestureDetector: MoveGestureDetector): Boolean {
+                if (mAfterLongPress) {
+                    return true // consume the move events that come after a long press, to prevent the map from moving when the user is trying to long press on something
+                }
                 return mapGesture(MapGestureType.Move, moveGestureDetector)
             }
 
             override fun onMoveEnd(moveGestureDetector: MoveGestureDetector) {
+                if (mAfterLongPress) {
+                    mAfterLongPress = false
+                    return
+                }
                 mapGestureEnd(MapGestureType.Move, moveGestureDetector)
             }
         })
@@ -1009,6 +1029,7 @@ open class RNMBXMapView(private val mContext: Context, var mManager: RNMBXMapVie
         }
         val screenPointPx = mMap?.pixelForCoordinate(point)
         if (screenPointPx != null) {
+            mAfterLongPress = true
             val screenPointDp = toDp(screenPointPx)
             val event = MapClickEvent(_this, LatLng(point), screenPointDp, EventTypes.MAP_LONG_CLICK)
             mManager.handleEvent(event)
