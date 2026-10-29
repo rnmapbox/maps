@@ -5540,6 +5540,13 @@
         "description": "Overrides the glyph URL of the style, so labels use fonts from another glyph server, e.g.\n`https://example.com/fonts/{fontstack}/{range}.pbf`. It is re-applied on every style load.\nRemoving the prop restores the style's own glyphs from the next style load.\n\n@experimental Uses an experimental Mapbox API that may change in a future SDK release."
       },
       {
+        "name": "debugOptions",
+        "required": false,
+        "type": "Array",
+        "default": "none",
+        "description": "Debug drawings of the native map, e.g. `['tileBorders', 'collision']`:\n- `tileBorders`: tile boundaries as red lines\n- `parseStatus`: tile coordinates (x/y/z) in the corner of each tile\n- `timestamps`: when each tile was loaded\n- `collision`: symbol collision boxes, for diagnosing label placement\n- `overdraw`: each draw as a translucent fill, so overdrawn areas stand out\n- `stencilClip`: the stencil buffer instead of the color buffer\n- `depthBuffer`: the depth buffer instead of the color buffer\n- `modelBounds`: bounding boxes of 3D models\n- `light`: the light conditions of each tile\n- `camera`: a view with the camera's center, zoom, bearing and pitch\n- `padding`: the camera padding frame\n- `terrainWireframe`, `layers2DWireframe`, `layers3DWireframe`: Android only, wireframes of terrain and of 2D and 3D layers\n\nOptions a platform doesn't support are ignored there with a warning. An empty array or removing the prop turns all of them off."
+      },
+      {
         "name": "gestureSettings",
         "required": false,
         "type": {

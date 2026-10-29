@@ -67,6 +67,7 @@ export interface NativeProps extends ViewProps {
   styleURL?: OptionalProp<string>;
   symbolScaleBehavior?: UnsafeMixed<any>;
   styleGlyphURL?: OptionalProp<string>;
+  debugOptions?: UnsafeMixed<string[]>;
 
   gestureSettings?: UnsafeMixed<GestureSettings>;
 

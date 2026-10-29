@@ -176,7 +176,7 @@ describe('MapView', () => {
     });
   });
 
-  describe('surfaceView and transparent', () => {
+  describe('native props', () => {
     const renderNativeProps = (props) => {
       const { getByTestId, UNSAFE_getByType } = render(
         <MapView testID="map" {...props} />,
@@ -199,6 +199,13 @@ describe('MapView', () => {
       const props = renderNativeProps({ transparent: true, surfaceView: true });
       expect(props.transparent).toBe(true);
       expect(props.surfaceView).toBe(true);
+    });
+
+    test('passes debugOptions through', () => {
+      const props = renderNativeProps({
+        debugOptions: ['tileBorders', 'collision'],
+      });
+      expect(props.debugOptions).toEqual(['tileBorders', 'collision']);
     });
   });
 });

@@ -231,6 +231,13 @@ using namespace facebook::react;
         _view.reactSymbolScaleBehavior = nil;
     }
 
+    id debugOptions = RNMBXConvertFollyDynamicToId(newViewProps.debugOptions);
+    if (debugOptions != nil) {
+        _view.reactDebugOptions = debugOptions;
+    } else if (oldProps && RNMBXConvertFollyDynamicToId(oldViewProps.debugOptions) != nil) {
+        _view.reactDebugOptions = nil;
+    }
+
     id styleGlyphURL = RNMBXConvertFollyDynamicToId(newViewProps.styleGlyphURL);
     if (styleGlyphURL != nil) {
         _view.reactStyleGlyphURL = styleGlyphURL;

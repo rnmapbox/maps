@@ -338,6 +338,29 @@ Removing the prop restores the style's own glyphs from the next style load.
 
 
   
+### debugOptions
+
+```tsx
+Array
+```
+Debug drawings of the native map, e.g. `['tileBorders', 'collision']`:
+- `tileBorders`: tile boundaries as red lines
+- `parseStatus`: tile coordinates (x/y/z) in the corner of each tile
+- `timestamps`: when each tile was loaded
+- `collision`: symbol collision boxes, for diagnosing label placement
+- `overdraw`: each draw as a translucent fill, so overdrawn areas stand out
+- `stencilClip`: the stencil buffer instead of the color buffer
+- `depthBuffer`: the depth buffer instead of the color buffer
+- `modelBounds`: bounding boxes of 3D models
+- `light`: the light conditions of each tile
+- `camera`: a view with the camera's center, zoom, bearing and pitch
+- `padding`: the camera padding frame
+- `terrainWireframe`, `layers2DWireframe`, `layers3DWireframe`: Android only, wireframes of terrain and of 2D and 3D layers
+
+Options a platform doesn't support are ignored there with a warning. An empty array or removing the prop turns all of them off.
+
+[Debug Options](../examples/Map/DebugOptions)
+  
 ### gestureSettings
 
 ```tsx

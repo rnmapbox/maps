@@ -319,6 +319,19 @@
       },
       {
         "metadata": {
+          "title": "Debug Options",
+          "tags": [
+            "MapView#debugOptions"
+          ],
+          "docs": "\nToggles the native debug drawings of the map, like tile borders and symbol collision boxes. `terrainWireframe` is Android only, iOS ignores it with a warning.\n",
+          "excludeFromPercy": true
+        },
+        "fullPath": "example/src/examples/Map/DebugOptions.tsx",
+        "relPath": "Map/DebugOptions.tsx",
+        "name": "DebugOptions"
+      },
+      {
+        "metadata": {
           "title": "Dynamic URL",
           "tags": [
             "ShapeSource#url"

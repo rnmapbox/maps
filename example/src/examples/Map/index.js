@@ -19,6 +19,7 @@ export { default as LocalizeLabels } from './LocalizeLabels';
 export { default as SymbolScaleBehavior } from './SymbolScaleBehavior';
 export { default as SetLanguage } from './SetLanguage';
 export { default as ScreenCoordinates} from './ScreenCoordinates';
+export { default as DebugOptions } from './DebugOptions';
 
 export const metadata = {
   title: 'Map',

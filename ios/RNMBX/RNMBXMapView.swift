@@ -522,6 +522,7 @@ open class RNMBXMapView: UIView, RCTInvalidating {
     case transparent
     case symbolScaleBehavior
     case styleGlyphURL
+    case debugOptions
 
     func apply(_ map: RNMBXMapView) -> Void {
       if !map.ownsMapView {
@@ -573,6 +574,8 @@ open class RNMBXMapView: UIView, RCTInvalidating {
         map.applySymbolScaleBehavior()
       case .styleGlyphURL:
         map.applyStyleGlyphURL()
+      case .debugOptions:
+        map.applyDebugOptions()
       }
     }
   }
@@ -738,6 +741,44 @@ open class RNMBXMapView: UIView, RCTInvalidating {
         mapboxMap.styleGlyphURL = styleGlyphURL
       }
     }
+  }
+
+  static let debugOptionsByName: [String: MapViewDebugOptions] = [
+    "tileBorders": .tileBorders,
+    "parseStatus": .parseStatus,
+    "timestamps": .timestamps,
+    "collision": .collision,
+    "overdraw": .overdraw,
+    "stencilClip": .stencilClip,
+    "depthBuffer": .depthBuffer,
+    "modelBounds": .modelBounds,
+    "light": .light,
+    "camera": .camera,
+    "padding": .padding,
+  ]
+
+  static let androidOnlyDebugOptions: Set<String> = ["terrainWireframe", "layers2DWireframe", "layers3DWireframe"]
+
+  var debugOptions: MapViewDebugOptions = []
+
+  @objc public func setReactDebugOptions(_ value: [Any]?) {
+    var options: MapViewDebugOptions = []
+    for item in value ?? [] {
+      let name = item as? String ?? "\(item)"
+      if let option = Self.debugOptionsByName[name] {
+        options.insert(option)
+      } else if Self.androidOnlyDebugOptions.contains(name) {
+        Logger.log(level: .warn, tag: "RNMBXMapView", message: "debugOptions: \(name) is only supported on Android, ignored")
+      } else {
+        Logger.log(level: .warn, tag: "RNMBXMapView", message: "debugOptions: unknown option \(name), ignored")
+      }
+    }
+    debugOptions = options
+    changed(.debugOptions)
+  }
+
+  func applyDebugOptions() {
+    mapView.debugOptions = debugOptions
   }
 
   struct GestureSettings {

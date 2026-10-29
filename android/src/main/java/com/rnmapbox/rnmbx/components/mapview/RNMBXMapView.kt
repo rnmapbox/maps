@@ -21,6 +21,7 @@ import com.mapbox.common.MapboxCommonSettings
 import com.mapbox.common.SettingsServiceFactory
 import com.mapbox.common.SettingsServiceStorageType
 import com.mapbox.maps.*
+import com.mapbox.maps.debugoptions.MapViewDebugOptions
 import com.mapbox.maps.extension.localization.localizeLabels
 import com.mapbox.maps.extension.observable.eventdata.MapLoadingErrorEventData
 import com.mapbox.maps.extension.observable.eventdata.RenderFrameFinishedEventData
@@ -682,7 +683,8 @@ open class RNMBXMapView(private val mContext: Context, var mManager: RNMBXMapVie
         COMPASS(RNMBXMapView::applyCompass),
         MAX_PITCH(RNMBXMapView::applyMaxPitch),
         SYMBOL_SCALE_BEHAVIOR(RNMBXMapView::applySymbolScaleBehavior),
-        STYLE_GLYPH_URL(RNMBXMapView::applyStyleGlyphURL),;
+        STYLE_GLYPH_URL(RNMBXMapView::applyStyleGlyphURL),
+        DEBUG_OPTIONS(RNMBXMapView::applyDebugOptions),;
 
         override fun apply(mapView: RNMBXMapView) {
            _apply(mapView)
@@ -782,6 +784,25 @@ open class RNMBXMapView(private val mContext: Context, var mManager: RNMBXMapVie
     fun applyStyleGlyphURL() {
         val url = mStyleGlyphURL ?: return
         savedStyle?.setStyleGlyphURL(url)
+    }
+
+    private var mDebugOptions: Set<MapViewDebugOptions> = emptySet()
+
+    fun setReactDebugOptions(names: List<String>) {
+        mDebugOptions = names.mapNotNull { name ->
+            val option = debugOptionsByName[name]
+            if (option == null) {
+                Logger.w(LOG_TAG, "debugOptions: unknown option $name, ignored")
+            }
+            option
+        }.toSet()
+        changes.add(Property.DEBUG_OPTIONS)
+    }
+
+    private fun applyDebugOptions() {
+        mapView?.debugOptions = mDebugOptions
+        // The camera and padding options add views to the MapView
+        workaroundToRelayoutChildOfMapView()
     }
 
     fun setReactPreferredFramesPerSecond(preferredFramesPerSecond: Int) {
@@ -1456,6 +1477,23 @@ open class RNMBXMapView(private val mContext: Context, var mManager: RNMBXMapVie
 
     companion object {
         const val LOG_TAG = "RNMBXMapView"
+
+        private val debugOptionsByName = mapOf(
+            "tileBorders" to MapViewDebugOptions.TILE_BORDERS,
+            "parseStatus" to MapViewDebugOptions.PARSE_STATUS,
+            "timestamps" to MapViewDebugOptions.TIMESTAMPS,
+            "collision" to MapViewDebugOptions.COLLISION,
+            "overdraw" to MapViewDebugOptions.OVERDRAW,
+            "stencilClip" to MapViewDebugOptions.STENCIL_CLIP,
+            "depthBuffer" to MapViewDebugOptions.DEPTH_BUFFER,
+            "modelBounds" to MapViewDebugOptions.MODEL_BOUNDS,
+            "light" to MapViewDebugOptions.LIGHT,
+            "camera" to MapViewDebugOptions.CAMERA,
+            "padding" to MapViewDebugOptions.PADDING,
+            "terrainWireframe" to MapViewDebugOptions.TERRAIN_WIREFRAME,
+            "layers2DWireframe" to MapViewDebugOptions.LAYERS2_DWIREFRAME,
+            "layers3DWireframe" to MapViewDebugOptions.LAYERS3_DWIREFRAME,
+        )
     }
 
     private fun createMap() {
