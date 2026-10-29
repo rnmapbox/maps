@@ -123,6 +123,8 @@ The full documentation generation process looks like this:
   bun scripts/example-docs.ts
   ```
 
+  The doc page shows the example source up to `/* end-example-doc */`, so metadata and test-only code go after it. Lines ending with `// exclude-from-example-doc`, and lines between `/* exclude-from-example-doc:start */` and `/* exclude-from-example-doc:end */`, are left out too.
+
   Runs when `main` is changed by `update-docs` gh action workflow
 
 6.) publish doc site

@@ -128,6 +128,7 @@ The project uses Mapbox Maps SDK v11 and React Native's New Architecture (Fabric
 - Component docs are auto-generated from JSDoc comments
 - Don't edit `.md` files in `docs/` directly - edit source files and run `yarn generate`
 - Examples in `example/src/examples/` are used for documentation
+- Example doc pages show the source up to `/* end-example-doc */` (keep metadata after it), without lines ending in `// exclude-from-example-doc` or between `/* exclude-from-example-doc:start */` and `/* exclude-from-example-doc:end */`
 
 ### Fixing Bugs
 

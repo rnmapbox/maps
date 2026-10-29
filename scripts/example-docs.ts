@@ -14,10 +14,33 @@ import {
   mapsRootPath,
 } from './autogenHelpers/docconfig.js';
 
-const endOfExampleMarker = '/* end-example-doc */';
-
 import type { Examples } from './autogenHelpers/examplesJsonSchema';
 import type { Screenshots } from './autogenHelpers/screenshotsJsonSchema';
+
+const endOfExampleMarker = '/* end-example-doc */';
+const excludeLineMarker = '// exclude-from-example-doc';
+const excludeStartMarker = '/* exclude-from-example-doc:start */';
+const excludeEndMarker = '/* exclude-from-example-doc:end */';
+
+function stripExcludedLines(code: string): string {
+  let excluding = false;
+  return code
+    .split('\n')
+    .filter((line) => {
+      const trimmed = line.trim();
+      if (trimmed === excludeStartMarker) {
+        excluding = true;
+        return false;
+      }
+      if (trimmed === excludeEndMarker) {
+        excluding = false;
+        return false;
+      }
+      return !excluding && !trimmed.endsWith(excludeLineMarker);
+    })
+    .join('\n')
+    .replace(/\n{3,}/g, '\n\n');
+}
 
 // Published by .github/workflows/update-docs.yml, see the linking config in example/src/App.js
 const webExampleAppURL = 'https://rnmapbox.github.io/example-app/';
@@ -49,6 +72,7 @@ examples.forEach(({ groupName, examples: _examples, metadata: _metadata }) => {
     if (endOfMarkerIndex > 0) {
       jscode = jscode.slice(0, endOfMarkerIndex);
     }
+    jscode = stripExcludedLines(jscode);
 
     const mdPath = path.join(destGroupDir, `${name}.md`);
 

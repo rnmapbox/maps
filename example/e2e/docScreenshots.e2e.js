@@ -7,7 +7,8 @@
 const { mkdir, copyFile } = require('fs/promises');
 const fs = require('fs');
 const path = require('path');
-const { execSync, execFileSync } = require('child_process');
+const { promisify } = require('util');
+const { execSync, execFileSync, execFile } = require('child_process');
 
 const { device } = require('detox');
 
@@ -83,8 +84,7 @@ async function setSampleLocation() {
   execSync(`xcrun simctl location ${device.id} set ${latitude},${longitude}`);
 }
 
-async function saveImage(basePath, suffix = null) {
-  const imagePath = await device.takeScreenshot(`example-${suffix || ''}`);
+async function saveImage(imagePath, basePath, suffix = null) {
   const destDir = path.dirname(basePath);
   await mkdir(destDir, { recursive: true });
   var fullDestPath = basePath;
@@ -122,6 +122,44 @@ async function savePercyImage(imagePath, groupName, name) {
     String(safeAreaInsets.top),
     String(frame.width),
   ]);
+}
+
+const STABLE_INTERVAL_MS = 500;
+const STABLE_TIMEOUT_MS = 10000;
+const STABLE_MAX_CHANGED_PIXELS = 10;
+
+// Compared in a separate process for the same reason as savePercyImage.
+async function changedPixels(aPath, bPath) {
+  const { frame, safeAreaInsets } = rootViewAttributes;
+  const { stdout } = await promisify(execFile)(process.execPath, [
+    path.join(__dirname, 'changedPixels.js'),
+    aPath,
+    bPath,
+    String(safeAreaInsets.top),
+    String(frame.width),
+  ]);
+  return Number(stdout);
+}
+
+// Labels and tiles can still change after the maps report idle, so wait until two
+// consecutive screenshots match.
+async function takeStableScreenshot(name) {
+  const start = Date.now();
+  let previous = await device.takeScreenshot(`${name}-0`);
+  for (let i = 1; ; i++) {
+    await new Promise((resolve) => setTimeout(resolve, STABLE_INTERVAL_MS));
+    const current = await device.takeScreenshot(`${name}-${i}`);
+    if ((await changedPixels(previous, current)) <= STABLE_MAX_CHANGED_PIXELS) {
+      return current;
+    }
+    if (Date.now() - start >= STABLE_TIMEOUT_MS) {
+      console.warn(
+        `${name}: screenshot still changing after ${STABLE_TIMEOUT_MS} ms, keeping the last one.`,
+      );
+      return current;
+    }
+    previous = current;
+  }
 }
 
 async function wait(ms) {
@@ -207,7 +245,11 @@ class ExampleScreenshots {
       screenshotsDict[basename] = { images: [] };
     }
 
-    const imgPath = await saveImage(path.join(groupDir, basename), suffix);
+    const imgPath = await saveImage(
+      await takeStableScreenshot(basename),
+      path.join(groupDir, basename),
+      suffix,
+    );
     screenshotsDict[basename].images.push(
       path.relative(docSiteRootPath, path.resolve(imgPath)),
     );
@@ -255,9 +297,7 @@ describe('Example screenshots', () => {
                 cellularBars: '4',
               });
               await setSampleLocation();
-              if (percyScreenshotsPath) {
-                await readRootViewAttributes();
-              }
+              await readRootViewAttributes();
 
               await waitFor(element(by.text(groupMetadata.title)))
                 .toBeVisible()
