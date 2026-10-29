@@ -3,6 +3,7 @@ package com.rnmapbox.rnmbx.components
 import com.facebook.react.bridge.WritableMap
 import com.facebook.react.uimanager.events.Event
 import com.facebook.react.uimanager.events.RCTEventEmitter
+import com.facebook.react.uimanager.events.RCTModernEventEmitter
 
 class AbstractEvent(
     viewId: Int,
@@ -16,6 +17,19 @@ class AbstractEvent(
 
     override fun dispatch(rctEventEmitter: RCTEventEmitter) {
         rctEventEmitter.receiveEvent(viewTag, eventName, mEvent)
+    }
+
+    // The default dispatchModern() uses dispatch() for surfaceId -1, which Fabric never coalesces.
+    override fun dispatchModern(rctEventEmitter: RCTModernEventEmitter) {
+        rctEventEmitter.receiveEvent(
+            surfaceId,
+            viewTag,
+            eventName,
+            canCoalesce(),
+            getCoalescingKey().toInt(),
+            mEvent,
+            getEventCategory()
+        )
     }
 
     override fun canCoalesce(): Boolean {

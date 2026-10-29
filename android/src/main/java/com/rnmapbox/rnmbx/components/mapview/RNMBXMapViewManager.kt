@@ -449,6 +449,7 @@ open class RNMBXMapViewManager(context: ReactApplicationContext, val viewTagReso
             EventKeys.MAP_CLICK to "onPress",
             EventKeys.MAP_LONG_CLICK to "onLongPress",
             EventKeys.MAP_ONCHANGE to "onMapChange",
+            EventKeys.MAP_CAMERA_CHANGED to "onCameraChanged",
             EventKeys.MAP_ON_LOCATION_CHANGE to "onLocationChange",
             EventKeys.MAP_USER_TRACKING_MODE_CHANGE to "onUserTrackingModeChange",
             EventKeys.MAP_ANDROID_CALLBACK to "onAndroidCallback"
