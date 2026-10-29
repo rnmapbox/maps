@@ -273,7 +273,8 @@
             "UserLocation#onUpdate"
           ],
           "docs": "\nRetrieves and shows location updates from UserLocation component via the `onUpdate` callback\n",
-          "waitForMapIdle": false
+          "waitForMapIdle": false,
+          "excludeFromPercy": true
         },
         "fullPath": "example/src/examples/UserLocation/UserLocationUpdates.tsx",
         "relPath": "UserLocation/UserLocationUpdates.tsx",
