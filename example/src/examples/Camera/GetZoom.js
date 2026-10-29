@@ -39,7 +39,7 @@ class GetZoom extends React.Component {
         </MapView>
 
         <Bubble>
-          <Text>Current zoom: {this.state.zoom}</Text>
+          <Text>Current zoom: {this.state.zoom.toFixed(2)}</Text>
         </Bubble>
       </>
     );

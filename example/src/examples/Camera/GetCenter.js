@@ -28,12 +28,16 @@ class GetCenter extends React.Component {
 
   getLng() {
     const { center } = this.state;
-    return center.length === 2 ? `Lng: ${center[0]}` : 'Not available';
+    return center.length === 2
+      ? `Lng: ${center[0].toFixed(6)}`
+      : 'Not available';
   }
 
   getLat() {
     const { center } = this.state;
-    return center.length === 2 ? `Lat: ${center[1]}` : 'Not available';
+    return center.length === 2
+      ? `Lat: ${center[1].toFixed(6)}`
+      : 'Not available';
   }
 
   render() {
