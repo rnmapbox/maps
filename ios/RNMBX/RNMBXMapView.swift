@@ -1960,10 +1960,23 @@ extension RNMBXMapView {
     resolver: @escaping RCTPromiseResolveBlock,
     rejecter: @escaping RCTPromiseRejectBlock
   ) {
-    self.handleMapChangedEvents = Set(
+    let handledEvents = Set(
       events.compactMap {
         RNMBXEvent.EventType(rawValue: $0)
       })
+    // Camera changes are sent only once JS has asked for them, so the ones before (the start camera
+    // among them) never reach JS: send the current camera once, as applyOnMapChange would.
+    let cameraChangedAdded =
+      handledEvents.contains(.cameraChanged)
+      && !self.handleMapChangedEvents.contains(.cameraChanged)
+      && !handledEvents.contains(.regionIsChanging)
+    self.handleMapChangedEvents = handledEvents
+    if cameraChangedAdded {
+      withMapView { _ in
+        let event = RNMBXCameraChanged(type:.cameraChanged, payload: self.buildStateObject(), reactTag: self.reactTag)
+        self.eventDispatcher.send(event)
+      }
+    }
     resolver(nil)
   }
 
