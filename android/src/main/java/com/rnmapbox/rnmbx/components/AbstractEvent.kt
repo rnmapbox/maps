@@ -19,9 +19,7 @@ class AbstractEvent(
         rctEventEmitter.receiveEvent(viewTag, eventName, mEvent)
     }
 
-    // The default would call dispatch() above, which Fabric treats as an event that cannot be
-    // coalesced. With surface id -1 Fabric finds the view by its tag (a map view's context is the
-    // activity, so it has no surface id), and with canCoalesce() it merges queued camera changes.
+    // The default dispatchModern() uses dispatch() for surfaceId -1, which Fabric never coalesces.
     override fun dispatchModern(rctEventEmitter: RCTModernEventEmitter) {
         rctEventEmitter.receiveEvent(
             surfaceId,
