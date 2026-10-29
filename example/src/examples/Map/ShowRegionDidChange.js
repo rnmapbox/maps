@@ -110,13 +110,13 @@ class ShowRegionDidChange extends React.Component {
     return (
       <Bubble style={styles.bubble}>
         <Text>{this.state.reason}</Text>
-        <Text>Latitude: {geometry.coordinates[1]}</Text>
-        <Text>Longitude: {geometry.coordinates[0]}</Text>
+        <Text>Latitude: {geometry.coordinates[1].toFixed(6)}</Text>
+        <Text>Longitude: {geometry.coordinates[0].toFixed(6)}</Text>
         <Text>Visible Bounds NE: {neCoord}</Text>
         <Text>Visible Bounds SW: {swCoord}</Text>
-        <Text>Zoom Level: {properties.zoomLevel}</Text>
-        <Text>Heading: {properties.heading}</Text>
-        <Text>Pitch: {properties.pitch}</Text>
+        <Text>Zoom Level: {properties.zoomLevel.toFixed(2)}</Text>
+        <Text>Heading: {properties.heading.toFixed(2)}</Text>
+        <Text>Pitch: {properties.pitch.toFixed(2)}</Text>
         <Text>
           Is User Interaction: {properties.isUserInteraction ? 'true' : 'false'}
         </Text>
