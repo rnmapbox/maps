@@ -173,16 +173,8 @@ public class RNMBXNativeUserLocation: UIView, RNMBXMapAndMapViewComponent {
     }
 
     if (!visible) {
-      let emptyImage = UIGraphicsImageRenderer(size: CGSize(width: 1, height: 1)).image { _ in }
-      location.options.puckType = .puck2D(
-        Puck2DConfiguration(
-          topImage: emptyImage,
-          bearingImage: emptyImage,
-          shadowImage: emptyImage,
-          scale: Value.constant(1.0)
-        )
-      )
-      return
+      // Camera following consumes location data independently of puck rendering.
+      location.options.puckType = nil
     } else if let model = model, let configuration = makePuck3DConfiguration(model) {
       location.options.puckType = .puck3D(configuration)
     } else {
