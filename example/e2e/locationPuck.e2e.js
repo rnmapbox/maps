@@ -1,7 +1,8 @@
 /* global device, element, by, waitFor, describe, it, beforeAll, beforeEach, afterEach */
 
-const fs = require('fs');
-const { PNG } = require('pngjs');
+const path = require('path');
+const { execFile } = require('child_process');
+const { promisify } = require('util');
 const { expect } = require('@jest/globals');
 
 async function stateWhen(predicate, timeout = 15000) {
@@ -31,15 +32,14 @@ async function expectHiddenToSettle() {
 }
 
 async function expectCustomImage() {
-  const shot = PNG.sync.read(
-    fs.readFileSync(await device.takeScreenshot('custom-puck')),
-  );
-  let magenta = 0;
-  for (let i = 0; i < shot.data.length; i += 4) {
-    if (shot.data[i] > 220 && shot.data[i + 1] < 40 && shot.data[i + 2] > 220)
-      magenta += 1;
-  }
-  expect(magenta).toBeGreaterThan(10);
+  const { frame } = await element(by.id('puck-map')).getAttributes();
+  // Like docScreenshots.e2e.js, keep PNG processing outside Jest's slower VM.
+  const { stdout } = await promisify(execFile)(process.execPath, [
+    path.join(__dirname, 'puckImagePixels.js'),
+    await device.takeScreenshot('custom-puck'),
+    JSON.stringify(frame),
+  ]);
+  expect(Number(stdout)).toBeGreaterThan(10);
 }
 
 describe('iOS location puck lifecycle', () => {
