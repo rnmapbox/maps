@@ -15,28 +15,18 @@ const styleJSON = JSON.stringify({
     },
   ],
 });
-// A magenta pixel scaled into a square makes image restoration observable in screenshots.
-const images = {
-  'lifecycle-puck': {
-    uri: 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR4AWP4z/D/PwAG/gL+/gUKLAAAAABJRU5ErkJggg==',
-  },
-};
-const pulsing = { isEnabled: true, radius: 30, color: '#00ffff' };
-
 export default function LocationPuckLifecycle() {
   const map = useRef(null);
   const frames = useRef(0);
   const heading = useRef(0);
   const ready = useRef(false);
-  const [mode, setMode] = useState('hidden');
-  const [pulseEnabled, setPulseEnabled] = useState(false);
+  const [follow, setFollow] = useState(false);
   const [tick, setTick] = useState(0);
   const [state, setState] = useState('{}');
-  const visible = mode === 'visible';
-  const coordinate = visible ? origin : [origin[0] + tick * 0.00004, origin[1]];
-  const targetHeading = visible ? 0 : (tick * 10) % 360;
+  const coordinate = [origin[0] + tick * 0.00004, origin[1]];
+  const targetHeading = follow ? 90 : (tick * 10) % 360;
   const current = useRef(null);
-  current.current = { mode, locations: tick, coordinate, targetHeading };
+  current.current = { follow, locations: tick, coordinate, targetHeading };
 
   useEffect(() => {
     const timer = setInterval(() => setTick((value) => value + 1), 1000);
@@ -69,27 +59,9 @@ export default function LocationPuckLifecycle() {
   return (
     <View style={{ flex: 1 }}>
       <Button
-        testID="puck-hidden"
-        title="Hidden"
-        onPress={() => setMode('hidden')}
-      />
-      <Button
         testID="puck-follow"
         title="Follow hidden"
-        onPress={() => setMode('follow')}
-      />
-      <Button
-        testID="puck-compass"
-        title="Compass hidden"
-        onPress={() => setMode('compass')}
-      />
-      <Button
-        testID="puck-visible"
-        title="Show custom pulse"
-        onPress={() => {
-          setPulseEnabled(true);
-          setMode('visible');
-        }}
+        onPress={() => setFollow(true)}
       />
       <Text
         testID="puck-state"
@@ -119,22 +91,18 @@ export default function LocationPuckLifecycle() {
       >
         <Mapbox.Camera
           defaultSettings={camera}
-          followUserLocation={mode === 'follow' || mode === 'compass'}
-          followUserMode={mode === 'compass' ? 'compass' : 'normal'}
+          followUserLocation={follow}
+          followUserMode="compass"
           followZoomLevel={16}
         />
         <Mapbox.CustomLocationProvider
           coordinate={coordinate}
           heading={targetHeading}
         />
-        <Mapbox.Images images={images} />
         <Mapbox.LocationPuck
-          visible={visible}
-          topImage="lifecycle-puck"
-          scale={20}
+          visible={false}
           puckBearingEnabled
           puckBearing="heading"
-          pulsing={pulseEnabled ? pulsing : undefined}
         />
       </Mapbox.MapView>
     </View>

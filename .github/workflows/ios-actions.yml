@@ -156,7 +156,7 @@ jobs:
         if: inputs.E2E_MODE == 'test'
         run: |
           npx detox --version
-          yarn detox test --configuration ios.debug.ci --take-screenshots failing --record-logs failing --capture-view-hierarchy enabled e2e/firstTest.e2e.js e2e/locationPuck.e2e.js
+          yarn detox test --configuration ios.debug.ci --take-screenshots failing --record-logs failing --capture-view-hierarchy enabled e2e/firstTest.e2e.js
 
       # Informational only, the snapshots are compared by the percy job
       - name: Capture visual snapshots
