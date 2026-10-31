@@ -2,8 +2,9 @@
 
 const MAP_LOAD_TIMEOUT = 60000;
 const TAP_ATTEMPTS = 3;
+const { expect: expectValue } = require('@jest/globals');
 
-async function openExample(groupTitle, exampleTitle) {
+async function openExample(groupTitle, exampleTitle, disableSync = false) {
   await waitFor(element(by.text(groupTitle)))
     .toBeVisible()
     .whileElement(by.id('example-list'))
@@ -13,7 +14,22 @@ async function openExample(groupTitle, exampleTitle) {
     .toBeVisible()
     .whileElement(by.id('example-list'))
     .scroll(50, 'down');
+  if (disableSync) await device.disableSynchronization();
   await element(by.text(exampleTitle)).tap();
+}
+
+async function puckStateWhen(predicate) {
+  const deadline = Date.now() + 15000;
+  let state;
+  do {
+    const attributes = await element(by.id('puck-state')).getAttributes();
+    state = JSON.parse(attributes.label);
+    if (predicate(state)) return state;
+    await new Promise((resolve) => setTimeout(resolve, 250));
+  } while (Date.now() < deadline);
+  throw new Error(
+    `Puck state did not satisfy assertion: ${JSON.stringify(state)}`,
+  );
 }
 
 // A main thread stall between Detox's touch down and up turns a tap into a
@@ -45,6 +61,7 @@ describe('Maps Example App', () => {
 
   afterEach(async () => {
     await device.reloadReactNative();
+    await device.enableSynchronization();
   });
 
   it('should show initial screen', async () => {
@@ -73,5 +90,38 @@ describe('Maps Example App', () => {
       by.id('show-click-map-view'),
       by.id('location-bubble-latitude'),
     );
+  });
+
+  it('should stop hidden puck rendering while preserving camera following', async () => {
+    await openExample('E2E', 'Location Puck Lifecycle', true);
+    await waitFor(element(by.id('puck-state')))
+      .toExist()
+      .withTimeout(15000);
+    const initial = await puckStateWhen((state) => state.ready);
+    // Settle initial rendering, then observe three more location/heading updates.
+    const before = await puckStateWhen(
+      (state) => state.locations >= initial.locations + 3,
+    );
+    const hidden = await puckStateWhen(
+      (state) => state.locations >= before.locations + 3,
+    );
+    expectValue(hidden.frames).toBe(before.frames);
+
+    await element(by.id('puck-follow')).tap();
+    const start = await puckStateWhen((state) => state.follow);
+    const followed = await puckStateWhen(
+      (state) => state.locations >= start.locations + 2,
+    );
+    expectValue(followed.center[0]).toBeGreaterThan(hidden.center[0]);
+    expectValue(
+      Math.abs(followed.center[0] - followed.coordinate[0]),
+    ).toBeLessThan(0.0002);
+    expectValue(
+      Math.abs(followed.center[1] - followed.coordinate[1]),
+    ).toBeLessThan(0.0002);
+    const headingError = Math.abs(
+      ((followed.heading - followed.targetHeading + 540) % 360) - 180,
+    );
+    expectValue(headingError).toBeLessThan(20);
   });
 });
