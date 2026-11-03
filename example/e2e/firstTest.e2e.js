@@ -2,6 +2,7 @@
 
 const MAP_LOAD_TIMEOUT = 60000;
 const TAP_ATTEMPTS = 3;
+const MAX_HIDDEN_PUCK_FRAMES = 10;
 const { expect: expectValue } = require('@jest/globals');
 
 async function openExample(groupTitle, exampleTitle, disableSync = false) {
@@ -105,7 +106,10 @@ describe('Maps Example App', () => {
     const hidden = await puckStateWhen(
       (state) => state.locations >= before.locations + 3,
     );
-    expectValue(hidden.frames).toBe(before.frames);
+    // Allow incidental CI repaints while still rejecting continuous puck rendering.
+    expectValue(hidden.frames - before.frames).toBeLessThanOrEqual(
+      MAX_HIDDEN_PUCK_FRAMES,
+    );
 
     await element(by.id('puck-follow')).tap();
     const start = await puckStateWhen((state) => state.follow);

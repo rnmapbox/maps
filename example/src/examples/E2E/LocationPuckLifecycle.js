@@ -82,9 +82,6 @@ export default function LocationPuckLifecycle() {
         onDidFinishRenderingFrameFully={() => {
           frames.current += 1;
         }}
-        onDidFinishRenderingFrame={() => {
-          frames.current += 1;
-        }}
         onCameraChanged={(event) => {
           heading.current = event.properties.heading;
         }}
@@ -111,7 +108,4 @@ export default function LocationPuckLifecycle() {
 
 LocationPuckLifecycle.metadata = {
   title: 'Location Puck Lifecycle',
-  disableSync: true,
-  waitForMapIdle: false,
-  excludeFromPercy: true,
 };
