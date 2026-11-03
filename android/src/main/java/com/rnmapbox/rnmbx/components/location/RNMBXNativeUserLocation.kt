@@ -134,6 +134,8 @@ class RNMBXNativeUserLocation(context: Context) : AbstractMapFeature(context), O
     }
 
     private fun _apply(mapView: MapView) {
+        // Keep location interpolation active for camera following, even with no visible puck.
+        mMapView?.locationComponentManager?.showNativeUserLocation(mEnabled, visible)
         val location2 = mapView.location2;
 
         val locationPuck3D = model?.let { makeLocationPuck3D(it) }
@@ -167,10 +169,13 @@ class RNMBXNativeUserLocation(context: Context) : AbstractMapFeature(context), O
             location2.puckBearingEnabled = it
         }
 
+        if (!visible) {
+            location2.pulsingEnabled = false
+        }
         pulsing?.let { pulsing ->
             pulsing.getAndLogIfNotString("kind")?.also { kind ->
                 if (kind == "default") {
-                    location2.pulsingEnabled = true
+                    location2.pulsingEnabled = visible
                 }
             }
             if (pulsing.hasKey("color")) {
@@ -184,7 +189,7 @@ class RNMBXNativeUserLocation(context: Context) : AbstractMapFeature(context), O
                 }
             }
             pulsing.getAndLogIfNotBoolean("isEnabled")?.let { enabled ->
-               location2.pulsingEnabled = enabled
+               location2.pulsingEnabled = visible && enabled
             }
             if (pulsing.hasKey("radius")) {
                 when (pulsing.getType("radius")) {
@@ -226,7 +231,7 @@ class RNMBXNativeUserLocation(context: Context) : AbstractMapFeature(context), O
         mEnabled = true
         mapView.getMapboxMap()
         mapView.getMapAsync(this)
-        mMapView?.locationComponentManager?.showNativeUserLocation(true)
+        mMapView?.locationComponentManager?.showNativeUserLocation(true, visible)
         mMBXMapView = mapView
         _fetchImages(mapView)
         _apply()
@@ -255,7 +260,7 @@ class RNMBXNativeUserLocation(context: Context) : AbstractMapFeature(context), O
         }
 
         mMapView?.locationComponentManager?.update()
-        mMapView?.locationComponentManager?.showNativeUserLocation(mEnabled)
+        mMapView?.locationComponentManager?.showNativeUserLocation(mEnabled, visible)
     }
 
     // region fetch images and subscribe on updates

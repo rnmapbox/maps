@@ -207,9 +207,9 @@ class LocationComponentManager(mapView: RNMBXMapView, context: Context) {
     }
 
 
-    fun showNativeUserLocation(showUserLocation: Boolean) {
+    fun showNativeUserLocation(showUserLocation: Boolean, visible: Boolean = true) {
         update {
-            it.copy(showUserLocation = showUserLocation, nativeUserLocation= showUserLocation)
+            it.copy(showUserLocation = showUserLocation && visible, nativeUserLocation = showUserLocation)
         }
     }
 
