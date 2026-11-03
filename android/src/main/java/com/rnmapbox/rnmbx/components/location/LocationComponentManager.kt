@@ -31,7 +31,11 @@ import com.rnmapbox.rnmbx.v11compat.location.PuckBearing
  * LocationComponentManager attempts to separate that, so that Camera can ask for location tracking independent of display of user current location.
  * And NativeUserLocation can ask for display of user's current location - independent of Camera's user tracking.
  */
-class LocationComponentManager(mapView: RNMBXMapView, context: Context) {
+class LocationComponentManager @JvmOverloads constructor(
+    mapView: RNMBXMapView,
+    context: Context,
+    private val mLocationManager: LocationManager = LocationManager.getInstance(context),
+) {
     private val MAPBOX_BLUE_COLOR = Color.parseColor("#4A90E2")
 
     var mMapView = mapView
@@ -46,8 +50,6 @@ class LocationComponentManager(mapView: RNMBXMapView, context: Context) {
         shadowImage = null,
         scale = 1.0,
     )
-
-    private var mLocationManager: LocationManager = LocationManager.getInstance(context)
 
     private var mNeedsFullUpdate = true
 
@@ -207,6 +209,7 @@ class LocationComponentManager(mapView: RNMBXMapView, context: Context) {
     }
 
 
+    @JvmOverloads
     fun showNativeUserLocation(showUserLocation: Boolean, visible: Boolean = true) {
         update {
             it.copy(showUserLocation = showUserLocation && visible, nativeUserLocation = showUserLocation)

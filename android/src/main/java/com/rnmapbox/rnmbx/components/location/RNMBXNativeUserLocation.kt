@@ -20,6 +20,7 @@ import com.mapbox.maps.MapboxMap
 import com.mapbox.maps.Style
 import com.mapbox.maps.plugin.LocationPuck2D
 import com.mapbox.maps.plugin.LocationPuck3D
+import com.mapbox.maps.plugin.locationcomponent.LocationComponentPlugin
 import com.mapbox.maps.plugin.locationcomponent.LocationComponentConstants
 import com.mapbox.maps.plugin.locationcomponent.location
 import com.mapbox.maps.plugin.locationcomponent.R as LR
@@ -169,43 +170,7 @@ class RNMBXNativeUserLocation(context: Context) : AbstractMapFeature(context), O
             location2.puckBearingEnabled = it
         }
 
-        if (!visible) {
-            location2.pulsingEnabled = false
-        }
-        pulsing?.let { pulsing ->
-            pulsing.getAndLogIfNotString("kind")?.also { kind ->
-                if (kind == "default") {
-                    location2.pulsingEnabled = visible
-                }
-            }
-            if (pulsing.hasKey("color")) {
-                when (pulsing.getType("color")) {
-                    ReadableType.Map ->
-                        location2.pulsingColor = ColorPropConverter.getColor(pulsing.getMap("color"), mContext) ?: 0
-                    ReadableType.Number ->
-                        location2.pulsingColor = pulsing.getInt("color")
-                    else ->
-                        Logger.e(LOG_TAG, "pusling.color should be either a map or a number, but was ${pulsing.getDynamic("color")}")
-                }
-            }
-            pulsing.getAndLogIfNotBoolean("isEnabled")?.let { enabled ->
-               location2.pulsingEnabled = visible && enabled
-            }
-            if (pulsing.hasKey("radius")) {
-                when (pulsing.getType("radius")) {
-                    ReadableType.Number ->
-                        location2.pulsingMaxRadius = pulsing.getDouble("radius").toFloat()
-                    ReadableType.String ->
-                        if (pulsing.getString("radius") == "accuracy") {
-                            location2.pulsingMaxRadius = LocationComponentConstants.PULSING_MAX_RADIUS_FOLLOW_ACCURACY
-                        } else {
-                            Logger.e(LOG_TAG, "Expected pulsing/radius to be a number or accuracy but was ${pulsing.getString("radius")}")
-                        }
-                    else ->
-                        Logger.e(LOG_TAG, "Expected pulsing/radius to be a number or accuracy but was ${pulsing.getString("radius")}")
-                }
-            }
-        }
+        applyLocationPuckPulsing(location2, visible, pulsing, mContext)
     }
 
     private fun makeLocationPuck3D(model: ReadableMap): LocationPuck3D? {
@@ -342,4 +307,48 @@ fun makeDefaultLocationPuck2D(context: Context, renderMode: RenderMode): Locatio
             LR.drawable.mapbox_user_icon_shadow
         )
     );
+}
+internal fun applyLocationPuckPulsing(
+    location: LocationComponentPlugin,
+    visible: Boolean,
+    pulsing: ReadableMap?,
+    context: Context,
+) {
+    if (!visible) {
+        location.pulsingEnabled = false
+    }
+    pulsing?.let { pulsing ->
+        pulsing.getAndLogIfNotString("kind")?.also { kind ->
+            if (kind == "default") {
+                location.pulsingEnabled = visible
+            }
+        }
+        if (pulsing.hasKey("color")) {
+            when (pulsing.getType("color")) {
+                ReadableType.Map ->
+                    location.pulsingColor = ColorPropConverter.getColor(pulsing.getMap("color"), context) ?: 0
+                ReadableType.Number ->
+                    location.pulsingColor = pulsing.getInt("color")
+                else ->
+                    Logger.e("RNMBXNativeUserLocation", "pusling.color should be either a map or a number, but was ${pulsing.getDynamic("color")}")
+            }
+        }
+        pulsing.getAndLogIfNotBoolean("isEnabled")?.let { enabled ->
+            location.pulsingEnabled = visible && enabled
+        }
+        if (pulsing.hasKey("radius")) {
+            when (pulsing.getType("radius")) {
+                ReadableType.Number ->
+                    location.pulsingMaxRadius = pulsing.getDouble("radius").toFloat()
+                ReadableType.String ->
+                    if (pulsing.getString("radius") == "accuracy") {
+                        location.pulsingMaxRadius = LocationComponentConstants.PULSING_MAX_RADIUS_FOLLOW_ACCURACY
+                    } else {
+                        Logger.e("RNMBXNativeUserLocation", "Expected pulsing/radius to be a number or accuracy but was ${pulsing.getString("radius")}")
+                    }
+                else ->
+                    Logger.e("RNMBXNativeUserLocation", "Expected pulsing/radius to be a number or accuracy but was ${pulsing.getString("radius")}")
+            }
+        }
+    }
 }
