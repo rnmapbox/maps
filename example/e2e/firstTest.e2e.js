@@ -113,19 +113,15 @@ describe('Maps Example App', () => {
 
     await element(by.id('puck-follow')).tap();
     const start = await puckStateWhen((state) => state.follow);
-    const followed = await puckStateWhen(
-      (state) => state.locations >= start.locations + 2,
+    // The follow camera animates toward a moving puck, so wait for it to catch up.
+    await puckStateWhen(
+      (state) =>
+        state.locations >= start.locations + 2 &&
+        state.center[0] > hidden.center[0] &&
+        Math.abs(state.center[0] - state.coordinate[0]) < 0.0002 &&
+        Math.abs(state.center[1] - state.coordinate[1]) < 0.0002 &&
+        Math.abs(((state.heading - state.targetHeading + 540) % 360) - 180) <
+          20,
     );
-    expectValue(followed.center[0]).toBeGreaterThan(hidden.center[0]);
-    expectValue(
-      Math.abs(followed.center[0] - followed.coordinate[0]),
-    ).toBeLessThan(0.0002);
-    expectValue(
-      Math.abs(followed.center[1] - followed.coordinate[1]),
-    ).toBeLessThan(0.0002);
-    const headingError = Math.abs(
-      ((followed.heading - followed.targetHeading + 540) % 360) - 180,
-    );
-    expectValue(headingError).toBeLessThan(20);
   });
 });
