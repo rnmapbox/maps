@@ -78,7 +78,7 @@ jobs:
       - run: yarn postinstall
         working-directory: example
 
-      - run: ./gradlew assemble :rnmapbox_maps:testDebugUnitTest
+      - run: ./gradlew assemble
         working-directory: example/android
         env:
           CI_MAP_IMPL: ${{ inputs.MAP_IMPL }}
