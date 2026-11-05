@@ -63,6 +63,7 @@ body:
     description: |-
       - Use [our BugReportTemplate](https://github.com/rnmapbox/maps/blob/main/example/src/examples/BugReportExample.js) screens as a starting point.
       - Component should be self contained - no extra libraries, external data, no parameters
+      - The only local files allowed are `require('../assets/example.png')` for an image and `require('../assets/example.glb')` for a 3D model
       - Do not include setAccessToken or access token istelf.
     value: |-
       ```javascript

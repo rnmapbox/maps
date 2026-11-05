@@ -16,7 +16,7 @@ A working reproducer is worth 100x more than a speculative fix. Without one, mai
 
    Keep all provocation and instrumentation **out of the final PR** — capture its output as evidence instead.
 
-3. **Package the reproducer so others can run it.** Base it on [`example/src/examples/BugReportExample.js`](../example/src/examples/BugReportExample.js), self-contained (no extra libraries, external data, or parameters). For intermittent bugs, make it toggleable — a Start/Stop button and live counters — so it can run unattended until the bug fires. Include it in the issue or PR description in a collapsed `<details>` block; it does not need to be committed to the repo.
+3. **Package the reproducer so others can run it.** Base it on [`example/src/examples/BugReportExample.js`](../example/src/examples/BugReportExample.js), self-contained (no extra libraries, external data, or parameters; the only local files it may use are `../assets/example.png` for an image and `../assets/example.glb` for a 3D model). For intermittent bugs, make it toggleable — a Start/Stop button and live counters — so it can run unattended until the bug fires. Include it in the issue or PR description in a collapsed `<details>` block; it does not need to be committed to the repo.
 
 4. **Verify the fix against the reproducer.** The reproducer should fail on the unfixed build and pass on the fixed one. Include before/after evidence in the PR: crash stacks, iteration counts, timings.
 
