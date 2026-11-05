@@ -96,6 +96,16 @@ class RNMBXShapeSourceManager(private val mContext: ReactApplicationContext, val
         source.setShape(str)
     }
 
+    @ReactProp(name = "shapeRevision")
+    override fun setShapeRevision(source: RNMBXShapeSource, revision: Dynamic) {
+        source.setShapeRevision(revision.asInt())
+    }
+
+    override fun onAfterUpdateTransaction(view: RNMBXShapeSource) {
+        super.onAfterUpdateTransaction(view)
+        view.applyShapeRevision()
+    }
+
     @ReactProp(name = "cluster")
     override fun setCluster(source: RNMBXShapeSource, cluster: Dynamic) {
         source.setCluster(cluster.asInt() == 1)

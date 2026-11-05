@@ -55,6 +55,39 @@ RCT_EXPORT_METHOD(getClusterExpansionZoom:(nonnull NSNumber *)viewRef featureJSO
  } reject:reject methodName:@"getClusterExpansionZoom"];
 }
 
+RCT_EXPORT_METHOD(addFeatures:(nonnull NSNumber *)viewRef featuresJSON:(NSString *)featuresJSON featureIds:(NSArray *)featureIds shapeRevision:(NSInteger)shapeRevision resolve:(RCTPromiseResolveBlock)resolve reject:(RCTPromiseRejectBlock)reject)
+{
+ NSError *error = nil;
+ RNMBXParsedFeatures *features = [RNMBXParsedFeatures parse:featuresJSON error:&error];
+ if (features == nil) {
+     reject(@"addFeatures", error.localizedDescription, error);
+     return;
+ }
+ [self withShapeSource:viewRef block:^(RNMBXShapeSource *view) {
+     [view addFeatures:features featureIds:featureIds shapeRevision:shapeRevision resolver:resolve rejecter:reject];
+ } reject:reject methodName:@"addFeatures"];
+}
+
+RCT_EXPORT_METHOD(updateFeatures:(nonnull NSNumber *)viewRef featuresJSON:(NSString *)featuresJSON featureIds:(NSArray *)featureIds shapeRevision:(NSInteger)shapeRevision resolve:(RCTPromiseResolveBlock)resolve reject:(RCTPromiseRejectBlock)reject)
+{
+ NSError *error = nil;
+ RNMBXParsedFeatures *features = [RNMBXParsedFeatures parse:featuresJSON error:&error];
+ if (features == nil) {
+     reject(@"updateFeatures", error.localizedDescription, error);
+     return;
+ }
+ [self withShapeSource:viewRef block:^(RNMBXShapeSource *view) {
+     [view updateFeatures:features featureIds:featureIds shapeRevision:shapeRevision resolver:resolve rejecter:reject];
+ } reject:reject methodName:@"updateFeatures"];
+}
+
+RCT_EXPORT_METHOD(removeFeatures:(nonnull NSNumber *)viewRef featureIds:(NSArray *)featureIds shapeRevision:(NSInteger)shapeRevision resolve:(RCTPromiseResolveBlock)resolve reject:(RCTPromiseRejectBlock)reject)
+{
+ [self withShapeSource:viewRef block:^(RNMBXShapeSource *view) {
+     [view removeFeaturesWithFeatureIds:featureIds shapeRevision:shapeRevision resolver:resolve rejecter:reject];
+ } reject:reject methodName:@"removeFeatures"];
+}
+
 - (std::shared_ptr<facebook::react::TurboModule>)getTurboModule:
     (const facebook::react::ObjCTurboModule::InitParams &)params
 {

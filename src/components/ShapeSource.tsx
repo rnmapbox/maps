@@ -178,6 +178,27 @@ export class ShapeSource extends NativeBridgeComponent(
     id: Mapbox.StyleSource.DefaultSourceID,
   };
 
+  // Lets native order partial updates after the `shape` they were made on.
+  static getDerivedStateFromProps(
+    props: Pick<Props, 'shape'>,
+    state: State,
+  ): State | null {
+    if (props.shape === state.source) {
+      return null;
+    }
+    const shape = props.shape ? toJSONString(props.shape) : undefined;
+    return {
+      source: props.shape,
+      shape,
+      shapeRevision:
+        shape !== undefined && shape !== state.shape
+          ? state.shapeRevision + 1
+          : state.shapeRevision,
+    };
+  }
+
+  state: State = { shapeRevision: 0 };
+
   constructor(props: Props) {
     super(props);
   }
@@ -259,6 +280,110 @@ export class ShapeSource extends NativeBridgeComponent(
     return res.data;
   }
 
+  _featureId(feature: GeoJSON.Feature): string {
+    const { promoteId } = this.props;
+    const promoted =
+      typeof promoteId === 'string'
+        ? feature.properties?.[promoteId]
+        : undefined;
+    const id = promoted ?? feature.id;
+    if (id === undefined || id === null) {
+      throw new Error(
+        'ShapeSource: partial updates need a feature `id`, or the `promoteId` property on the feature',
+      );
+    }
+    return String(id);
+  }
+
+  _assertSupportsPartialUpdates() {
+    const { shape, url } = this.props;
+    if (url) {
+      throw new Error(
+        'ShapeSource: partial updates are not supported with `url`, as it can load after they are applied',
+      );
+    }
+    if (shape && '__nativeTag' in shape) {
+      throw new Error(
+        'ShapeSource: partial updates are not supported with a shape animator, as it replaces the data on every frame',
+      );
+    }
+  }
+
+  async _changeFeatures(
+    methodName: 'addFeatures' | 'updateFeatures',
+    features: GeoJSON.Feature[],
+  ): Promise<void> {
+    this._assertSupportsPartialUpdates();
+    const featureIds = features.map((feature) => this._featureId(feature));
+    await this._runNativeMethod(methodName, this._nativeRef, [
+      JSON.stringify({ type: 'FeatureCollection', features }),
+      featureIds,
+      this.state.shapeRevision,
+    ]);
+  }
+
+  /**
+   * Adds features to the source without resending its `shape`, which keeps the JS thread free
+   * when a large source changes often. The map still reprocesses the source, so for changes to
+   * paint properties alone `MapView#setFeatureState` is much cheaper.
+   *
+   * Every feature of the source needs a unique id: a feature `id`, or the `promoteId` property.
+   *
+   * The promise resolves once the source has the change, shortly before it renders. It rejects
+   * when the map refused the call, for example if an added id already exists or the source has
+   * features without an id. The map stops at the first such id, named in the error, and keeps
+   * the features before it. It also rejects if a new `shape` or an unmount replaced the change
+   * first. Refusals also reach `MapView#onMapLoadingError`.
+   *
+   * Changes survive a style reload, and stay in memory for that until the next `shape`. A new
+   * `shape` replaces them, a re-render with an equal `shape` keeps them, and remounting
+   * `ShapeSource` loses them. A call made after a `shape` was committed applies on top of that
+   * `shape`. Works with clustering. Not supported with `url`, a shape animator, or on web. With
+   * `existing` the source should have inline data, a reload can't reapply changes before a url loads.
+   *
+   * @example
+   * await shapeSource.addFeatures([{ type: 'Feature', id: 'a', properties: {}, geometry }]);
+   *
+   * @param  {GeoJSON.Feature[]} features - The features to add.
+   * @return {void}
+   */
+  async addFeatures(features: GeoJSON.Feature[]): Promise<void> {
+    await this._changeFeatures('addFeatures', features);
+  }
+
+  /**
+   * Replaces features of the source by id, without resending its `shape`. The map refuses the
+   * call at the first missing id. See `addFeatures` for the requirements and the result.
+   *
+   * @example
+   * await shapeSource.updateFeatures([{ type: 'Feature', id: 'a', properties: { v: 1 }, geometry }]);
+   *
+   * @param  {GeoJSON.Feature[]} features - The new features, the id selects the feature to replace.
+   * @return {void}
+   */
+  async updateFeatures(features: GeoJSON.Feature[]): Promise<void> {
+    await this._changeFeatures('updateFeatures', features);
+  }
+
+  /**
+   * Removes features from the source by id, without resending its `shape`. The map refuses the
+   * call at the first missing id, and removals before it render with the next change. See
+   * `addFeatures` for the requirements and the result.
+   *
+   * @example
+   * await shapeSource.removeFeatures(['a']);
+   *
+   * @param  {(string | number)[]} featureIds - The ids of the features to remove.
+   * @return {void}
+   */
+  async removeFeatures(featureIds: (string | number)[]): Promise<void> {
+    this._assertSupportsPartialUpdates();
+    await this._runNativeMethod('removeFeatures', this._nativeRef, [
+      [...new Set(featureIds.map(String))],
+      this.state.shapeRevision,
+    ]);
+  }
+
   setNativeProps(props: NativeProps) {
     const shallowProps = Object.assign({}, props);
 
@@ -268,13 +393,6 @@ export class ShapeSource extends NativeBridgeComponent(
     }
 
     super.setNativeProps(shallowProps);
-  }
-
-  _getShape() {
-    if (!this.props.shape) {
-      return;
-    }
-    return toJSONString(this.props.shape);
   }
 
   _decodePayload(payload: OnPressEvent | string): OnPressEvent {
@@ -323,7 +441,8 @@ export class ShapeSource extends NativeBridgeComponent(
       id: this.props.id,
       existing: this.props.existing,
       url: this.props.url,
-      shape: this._getShape(),
+      shape: this.state.shape,
+      shapeRevision: this.state.shapeRevision,
       hitbox: this.props.hitbox,
       hasPressListener: isFunction(this.props.onPress),
       onMapboxShapeSourcePress: this.onPress.bind(this),
@@ -354,6 +473,12 @@ export class ShapeSource extends NativeBridgeComponent(
     );
   }
 }
+
+type State = {
+  source?: Props['shape'];
+  shape?: string;
+  shapeRevision: number;
+};
 
 type NativeProps = {
   id: string;

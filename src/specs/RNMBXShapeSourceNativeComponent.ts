@@ -16,6 +16,7 @@ export interface NativeProps extends ViewProps {
   existing: UnsafeMixed<boolean>;
   url: UnsafeMixed<string>;
   shape: UnsafeMixed<string>;
+  shapeRevision: UnsafeMixed<Int32>;
   cluster: UnsafeMixed<Int32>;
   clusterRadius: UnsafeMixed<Double>;
   clusterMaxZoomLevel: UnsafeMixed<Double>;
