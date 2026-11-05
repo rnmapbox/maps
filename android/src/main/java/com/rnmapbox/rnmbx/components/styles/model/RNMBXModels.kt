@@ -5,6 +5,7 @@ import com.facebook.react.bridge.Dynamic
 import com.facebook.react.bridge.ReadableMap
 import com.rnmapbox.rnmbx.components.AbstractMapFeature
 import com.rnmapbox.rnmbx.components.mapview.RNMBXMapView
+import com.rnmapbox.rnmbx.utils.ModelUtils
 import java.net.URI
 
 class RNMBXModels(context: Context?) : AbstractMapFeature(context) {
@@ -26,7 +27,7 @@ class RNMBXModels(context: Context?) : AbstractMapFeature(context) {
                 val uri = URI.create(modelUri)
                 val modelUriWithoutQuery = URI(uri.scheme, uri.userInfo, uri.host, uri.port, uri.path, null, uri.fragment).toString()
 
-                style.addStyleModel(modelId, modelUriWithoutQuery)
+                style.addStyleModel(modelId, ModelUtils.resolveUri(context, modelUriWithoutQuery))
             }
         }
     }
