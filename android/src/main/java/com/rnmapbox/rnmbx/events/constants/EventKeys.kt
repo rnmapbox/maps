@@ -10,6 +10,7 @@ enum class EventKeys(val value: String) {
     MAP_CLICK("topPress"),
     MAP_LONG_CLICK("topLongPress"),
     MAP_ONCHANGE("topMapChange"),
+    MAP_CAMERA_CHANGED("topCameraChanged"),
     MAP_ON_LOCATION_CHANGE("topLocationChange"),
     MAP_ANDROID_CALLBACK("topAndroidCallback"),
     MAP_USER_TRACKING_MODE_CHANGE("topUserTrackingModeChange"),

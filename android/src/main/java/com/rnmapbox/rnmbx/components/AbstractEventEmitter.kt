@@ -17,12 +17,10 @@ import com.rnmapbox.rnmbx.utils.Logger
  */
 abstract class AbstractEventEmitter<T : ViewGroup>(reactApplicationContext: ReactApplicationContext) :
     ViewGroupManager<T>() {
-    private val mRateLimitedEvents: MutableMap<String, Long>
     private var mEventDispatcher: EventDispatcher? = null
     private val mRCTAppContext: ReactApplicationContext
 
     init {
-        mRateLimitedEvents = HashMap()
         mRCTAppContext = reactApplicationContext
     }
 
@@ -34,14 +32,6 @@ abstract class AbstractEventEmitter<T : ViewGroup>(reactApplicationContext: Reac
     }
 
     fun handleEvent(event: IEvent) {
-        val eventCacheKey = getEventCacheKey(event)
-
-        // fail safe to protect bridge from being spammed
-        if (shouldDropEvent(eventCacheKey, event)) {
-            return
-        }
-        mRateLimitedEvents[eventCacheKey] = System.currentTimeMillis()
-
         try {
             mEventDispatcher!!.dispatchEvent(
                 AbstractEvent(
@@ -70,16 +60,4 @@ abstract class AbstractEventEmitter<T : ViewGroup>(reactApplicationContext: Reac
     }
 
     abstract fun customEvents(): Map<String, String>?
-    private fun shouldDropEvent(cacheKey: String, event: IEvent): Boolean {
-        val lastEventTimestamp = mRateLimitedEvents[cacheKey]
-        return lastEventTimestamp != null && event.timestamp - lastEventTimestamp <= BRIDGE_TIMEOUT_MS
-    }
-
-    private fun getEventCacheKey(event: IEvent): String {
-        return String.format("%s-%s", event.key, event.type)
-    }
-
-    companion object {
-        private const val BRIDGE_TIMEOUT_MS = 10.0
-    }
 }

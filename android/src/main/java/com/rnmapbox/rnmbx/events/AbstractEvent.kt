@@ -6,7 +6,6 @@ import com.facebook.react.bridge.WritableMap
 
 abstract class AbstractEvent(view: View?, private val mEventType: String) : IEvent {
     private var mTagID = 0
-    private val mTimestamp: Long
 
     constructor(eventType: String) : this(null, eventType) {}
 
@@ -14,7 +13,6 @@ abstract class AbstractEvent(view: View?, private val mEventType: String) : IEve
         if (view != null) {
             mTagID = view.id
         }
-        mTimestamp = System.currentTimeMillis()
     }
 
     override val iD
@@ -23,15 +21,8 @@ abstract class AbstractEvent(view: View?, private val mEventType: String) : IEve
     override val type
         get() = mEventType
 
-    override fun equals(event: IEvent): Boolean {
-        return key == event.key && mEventType == event.type
-    }
-
     override val payload
         get() = Arguments.createMap()
-
-    override val timestamp
-        get() = mTimestamp
 
     override fun toJSON(): WritableMap {
         val map = Arguments.createMap()
@@ -43,7 +34,7 @@ abstract class AbstractEvent(view: View?, private val mEventType: String) : IEve
     }
 
     override fun canCoalesce(): Boolean {
-        // default behavior of com.facebook.react.uimanager.events.Event
-        return true
+        // Every event reaches JS, unless an event that only carries the latest state opts in
+        return false
     }
 }
