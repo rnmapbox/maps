@@ -535,27 +535,62 @@ class RNMBXOfflineModule(private val mReactContext: ReactApplicationContext) :
     @ReactMethod
     fun resetDatabase(promise: Promise) {
         tileStore.getAllTileRegions { expected ->
-            expected.value?.also { tileRegions ->
-                tileRegions.forEach { tileRegion ->
-                    tileStore.removeTileRegion(tileRegion.id);
-                }
-
-                offlineManager.getAllStylePacks { expected ->
-                    expected.value?.also { stylePacks ->
-                        stylePacks.forEach { stylePack ->
-                            offlineManager.removeStylePack(stylePack.styleURI)
-                        }
-                        promise.resolve(null)
-                    } ?: run {
-                        Logger.w(LOG_TAG, "resetDatabase: error: ${expected.error}")
-                        promise.reject(Error(expected.error?.message ?: "n/a"))
-                    }
-                }
-
-                promise.resolve(null);
-            }?: run {
+            val tileRegions = expected.value
+            if (tileRegions == null) {
                 Logger.w(LOG_TAG, "resetDatabase: error: ${expected.error}")
                 promise.reject(Error(expected.error?.message ?: "n/a"))
+                return@getAllTileRegions
+            }
+
+            fun removeStylePacks() {
+                offlineManager.getAllStylePacks { stylePacksResult ->
+                    val stylePacks = stylePacksResult.value
+                    if (stylePacks == null) {
+                        Logger.w(LOG_TAG, "resetDatabase: error: ${stylePacksResult.error}")
+                        promise.reject(Error(stylePacksResult.error?.message ?: "n/a"))
+                        return@getAllStylePacks
+                    }
+
+                    if (stylePacks.isEmpty()) {
+                        promise.resolve(null)
+                        return@getAllStylePacks
+                    }
+
+                    val remaining = java.util.concurrent.atomic.AtomicInteger(stylePacks.size)
+                    val failed = java.util.concurrent.atomic.AtomicBoolean(false)
+                    stylePacks.forEach { stylePack ->
+                        offlineManager.removeStylePack(stylePack.styleURI, object : StylePackCallback {
+                            override fun run(result: Expected<StylePackError, StylePack>) {
+                                val removed = result.value
+                                if (removed == null && failed.compareAndSet(false, true)) {
+                                    promise.reject(Error(result.error?.message ?: "n/a"))
+                                } else if (remaining.decrementAndGet() == 0 && !failed.get()) {
+                                    promise.resolve(null)
+                                }
+                            }
+                        })
+                    }
+                }
+            }
+
+            if (tileRegions.isEmpty()) {
+                removeStylePacks()
+                return@getAllTileRegions
+            }
+
+            val remaining = java.util.concurrent.atomic.AtomicInteger(tileRegions.size)
+            val failed = java.util.concurrent.atomic.AtomicBoolean(false)
+            tileRegions.forEach { tileRegion ->
+                tileStore.removeTileRegion(tileRegion.id, object : TileRegionCallback {
+                    override fun run(result: Expected<TileRegionError, TileRegion>) {
+                        val removed = result.value
+                        if (removed == null && failed.compareAndSet(false, true)) {
+                            promise.reject(Error(result.error?.message ?: "n/a"))
+                        } else if (remaining.decrementAndGet() == 0 && !failed.get()) {
+                            removeStylePacks()
+                        }
+                    }
+                })
             }
         }
 

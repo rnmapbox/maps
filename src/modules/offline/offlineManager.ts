@@ -69,6 +69,9 @@ type ErrorListener = (pack: OfflinePack, err: OfflinePackError) => void;
 class OfflineManager {
   private _hasInitialized: boolean;
   private _offlinePacks: Record<string, OfflinePack>;
+  private _cacheRevision = 0;
+  private _refreshId = 0;
+  private _appliedRefreshId = 0;
   private _progressListeners: Record<string, ProgressListener>;
   private _errorListeners: Record<string, ErrorListener>;
   public subscriptionProgress: EventSubscription | null;
@@ -128,6 +131,7 @@ class OfflineManager {
     const nativeOfflinePack =
       await MapboxOfflineManager.createPack(packOptions);
     this._offlinePacks[packOptions.name] = new OfflinePack(nativeOfflinePack);
+    this._cacheRevision++;
   }
 
   /**
@@ -174,6 +178,7 @@ class OfflineManager {
     if (offlinePack) {
       await MapboxOfflineManager.deletePack(name);
       delete this._offlinePacks[name];
+      this._cacheRevision++;
     }
   }
 
@@ -245,9 +250,11 @@ class OfflineManager {
    * @return {void}
    */
   async resetDatabase(): Promise<void> {
+    this._cacheRevision++;
     await MapboxOfflineManager.resetDatabase();
     this._offlinePacks = {};
-    await this._initialize(true);
+    this._cacheRevision++;
+    await this._initialize(true, true);
   }
 
   /**
@@ -259,7 +266,7 @@ class OfflineManager {
    * @return {Array<OfflinePack>}
    */
   async getPacks(): Promise<OfflinePack[]> {
-    await this._initialize(true);
+    await this._initialize(true, true);
     return Object.keys(this._offlinePacks).map(
       (name) => this._offlinePacks[name]!,
     );
@@ -403,18 +410,36 @@ class OfflineManager {
     }
   }
 
-  async _initialize(forceInit?: boolean): Promise<boolean> {
+  async _initialize(
+    forceInit?: boolean,
+    replaceExistingPacks = false,
+  ): Promise<boolean> {
     if (this._hasInitialized && !forceInit) {
       return true;
     }
 
+    const cacheRevision = this._cacheRevision;
+    const refreshId = ++this._refreshId;
     const nativeOfflinePacks = await MapboxOfflineManager.getPacks();
+
+    // Only an applied newer refresh or a mutation makes this snapshot obsolete.
+    if (
+      cacheRevision !== this._cacheRevision ||
+      refreshId < this._appliedRefreshId
+    ) {
+      return true;
+    }
+    const offlinePacks: Record<string, OfflinePack> = replaceExistingPacks
+      ? {}
+      : this._offlinePacks;
 
     for (const nativeOfflinePack of nativeOfflinePacks) {
       const offlinePack = new OfflinePack(nativeOfflinePack);
-      this._offlinePacks[offlinePack.name] = offlinePack;
+      offlinePacks[offlinePack.name] = offlinePack;
     }
 
+    this._offlinePacks = offlinePacks;
+    this._appliedRefreshId = refreshId;
     this._hasInitialized = true;
     return true;
   }
