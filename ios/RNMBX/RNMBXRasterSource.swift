@@ -11,6 +11,8 @@ public class RNMBXRasterSource : RNMBXSource {
   @objc public var minZoomLevel: NSNumber?
   @objc public var maxZoomLevel: NSNumber?
   @objc public var tileSize: NSNumber?
+  @objc public var prefetchZoomDelta: NSNumber?
+  @objc public var tileNetworkRequestsDelay: NSNumber?
 
   @objc public var tms: Bool = false
 
@@ -29,6 +31,14 @@ public class RNMBXRasterSource : RNMBXSource {
 
     if let tileSize = tileSize {
       result.tileSize = tileSize.doubleValue
+    }
+
+    if let prefetchZoomDelta = prefetchZoomDelta {
+      result.prefetchZoomDelta = prefetchZoomDelta.doubleValue
+    }
+
+    if let tileNetworkRequestsDelay = tileNetworkRequestsDelay {
+      result.tileNetworkRequestsDelay = tileNetworkRequestsDelay.doubleValue
     }
 
     if let minZoomLevel = minZoomLevel {

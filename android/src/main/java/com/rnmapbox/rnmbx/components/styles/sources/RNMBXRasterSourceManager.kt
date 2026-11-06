@@ -35,6 +35,16 @@ class RNMBXRasterSourceManager(reactApplicationContext: ReactApplicationContext)
         source.setTileSize(tileSize.asInt())
     }
 
+    @ReactProp(name = "prefetchZoomDelta")
+    override fun setPrefetchZoomDelta(source: RNMBXRasterSource, value: Dynamic) {
+        source.setPrefetchZoomDelta(value.asInt().toLong())
+    }
+
+    @ReactProp(name = "tileNetworkRequestsDelay")
+    override fun setTileNetworkRequestsDelay(source: RNMBXRasterSource, value: Dynamic) {
+        source.setTileNetworkRequestsDelay(value.asDouble())
+    }
+
     override fun customEvents(): Map<String, String>? {
         return eventMapOf(
             EventKeys.RASTER_SOURCE_LAYER_CLICK to "onMapboxRasterSourcePress",

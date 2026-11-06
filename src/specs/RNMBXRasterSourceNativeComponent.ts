@@ -13,6 +13,8 @@ export interface NativeProps extends ViewProps {
   minZoomLevel: UnsafeMixed<Double>;
   maxZoomLevel: UnsafeMixed<Double>;
   tileSize: UnsafeMixed<Double>;
+  prefetchZoomDelta: UnsafeMixed<Double>;
+  tileNetworkRequestsDelay: UnsafeMixed<Double>;
   tms: UnsafeMixed<boolean>;
   attribution: UnsafeMixed<string>;
   sourceBounds: UnsafeMixed<Array<number>>;

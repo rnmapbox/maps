@@ -7,6 +7,7 @@ export { default as QueryAtPoint } from './QueryAtPoint';
 export { default as QuerySourceFeatures } from './QuerySourceFeatures';
 export { default as QueryWithRect } from './QueryWithRect';
 export { default as RasterSource } from './RasterSource';
+export { default as RasterSourceTileRequests } from './RasterSourceTileRequests';
 export { default as WatercolorRasterTiles } from './WatercolorRasterTiles';
 export { default as HillshadeSource } from './HillshadeSource';
 
