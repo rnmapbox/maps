@@ -1,6 +1,8 @@
 package com.rnmapbox.rnmbx.components.styles.sources
 
 import android.content.Context
+import android.os.Handler
+import android.os.HandlerThread
 import com.facebook.react.bridge.Promise
 import com.facebook.react.bridge.WritableMap
 import com.facebook.react.bridge.WritableNativeMap
@@ -23,6 +25,12 @@ import com.rnmapbox.rnmbx.v11compat.feature.*
 import java.net.URL
 
 private const val LOG_TAG = "RNMBXShapeSource"
+
+// Passing a large shape to the SDK takes ~100ms, so it can't run on the main thread. Unlike
+// GeoJsonSource.data(), work posted here keeps its order with later changes to the source.
+private val sourceDataHandler by lazy {
+    Handler(HandlerThread("RNMBXShapeSourceData").apply { start() }.looper)
+}
 
 class RNMBXShapeSource(context: Context, private val mManager: RNMBXShapeSourceManager) :
     RNMBXSource<GeoJsonSource>(context), ShapeAnimationConsumer {
@@ -53,6 +61,14 @@ class RNMBXShapeSource(context: Context, private val mManager: RNMBXShapeSourceM
         }
     }
 
+    override fun addToMap(existings: Boolean, style: Style, mapView: RNMBXMapView) {
+        val created = !style.styleSourceExists(iD!!)
+        super.addToMap(existings, style, mapView)
+        if (created) {
+            (mShape ?: mURL?.toString())?.let { applySourceData(style, it) }
+        }
+    }
+
     override fun removeFromMap(mapView: RNMBXMapView, reason: RemovalReason): Boolean {
 
         if (reason == RemovalReason.VIEW_REMOVAL) {
@@ -69,16 +85,22 @@ class RNMBXShapeSource(context: Context, private val mManager: RNMBXShapeSourceM
     override fun makeSource(): GeoJsonSource {
         val builder = GeoJsonSource.Builder(iD.toString())
         getOptions(builder)
-
-        builder.data(mShape ?: mURL.toString())
-
         return builder.build()
+    }
+
+    private fun applySourceData(style: Style, data: String) {
+        val sourceId = iD!!
+        sourceDataHandler.post {
+            style.setStyleGeoJSONSourceData(sourceId, "", GeoJSONSourceData.valueOf(data)).error?.let {
+                Logger.w(LOG_TAG, "Setting the data of source $sourceId failed: $it")
+            }
+        }
     }
 
     fun setURL(url: URL) {
         mURL = url
         if (mSource != null && mMapView != null && !mMapView!!.isDestroyed) {
-            mSource!!.data(mURL.toString())
+            mMap?.getStyle()?.let { applySourceData(it, url.toString()) }
         }
     }
 
@@ -98,9 +120,7 @@ class RNMBXShapeSource(context: Context, private val mManager: RNMBXShapeSourceM
         } else {
             mShape = geoJSONStr
             if (mSource != null && mMapView != null && !mMapView!!.isDestroyed) {
-                mSource!!.data(mShape!!)
-                val result = mMap!!.getStyle()!!
-                    .setStyleSourceProperty(iD!!, "data", Value.valueOf(mShape!!))
+                mMap?.getStyle()?.let { applySourceData(it, geoJSONStr) }
             }
         }
     }
