@@ -1,7 +1,6 @@
 package com.rnmapbox.rnmbx.modules
 
-import com.mapbox.common.*
-import com.rnmapbox.rnmbx.v11compat.httpinterceptor.*
+import com.mapbox.common.HttpRequest
 
 data class CustomHttpHeadersOptions(val urlRegexp: Regex?)
 
@@ -10,54 +9,45 @@ data class CustomHttpHeadersMapValue(
     val options: CustomHttpHeadersOptions?
 )
 
-object CustomHttpHeaders : HttpServiceBase() {
+object CustomHttpHeaders {
     const val LOG_TAG = "CustomHttpHeaders"
 
-    init {}
-
-    val map = mutableMapOf<String, CustomHttpHeadersMapValue>()
+    // Written only from the native-module thread (one MessageQueueThread under both the bridge and TurboModules),
+    // so a write just publishes a new immutable map; @Volatile makes it visible to Mapbox's HTTP thread.
+    @Volatile
+    var headers: Map<String, CustomHttpHeadersMapValue> = emptyMap()
+        private set
 
     fun addCustomHeader(headerName: String, headerValue: String, options: CustomHttpHeadersOptions? = null) {
-        HttpServiceFactory.getInstance().setInterceptor(
-            this
-        )
-        map.put(headerName, CustomHttpHeadersMapValue(headerValue = headerValue, options = options))
+        headers = headers + (headerName to CustomHttpHeadersMapValue(headerValue = headerValue, options = options))
     }
 
     fun removeCustomHeader(headerName: String) {
-        map.remove(headerName)
+        headers = headers - headerName
     }
 
-    fun getCustomRequestHeaders(customRequestHeaders: MutableMap<String, CustomHttpHeadersMapValue>, httpRequest: HttpRequest): HashMap<String, String> {
+    fun getCustomRequestHeaders(customRequestHeaders: Map<String, CustomHttpHeadersMapValue>, httpRequest: HttpRequest): HashMap<String, String> {
         val headers = hashMapOf<String, String>()
-        for (entry in map.entries.iterator()) {
-            val urlRegexp = entry.value.options?.urlRegexp
+        for ((name, value) in customRequestHeaders) {
+            val urlRegexp = value.options?.urlRegexp
             if (urlRegexp != null) {
                 val destination = httpRequest.headers.getOrDefault("location", httpRequest.url)
                 if (urlRegexpMatches(urlRegexp, destination)) {
-                    headers[entry.key] = entry.value.headerValue
+                    headers[name] = value.headerValue
                 }
             }
             else {
-                headers[entry.key] = entry.value.headerValue
+                headers[name] = value.headerValue
             }
         }
         return headers
     }
 
-    override fun onRequest(request: HttpRequest): HttpRequest {
+    fun applyTo(request: HttpRequest) {
+        val snapshot = headers
+        if (snapshot.isEmpty()) return
         request.headers.remove("Authorization")
-        request.headers.putAll(getCustomRequestHeaders(map, request))
-        return request
-    }
-
-    override fun onDownload(download: DownloadOptions): DownloadOptions {
-        download.request.headers.putAll(getCustomRequestHeaders(map, download.request))
-        return download
-    }
-
-    override fun onResponse(response: HttpResponse): HttpResponse {
-        return response
+        request.headers.putAll(getCustomRequestHeaders(snapshot, request))
     }
 }
 
