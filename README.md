@@ -199,7 +199,7 @@ This package is not available in the [Expo Go](https://expo.io/client) app. Lear
 
 ## Turn-by-turn navigation
 
-For routing and turn-by-turn guidance with the Mapbox Navigation SDK v3, see [`@rnmapbox/navigation`](https://github.com/rnmapbox/navigation) (alpha) — it builds on `@rnmapbox/maps` and works with Expo development builds. [Docs](https://rnmapbox.github.io/docs/navigation/overview).
+For routing and turn-by-turn guidance with the Mapbox Navigation SDK v3, see [`@rnmapbox/navigation`](https://github.com/rnmapbox/navigation) — it builds on `@rnmapbox/maps` and works with Expo development builds. [Docs](https://rnmapbox.github.io/docs/navigation/overview).
 
 ## Testing with Jest
 
