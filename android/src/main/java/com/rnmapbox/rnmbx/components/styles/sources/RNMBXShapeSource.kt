@@ -4,9 +4,11 @@ import android.content.Context
 import android.os.Handler
 import android.os.HandlerThread
 import com.facebook.react.bridge.Promise
+import com.facebook.react.bridge.UiThreadUtil
 import com.facebook.react.bridge.WritableMap
 import com.facebook.react.bridge.WritableNativeMap
 import com.mapbox.bindgen.Value
+import com.mapbox.common.Cancelable
 import com.mapbox.geojson.Feature
 import com.mapbox.geojson.FeatureCollection
 import com.mapbox.geojson.GeoJson
@@ -22,9 +24,12 @@ import com.rnmapbox.rnmbx.shapeAnimators.ShapeAnimationConsumer
 import com.rnmapbox.rnmbx.shapeAnimators.ShapeAnimator
 import com.rnmapbox.rnmbx.utils.Logger
 import com.rnmapbox.rnmbx.v11compat.feature.*
+import org.json.JSONException
+import org.json.JSONObject
 import java.net.URL
 
 private const val LOG_TAG = "RNMBXShapeSource"
+private const val SHAPE_REPLACED_ERROR = "ShapeSource: a new shape replaced this partial update"
 
 // Passing a large shape to the SDK takes ~100ms, so it can't run on the main thread. Unlike
 // GeoJsonSource.data(), work posted here keeps its order with later changes to the source.
@@ -48,6 +53,13 @@ class RNMBXShapeSource(context: Context, private val mManager: RNMBXShapeSourceM
     private var mTolerance: Double? = null
     private var mLineMetrics: Boolean? = null
 
+    private var mShapeRevision = 0
+    private var mNextShapeRevision = 0
+    private var mSourceAdded = false
+    private val mPartialChanges = PartialFeatureChanges()
+    private val mPendingChanges = PendingPartialChanges()
+    private var mPartialChangeSubscriptions = listOf<Cancelable>()
+
     override fun hasNoDataSoRefersToExisting(): Boolean {
         return (mURL == null) && (mShape == null)
     }
@@ -67,9 +79,20 @@ class RNMBXShapeSource(context: Context, private val mManager: RNMBXShapeSourceM
         if (created) {
             (mShape ?: mURL?.toString())?.let { applySourceData(style, it) }
         }
+        replayPartialChanges(style)
+        mSourceAdded = true
+        sendPartialChanges()
     }
 
     override fun removeFromMap(mapView: RNMBXMapView, reason: RemovalReason): Boolean {
+        mSourceAdded = false
+        if (reason == RemovalReason.STYLE_CHANGE) {
+            mPendingChanges.markNoneInFlight()
+        } else {
+            mPendingChanges.clear().forEach { it.promise.reject("error", "ShapeSource was removed from the map") }
+        }
+        mPartialChangeSubscriptions.forEach { it.cancel() }
+        mPartialChangeSubscriptions = listOf()
 
         if (reason == RemovalReason.VIEW_REMOVAL) {
             mShapeAnimator?.unsubscribe(this)
@@ -99,6 +122,7 @@ class RNMBXShapeSource(context: Context, private val mManager: RNMBXShapeSourceM
 
     fun setURL(url: URL) {
         mURL = url
+        mPartialChanges.clear()
         if (mSource != null && mMapView != null && !mMapView!!.isDestroyed) {
             mMap?.getStyle()?.let { applySourceData(it, url.toString()) }
         }
@@ -107,6 +131,7 @@ class RNMBXShapeSource(context: Context, private val mManager: RNMBXShapeSourceM
     fun setShape(geoJSONStr: String) {
         mShapeAnimator?.unsubscribe(this)
         mShapeAnimator = null
+        mPartialChanges.clear()
 
         val shapeAnimatorManager = mManager.shapeAnimatorManager
         if (shapeAnimatorManager.isShapeAnimatorTag(geoJSONStr)) {
@@ -123,6 +148,18 @@ class RNMBXShapeSource(context: Context, private val mManager: RNMBXShapeSourceM
                 mMap?.getStyle()?.let { applySourceData(it, geoJSONStr) }
             }
         }
+    }
+
+    fun setShapeRevision(revision: Int) {
+        mNextShapeRevision = revision
+    }
+
+    /** Runs after all props of a transaction, so `shape` is set whatever order the props came in. */
+    fun applyShapeRevision() {
+        if (mNextShapeRevision == mShapeRevision) return
+        mShapeRevision = mNextShapeRevision
+        mPendingChanges.replacedBy(mShapeRevision).forEach { it.promise.reject("error", SHAPE_REPLACED_ERROR) }
+        sendPartialChanges()
     }
 
     private fun toGeoJSONSourceData(geoJson: GeoJson): GeoJSONSourceData? {
@@ -270,6 +307,135 @@ class RNMBXShapeSource(context: Context, private val mManager: RNMBXShapeSourceM
                 val event = AndroidCallbackEvent(_this, callbackID, payload)
                 mManager.handleEvent(event)
             }
+        }
+    }
+
+    fun addFeatures(features: List<Feature>, featureIds: List<String>, shapeRevision: Int, promise: Promise) {
+        enqueuePartialChange(PartialChangeType.ADD, featureIds, features, shapeRevision, promise)
+    }
+
+    fun updateFeatures(features: List<Feature>, featureIds: List<String>, shapeRevision: Int, promise: Promise) {
+        enqueuePartialChange(PartialChangeType.UPDATE, featureIds, features, shapeRevision, promise)
+    }
+
+    fun removeFeatures(featureIds: List<String>, shapeRevision: Int, promise: Promise) {
+        enqueuePartialChange(PartialChangeType.REMOVE, featureIds, listOf(), shapeRevision, promise)
+    }
+
+    private fun enqueuePartialChange(
+        type: PartialChangeType,
+        featureIds: List<String>,
+        features: List<Feature>,
+        shapeRevision: Int,
+        promise: Promise
+    ) {
+        if (shapeRevision < mShapeRevision) {
+            promise.reject("error", SHAPE_REPLACED_ERROR)
+            return
+        }
+        mPendingChanges.add(type, featureIds, features, shapeRevision, promise)
+        sendPartialChanges()
+    }
+
+    private fun sendPartialChanges() {
+        val style = mMap?.getStyle()
+        val sourceId = iD
+        if (!mSourceAdded || style == null || sourceId == null) return
+        subscribeToPartialChangeResults()
+        val changes = mPendingChanges.next(mShapeRevision)
+        if (changes.isEmpty()) return
+        val dataId = changes.last().dataId
+        val type = changes.first().type
+        val features = changes.flatMap { it.features }
+        val featureIds = changes.flatMap { it.featureIds }
+        sourceDataHandler.post {
+            val result = when (type) {
+                PartialChangeType.ADD -> style.addGeoJSONSourceFeatures(sourceId, dataId, features)
+                PartialChangeType.UPDATE -> style.updateGeoJSONSourceFeatures(sourceId, dataId, features)
+                PartialChangeType.REMOVE -> style.removeGeoJSONSourceFeatures(sourceId, dataId, featureIds)
+            }
+            result.error?.let { error ->
+                UiThreadUtil.runOnUiThread {
+                    if (mSourceAdded) onPartialChangeRefused(dataId, error)
+                }
+            }
+        }
+    }
+
+    private fun replayPartialChanges(style: Style) {
+        val sourceId = iD!!
+        val added = mPartialChanges.added
+        val updated = mPartialChanges.updated
+        val removed = mPartialChanges.removed
+        sourceDataHandler.post {
+            if (added.isNotEmpty()) style.addGeoJSONSourceFeatures(sourceId, "", added)
+            if (updated.isNotEmpty()) style.updateGeoJSONSourceFeatures(sourceId, "", updated)
+            if (removed.isNotEmpty()) style.removeGeoJSONSourceFeatures(sourceId, "", removed)
+        }
+    }
+
+    private fun subscribeToPartialChangeResults() {
+        val map = mMap
+        if (mPartialChangeSubscriptions.isNotEmpty() || mPendingChanges.isEmpty || map == null) return
+        mPartialChangeSubscriptions = listOf(
+            map.subscribeSourceDataLoaded { event ->
+                val dataId = event.dataId
+                if (event.sourceId == iD && event.type == SourceDataLoadedType.METADATA && !dataId.isNullOrEmpty()) {
+                    if (mPendingChanges.isInFlight(dataId)) {
+                        mPendingChanges.confirm().forEach {
+                            mPartialChanges.record(it)
+                            it.promise.resolve(null)
+                        }
+                        onPartialChangeSettled()
+                    }
+                }
+            },
+            map.subscribeMapLoadingError { error ->
+                if (error.sourceId == iD && error.type == MapLoadingErrorType.SOURCE) {
+                    onSourceError(error.message)
+                }
+            }
+        )
+    }
+
+    private fun onSourceError(message: String) {
+        val json = try {
+            JSONObject(message)
+        } catch (e: JSONException) {
+            return
+        }
+        val dataId = json.optString("dataId", null) ?: return
+        onPartialChangeRefused(dataId, json.optString("message", message))
+    }
+
+    private fun onPartialChangeRefused(dataId: String, message: String) {
+        val featureId = message.substringAfter("feature id: ", "").ifEmpty { null }
+        if (!mPendingChanges.isRefusalOfInFlight(dataId, featureId)) return
+        val refusal = mPendingChanges.refuse(featureId)
+        refusal.applied.forEach {
+            mPartialChanges.record(it)
+            it.promise.resolve(null)
+        }
+        refusal.appliedPart?.let { mPartialChanges.record(it) }
+        refusal.refused.promise.reject("error", message)
+        renderAppliedFeatures(refusal.applied.flatMap { it.features } + (refusal.appliedPart?.features ?: listOf()))
+        onPartialChangeSettled()
+    }
+
+    // The SDK renders what a refused call kept only with the next change, so update them to themselves
+    private fun renderAppliedFeatures(features: List<Feature>) {
+        val style = mMap?.getStyle()
+        val sourceId = iD
+        if (features.isEmpty() || style == null || sourceId == null) return
+        sourceDataHandler.post { style.updateGeoJSONSourceFeatures(sourceId, "", features) }
+    }
+
+    private fun onPartialChangeSettled() {
+        if (mPendingChanges.isEmpty) {
+            mPartialChangeSubscriptions.forEach { it.cancel() }
+            mPartialChangeSubscriptions = listOf()
+        } else {
+            sendPartialChanges()
         }
     }
 

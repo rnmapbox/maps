@@ -274,7 +274,55 @@ const collection = await shapeSource.getClusterChildren(clusterId);
 ```
 
 
-### onPress(event)
+### addFeatures(features)
+
+Adds features to the source without resending its `shape`, which keeps the JS thread free<br/>when a large source changes often. The map still reprocesses the source, so for changes to<br/>paint properties alone `MapView#setFeatureState` is much cheaper.<br/><br/>Every feature of the source needs a unique id: a feature `id`, or the `promoteId` property.<br/><br/>The promise resolves once the source has the change, shortly before it renders. It rejects<br/>when the map refused the call, for example if an added id already exists or the source has<br/>features without an id. The map stops at the first such id, named in the error, and keeps<br/>the features before it. It also rejects if a new `shape` or an unmount replaced the change<br/>first. Refusals also reach `MapView#onMapLoadingError`.<br/><br/>Changes survive a style reload, and stay in memory for that until the next `shape`. A new<br/>`shape` replaces them, a re-render with an equal `shape` keeps them, and remounting<br/>`ShapeSource` loses them. A call made after a `shape` was committed applies on top of that<br/>`shape`. Works with clustering. Not supported with `url`, a shape animator, or on web. With<br/>`existing` the source should have inline data, a reload can't reapply changes before a url loads.
+
+#### arguments
+| Name | Type | Required | Description  |
+| ---- | :--: | :------: | :----------: |
+| `features` | `Array` | `Yes` | The features to add. |
+
+
+
+```javascript
+await shapeSource.addFeatures([{ type: 'Feature', id: 'a', properties: {}, geometry }]);
+```
+
+
+[Partial feature updates](../examples/SymbolCircleLayer/PartialFeatureUpdates)### updateFeatures(features)
+
+Replaces features of the source by id, without resending its `shape`. The map refuses the<br/>call at the first missing id. See `addFeatures` for the requirements and the result.
+
+#### arguments
+| Name | Type | Required | Description  |
+| ---- | :--: | :------: | :----------: |
+| `features` | `Array` | `Yes` | The new features, the id selects the feature to replace. |
+
+
+
+```javascript
+await shapeSource.updateFeatures([{ type: 'Feature', id: 'a', properties: { v: 1 }, geometry }]);
+```
+
+
+[Partial feature updates](../examples/SymbolCircleLayer/PartialFeatureUpdates)### removeFeatures(featureIds)
+
+Removes features from the source by id, without resending its `shape`. The map refuses the<br/>call at the first missing id, and removals before it render with the next change. See<br/>`addFeatures` for the requirements and the result.
+
+#### arguments
+| Name | Type | Required | Description  |
+| ---- | :--: | :------: | :----------: |
+| `featureIds` | `Array` | `Yes` | The ids of the features to remove. |
+
+
+
+```javascript
+await shapeSource.removeFeatures(['a']);
+```
+
+
+[Partial feature updates](../examples/SymbolCircleLayer/PartialFeatureUpdates)### onPress(event)
 
 
 

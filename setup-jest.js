@@ -169,6 +169,9 @@ NativeModules.RNMBXMapViewModule = {
 };
 
 NativeModules.RNMBXShapeSourceModule = {
+  addFeatures: jest.fn(),
+  updateFeatures: jest.fn(),
+  removeFeatures: jest.fn(),
   getClusterExpansionZoom: jest.fn(),
   getClusterLeaves: jest.fn(),
   getClusterChildren: jest.fn(),

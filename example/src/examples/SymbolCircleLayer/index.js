@@ -5,6 +5,7 @@ export { default as ImageScaleTests } from './ImageScaleTests';
 export { default as ScalableImages } from './ScalableImages';
 export { default as ShapeSourceIcon } from './ShapeSourceIcon';
 export { default as Earthquakes } from './Earthquakes';
+export { default as PartialFeatureUpdates } from './PartialFeatureUpdates';
 
 export const metadata = {
   title: 'Symbol/CircleLayer',
