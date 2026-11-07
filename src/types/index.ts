@@ -2,6 +2,8 @@ import { type SyntheticEvent } from 'react';
 import { Animated } from 'react-native';
 import { type GeoJsonObject } from 'geojson';
 
+export type { OnPressEvent } from './OnPressEvent';
+
 // General.
 
 export type MapboxGLEvent<
