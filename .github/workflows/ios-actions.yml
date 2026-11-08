@@ -156,7 +156,7 @@ jobs:
       - name: Wait for the simulator
         run: |
           time xcrun simctl bootstatus "$DETOX_DEVICE_UDID"
-          "$GITHUB_WORKSPACE/scripts/ci/wait-for-settled-host.sh"
+          echo "load: $(sysctl -n vm.loadavg), free: $(vm_stat | awk '/Pages free/ {print int($3 * 16384 / 1048576)}') MB"
 
       - name: Test with detox
         if: inputs.E2E_MODE == 'test'
