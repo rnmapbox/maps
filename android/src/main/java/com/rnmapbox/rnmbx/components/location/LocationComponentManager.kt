@@ -108,7 +108,7 @@ class LocationComponentManager(mapView: RNMBXMapView, context: Context) {
 
     private fun applyStateChanges(map: RNMBXMapView, oldState: State, newState: State, fullUpdate: Boolean) {
         val mapView = map.mapPlugins
-        if (map.getLifecycleState() != Lifecycle.State.STARTED && map.getLifecycleState() != Lifecycle.State.INITIALIZED) {
+        if (!isRunning(map)) {
             // In case lifecycle was already stopped, so we're part of shutdown, do not call updateSettings as it'll just restart
             // the loationComponent that will not be stopped. See https://github.com/mapbox/mapbox-maps-android/issues/2017
             if (!newState.enabled) {
@@ -222,6 +222,18 @@ class LocationComponentManager(mapView: RNMBXMapView, context: Context) {
     fun update() {
         update { it }
     }
+
+    private fun isRunning(map: RNMBXMapView) =
+        map.getLifecycleState() == Lifecycle.State.STARTED || map.getLifecycleState() == Lifecycle.State.INITIALIZED
+
+    // Lets RNMBXNativeUserLocation rebuild a puck the Maps SDK can no longer add.
+    internal val puckGuardComponent = LocationComponentReset(
+        isRequested = { mState.enabled },
+        isRunning = { isRunning(mMapView) },
+        isEnabled = { mMapView.mapPlugins.location.enabled },
+        setEnabled = { mMapView.mapPlugins.location.enabled = it },
+        holdProvider = ::holdLocationProviderBriefly,
+    )
 
     // All maps share one Mapbox device location provider, and restarting it before its stop completes leaks a
     // fusedLocationClientHandlerThread (#4225), so stay subscribed briefly in case another map takes over in the same frame.

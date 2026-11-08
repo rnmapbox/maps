@@ -56,6 +56,7 @@ class RNMBXNativeUserLocation(context: Context) : AbstractMapFeature(context), O
     private var mContext : Context = context
 
     private var imageManager: ImageManager? = null
+    private val puckGuard = LocationPuckGuard()
 
     // region bearing
     var androidRenderMode: RenderMode? = null
@@ -134,6 +135,18 @@ class RNMBXNativeUserLocation(context: Context) : AbstractMapFeature(context), O
     }
 
     private fun _apply(mapView: MapView) {
+        val locationComponent = mMapView?.locationComponentManager?.puckGuardComponent
+        if (locationComponent == null) {
+            _applySettings(mapView)
+            return
+        }
+        puckGuard.apply(locationComponent) { _applySettings(mapView) }?.let { error ->
+            val outcome = if (puckGuard.disabledAfterError) "disabled the location component" else "recreated the puck"
+            Logger.e(LOG_TAG, "Failed to add the location puck, $outcome: ${error.message}")
+        }
+    }
+
+    private fun _applySettings(mapView: MapView) {
         val location2 = mapView.location2;
 
         val locationPuck3D = model?.let { makeLocationPuck3D(it) }
