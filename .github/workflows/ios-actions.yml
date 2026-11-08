@@ -67,6 +67,14 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
+      # A new simulator renders posters and widgets for over 10 minutes after its first boot, starving
+      # the app under test, so boot the one Detox uses now and let that overlap with the build
+      - name: Boot simulator
+        run: |
+          UDID=$("$GITHUB_WORKSPACE/scripts/ci/pick-ios-simulator.sh")
+          echo "DETOX_DEVICE_UDID=$UDID" >> "$GITHUB_ENV"
+          xcrun simctl boot "$UDID"
+
       # Fork PRs get no secrets; fall back to the public rotated CI token (see rnmapbox/ci-config)
       - name: Access Token
         run: |
@@ -145,17 +153,10 @@ jobs:
           xcodebuild -version
           set -o pipefail && NSUnbufferedIO=YES  yarn detox build --configuration "$DETOX_CONFIGURATION" 2>&1
 
-      - name: Boot simulator
+      - name: Wait for the simulator
         run: |
-          UDID=$("$GITHUB_WORKSPACE/scripts/ci/pick-ios-simulator.sh")
-          echo "DETOX_DEVICE_UDID=$UDID" >> "$GITHUB_ENV"
-          xcrun simctl boot "$UDID"
-          time xcrun simctl bootstatus "$UDID"
-
-      # The first map load in the app needs locationd, storekitd etc., which take over
-      # a minute to answer while the simulator is still busy with its first boot
-      - name: Wait for the simulator to settle
-        run: "$GITHUB_WORKSPACE/scripts/ci/wait-for-settled-host.sh"
+          time xcrun simctl bootstatus "$DETOX_DEVICE_UDID"
+          "$GITHUB_WORKSPACE/scripts/ci/wait-for-settled-host.sh"
 
       - name: Test with detox
         if: inputs.E2E_MODE == 'test'
