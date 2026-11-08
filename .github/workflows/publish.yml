@@ -25,10 +25,16 @@ jobs:
       - name: Upgrade npm for OIDC support
         # npm 12 requires node >= 22.22.2, newer than our .nvmrc; npm 11.5.1+ has OIDC support
         run: npm install -g npm@11
-      - name: Install dependencies and build 🔧
+      - name: Install dependencies 🔧
         run: yarn install --immutable
+      - name: Build 🔧
+        run: yarn bob build
+      - name: Strip devDependencies from package.json
+        # Snack rejects packages with non-semver specifiers in any dependency section (expo/snack#713)
+        run: npm pkg delete devDependencies
       - name: Publish package on NPM 📦
-        run: npm publish --provenance --access public ${{ github.event.release.prerelease && '--tag next' || ''}}
+        # prepare (yarn bob build) already ran above and can't resolve bob without devDependencies
+        run: npm publish --ignore-scripts --provenance --access public ${{ github.event.release.prerelease && '--tag next' || ''}}
   notify-failure:
     runs-on: ubuntu-latest
     needs: build
