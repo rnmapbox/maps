@@ -152,6 +152,11 @@ jobs:
           xcrun simctl boot "$UDID"
           time xcrun simctl bootstatus "$UDID"
 
+      # The first map load in the app needs locationd, storekitd etc., which take over
+      # a minute to answer while the simulator is still busy with its first boot
+      - name: Wait for the simulator to settle
+        run: "$GITHUB_WORKSPACE/scripts/ci/wait-for-settled-host.sh"
+
       - name: Test with detox
         if: inputs.E2E_MODE == 'test'
         run: |
