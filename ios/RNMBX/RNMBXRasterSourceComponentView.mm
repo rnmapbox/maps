@@ -104,6 +104,14 @@ using namespace facebook::react;
     if (tileSize != nil) {
         _view.tileSize = tileSize;
     }
+    id prefetchZoomDelta = RNMBXConvertFollyDynamicToId(newProps.prefetchZoomDelta);
+    if (prefetchZoomDelta != nil) {
+        _view.prefetchZoomDelta = prefetchZoomDelta;
+    }
+    id tileNetworkRequestsDelay = RNMBXConvertFollyDynamicToId(newProps.tileNetworkRequestsDelay);
+    if (tileNetworkRequestsDelay != nil) {
+        _view.tileNetworkRequestsDelay = tileNetworkRequestsDelay;
+    }
     id tms = RNMBXConvertFollyDynamicToId(newProps.tms);
     if (tms != nil) {
         _view.tms = tms;

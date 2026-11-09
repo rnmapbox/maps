@@ -7736,6 +7736,20 @@
         "description": "Size of the map tiles.\nMapbox urls default to 256, all others default to 512."
       },
       {
+        "name": "prefetchZoomDelta",
+        "required": false,
+        "type": "number",
+        "default": "none",
+        "description": "When greater than 0, the map first requests a tile at a zoom level below\n`zoom - prefetchZoomDelta`, rounded to a multiple of the delta, so it can show a\nlow-resolution map quickly. 0 disables this. The default value for this option is 4.\nOnly read when the source is created."
+      },
+      {
+        "name": "tileNetworkRequestsDelay",
+        "required": false,
+        "type": "number",
+        "default": "none",
+        "description": "Delay in milliseconds before a tile's network request is sent while a gesture or a camera\nanimation is in progress. Tiles that leave the viewport before the delay elapses are never\nrequested. Has no effect on an idle map. The default value for this option is 0.\nOnly read when the source is created."
+      },
+      {
         "name": "tms",
         "required": false,
         "type": "boolean",
