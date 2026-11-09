@@ -124,7 +124,7 @@ class DocJSONBuilder {
     function mapNestedProp(propMeta) {
       const result = {
         type: {
-          name: propMeta.name,
+          name: tsTypeIsObject(propMeta) ? tsTypeDump(propMeta) : propMeta.name,
           value: propMeta.value,
         },
         description: propMeta.description,
