@@ -370,7 +370,9 @@ type GestureSettings = {
   focalPoint: {x: number, y: number}; /* By default, gestures rotate and zoom around the center of the gesture. Set
 this property to rotate and zoom around a fixed point instead, given in
 points (iOS) / dp (Android) relative to the top-left of the map view.
-Applies to pinch, rotate, double-tap and two-finger tap zoom. */
+Applies to pinch, rotate, double-tap and two-finger tap zoom.
+On iOS, pinch ignores the focal point while `pinchPanEnabled` is `true` (the default),
+so set `pinchPanEnabled: false` to keep pinch anchored to it. */
   pinchPanEnabled: boolean; /* Whether pan/scroll is enabled for the pinch gesture. */
   pinchZoomEnabled: boolean; /* Whether zoom is enabled for the pinch gesture. */
   pinchZoomDecelerationEnabled: boolean; /* Whether a deceleration animation following a pinch-zoom gesture is enabled. True by default.

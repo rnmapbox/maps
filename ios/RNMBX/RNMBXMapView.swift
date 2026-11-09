@@ -792,7 +792,7 @@ open class RNMBXMapView: UIView, RCTInvalidating {
     var panEnabled: Bool? = nil;
     var panDecelerationFactor: CGFloat? = nil;
     var simultaneousRotateAndPinchZoomEnabled: Bool? = nil;
-    var focalPoint: CGPoint? = nil;
+    var focalPoint: CGPoint? = nil
   }
 
   var gestureSettings = GestureSettings()

@@ -172,8 +172,9 @@ open class RNMBXMapViewManager(context: ReactApplicationContext, val viewTagReso
     override fun setGestureSettings(mapView: RNMBXMapView, settings: Dynamic) {
         mapView.withMap {
            it.gesturesPlugin {
-               val map = settings.asMap()
+               val map = if (settings.type == ReadableType.Map) settings.asMap() else null
                if (map == null) {
+                   mapView.pinchPanEnabledSetByApp = false
                    this.updateSettings { this.focalPoint = null }
                    return@gesturesPlugin Unit
                }
