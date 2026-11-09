@@ -20,6 +20,7 @@ export default function RasterSourceTileRequestsExample() {
         prefetchZoomDelta={0}
         tileNetworkRequestsDelay={200}
         tileUrlTemplates={['https://tile.openstreetmap.org/{z}/{x}/{y}.png']}
+        attribution="© OpenStreetMap contributors"
       />
       <RasterLayer
         id="osm-tiles-layer"

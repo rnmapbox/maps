@@ -26,11 +26,11 @@ class RNMBXRasterSource(context: Context?) : RNMBXTileSource<RasterSource?>(cont
         mTileSize = tileSize
     }
 
-    fun setPrefetchZoomDelta(value: Long) {
+    fun setPrefetchZoomDelta(value: Long?) {
         mPrefetchZoomDelta = value
     }
 
-    fun setTileNetworkRequestsDelay(value: Double) {
+    fun setTileNetworkRequestsDelay(value: Double?) {
         mTileNetworkRequestsDelay = value
     }
 

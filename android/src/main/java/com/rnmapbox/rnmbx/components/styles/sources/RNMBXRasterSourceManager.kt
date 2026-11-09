@@ -37,12 +37,12 @@ class RNMBXRasterSourceManager(reactApplicationContext: ReactApplicationContext)
 
     @ReactProp(name = "prefetchZoomDelta")
     override fun setPrefetchZoomDelta(source: RNMBXRasterSource, value: Dynamic) {
-        source.setPrefetchZoomDelta(value.asInt().toLong())
+        source.setPrefetchZoomDelta(if (value.isNull) null else value.asInt().toLong())
     }
 
     @ReactProp(name = "tileNetworkRequestsDelay")
     override fun setTileNetworkRequestsDelay(source: RNMBXRasterSource, value: Dynamic) {
-        source.setTileNetworkRequestsDelay(value.asDouble())
+        source.setTileNetworkRequestsDelay(if (value.isNull) null else value.asDouble())
     }
 
     override fun customEvents(): Map<String, String>? {
