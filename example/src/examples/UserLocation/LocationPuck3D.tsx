@@ -46,5 +46,6 @@ const metadata: ExampleWithMetadata['metadata'] = {
   docs: `
   Renders the user location as a 3D model that rotates with the course
   `,
+  waitForMapIdle: false,
 };
 LocationPuck3D.metadata = metadata;

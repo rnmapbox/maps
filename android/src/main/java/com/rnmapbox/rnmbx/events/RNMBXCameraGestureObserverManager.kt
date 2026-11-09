@@ -61,11 +61,21 @@ class RNMBXCameraGestureObserverManager(private val mContext: ReactApplicationCo
         }
     }
 
+    @ReactProp(name = "hasOnCameraChanged")
+    override fun setHasOnCameraChanged(view: RNMBXCameraGestureObserver?, value: Dynamic?) {
+        if (value?.getType()?.name == "Boolean") {
+            view?.hasOnCameraChanged = value.asBoolean()
+        } else {
+            Logger.e(REACT_CLASS, "Expected Boolean value for hasOnCameraChanged, got ${value?.getType()?.name}")
+        }
+    }
+
     override fun getDelegate(): ViewManagerDelegate<RNMBXCameraGestureObserver> = delegate
 
     // Map the native event name to the JS registration name for direct events
     override fun customEvents(): Map<String, String> = mapOf(
-        "onMapSteady" to "onMapSteady"
+        "onMapSteady" to "onMapSteady",
+        "onCameraChanged" to "onCameraChanged"
     )
 
     companion object {

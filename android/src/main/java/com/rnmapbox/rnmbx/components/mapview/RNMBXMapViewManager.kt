@@ -14,6 +14,8 @@ import com.facebook.react.uimanager.ViewManagerDelegate
 import com.facebook.react.viewmanagers.RNMBXMapViewManagerDelegate
 import com.facebook.react.viewmanagers.RNMBXMapViewManagerInterface
 import com.mapbox.maps.ScreenCoordinate
+import com.mapbox.maps.MapboxExperimental
+import com.mapbox.maps.SymbolScaleBehavior
 import com.mapbox.maps.extension.style.layers.properties.generated.ProjectionName
 import com.mapbox.maps.plugin.gestures.gestures
 import com.rnmapbox.rnmbx.events.constants.eventMapOf
@@ -144,12 +146,25 @@ open class RNMBXMapViewManager(context: ReactApplicationContext, val viewTagReso
 
     @ReactProp(name = "surfaceView")
     override fun setSurfaceView(mapView: RNMBXMapView, value: Dynamic) {
+        val surfaceView = if (value.isNull) null else value.asBoolean()
         if (mapView.isInitialized) {
-            if (mapView.surfaceView != value.asBoolean()) {
+            if (mapView.surfaceView != surfaceView) {
                 Logger.d(LOG_TAG, "surafaceView cannot be changed on existing map")
             }
         } else {
-            mapView.surfaceView = value.asBoolean()
+            mapView.surfaceView = surfaceView
+        }
+    }
+
+    @ReactProp(name = "transparent")
+    override fun setTransparent(mapView: RNMBXMapView, value: Dynamic) {
+        val transparent = !value.isNull && value.asBoolean()
+        if (mapView.isInitialized) {
+            if (mapView.transparent != transparent) {
+                Logger.w(LOG_TAG, "transparent cannot be changed on existing map, it only applies when the map is created")
+            }
+        } else {
+            mapView.transparent = transparent
         }
     }
 
@@ -162,6 +177,7 @@ open class RNMBXMapViewManager(context: ReactApplicationContext, val viewTagReso
                    this.updateSettings { this.focalPoint = null }
                    return@gesturesPlugin Unit
                }
+               mapView.pinchPanEnabledSetByApp = map.hasKey("pinchPanEnabled") && !map.isNull("pinchPanEnabled")
                this.updateSettings {
                    val focalPoint = map.takeIf { it.hasKey("focalPoint") && !it.isNull("focalPoint") }
                        ?.getAndLogIfNotMap("focalPoint", LOG_TAG)
@@ -253,6 +269,31 @@ open class RNMBXMapViewManager(context: ReactApplicationContext, val viewTagReso
         map.withMapView {
             it.gestures.pitchEnabled = pitchEnabled.asBoolean()
         }
+    }
+
+    @OptIn(MapboxExperimental::class)
+    @ReactProp(name = "symbolScaleBehavior")
+    override fun setSymbolScaleBehavior(map: RNMBXMapView, value: Dynamic) {
+        map.setReactSymbolScaleBehavior(
+            when (value.type) {
+                ReadableType.String -> if (value.asString() == "system") SymbolScaleBehavior.system else null
+                ReadableType.Map -> value.asMap()?.takeIf { it.hasKey("fixed") }?.let {
+                    SymbolScaleBehavior.fixed(it.getDouble("fixed").toFloat())
+                }
+                else -> null
+            }
+        )
+    }
+
+    @ReactProp(name = "styleGlyphURL")
+    override fun setStyleGlyphURL(map: RNMBXMapView, value: Dynamic) {
+        map.setReactStyleGlyphURL(if (value.type == ReadableType.String) value.asString() else null)
+    }
+
+    @ReactProp(name = "debugOptions")
+    override fun setDebugOptions(map: RNMBXMapView, value: Dynamic) {
+        val names = if (value.type == ReadableType.Array) value.asArray()?.toArrayList()?.map { "$it" } else null
+        map.setReactDebugOptions(names ?: emptyList())
     }
 
     @ReactProp(name = "maxPitch")
@@ -410,7 +451,7 @@ open class RNMBXMapViewManager(context: ReactApplicationContext, val viewTagReso
     }
 
     override fun setCompassImage(view: RNMBXMapView, value: Dynamic?) {
-        // TODO: No-op on Android?
+        view.setReactCompassImage(if (value == null || value.isNull) null else value.asString())
     }
 
     //endregion

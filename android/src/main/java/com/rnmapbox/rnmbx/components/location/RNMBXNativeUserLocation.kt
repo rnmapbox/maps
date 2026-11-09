@@ -33,6 +33,7 @@ import com.rnmapbox.rnmbx.components.mapview.OnMapReadyCallback
 import com.rnmapbox.rnmbx.components.mapview.RNMBXMapView
 import com.rnmapbox.rnmbx.utils.BitmapUtils
 import com.rnmapbox.rnmbx.utils.Logger
+import com.rnmapbox.rnmbx.utils.ModelUtils
 import com.rnmapbox.rnmbx.utils.extensions.getAndLogIfNotArray
 import com.rnmapbox.rnmbx.utils.extensions.getAndLogIfNotBoolean
 import com.rnmapbox.rnmbx.utils.extensions.getAndLogIfNotString
@@ -211,7 +212,7 @@ class RNMBXNativeUserLocation(context: Context) : AbstractMapFeature(context), O
         val opacityExpression = opacity?.takeIf { it.type == ReadableType.Array }?.asArray()
 
         return LocationPuck3D(
-            modelUri = uri,
+            modelUri = ModelUtils.resolveUri(mContext, uri),
             modelScale = scale?.toFloatListOrNull() ?: listOf(1f, 1f, 1f),
             modelScaleExpression = scale?.toExpressionJsonOrNull(),
             modelRotation = rotation?.toFloatListOrNull() ?: listOf(0f, 0f, 0f),
@@ -278,7 +279,7 @@ class RNMBXNativeUserLocation(context: Context) : AbstractMapFeature(context), O
     }
 
     private fun _fetchImages(map: RNMBXMapView) {
-        map.mapView?.getMapboxMap()?.getStyle()?.let { style ->
+        map.getMapboxMap().getStyle()?.let { style ->
             imageNames.forEach { (part,name) ->
                 if (name != null) {
                     if (style.hasStyleImage(name)) {

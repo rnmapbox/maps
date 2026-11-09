@@ -175,5 +175,6 @@ const metadata: ExampleWithMetadata['metadata'] = {
   docs: `
 Demonstrates UserLocation render modes, follow modes
 `,
+  waitForMapIdle: false,
 };
 UserLocationRenderMode.metadata = metadata;

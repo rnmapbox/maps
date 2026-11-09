@@ -115,6 +115,7 @@ describe('Style', () => {
       cluster: true,
       clusterRadius: 80,
       clusterMaxZoom: 10,
+      clusterMinPoints: 5,
       maxzoom: 22,
       minzoom: 1,
       buffer: 128,
@@ -137,6 +138,7 @@ describe('Style', () => {
     expect(props.shape).toBeUndefined();
     expect(props.clusterRadius).toStrictEqual(shapeSource.clusterRadius);
     expect(props.clusterMaxZoomLevel).toStrictEqual(shapeSource.clusterMaxZoom);
+    expect(props.clusterMinPoints).toStrictEqual(shapeSource.clusterMinPoints);
     expect(props.maxZoomLevel).toStrictEqual(shapeSource.maxzoom);
     expect(props.buffer).toStrictEqual(shapeSource.buffer);
     expect(props.tolerance).toStrictEqual(shapeSource.tolerance);

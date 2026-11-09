@@ -578,6 +578,7 @@ const metadata: ExampleWithMetadata['metadata'] = {
   docs: `
 Tests conversion from screen to geographic coordinates and vice versa.        
 `,
+  webSupported: true,
 };
 
 ScreenCoordinates.metadata = metadata;

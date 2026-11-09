@@ -1,6 +1,6 @@
 import type { HostComponent, ViewProps } from 'react-native';
 // @ts-ignore - CI environment type resolution issue for CodegenTypes
-import { Int32 } from 'react-native/Libraries/Types/CodegenTypes';
+import { Double, Int32 } from 'react-native/Libraries/Types/CodegenTypes';
 import codegenNativeComponent from 'react-native/Libraries/Utilities/codegenNativeComponent';
 
 import { type Position } from '../types/Position';
@@ -18,6 +18,10 @@ export interface NativeProps extends ViewProps {
   allowOverlap: UnsafeMixed<boolean>;
   allowOverlapWithPuck: UnsafeMixed<boolean>;
   isSelected: UnsafeMixed<boolean>;
+  allowZElevate?: UnsafeMixed<boolean>;
+  priority?: UnsafeMixed<Int32>;
+  minZoom?: UnsafeMixed<Double>;
+  maxZoom?: UnsafeMixed<Double>;
   stopGesturePropagation: UnsafeMixed<boolean>;
 }
 

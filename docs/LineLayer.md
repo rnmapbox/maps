@@ -164,6 +164,7 @@ Customizable style attributes
 * <a href="#lineemissivestrength">lineEmissiveStrength</a><br/>
 * <a href="#lineborderwidth">lineBorderWidth</a><br/>
 * <a href="#linebordercolor">lineBorderColor</a><br/>
+* <a href="#linebordergradient">lineBorderGradient</a><br/>
 * <a href="#lineocclusionopacity">lineOcclusionOpacity</a><br/>
 
 ___
@@ -285,12 +286,15 @@ Name: `lineZOffset`
 Mapbox spec: [line-z-offset](https://docs.mapbox.com/style-spec/reference/layers/#layout-line-line-z-offset)
 
 #### Description
-Vertical offset from ground, in meters. Not supported for globe projection at the moment.
+Vertical offset from ground. Not supported for globe projection at the moment.
 
 #### Type
 `number`
 #### Default Value
 `0`
+
+#### Units
+`meters`
 
 
 #### Requires
@@ -401,25 +405,6 @@ Controls how much the elevation of lines with `lineElevationReference` set to `s
 #### Expression
 
 Parameters: `zoom, feature, line-progress`
-___
-
-### lineElevationGroundScaleTransition
-Name: `lineElevationGroundScaleTransition`
-
-#### Description
-
-The transition affecting any changes to this layer’s lineElevationGroundScale property.
-
-#### Type
-
-`{ duration, delay }`
-
-#### Units
-`milliseconds`
-
-#### Default Value
-`{duration: 300, delay: 0}`
-
 
 ___
 
@@ -719,7 +704,7 @@ Name: `lineBlur`
 Mapbox spec: [line-blur](https://docs.mapbox.com/style-spec/reference/layers/#paint-line-line-blur)
 
 #### Description
-Blur applied to the line, in pixels.
+Blur applied to the line.
 
 #### Type
 `number`
@@ -1008,6 +993,9 @@ The width of the line border. A value of zero means no border.
 #### Default Value
 `0`
 
+#### Units
+`pixels`
+
 #### Minimum
 `0`
 
@@ -1073,6 +1061,27 @@ The transition affecting any changes to this layer’s lineBorderColor property.
 #### Default Value
 `{duration: 300, delay: 0}`
 
+
+___
+
+### lineBorderGradient
+Name: `lineBorderGradient`
+
+Mapbox spec: [line-border-gradient](https://docs.mapbox.com/style-spec/reference/layers/#paint-line-line-border-gradient)
+
+#### Description
+A gradient used to color the border of a line feature at various distances along its length. Defined using a `step` or `interpolate` expression which outputs a color for each corresponding `lineProgress` input value. `lineProgress` is a percentage of the line feature's total length as measured on the webmercator projected coordinate plane (a `number` between `0` and `1`). Takes precedence over `lineBorderColor`. Has no effect unless `lineBorderWidth` is greater than zero. Can only be used with GeoJSON sources that specify `"lineMetrics": true`.
+
+#### Type
+`color`
+
+
+#### Disabled By
+`linePattern`
+
+#### Expression
+
+Parameters: `line-progress`
 
 ___
 

@@ -356,5 +356,6 @@ const metadata: ExampleWithMetadata['metadata'] = {
   docs: `
 Camera animation modes
 `,
+  webSupported: true,
 };
 CameraAnimation.metadata = metadata;

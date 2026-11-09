@@ -55,6 +55,17 @@ export const setAccessToken = (token: string) => {
 
 export const getAccessToken = async () => mapboxgl.accessToken;
 
+export const setWorkerUrl = (url: string) => {
+  mapboxgl.workerUrl = url;
+  // Newer mapbox-gl starts workerUrl as a module worker, where the CSP
+  // worker's importScripts() throws; workerClass takes precedence.
+  mapboxgl.workerClass = class {
+    constructor() {
+      return new Worker(url);
+    }
+  } as unknown as new () => Worker;
+};
+
 // Custom headers would need transformRequest, and extra headers on
 // cross-origin tile requests trigger CORS preflights that api.mapbox.com
 // rejects, so these are no-ops on web for now.
@@ -95,6 +106,7 @@ const MapboxModule = {
   UserLocationRenderMode,
   setAccessToken,
   getAccessToken,
+  setWorkerUrl,
   addCustomHeader,
   removeCustomHeader,
   setTelemetryEnabled,

@@ -80,5 +80,6 @@ Demonstrates multiple PointAnnotationManager instances, each owning its own
 annotation layer in a different slot of the Mapbox Standard style. The bottom-slot
 pins (B) render behind the 3D buildings while the top-slot pins (T) render in front.
   `,
+  excludeFromPercy: true,
 };
 PointAnnotationManagerMultiple.metadata = metadata;

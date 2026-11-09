@@ -19,6 +19,7 @@ export interface NativeProps extends ViewProps {
   cluster: UnsafeMixed<Int32>;
   clusterRadius: UnsafeMixed<Double>;
   clusterMaxZoomLevel: UnsafeMixed<Double>;
+  clusterMinPoints?: UnsafeMixed<Double>;
   clusterProperties: UnsafeMixed<any>;
   maxZoomLevel: UnsafeMixed<Double>;
   minZoomLevel: UnsafeMixed<Double>;
@@ -27,6 +28,7 @@ export interface NativeProps extends ViewProps {
   lineMetrics: UnsafeMixed<boolean>;
   hasPressListener: UnsafeMixed<boolean>;
   hitbox: UnsafeMixed<any>;
+  promoteId?: UnsafeMixed<any>;
   onMapboxShapeSourcePress: DirectEventHandler<OnMapboxShapeSourcePressEventType>;
 }
 

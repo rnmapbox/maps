@@ -8,7 +8,8 @@ import { MapView } from '@rnmapbox/maps';
 MapView
 
 ```
-MapView backed by Mapbox Native GL
+MapView renders an interactive Mapbox map in a React Native app on iOS and Android.
+It is the root component of a map: add a Camera, sources, layers, annotations and the user location as its children.
 
 ## props
 
@@ -223,7 +224,7 @@ Add margins to the compass with x and y values
 ```tsx
 string
 ```
-[iOS, `mapbox` (v10) implementation only] A string referencing an image key. Requires an `Images` component.
+[`mapbox` (v10) implementation only] A string referencing an image key. Requires an `Images` component.
 
 [Ornaments](../examples/Map/Ornaments)
   
@@ -260,10 +261,26 @@ Set the scale bar distance units. Defaults to metric.
 ```tsx
 boolean
 ```
-[Android only] Enable/Disable use of GLSurfaceView instead of TextureView.
+[Android only] Enable/Disable use of GLSurfaceView instead of TextureView. Defaults to `true`, or to `false` when `transparent` is set.
+Only applies when the map is created.
 
-  _defaults to:_ `true`
 
+  
+### transparent
+
+```tsx
+boolean
+```
+Renders the map with a transparent background, so views behind the map show through wherever the style's background is transparent or semi-transparent.
+The style must provide that background itself, e.g. a `background` layer with `background-color: rgba(0,0,0,0)`; maps with regular Mapbox styles stay opaque.
+Snapshots taken with `takeSnap` keep the transparency.
+
+On Android this uses a TextureView, which is slower, uses more memory and lags one frame behind the rest of the UI. It only applies when the map is created and
+overrides `surfaceView={true}`.
+
+Globe fog and atmosphere may not composite correctly over a transparent background.
+
+[Transparent Map](../examples/Map/TransparentMap)
   
 ### requestDisallowInterceptTouchEvent
 
@@ -293,6 +310,56 @@ For any language Mapbox supports and for the Standard style, use the app-wide `M
 Removing the prop stops localizing labels from the next style load.
 
 [Localize Labels](../examples/Map/LocalizeLabels)
+  
+### symbolScaleBehavior
+
+```tsx
+'system' | { fixed: number }
+```
+How map symbols (icons and text) scale with the system text size setting.
+`'system'` follows the device's text size, from 0.8x up to 2.0x for accessibility sizes.
+`{ fixed: number }` uses a constant scale factor, recommended range 0.8–2.0.
+Defaults to `{ fixed: 1.0 }`.
+
+@experimental Uses an experimental Mapbox API that may change in a future SDK release.
+
+[Symbol Scale Behavior](../examples/Map/SymbolScaleBehavior)
+  
+### styleGlyphURL
+
+```tsx
+string
+```
+Overrides the glyph URL of the style, so labels use fonts from another glyph server, e.g.
+`https://example.com/fonts/{fontstack}/{range}.pbf`. It is re-applied on every style load.
+Removing the prop restores the style's own glyphs from the next style load.
+
+@experimental Uses an experimental Mapbox API that may change in a future SDK release.
+
+
+  
+### debugOptions
+
+```tsx
+Array
+```
+Debug drawings of the native map, e.g. `['tileBorders', 'collision']`:
+- `tileBorders`: tile boundaries as red lines
+- `parseStatus`: tile coordinates (x/y/z) in the corner of each tile
+- `timestamps`: when each tile was loaded
+- `collision`: symbol collision boxes, for diagnosing label placement
+- `overdraw`: each draw as a translucent fill, so overdrawn areas stand out
+- `stencilClip`: the stencil buffer instead of the color buffer
+- `depthBuffer`: the depth buffer instead of the color buffer
+- `modelBounds`: bounding boxes of 3D models
+- `light`: the light conditions of each tile
+- `camera`: a view with the camera's center, zoom, bearing and pitch
+- `padding`: the camera padding frame
+- `terrainWireframe`, `layers2DWireframe`, `layers3DWireframe`: Android only, wireframes of terrain and of 2D and 3D layers
+
+Options a platform doesn't support are ignored there with a warning. An empty array or removing the prop turns all of them off.
+
+[Debug Options](../examples/Map/DebugOptions)
   
 ### gestureSettings
 
@@ -369,6 +436,7 @@ This event is triggered whenever the currently displayed map region is about to 
 func
 ```
 This event is triggered whenever the currently displayed map region is changing.
+`properties.isUserInteraction` is deprecated, use CameraGestureObserver#onCameraChanged to tell user gestures from programmatic camera changes.
 
 - `feature`: `PointFeature`  - The geojson point feature at the camera center, properties contains zoomLevel, visibleBounds
 *signature:*`(feature:GeoJSON.Feature) =&gt; void`

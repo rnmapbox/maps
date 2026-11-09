@@ -1,6 +1,6 @@
 package com.rnmapbox.rnmbx.components.annotation
 
-import com.mapbox.maps.MapView
+import com.mapbox.maps.plugin.delegates.MapPluginProviderDelegate
 import com.mapbox.maps.plugin.annotation.Annotation
 import com.mapbox.maps.plugin.annotation.AnnotationConfig
 import com.mapbox.maps.plugin.annotation.annotations
@@ -13,7 +13,7 @@ import com.mapbox.maps.plugin.annotation.generated.createPointAnnotationManager
 import com.rnmapbox.rnmbx.components.annotation.RNMBXPointAnnotation
 import com.rnmapbox.rnmbx.utils.Logger
 
-class RNMBXPointAnnotationCoordinator(val mapView: MapView, layerId: String? = "RNMBX-mapview-annotations") {
+class RNMBXPointAnnotationCoordinator(val mapView: MapPluginProviderDelegate, layerId: String? = "RNMBX-mapview-annotations") {
     val manager: PointAnnotationManager;
     var annotationClicked = false
     var annotationDragged = false

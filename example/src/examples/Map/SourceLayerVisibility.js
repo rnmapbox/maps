@@ -65,5 +65,6 @@ const metadata = {
   docs: `
 Changes visibility of layers using a source in the map
 `,
+  webSupported: true,
 };
 SourceLayerVisibility.metadata = metadata;

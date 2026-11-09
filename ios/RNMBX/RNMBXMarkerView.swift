@@ -4,8 +4,18 @@ import UIKit
 /// dummy parent of RNMBXMarkerView, so react-native changes visibility on RNMBXMarkerView,
 /// and Mapbox changes visibility on RNMBXMarkerViewParentViewAnnotation
 class RNMBXMarkerViewParentViewAnnotation : UIView {
+  weak var marker: RNMBXMarkerView?
+
+  // Mapbox positions the annotation by setting its frame.
+  override var frame: CGRect {
+    didSet {
+      marker?.onPositionChange?()
+    }
+  }
+
   required init(marker: RNMBXMarkerView) {
     super.init(frame: marker.bounds)
+    self.marker = marker
     insertSubview(marker, at: 0)
   }
   
@@ -41,6 +51,8 @@ public class RNMBXMarkerView: UIView, RNMBXMapComponent {
   weak var _annotationView: RNMBXMarkerViewParentViewAnnotation?
   
   var didAddToMap = false
+
+  @objc public var onPositionChange: (() -> Void)?
   
   @objc public var coordinate: Array<NSNumber>? {
     didSet {
@@ -67,6 +79,30 @@ public class RNMBXMarkerView: UIView, RNMBXMapComponent {
   }
   
   @objc public var isSelected: Bool = false {
+    didSet {
+      update()
+    }
+  }
+
+  @objc public var allowZElevate: NSNumber? {
+    didSet {
+      update()
+    }
+  }
+
+  @objc public var priority: NSNumber? {
+    didSet {
+      update()
+    }
+  }
+
+  @objc public var minZoom: NSNumber? {
+    didSet {
+      update()
+    }
+  }
+
+  @objc public var maxZoom: NSNumber? {
     didSet {
       update()
     }
@@ -228,6 +264,10 @@ public class RNMBXMarkerView: UIView, RNMBXMapComponent {
       selected: isSelected
     )
     options.allowOverlapWithPuck = allowOverlapWithPuck
+    options.allowZElevate = allowZElevate?.boolValue
+    options.priority = priority?.intValue
+    options.minZoom = minZoom?.doubleValue
+    options.maxZoom = maxZoom?.doubleValue
     options.ignoreCameraPadding = true
     return options
   }

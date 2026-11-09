@@ -109,5 +109,6 @@ const metadata = {
   title: 'Query Source Features',
   tags: ['VectorSource', 'querySourceFeatures'],
   docs: '',
+  webSupported: true,
 };
 QuerySourceFeatures.metadata = metadata;

@@ -17,6 +17,8 @@ import MapContext from '../MapContext';
 type MarkerViewProps = {
   coordinate: [number, number];
   anchor?: { x: number; y: number };
+  minZoom?: number;
+  maxZoom?: number;
   children?: ReactElement;
 };
 
@@ -59,6 +61,28 @@ function MarkerView(props: MarkerViewProps, ref: Ref<Marker>) {
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [map]);
+
+  // Hide marker outside its zoom range
+  useEffect(() => {
+    const { minZoom, maxZoom } = props;
+    if (map === undefined || (minZoom === undefined && maxZoom === undefined)) {
+      return;
+    }
+    const { style } = marker.getElement();
+    const updateVisibility = () => {
+      const zoom = map.getZoom();
+      const visible = zoom >= (minZoom ?? 0) && zoom <= (maxZoom ?? 22);
+      style.visibility = visible ? '' : 'hidden';
+    };
+    updateVisibility();
+    map.on('zoom', updateVisibility);
+
+    return () => {
+      map.off('zoom', updateVisibility);
+      style.visibility = '';
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [map, props.minZoom, props.maxZoom]);
 
   // Expose marker instance
   // eslint-disable-next-line react-hooks/exhaustive-deps

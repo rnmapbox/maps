@@ -54,6 +54,7 @@ const metadata = {
   docs: `This example renders vector tiles using a third party vector tile source.
 
 In this case, Mapillary provides the vector tiles, which are added to the map using VectorSource.`,
+  webSupported: true,
 };
 
 ThirdPartyVectorSource.metadata = metadata;

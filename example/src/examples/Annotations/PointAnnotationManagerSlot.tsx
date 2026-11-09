@@ -87,5 +87,6 @@ const metadata: ExampleWithMetadata['metadata'] = {
 Demonstrates using PointAnnotationManager to position annotations
 in different slots of the Mapbox Standard style.
   `,
+  excludeFromPercy: true,
 };
 PointAnnotationManagerSlot.metadata = metadata;

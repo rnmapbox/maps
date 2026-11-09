@@ -243,12 +243,15 @@ Name: `skyGradientRadius`
 Mapbox spec: [sky-gradient-radius](https://docs.mapbox.com/style-spec/reference/layers/#paint-sky-sky-gradient-radius)
 
 #### Description
-The angular distance (measured in degrees) from `skyGradientCenter` up to which the gradient extends. A value of 180 causes the gradient to wrap around to the opposite direction from `skyGradientCenter`.
+The angular distance from `skyGradientCenter` up to which the gradient extends. A value of 180 causes the gradient to wrap around to the opposite direction from `skyGradientCenter`.
 
 #### Type
 `number`
 #### Default Value
 `90`
+
+#### Units
+`degrees`
 
 #### Minimum
 `0`

@@ -86,6 +86,17 @@ the shapes are not clustered.
 
 
   
+### clusterMinPoints
+
+```tsx
+number
+```
+Specifies the minimum number of points to form a cluster if clustering is enabled.
+The default value is 2. It is applied when the source is added to the map; changing it
+later requires remounting the ShapeSource.
+
+[Earthquakes](../examples/SymbolCircleLayer/Earthquakes)
+  
 ### clusterProperties
 
 ```tsx
@@ -103,6 +114,16 @@ Has the form `{ "property_name": [operator, map_expression]}`, where
 Example: `{ "resultingSum": [["+", ["accumulated"], ["get", "resultingSum"]], ["get", "scalerank"]] }`
 
 
+  
+### promoteId
+
+```tsx
+string | Expression
+```
+A feature property to use as the feature id, for example with `setFeatureState`.
+Either a property name or an expression that evaluates to the id.
+
+[Feature State](../examples/V10/FeatureState)
   
 ### maxZoomLevel
 

@@ -5,6 +5,7 @@ import RNMBXVectorSourceNativeComponent from '../specs/RNMBXVectorSourceNativeCo
 import { cloneReactChildrenWithProps, isFunction } from '../utils';
 import { copyPropertiesAsDeprecated } from '../utils/deprecation';
 import { type OnPressEvent } from '../types/OnPressEvent';
+import { type Expression } from '../utils/MapboxStyles';
 
 import AbstractSource from './AbstractSource';
 
@@ -58,6 +59,12 @@ interface Props {
    * source is part of a map view’s style and the map view’s attribution button is pressed.
    */
   attribution?: string;
+
+  /**
+   * A feature property to use as the feature id, for example with `setFeatureState`.
+   * Either a property name or an expression that evaluates to the id.
+   */
+  promoteId?: string | Expression;
 
   /**
    * Source press listener, gets called when a user presses one of the children layers only
@@ -155,6 +162,7 @@ class VectorSource extends AbstractSource<Props, NativeProps> {
       maxZoomLevel: this.props.maxZoomLevel,
       tms: this.props.tms,
       attribution: this.props.attribution,
+      promoteId: this.props.promoteId,
       hitbox: this.props.hitbox,
       hasPressListener: isFunction(this.props.onPress),
       onMapboxVectorSourcePress: this.onPress.bind(this),

@@ -86,5 +86,6 @@ const metadata = {
   title: 'Watercolor Raster Tiles',
   tags: ['RasterSource', 'RasterLayer'],
   docs: '',
+  webSupported: true,
 };
 WatercolorRasterTiles.metadata = metadata;

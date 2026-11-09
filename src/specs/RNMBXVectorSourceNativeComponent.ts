@@ -21,6 +21,7 @@ export interface NativeProps extends ViewProps {
   tms: UnsafeMixed<boolean>;
   hasPressListener: UnsafeMixed<boolean>;
   hitbox: UnsafeMixed<any>;
+  promoteId?: UnsafeMixed<any>;
   onMapboxVectorSourcePress: DirectEventHandler<OnMapboxVectorSourcePressEventType>;
 }
 

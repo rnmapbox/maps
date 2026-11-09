@@ -56,5 +56,6 @@ const metadata = {
   title: 'Hillshade Layer',
   tags: ['RasterDemSource', 'HillshadeLayer'],
   docs: 'Renders terrain hillshading from a raster-dem source.',
+  webSupported: true,
 };
 HillshadeSource.metadata = metadata;

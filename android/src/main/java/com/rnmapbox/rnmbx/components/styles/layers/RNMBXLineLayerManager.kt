@@ -7,6 +7,7 @@ import com.facebook.react.uimanager.annotations.ReactProp
 import com.facebook.react.viewmanagers.RNMBXLineLayerManagerInterface
 import com.facebook.react.uimanager.ViewManagerDelegate
 import com.facebook.react.viewmanagers.RNMBXLineLayerManagerDelegate
+import com.rnmapbox.rnmbx.utils.extensions.asStringOrNull
 
 class RNMBXLineLayerManager : ViewGroupManager<RNMBXLineLayer>(),
     RNMBXLineLayerManagerInterface<RNMBXLineLayer> {
@@ -40,12 +41,12 @@ class RNMBXLineLayerManager : ViewGroupManager<RNMBXLineLayer>(),
 
     @ReactProp(name = "aboveLayerID")
     override fun setAboveLayerID(layer: RNMBXLineLayer, aboveLayerID: Dynamic) {
-        layer.setAboveLayerID(aboveLayerID.asString())
+        layer.setAboveLayerID(aboveLayerID.asStringOrNull())
     }
 
     @ReactProp(name = "belowLayerID")
     override fun setBelowLayerID(layer: RNMBXLineLayer, belowLayerID: Dynamic) {
-        layer.setBelowLayerID(belowLayerID.asString())
+        layer.setBelowLayerID(belowLayerID.asStringOrNull())
     }
 
     @ReactProp(name = "layerIndex")
@@ -70,7 +71,7 @@ class RNMBXLineLayerManager : ViewGroupManager<RNMBXLineLayer>(),
 
     @ReactProp(name = "sourceLayerID")
     override fun setSourceLayerID(layer: RNMBXLineLayer, sourceLayerID: Dynamic) {
-        layer.setSourceLayerID(sourceLayerID.asString())
+        layer.setSourceLayerID(sourceLayerID.asStringOrNull())
     }
 
     @ReactProp(name = "filter")
@@ -80,7 +81,7 @@ class RNMBXLineLayerManager : ViewGroupManager<RNMBXLineLayer>(),
 
     @ReactProp(name = "slot")
     override fun setSlot(layer: RNMBXLineLayer, slot: Dynamic) {
-        layer.setSlot(slot.asString())
+        layer.setSlot(slot.asStringOrNull())
     }
     // @{codepart-replace-end}
 

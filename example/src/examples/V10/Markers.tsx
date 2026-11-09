@@ -228,5 +228,7 @@ const metadata: ExampleWithMetadata['metadata'] = {
   docs: `
 Test view for MarkerViews
 `,
+  excludeFromPercy: true,
+  webSupported: true,
 };
 Markers.metadata = metadata;

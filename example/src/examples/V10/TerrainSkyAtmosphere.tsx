@@ -107,5 +107,6 @@ const metadata = {
   docs: `
 Demonstrates use of Terrain, Atmosphere and SkyLayer. Use the Snow/Rain buttons to toggle experimental particle weather effects.
 `,
+  webSupported: true,
 };
 TerrainSkyAtmosphere.metadata = metadata;

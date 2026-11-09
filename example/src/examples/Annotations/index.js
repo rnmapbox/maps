@@ -1,6 +1,7 @@
 export { default as CustomCallout } from './CustomCallout';
 export { default as Heatmap } from './Heatmap';
 export { default as MarkerView } from './MarkerView';
+export { default as MarkerViewPlacement } from './MarkerViewPlacement';
 export { default as PointAnnotationAnchors } from './PointAnnotationAnchors';
 export { default as PointAnnotationManagerMultiple } from './PointAnnotationManagerMultiple';
 export { default as PointAnnotationManagerSlot } from './PointAnnotationManagerSlot';
