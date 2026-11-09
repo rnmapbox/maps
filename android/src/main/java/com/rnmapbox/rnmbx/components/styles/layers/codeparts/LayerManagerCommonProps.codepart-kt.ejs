@@ -15,12 +15,12 @@
 
     @ReactProp(name = "aboveLayerID")
     override fun setAboveLayerID(layer: <%= layerType %>, aboveLayerID: Dynamic) {
-        layer.setAboveLayerID(aboveLayerID.asString())
+        layer.setAboveLayerID(aboveLayerID.asStringOrNull())
     }
 
     @ReactProp(name = "belowLayerID")
     override fun setBelowLayerID(layer: <%= layerType %>, belowLayerID: Dynamic) {
-        layer.setBelowLayerID(belowLayerID.asString())
+        layer.setBelowLayerID(belowLayerID.asStringOrNull())
     }
 
     @ReactProp(name = "layerIndex")
@@ -45,7 +45,7 @@
 
     @ReactProp(name = "sourceLayerID")
     override fun setSourceLayerID(layer: <%= layerType %>, sourceLayerID: Dynamic) {
-        layer.setSourceLayerID(sourceLayerID.asString())
+        layer.setSourceLayerID(sourceLayerID.asStringOrNull())
     }
 
     @ReactProp(name = "filter")
@@ -55,5 +55,5 @@
 
     @ReactProp(name = "slot")
     override fun setSlot(layer: <%= layerType %>, slot: Dynamic) {
-        layer.setSlot(slot.asString())
+        layer.setSlot(slot.asStringOrNull())
     }

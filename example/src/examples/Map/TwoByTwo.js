@@ -56,5 +56,6 @@ const metadata = {
   docs: `
 Display two map views side by side
 `,
+  webSupported: true,
 };
 TwoByTwo.metadata = metadata;

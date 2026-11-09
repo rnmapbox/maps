@@ -8,6 +8,7 @@ import com.facebook.react.viewmanagers.RNMBXModelLayerManagerInterface
 import com.rnmapbox.rnmbx.utils.Logger
 import com.facebook.react.uimanager.ViewManagerDelegate
 import com.facebook.react.viewmanagers.RNMBXModelLayerManagerDelegate
+import com.rnmapbox.rnmbx.utils.extensions.asStringOrNull
 
 
 class RNMBXModelLayerManager : ViewGroupManager<RNMBXModelLayer>(),
@@ -42,12 +43,12 @@ class RNMBXModelLayerManager : ViewGroupManager<RNMBXModelLayer>(),
 
     @ReactProp(name = "aboveLayerID")
     override fun setAboveLayerID(layer: RNMBXModelLayer, aboveLayerID: Dynamic) {
-        layer.setAboveLayerID(aboveLayerID.asString())
+        layer.setAboveLayerID(aboveLayerID.asStringOrNull())
     }
 
     @ReactProp(name = "belowLayerID")
     override fun setBelowLayerID(layer: RNMBXModelLayer, belowLayerID: Dynamic) {
-        layer.setBelowLayerID(belowLayerID.asString())
+        layer.setBelowLayerID(belowLayerID.asStringOrNull())
     }
 
     @ReactProp(name = "layerIndex")
@@ -72,7 +73,7 @@ class RNMBXModelLayerManager : ViewGroupManager<RNMBXModelLayer>(),
 
     @ReactProp(name = "sourceLayerID")
     override fun setSourceLayerID(layer: RNMBXModelLayer, sourceLayerID: Dynamic) {
-        layer.setSourceLayerID(sourceLayerID.asString())
+        layer.setSourceLayerID(sourceLayerID.asStringOrNull())
     }
 
     @ReactProp(name = "filter")
@@ -82,7 +83,7 @@ class RNMBXModelLayerManager : ViewGroupManager<RNMBXModelLayer>(),
 
     @ReactProp(name = "slot")
     override fun setSlot(layer: RNMBXModelLayer, slot: Dynamic) {
-        layer.setSlot(slot.asString())
+        layer.setSlot(slot.asStringOrNull())
     }
     // @{codepart-replace-end}
 

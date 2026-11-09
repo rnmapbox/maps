@@ -91,5 +91,6 @@ const metadata = {
   docs: `
 Demonstrates onPress event and how to get the screen point of the click.
 `,
+  webSupported: true,
 };
 ShowClick.metadata = metadata;

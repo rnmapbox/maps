@@ -3,6 +3,8 @@ import { View, type StyleProp, type ViewStyle } from 'react-native';
 import mapboxgl from 'mapbox-gl';
 
 import MapContext from '../MapContext';
+import { injectMapboxGLStyles } from '../injectMapboxGLStyles';
+import { warnUnimplemented } from '../UnimplementedComponent';
 import type {
   MapState,
   RegionPayload,
@@ -20,6 +22,9 @@ type Props = {
   style?: StyleProp<ViewStyle>;
   styleURL?: string;
   styleJSON?: string;
+  symbolScaleBehavior?: 'system' | { fixed: number };
+  styleGlyphURL?: string;
+  projection?: 'mercator' | 'globe';
   children?: ReactNode;
   onPress?: (feature: PressFeature) => void;
   onLongPress?: (feature: PressFeature) => void;
@@ -44,14 +49,29 @@ const reloadWholeStyle = { diff: false } as Parameters<
   mapboxgl.Map['setStyle']
 >[1];
 
+function parseStyleJSON(json: string) {
+  return JSON.parse(json) as mapboxgl.StyleSpecification;
+}
+
 function styleFromProps({ styleURL, styleJSON }: Props) {
   if (styleURL) {
-    return styleURL;
+    // Native accepts a style JSON string in styleURL as well
+    return styleURL.trimStart().startsWith('{')
+      ? parseStyleJSON(styleURL)
+      : styleURL;
   }
   if (styleJSON) {
-    return JSON.parse(styleJSON) as mapboxgl.StyleSpecification;
+    return parseStyleJSON(styleJSON);
   }
   return defaultStyleURL;
+}
+
+function symbolScaleFactor({ symbolScaleBehavior }: Props) {
+  if (symbolScaleBehavior === 'system') {
+    warnUnimplemented("MapView symbolScaleBehavior 'system'");
+    return 1;
+  }
+  return symbolScaleBehavior?.fixed ?? 1;
 }
 
 function toPosition(lngLat: mapboxgl.LngLat): Position {
@@ -145,13 +165,17 @@ class MapView extends React.Component<
       console.error('MapView - mapContainer is null');
       return;
     }
+    injectMapboxGLStyles();
     const map = new mapboxgl.Map({
       container: this.mapContainer,
       style: styleFromProps(this.props),
+      scaleFactor: symbolScaleFactor(this.props),
+      projection: this.props.projection,
     });
     this.map = map;
     this.setState({ map });
     map.on('style.load', () => {
+      this.applyStyleGlyphURL(map);
       this.setState(({ styleGeneration }) => ({
         styleGeneration: styleGeneration + 1,
       }));
@@ -197,13 +221,33 @@ class MapView extends React.Component<
     map.on('render', () => this.props.onDidFinishRenderingFrame?.());
   }
 
+  applyStyleGlyphURL(map: mapboxgl.Map) {
+    if (this.props.styleGlyphURL) {
+      map.setGlyphsUrl(this.props.styleGlyphURL);
+    }
+  }
+
   componentDidUpdate(prevProps: Props) {
+    if (!this.map) {
+      return;
+    }
     if (
-      this.map &&
-      (prevProps.styleURL !== this.props.styleURL ||
-        prevProps.styleJSON !== this.props.styleJSON)
+      prevProps.styleURL !== this.props.styleURL ||
+      prevProps.styleJSON !== this.props.styleJSON
     ) {
       this.map.setStyle(styleFromProps(this.props), reloadWholeStyle);
+    } else if (
+      prevProps.styleGlyphURL !== this.props.styleGlyphURL &&
+      this.state.styleGeneration > 0
+    ) {
+      this.applyStyleGlyphURL(this.map);
+    }
+    const scaleFactor = symbolScaleFactor(this.props);
+    if (this.map.getScaleFactor() !== scaleFactor) {
+      this.map.setScaleFactor(scaleFactor);
+    }
+    if (prevProps.projection !== this.props.projection) {
+      this.map.setProjection(this.props.projection ?? null);
     }
   }
 

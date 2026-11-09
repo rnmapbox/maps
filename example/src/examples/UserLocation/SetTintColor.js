@@ -50,5 +50,6 @@ const metadata = {
   docs: `
 Change the tint color of the map. This will change the color of the user location icon and the compass.
 `,
+  waitForMapIdle: false,
 };
 SetTintColor.metadata = metadata;

@@ -9,6 +9,8 @@ platform :ios, '15.1'
 prepare_react_native_project!
 
 $RNMapboxMapsImpl = 'mapbox'
+# RNMBX_SPM=1 pod install: get MapboxMaps through Swift Package Manager instead of CocoaPods
+$RNMapboxMapsSwiftPackageManager = true if ENV['RNMBX_SPM'] == '1'
 if ENV['RNMBX10']
   $RNMapboxMapsVersion = '10.19.0'
 end

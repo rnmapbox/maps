@@ -80,6 +80,45 @@ FIX ME NO DESCRIPTION
   _defaults to:_ `false`
 
   
+### allowZElevate
+
+```tsx
+boolean
+```
+Places the marker on the roof of the 3D building (fill extrusion or model) under it
+instead of at ground level. Defaults to false.
+
+[Marker View Placement](../examples/Annotations/MarkerViewPlacement)
+  
+### priority
+
+```tsx
+number
+```
+Placement order among markers: higher priority markers are placed first, so they win
+when markers collide and `allowOverlap` is false. Negative values are allowed.
+Defaults to 0. Use either this or `isSelected`, not both.
+
+[Marker View Placement](../examples/Annotations/MarkerViewPlacement)
+  
+### minZoom
+
+```tsx
+number
+```
+Minimum zoom level, in the range [0, 22], at which the marker is shown. Defaults to 0.
+
+[Marker View Placement](../examples/Annotations/MarkerViewPlacement)
+  
+### maxZoom
+
+```tsx
+number
+```
+Maximum zoom level, in the range [0, 22], at which the marker is shown. Defaults to 22.
+
+
+  
 ### stopGesturePropagation
 
 ```tsx

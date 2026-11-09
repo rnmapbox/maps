@@ -170,8 +170,6 @@ func lineLayer(layer: inout LineLayer, reactStyle:Dictionary<String, Any>, oldRe
       self.setLineCrossSlope(&layer, styleValue:styleValue);
     } else if (prop == "lineElevationGroundScale") {
       self.setLineElevationGroundScale(&layer, styleValue:styleValue);
-    } else if (prop == "lineElevationGroundScaleTransition") {
-      self.setLineElevationGroundScaleTransition(&layer, styleValue:styleValue);
     } else if (prop == "linePatternCrossFade") {
       styleValue.setImage(
         bridge: bridge,
@@ -192,6 +190,8 @@ func lineLayer(layer: inout LineLayer, reactStyle:Dictionary<String, Any>, oldRe
       self.setLineEmissiveStrength(&layer, styleValue:styleValue);
     } else if (prop == "lineEmissiveStrengthTransition") {
       self.setLineEmissiveStrengthTransition(&layer, styleValue:styleValue);
+    } else if (prop == "lineBorderGradient") {
+      self.setLineBorderGradient(&layer, styleValue:styleValue);
     } else if (prop == "lineOcclusionOpacity") {
       self.setLineOcclusionOpacity(&layer, styleValue:styleValue);
     } else if (prop == "lineOcclusionOpacityTransition") {
@@ -703,6 +703,8 @@ func rasterLayer(layer: inout RasterLayer, reactStyle:Dictionary<String, Any>, o
       self.setRasterColorRange(&layer, styleValue:styleValue);
     } else if (prop == "rasterColorRangeTransition") {
       self.setRasterColorRangeTransition(&layer, styleValue:styleValue);
+    } else if (prop == "rasterColorScale") {
+      self.setRasterColorScale(&layer, styleValue:styleValue);
     } else if (prop == "rasterEmissiveStrength") {
       self.setRasterEmissiveStrength(&layer, styleValue:styleValue);
     } else if (prop == "rasterEmissiveStrengthTransition") {
@@ -822,12 +824,12 @@ func modelLayer(layer: inout ModelLayer, reactStyle:Dictionary<String, Any>, old
 
     let styleValue = RNMBXStyleValue.make(reactStyle[prop])
 
-      if (prop == "modelAllowDensityReduction") {
-      self.setModelAllowDensityReduction(&layer, styleValue:styleValue);
-    } else if (prop == "visibility") {
+      if (prop == "visibility") {
       self.setModelStyleLayerVisibility(&layer, styleValue:styleValue);
     } else if (prop == "modelId") {
       self.setModelId(&layer, styleValue:styleValue);
+    } else if (prop == "modelAllowDensityReduction") {
+      self.setModelAllowDensityReduction(&layer, styleValue:styleValue);
     } else if (prop == "modelOpacity") {
       self.setModelOpacity(&layer, styleValue:styleValue);
     } else if (prop == "modelOpacityTransition") {
@@ -1581,11 +1583,6 @@ func setLineElevationGroundScale(_ layer: inout LineLayer, styleValue: RNMBXStyl
       
 }
 
-func setLineElevationGroundScaleTransition(_ layer: inout LineLayer, styleValue: RNMBXStyleValue)
-{
-    layer.lineElevationGroundScaleTransition = styleValue.getTransition();
-}
-
 func setLinePatternCrossFade(_ layer: inout LineLayer, styleValue: RNMBXStyleValue)
 {
       
@@ -1630,6 +1627,15 @@ func setLineEmissiveStrength(_ layer: inout LineLayer, styleValue: RNMBXStyleVal
 func setLineEmissiveStrengthTransition(_ layer: inout LineLayer, styleValue: RNMBXStyleValue)
 {
     layer.lineEmissiveStrengthTransition = styleValue.getTransition();
+}
+
+func setLineBorderGradient(_ layer: inout LineLayer, styleValue: RNMBXStyleValue)
+{
+      
+        
+          layer.lineBorderGradient = styleValue.mglStyleValueColor();
+        
+      
 }
 
 func setLineOcclusionOpacity(_ layer: inout LineLayer, styleValue: RNMBXStyleValue)
@@ -3081,6 +3087,15 @@ func setRasterColorRangeTransition(_ layer: inout RasterLayer, styleValue: RNMBX
     layer.rasterColorRangeTransition = styleValue.getTransition();
 }
 
+func setRasterColorScale(_ layer: inout RasterLayer, styleValue: RNMBXStyleValue)
+{
+      
+        
+          layer.rasterColorScale = styleValue.mglStyleValueEnum();
+        
+      
+}
+
 func setRasterEmissiveStrength(_ layer: inout RasterLayer, styleValue: RNMBXStyleValue)
 {
       
@@ -3295,15 +3310,6 @@ func setHillshadeEmissiveStrengthTransition(_ layer: inout HillshadeLayer, style
 
 
 
-func setModelAllowDensityReduction(_ layer: inout ModelLayer, styleValue: RNMBXStyleValue)
-{
-      
-        
-          layer.modelAllowDensityReduction = styleValue.mglStyleValueBoolean();
-        
-      
-}
-
 func setModelStyleLayerVisibility(_ layer: inout ModelLayer, styleValue: RNMBXStyleValue)
 {
     layer.visibility = styleValue.isVisible();
@@ -3314,6 +3320,15 @@ func setModelId(_ layer: inout ModelLayer, styleValue: RNMBXStyleValue)
       
         
           layer.modelId = styleValue.mglStyleValueString();
+        
+      
+}
+
+func setModelAllowDensityReduction(_ layer: inout ModelLayer, styleValue: RNMBXStyleValue)
+{
+      
+        
+          layer.modelAllowDensityReduction = styleValue.mglStyleValueBoolean();
         
       
 }

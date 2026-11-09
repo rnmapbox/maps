@@ -1,8 +1,9 @@
-@_spi(Restricted) import MapboxMaps
+@_spi(Restricted) @_spi(Experimental) import MapboxMaps
 import Turf
 import MapKit
 
-public typealias RNMBXMapViewFactoryFunc = (String, UIView) -> (MapView?)
+/// Returning nil, e.g. for a map that no longer exists, leaves the `RNMBXMapView` without a map until it's remounted.
+public typealias RNMBXMapViewFactoryFunc = (String, RNMBXMapView) -> (MapView?)
 
 /**
  * InitWaiter: simple waiters gets queued unitl the init happens
@@ -147,6 +148,12 @@ class RNMBXCameraChanged : RNMBXEvent, RCTEvent {
   }
 }
 
+/// Called right before `<Camera>` moves the map, but not for its `defaultSettings` or for user gestures.
+@MainActor
+public protocol RNMBXCameraDelegate: AnyObject {
+  func cameraWillMoveMap(_ map: RNMBXMapView)
+}
+
 @objc(RNMBXMapView)
 open class RNMBXMapView: UIView, RCTInvalidating {
 
@@ -176,14 +183,34 @@ open class RNMBXMapView: UIView, RCTInvalidating {
     #endif
   }
 
-  public func invalidate() {
-    self.removeAllFeaturesFromMap(reason: .ViewRemoval)
+  private var cameraDelegates: NSHashTable<AnyObject> = NSHashTable.weakObjects()
 
+  /// Lets native code driving the same map, such as a navigation camera, yield when `<Camera>` moves it.
+  public func addCameraDelegate(_ delegate: RNMBXCameraDelegate) {
+    cameraDelegates.add(delegate)
+  }
+
+  public func removeCameraDelegate(_ delegate: RNMBXCameraDelegate) {
+    cameraDelegates.remove(delegate)
+  }
+
+  func cameraWillMoveMap() {
+    for case let delegate as RNMBXCameraDelegate in cameraDelegates.allObjects {
+      delegate.cameraWillMoveMap(self)
+    }
+  }
+
+  public func invalidate() {
+    self.removeAllFeaturesFromMap(reason: .OnDestroy)
+
+    cancelExternalStyleObservers()
     cancelables.forEach { $0.cancel() }
     cancelables.removeAll()
 
-    _mapView.gestures.delegate = nil
-    _mapView.removeFromSuperview()
+    if ownsMapView, let mapView = _mapView {
+      mapView.gestures.delegate = nil
+      mapView.removeFromSuperview()
+    }
     _mapView = nil
 
     self.removeFromSuperview()
@@ -192,6 +219,7 @@ open class RNMBXMapView: UIView, RCTInvalidating {
   var imageManager: ImageManager = ImageManager()
 
   var tapDelegate: IgnoreRNMBXMakerViewGestureDelegate? = nil
+  var longPressDelegate: IgnoreRNMBXMakerViewGestureDelegate? = nil
 
   var eventDispatcher: RCTEventDispatcherProtocol
 
@@ -260,29 +288,45 @@ open class RNMBXMapView: UIView, RCTInvalidating {
     return manager
   }()
 
+  /// Set to false by a `RNMBXMapViewFactory` handing over a map that lives elsewhere, such as a car screen's.
+  /// Such a map keeps its own style, ornaments, gestures and frame and outlives this view, which only adds its
+  /// sources, layers and images and removes them again.
+  public var ownsMapView = true
+
   var _mapView: MapView! = nil
-  func createMapView() -> MapView {
-    if let mapViewImpl = mapViewImpl, let mapViewInstance = createAndAddMapViewImpl(mapViewImpl, self) {
+  private var mapUnavailable = false
+
+  @objc public var hasMap: Bool { _mapView != nil }
+
+  func createMapView() -> MapView? {
+    if let mapViewImpl = mapViewImpl, let factory = RNMBXMapViewFactory.get(mapViewImpl) {
+      guard let mapViewInstance = factory(mapViewImpl, self) else {
+        Logger.log(level: .warn, message: "The \(mapViewImpl) factory has no map for this MapView, it stays empty")
+        mapUnavailable = true
+        return nil
+      }
       _mapView = mapViewInstance
     } else {
+      if let mapViewImpl = mapViewImpl {
+        Logger.log(level:.error, message: "No mapview factory registered for: \(mapViewImpl)")
+      }
       _mapView = MapView(frame: self.bounds, mapInitOptions:  MapInitOptions())
       _mapView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
       addSubview(_mapView)
     }
 
-    _mapView.gestures.delegate = self
+    if ownsMapView {
+      if let delegate = _mapView.gestures.delegate, delegate !== self {
+        addGestureDelegate(delegate)
+      }
+      _mapView.gestures.delegate = self
+    }
     setupEvents()
+    if !ownsMapView {
+      initWhenExternalStyleLoaded()
+    }
     afterMapViewAdded()
     return _mapView
-  }
-
-  func createAndAddMapViewImpl(_ impl: String, _ view: RNMBXMapView) -> MapView? {
-    if let factory = RNMBXMapViewFactory.get(impl) {
-      return factory(impl, view) as? MapView;
-    } else {
-      Logger.log(level:.error, message: "No mapview factory registered for: \(impl)")
-      return nil
-    }
   }
 
   @available(*, deprecated, renamed: "withMapView", message: "mapView can be nil if the map initialization has not finished, use withMapView instead")
@@ -293,6 +337,31 @@ open class RNMBXMapView: UIView, RCTInvalidating {
   @available(*, deprecated, renamed: "withMapboxMap", message: "mapboxMap can be nil if the map initialization has not finished, use withMapboxMap instead")
   var mapboxMap: MapboxMap! {
     get { _mapView?.mapboxMap }
+  }
+
+  private var externalStyleObservers: [AnyCancelable] = []
+
+  // No styleLoaded event follows for a style the owner already loaded, and `isStyleLoaded` can be false until its sources load.
+  private func initWhenExternalStyleLoaded() {
+    let initIfStyleLoaded = { [weak self] in
+      guard let self = self, let mapboxMap = self._mapView?.mapboxMap else { return }
+      if !self.styleLoadWaiters.hasInited() {
+        guard mapboxMap.isStyleLoaded else { return }
+        self.addFeaturesToMap(style: mapboxMap.style)
+        self.styleLoadWaiters.onInit(mapboxMap)
+      }
+      self.cancelExternalStyleObservers()
+    }
+    externalStyleObservers = [
+      _mapView.mapboxMap.onSourceDataLoaded.observe { _ in initIfStyleLoaded() },
+      _mapView.mapboxMap.onStyleDataLoaded.observe { _ in initIfStyleLoaded() },
+    ]
+    initIfStyleLoaded()
+  }
+
+  private func cancelExternalStyleObservers() {
+    externalStyleObservers.forEach { $0.cancel() }
+    externalStyleObservers.removeAll()
   }
 
   @objc public func addToMap(_ subview: UIView) {
@@ -356,7 +425,7 @@ open class RNMBXMapView: UIView, RCTInvalidating {
             features.remove(at: entryIndex)
             return
           }
-          mapAndMapViewComponent.removeFromMap(self, mapView: mapView, reason: .OnDestroy)
+          mapAndMapViewComponent.removeFromMap(self, mapView: mapView, reason: .ViewRemoval)
           entry.addedToMap = false
         }
         features.remove(at: entryIndex)
@@ -368,7 +437,7 @@ open class RNMBXMapView: UIView, RCTInvalidating {
       if let entryIndex = entryIndex {
         var entry = features[entryIndex]
         if (entry.addedToMap) {
-          mapComponent.removeFromMap(self, reason: .OnDestroy)
+          mapComponent.removeFromMap(self, reason: .ViewRemoval)
           entry.addedToMap = false
         }
         features.remove(at: entryIndex)
@@ -450,8 +519,18 @@ open class RNMBXMapView: UIView, RCTInvalidating {
     case styleURL
     case gestureSettings
     case preferredFramesPerSecond
+    case transparent
+    case symbolScaleBehavior
+    case styleGlyphURL
+    case debugOptions
 
     func apply(_ map: RNMBXMapView) -> Void {
+      if !map.ownsMapView {
+        switch self {
+        case .onPress, .onLongPress, .onMapChange: break
+        default: return
+        }
+      }
       switch self {
       case .projection:
         map.applyProjection()
@@ -480,6 +559,7 @@ open class RNMBXMapView: UIView, RCTInvalidating {
       case .styleURL:
         map.applyStyleURL()
         map.applyLocalizeLabels()
+        map.applyStyleGlyphURL()
       case .pitchEnabled:
         map.applyPitchEnabled()
       case .maxPitch:
@@ -488,6 +568,14 @@ open class RNMBXMapView: UIView, RCTInvalidating {
         map.applyGestureSettings()
       case .preferredFramesPerSecond:
         map.applyPreferredFramesPerSecond()
+      case .transparent:
+        map.applyTransparent()
+      case .symbolScaleBehavior:
+        map.applySymbolScaleBehavior()
+      case .styleGlyphURL:
+        map.applyStyleGlyphURL()
+      case .debugOptions:
+        map.applyDebugOptions()
       }
     }
   }
@@ -529,6 +617,21 @@ open class RNMBXMapView: UIView, RCTInvalidating {
     }
   }
 
+  var transparent: Bool? = nil
+
+  @objc public func setReactTransparent(_ value: Bool) {
+    transparent = value
+    changed(.transparent)
+  }
+
+  func applyTransparent() {
+    if let transparent = transparent {
+      mapView.isOpaque = !transparent
+      // The new opacity only shows from the next rendered frame.
+      mapView.mapboxMap.triggerRepaint()
+    }
+  }
+
   var preferredFramesPerSecond: Int? = nil
 
   @objc public func setReactPreferredFramesPerSecond(_ value: Int) {
@@ -544,6 +647,23 @@ open class RNMBXMapView: UIView, RCTInvalidating {
         self.mapView.preferredFramesPerSecond = value
       }
     }
+  }
+
+  var symbolScaleBehavior: SymbolScaleBehavior? = nil
+
+  @objc public func setReactSymbolScaleBehavior(_ value: Any?) {
+    if let mode = value as? String, mode == "system" {
+      symbolScaleBehavior = .system
+    } else if let fixed = (value as? [String: Any])?["fixed"] as? NSNumber {
+      symbolScaleBehavior = .fixed(scaleFactor: fixed.doubleValue)
+    } else {
+      symbolScaleBehavior = nil
+    }
+    changed(.symbolScaleBehavior)
+  }
+
+  func applySymbolScaleBehavior() {
+    self.mapboxMap.symbolScaleBehavior = symbolScaleBehavior ?? .fixed(scaleFactor: 1.0)
   }
 
   var maxPitch: Double? = nil
@@ -606,6 +726,59 @@ open class RNMBXMapView: UIView, RCTInvalidating {
         }
       }
     }
+  }
+
+  var styleGlyphURL: String? = nil
+
+  @objc public func setReactStyleGlyphURL(_ value: String?) {
+    styleGlyphURL = value
+    changed(.styleGlyphURL)
+  }
+
+  func applyStyleGlyphURL() {
+    onMapStyleLoaded { mapboxMap in
+      if let styleGlyphURL = self.styleGlyphURL {
+        mapboxMap.styleGlyphURL = styleGlyphURL
+      }
+    }
+  }
+
+  static let debugOptionsByName: [String: MapViewDebugOptions] = [
+    "tileBorders": .tileBorders,
+    "parseStatus": .parseStatus,
+    "timestamps": .timestamps,
+    "collision": .collision,
+    "overdraw": .overdraw,
+    "stencilClip": .stencilClip,
+    "depthBuffer": .depthBuffer,
+    "modelBounds": .modelBounds,
+    "light": .light,
+    "camera": .camera,
+    "padding": .padding,
+  ]
+
+  static let androidOnlyDebugOptions: Set<String> = ["terrainWireframe", "layers2DWireframe", "layers3DWireframe"]
+
+  var debugOptions: MapViewDebugOptions = []
+
+  @objc public func setReactDebugOptions(_ value: [Any]?) {
+    var options: MapViewDebugOptions = []
+    for item in value ?? [] {
+      let name = item as? String ?? "\(item)"
+      if let option = Self.debugOptionsByName[name] {
+        options.insert(option)
+      } else if Self.androidOnlyDebugOptions.contains(name) {
+        Logger.log(level: .warn, tag: "RNMBXMapView", message: "debugOptions: \(name) is only supported on Android, ignored")
+      } else {
+        Logger.log(level: .warn, tag: "RNMBXMapView", message: "debugOptions: unknown option \(name), ignored")
+      }
+    }
+    debugOptions = options
+    changed(.debugOptions)
+  }
+
+  func applyDebugOptions() {
+    mapView.debugOptions = debugOptions
   }
 
   struct GestureSettings {
@@ -903,10 +1076,14 @@ open class RNMBXMapView: UIView, RCTInvalidating {
   }
 
   @objc override public func didSetProps(_ props: [String]) {
-    if (_mapView == nil) {
-      let view = createMapView()
-
-      mapViewWaiters.onInit(view)
+    if (_mapView == nil && !mapUnavailable) {
+      if let view = createMapView() {
+        mapViewWaiters.onInit(view)
+      }
+    }
+    if mapUnavailable {
+      changes.changes.removeAll()
+      return
     }
     changes.apply(self)
   }
@@ -1261,6 +1438,10 @@ extension RNMBXMapView {
     })
 
     self.onEvery(event: .styleLoaded, handler: { (self, event) in
+      if !self.ownsMapView && self.styleLoadWaiters.hasInited() {
+        // The owner replaced the style, and with it the features added to the previous one.
+        self.removeAllFeaturesFromMap(reason: .StyleChange)
+      }
       self.addFeaturesToMap(style: self.mapboxMap.style)
 
       if !self.styleLoadWaiters.hasInited(), let mapboxMap = self.mapboxMap {
@@ -1355,6 +1536,9 @@ extension RNMBXMapView {
   func applyOnLongPress() {
     if (reactOnLongPress != nil) {
       let longPressGestureRecognizer = UILongPressGestureRecognizer(target: self, action: #selector(doHandleLongPress(_:)))
+      let delegate = IgnoreRNMBXMakerViewGestureDelegate(originalDelegate: longPressGestureRecognizer.delegate)
+      longPressGestureRecognizer.delegate = delegate
+      self.longPressDelegate = delegate
       self.mapView.addGestureRecognizer(longPressGestureRecognizer)
     }
   }
@@ -1613,7 +1797,7 @@ extension RNMBXMapView
     writeToDisk:Bool) -> URL
   {
     let format = UIGraphicsImageRendererFormat(for: self.traitCollection)
-    format.opaque = true
+    format.opaque = _mapView?.isOpaque ?? true
     let snapshot = UIGraphicsImageRenderer(bounds: self.bounds, format: format).image { _ in
       self.drawHierarchy(in: self.bounds, afterScreenUpdates: true)
     }

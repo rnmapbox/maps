@@ -54,5 +54,6 @@ Demonstrates Scalable images.
 
 You can use stretchX, stretchY and content to scale a bitmap image - keep parts of it fixed while only scale specific parts.
 `,
+  waitForMapIdle: false,
 };
 UserLocationPadding.metadata = metadata;

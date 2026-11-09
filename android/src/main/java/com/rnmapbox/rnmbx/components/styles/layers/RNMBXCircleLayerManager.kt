@@ -7,6 +7,7 @@ import com.facebook.react.uimanager.annotations.ReactProp
 import com.facebook.react.viewmanagers.RNMBXCircleLayerManagerInterface
 import com.facebook.react.uimanager.ViewManagerDelegate
 import com.facebook.react.viewmanagers.RNMBXCircleLayerManagerDelegate
+import com.rnmapbox.rnmbx.utils.extensions.asStringOrNull
 
 class RNMBXCircleLayerManager : ViewGroupManager<RNMBXCircleLayer>(),
     RNMBXCircleLayerManagerInterface<RNMBXCircleLayer> {
@@ -41,12 +42,12 @@ class RNMBXCircleLayerManager : ViewGroupManager<RNMBXCircleLayer>(),
 
     @ReactProp(name = "aboveLayerID")
     override fun setAboveLayerID(layer: RNMBXCircleLayer, aboveLayerID: Dynamic) {
-        layer.setAboveLayerID(aboveLayerID.asString())
+        layer.setAboveLayerID(aboveLayerID.asStringOrNull())
     }
 
     @ReactProp(name = "belowLayerID")
     override fun setBelowLayerID(layer: RNMBXCircleLayer, belowLayerID: Dynamic) {
-        layer.setBelowLayerID(belowLayerID.asString())
+        layer.setBelowLayerID(belowLayerID.asStringOrNull())
     }
 
     @ReactProp(name = "layerIndex")
@@ -71,7 +72,7 @@ class RNMBXCircleLayerManager : ViewGroupManager<RNMBXCircleLayer>(),
 
     @ReactProp(name = "sourceLayerID")
     override fun setSourceLayerID(layer: RNMBXCircleLayer, sourceLayerID: Dynamic) {
-        layer.setSourceLayerID(sourceLayerID.asString())
+        layer.setSourceLayerID(sourceLayerID.asStringOrNull())
     }
 
     @ReactProp(name = "filter")
@@ -81,7 +82,7 @@ class RNMBXCircleLayerManager : ViewGroupManager<RNMBXCircleLayer>(),
 
     @ReactProp(name = "slot")
     override fun setSlot(layer: RNMBXCircleLayer, slot: Dynamic) {
-        layer.setSlot(slot.asString())
+        layer.setSlot(slot.asStringOrNull())
     }
     // @{codepart-replace-end}
 

@@ -239,6 +239,23 @@ class RNMBXImagesManager(private val mContext: ReactApplicationContext) :
 
         parent.mImageViews.add(childPosition, childView)
         childView.nativeImageUpdater = parent
+        parent.attachImageViewIfOnMap(childView)
+    }
+
+    override fun getChildCount(parent: RNMBXImages): Int {
+        return parent.mImageViews.size
+    }
+
+    override fun getChildAt(parent: RNMBXImages, index: Int): View? {
+        return parent.mImageViews.getOrNull(index)
+    }
+
+    override fun removeViewAt(parent: RNMBXImages, index: Int) {
+        if (index < 0 || index >= parent.mImageViews.size) {
+            Logger.e("RNMBXImages", "removeViewAt: no image view at index $index")
+            return
+        }
+        parent.mImageViews.removeAt(index).removeFromMap()
     }
 
     override fun removeView(parent: RNMBXImages, view: View) {
@@ -247,10 +264,13 @@ class RNMBXImagesManager(private val mContext: ReactApplicationContext) :
             return
         }
 
-        parent.mImageViews.remove(view)
+        if (parent.mImageViews.remove(view)) {
+            (view as RNMBXImage).removeFromMap()
+        }
     }
 
     override fun removeAllViews(parent: RNMBXImages) {
+        parent.mImageViews.forEach { it.removeFromMap() }
         parent.mImageViews.clear()
     }
 

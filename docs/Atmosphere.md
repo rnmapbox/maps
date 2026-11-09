@@ -300,12 +300,15 @@ Name: `verticalRange`
 Mapbox spec: [vertical-range](https://docs.mapbox.com/style-spec/reference/layers/#vertical-range)
 
 #### Description
-An array of two number values, specifying the vertical range, measured in meters, over which the fog should gradually fade out. When both parameters are set to zero, the fog will be rendered without any vertical constraints.
+An array of two number values, specifying the vertical range over which the fog should gradually fade out. When both parameters are set to zero, the fog will be rendered without any vertical constraints.
 
 #### Type
 `array<number>`
 #### Default Value
 `[0,0]`
+
+#### Units
+`meters`
 
 #### Minimum
 `0`

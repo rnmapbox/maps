@@ -12,6 +12,7 @@ type TileSourceProps = {
   tms?: boolean;
   attribution?: string;
   sourceBounds?: number[];
+  promoteId?: string | readonly unknown[];
   children?: ReactNode;
 };
 
@@ -30,6 +31,7 @@ function createTileSource(
       scheme: props.tms ? 'tms' : undefined,
       attribution: props.attribution,
       bounds: props.sourceBounds,
+      promoteId: type === 'vector' ? props.promoteId : undefined,
     } as const;
     return (
       <Source

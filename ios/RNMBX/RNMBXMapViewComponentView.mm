@@ -205,6 +205,8 @@ using namespace facebook::react;
   
     RNMBX_REMAP_OPTIONAL_PROP_NSDictionary(gestureSettings, reactGestureSettings)
 
+    RNMBX_REMAP_OPTIONAL_PROP_BOOL(transparent, reactTransparent)
+
     id preferredFramesPerSecond = RNMBXConvertFollyDynamicToId(newViewProps.preferredFramesPerSecond);
     if (preferredFramesPerSecond != nil) {
         _view.reactPreferredFramesPerSecond = [preferredFramesPerSecond integerValue];
@@ -220,6 +222,27 @@ using namespace facebook::react;
         _view.reactLocalizeLabels = localizeLabels;
     } else if (oldProps && RNMBXConvertFollyDynamicToId(oldViewProps.localizeLabels) != nil) {
         _view.reactLocalizeLabels = nil;
+    }
+
+    id symbolScaleBehavior = RNMBXConvertFollyDynamicToId(newViewProps.symbolScaleBehavior);
+    if (symbolScaleBehavior != nil) {
+        _view.reactSymbolScaleBehavior = symbolScaleBehavior;
+    } else if (oldProps && RNMBXConvertFollyDynamicToId(oldViewProps.symbolScaleBehavior) != nil) {
+        _view.reactSymbolScaleBehavior = nil;
+    }
+
+    id debugOptions = RNMBXConvertFollyDynamicToId(newViewProps.debugOptions);
+    if (debugOptions != nil) {
+        _view.reactDebugOptions = debugOptions;
+    } else if (oldProps && RNMBXConvertFollyDynamicToId(oldViewProps.debugOptions) != nil) {
+        _view.reactDebugOptions = nil;
+    }
+
+    id styleGlyphURL = RNMBXConvertFollyDynamicToId(newViewProps.styleGlyphURL);
+    if (styleGlyphURL != nil) {
+        _view.reactStyleGlyphURL = styleGlyphURL;
+    } else if (oldProps && RNMBXConvertFollyDynamicToId(oldViewProps.styleGlyphURL) != nil) {
+        _view.reactStyleGlyphURL = nil;
     }
 
     RNMBX_OPTIONAL_PROP_BOOL(deselectAnnotationOnTap);

@@ -102,7 +102,16 @@ export type OnStatusChangedEventTypeReal = {
 };
 
 export interface NativeProps extends ViewProps {
-  transitionsToIdleUponUserInteraction?: OptionalProp<boolean>;
+  transitionsToIdleUponUserInteraction?: OptionalProp<
+    | boolean
+    | {
+        pan: boolean;
+        pinch: boolean;
+        doubleTap: boolean;
+        rotate: boolean;
+        pitch: boolean;
+      }
+  >;
   hasStatusChanged: boolean;
   onStatusChanged?: DirectEventHandler<OnStatusChangedEventType>;
 }

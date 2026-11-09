@@ -73,5 +73,6 @@ const metadata = {
   title: 'Custom Vector Source',
   tags: ['VectorSource', 'VectorSource#features'],
   docs: '',
+  webSupported: true,
 };
 CustomVectorSource.metadata = metadata;

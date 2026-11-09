@@ -177,6 +177,10 @@ class RNMBXImages(context: Context, private val mManager: RNMBXImagesManager) : 
         return style != null && imageId?.let { style.getStyleImage(it) } != null
     }
 
+    fun attachImageViewIfOnMap(image: RNMBXImage) {
+        mMapView?.let { image.addToMap(it) }
+    }
+
     override fun addToMap(mapView: RNMBXMapView) {
         super.addToMap(mapView)
 

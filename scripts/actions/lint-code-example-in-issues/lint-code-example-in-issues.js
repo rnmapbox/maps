@@ -6,6 +6,49 @@ const core = require('@actions/core');
 const github = require('@actions/github');
 const { ESLint } = require('eslint');
 
+const localFilesMessage =
+  'Repo example should complete - it should not use files from your project, use ../assets/example.png if you need an example image or ../assets/example.glb if you need an example 3D model';
+
+const localFilesRules = {
+  'no-restricted-imports': [
+    'error',
+    {
+      patterns: [
+        {
+          group: [
+            './*',
+            '../*',
+            // gitignore semantics: a file can't be re-included while its parent dir is excluded
+            '!../assets',
+            '../assets/*',
+            '!../assets/example.png',
+            '!../assets/example.glb',
+          ],
+          message: localFilesMessage,
+        },
+        {
+          group: ['!react', '!react-native', '!@rnmapbox/maps'],
+          message: 'Should not use third-party libraries',
+        },
+      ],
+    },
+  ],
+  'node/no-restricted-require': [
+    'error',
+    [
+      {
+        name: [
+          './**',
+          '../**',
+          '!../assets/example.png',
+          '!../assets/example.glb',
+        ],
+        message: localFilesMessage,
+      },
+    ],
+  ],
+};
+
 const Config = {
   /// the login of the but used to make the comment
   botLogin: 'github-actions[bot]',
@@ -53,32 +96,7 @@ const Config = {
     rules: {
       'import/prefer-default-export': ['error'],
       'no-undef': 'error',
-      'no-restricted-imports': [
-        'error',
-        {
-          patterns: [
-            {
-              group: ['./*', '../*', '!../assets/example.png'],
-              message:
-                'Repo example should complete - it should not use files from your project',
-            },
-            {
-              group: ['!react', '!react-native', '!@rnmapbox/maps'],
-              message: 'Should not use third-party libraries',
-            },
-          ],
-        },
-      ],
-      'node/no-restricted-require': [
-        'error',
-        [
-          {
-            name: ['./**', '../**', '!../assets/example.png'],
-            message:
-              'Repo example should complete - it should not use files from your project, use ../assets/example.png if you need an example image',
-          },
-        ],
-      ],
+      ...localFilesRules,
     },
   },
   /// the eslint config used for typescript
@@ -88,6 +106,7 @@ const Config = {
     env: {
       browser: true,
       es2021: true,
+      node: true,
     },
     extends: 'plugin:react/recommended',
     overrides: [],
@@ -100,26 +119,11 @@ const Config = {
         version: '17.0.2',
       },
     },
-    plugins: ['react', 'eslint-plugin-import'],
+    plugins: ['react', 'eslint-plugin-import', 'eslint-plugin-node'],
     rules: {
       'import/prefer-default-export': ['error'],
       'no-undef': 'error',
-      'no-restricted-imports': [
-        'error',
-        {
-          patterns: [
-            {
-              group: ['./*', '../*', '!../assets/example.png'],
-              message:
-                'Repo example should complete - it should not use files from your project',
-            },
-            {
-              group: ['!react', '!react-native', '!@rnmapbox/maps'],
-              message: 'Should not use third-party libraries',
-            },
-          ],
-        },
-      ],
+      ...localFilesRules,
     },
   },
 };
@@ -148,7 +152,10 @@ async function ignoreIssue(issueNumber, ignoreLabels) {
 async function run() {
   try {
     const issueNumber = getIssueNumber();
-    if (await ignoreIssue(issueNumber, Config.ignoreLabels)) {
+    if (
+      !process.env.LINT_FILE &&
+      (await ignoreIssue(issueNumber, Config.ignoreLabels))
+    ) {
       return;
     }
     const [code, { isTypescript = false }] = getCode();

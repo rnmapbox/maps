@@ -15,6 +15,7 @@ export {
   default as MapView,
   type MapState,
   type ScreenPointPayload,
+  type DebugOption,
 } from './components/MapView';
 export { default as Light } from './components/Light';
 export { default as PointAnnotation } from './components/PointAnnotation';
@@ -53,7 +54,10 @@ export { default as BackgroundLayer } from './components/BackgroundLayer';
 export { default as CustomLocationProvider } from './components/CustomLocationProvider';
 export { Terrain } from './components/Terrain';
 export { default as CameraGestureObserver } from './components/CameraGestureObserver';
-export { type OnMapSteadyEvent } from './specs/RNMBXCameraGestureObserverNativeComponent';
+export {
+  type OnCameraChangedEvent,
+  type OnMapSteadyEvent,
+} from './specs/RNMBXCameraGestureObserverNativeComponent';
 export {
   default as locationManager,
   type Location,

@@ -86,6 +86,7 @@ Demonstrates Scalable images.
 
 You can use stretchX, stretchY and content to scale a bitmap image - keep parts of it fixed while only scale specific parts.
 `,
+  webSupported: true,
 };
 
 (ScaleableImages as unknown as ExampleWithMetadata).metadata = metadata;

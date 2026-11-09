@@ -68,5 +68,6 @@ const metadata = {
   docs: `
 Converts a coordinate to a point in the current view.
 `,
+  webSupported: true,
 };
 PointInMapView.metadata = metadata;

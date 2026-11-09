@@ -1,0 +1,167 @@
+name: iOS doc screenshots to Percy (nightly)
+
+on:
+  schedule:
+    - cron: "0 2 * * *"
+  workflow_dispatch:
+    inputs:
+      refresh_unstable:
+        description: Also replace the doc site screenshots of excludeFromPercy examples
+        type: boolean
+        default: false
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    permissions:
+      actions: read
+    outputs:
+      NVMRC: ${{ steps.nvm.outputs.NVMRC }}
+      run: ${{ steps.changed.outputs.run }}
+    steps:
+      - uses: actions/checkout@v4
+      - id: nvm
+        run: echo "NVMRC=$(cat .nvmrc)" >> "$GITHUB_OUTPUT"
+      - id: changed
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          if [ "$GITHUB_EVENT_NAME" = schedule ]; then
+            LAST=$(gh run list --repo "$GITHUB_REPOSITORY" --workflow ios-nightly-percy.yml \
+              --branch main --status success --limit 1 --json headSha --jq '.[0].headSha')
+            if [ "$LAST" = "$GITHUB_SHA" ]; then
+              echo "No new commits on main since the last successful nightly ($LAST)"
+              echo "run=false" >> "$GITHUB_OUTPUT"
+              exit 0
+            fi
+          fi
+          echo "run=true" >> "$GITHUB_OUTPUT"
+
+  ios:
+    name: "iOS/Mapbox11/Fabric"
+    needs: check
+    if: needs.check.outputs.run == 'true'
+    uses: ./.github/workflows/ios-actions.yml
+    with:
+      NVMRC: ${{ needs.check.outputs.NVMRC }}
+      env_name: default
+      MAP_IMPL: mapbox11
+      NEW_ARCH: true
+      E2E_MODE: doc-screenshots
+    secrets:
+      MAPBOX_ACCESS_TOKEN: ${{ secrets.MAPBOX_ACCESS_TOKEN }}
+
+  percy:
+    name: Percy doc screenshots
+    needs: [check, ios]
+    # Uploads whatever was captured, also when the capture failed or timed out
+    if: always() && needs.check.outputs.run == 'true'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check for PERCY_TOKEN
+        id: token
+        env:
+          PERCY_TOKEN: ${{ secrets.PERCY_TOKEN }}
+        run: |
+          if [ -n "$PERCY_TOKEN" ]; then
+            echo "present=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "PERCY_TOKEN is not set, skipping the Percy upload"
+          fi
+
+      - uses: actions/download-artifact@v4
+        if: steps.token.outputs.present == 'true'
+        continue-on-error: true
+        with:
+          name: percy-doc-screenshots
+          path: percy
+
+      - uses: actions/setup-node@v4
+        if: steps.token.outputs.present == 'true'
+        with:
+          node-version: ${{ needs.check.outputs.NVMRC }}
+
+      # Own Percy branch, so these builds and the per-commit visual snapshot builds on main are
+      # never each other's baseline.
+      # diffIgnorePercentage is a fraction: diffs under 0.5% of the pixels (e.g. a timestamp) are ignored.
+      - name: Upload to Percy
+        if: steps.token.outputs.present == 'true' && hashFiles('percy/**/*.png') != ''
+        run: npx --yes @percy/cli@1.32.11 upload --strip-extensions percy
+        env:
+          PERCY_TOKEN: ${{ secrets.PERCY_TOKEN }}
+          PERCY_BRANCH: doc-screenshots
+          PERCY_TARGET_BRANCH: doc-screenshots
+          PERCY_COMMIT: ${{ github.sha }}
+          PERCY_VISUAL_CONFIG: '{"diffIgnoreEnabled":true,"diffIgnorePercentage":0.005}'
+          PERCY_CLIENT_ERROR_LOGS: false
+
+  doc-screenshots-branch:
+    name: Doc site screenshots branch
+    needs: [check, ios]
+    if: always() && needs.check.outputs.run == 'true'
+    runs-on: ubuntu-latest
+    env:
+      BRANCH: auto/example-screenshots
+    steps:
+      - uses: actions/download-artifact@v4
+        id: download
+        continue-on-error: true
+        with:
+          name: doc-screenshots
+          path: captured
+
+      - uses: actions/checkout@v4
+        if: steps.download.outcome == 'success'
+        with:
+          path: maps
+
+      - uses: actions/checkout@v4
+        if: steps.download.outcome == 'success'
+        with:
+          repository: rnmapbox/maps-docs
+          ssh-key: ${{ secrets.MAPS_DOCS_DEPLOY_KEY }}
+          path: maps-docs
+
+      - uses: actions/setup-node@v4
+        if: steps.download.outcome == 'success'
+        with:
+          node-version: ${{ needs.check.outputs.NVMRC }}
+
+      - name: Update changed screenshots
+        if: steps.download.outcome == 'success'
+        run: |
+          npm install --no-save --prefix "$RUNNER_TEMP/deps" pngjs@7.0.0
+          NODE_PATH="$RUNNER_TEMP/deps/node_modules" node maps/scripts/ci/update-doc-screenshots.js \
+            captured maps-docs/examples-screenshots maps/docs/examples.json "$RUNNER_TEMP/summary.md"
+        env:
+          REFRESH_UNSTABLE: ${{ inputs.refresh_unstable }}
+
+      # Rebuilt on top of maps-docs main every time, so it never conflicts with the docs pushed
+      # to main by update-docs.yml. maps-docs opens the PR from it. Only examples-screenshots is
+      # compared with the existing branch, as main itself moves with almost every docs push.
+      - name: Push the screenshots branch
+        if: steps.download.outcome == 'success'
+        working-directory: maps-docs
+        run: |
+          if [ ! -s "$RUNNER_TEMP/summary.md" ]; then
+            echo "No meaningful screenshot changes"
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git checkout -q -b "$BRANCH"
+          git add examples-screenshots
+          {
+            echo "Update example screenshots from rnmapbox/maps@${GITHUB_SHA::7}"
+            echo
+            echo "Captured by $GITHUB_SERVER_URL/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID"
+            echo
+            cat "$RUNNER_TEMP/summary.md"
+          } > "$RUNNER_TEMP/message.txt"
+          git commit -q -F "$RUNNER_TEMP/message.txt"
+          cat "$RUNNER_TEMP/message.txt" >> "$GITHUB_STEP_SUMMARY"
+          if git fetch -q origin "$BRANCH" && git diff --quiet FETCH_HEAD HEAD -- examples-screenshots; then
+            echo "$BRANCH is already up to date"
+            exit 0
+          fi
+          git push --force origin "HEAD:$BRANCH"

@@ -465,5 +465,6 @@ sliders, switch, counter, text input, and pressable button to verify complex
 touch interactions inside a MarkerView. Toggle pointerEvents="none" to make
 the marker transparent to all touch events, passing them through to the map.
 `,
+  webSupported: true,
 };
 ShowMarkerView.metadata = metadata;

@@ -100,6 +100,7 @@ using namespace facebook::react;
   RNMBX_OPTIONAL_PROP_NSNumber(cluster)
   RNMBX_OPTIONAL_PROP_NSNumber(clusterRadius)
   RNMBX_OPTIONAL_PROP_NSNumber(clusterMaxZoomLevel)
+  RNMBX_OPTIONAL_PROP_NSNumber(clusterMinPoints)
   RNMBX_OPTIONAL_PROP_NSDictionary(clusterProperties)
   RNMBX_OPTIONAL_PROP_NSNumber(maxZoomLevel)
   RNMBX_OPTIONAL_PROP_NSNumber(minZoomLevel)
@@ -108,6 +109,10 @@ using namespace facebook::react;
   RNMBX_OPTIONAL_PROP_BOOL(lineMetrics)
   RNMBX_OPTIONAL_PROP_BOOL(hasPressListener)
   RNMBX_OPTIONAL_PROP_NSDictionary(hitbox)
+  id promoteId = RNMBXConvertFollyDynamicToId(newViewProps.promoteId);
+  if (promoteId != nil) {
+    _view.promoteId = promoteId;
+  }
   
   [super updateProps:props oldProps:oldProps];
 }

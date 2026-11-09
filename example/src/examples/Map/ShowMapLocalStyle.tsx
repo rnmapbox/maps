@@ -39,5 +39,7 @@ const metadata: ExampleWithMetadata['metadata'] = {
   docs: `
 Customize ornaments of the map(logo, compass, scalebar, attribution)
 `,
+  waitForMapIdle: false,
+  webSupported: true,
 };
 ShowMap.metadata = metadata;

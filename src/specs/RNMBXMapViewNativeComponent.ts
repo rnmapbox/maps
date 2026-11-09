@@ -65,8 +65,13 @@ export interface NativeProps extends ViewProps {
   localizeLabels?: UnsafeMixed<LocalizeLabels>;
 
   styleURL?: OptionalProp<string>;
+  symbolScaleBehavior?: UnsafeMixed<any>;
+  styleGlyphURL?: OptionalProp<string>;
+  debugOptions?: UnsafeMixed<string[]>;
 
   gestureSettings?: UnsafeMixed<GestureSettings>;
+
+  transparent?: OptionalProp<boolean>;
 
   // Android only
   surfaceView?: OptionalProp<boolean>;

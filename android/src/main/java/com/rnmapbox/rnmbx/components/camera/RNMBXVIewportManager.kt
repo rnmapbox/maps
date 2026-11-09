@@ -3,6 +3,7 @@ package com.rnmapbox.rnmbx.components.camera
 import com.facebook.react.bridge.Arguments
 import com.facebook.react.bridge.Dynamic
 import com.facebook.react.bridge.ReactApplicationContext
+import com.facebook.react.bridge.ReadableType
 import com.facebook.react.bridge.WritableArray
 import com.facebook.react.bridge.WritableMap
 import com.facebook.react.common.MapBuilder
@@ -34,7 +35,11 @@ class RNMBXViewportManager(private val mContext: ReactApplicationContext, val vi
 
     @ReactProp(name = "transitionsToIdleUponUserInteraction")
     override fun setTransitionsToIdleUponUserInteraction(view: RNMBXViewport?, value: Dynamic?) {
-        view?.transitionsToIdleUponUserInteraction = value?.asBoolean()
+        when (value?.type) {
+            ReadableType.Boolean -> view?.setTransitionsToIdleUponUserInteraction(value.asBoolean(), null)
+            ReadableType.Map -> view?.setTransitionsToIdleUponUserInteraction(null, RNMBXViewportGestureHandler.IdleGestures.from(value.asMap()))
+            else -> view?.setTransitionsToIdleUponUserInteraction(null, null)
+        }
     }
 
     @ReactProp(name = "hasStatusChanged")

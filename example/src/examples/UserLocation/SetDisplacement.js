@@ -58,5 +58,6 @@ const metadata = {
   docs: `
 Change the minimum displacement required to update the user location.
 `,
+  waitForMapIdle: false,
 };
 SetDisplacement.metadata = metadata;

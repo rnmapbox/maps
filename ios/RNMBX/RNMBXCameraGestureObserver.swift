@@ -9,15 +9,24 @@ public class RNMBXCameraGestureObserver: RNMBXMapComponentBase, GestureManagerDe
   // Event callback set from the ComponentView when JS subscribes
   @objc public var onMapSteady: ((_ reason: String, _ idleDurationMs: NSNumber?, _ lastGestureType: String?, _ timestamp: NSNumber) -> Void)? = nil
 
+  @objc public var onCameraChanged: ((_ state: [String: Any]) -> Void)? = nil
+
   private var hasOnMapSteady: Bool = false
+  private var hasOnCameraChanged: Bool = false
 
   @objc public func setHasOnMapSteady(_ hasOnMapSteady: Bool) {
     self.hasOnMapSteady = hasOnMapSteady
   }
 
+  @objc public func setHasOnCameraChanged(_ hasOnCameraChanged: Bool) {
+    self.hasOnCameraChanged = hasOnCameraChanged
+  }
+
   // MARK: Internal state
   private var activeAnimations: Int = 0
-  private var isGestureActive: Bool = false
+  private var activeGestures: Int = 0
+  private var animatingGestures: Int = 0
+  private var isGestureActive: Bool { activeGestures > 0 || animatingGestures > 0 }
   private var lastGestureType: String? = nil
   // Time when the last transition (gesture without follow-up anim or camera animation) ended
   private var lastTransitionEndedAtMs: Double? = nil
@@ -81,6 +90,7 @@ public class RNMBXCameraGestureObserver: RNMBXMapComponentBase, GestureManagerDe
   }
 
   private func scheduleQuietCheck() {
+    guard hasOnMapSteady else { return }
     let delay = quietMs
     guard delay > 0 else {
       cancelQuietTimer()
@@ -95,7 +105,7 @@ public class RNMBXCameraGestureObserver: RNMBXMapComponentBase, GestureManagerDe
   }
 
   private func scheduleTimeout() {
-    guard let delay = maxMs else { return }
+    guard hasOnMapSteady, let delay = maxMs else { return }
     scheduleTimer(&timeoutTimer, delay: delay) { [weak self] in
       self?.emitTimeout()
     }
@@ -139,33 +149,42 @@ public class RNMBXCameraGestureObserver: RNMBXMapComponentBase, GestureManagerDe
   public override func addToMap(_ map: RNMBXMapView, style: Style) {
     super.addToMap(map, style: style)
 
-    guard hasOnMapSteady else { return }
+    guard hasOnMapSteady || hasOnCameraChanged else { return }
 
     let camera = map.mapView.camera!
 
-    // Camera animator lifecycle
-    _cancelables.insert(camera.onCameraAnimatorStarted.observe { [weak self] _ in
-      guard let self = self else { return }
-      self.activeAnimations += 1
-      self.lastTransitionEndedAtMs = nil
-      self.markActivity()
-      self.debugLog("camera animator started")
-    })
-    let handleAnimatorEnd: (CameraAnimator) -> Void = { [weak self] _ in
-      guard let self = self else { return }
-      self.activeAnimations -= 1
-      #if DEBUG
-      if self.activeAnimations < 0 {
-        print("[RNMBXCameraGestureObserver] WARNING: activeAnimations went negative, resetting to 0")
-        self.activeAnimations = 0
-      }
-      #endif
-      self.lastTransitionEndedAtMs = self.nowMs()
-      self.scheduleQuietCheck()
-      self.debugLog("camera animator ended")
+    if hasOnCameraChanged {
+      _cancelables.insert(map.mapView.mapboxMap.onCameraChanged.observe { [weak self, weak map] _ in
+        guard let self = self, let map = map else { return }
+        self.emitCameraChanged(map.mapView)
+      })
     }
-    _cancelables.insert(camera.onCameraAnimatorFinished.observe(handleAnimatorEnd))
-    _cancelables.insert(camera.onCameraAnimatorCancelled.observe(handleAnimatorEnd))
+
+    if hasOnMapSteady {
+      // Camera animator lifecycle
+      _cancelables.insert(camera.onCameraAnimatorStarted.observe { [weak self] _ in
+        guard let self = self else { return }
+        self.activeAnimations += 1
+        self.lastTransitionEndedAtMs = nil
+        self.markActivity()
+        self.debugLog("camera animator started")
+      })
+      let handleAnimatorEnd: (CameraAnimator) -> Void = { [weak self] _ in
+        guard let self = self else { return }
+        self.activeAnimations -= 1
+        #if DEBUG
+        if self.activeAnimations < 0 {
+          print("[RNMBXCameraGestureObserver] WARNING: activeAnimations went negative, resetting to 0")
+          self.activeAnimations = 0
+        }
+        #endif
+        self.lastTransitionEndedAtMs = self.nowMs()
+        self.scheduleQuietCheck()
+        self.debugLog("camera animator ended")
+      }
+      _cancelables.insert(camera.onCameraAnimatorFinished.observe(handleAnimatorEnd))
+      _cancelables.insert(camera.onCameraAnimatorCancelled.observe(handleAnimatorEnd))
+    }
 
     // Subscribe to gestures as a secondary observer (multicast from RNMBXMapView)
     map.addGestureDelegate(self)
@@ -176,15 +195,40 @@ public class RNMBXCameraGestureObserver: RNMBXMapComponentBase, GestureManagerDe
     _cancelables.forEach { $0.cancel() }
     _cancelables.removeAll()
     map.removeGestureDelegate(self)
+    activeAnimations = 0
+    activeGestures = 0
+    animatingGestures = 0
     debugLog("removeFromMap and unsubscribed from gestures")
     cancelQuietTimer()
     cancelTimeoutTimer()
     return super.removeFromMap(map, reason: reason)
   }
 
+  private func emitCameraChanged(_ mapView: MapView) {
+    let cameraState = mapView.cameraState
+    let bounds = mapView.mapboxMap.coordinateBounds(for: CameraOptions(cameraState: cameraState))
+    onCameraChanged?([
+      "properties": [
+        "center": [cameraState.center.longitude, cameraState.center.latitude],
+        "bounds": [
+          "ne": [bounds.northeast.longitude, bounds.northeast.latitude],
+          "sw": [bounds.southwest.longitude, bounds.southwest.latitude],
+        ],
+        "zoom": Double(cameraState.zoom),
+        "heading": Double(cameraState.bearing),
+        "pitch": Double(cameraState.pitch),
+        "isUserInteraction": isGestureActive,
+      ],
+      "gestures": [
+        "isGestureActive": activeGestures > 0,
+      ],
+      "timestamp": nowMs(),
+    ])
+  }
+
   // MARK: GestureManagerDelegate
   public func gestureManager(_ gestureManager: MapboxMaps.GestureManager, didBegin gestureType: MapboxMaps.GestureType) {
-    isGestureActive = true
+    activeGestures += 1
     lastGestureType = normalizeGestureType(gestureType)
     lastTransitionEndedAtMs = nil
     markActivity(gestureType: lastGestureType)
@@ -193,8 +237,10 @@ public class RNMBXCameraGestureObserver: RNMBXMapComponentBase, GestureManagerDe
 
   public func gestureManager(_ gestureManager: MapboxMaps.GestureManager, didEnd gestureType: MapboxMaps.GestureType, willAnimate: Bool) {
     lastGestureType = normalizeGestureType(gestureType)
-    if !willAnimate {
-      isGestureActive = false
+    activeGestures = max(activeGestures - 1, 0)
+    if willAnimate {
+      animatingGestures += 1
+    } else {
       lastTransitionEndedAtMs = nowMs()
     }
     markActivity(gestureType: lastGestureType)
@@ -202,7 +248,7 @@ public class RNMBXCameraGestureObserver: RNMBXMapComponentBase, GestureManagerDe
   }
 
   public func gestureManager(_ gestureManager: MapboxMaps.GestureManager, didEndAnimatingFor gestureType: MapboxMaps.GestureType) {
-    isGestureActive = false
+    animatingGestures = max(animatingGestures - 1, 0)
     lastTransitionEndedAtMs = nowMs()
     scheduleQuietCheck()
     debugLog("gesture didEndAnimatingFor type=\(gestureType)")

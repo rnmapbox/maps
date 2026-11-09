@@ -190,5 +190,6 @@ const metadata: ExampleWithMetadata['metadata'] = {
   docs: `
 Map Handlers
 `,
+  webSupported: true,
 };
 MapHandlers.metadata = metadata;

@@ -77,6 +77,7 @@ public class RNMBXShapeSource : RNMBXSource {
       }
     }
   }
+  @objc public var clusterMinPoints : NSNumber?
   @objc public var clusterProperties : [String: [Any]]?;
 
   @objc public var maxZoomLevel : NSNumber?
@@ -111,6 +112,10 @@ public class RNMBXShapeSource : RNMBXSource {
       result.clusterMaxZoom = clusterMaxZoomLevel.doubleValue
     }
 
+    if let clusterMinPoints = clusterMinPoints {
+      result.clusterMinPoints = clusterMinPoints.doubleValue
+    }
+
     do {
       if let clusterProperties = clusterProperties {
         result.clusterProperties = try clusterProperties.mapValues { (params : [Any]) in
@@ -141,6 +146,10 @@ public class RNMBXShapeSource : RNMBXSource {
     }
 
     result.lineMetrics = lineMetrics
+
+    if let promoteId = promoteIdValue() {
+      result.promoteId2 = promoteId
+    }
 
     return result
   }

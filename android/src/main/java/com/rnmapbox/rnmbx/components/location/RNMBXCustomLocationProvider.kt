@@ -1,5 +1,6 @@
 package com.rnmapbox.rnmbx.components.location
 
+import com.mapbox.maps.plugin.delegates.MapPluginProviderDelegate
 import android.content.Context
 import com.mapbox.geojson.Point
 import com.mapbox.maps.MapView
@@ -40,11 +41,11 @@ class RNMBXCustomLocationProvider(context: Context) : AbstractMapFeature(context
 
     override fun addToMap(mapView: RNMBXMapView) {
         super.addToMap(mapView)
-        installCustomLocationProviderIfNeeded(mapView.mapView)
+        installCustomLocationProviderIfNeeded(mapView.mapPlugins)
     }
 
     override fun removeFromMap(mapView: RNMBXMapView, reason: RemovalReason): Boolean {
-        removeCustomLocationProvider(mapView.mapView)
+        removeCustomLocationProvider(mapView.mapPlugins)
         return super.removeFromMap(mapView, reason)
     }
 
@@ -82,7 +83,7 @@ class RNMBXCustomLocationProvider(context: Context) : AbstractMapFeature(context
     private var customLocationProvider: LocationProvider? = null
     private var defaultLocationProvider: LocationProvider? = null
 
-    fun installCustomLocationProviderIfNeeded(mapView: MapView) {
+    fun installCustomLocationProviderIfNeeded(mapView: MapPluginProviderDelegate) {
         var customLocationProvider: LocationProvider? = null
         if (customLocationProvider == null) {
             customLocationProvider = object : LocationProvider {
@@ -109,7 +110,7 @@ class RNMBXCustomLocationProvider(context: Context) : AbstractMapFeature(context
         }
     }
 
-    fun removeCustomLocationProvider(mapView: MapView) {
+    fun removeCustomLocationProvider(mapView: MapPluginProviderDelegate) {
         mapView.location.setLocationProvider(
             defaultLocationProvider ?: DefaultLocationProvider(
                 context

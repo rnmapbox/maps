@@ -110,7 +110,8 @@
             "CircleLayer#circleColor",
             "expressions"
           ],
-          "docs": "\nRenders circles with radius and color based on data-driven expressions.\n\nColor is based on the `ethnicity` property of the feature, radius is based on zoom level.\n"
+          "docs": "\nRenders circles with radius and color based on data-driven expressions.\n\nColor is based on the `ethnicity` property of the feature, radius is based on zoom level.\n",
+          "webSupported": true
         },
         "fullPath": "example/src/examples/SymbolCircleLayer/DataDrivenCircleColors.js",
         "relPath": "SymbolCircleLayer/DataDrivenCircleColors.js",
@@ -123,11 +124,13 @@
             "ShapeSource",
             "SymbolLayer",
             "ShapeSource#getClusterLeaves",
+            "ShapeSource#clusterMinPoints",
             "CircleLayer",
             "CircleLayer#clusterProperties",
             "expressions"
           ],
-          "docs": "\nRenders earthquake with clustering.\n\nClick a cluster to show list of contents in the cluster `getClusterLeaves`.\n"
+          "docs": "\nRenders earthquake with clustering.\n\nClick a cluster to show list of contents in the cluster `getClusterLeaves`.\nToggle `clusterMinPoints` to only cluster groups of at least 10 points.\n",
+          "webSupported": true
         },
         "fullPath": "example/src/examples/SymbolCircleLayer/Earthquakes.tsx",
         "relPath": "SymbolCircleLayer/Earthquakes.tsx",
@@ -142,7 +145,8 @@
             "Images#stretchY",
             "Images#content"
           ],
-          "docs": "\nDemonstrates Scalable images.\n\nYou can use stretchX, stretchY and content to scale a bitmap image - keep parts of it fixed while only scale specific parts.\n"
+          "docs": "\nDemonstrates Scalable images.\n\nYou can use stretchX, stretchY and content to scale a bitmap image - keep parts of it fixed while only scale specific parts.\n",
+          "webSupported": true
         },
         "fullPath": "example/src/examples/SymbolCircleLayer/ScalableImages.tsx",
         "relPath": "SymbolCircleLayer/ScalableImages.tsx",
@@ -158,7 +162,7 @@
             "Images#nativeAssetImages",
             "Images#onImageMissing"
           ],
-          "docs": "\nRender icons with various methods.\n\n* pin-rn: Rendered with a React Native View\n* pin: Rendered with a native asset image\n* pin3: Resolved as a result of onImageMissing\n* example: Rendered with a js asset image (require)\n\n"
+          "docs": "\nRender icons with various methods.\n\n* pin-rn: Rendered with a React Native View\n* pin-remote: Rendered with a React Native View holding a remote image, refreshed from its onLoad\n* pin: Rendered with a native asset image\n* pin3: Resolved as a result of onImageMissing\n* example: Rendered with a js asset image (require)\n\n"
         },
         "fullPath": "example/src/examples/SymbolCircleLayer/ShapeSourceIcon.tsx",
         "relPath": "SymbolCircleLayer/ShapeSourceIcon.tsx",
@@ -180,7 +184,9 @@
             "LocationPuck#topImage",
             "LocationPuck#scale"
           ],
-          "docs": "\n  Demonstrates use of images to customize LocationPuck\n  "
+          "docs": "\n  Demonstrates use of images to customize LocationPuck\n  ",
+          "excludeFromPercy": true,
+          "waitForMapIdle": false
         },
         "fullPath": "example/src/examples/UserLocation/CustomNativeUserLocation.tsx",
         "relPath": "UserLocation/CustomNativeUserLocation.tsx",
@@ -193,7 +199,8 @@
             "LocationPuck",
             "LocationPuck#model"
           ],
-          "docs": "\n  Renders the user location as a 3D model that rotates with the course\n  "
+          "docs": "\n  Renders the user location as a 3D model that rotates with the course\n  ",
+          "waitForMapIdle": false
         },
         "fullPath": "example/src/examples/UserLocation/LocationPuck3D.tsx",
         "relPath": "UserLocation/LocationPuck3D.tsx",
@@ -206,7 +213,8 @@
             "UserLocation",
             "UserLocation#minDisplacement"
           ],
-          "docs": "\nChange the minimum displacement required to update the user location.\n"
+          "docs": "\nChange the minimum displacement required to update the user location.\n",
+          "waitForMapIdle": false
         },
         "fullPath": "example/src/examples/UserLocation/SetDisplacement.js",
         "relPath": "UserLocation/SetDisplacement.js",
@@ -218,7 +226,8 @@
           "tags": [
             "MapView#tintColor"
           ],
-          "docs": "\nChange the tint color of the map. This will change the color of the user location icon and the compass.\n"
+          "docs": "\nChange the tint color of the map. This will change the color of the user location icon and the compass.\n",
+          "waitForMapIdle": false
         },
         "fullPath": "example/src/examples/UserLocation/SetTintColor.js",
         "relPath": "UserLocation/SetTintColor.js",
@@ -233,7 +242,8 @@
             "Images#stretchY",
             "Images#content"
           ],
-          "docs": "\nDemonstrates Scalable images.\n\nYou can use stretchX, stretchY and content to scale a bitmap image - keep parts of it fixed while only scale specific parts.\n"
+          "docs": "\nDemonstrates Scalable images.\n\nYou can use stretchX, stretchY and content to scale a bitmap image - keep parts of it fixed while only scale specific parts.\n",
+          "waitForMapIdle": false
         },
         "fullPath": "example/src/examples/UserLocation/UserLocationPadding.tsx",
         "relPath": "UserLocation/UserLocationPadding.tsx",
@@ -248,7 +258,8 @@
             "UserLocation#visible",
             "UserLocation#onUserTrackingModeChange"
           ],
-          "docs": "\nDemonstrates UserLocation render modes, follow modes\n"
+          "docs": "\nDemonstrates UserLocation render modes, follow modes\n",
+          "waitForMapIdle": false
         },
         "fullPath": "example/src/examples/UserLocation/UserLocationRenderMode.tsx",
         "relPath": "UserLocation/UserLocationRenderMode.tsx",
@@ -261,7 +272,9 @@
             "UserLocation",
             "UserLocation#onUpdate"
           ],
-          "docs": "\nRetrieves and shows location updates from UserLocation component via the `onUpdate` callback\n"
+          "docs": "\nRetrieves and shows location updates from UserLocation component via the `onUpdate` callback\n",
+          "waitForMapIdle": false,
+          "excludeFromPercy": true
         },
         "fullPath": "example/src/examples/UserLocation/UserLocationUpdates.tsx",
         "relPath": "UserLocation/UserLocationUpdates.tsx",
@@ -281,9 +294,11 @@
           "tags": [
             "CameraGestureObserver#onMapSteady",
             "CameraGestureObserver#quietPeriodMs",
-            "CameraGestureObserver#maxIntervalMs"
+            "CameraGestureObserver#maxIntervalMs",
+            "CameraGestureObserver#onCameraChanged"
           ],
-          "docs": "\nDemonstrates how to detect when the map becomes steady after user gestures (pan, zoom, rotate). The CameraGestureObserver component fires the onMapSteady event after a configurable quiet period, providing information about the last gesture type and idle duration.\n"
+          "docs": "\nDemonstrates how to detect when the map becomes steady after user gestures (pan, zoom, rotate). The CameraGestureObserver component fires the onMapSteady event after a configurable quiet period, providing information about the last gesture type and idle duration. onCameraChanged reports whether the camera is moving because of the user.\n",
+          "webSupported": true
         },
         "fullPath": "example/src/examples/Map/CameraGestureObserver.tsx",
         "relPath": "Map/CameraGestureObserver.tsx",
@@ -296,7 +311,8 @@
             "FillLayer#existing",
             "FillLayer#fillColor"
           ],
-          "docs": "\nChange style of a layer part of the map on the fly.\n"
+          "docs": "\nChange style of a layer part of the map on the fly.\n",
+          "webSupported": true
         },
         "fullPath": "example/src/examples/Map/ChangeLayerColor.js",
         "relPath": "Map/ChangeLayerColor.js",
@@ -304,11 +320,25 @@
       },
       {
         "metadata": {
+          "title": "Debug Options",
+          "tags": [
+            "MapView#debugOptions"
+          ],
+          "docs": "\nToggles the native debug drawings of the map, like tile borders and symbol collision boxes. `terrainWireframe` is Android only, iOS ignores it with a warning.\n",
+          "excludeFromPercy": true
+        },
+        "fullPath": "example/src/examples/Map/DebugOptions.tsx",
+        "relPath": "Map/DebugOptions.tsx",
+        "name": "DebugOptions"
+      },
+      {
+        "metadata": {
           "title": "Dynamic URL",
           "tags": [
             "ShapeSource#url"
           ],
-          "docs": "\nChange shape source URL on press of the bubble.\n"
+          "docs": "\nChange shape source URL on press of the bubble.\n",
+          "webSupported": true
         },
         "fullPath": "example/src/examples/Map/DynamicUrl.tsx",
         "relPath": "Map/DynamicUrl.tsx",
@@ -320,7 +350,8 @@
           "tags": [
             "MapView#localizeLabels"
           ],
-          "docs": "\nLocalize labels to a specific locale(es).\n"
+          "docs": "\nLocalize labels to a specific locale(es).\n",
+          "webSupported": true
         },
         "fullPath": "example/src/examples/Map/LocalizeLabels.tsx",
         "relPath": "Map/LocalizeLabels.tsx",
@@ -332,7 +363,8 @@
           "tags": [
             "MapView"
           ],
-          "docs": "\nDemonstrates various ways to embed map via (Navigation, Page, modal, etc)\n"
+          "docs": "\nDemonstrates various ways to embed map via (Navigation, Page, modal, etc)\n",
+          "waitForMapIdle": false
         },
         "fullPath": "example/src/examples/Map/MapAndRNNavigation.js",
         "relPath": "Map/MapAndRNNavigation.js",
@@ -342,7 +374,9 @@
         "metadata": {
           "title": "Map FPS",
           "tags": [],
-          "docs": "Toggles preferredFramesPerSecond between 10 fps and 60 fps, move the map around to feel the difference."
+          "docs": "Toggles preferredFramesPerSecond between 10 fps and 60 fps, move the map around to feel the difference.",
+          "webSupported": true,
+          "waitForMapIdle": false
         },
         "fullPath": "example/src/examples/Map/MapFps.tsx",
         "relPath": "Map/MapFps.tsx",
@@ -352,7 +386,9 @@
         "metadata": {
           "title": "Map (un-)mount",
           "tags": [],
-          "docs": "\nShowing and hiding the the map should not lead to increased memory consumption, use this example to check it on the profiler.\n"
+          "docs": "\nShowing and hiding the the map should not lead to increased memory consumption, use this example to check it on the profiler.\n",
+          "webSupported": true,
+          "waitForMapIdle": false
         },
         "fullPath": "example/src/examples/Map/MapUnMount.tsx",
         "relPath": "Map/MapUnMount.tsx",
@@ -385,7 +421,8 @@
           "tags": [
             "MapView#pointInMapView"
           ],
-          "docs": "\nConverts a coordinate to a point in the current view.\n"
+          "docs": "\nConverts a coordinate to a point in the current view.\n",
+          "webSupported": true
         },
         "fullPath": "example/src/examples/Map/PointInMapView.js",
         "relPath": "Map/PointInMapView.js",
@@ -402,7 +439,8 @@
             "MapView#queryRenderedFeaturesAtPoint",
             "MapView#queryRenderedFeaturesInRect"
           ],
-          "docs": "\nTests conversion from screen to geographic coordinates and vice versa.        \n"
+          "docs": "\nTests conversion from screen to geographic coordinates and vice versa.        \n",
+          "webSupported": true
         },
         "fullPath": "example/src/examples/Map/ScreenCoordinates.tsx",
         "relPath": "Map/ScreenCoordinates.tsx",
@@ -414,7 +452,8 @@
           "tags": [
             "Mapbox#setLanguage"
           ],
-          "docs": "\nSets the label language for all maps in the app with `Mapbox.setLanguage`, which works with any language Mapbox supports and with the Standard style.\n"
+          "docs": "\nSets the label language for all maps in the app with `Mapbox.setLanguage`, which works with any language Mapbox supports and with the Standard style.\n",
+          "webSupported": true
         },
         "fullPath": "example/src/examples/Map/SetLanguage.tsx",
         "relPath": "Map/SetLanguage.tsx",
@@ -429,7 +468,8 @@
             "FillLayer#visibility",
             "FillLayer#visibility"
           ],
-          "docs": "\nChanges visibility of layers part of the map\n"
+          "docs": "\nChanges visibility of layers part of the map\n",
+          "webSupported": true
         },
         "fullPath": "example/src/examples/Map/ShowAndHideLayer.js",
         "relPath": "Map/ShowAndHideLayer.js",
@@ -441,7 +481,8 @@
           "tags": [
             "MapView#onPress"
           ],
-          "docs": "\nDemonstrates onPress event and how to get the screen point of the click.\n"
+          "docs": "\nDemonstrates onPress event and how to get the screen point of the click.\n",
+          "webSupported": true
         },
         "fullPath": "example/src/examples/Map/ShowClick.js",
         "relPath": "Map/ShowClick.js",
@@ -454,7 +495,10 @@
             "Camera#followZoomLevel",
             "UserLocation#onPress"
           ],
-          "docs": "\nShows a map with the user location annotation enabled, and on press of the user location annotation, an alert is shown.\n"
+          "docs": "\nShows a map with the user location annotation enabled, and on press of the user location annotation, an alert is shown.\n",
+          "excludeFromPercy": true,
+          "webSupported": true,
+          "waitForMapIdle": false
         },
         "fullPath": "example/src/examples/Map/ShowMap.tsx",
         "relPath": "Map/ShowMap.tsx",
@@ -464,7 +508,9 @@
         "metadata": {
           "title": "Show Map Local Style",
           "tags": [],
-          "docs": "\nCustomize ornaments of the map(logo, compass, scalebar, attribution)\n"
+          "docs": "\nCustomize ornaments of the map(logo, compass, scalebar, attribution)\n",
+          "waitForMapIdle": false,
+          "webSupported": true
         },
         "fullPath": "example/src/examples/Map/ShowMapLocalStyle.tsx",
         "relPath": "Map/ShowMapLocalStyle.tsx",
@@ -478,7 +524,8 @@
             "MapView#onRegionIsChanging",
             "MapView#onRegionDidChange"
           ],
-          "docs": "\nDemonstrates MapView region change events.\n"
+          "docs": "\nDemonstrates MapView region change events.\n",
+          "webSupported": true
         },
         "fullPath": "example/src/examples/Map/ShowRegionDidChange.js",
         "relPath": "Map/ShowRegionDidChange.js",
@@ -490,7 +537,8 @@
           "tags": [
             "MapView#setSoruceVisibility"
           ],
-          "docs": "\nChanges visibility of layers using a source in the map\n"
+          "docs": "\nChanges visibility of layers using a source in the map\n",
+          "webSupported": true
         },
         "fullPath": "example/src/examples/Map/SourceLayerVisibility.js",
         "relPath": "Map/SourceLayerVisibility.js",
@@ -502,7 +550,8 @@
           "tags": [
             "Style#json"
           ],
-          "docs": "\nChange style of a MapView on the fly.\n"
+          "docs": "\nChange style of a MapView on the fly.\n",
+          "webSupported": true
         },
         "fullPath": "example/src/examples/Map/StyleJson.js",
         "relPath": "Map/StyleJson.js",
@@ -510,11 +559,38 @@
       },
       {
         "metadata": {
+          "title": "Symbol Scale Behavior",
+          "tags": [
+            "MapView#symbolScaleBehavior"
+          ],
+          "docs": "\nScales map labels and icons by a fixed factor, or with the system text size setting.\n",
+          "webSupported": true
+        },
+        "fullPath": "example/src/examples/Map/SymbolScaleBehavior.tsx",
+        "relPath": "Map/SymbolScaleBehavior.tsx",
+        "name": "SymbolScaleBehavior"
+      },
+      {
+        "metadata": {
+          "title": "Transparent Map",
+          "tags": [
+            "MapView#transparent"
+          ],
+          "docs": "\nRenders the map over coloured stripes. With `transparent` on, the stripes show through wherever the style's background is transparent or semi-transparent; the Streets style stays opaque.\n\nOn Android `transparent` is applied when the map is created, so toggling it here has no effect until the screen is reopened.\n",
+          "webSupported": true
+        },
+        "fullPath": "example/src/examples/Map/TransparentMap.tsx",
+        "relPath": "Map/TransparentMap.tsx",
+        "name": "TransparentMap"
+      },
+      {
+        "metadata": {
           "title": "Two Map Views",
           "tags": [
             "MapView"
           ],
-          "docs": "\nDisplay two map views side by side\n"
+          "docs": "\nDisplay two map views side by side\n",
+          "webSupported": true
         },
         "fullPath": "example/src/examples/Map/TwoByTwo.js",
         "relPath": "Map/TwoByTwo.js",
@@ -535,7 +611,8 @@
             "Camera",
             "Camera#animationMode"
           ],
-          "docs": "\nCamera animation modes\n"
+          "docs": "\nCamera animation modes\n",
+          "webSupported": true
         },
         "fullPath": "example/src/examples/V10/CameraAnimation.tsx",
         "relPath": "V10/CameraAnimation.tsx",
@@ -548,9 +625,11 @@
             "MapView",
             "MapView#setFeatureState",
             "MapView#getFeatureState",
-            "MapView#removeFeatureState"
+            "MapView#removeFeatureState",
+            "ShapeSource#promoteId"
           ],
-          "docs": "\nDemonstrates modifying the feature state.\n"
+          "docs": "\nDemonstrates modifying the feature state. `promoteId` makes the `name` property the\nfeature id, so the state is keyed by name. Tap a shape to toggle its selected state.\n",
+          "webSupported": true
         },
         "fullPath": "example/src/examples/V10/FeatureState.tsx",
         "relPath": "V10/FeatureState.tsx",
@@ -562,7 +641,8 @@
           "tags": [
             "MapView#projection"
           ],
-          "docs": "\nShows map with globe projection\n"
+          "docs": "\nShows map with globe projection\n",
+          "webSupported": true
         },
         "fullPath": "example/src/examples/V10/GlobeProjection.tsx",
         "relPath": "V10/GlobeProjection.tsx",
@@ -574,7 +654,8 @@
           "tags": [
             "MapView#onMapIdle"
           ],
-          "docs": "\nMap Handlers\n"
+          "docs": "\nMap Handlers\n",
+          "webSupported": true
         },
         "fullPath": "example/src/examples/V10/MapHandlers.tsx",
         "relPath": "V10/MapHandlers.tsx",
@@ -586,7 +667,9 @@
           "tags": [
             "MarkerView"
           ],
-          "docs": "\nTest view for MarkerViews\n"
+          "docs": "\nTest view for MarkerViews\n",
+          "excludeFromPercy": true,
+          "webSupported": true
         },
         "fullPath": "example/src/examples/V10/Markers.tsx",
         "relPath": "V10/Markers.tsx",
@@ -601,7 +684,9 @@
             "AnimatedRouteCoordinatesArray",
             "AnimatedExtractCoordinateFromArray"
           ],
-          "docs": "\nThis is a fairly complex example demonstrating the use of AnimatedShape, Camera animation, queryTerrainElevation and AnimatedMarkerView\n"
+          "docs": "\nThis is a fairly complex example demonstrating the use of AnimatedShape, Camera animation, queryTerrainElevation and AnimatedMarkerView\n",
+          "excludeFromPercy": true,
+          "webSupported": true
         },
         "fullPath": "example/src/examples/V10/QueryTerrainElevation.js",
         "relPath": "V10/QueryTerrainElevation.js",
@@ -614,7 +699,8 @@
             "Models",
             "ModelLayer"
           ],
-          "docs": "\nDemonstrate the use of ModelLayer to render, and Models to associate 3D models with names.\n"
+          "docs": "\nDemonstrate the use of ModelLayer to render, and Models to associate 3D models with names.\n",
+          "excludeFromPercy": true
         },
         "fullPath": "example/src/examples/V10/SimpleModelLayer.js",
         "relPath": "V10/SimpleModelLayer.js",
@@ -631,7 +717,8 @@
             "Snow",
             "Rain"
           ],
-          "docs": "\nDemonstrates use of Terrain, Atmosphere and SkyLayer. Use the Snow/Rain buttons to toggle experimental particle weather effects.\n"
+          "docs": "\nDemonstrates use of Terrain, Atmosphere and SkyLayer. Use the Snow/Rain buttons to toggle experimental particle weather effects.\n",
+          "webSupported": true
         },
         "fullPath": "example/src/examples/V10/TerrainSkyAtmosphere.tsx",
         "relPath": "V10/TerrainSkyAtmosphere.tsx",
@@ -664,7 +751,8 @@
             "HeatmapLayer",
             "HeatmapLayer#heatmapColor"
           ],
-          "docs": "\nShows heatmap layer\n"
+          "docs": "\nShows heatmap layer\n",
+          "webSupported": true
         },
         "fullPath": "example/src/examples/Annotations/Heatmap.js",
         "relPath": "Annotations/Heatmap.js",
@@ -680,11 +768,28 @@
             "Interactive",
             "pointerEvents"
           ],
-          "docs": "\nShows marker view and point annotations, including an interactive marker with\nsliders, switch, counter, text input, and pressable button to verify complex\ntouch interactions inside a MarkerView. Toggle pointerEvents=\"none\" to make\nthe marker transparent to all touch events, passing them through to the map.\n"
+          "docs": "\nShows marker view and point annotations, including an interactive marker with\nsliders, switch, counter, text input, and pressable button to verify complex\ntouch interactions inside a MarkerView. Toggle pointerEvents=\"none\" to make\nthe marker transparent to all touch events, passing them through to the map.\n",
+          "webSupported": true
         },
         "fullPath": "example/src/examples/Annotations/MarkerView.tsx",
         "relPath": "Annotations/MarkerView.tsx",
         "name": "MarkerView"
+      },
+      {
+        "metadata": {
+          "title": "Marker View Placement",
+          "tags": [
+            "MarkerView",
+            "MarkerView#priority",
+            "MarkerView#minZoom",
+            "MarkerView#allowZElevate"
+          ],
+          "docs": "\nTwo overlapping markers where `priority` picks the one that is shown, a marker hidden\nbelow `minZoom`, and a marker on a 3D building that `allowZElevate` lifts to the roof.\n",
+          "webSupported": true
+        },
+        "fullPath": "example/src/examples/Annotations/MarkerViewPlacement.tsx",
+        "relPath": "Annotations/MarkerViewPlacement.tsx",
+        "name": "MarkerViewPlacement"
       },
       {
         "metadata": {
@@ -706,7 +811,8 @@
             "PointAnnotation",
             "slot"
           ],
-          "docs": "\nDemonstrates multiple PointAnnotationManager instances, each owning its own\nannotation layer in a different slot of the Mapbox Standard style. The bottom-slot\npins (B) render behind the 3D buildings while the top-slot pins (T) render in front.\n  "
+          "docs": "\nDemonstrates multiple PointAnnotationManager instances, each owning its own\nannotation layer in a different slot of the Mapbox Standard style. The bottom-slot\npins (B) render behind the 3D buildings while the top-slot pins (T) render in front.\n  ",
+          "excludeFromPercy": true
         },
         "fullPath": "example/src/examples/Annotations/PointAnnotationManagerMultiple.tsx",
         "relPath": "Annotations/PointAnnotationManagerMultiple.tsx",
@@ -720,7 +826,8 @@
             "PointAnnotation",
             "slot"
           ],
-          "docs": "\nDemonstrates using PointAnnotationManager to position annotations\nin different slots of the Mapbox Standard style.\n  "
+          "docs": "\nDemonstrates using PointAnnotationManager to position annotations\nin different slots of the Mapbox Standard style.\n  ",
+          "excludeFromPercy": true
         },
         "fullPath": "example/src/examples/Annotations/PointAnnotationManagerSlot.tsx",
         "relPath": "Annotations/PointAnnotationManagerSlot.tsx",
@@ -755,7 +862,8 @@
           "tags": [
             "VectorSource"
           ],
-          "docs": ""
+          "docs": "",
+          "webSupported": true
         },
         "fullPath": "example/src/examples/FillRasterLayer/ChoroplethLayerByZoomLevel.js",
         "relPath": "FillRasterLayer/ChoroplethLayerByZoomLevel.js",
@@ -768,7 +876,8 @@
             "VectorSource",
             "VectorSource#features"
           ],
-          "docs": ""
+          "docs": "",
+          "webSupported": true
         },
         "fullPath": "example/src/examples/FillRasterLayer/CustomVectorSource.js",
         "relPath": "FillRasterLayer/CustomVectorSource.js",
@@ -778,7 +887,9 @@
         "metadata": {
           "title": "GeoJSON Source",
           "tags": [],
-          "docs": ""
+          "docs": "",
+          "webSupported": true,
+          "snackSupported": false
         },
         "fullPath": "example/src/examples/FillRasterLayer/GeoJSONSource.js",
         "relPath": "FillRasterLayer/GeoJSONSource.js",
@@ -791,7 +902,8 @@
             "RasterDemSource",
             "HillshadeLayer"
           ],
-          "docs": "Renders terrain hillshading from a raster-dem source."
+          "docs": "Renders terrain hillshading from a raster-dem source.",
+          "webSupported": true
         },
         "fullPath": "example/src/examples/FillRasterLayer/HillshadeSource.tsx",
         "relPath": "FillRasterLayer/HillshadeSource.tsx",
@@ -805,7 +917,10 @@
             "ImageSource"
           ],
           "docs": "",
-          "disableSync": true
+          "disableSync": true,
+          "excludeFromPercy": true,
+          "webSupported": true,
+          "snackSupported": false
         },
         "fullPath": "example/src/examples/FillRasterLayer/ImageOverlay.js",
         "relPath": "FillRasterLayer/ImageOverlay.js",
@@ -815,7 +930,8 @@
         "metadata": {
           "title": "Indoor Building Map",
           "tags": [],
-          "docs": ""
+          "docs": "",
+          "webSupported": true
         },
         "fullPath": "example/src/examples/FillRasterLayer/IndoorBuilding.js",
         "relPath": "FillRasterLayer/IndoorBuilding.js",
@@ -825,7 +941,9 @@
         "metadata": {
           "title": "Query Feature Point",
           "tags": [],
-          "docs": ""
+          "docs": "",
+          "excludeFromPercy": true,
+          "webSupported": true
         },
         "fullPath": "example/src/examples/FillRasterLayer/QueryAtPoint.js",
         "relPath": "FillRasterLayer/QueryAtPoint.js",
@@ -838,7 +956,8 @@
             "VectorSource",
             "querySourceFeatures"
           ],
-          "docs": ""
+          "docs": "",
+          "webSupported": true
         },
         "fullPath": "example/src/examples/FillRasterLayer/QuerySourceFeatures.tsx",
         "relPath": "FillRasterLayer/QuerySourceFeatures.tsx",
@@ -850,7 +969,8 @@
           "tags": [
             "queryRenderedFeaturesInRect"
           ],
-          "docs": ""
+          "docs": "",
+          "webSupported": true
         },
         "fullPath": "example/src/examples/FillRasterLayer/QueryWithRect.js",
         "relPath": "FillRasterLayer/QueryWithRect.js",
@@ -860,7 +980,9 @@
         "metadata": {
           "title": "Raster Source",
           "tags": [],
-          "docs": ""
+          "docs": "",
+          "excludeFromPercy": true,
+          "webSupported": true
         },
         "fullPath": "example/src/examples/FillRasterLayer/RasterSource.js",
         "relPath": "FillRasterLayer/RasterSource.js",
@@ -887,7 +1009,8 @@
             "RasterSource",
             "RasterLayer"
           ],
-          "docs": ""
+          "docs": "",
+          "webSupported": true
         },
         "fullPath": "example/src/examples/FillRasterLayer/WatercolorRasterTiles.js",
         "relPath": "FillRasterLayer/WatercolorRasterTiles.js",
@@ -911,7 +1034,8 @@
             "getCoordinateFromView",
             "Overlay"
           ],
-          "docs": "This example shows a simple polyline editor. It uses `onCameraChanged` to get the center of the map and `getCoordinateFromView`\n  to get the coordinates of the crosshair.\n\n  The crosshair is an overlay that is positioned using `onLayout` and `getCoordinateFromView`.\n\n  The `ShapeSource` is updated with the new coordinates and the `LineLayer` is updated with the new coordinates."
+          "docs": "This example shows a simple polyline editor. It uses `onCameraChanged` to get the center of the map and `getCoordinateFromView`\n  to get the coordinates of the crosshair.\n\n  The crosshair is an overlay that is positioned using `onLayout` and `getCoordinateFromView`.\n\n  The `ShapeSource` is updated with the new coordinates and the `LineLayer` is updated with the new coordinates.",
+          "webSupported": true
         },
         "fullPath": "example/src/examples/LineLayer/DrawPolyline.tsx",
         "relPath": "LineLayer/DrawPolyline.tsx",
@@ -924,7 +1048,8 @@
             "LineLayer",
             "LineLayer#lineGradient"
           ],
-          "docs": "This example demonstrates how to use interpolate expression in the `lineGradient` property of a `LineLayer` to create a gradient line."
+          "docs": "This example demonstrates how to use interpolate expression in the `lineGradient` property of a `LineLayer` to create a gradient line.",
+          "webSupported": true
         },
         "fullPath": "example/src/examples/LineLayer/GradientLine.js",
         "relPath": "LineLayer/GradientLine.js",
@@ -937,7 +1062,8 @@
             "VectorSource",
             "VectorSource#tileUrlTemplates"
           ],
-          "docs": "This example renders vector tiles using a third party vector tile source.\n\nIn this case, Mapillary provides the vector tiles, which are added to the map using VectorSource."
+          "docs": "This example renders vector tiles using a third party vector tile source.\n\nIn this case, Mapillary provides the vector tiles, which are added to the map using VectorSource.",
+          "webSupported": true
         },
         "fullPath": "example/src/examples/LineLayer/ThirdPartyVectorSource.js",
         "relPath": "LineLayer/ThirdPartyVectorSource.js",
@@ -958,7 +1084,8 @@
             "Camera",
             "Camera#zoomTo"
           ],
-          "docs": "Change camera via imperative methods"
+          "docs": "Change camera via imperative methods",
+          "webSupported": true
         },
         "fullPath": "example/src/examples/Camera/Fit.tsx",
         "relPath": "Camera/Fit.tsx",
@@ -970,7 +1097,9 @@
           "tags": [
             "Camera"
           ],
-          "docs": "\nChange camera via change of camera properties\n"
+          "docs": "\nChange camera via change of camera properties\n",
+          "excludeFromPercy": true,
+          "webSupported": true
         },
         "fullPath": "example/src/examples/Camera/FlyTo.js",
         "relPath": "Camera/FlyTo.js",
@@ -983,7 +1112,8 @@
             "Camera",
             "Camera#getCenter"
           ],
-          "docs": "\nGet center of map via Camera#getCenter\n"
+          "docs": "\nGet center of map via Camera#getCenter\n",
+          "webSupported": true
         },
         "fullPath": "example/src/examples/Camera/GetCenter.js",
         "relPath": "Camera/GetCenter.js",
@@ -996,11 +1126,27 @@
             "Camera",
             "Camera#getZoom"
           ],
-          "docs": "\nGet zoom level of map via Camera#getZoom\n"
+          "docs": "\nGet zoom level of map via Camera#getZoom\n",
+          "webSupported": true
         },
         "fullPath": "example/src/examples/Camera/GetZoom.js",
         "relPath": "Camera/GetZoom.js",
         "name": "GetZoom"
+      },
+      {
+        "metadata": {
+          "title": "Viewport Gestures",
+          "tags": [
+            "Viewport",
+            "Viewport#transitionsToIdleUponUserInteraction"
+          ],
+          "docs": "\nFollows a simulated moving location, and chooses which gestures stop following with `transitionsToIdleUponUserInteraction`.\n\nIn the object form, pan stops following, while zooming, rotating and pitching keep following and keep the user's value.\n",
+          "disableSync": true,
+          "webSupported": true
+        },
+        "fullPath": "example/src/examples/Camera/ViewportGestures.tsx",
+        "relPath": "Camera/ViewportGestures.tsx",
+        "name": "ViewportGestures"
       }
     ]
   }

@@ -78,7 +78,7 @@ class RNMBXPointAnnotationManagerView(context: Context) : AbstractMapFeature(con
             }
             mapView.pointAnnotations
         } else {
-            val c = RNMBXPointAnnotationCoordinator(mapView.mapView, reactId)
+            val c = RNMBXPointAnnotationCoordinator(mapView.mapPlugins, reactId)
             mapView.registerPointAnnotationCoordinator(c)
             c
         }

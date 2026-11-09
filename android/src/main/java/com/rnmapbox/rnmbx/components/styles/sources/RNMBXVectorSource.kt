@@ -35,15 +35,13 @@ class RNMBXVectorSource(context: Context?, private val mManager: RNMBXVectorSour
             return mMap!!.getStyle()!!.getSource(DEFAULT_ID) as VectorSource
         }
         val configurationUrl = uRL
-        return if (configurationUrl != null) {
-            VectorSource(
-                VectorSource.Builder(id)
-                    .url(configurationUrl)
-            )
-        } else VectorSource(
-            VectorSource.Builder(id)
-                .tileSet(buildTileset())
-        )
+        val builder = if (configurationUrl != null) {
+            VectorSource.Builder(id).url(configurationUrl)
+        } else {
+            VectorSource.Builder(id).tileSet(buildTileset())
+        }
+        promoteId?.let { builder.promoteId(it) }
+        return VectorSource(builder)
     }
 
     fun querySourceFeatures(

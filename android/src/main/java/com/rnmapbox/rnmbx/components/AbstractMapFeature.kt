@@ -5,9 +5,13 @@ import com.facebook.react.views.view.ReactViewGroup
 import com.rnmapbox.rnmbx.components.mapview.RNMBXMapView
 
 enum class RemovalReason {
+    /** The component was unmounted from its parent. */
     VIEW_REMOVAL,
+    /** The style is reloading; the component is added back once the new style loads. */
     STYLE_CHANGE,
+    /** The map is being torn down while the component is still attached to it. */
     ON_DESTROY,
+    /** The layer is being moved; it is added back right away. */
     REORDER
 }
 
