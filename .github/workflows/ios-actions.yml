@@ -74,6 +74,10 @@ jobs:
           UDID=$("$GITHUB_WORKSPACE/scripts/ci/pick-ios-simulator.sh")
           echo "DETOX_DEVICE_UDID=$UDID" >> "$GITHUB_ENV"
           xcrun simctl boot "$UDID"
+        # The doc site screenshots change size and rendering with the device and iOS version
+        env:
+          IOS_SIMULATOR_DEVICE: ${{ inputs.E2E_MODE == 'doc-screenshots' && 'iPhone 17' || '' }}
+          IOS_SIMULATOR_RUNTIME: ${{ inputs.E2E_MODE == 'doc-screenshots' && '26.5' || '' }}
 
       # Fork PRs get no secrets; fall back to the public rotated CI token (see rnmapbox/ci-config)
       - name: Access Token

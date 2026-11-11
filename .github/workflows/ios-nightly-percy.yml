@@ -100,6 +100,9 @@ jobs:
     needs: [check, ios]
     if: always() && needs.check.outputs.run == 'true'
     runs-on: ubuntu-latest
+    permissions:
+      actions: read
+      contents: read
     env:
       BRANCH: auto/example-screenshots
     steps:
@@ -122,6 +125,23 @@ jobs:
           ssh-key: ${{ secrets.MAPS_DOCS_DEPLOY_KEY }}
           path: maps-docs
 
+      # Skipped nightlies (no new commits) succeed without a capture, so look further back
+      - name: Download the previous capture
+        if: steps.download.outcome == 'success'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          for RUN in $(gh run list --repo "$GITHUB_REPOSITORY" --workflow ios-nightly-percy.yml \
+            --branch main --status success --limit 20 --json databaseId --jq '.[].databaseId'); do
+            if gh run download "$RUN" --repo "$GITHUB_REPOSITORY" --name doc-screenshots --dir previous; then
+              echo "Comparing with the capture of $GITHUB_SERVER_URL/$GITHUB_REPOSITORY/actions/runs/$RUN"
+              echo "PREVIOUS_CAPTURE=previous" >> "$GITHUB_ENV"
+              exit 0
+            fi
+            rm -rf previous
+          done
+          echo "No previous capture found"
+
       - uses: actions/setup-node@v4
         if: steps.download.outcome == 'success'
         with:
@@ -132,7 +152,8 @@ jobs:
         run: |
           npm install --no-save --prefix "$RUNNER_TEMP/deps" pngjs@7.0.0
           NODE_PATH="$RUNNER_TEMP/deps/node_modules" node maps/scripts/ci/update-doc-screenshots.js \
-            captured maps-docs/examples-screenshots maps/docs/examples.json "$RUNNER_TEMP/summary.md"
+            captured maps-docs/examples-screenshots maps/docs/examples.json "$RUNNER_TEMP/summary.md" \
+            ${PREVIOUS_CAPTURE:+"$PREVIOUS_CAPTURE"}
         env:
           REFRESH_UNSTABLE: ${{ inputs.refresh_unstable }}
 

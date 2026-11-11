@@ -1,8 +1,11 @@
 /**
- * @file node update-doc-screenshots.js <captured-dir> <docs-screenshots-dir> <examples.json> <summary.md>
+ * @file node update-doc-screenshots.js <captured-dir> <docs-screenshots-dir> <examples.json> <summary.md> [<previous-captured-dir>]
  * Copies the captured example screenshots that differ meaningfully into the doc site's
  * examples-screenshots folder, drops screenshots of removed examples, keeps screenshots.json
  * in sync and writes a markdown summary of what changed (empty if nothing did).
+ *
+ * With the previous night's capture, a changed screenshot is only copied if it matches that capture
+ * too, so one-off rendering and loading glitches never reach the doc site.
  *
  * excludeFromPercy examples differ by up to ~80% between runs (animations, timers), so they are only
  * replaced when new, when the screenshot size changed or with REFRESH_UNSTABLE=true.
@@ -12,13 +15,13 @@ const fs = require('fs');
 const path = require('path');
 const { PNG } = require('pngjs');
 
-const [capturedDir, docsDir, examplesJSONPath, summaryPath] =
+const [capturedDir, docsDir, examplesJSONPath, summaryPath, previousDir] =
   process.argv.slice(2);
 
 // The status bar can't be fully frozen (the location arrow comes and goes)
 const IGNORE_TOP_FRACTION = 0.075;
-const CHANNEL_TOLERANCE = 16;
-const THRESHOLD = 0.005;
+const CHANNEL_TOLERANCE = 32;
+const THRESHOLD = 0.0025;
 const refreshUnstable = process.env.REFRESH_UNSTABLE === 'true';
 
 function diffFraction(aPath, bPath) {
@@ -48,6 +51,7 @@ const changed = [];
 const added = [];
 const removed = [];
 const missing = [];
+const unstableChanges = [];
 const expected = new Set();
 
 for (const { groupName, examples: groupExamples } of examples) {
@@ -68,16 +72,34 @@ for (const { groupName, examples: groupExamples } of examples) {
     if (entry && fs.existsSync(dest)) {
       const fraction = diffFraction(captured, dest);
       const unstable = metadata.excludeFromPercy && !refreshUnstable;
-      if (fraction === null) {
-        changed.push(`${key} (size changed)`);
-      } else {
-        const percent = `${(fraction * 100).toFixed(1)}%`;
-        console.log(`${key}: ${percent}${unstable ? ' (unstable, kept)' : ''}`);
+      const change =
+        fraction === null
+          ? 'size changed'
+          : `${(fraction * 100).toFixed(2)}% of the pixels`;
+      if (fraction !== null) {
+        console.log(`${key}: ${change}${unstable ? ' (unstable, kept)' : ''}`);
         if (unstable || fraction <= THRESHOLD) {
           continue;
         }
-        changed.push(`${key} (${percent} of the pixels)`);
       }
+      if (previousDir && !metadata.excludeFromPercy) {
+        const previous = path.join(previousDir, groupName, `${name}.png`);
+        const sinceLastNight = fs.existsSync(previous)
+          ? diffFraction(captured, previous)
+          : null;
+        if (sinceLastNight === null || sinceLastNight > THRESHOLD) {
+          const reason =
+            sinceLastNight === null
+              ? 'no matching capture last night'
+              : `${(sinceLastNight * 100).toFixed(
+                  2,
+                )}% off last night's capture`;
+          console.log(`${key}: ${reason}, not updated`);
+          unstableChanges.push(`${key} (${change}, ${reason})`);
+          continue;
+        }
+      }
+      changed.push(`${key} (${change})`);
     } else {
       added.push(key);
     }
@@ -117,6 +139,12 @@ for (const file of fs.readdirSync(docsDir, { recursive: true })) {
   }
 }
 
+if (!previousDir) {
+  console.log(
+    "No previous capture, changed screenshots are updated without checking that they're stable",
+  );
+}
+
 if (missing.length > 0) {
   console.log(`Not captured, kept as is: ${missing.join(', ')}`);
 }
@@ -126,6 +154,9 @@ const sections = [
   ['New', added],
   ['Removed', removed],
 ].filter(([, keys]) => keys.length > 0);
+if (sections.length > 0 && unstableChanges.length > 0) {
+  sections.push(['Unstable, not updated', unstableChanges]);
+}
 
 if (sections.length === 0) {
   fs.writeFileSync(summaryPath, '');
