@@ -4,10 +4,14 @@ import com.mapbox.common.HttpRequest
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertFalse
+import org.junit.jupiter.api.Assertions.assertNull
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test
 import org.mockito.kotlin.doReturn
 import org.mockito.kotlin.mock
+import java.util.concurrent.CountDownLatch
+import java.util.concurrent.atomic.AtomicReference
+import kotlin.concurrent.thread
 
 class CustomHttpHeadersTest {
     private val tileUrl =
@@ -15,12 +19,12 @@ class CustomHttpHeadersTest {
 
     @AfterEach
     fun tearDown() {
-        CustomHttpHeaders.map.clear()
+        CustomHttpHeaders.headers.keys.forEach { CustomHttpHeaders.removeCustomHeader(it) }
     }
 
-    private fun request(url: String): HttpRequest = mock {
+    private fun request(url: String, headers: HashMap<String, String> = hashMapOf()): HttpRequest = mock {
         on { this.url } doReturn url
-        on { headers } doReturn hashMapOf()
+        on { this.headers } doReturn headers
     }
 
     @Test
@@ -72,20 +76,21 @@ class CustomHttpHeadersTest {
 
     @Test
     fun `headers are added only to matching urls`() {
-        CustomHttpHeaders.map["X-Anchored"] = CustomHttpHeadersMapValue(
-            headerValue = "anchored",
-            options = CustomHttpHeadersOptions(urlRegexp = "^https://tiles\\.example\\.com/".toRegex()),
+        CustomHttpHeaders.addCustomHeader(
+            "X-Anchored",
+            "anchored",
+            CustomHttpHeadersOptions(urlRegexp = "^https://tiles\\.example\\.com/".toRegex()),
         )
-        CustomHttpHeaders.map["X-Global"] = CustomHttpHeadersMapValue(headerValue = "global", options = null)
+        CustomHttpHeaders.addCustomHeader("X-Global", "global")
 
         assertEquals(
             mapOf("X-Anchored" to "anchored", "X-Global" to "global"),
-            CustomHttpHeaders.getCustomRequestHeaders(CustomHttpHeaders.map, request(tileUrl)),
+            CustomHttpHeaders.getCustomRequestHeaders(CustomHttpHeaders.headers, request(tileUrl)),
         )
         assertEquals(
             mapOf("X-Global" to "global"),
             CustomHttpHeaders.getCustomRequestHeaders(
-                CustomHttpHeaders.map,
+                CustomHttpHeaders.headers,
                 request("https://tiles.example.com.evil.com/v1/map"),
             ),
         )
@@ -93,12 +98,81 @@ class CustomHttpHeadersTest {
 
     @Test
     fun `removeCustomHeader stops sending the header`() {
-        CustomHttpHeaders.map["X-Global"] = CustomHttpHeadersMapValue(headerValue = "global", options = null)
+        CustomHttpHeaders.addCustomHeader("X-Global", "global")
         CustomHttpHeaders.removeCustomHeader("X-Global")
 
         assertEquals(
             emptyMap<String, String>(),
-            CustomHttpHeaders.getCustomRequestHeaders(CustomHttpHeaders.map, request(tileUrl)),
+            CustomHttpHeaders.getCustomRequestHeaders(CustomHttpHeaders.headers, request(tileUrl)),
         )
+    }
+
+    @Test
+    fun `getCustomRequestHeaders uses the headers it is given`() {
+        CustomHttpHeaders.addCustomHeader("X-Published", "published")
+
+        assertEquals(
+            mapOf("X-Given" to "given"),
+            CustomHttpHeaders.getCustomRequestHeaders(
+                mapOf("X-Given" to CustomHttpHeadersMapValue(headerValue = "given", options = null)),
+                request(tileUrl),
+            ),
+        )
+    }
+
+    @Test
+    fun `Authorization is kept when no custom headers are set`() {
+        val headers = hashMapOf("Authorization" to "Bearer token")
+        CustomHttpHeaders.addCustomHeader("X-Global", "global")
+        CustomHttpHeaders.removeCustomHeader("X-Global")
+
+        CustomHttpHeaders.applyTo(request(tileUrl, headers))
+
+        assertEquals(mapOf("Authorization" to "Bearer token"), headers)
+    }
+
+    @Test
+    fun `Authorization is replaced by custom headers when they are set`() {
+        val headers = hashMapOf("Authorization" to "Bearer token")
+        CustomHttpHeaders.addCustomHeader("X-Global", "global")
+
+        CustomHttpHeaders.applyTo(request(tileUrl, headers))
+
+        assertEquals(mapOf("X-Global" to "global"), headers)
+    }
+
+    @Test
+    fun `adding and removing headers while requests read them does not fail`() {
+        val request: HttpRequest = mock(stubOnly = true) {
+            on { url } doReturn tileUrl
+            on { headers } doReturn hashMapOf()
+        }
+        val failure = AtomicReference<Throwable?>(null)
+        val start = CountDownLatch(1)
+        val end = System.currentTimeMillis() + 3000
+        val writer = thread(name = "native-module-writer") {
+            start.await()
+            var i = 0
+            while (System.currentTimeMillis() < end && failure.get() == null) {
+                CustomHttpHeaders.addCustomHeader("X-Header-${i % 64}", "v$i")
+                CustomHttpHeaders.removeCustomHeader("X-Header-${(i + 32) % 64}")
+                i++
+            }
+        }
+        val reader = thread(name = "mapbox-http") {
+            start.await()
+            try {
+                while (System.currentTimeMillis() < end) {
+                    CustomHttpHeaders.applyTo(request)
+                }
+            } catch (t: Throwable) {
+                failure.set(t)
+            }
+        }
+        start.countDown()
+        writer.join()
+        reader.join()
+
+        assertNull(failure.get()) { "reader failed: ${failure.get()?.stackTraceToString()}" }
     }
 }
