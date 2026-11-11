@@ -136,6 +136,8 @@ jobs:
             if gh run download "$RUN" --repo "$GITHUB_REPOSITORY" --name doc-screenshots --dir previous; then
               echo "Comparing with the capture of $GITHUB_SERVER_URL/$GITHUB_REPOSITORY/actions/runs/$RUN"
               echo "PREVIOUS_CAPTURE=previous" >> "$GITHUB_ENV"
+              gh run download "$RUN" --repo "$GITHUB_REPOSITORY" --name doc-screenshot-history --dir history \
+                || echo "No flaky screenshot history in that run, starting a new one"
               exit 0
             fi
             rm -rf previous
@@ -150,12 +152,20 @@ jobs:
       - name: Update changed screenshots
         if: steps.download.outcome == 'success'
         run: |
+          mkdir -p history
           npm install --no-save --prefix "$RUNNER_TEMP/deps" pngjs@7.0.0
           NODE_PATH="$RUNNER_TEMP/deps/node_modules" node maps/scripts/ci/update-doc-screenshots.js \
             captured maps-docs/examples-screenshots maps/docs/examples.json "$RUNNER_TEMP/summary.md" \
             ${PREVIOUS_CAPTURE:+"$PREVIOUS_CAPTURE"}
         env:
           REFRESH_UNSTABLE: ${{ inputs.refresh_unstable }}
+          FLAKY_HISTORY: history/flaky.json
+
+      - uses: actions/upload-artifact@v4
+        if: steps.download.outcome == 'success'
+        with:
+          name: doc-screenshot-history
+          path: history/flaky.json
 
       # Rebuilt on top of maps-docs main every time, so it never conflicts with the docs pushed
       # to main by update-docs.yml. maps-docs opens the PR from it. Only examples-screenshots is

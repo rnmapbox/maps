@@ -5,7 +5,9 @@
  * in sync and writes a markdown summary of what changed (empty if nothing did).
  *
  * With the previous night's capture, a changed screenshot is only copied if it matches that capture
- * too, so one-off rendering and loading glitches never reach the doc site.
+ * too, so one-off rendering and loading glitches never reach the doc site. FLAKY_HISTORY is a JSON file
+ * that counts the nights in a row each screenshot was held back this way; after FLAKY_NIGHTS it is
+ * updated anyway and flagged for a manual look, so a real change can't hide behind the noise.
  *
  * excludeFromPercy examples differ by up to ~80% between runs (animations, timers), so they are only
  * replaced when new, when the screenshot size changed or with REFRESH_UNSTABLE=true.
@@ -22,7 +24,11 @@ const [capturedDir, docsDir, examplesJSONPath, summaryPath, previousDir] =
 const IGNORE_TOP_FRACTION = 0.075;
 const CHANNEL_TOLERANCE = 32;
 const THRESHOLD = 0.0025;
+const FLAKY_NIGHTS = 5;
+const RECENT_NIGHTS = 7;
 const refreshUnstable = process.env.REFRESH_UNSTABLE === 'true';
+const historyPath = process.env.FLAKY_HISTORY;
+const today = process.env.FLAKY_DATE || new Date().toISOString().slice(0, 10);
 
 function diffFraction(aPath, bPath) {
   const a = PNG.sync.read(fs.readFileSync(aPath));
@@ -52,7 +58,17 @@ const added = [];
 const removed = [];
 const missing = [];
 const unstableChanges = [];
+const flakyUpdated = [];
 const expected = new Set();
+
+const history =
+  historyPath && fs.existsSync(historyPath)
+    ? JSON.parse(fs.readFileSync(historyPath, 'utf8'))
+    : {};
+const newHistory = {};
+
+const percent = (fraction) =>
+  fraction === null ? 'size changed' : `${(fraction * 100).toFixed(2)}%`;
 
 for (const { groupName, examples: groupExamples } of examples) {
   for (const { name, metadata } of groupExamples) {
@@ -64,6 +80,9 @@ for (const { groupName, examples: groupExamples } of examples) {
     const captured = path.join(capturedDir, groupName, `${name}.png`);
     if (!fs.existsSync(captured)) {
       missing.push(key);
+      if (history[key]) {
+        newHistory[key] = history[key];
+      }
       continue;
     }
     const image = `examples-screenshots/${groupName}/${name}.png`;
@@ -82,6 +101,8 @@ for (const { groupName, examples: groupExamples } of examples) {
           continue;
         }
       }
+      let updated = changed;
+      let line = `${key} (${change})`;
       if (previousDir && !metadata.excludeFromPercy) {
         const previous = path.join(previousDir, groupName, `${name}.png`);
         const sinceLastNight = fs.existsSync(previous)
@@ -91,15 +112,31 @@ for (const { groupName, examples: groupExamples } of examples) {
           const reason =
             sinceLastNight === null
               ? 'no matching capture last night'
-              : `${(sinceLastNight * 100).toFixed(
-                  2,
-                )}% off last night's capture`;
-          console.log(`${key}: ${reason}, not updated`);
-          unstableChanges.push(`${key} (${change}, ${reason})`);
-          continue;
+              : `${percent(sinceLastNight)} off last night's capture`;
+          const flaky = {
+            nights: (history[key]?.nights ?? 0) + 1,
+            firstSeen: history[key]?.firstSeen ?? today,
+            recent: [
+              ...(history[key]?.recent ?? []),
+              {
+                date: today,
+                docs: percent(fraction),
+                lastNight: percent(sinceLastNight),
+              },
+            ].slice(-RECENT_NIGHTS),
+          };
+          line = `${key} (${change}, ${reason}, unstable nights: ${flaky.nights} since ${flaky.firstSeen})`;
+          if (flaky.nights < FLAKY_NIGHTS) {
+            console.log(`${line}: not updated`);
+            unstableChanges.push(line);
+            newHistory[key] = flaky;
+            continue;
+          }
+          console.log(`${line}: updated anyway`);
+          updated = flakyUpdated;
         }
       }
-      changed.push(`${key} (${change})`);
+      updated.push(line);
     } else {
       added.push(key);
     }
@@ -145,6 +182,32 @@ if (!previousDir) {
   );
 }
 
+// Without last night's capture nothing was checked, so the history carries over as is
+const flakyHistory = previousDir ? newHistory : history;
+if (historyPath) {
+  fs.writeFileSync(historyPath, JSON.stringify(flakyHistory, null, 2));
+}
+
+const flakyRows = Object.entries(flakyHistory).map(
+  ([key, { nights, firstSeen, recent }]) =>
+    `| ${key} | ${nights} | ${firstSeen} | ${recent
+      .map(({ docs, lastNight }) => `${docs} / ${lastNight}`)
+      .join(', ')} |`,
+);
+if (process.env.GITHUB_STEP_SUMMARY && flakyRows.length > 0) {
+  fs.appendFileSync(
+    process.env.GITHUB_STEP_SUMMARY,
+    [
+      `Unstable screenshots, updated for a manual look after ${FLAKY_NIGHTS} nights in a row:`,
+      '',
+      '| screenshot | nights | since | off the docs / off last night |',
+      '| --- | --- | --- | --- |',
+      ...flakyRows,
+      '',
+    ].join('\n'),
+  );
+}
+
 if (missing.length > 0) {
   console.log(`Not captured, kept as is: ${missing.join(', ')}`);
 }
@@ -153,6 +216,10 @@ const sections = [
   ['Changed', changed],
   ['New', added],
   ['Removed', removed],
+  [
+    `Flaky, updated after ${FLAKY_NIGHTS} unstable nights, check by hand`,
+    flakyUpdated,
+  ],
 ].filter(([, keys]) => keys.length > 0);
 if (sections.length > 0 && unstableChanges.length > 0) {
   sections.push(['Unstable, not updated', unstableChanges]);
