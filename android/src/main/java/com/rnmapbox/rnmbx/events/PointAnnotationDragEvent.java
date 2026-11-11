@@ -41,6 +41,12 @@ public class PointAnnotationDragEvent extends MapClickEvent {
     }
 
     @Override
+    public boolean canCoalesce() {
+        // Only the moves between drag start and drag end
+        return getKey().equals(EventKeys.POINT_ANNOTATION_DRAG.getValue());
+    }
+
+    @Override
     public WritableMap getPayload() {
         WritableMap properties = new WritableNativeMap();
         properties.putDouble("screenPointX", mScreenPoint.x);

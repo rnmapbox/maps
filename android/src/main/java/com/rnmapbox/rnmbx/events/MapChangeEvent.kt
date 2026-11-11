@@ -32,6 +32,10 @@ class MapChangeEvent constructor(
 
 public
 class CameraChangeEvent(view: View, eventType: String, payload: WritableMap) : MapChangeEvent(view, eventType, payload) {
+    // Its own event name, as on iOS: topMapChange only carries events that are never coalesced
+    override val key: String
+        get() = EventKeys.MAP_CAMERA_CHANGED.value
+
     override fun canCoalesce(): Boolean {
         return true
     }
