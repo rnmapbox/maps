@@ -304,22 +304,65 @@ class RNMBXOfflineModule: RCTEventEmitter {
     self.tileStore.allTileRegions { result in
       switch result {
       case .success(let regions):
-        regions.forEach { region in
-          self.tileStore.removeTileRegion(forId: region.id)
+        let removals = DispatchGroup()
+        let errorLock = NSLock()
+        var removalError: Error?
+
+        func recordRemovalError(_ error: Error) {
+          errorLock.lock()
+          if removalError == nil {
+            removalError = error
+          }
+          errorLock.unlock()
         }
-        self.offlineManager.allStylePacks { result in
-          switch result {
-          case .success(let packs):
-            packs.forEach { pack in
-              if let url = logged("RNMBXOfflineModule.resetDatabase invalid styleURI",fn: { return URL(string: pack.styleURI) }),
-                 let styleUri = logged("RNMBXOfflineModule.resetDatabase invalid styleURI2", fn: { return StyleURI(url: url) }) {
-                self.offlineManager.removeStylePack(for: styleUri)
-              }
+
+        regions.forEach { region in
+          removals.enter()
+          self.tileStore.removeRegion(forId: region.id) { result in
+            if case .failure(let error) = result {
+              recordRemovalError(error)
             }
-            resolve(nil)
-          case .failure(let error):
-            Logger.log(level:.error, message: "RNMBXOfflineModule.resetDatabase/allStylePacks \(error.localizedDescription) \(error)")
-            rejecter("RNMBXOfflineModule.resetDatabase/allStylePacks", error.localizedDescription, error)
+            removals.leave()
+          }
+        }
+
+        // Continue style-pack work on the module's main queue.
+        removals.notify(queue: .main) {
+          if let error = removalError {
+            rejecter("RNMBXOfflineModule.resetDatabase/removeTileRegion", error.localizedDescription, error)
+            return
+          }
+
+          self.offlineManager.allStylePacks { result in
+            switch result {
+            case .success(let packs):
+              let stylePackRemovals = DispatchGroup()
+              packs.forEach { pack in
+                guard let url = logged("RNMBXOfflineModule.resetDatabase invalid styleURI", fn: { URL(string: pack.styleURI) }),
+                      let styleUri = logged("RNMBXOfflineModule.resetDatabase invalid styleURI2", fn: { StyleURI(url: url) }) else {
+                  return
+                }
+
+                stylePackRemovals.enter()
+                self.offlineManager.removeStylePack(for: styleUri) { result in
+                  if case .failure(let error) = result {
+                    recordRemovalError(error)
+                  }
+                  stylePackRemovals.leave()
+                }
+              }
+
+              stylePackRemovals.notify(queue: .main) {
+                if let error = removalError {
+                  rejecter("RNMBXOfflineModule.resetDatabase/removeStylePack", error.localizedDescription, error)
+                } else {
+                  resolve(nil)
+                }
+              }
+            case .failure(let error):
+              Logger.log(level:.error, message: "RNMBXOfflineModule.resetDatabase/allStylePacks \(error.localizedDescription) \(error)")
+              rejecter("RNMBXOfflineModule.resetDatabase/allStylePacks", error.localizedDescription, error)
+            }
           }
         }
       case .failure(let error):
