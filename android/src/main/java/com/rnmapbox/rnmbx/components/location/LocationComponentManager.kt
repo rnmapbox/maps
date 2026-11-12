@@ -31,7 +31,11 @@ import com.rnmapbox.rnmbx.v11compat.location.PuckBearing
  * LocationComponentManager attempts to separate that, so that Camera can ask for location tracking independent of display of user current location.
  * And NativeUserLocation can ask for display of user's current location - independent of Camera's user tracking.
  */
-class LocationComponentManager(mapView: RNMBXMapView, context: Context) {
+class LocationComponentManager(
+    mapView: RNMBXMapView,
+    context: Context,
+    private val locationManager: LocationManager = LocationManager.getInstance(context),
+) {
     private val MAPBOX_BLUE_COLOR = Color.parseColor("#4A90E2")
 
     var mMapView = mapView
@@ -46,8 +50,6 @@ class LocationComponentManager(mapView: RNMBXMapView, context: Context) {
         shadowImage = null,
         scale = 1.0,
     )
-
-    private var mLocationManager: LocationManager = LocationManager.getInstance(context)
 
     private var mNeedsFullUpdate = true
 
@@ -187,14 +189,14 @@ class LocationComponentManager(mapView: RNMBXMapView, context: Context) {
 
     private fun startLocationManager() {
         if (!mLocationManagerStarted) {
-            mLocationManager.startCounted()
+            locationManager.startCounted()
             mLocationManagerStarted = true
         }
     }
 
     private fun stopLocationManager() {
         if (mLocationManagerStarted) {
-            mLocationManager.stopCounted()
+            locationManager.stopCounted()
             mLocationManagerStarted = false
         }
     }
@@ -202,14 +204,14 @@ class LocationComponentManager(mapView: RNMBXMapView, context: Context) {
     private fun useMapLocationProvider(mapView: RNMBXMapView) {
         val provider = mapView.mapPlugins.location.getLocationProvider()
         if (provider != null) {
-            mLocationManager.provider = provider
+            locationManager.provider = provider
         }
     }
 
 
-    fun showNativeUserLocation(showUserLocation: Boolean) {
+    fun showNativeUserLocation(showUserLocation: Boolean, visible: Boolean) {
         update {
-            it.copy(showUserLocation = showUserLocation, nativeUserLocation= showUserLocation)
+            it.copy(showUserLocation = showUserLocation && visible, nativeUserLocation = showUserLocation)
         }
     }
 
