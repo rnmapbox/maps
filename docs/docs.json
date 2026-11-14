@@ -5145,38 +5145,50 @@
       },
       {
         "name": "setStyleLayerProperty",
-        "docblock": "Sets the value of a property for a specific layer referencing the specified `layerId`\n\n@example\nawait this._map.setStyleLayerProperty('my-layer', 'visibility', 'none')\n\n@param {String} layerId - layerId\n@param {String} propertyName - propertyName\n@param {String} propertyValue - propertyValue",
-        "modifiers": [],
+        "docblock": "Sets a property of a style layer, e.g. one coming from `styleURL`.\nMirrors the Mapbox SDK's `setStyleLayerProperty`; rejects if the layer or property is invalid.\n\n@example\nawait this._map.setStyleLayerProperty('building', 'visibility', 'none')\n\n@param {string} layerId Style layer identifier.\n@param {string} property Layout or paint property name, e.g. `visibility` or `fill-color`.\n@param {NativeArg} value Property value, which can be an expression.",
+        "modifiers": [
+          "async"
+        ],
         "params": [
           {
             "name": "layerId",
-            "description": "layerId",
+            "description": "Style layer identifier.",
             "type": {
               "name": "string"
             },
             "optional": false
           },
           {
-            "name": "propertyName",
-            "description": "propertyName",
+            "name": "property",
+            "description": "Layout or paint property name, e.g. `visibility` or `fill-color`.",
             "type": {
               "name": "string"
             },
             "optional": false
           },
           {
-            "name": "propertyValue",
-            "description": "propertyValue",
+            "name": "value",
+            "description": "Property value, which can be an expression.",
             "type": {
-              "name": "string"
+              "name": "NativeArg"
             },
             "optional": false
           }
         ],
-        "returns": null,
-        "description": "Sets the value of a property for a specific layer referencing the specified `layerId`",
+        "returns": {
+          "type": {
+            "name": "Promise",
+            "elements": [
+              {
+                "name": "void"
+              }
+            ],
+            "raw": "Promise<void>"
+          }
+        },
+        "description": "Sets a property of a style layer, e.g. one coming from `styleURL`.\nMirrors the Mapbox SDK's `setStyleLayerProperty`; rejects if the layer or property is invalid.",
         "examples": [
-          "\nawait this._map.setStyleLayerProperty('my-layer', 'visibility', 'none')\n\n"
+          "\nawait this._map.setStyleLayerProperty('building', 'visibility', 'none')\n\n"
         ]
       },
       {

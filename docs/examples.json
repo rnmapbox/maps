@@ -547,7 +547,7 @@
         "metadata": {
           "title": "Source Layer Visibility",
           "tags": [
-            "MapView#setSourceVisibility"
+            "MapView#setSoruceVisibility"
           ],
           "docs": "\nChanges visibility of layers using a source in the map\n",
           "webSupported": true
@@ -555,18 +555,6 @@
         "fullPath": "example/src/examples/Map/SourceLayerVisibility.js",
         "relPath": "Map/SourceLayerVisibility.js",
         "name": "SourceLayerVisibility"
-      },
-      {
-        "metadata": {
-          "title": "Style Layer Property",
-          "tags": [
-            "MapView#setStyleLayerProperty"
-          ],
-          "docs": "\nChanges the property of a layer using the specified layerId\n"
-        },
-        "fullPath": "example/src/examples/Map/StyleLayerProperty.js",
-        "relPath": "Map/StyleLayerProperty.js",
-        "name": "StyleLayerProperty"
       },
       {
         "metadata": {
@@ -580,6 +568,18 @@
         "fullPath": "example/src/examples/Map/StyleJson.js",
         "relPath": "Map/StyleJson.js",
         "name": "StyleJson"
+      },
+      {
+        "metadata": {
+          "title": "Style Layer Property",
+          "tags": [
+            "MapView#setStyleLayerProperty"
+          ],
+          "docs": "Toggles the visibility of the `building` layer of the default style with `setStyleLayerProperty`."
+        },
+        "fullPath": "example/src/examples/Map/StyleLayerProperty.tsx",
+        "relPath": "Map/StyleLayerProperty.tsx",
+        "name": "StyleLayerProperty"
       },
       {
         "metadata": {

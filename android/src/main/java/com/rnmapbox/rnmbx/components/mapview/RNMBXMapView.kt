@@ -1360,6 +1360,20 @@ open class RNMBXMapView(private val mContext: Context, var mManager: RNMBXMapVie
         }
     }
 
+    fun setStyleLayerProperty(
+      layerId: String,
+      property: String,
+      value: Value,
+      response: CommandResponse
+    ) {
+        val expected = mMap.setStyleLayerProperty(layerId, property, value)
+        if (expected.isError) {
+            response.error(expected.error!!)
+        } else {
+            response.success { }
+        }
+    }
+
     fun setFeatureState(
       featureId: String,
       state: HashMap<String, Value>,
@@ -1471,41 +1485,6 @@ open class RNMBXMapView(private val mContext: Context, var mManager: RNMBXMapVie
                     if (visible) Visibility.VISIBLE else Visibility.NONE
                 )
             }
-        }
-    }
-    
-    fun setStyleLayerProperty(
-        layerId: String, 
-        propertyName: String, 
-        propertyValue: String
-    ): Boolean {
-        if (mMap == null) {
-            Logger.e("MapView", "setStyleLayerProperty, map is null")
-            return false
-        }
-
-        val style = mMap.getStyle()
-        if (style == null) {
-            Logger.e("MapView", "setStyleLayerProperty, style is null")
-            return false
-        }
-
-        try {
-            val result = style.setStyleLayerProperty(
-                layerId,
-                propertyName,
-                Value.valueOf(propertyValue)
-            )
-
-            if (result.isError) {
-                Logger.e("MapView", "setStyleLayerProperty error: ${result.error}")
-                return false
-            }
-
-            return true
-        } catch (e: Exception) {
-            Logger.e("MapView", "setStyleLayerProperty exception: ${e.message}")
-            return false
         }
     }
     // endregion
