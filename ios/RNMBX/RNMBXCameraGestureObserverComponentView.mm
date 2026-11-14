@@ -79,6 +79,49 @@ using namespace facebook::react;
   }
 }
 
+- (void)setHasOnCameraChanged:(BOOL)hasOnCameraChanged {
+  [_view setHasOnCameraChanged:hasOnCameraChanged];
+  if (!hasOnCameraChanged) {
+    [_view setOnCameraChanged:nil];
+    return;
+  }
+  __weak __typeof__(self) weakSelf = self;
+  [_view setOnCameraChanged:^(NSDictionary* state) {
+    __typeof__(self) strongSelf = weakSelf;
+    if (strongSelf == nullptr || strongSelf->_eventEmitter == nullptr) {
+      return;
+    }
+    using EventEmitterT = facebook::react::RNMBXCameraGestureObserverEventEmitter;
+    NSDictionary *properties = state[@"properties"];
+    NSDictionary *bounds = properties[@"bounds"];
+    auto toVector = [](NSArray<NSNumber *> *position) {
+      std::vector<double> result;
+      for (NSNumber *value in position) {
+        result.push_back(value.doubleValue);
+      }
+      return result;
+    };
+    EventEmitterT::OnCameraChanged event = {
+      .properties = {
+        .center = toVector(properties[@"center"]),
+        .bounds = {
+          .ne = toVector(bounds[@"ne"]),
+          .sw = toVector(bounds[@"sw"]),
+        },
+        .zoom = [properties[@"zoom"] doubleValue],
+        .heading = [properties[@"heading"] doubleValue],
+        .pitch = [properties[@"pitch"] doubleValue],
+        .isUserInteraction = [properties[@"isUserInteraction"] boolValue],
+      },
+      .gestures = {
+        .isGestureActive = [state[@"gestures"][@"isGestureActive"] boolValue],
+      },
+      .timestamp = [state[@"timestamp"] doubleValue],
+    };
+    std::dynamic_pointer_cast<const EventEmitterT>(strongSelf->_eventEmitter)->onCameraChanged(event);
+  }];
+}
+
 #pragma mark - RCTComponentViewProtocol
 
 + (ComponentDescriptorProvider)componentDescriptorProvider
@@ -97,6 +140,9 @@ using namespace facebook::react;
 
   if (!oldProps.get() || oldViewProps.hasOnMapSteady != newViewProps.hasOnMapSteady) {
     [self setHasOnMapSteady:newViewProps.hasOnMapSteady.asBool()];
+  }
+  if (!oldProps.get() || oldViewProps.hasOnCameraChanged != newViewProps.hasOnCameraChanged) {
+    [self setHasOnCameraChanged:newViewProps.hasOnCameraChanged.asBool()];
   }
 
   [super updateProps:props oldProps:oldProps];

@@ -25,7 +25,13 @@ class NativeMapViewModule(context: ReactApplicationContext, val viewTagResolver:
         if (viewRef == null) {
             reject.reject(Exception("viewRef is null"))
         } else {
-            viewTagResolver.withViewResolved(viewRef.toInt(), reject, fn)
+            viewTagResolver.withViewResolved<RNMBXMapView>(viewRef.toInt(), reject) { mapView ->
+                if (mapView.isInitialized) {
+                    fn(mapView)
+                } else {
+                    reject.reject(Exception("The MapView has no map"))
+                }
+            }
         }
     }
 

@@ -1,8 +1,8 @@
 import React from 'react';
 import {
-  NativeMethods,
+  type NativeMethods,
   NativeModules,
-  NativeSyntheticEvent,
+  type NativeSyntheticEvent,
 } from 'react-native';
 
 import RNMBXShapeSourceNativeComponent from '../specs/RNMBXShapeSourceNativeComponent';
@@ -14,8 +14,9 @@ import {
   isAndroid,
 } from '../utils';
 import { copyPropertiesAsDeprecated } from '../utils/deprecation';
-import { OnPressEvent } from '../types/OnPressEvent';
-import { ShapeAnimatorInterface } from '../shapeAnimators';
+import { type OnPressEvent } from '../types/OnPressEvent';
+import { type ShapeAnimatorInterface } from '../shapeAnimators';
+import { type Expression } from '../utils/MapboxStyles';
 
 import AbstractSource from './AbstractSource';
 import NativeBridgeComponent from './NativeBridgeComponent';
@@ -72,6 +73,13 @@ export type Props = {
   clusterMaxZoomLevel?: number;
 
   /**
+   * Specifies the minimum number of points to form a cluster if clustering is enabled.
+   * The default value is 2. It is applied when the source is added to the map; changing it
+   * later requires remounting the ShapeSource.
+   */
+  clusterMinPoints?: number;
+
+  /**
    * [`mapbox-gl` (v8) implementation only]
    * Specifies custom properties on the generated clusters if clustering
    * is enabled, aggregating values from clustered points.
@@ -87,11 +95,23 @@ export type Props = {
   clusterProperties?: object;
 
   /**
+   * A feature property to use as the feature id, for example with `setFeatureState`.
+   * Either a property name or an expression that evaluates to the id.
+   */
+  promoteId?: string | Expression;
+
+  /**
    * Specifies the maximum zoom level at which to create vector tiles.
    * A greater value produces greater detail at high zoom levels.
    * The default value is 18.
    */
   maxZoomLevel?: number;
+
+  /**
+   * Specifies the minimum zoom level at which to create vector tiles.
+   * The default value is 0.
+   */
+  minZoomLevel?: number;
 
   /**
    * Specifies the size of the tile buffer on each side.
@@ -128,7 +148,7 @@ export type Props = {
   onPress?: (event: OnPressEvent) => void;
 
   /**
-   * Overrides the default touch hitbox(44x44 pixels) for the source layers
+   * Overrides the default touch hitbox (44x44 points) for the source layers
    */
   hitbox?: {
     /**
@@ -310,8 +330,11 @@ export class ShapeSource extends NativeBridgeComponent(
       cluster: this.props.cluster ? 1 : 0,
       clusterRadius: this.props.clusterRadius,
       clusterMaxZoomLevel: this.props.clusterMaxZoomLevel,
+      clusterMinPoints: this.props.clusterMinPoints,
       clusterProperties: this.props.clusterProperties,
+      promoteId: this.props.promoteId,
       maxZoomLevel: this.props.maxZoomLevel,
+      minZoomLevel: this.props.minZoomLevel,
       buffer: this.props.buffer,
       tolerance: this.props.tolerance,
       lineMetrics: this.props.lineMetrics,

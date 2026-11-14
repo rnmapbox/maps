@@ -1,5 +1,5 @@
 import React from 'react';
-import { NativeMethods } from 'react-native';
+import { type NativeMethods } from 'react-native';
 
 import type { BaseProps } from '../types/BaseProps';
 

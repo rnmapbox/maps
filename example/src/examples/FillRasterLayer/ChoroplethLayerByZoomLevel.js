@@ -108,5 +108,6 @@ const metadata = {
   title: 'Choropleth Layer By Zoom Level',
   tags: ['VectorSource'],
   docs: '',
+  webSupported: true,
 };
 ChoroplethLayerByZoomLevel.metadata = metadata;

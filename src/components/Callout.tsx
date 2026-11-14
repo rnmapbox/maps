@@ -1,11 +1,11 @@
-import React, { ReactNode } from 'react';
+import React, { type ReactNode } from 'react';
 import {
   View,
   Text,
   Animated,
   StyleSheet,
-  ViewStyle,
-  ViewProps,
+  type ViewStyle,
+  type ViewProps,
 } from 'react-native';
 
 import RNMBXCalloutNativeComponent from '../specs/RNMBXCalloutNativeComponent';

@@ -9,6 +9,8 @@ import com.mapbox.android.gestures.MoveGestureDetector
 import com.mapbox.android.gestures.RotateGestureDetector
 import com.mapbox.android.gestures.ShoveGestureDetector
 import com.mapbox.android.gestures.StandardScaleGestureDetector
+import com.mapbox.common.Cancelable
+import com.mapbox.maps.MapboxMap
 import com.mapbox.maps.plugin.animation.CameraAnimationsLifecycleListener
 import com.mapbox.maps.plugin.animation.CameraAnimatorType
 import com.mapbox.maps.plugin.gestures.OnMoveListener
@@ -25,6 +27,7 @@ class RNMBXCameraGestureObserver(
 ) : AbstractMapFeature(mContext) {
 
     var hasOnMapSteady: Boolean = false
+    var hasOnCameraChanged: Boolean = false
     var quietPeriodMs: Double? = null
     var maxIntervalMs: Double? = null
 
@@ -32,11 +35,14 @@ class RNMBXCameraGestureObserver(
 
     private val handler = Handler(Looper.getMainLooper())
     private var activeAnimations: Int = 0
-    private var isGestureActive: Boolean = false
+    private var activeGestures: Int = 0
+    private val isGestureActive: Boolean get() = activeGestures > 0
     private var lastGestureType: String? = null
     private var lastTransitionEndedAtMs: Double? = null
     private var quietRunnable: Runnable? = null
     private var timeoutRunnable: Runnable? = null
+    private var mapboxMap: MapboxMap? = null
+    private var cameraChangedCancelable: Cancelable? = null
 
     private val quietMs: Double get() = quietPeriodMs ?: 200.0
     private val maxMs: Double? get() = maxIntervalMs
@@ -83,6 +89,7 @@ class RNMBXCameraGestureObserver(
     }
 
     private fun scheduleQuietCheck() {
+        if (!hasOnMapSteady) return
         cancelQuietTimer()
         val delay = quietMs
         if (delay <= 0) {
@@ -98,7 +105,7 @@ class RNMBXCameraGestureObserver(
     }
 
     private fun scheduleTimeout() {
-        if (timeoutRunnable != null) return
+        if (!hasOnMapSteady || timeoutRunnable != null) return
         val delay = maxMs ?: return
         val runnable = Runnable {
             timeoutRunnable = null
@@ -141,111 +148,121 @@ class RNMBXCameraGestureObserver(
         scheduleTimeout()
     }
 
+    private val animationsListener = object : CameraAnimationsLifecycleListener {
+        override fun onAnimatorStarting(
+            type: CameraAnimatorType,
+            animator: ValueAnimator,
+            owner: String?
+        ) {
+            if (owner != GESTURES_ANIMATION_OWNER) return
+            activeAnimations++
+            lastTransitionEndedAtMs = null
+            markActivity()
+            debugLog("camera animator started")
+        }
+
+        override fun onAnimatorEnding(
+            type: CameraAnimatorType,
+            animator: ValueAnimator,
+            owner: String?
+        ) {
+            if (owner != GESTURES_ANIMATION_OWNER) return
+            handleAnimatorEnd()
+        }
+
+        override fun onAnimatorCancelling(
+            type: CameraAnimatorType,
+            animator: ValueAnimator,
+            owner: String?
+        ) {
+            if (owner != GESTURES_ANIMATION_OWNER) return
+            handleAnimatorEnd()
+        }
+
+        override fun onAnimatorInterrupting(
+            type: CameraAnimatorType,
+            runningAnimator: ValueAnimator,
+            runningAnimatorOwner: String?,
+            newAnimator: ValueAnimator,
+            newAnimatorOwner: String?
+        ) {
+            // Interruptions are handled by the ending/starting callbacks
+        }
+    }
+
+    private val moveListener = object : OnMoveListener {
+        override fun onMoveBegin(detector: MoveGestureDetector) {
+            handleGestureBegin("move")
+        }
+
+        override fun onMove(detector: MoveGestureDetector): Boolean {
+            return false
+        }
+
+        override fun onMoveEnd(detector: MoveGestureDetector) {
+            handleGestureEnd("move")
+        }
+    }
+
+    private val scaleListener = object : OnScaleListener {
+        override fun onScaleBegin(detector: StandardScaleGestureDetector) {
+            handleGestureBegin("scale")
+        }
+
+        override fun onScale(detector: StandardScaleGestureDetector) {
+        }
+
+        override fun onScaleEnd(detector: StandardScaleGestureDetector) {
+            handleGestureEnd("scale")
+        }
+    }
+
+    private val rotateListener = object : OnRotateListener {
+        override fun onRotateBegin(detector: RotateGestureDetector) {
+            handleGestureBegin("rotate")
+        }
+
+        override fun onRotate(detector: RotateGestureDetector) {
+        }
+
+        override fun onRotateEnd(detector: RotateGestureDetector) {
+            handleGestureEnd("rotate")
+        }
+    }
+
+    private val shoveListener = object : OnShoveListener {
+        override fun onShoveBegin(detector: ShoveGestureDetector) {
+            handleGestureBegin("shove")
+        }
+
+        override fun onShove(detector: ShoveGestureDetector) {
+        }
+
+        override fun onShoveEnd(detector: ShoveGestureDetector) {
+            handleGestureEnd("shove")
+        }
+    }
+
     override fun addToMap(mapView: RNMBXMapView) {
         super.addToMap(mapView)
 
-        if (!hasOnMapSteady) return
+        if (!hasOnMapSteady && !hasOnCameraChanged) return
 
         mapView.getMapAsync { mapboxMap ->
-            // Camera animations lifecycle
+            this.mapboxMap = mapboxMap
             mapboxMap.cameraAnimationsPlugin {
-                this.addCameraAnimationsLifecycleListener(object : CameraAnimationsLifecycleListener {
-                    override fun onAnimatorStarting(
-                        type: CameraAnimatorType,
-                        animator: ValueAnimator,
-                        owner: String?
-                    ) {
-                        if (owner != "Maps-Gestures") return
-                        activeAnimations++
-                        lastTransitionEndedAtMs = null
-                        markActivity()
-                        debugLog("camera animator started")
-                    }
-
-                    override fun onAnimatorEnding(
-                        type: CameraAnimatorType,
-                        animator: ValueAnimator,
-                        owner: String?
-                    ) {
-                        if (owner != "Maps-Gestures") return
-                        handleAnimatorEnd()
-                    }
-
-                    override fun onAnimatorCancelling(
-                        type: CameraAnimatorType,
-                        animator: ValueAnimator,
-                        owner: String?
-                    ) {
-                        if (owner != "Maps-Gestures") return
-                        handleAnimatorEnd()
-                    }
-
-                    override fun onAnimatorInterrupting(
-                        type: CameraAnimatorType,
-                        runningAnimator: ValueAnimator,
-                        runningAnimatorOwner: String?,
-                        newAnimator: ValueAnimator,
-                        newAnimatorOwner: String?
-                    ) {
-                        // Interruptions are handled by the ending/starting callbacks
-                    }
-                })
+                addCameraAnimationsLifecycleListener(animationsListener)
             }
-
-            // Gesture listeners
             mapboxMap.gesturesPlugin {
-                this.addOnMoveListener(object : OnMoveListener {
-                    override fun onMoveBegin(detector: MoveGestureDetector) {
-                        handleGestureBegin("move")
-                    }
-
-                    override fun onMove(detector: MoveGestureDetector): Boolean {
-                        return false
-                    }
-
-                    override fun onMoveEnd(detector: MoveGestureDetector) {
-                        handleGestureEnd("move")
-                    }
-                })
-
-                this.addOnScaleListener(object : OnScaleListener {
-                    override fun onScaleBegin(detector: StandardScaleGestureDetector) {
-                        handleGestureBegin("scale")
-                    }
-
-                    override fun onScale(detector: StandardScaleGestureDetector) {
-                    }
-
-                    override fun onScaleEnd(detector: StandardScaleGestureDetector) {
-                        handleGestureEnd("scale")
-                    }
-                })
-
-                this.addOnRotateListener(object : OnRotateListener {
-                    override fun onRotateBegin(detector: RotateGestureDetector) {
-                        handleGestureBegin("rotate")
-                    }
-
-                    override fun onRotate(detector: RotateGestureDetector) {
-                    }
-
-                    override fun onRotateEnd(detector: RotateGestureDetector) {
-                        handleGestureEnd("rotate")
-                    }
-                })
-
-                this.addOnShoveListener(object : OnShoveListener {
-                    override fun onShoveBegin(detector: ShoveGestureDetector) {
-                        handleGestureBegin("shove")
-                    }
-
-                    override fun onShove(detector: ShoveGestureDetector) {
-                    }
-
-                    override fun onShoveEnd(detector: ShoveGestureDetector) {
-                        handleGestureEnd("shove")
-                    }
-                })
+                addOnMoveListener(moveListener)
+                addOnScaleListener(scaleListener)
+                addOnRotateListener(rotateListener)
+                addOnShoveListener(shoveListener)
+            }
+            if (hasOnCameraChanged) {
+                cameraChangedCancelable = mapboxMap.subscribeCameraChanged {
+                    emitCameraChanged(mapboxMap)
+                }
             }
 
             debugLog("addToMap and subscribed to gestures")
@@ -253,10 +270,37 @@ class RNMBXCameraGestureObserver(
     }
 
     override fun removeFromMap(mapView: RNMBXMapView, reason: RemovalReason): Boolean {
+        cameraChangedCancelable?.cancel()
+        cameraChangedCancelable = null
+        mapboxMap?.let { mapboxMap ->
+            mapboxMap.cameraAnimationsPlugin {
+                removeCameraAnimationsLifecycleListener(animationsListener)
+            }
+            mapboxMap.gesturesPlugin {
+                removeOnMoveListener(moveListener)
+                removeOnScaleListener(scaleListener)
+                removeOnRotateListener(rotateListener)
+                removeOnShoveListener(shoveListener)
+            }
+        }
+        mapboxMap = null
+        activeAnimations = 0
+        activeGestures = 0
         debugLog("removeFromMap and unsubscribed from gestures")
         cancelQuietTimer()
         cancelTimeoutTimer()
         return super.removeFromMap(mapView, reason)
+    }
+
+    private fun emitCameraChanged(mapboxMap: MapboxMap) {
+        mManager.handleEvent(
+            CameraChangedEvent.make(
+                this,
+                mapboxMap,
+                isGestureActive = isGestureActive,
+                isUserInteraction = isGestureActive || activeAnimations > 0
+            )
+        )
     }
 
     private fun handleAnimatorEnd() {
@@ -271,7 +315,7 @@ class RNMBXCameraGestureObserver(
     }
 
     private fun handleGestureBegin(type: String) {
-        isGestureActive = true
+        activeGestures++
         lastGestureType = normalizeGestureType(type)
         lastTransitionEndedAtMs = null
         markActivity(lastGestureType)
@@ -280,9 +324,7 @@ class RNMBXCameraGestureObserver(
 
     private fun handleGestureEnd(type: String) {
         lastGestureType = normalizeGestureType(type)
-        // On Android, gesture end callbacks fire AFTER animations complete
-        // So we can mark the gesture as inactive and transition as ended
-        isGestureActive = false
+        if (activeGestures > 0) activeGestures--
         lastTransitionEndedAtMs = nowMs()
         markActivity(lastGestureType)
         debugLog("gesture didEnd type=$lastGestureType -> isGestureActive=$isGestureActive")
@@ -290,5 +332,6 @@ class RNMBXCameraGestureObserver(
 
     companion object {
         const val LOG_TAG = "RNMBXCameraGestureObserver"
+        private const val GESTURES_ANIMATION_OWNER = "Maps-Gestures"
     }
 }

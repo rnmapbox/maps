@@ -1,3 +1,5 @@
+import fs from 'fs';
+import os from 'os';
 import path from 'path';
 import { execSync } from 'child_process';
 import * as url from 'url';
@@ -14,6 +16,23 @@ import { updatePackageJsonWithIOSComponents } from './autogenHelpers/generateIOS
 
 const __dirname = url.fileURLToPath(new URL('.', import.meta.url));
 
+// Snack's bundler can't load .css imports, so the web MapView injects mapbox-gl's CSS from a string
+function generateMapboxGLCss() {
+  const outputPath = 'src/web/mapboxglCss.ts';
+  const css = fs
+    .readFileSync(
+      path.join(__dirname, '..', 'node_modules/mapbox-gl/dist/mapbox-gl.css'),
+      'utf8',
+    )
+    .trim();
+  fs.writeFileSync(
+    path.join(__dirname, '..', outputPath),
+    `// Generated from mapbox-gl/dist/mapbox-gl.css by scripts/autogenerate.mjs, do not edit\n` +
+      `export default ${JSON.stringify(css)};\n`,
+  );
+  return outputPath;
+}
+
 async function generate() {
   let layers = getLayers();
   let outputPaths = await generateCodeWithEjs(layers);
@@ -21,6 +40,8 @@ async function generate() {
   // autogenerate expo plugin
   execSync('yarn build:plugin', { stdio: 'inherit' });
   outputPaths.push('plugin/build');
+
+  outputPaths.push(generateMapboxGLCss());
 
   // autogenerate examples.json
   execSync('yarn build:examples.json', { stdio: 'inherit' });
@@ -75,6 +96,13 @@ async function generate() {
   const markdownBuilder = new MarkdownBuilder();
   await docBuilder.generate(docsJsonPath);
   await markdownBuilder.generate(docsJsonPath, docsRoot);
+
+  // The docs site renders the docosaurus variant as MDX, which can fail where plain markdown doesn't (#4324)
+  await markdownBuilder.generate(
+    docsJsonPath,
+    fs.mkdtempSync(path.join(os.tmpdir(), 'rnmbx-docs-mdx-')),
+    { docosaurus: true },
+  );
 
   // autogenerate iOS components configuration
   const updatedComponents = updatePackageJsonWithIOSComponents();

@@ -3,6 +3,7 @@
 #import "RNMBXFabricHelpers.h"
 
 #import <React/RCTBridge+Private.h>
+#import "RNMBXBridgeManager.h"
 #import <React/RCTConversions.h>
 #import <React/RCTFabricComponentsPlugins.h>
 
@@ -40,7 +41,7 @@ using namespace facebook::react;
 - (void)prepareView
 {
     _view =  [[RNMBXAtmosphere alloc] init];
-    _view.bridge = [RCTBridge currentBridge];
+    _view.bridge = [RNMBXBridgeManager currentBridge];
 
     self.contentView = _view;
 }

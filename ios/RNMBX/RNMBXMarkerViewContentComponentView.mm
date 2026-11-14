@@ -5,7 +5,7 @@
 #import <React/RCTConversions.h>
 #import <React/RCTFabricComponentsPlugins.h>
 
-#import <react/renderer/components/rnmapbox_maps_specs/ComponentDescriptors.h>
+#import <react/renderer/components/rnmapbox_maps_specs/RNMBXMarkerViewContentComponentDescriptor.h>
 #import <react/renderer/components/rnmapbox_maps_specs/EventEmitters.h>
 #import <react/renderer/components/rnmapbox_maps_specs/Props.h>
 #import <react/renderer/components/rnmapbox_maps_specs/RCTComponentViewHelpers.h>

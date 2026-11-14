@@ -3,7 +3,7 @@ import Mapbox from '@rnmapbox/maps';
 import { Button } from '@rneui/base';
 
 import sheet from '../../styles/sheet';
-import { ExampleWithMetadata } from '../common/ExampleMetadata'; // exclude-from-doc
+import { type ExampleWithMetadata } from '../common/ExampleMetadata'; // exclude-from-doc
 
 const MapFps = () => {
   const [frameRate, setFrameRate] = useState(60);
@@ -44,5 +44,7 @@ const metadata: ExampleWithMetadata['metadata'] = {
   title: 'Map FPS',
   tags: [],
   docs: `Toggles preferredFramesPerSecond between 10 fps and 60 fps, move the map around to feel the difference.`,
+  webSupported: true,
+  waitForMapIdle: false,
 };
 MapFps.metadata = metadata;

@@ -6,9 +6,15 @@ import com.rnmapbox.rnmbx.utils.extensions.asMapOrNull
 import com.facebook.react.uimanager.ViewGroupManager
 import com.facebook.react.uimanager.annotations.ReactProp
 import com.facebook.react.viewmanagers.RNMBXTerrainManagerInterface
+import com.facebook.react.uimanager.ViewManagerDelegate
+import com.facebook.react.viewmanagers.RNMBXTerrainManagerDelegate
 
 class RNMBXTerrainManager : ViewGroupManager<RNMBXTerrain>(),
     RNMBXTerrainManagerInterface<RNMBXTerrain> {
+
+    private val delegate = RNMBXTerrainManagerDelegate<RNMBXTerrain, RNMBXTerrainManager>(this)
+
+    override fun getDelegate(): ViewManagerDelegate<RNMBXTerrain> = delegate
     override fun getName(): String {
         return REACT_CLASS
     }

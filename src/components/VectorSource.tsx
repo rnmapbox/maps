@@ -1,10 +1,11 @@
 import React from 'react';
-import { NativeModules, NativeSyntheticEvent } from 'react-native';
+import { NativeModules, type NativeSyntheticEvent } from 'react-native';
 
 import RNMBXVectorSourceNativeComponent from '../specs/RNMBXVectorSourceNativeComponent';
 import { cloneReactChildrenWithProps, isFunction } from '../utils';
 import { copyPropertiesAsDeprecated } from '../utils/deprecation';
-import { OnPressEvent } from '../types/OnPressEvent';
+import { type OnPressEvent } from '../types/OnPressEvent';
+import { type Expression } from '../utils/MapboxStyles';
 
 import AbstractSource from './AbstractSource';
 
@@ -60,6 +61,12 @@ interface Props {
   attribution?: string;
 
   /**
+   * A feature property to use as the feature id, for example with `setFeatureState`.
+   * Either a property name or an expression that evaluates to the id.
+   */
+  promoteId?: string | Expression;
+
+  /**
    * Source press listener, gets called when a user presses one of the children layers only
    * if that layer has a higher z-index than another source layers
    *
@@ -71,7 +78,7 @@ interface Props {
   onPress?: (event: OnPressEvent) => void;
 
   /**
-   * Overrides the default touch hitbox(44x44 pixels) for the source layers
+   * Overrides the default touch hitbox (44x44 points) for the source layers
    */
   hitbox?: {
     /**
@@ -155,6 +162,7 @@ class VectorSource extends AbstractSource<Props, NativeProps> {
       maxZoomLevel: this.props.maxZoomLevel,
       tms: this.props.tms,
       attribution: this.props.attribution,
+      promoteId: this.props.promoteId,
       hitbox: this.props.hitbox,
       hasPressListener: isFunction(this.props.onPress),
       onMapboxVectorSourcePress: this.onPress.bind(this),

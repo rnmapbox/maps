@@ -62,5 +62,6 @@ const metadata = {
   docs: `
 Change style of a MapView on the fly.
 `,
+  webSupported: true,
 };
 StyleJson.metadata = metadata;

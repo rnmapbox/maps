@@ -165,40 +165,46 @@ extension ChangeLineOffsetsShapeAnimator {
   }
 
   @objc
-  public static func setLineString(tag: NSNumber, coordinates: NSArray, startOffset: NSNumber, endOffset: NSNumber, resolve: RCTPromiseResolveBlock, reject: @escaping (_ code: String, _ message: String, _ error: NSError) -> Void) {
+  public static func setLineString(tag: NSNumber, coordinates: NSArray, startOffset: NSNumber, endOffset: NSNumber, resolve: @escaping RCTPromiseResolveBlock, reject: @escaping (_ code: String, _ message: String, _ error: NSError) -> Void) {
     let lineString = buildLineString(_coordinates: coordinates)
-    guard let animator = getAnimator(tag: tag) else {
-      reject("\(LOG_TAG): setLineString", "Unable to find animator with tag \(tag)", NSError())
-      return
+    DispatchQueue.main.async {
+      guard let animator = getAnimator(tag: tag) else {
+        reject("\(LOG_TAG): setLineString", "Unable to find animator with tag \(tag)", NSError())
+        return
+      }
+
+      let _startOffset: NSNumber? = startOffset != -1 ? startOffset : nil
+      let _endOffset: NSNumber? = endOffset != -1 ? endOffset : nil
+
+      animator.setLineString(lineString: lineString, startOffset: _startOffset?.doubleValue, endOffset: _endOffset?.doubleValue)
+      resolve(tag)
     }
-    
-    let _startOffset: NSNumber? = startOffset != -1 ? startOffset : nil
-    let _endOffset: NSNumber? = endOffset != -1 ? endOffset : nil
-    
-    animator.setLineString(lineString: lineString, startOffset: _startOffset?.doubleValue, endOffset: _endOffset?.doubleValue)
-    resolve(tag)
   }
   
   @objc
-  public static func setStartOffset(tag: NSNumber, offset: NSNumber, durationMs: NSNumber, resolve: RCTPromiseResolveBlock, reject: @escaping (_ code: String, _ message: String, _ error: NSError) -> Void) {
-    guard let animator = getAnimator(tag: tag) else {
-      reject("\(LOG_TAG): setStartOffset", "Unable to find animator with tag \(tag)", NSError())
-      return
+  public static func setStartOffset(tag: NSNumber, offset: NSNumber, durationMs: NSNumber, resolve: @escaping RCTPromiseResolveBlock, reject: @escaping (_ code: String, _ message: String, _ error: NSError) -> Void) {
+    DispatchQueue.main.async {
+      guard let animator = getAnimator(tag: tag) else {
+        reject("\(LOG_TAG): setStartOffset", "Unable to find animator with tag \(tag)", NSError())
+        return
+      }
+
+      animator.setStartOffset(offset: offset.doubleValue, durationSec: durationMs.doubleValue / 1000)
+      resolve(tag)
     }
-    
-    animator.setStartOffset(offset: offset.doubleValue, durationSec: durationMs.doubleValue / 1000)
-    resolve(tag)
   }
   
   @objc
-  public static func setEndOffset(tag: NSNumber, offset: NSNumber, durationMs: NSNumber, resolve: RCTPromiseResolveBlock, reject: @escaping (_ code: String, _ message: String, _ error: NSError) -> Void) {
-    guard let animator = getAnimator(tag: tag) else {
-      reject("\(LOG_TAG): setEndOffset", "Unable to find animator with tag \(tag)", NSError())
-      return
+  public static func setEndOffset(tag: NSNumber, offset: NSNumber, durationMs: NSNumber, resolve: @escaping RCTPromiseResolveBlock, reject: @escaping (_ code: String, _ message: String, _ error: NSError) -> Void) {
+    DispatchQueue.main.async {
+      guard let animator = getAnimator(tag: tag) else {
+        reject("\(LOG_TAG): setEndOffset", "Unable to find animator with tag \(tag)", NSError())
+        return
+      }
+
+      animator.setEndOffset(offset: offset.doubleValue, durationSec: durationMs.doubleValue / 1000)
+      resolve(tag)
     }
-    
-    animator.setEndOffset(offset: offset.doubleValue, durationSec: durationMs.doubleValue / 1000)
-    resolve(tag)
   }
 }
 

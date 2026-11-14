@@ -1,5 +1,6 @@
 package com.rnmapbox.rnmbx.components.camera
 
+import com.mapbox.maps.plugin.delegates.MapPluginProviderDelegate
 import android.animation.Animator
 import android.content.Context
 import android.location.Location
@@ -105,7 +106,7 @@ class RNMBXCamera(private val mContext: Context, private val mManager: RNMBXCame
                 mCameraStop?.let { updateCamera(it, mapView) }
             }
         }
-        _observeViewportState(mapView.mapView)
+        _observeViewportState(mapView.mapPlugins)
         _updateViewportState()
     }
 
@@ -182,10 +183,13 @@ class RNMBXCamera(private val mContext: Context, private val mManager: RNMBXCame
 
     private fun updateMaxBounds(mapView: RNMBXMapView) {
         val map = mapView.getMapboxMap()
+        val currentBounds = map.getBounds()
         val builder = CameraBoundsOptions.Builder()
-        builder.bounds(mMaxBounds?.toBounds())
+        builder.bounds(mMaxBounds?.toBounds() ?: CoordinateBounds.world()) // Passing null does not reset this value.
         builder.minZoom(mMinZoomLevel ?: 0.0) // Passing null does not reset this value.
         builder.maxZoom(mMaxZoomLevel ?: 25.0) // Passing null does not reset this value.
+        builder.minPitch(currentBounds.minPitch)
+        builder.maxPitch(currentBounds.maxPitch)
         map.setBounds(builder.build())
         mCameraStop?.let { updateCamera(it, mapView) }
     }
@@ -203,6 +207,7 @@ class RNMBXCamera(private val mContext: Context, private val mManager: RNMBXCame
 
     private fun updateCamera(cameraStop: CameraStop, mapView: RNMBXMapView) {
         mCameraUpdateQueue.offer(cameraStop)
+        mapView.cameraWillMoveMap()
         mCameraUpdateQueue.execute(mapView)
     }
 
@@ -403,7 +408,7 @@ class RNMBXCamera(private val mContext: Context, private val mManager: RNMBXCame
         }
     }
 
-    fun _observeViewportState(mapView: MapView) {
+    fun _observeViewportState(mapView: MapPluginProviderDelegate) {
         mapView.viewport.addStatusObserver(object: ViewportStatusObserver {
             override fun onViewportStatusChanged(
                 fromStatus: ViewportStatus,
@@ -449,7 +454,7 @@ class RNMBXCamera(private val mContext: Context, private val mManager: RNMBXCame
 
     fun _updateViewportState() {
         mMapView?.let {
-            val map = it.mapView
+            val map = it.mapPlugins
             val viewport = map.viewport;
 
             if (mLocationComponentManager == null) {
@@ -472,7 +477,7 @@ class RNMBXCamera(private val mContext: Context, private val mManager: RNMBXCame
 
             val location = map.location2
             val followOptions = FollowPuckViewportStateOptions.Builder()
-            val cameraState = map.getMapboxMap().cameraState
+            val cameraState = it.getMapboxMap().cameraState
             when (mFollowUserMode ?: "normal") {
                 "compass" -> {
                     location.puckBearingEnabled = true
@@ -485,13 +490,12 @@ class RNMBXCamera(private val mContext: Context, private val mManager: RNMBXCame
                     followOptions.bearing(FollowPuckViewportStateBearing.SyncWithLocationPuck)
                 }
                 "normal" -> {
-                    location.puckBearingEnabled = false
                     when(val it=mFollowHeading) {
                         null -> followOptions.bearing( FollowPuckViewportStateBearing.Constant(
                             cameraState.bearing
                         ))
                         else -> followOptions.bearing( FollowPuckViewportStateBearing.Constant(
-                            cameraState.bearing
+                            it
                         ))
                     }
                 }
@@ -517,6 +521,7 @@ class RNMBXCamera(private val mContext: Context, private val mManager: RNMBXCame
 
 
             val followState = viewport.makeFollowPuckViewportState(followOptions.build())
+            it.cameraWillMoveMap()
             viewport.transitionTo(followState)
         }
         mapboxMap?.let {

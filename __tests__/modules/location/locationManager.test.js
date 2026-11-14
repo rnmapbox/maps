@@ -1,7 +1,7 @@
 import { NativeModules } from 'react-native';
 
 import LocationManager, {
-  LocationModuleEventEmitter,
+  getLocationModuleEventEmitter,
 } from '../../../src/modules/location/locationManager';
 
 const MapboxGL = NativeModules.RNMBXModule;
@@ -148,6 +148,7 @@ describe('LocationManager', () => {
     });
 
     describe('#start', () => {
+      const LocationModuleEventEmitter = getLocationModuleEventEmitter();
       jest.spyOn(MapboxGLLocationManager, 'start');
       jest.spyOn(LocationModuleEventEmitter, 'addListener');
 
@@ -272,6 +273,72 @@ describe('LocationManager', () => {
           expect(listener).toHaveBeenCalledWith(location);
         });
       });
+    });
+  });
+});
+
+describe('native location module', () => {
+  let restore;
+
+  afterEach(() => {
+    restore();
+  });
+
+  const loadPackage = (OS) => {
+    const reads = jest.fn();
+    let Mapbox;
+    let onAppStateChange;
+    jest.isolateModules(() => {
+      const {
+        AppState,
+        NativeModules: nativeModules,
+        Platform,
+      } = require('react-native');
+      const nativeLocationModule = nativeModules.RNMBXLocationModule;
+      const originalOS = Platform.OS;
+      restore = () => {
+        Platform.OS = originalOS;
+        Object.defineProperty(nativeModules, 'RNMBXLocationModule', {
+          configurable: true,
+          enumerable: true,
+          writable: true,
+          value: nativeLocationModule,
+        });
+      };
+      Platform.OS = OS;
+      Object.defineProperty(nativeModules, 'RNMBXLocationModule', {
+        configurable: true,
+        get() {
+          reads();
+          return nativeLocationModule;
+        },
+      });
+      AppState.addEventListener.mockClear();
+      Mapbox = require('../../../src').default;
+      [, onAppStateChange] = AppState.addEventListener.mock.calls.find(
+        ([type]) => type === 'change',
+      );
+    });
+    return { reads, locationManager: Mapbox.locationManager, onAppStateChange };
+  };
+
+  describe.each(['ios', 'android'])('on %s', (OS) => {
+    test('is not read when the package loads', () => {
+      const { reads } = loadPackage(OS);
+      expect(reads).not.toHaveBeenCalled();
+    });
+
+    test('is not read when the app goes to the background and back', () => {
+      const { reads, onAppStateChange } = loadPackage(OS);
+      onAppStateChange('background');
+      onAppStateChange('active');
+      expect(reads).not.toHaveBeenCalled();
+    });
+
+    test('is read on first use', async () => {
+      const { reads, locationManager } = loadPackage(OS);
+      await locationManager.getLastKnownLocation();
+      expect(reads).toHaveBeenCalled();
     });
   });
 });

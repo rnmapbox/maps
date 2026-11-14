@@ -5,7 +5,7 @@ import { ButtonGroup } from '@rneui/base';
 
 import sheet from '../../styles/sheet';
 import { onSortOptions } from '../../utils';
-import { ExampleWithMetadata } from '../common/ExampleMetadata'; // exclude-from-doc
+import { type ExampleWithMetadata } from '../common/ExampleMetadata'; // exclude-from-doc
 
 const ShowMap = () => {
   const _mapOptions = Object.keys(Mapbox.StyleURL)
@@ -67,5 +67,8 @@ const metadata: ExampleWithMetadata['metadata'] = {
   docs: `
 Shows a map with the user location annotation enabled, and on press of the user location annotation, an alert is shown.
 `,
+  excludeFromPercy: true,
+  webSupported: true,
+  waitForMapIdle: false,
 };
 ShowMap.metadata = metadata;

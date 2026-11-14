@@ -4,7 +4,7 @@ import isEqual from 'lodash.isequal';
 import { MapView, Camera, StyleURL, type CameraBounds } from '@rnmapbox/maps';
 
 import sheet from '../../styles/sheet';
-import { ExampleWithMetadata } from '../common/ExampleMetadata'; // exclude-from-doc
+import { type ExampleWithMetadata } from '../common/ExampleMetadata'; // exclude-from-doc
 
 // Assertion function to ensure camera is not null
 function assertCameraNotNull(camera: Camera | null): asserts camera is Camera {
@@ -324,5 +324,6 @@ const metadata = {
   title: 'Fit',
   tags: ['Camera', 'Camera#zoomTo'],
   docs: `Change camera via imperative methods`,
+  webSupported: true,
 };
 (Fit as unknown as ExampleWithMetadata).metadata = metadata;

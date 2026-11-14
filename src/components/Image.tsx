@@ -1,4 +1,4 @@
-import React, { memo, forwardRef, ReactElement } from 'react';
+import React, { memo, forwardRef, type ReactElement } from 'react';
 import { findNodeHandle } from 'react-native';
 
 import RNMBXImageNativeComponent from '../specs/RNMBXImageNativeComponent';

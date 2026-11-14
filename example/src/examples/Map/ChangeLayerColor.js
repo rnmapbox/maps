@@ -61,5 +61,6 @@ const metadata = {
   docs: `
 Change style of a layer part of the map on the fly.
 `,
+  webSupported: true,
 };
 ChangeLayerColor.metadata = metadata;

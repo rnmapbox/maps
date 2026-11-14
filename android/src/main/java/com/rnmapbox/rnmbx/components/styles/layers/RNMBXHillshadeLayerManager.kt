@@ -5,9 +5,16 @@ import com.facebook.react.uimanager.ThemedReactContext
 import com.facebook.react.uimanager.ViewGroupManager
 import com.facebook.react.uimanager.annotations.ReactProp
 import com.facebook.react.viewmanagers.RNMBXHillshadeLayerManagerInterface
+import com.facebook.react.uimanager.ViewManagerDelegate
+import com.facebook.react.viewmanagers.RNMBXHillshadeLayerManagerDelegate
+import com.rnmapbox.rnmbx.utils.extensions.asStringOrNull
 
 class RNMBXHillshadeLayerManager : ViewGroupManager<RNMBXHillshadeLayer>(),
     RNMBXHillshadeLayerManagerInterface<RNMBXHillshadeLayer> {
+
+    private val delegate = RNMBXHillshadeLayerManagerDelegate<RNMBXHillshadeLayer, RNMBXHillshadeLayerManager>(this)
+
+    override fun getDelegate(): ViewManagerDelegate<RNMBXHillshadeLayer> = delegate
     override fun getName(): String {
         return REACT_CLASS
     }
@@ -34,12 +41,12 @@ class RNMBXHillshadeLayerManager : ViewGroupManager<RNMBXHillshadeLayer>(),
 
     @ReactProp(name = "aboveLayerID")
     override fun setAboveLayerID(layer: RNMBXHillshadeLayer, aboveLayerID: Dynamic) {
-        layer.setAboveLayerID(aboveLayerID.asString())
+        layer.setAboveLayerID(aboveLayerID.asStringOrNull())
     }
 
     @ReactProp(name = "belowLayerID")
     override fun setBelowLayerID(layer: RNMBXHillshadeLayer, belowLayerID: Dynamic) {
-        layer.setBelowLayerID(belowLayerID.asString())
+        layer.setBelowLayerID(belowLayerID.asStringOrNull())
     }
 
     @ReactProp(name = "layerIndex")
@@ -64,7 +71,7 @@ class RNMBXHillshadeLayerManager : ViewGroupManager<RNMBXHillshadeLayer>(),
 
     @ReactProp(name = "sourceLayerID")
     override fun setSourceLayerID(layer: RNMBXHillshadeLayer, sourceLayerID: Dynamic) {
-        layer.setSourceLayerID(sourceLayerID.asString())
+        layer.setSourceLayerID(sourceLayerID.asStringOrNull())
     }
 
     @ReactProp(name = "filter")
@@ -74,7 +81,7 @@ class RNMBXHillshadeLayerManager : ViewGroupManager<RNMBXHillshadeLayer>(),
 
     @ReactProp(name = "slot")
     override fun setSlot(layer: RNMBXHillshadeLayer, slot: Dynamic) {
-        layer.setSlot(slot.asString())
+        layer.setSlot(slot.asStringOrNull())
     }
     // @{codepart-replace-end}
 

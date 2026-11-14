@@ -16,18 +16,23 @@ import MapContext from '../MapContext';
 
 type MarkerViewProps = {
   coordinate: [number, number];
+  anchor?: { x: number; y: number };
+  minZoom?: number;
+  maxZoom?: number;
   children?: ReactElement;
 };
+
+const centerAnchor = { x: 0.5, y: 0.5 };
 
 function MarkerView(props: MarkerViewProps, ref: Ref<Marker>) {
   const { map } = useContext(MapContext);
 
   // Create marker instance
   const marker: Marker = useMemo(() => {
+    const hasCustomElement = isValidElement(props.children);
     const _marker = new Marker({
-      element: isValidElement(props.children)
-        ? document.createElement('div')
-        : undefined,
+      element: hasCustomElement ? document.createElement('div') : undefined,
+      anchor: hasCustomElement ? 'top-left' : 'center',
     });
 
     // Set marker coordinates
@@ -57,6 +62,28 @@ function MarkerView(props: MarkerViewProps, ref: Ref<Marker>) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [map]);
 
+  // Hide marker outside its zoom range
+  useEffect(() => {
+    const { minZoom, maxZoom } = props;
+    if (map === undefined || (minZoom === undefined && maxZoom === undefined)) {
+      return;
+    }
+    const { style } = marker.getElement();
+    const updateVisibility = () => {
+      const zoom = map.getZoom();
+      const visible = zoom >= (minZoom ?? 0) && zoom <= (maxZoom ?? 22);
+      style.visibility = visible ? '' : 'hidden';
+    };
+    updateVisibility();
+    map.on('zoom', updateVisibility);
+
+    return () => {
+      map.off('zoom', updateVisibility);
+      style.visibility = '';
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [map, props.minZoom, props.maxZoom]);
+
   // Expose marker instance
   // eslint-disable-next-line react-hooks/exhaustive-deps
   useImperativeHandle(ref, () => marker, []);
@@ -70,8 +97,19 @@ function MarkerView(props: MarkerViewProps, ref: Ref<Marker>) {
     marker.setLngLat([props.coordinate[0], props.coordinate[1]]);
   }
 
-  // Inject children into marker element
-  return createPortal(props.children, marker.getElement());
+  const { x, y } = props.anchor ?? centerAnchor;
+  return createPortal(
+    <div
+      style={{
+        position: 'absolute',
+        width: 'max-content',
+        transform: `translate(${-x * 100}%, ${-y * 100}%)`,
+      }}
+    >
+      {props.children}
+    </div>,
+    marker.getElement(),
+  );
 }
 
 export default memo(forwardRef(MarkerView));

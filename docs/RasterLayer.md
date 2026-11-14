@@ -142,6 +142,7 @@ Customizable style attributes
 * <a href="#rastercolor">rasterColor</a><br/>
 * <a href="#rastercolormix">rasterColorMix</a><br/>
 * <a href="#rastercolorrange">rasterColorRange</a><br/>
+* <a href="#rastercolorscale">rasterColorScale</a><br/>
 * <a href="#rasterhuerotate">rasterHueRotate</a><br/>
 * <a href="#rasterbrightnessmin">rasterBrightnessMin</a><br/>
 * <a href="#rasterbrightnessmax">rasterBrightnessMax</a><br/>
@@ -230,7 +231,7 @@ Name: `rasterColor`
 Mapbox spec: [raster-color](https://docs.mapbox.com/style-spec/reference/layers/#paint-raster-raster-color)
 
 #### Description
-Defines a color map by which to colorize a raster layer, parameterized by the `["rasterValue"]` expression and evaluated at 256 uniformly spaced steps over the range specified by `rasterColorRange`.
+Defines the color ramp used to colorize a raster layer, parameterized by the `["rasterValue"]` expression and evaluated over the range specified by `rasterColorRange`. Raster values are spaced evenly across the range by default.
 
 #### Type
 `color`
@@ -248,7 +249,7 @@ Name: `rasterColorMix`
 Mapbox spec: [raster-color-mix](https://docs.mapbox.com/style-spec/reference/layers/#paint-raster-raster-color-mix)
 
 #### Description
-When `rasterColor` is active, specifies the combination of source RGB channels used to compute the raster value. Computed using the equation `mix.r * src.r + mix.g * src.g + mix.b * src.b + mix.a`. The first three components specify the mix of source red, green, and blue channels, respectively. The fourth component serves as a constant offset and is *not* multipled by source alpha. Source alpha is instead carried through and applied as opacity to the colorized result. Default value corresponds to RGB luminosity.
+When `rasterColor` is active, specifies how the raster value is computed from a non`rasterarray` source's channels, using the equation `mix.r * src.r + mix.g * src.g + mix.b * src.b + mix.a`. The first three components weight the source's red, green, and blue channels; the fourth is a constant offset and is not multiplied by source alpha. Source alpha is carried through and applied as opacity to the colorized result. The default corresponds to RGB luminosity. `rasterarray` sources ignore this property, as their raster value is decoded directly from the source data.
 
 #### Type
 `array<number>`
@@ -290,7 +291,7 @@ Name: `rasterColorRange`
 Mapbox spec: [raster-color-range](https://docs.mapbox.com/style-spec/reference/layers/#paint-raster-raster-color-range)
 
 #### Description
-When `rasterColor` is active, specifies the range over which `rasterColor` is tabulated. Units correspond to the computed raster value via `rasterColorMix`. For `rasterarray` sources, if `rasterColorRange` is unspecified, the source's stated data range is used.
+When `rasterColor` is active, specifies the range of raster values mapped onto the color ramp, from the start of the ramp (low bound) to its end (high bound). For `rasterarray` sources the raster value is the decoded source data in the source's own units, and the source's stated data range is used when this property is unspecified. For other raster sources the raster value is computed from the source's channels via `rasterColorMix`. Defaults to `[0, 1]` when no range is otherwise available.
 
 #### Type
 `array<number>`
@@ -321,6 +322,33 @@ The transition affecting any changes to this layer’s rasterColorRange property
 #### Default Value
 `{duration: 300, delay: 0}`
 
+
+___
+
+### rasterColorScale
+Name: `rasterColorScale`
+
+Mapbox spec: [raster-color-scale](https://docs.mapbox.com/style-spec/reference/layers/#paint-raster-raster-color-scale)
+
+#### Description
+When `rasterColor` is active, specifies how raster values are distributed across the color ramp over the range specified by `rasterColorRange`.
+
+#### Type
+`enum`
+#### Default Value
+`linear`
+
+#### Supported Values
+**linear** - Raster values are spaced evenly across the color ramp.<br />
+**log** - Raster values are spaced logarithmically, giving more of the color ramp to smaller values. Useful for data concentrated near the low end of a wide range.<br />
+
+
+#### Requires
+`rasterColor`
+
+#### Expression
+
+Parameters: ``
 
 ___
 
@@ -665,12 +693,15 @@ Name: `rasterElevation`
 Mapbox spec: [raster-elevation](https://docs.mapbox.com/style-spec/reference/layers/#paint-raster-raster-elevation)
 
 #### Description
-Defines an uniform elevation from the base specified in rasterElevationReference, in meters.
+Defines an uniform elevation from the base specified in rasterElevationReference.
 
 #### Type
 `number`
 #### Default Value
 `0`
+
+#### Units
+`meters`
 
 #### Minimum
 `0`

@@ -126,6 +126,31 @@ class RNMBXModule : NSObject {
     }
   }
 
+  /// Sets `MapboxCommonSettings.language` in the persistent settings storage, see https://docs.mapbox.com/help/dive-deeper/maps-internationalization/
+  @objc func setLanguage(_ language: Any?,
+    resolver: @escaping RCTPromiseResolveBlock,
+    rejecter: @escaping RCTPromiseRejectBlock) {
+    let settings = SettingsServiceFactory.getInstance(storageType: .persistent)
+    let result: Result<Void, SettingsServiceError>
+    switch language {
+    case let tag as String:
+      result = settings.set(key: MapboxCommonSettings.language, value: tag)
+    case let tags as [String]:
+      result = settings.set(key: MapboxCommonSettings.language, value: tags)
+    case nil, is NSNull:
+      result = settings.erase(key: MapboxCommonSettings.language)
+    default:
+      rejecter("error", "setLanguage: language must be a string, an array of strings or null, got \(language ?? "nil")", nil)
+      return
+    }
+    switch result {
+    case .success:
+      resolver(nil)
+    case .failure(let error):
+      rejecter("error", "setLanguage: \(error.localizedDescription)", error)
+    }
+  }
+
   @objc func clearData(_ resolver: @escaping RCTPromiseResolveBlock,
     rejecter: @escaping RCTPromiseRejectBlock) {
 

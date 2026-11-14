@@ -185,6 +185,11 @@ using namespace facebook::react;
         _view.reactScaleBarPosition = scaleBarPosition;
     }
 
+    id scaleBarUnits = RNMBXConvertFollyDynamicToId(newViewProps.scaleBarUnits);
+    if (scaleBarUnits != nil) {
+        [_view setReactScaleBarUnits:scaleBarUnits];
+    }
+
     RNMBX_REMAP_OPTIONAL_PROP_BOOL(zoomEnabled, reactZoomEnabled)
 
     RNMBX_REMAP_OPTIONAL_PROP_BOOL(scrollEnabled, reactScrollEnabled)
@@ -192,8 +197,15 @@ using namespace facebook::react;
     RNMBX_REMAP_OPTIONAL_PROP_BOOL(rotateEnabled, reactRotateEnabled)
 
     RNMBX_REMAP_OPTIONAL_PROP_BOOL(pitchEnabled, reactPitchEnabled)
+
+    id maxPitch = RNMBXConvertFollyDynamicToId(newViewProps.maxPitch);
+    if (maxPitch != nil) {
+        _view.reactMaxPitch = maxPitch;
+    }
   
     RNMBX_REMAP_OPTIONAL_PROP_NSDictionary(gestureSettings, reactGestureSettings)
+
+    RNMBX_REMAP_OPTIONAL_PROP_BOOL(transparent, reactTransparent)
 
     id preferredFramesPerSecond = RNMBXConvertFollyDynamicToId(newViewProps.preferredFramesPerSecond);
     if (preferredFramesPerSecond != nil) {
@@ -208,9 +220,38 @@ using namespace facebook::react;
     id localizeLabels = RNMBXConvertFollyDynamicToId(newViewProps.localizeLabels);
     if (localizeLabels != nil) {
         _view.reactLocalizeLabels = localizeLabels;
+    } else if (oldProps && RNMBXConvertFollyDynamicToId(oldViewProps.localizeLabels) != nil) {
+        _view.reactLocalizeLabels = nil;
+    }
+
+    id symbolScaleBehavior = RNMBXConvertFollyDynamicToId(newViewProps.symbolScaleBehavior);
+    if (symbolScaleBehavior != nil) {
+        _view.reactSymbolScaleBehavior = symbolScaleBehavior;
+    } else if (oldProps && RNMBXConvertFollyDynamicToId(oldViewProps.symbolScaleBehavior) != nil) {
+        _view.reactSymbolScaleBehavior = nil;
+    }
+
+    id debugOptions = RNMBXConvertFollyDynamicToId(newViewProps.debugOptions);
+    if (debugOptions != nil) {
+        _view.reactDebugOptions = debugOptions;
+    } else if (oldProps && RNMBXConvertFollyDynamicToId(oldViewProps.debugOptions) != nil) {
+        _view.reactDebugOptions = nil;
+    }
+
+    id styleGlyphURL = RNMBXConvertFollyDynamicToId(newViewProps.styleGlyphURL);
+    if (styleGlyphURL != nil) {
+        _view.reactStyleGlyphURL = styleGlyphURL;
+    } else if (oldProps && RNMBXConvertFollyDynamicToId(oldViewProps.styleGlyphURL) != nil) {
+        _view.reactStyleGlyphURL = nil;
     }
 
     RNMBX_OPTIONAL_PROP_BOOL(deselectAnnotationOnTap);
+
+    // Has to be set before -didSetProps: below, which is where the MapView is created.
+    id mapViewImpl = RNMBXConvertFollyDynamicToId(newViewProps.mapViewImpl);
+    if (mapViewImpl != nil) {
+        _view.mapViewImpl = mapViewImpl;
+    }
 
     id styleURL = RNMBXConvertFollyDynamicToId(newViewProps.styleURL);
     if (styleURL != nil) {

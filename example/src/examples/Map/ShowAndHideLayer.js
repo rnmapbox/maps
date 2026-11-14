@@ -66,5 +66,6 @@ const metadata = {
   docs: `
 Changes visibility of layers part of the map
 `,
+  webSupported: true,
 };
 ShowAndHideLayer.metadata = metadata;

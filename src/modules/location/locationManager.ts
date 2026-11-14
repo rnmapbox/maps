@@ -2,30 +2,46 @@ import {
   NativeModules,
   NativeEventEmitter,
   AppState,
-  NativeEventSubscription,
-  EmitterSubscription,
+  type NativeEventSubscription,
+  type EmitterSubscription,
   type AppStateStatus,
   Platform,
-  EventSubscription,
+  type EventSubscription,
+  TurboModuleRegistry,
 } from 'react-native';
 
-import NativeRNMBXLocationModule from '../../specs/NativeRNMBXLocationModule';
+import type { Spec as NativeRNMBXLocationModuleSpec } from '../../specs/NativeRNMBXLocationModule';
 
 const Mapbox = NativeModules.RNMBXModule;
-const MapboxLocationManager: typeof NativeRNMBXLocationModule = Platform.select(
-  {
-    ios: NativeModules.RNMBXLocationModule,
-    android: NativeRNMBXLocationModule,
-  },
-);
 
-const IsTurbo: boolean =
-  typeof MapboxLocationManager.onLocationUpdate === 'function';
+// Loaded lazily (#4388); stop() runs on every background transition, so it must not be the first read.
+let mapboxLocationManager: NativeRNMBXLocationModuleSpec | undefined;
 
-export const LocationModuleEventEmitter =
-  Platform.OS === 'ios' || (Platform.OS === 'android' && !IsTurbo)
-    ? new NativeEventEmitter(MapboxLocationManager as any)
-    : null;
+function getMapboxLocationManager(): NativeRNMBXLocationModuleSpec {
+  if (mapboxLocationManager === undefined) {
+    mapboxLocationManager =
+      Platform.OS === 'android'
+        ? TurboModuleRegistry.getEnforcing<NativeRNMBXLocationModuleSpec>(
+            'RNMBXLocationModule',
+          )
+        : (NativeModules.RNMBXLocationModule as NativeRNMBXLocationModuleSpec);
+  }
+  return mapboxLocationManager;
+}
+
+let locationModuleEventEmitter: NativeEventEmitter | null | undefined;
+
+export function getLocationModuleEventEmitter(): NativeEventEmitter | null {
+  if (locationModuleEventEmitter === undefined) {
+    const isTurbo =
+      typeof getMapboxLocationManager().onLocationUpdate === 'function';
+    locationModuleEventEmitter =
+      Platform.OS === 'ios' || (Platform.OS === 'android' && !isTurbo)
+        ? new NativeEventEmitter(getMapboxLocationManager() as any)
+        : null;
+  }
+  return locationModuleEventEmitter;
+}
 
 /**
  * Location sent by locationManager
@@ -42,8 +58,6 @@ interface Coordinates {
   /**
    * The heading (measured in degrees) relative to true north.
    * Heading is used to describe the direction the device is pointing to (the value of the compass).
-   * Note that on Android this is incorrectly reporting the course value as mentioned in issue https://github.com/rnmapbox/maps/issues/1213
-   * and will be corrected in a future update.
    */
   heading?: number;
 
@@ -114,7 +128,8 @@ export class LocationManager {
       // let's silently catch it and simply log out
       // instead of throwing an exception
       try {
-        lastKnownLocation = await MapboxLocationManager.getLastKnownLocation();
+        lastKnownLocation =
+          await getMapboxLocationManager().getLastKnownLocation();
       } catch (error) {
         console.warn('locationManager Error: ', error);
       }
@@ -177,17 +192,18 @@ export class LocationManager {
     }
 
     if (!this._isListening) {
-      MapboxLocationManager.start(validDisplacement);
+      getMapboxLocationManager().start(validDisplacement);
       //Determine if TurboModules (new architecture) are available.
 
-      if (LocationModuleEventEmitter) {
+      const eventEmitter = getLocationModuleEventEmitter();
+      if (eventEmitter) {
         // Cast to match NativeEventEmitter's strict signature - runtime behavior is correct
-        this.subscription = LocationModuleEventEmitter.addListener(
+        this.subscription = eventEmitter.addListener(
           Mapbox.LocationCallbackName.Update,
           this._onUpdate as (...args: readonly Object[]) => unknown,
         );
       } else {
-        this.subscription = MapboxLocationManager.onLocationUpdate(
+        this.subscription = getMapboxLocationManager().onLocationUpdate(
           (location: any) => {
             this._onUpdate(location.payload);
           },
@@ -199,7 +215,7 @@ export class LocationManager {
   }
 
   stop() {
-    MapboxLocationManager.stop();
+    mapboxLocationManager?.stop();
 
     if (this._isListening && this.subscription) {
       this.subscription.remove();
@@ -210,11 +226,11 @@ export class LocationManager {
 
   setMinDisplacement(minDisplacement: number) {
     this._minDisplacement = minDisplacement;
-    MapboxLocationManager.setMinDisplacement(minDisplacement);
+    getMapboxLocationManager().setMinDisplacement(minDisplacement);
   }
 
   setRequestsAlwaysUse(requestsAlwaysUse: boolean) {
-    MapboxLocationManager.setRequestsAlwaysUse(requestsAlwaysUse);
+    getMapboxLocationManager().setRequestsAlwaysUse(requestsAlwaysUse);
     this._requestsAlwaysUse = requestsAlwaysUse;
   }
 
@@ -228,7 +244,7 @@ export class LocationManager {
    * simulates location updates, experimental  [V10, iOS only]
    */
   _simulateHeading(changesPerSecond: number, increment: number) {
-    MapboxLocationManager.simulateHeading(changesPerSecond, increment);
+    getMapboxLocationManager().simulateHeading(changesPerSecond, increment);
   }
 
   /**
@@ -242,7 +258,7 @@ export class LocationManager {
    * @return {void}
    */
   setLocationEventThrottle(throttleValue: number) {
-    MapboxLocationManager.setLocationEventThrottle(throttleValue);
+    getMapboxLocationManager().setLocationEventThrottle(throttleValue);
   }
 }
 

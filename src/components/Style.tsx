@@ -176,6 +176,7 @@ function getShapeSource(id: string, source: MapboxJSONSource) {
     cluster?: boolean;
     clusterRadius?: number;
     clusterMaxZoomLevel?: number;
+    clusterMinPoints?: number;
     clusterProperties?: object;
     buffer?: number;
     tolerance?: number;
@@ -197,6 +198,9 @@ function getShapeSource(id: string, source: MapboxJSONSource) {
   }
   if (source.clusterMaxZoom !== undefined) {
     sourceProps.clusterMaxZoomLevel = source.clusterMaxZoom;
+  }
+  if (source.clusterMinPoints !== undefined) {
+    sourceProps.clusterMinPoints = source.clusterMinPoints;
   }
   if (source.clusterProperties !== undefined) {
     sourceProps.clusterProperties = source.clusterProperties;
@@ -264,6 +268,7 @@ type MapboxJSONSource = {
   cluster?: boolean;
   clusterRadius?: number;
   clusterMaxZoom?: number;
+  clusterMinPoints?: number;
   clusterProperties?: object;
   tolerance?: number;
   lineMetrics?: boolean;

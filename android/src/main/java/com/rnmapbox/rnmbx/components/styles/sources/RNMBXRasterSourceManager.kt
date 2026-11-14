@@ -10,10 +10,16 @@ import com.rnmapbox.rnmbx.events.constants.eventMapOf
 import javax.annotation.Nonnull
 import com.facebook.react.bridge.ReadableType
 import com.rnmapbox.rnmbx.utils.Logger
+import com.facebook.react.uimanager.ViewManagerDelegate
+import com.facebook.react.viewmanagers.RNMBXRasterSourceManagerDelegate
 
 class RNMBXRasterSourceManager(reactApplicationContext: ReactApplicationContext) :
     RNMBXTileSourceManager<RNMBXRasterSource>(reactApplicationContext),
     RNMBXRasterSourceManagerInterface<RNMBXRasterSource> {
+
+    private val delegate = RNMBXRasterSourceManagerDelegate<RNMBXRasterSource, RNMBXRasterSourceManager>(this)
+
+    override fun getDelegate(): ViewManagerDelegate<RNMBXRasterSource> = delegate
     @Nonnull
     override fun getName(): String {
         return REACT_CLASS
@@ -27,6 +33,16 @@ class RNMBXRasterSourceManager(reactApplicationContext: ReactApplicationContext)
     @ReactProp(name = "tileSize")
     override fun setTileSize(source: RNMBXRasterSource, tileSize: Dynamic) {
         source.setTileSize(tileSize.asInt())
+    }
+
+    @ReactProp(name = "prefetchZoomDelta")
+    override fun setPrefetchZoomDelta(source: RNMBXRasterSource, value: Dynamic) {
+        source.setPrefetchZoomDelta(if (value.isNull) null else value.asInt().toLong())
+    }
+
+    @ReactProp(name = "tileNetworkRequestsDelay")
+    override fun setTileNetworkRequestsDelay(source: RNMBXRasterSource, value: Dynamic) {
+        source.setTileNetworkRequestsDelay(if (value.isNull) null else value.asDouble())
     }
 
     override fun customEvents(): Map<String, String>? {

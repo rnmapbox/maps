@@ -3,6 +3,7 @@ package com.rnmapbox.rnmbx.components.camera
 import com.facebook.react.bridge.Arguments
 import com.facebook.react.bridge.Dynamic
 import com.facebook.react.bridge.ReactApplicationContext
+import com.facebook.react.bridge.ReadableType
 import com.facebook.react.bridge.WritableArray
 import com.facebook.react.bridge.WritableMap
 import com.facebook.react.common.MapBuilder
@@ -13,10 +14,16 @@ import com.rnmapbox.rnmbx.components.AbstractEventEmitter
 import com.rnmapbox.rnmbx.events.constants.EventKeys
 import com.rnmapbox.rnmbx.events.constants.eventMapOf
 import com.rnmapbox.rnmbx.utils.ViewTagResolver
+import com.facebook.react.uimanager.ViewManagerDelegate
+import com.facebook.react.viewmanagers.RNMBXViewportManagerDelegate
 
 class RNMBXViewportManager(private val mContext: ReactApplicationContext, val viewTagResolver: ViewTagResolver) : AbstractEventEmitter<RNMBXViewport>(
         mContext
     ), RNMBXViewportManagerInterface<RNMBXViewport> {
+
+    private val delegate = RNMBXViewportManagerDelegate<RNMBXViewport, RNMBXViewportManager>(this)
+
+    override fun getDelegate(): ViewManagerDelegate<RNMBXViewport> = delegate
 
     override fun getName(): String {
         return REACT_CLASS
@@ -28,7 +35,11 @@ class RNMBXViewportManager(private val mContext: ReactApplicationContext, val vi
 
     @ReactProp(name = "transitionsToIdleUponUserInteraction")
     override fun setTransitionsToIdleUponUserInteraction(view: RNMBXViewport?, value: Dynamic?) {
-        view?.transitionsToIdleUponUserInteraction = value?.asBoolean()
+        when (value?.type) {
+            ReadableType.Boolean -> view?.setTransitionsToIdleUponUserInteraction(value.asBoolean(), null)
+            ReadableType.Map -> view?.setTransitionsToIdleUponUserInteraction(null, RNMBXViewportGestureHandler.IdleGestures.from(value.asMap()))
+            else -> view?.setTransitionsToIdleUponUserInteraction(null, null)
+        }
     }
 
     @ReactProp(name = "hasStatusChanged")

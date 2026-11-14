@@ -121,5 +121,9 @@ const metadata = {
   tags: ['RasterLayer', 'ImageSource'],
   docs: '',
   disableSync: true,
+  excludeFromPercy: true,
+  webSupported: true,
+  // Snack can't load the example's PNG assets from a URL
+  snackSupported: false,
 };
 ImageOverlay.metadata = metadata;

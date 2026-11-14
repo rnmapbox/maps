@@ -129,6 +129,10 @@ using namespace facebook::react;
     if (hitbox != nil) {
         _view.hitbox = hitbox;
     }
+    id promoteId = RNMBXConvertFollyDynamicToId(newProps.promoteId);
+    if (promoteId != nil) {
+        _view.promoteId = promoteId;
+    }
     
   [super updateProps:props oldProps:oldProps];
 }

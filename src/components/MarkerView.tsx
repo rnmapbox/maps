@@ -1,17 +1,9 @@
-import React, { useCallback, useMemo, useRef, useState } from 'react';
-import {
-  PixelRatio,
-  StyleSheet,
-  type NativeSyntheticEvent,
-  type ViewProps,
-} from 'react-native';
+import React, { useCallback, useMemo } from 'react';
+import { StyleSheet, type ViewProps } from 'react-native';
 
 import RNMBXMakerViewContentComponent from '../specs/RNMBXMarkerViewContentNativeComponent';
 import NativeMarkerViewComponent from '../specs/RNMBXMarkerViewNativeComponent';
 import { type Position } from '../types/Position';
-
-// Device pixel ratio is constant for the lifetime of the app.
-const PIXEL_RATIO = PixelRatio.get();
 
 const DEFAULT_ANCHOR = { x: 0.5, y: 0.5 };
 
@@ -45,6 +37,42 @@ type Props = ViewProps & {
   isSelected?: boolean;
 
   /**
+   * Places the marker on the roof of the 3D building (fill extrusion or model) under it
+   * instead of at ground level. Defaults to false.
+   */
+  allowZElevate?: boolean;
+
+  /**
+   * Placement order among markers: higher priority markers are placed first, so they win
+   * when markers collide and `allowOverlap` is false. Negative values are allowed.
+   * Defaults to 0. Use either this or `isSelected`, not both.
+   */
+  priority?: number;
+
+  /**
+   * Minimum zoom level, in the range [0, 22], at which the marker is shown. Defaults to 0.
+   */
+  minZoom?: number;
+
+  /**
+   * Maximum zoom level, in the range [0, 22], at which the marker is shown. Defaults to 22.
+   */
+  maxZoom?: number;
+
+  /**
+   * Keep pan/pinch/drag gestures that start on this marker inside the marker instead of
+   * letting them reach the map. Enable this for markers whose children handle their own
+   * drags in JavaScript (e.g. a PanResponder-based slider), which otherwise race the map's
+   * pan/zoom recogniser and can be taken over by the map. By default the marker is smart:
+   * taps and native scrollables are kept, but a pan/pinch that merely starts on the marker
+   * moves the map. Defaults to false.
+   *
+   * @platform android — on iOS the map's gesture recognisers already coexist with marker
+   * content, so this has no effect.
+   */
+  stopGesturePropagation?: boolean;
+
+  /**
    * One or more valid React Native views. You can use Pressable, TouchableOpacity,
    * etc. directly as children — onPress and touch feedback work correctly.
    */
@@ -70,48 +98,23 @@ const MarkerView = ({
   allowOverlap = false,
   allowOverlapWithPuck = false,
   isSelected = false,
+  allowZElevate,
+  priority,
+  minZoom,
+  maxZoom,
   coordinate,
   style,
+  pointerEvents,
+  stopGesturePropagation = false,
   children,
 }: Props) => {
-  // Android new-arch (Fabric) fix: UIManager.measure reads from the Fabric shadow
-  // tree, which doesn't include Mapbox's native setTranslationX/Y positioning.
-  // Strategy: intercept setTranslationX/Y on the native side (see
-  // RNMBXMarkerViewContent.kt), relay the values as an onAnnotationPosition event,
-  // then apply them as a React `transform` on RNMBXMarkerView so the shadow tree
-  // reflects the actual on-screen position. This makes
-  // Pressability._responderRegion correct and onPress / touch feedback work.
-  //
-  // Key details:
-  //  • position:'absolute' on RNMBXMarkerView → all markers have Yoga pos (0,0)
-  //    in MapView, so the only shadow-tree offset is the transform itself.
-  //  • Transform goes on RNMBXMarkerView (not RNMBXMarkerViewContent) so Fabric
-  //    never fights Mapbox's native positioning.
-  //  • PIXEL_RATIO: Android translationX/Y is in device pixels; React transform
-  //    expects logical pixels (points).
-  const [annotationTranslate, setAnnotationTranslate] = useState<{
-    x: number;
-    y: number;
-  } | null>(null);
-
-  // Mirror of Kotlin-side dedup: skip setState when position hasn't changed so
-  // we don't trigger a re-render for no-op native position re-applications.
-  const lastTranslateRef = useRef<{ x: number; y: number } | null>(null);
-
-  const handleTouchEnd = useCallback((e: { stopPropagation: () => void }) => {
-    e.stopPropagation();
-  }, []);
-
-  const handleAnnotationPosition = useCallback(
-    (e: NativeSyntheticEvent<{ x: number; y: number }>) => {
-      const x = e.nativeEvent.x / PIXEL_RATIO;
-      const y = e.nativeEvent.y / PIXEL_RATIO;
-      const last = lastTranslateRef.current;
-      if (last !== null && last.x === x && last.y === y) return;
-      lastTranslateRef.current = { x, y };
-      setAnnotationTranslate({ x, y });
+  const handleTouchEnd = useCallback(
+    (e: { stopPropagation: () => void }) => {
+      if (pointerEvents !== 'none' && pointerEvents !== 'box-none') {
+        e.stopPropagation();
+      }
     },
-    [],
+    [pointerEvents],
   );
 
   if (anchor.x < 0 || anchor.y < 0 || anchor.x > 1 || anchor.y > 1) {
@@ -126,21 +129,7 @@ const MarkerView = ({
     [coordinate[0], coordinate[1]],
   );
 
-  const nativeStyle = useMemo(
-    () => [
-      styles.absolutePosition,
-      style,
-      annotationTranslate != null
-        ? {
-            transform: [
-              { translateX: annotationTranslate.x },
-              { translateY: annotationTranslate.y },
-            ],
-          }
-        : undefined,
-    ],
-    [style, annotationTranslate],
-  );
+  const nativeStyle = useMemo(() => [styles.absolutePosition, style], [style]);
 
   return (
     <RNMBXMarkerView
@@ -150,12 +139,17 @@ const MarkerView = ({
       allowOverlap={allowOverlap}
       allowOverlapWithPuck={allowOverlapWithPuck}
       isSelected={isSelected}
+      allowZElevate={allowZElevate}
+      priority={priority}
+      minZoom={minZoom}
+      maxZoom={maxZoom}
+      pointerEvents={pointerEvents}
+      stopGesturePropagation={stopGesturePropagation}
       onTouchEnd={handleTouchEnd}
     >
       <RNMBXMakerViewContentComponent
         collapsable={false}
         style={styles.contentContainer}
-        onAnnotationPosition={handleAnnotationPosition}
       >
         {children}
       </RNMBXMakerViewContentComponent>

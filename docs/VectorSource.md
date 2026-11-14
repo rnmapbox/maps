@@ -93,6 +93,16 @@ source is part of a map view’s style and the map view’s attribution button i
 
 
   
+### promoteId
+
+```tsx
+string | Expression
+```
+A feature property to use as the feature id, for example with `setFeatureState`.
+Either a property name or an expression that evaluates to the id.
+
+
+  
 ### onPress
 
 ```tsx
@@ -117,7 +127,7 @@ type Hitbox = {
   height: number; /* `height` of hitbox */
 }
 ```
-Overrides the default touch hitbox(44x44 pixels) for the source layers
+Overrides the default touch hitbox (44x44 points) for the source layers
 
 
   

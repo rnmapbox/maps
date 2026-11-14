@@ -5,7 +5,7 @@ import type {
   FilterExpression,
   HillshadeLayerStyleProps,
 } from '../utils/MapboxStyles';
-import { StyleValue } from '../utils/StyleValue';
+import { type StyleValue } from '../utils/StyleValue';
 import RNMBXHillshadeLayerNativeComponent from '../specs/RNMBXHillshadeLayerNativeComponent';
 
 import AbstractLayer from './AbstractLayer';

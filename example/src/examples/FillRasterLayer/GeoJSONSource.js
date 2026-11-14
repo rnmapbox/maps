@@ -67,5 +67,8 @@ const metadata = {
   title: 'GeoJSON Source',
   tags: [],
   docs: '',
+  webSupported: true,
+  // Snack can't load the example's PNG assets from a URL
+  snackSupported: false,
 };
 GeoJSONSource.metadata = metadata;

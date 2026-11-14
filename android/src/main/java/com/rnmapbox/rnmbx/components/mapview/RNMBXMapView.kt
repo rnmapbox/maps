@@ -2,6 +2,7 @@ package com.rnmapbox.rnmbx.components.mapview
 
 import android.content.Context
 import android.graphics.BitmapFactory
+import android.graphics.Region
 import android.os.Handler
 import android.os.Looper
 import android.view.Gravity
@@ -16,7 +17,11 @@ import com.mapbox.bindgen.Value
 import com.mapbox.geojson.Feature
 import com.mapbox.geojson.FeatureCollection
 import com.mapbox.geojson.Point
+import com.mapbox.common.MapboxCommonSettings
+import com.mapbox.common.SettingsServiceFactory
+import com.mapbox.common.SettingsServiceStorageType
 import com.mapbox.maps.*
+import com.mapbox.maps.debugoptions.MapViewDebugOptions
 import com.mapbox.maps.extension.localization.localizeLabels
 import com.mapbox.maps.extension.observable.eventdata.MapLoadingErrorEventData
 import com.mapbox.maps.extension.observable.eventdata.RenderFrameFinishedEventData
@@ -30,6 +35,8 @@ import com.mapbox.maps.extension.style.projection.generated.Projection
 import com.mapbox.maps.extension.style.projection.generated.setProjection
 import com.mapbox.maps.plugin.attribution.attribution
 import com.mapbox.maps.plugin.compass.compass
+import com.mapbox.maps.plugin.compass.R as CR
+import com.mapbox.maps.plugin.delegates.MapPluginProviderDelegate
 import com.mapbox.maps.plugin.delegates.listeners.*
 import com.mapbox.maps.plugin.gestures.*
 import com.mapbox.maps.plugin.logo.logo
@@ -59,12 +66,17 @@ import com.rnmapbox.rnmbx.events.constants.EventTypes
 import com.rnmapbox.rnmbx.utils.*
 import com.rnmapbox.rnmbx.utils.extensions.toReadableArray
 import java.util.*
+import java.util.concurrent.CopyOnWriteArraySet
 
 import com.rnmapbox.rnmbx.components.annotation.RNMBXPointAnnotationCoordinator
+import com.rnmapbox.rnmbx.components.annotation.RNMBXPointAnnotationManagerView
 import com.rnmapbox.rnmbx.components.images.ImageManager
+import com.rnmapbox.rnmbx.components.images.Subscription
 import com.rnmapbox.rnmbx.utils.extensions.toStringKeyPairs
 
 import com.rnmapbox.rnmbx.v11compat.event.*
+import com.rnmapbox.rnmbx.v11compat.image.ImageHolder
+import com.rnmapbox.rnmbx.v11compat.image.toImageHolder
 import com.rnmapbox.rnmbx.v11compat.feature.*
 import com.rnmapbox.rnmbx.v11compat.mapboxmap.*
 import com.rnmapbox.rnmbx.v11compat.ornamentsettings.*
@@ -99,24 +111,70 @@ fun interface Cancelable {
     fun cancel()
 }
 
+/** Called right before `<Camera>` moves the map, but not for its `defaultSettings` or for user gestures. */
+fun interface OnCameraWillMoveMapListener {
+    fun onCameraWillMoveMap(mapView: RNMBXMapView)
+}
+
 // RNMBXLifeCycle is now provided by lifecycle-compat layer
 
 data class FeatureEntry(val feature: AbstractMapFeature?, val view: View?, var addedToMap: Boolean = false) {
 
 }
 
-typealias Factory = (impl: String, ViewGroup) -> MapView?;
+typealias Factory = (impl: String, RNMBXMapView) -> MapView?;
+
+/**
+ * A map owned by native code, e.g. a `MapSurface` on a car screen: `RNMBXMapView` adds its children to it but doesn't
+ * load a style, change its ornaments or gestures, or destroy it. `mapView` is null if the map isn't drawn by a `MapView`.
+ */
+class RNMBXExternalMap(val mapboxMap: MapboxMap, val plugins: MapPluginProviderDelegate, val mapView: MapView? = null) {
+    private val mapViews = mutableSetOf<RNMBXMapView>()
+
+    internal fun attach(mapView: RNMBXMapView) {
+        mapViews.add(mapView)
+    }
+
+    internal fun detach(mapView: RNMBXMapView) {
+        mapViews.remove(mapView)
+    }
+
+    /**
+     * Call before destroying the map, so the `RNMBXMapView`s showing it remove their children while it's still alive,
+     * not when React unmounts them later.
+     */
+    fun invalidate() {
+        val mapViews = mapViews.toList()
+        this.mapViews.clear()
+        mapViews.forEach { it.releaseMap() }
+    }
+}
+
+/** Returning null, e.g. for a map that no longer exists, leaves the `RNMBXMapView` without a map until it's remounted. */
+typealias ExternalMapFactory = (impl: String, RNMBXMapView) -> RNMBXExternalMap?;
+
 public class RNMBXMapViewFactory {
     companion object {
         var factories = mutableMapOf<String,Factory>();
-        fun regiser(impl: String, factory: Factory) {
-            val (impl, options) = impl.split(":",limit=2)
-            factories.put(impl, factory);
+        var externalMapFactories = mutableMapOf<String,ExternalMapFactory>();
+
+        fun register(impl: String, factory: Factory) {
+            factories.put(impl.substringBefore(":"), factory);
         }
 
+        fun registerExternalMap(impl: String, factory: ExternalMapFactory) {
+            externalMapFactories.put(impl.substringBefore(":"), factory);
+        }
+
+        fun getExternalMap(impl: String): ExternalMapFactory? {
+            return externalMapFactories.get(impl.substringBefore(":"));
+        }
+
+        @Deprecated("Use register", ReplaceWith("register(impl, factory)"))
+        fun regiser(impl: String, factory: Factory) = register(impl, factory)
+
         fun get(impl: String): Factory? {
-            val (impl, options) = impl.split(":",limit=2) + null;
-            return factories.get(impl);
+            return factories.get(impl.substringBefore(":"));
         }
     }
 }
@@ -135,21 +193,62 @@ open class RNMBXMapView(private val mContext: Context, var mManager: RNMBXMapVie
 
     private val mSources: MutableMap<String, RNMBXSource<*>>
     private val mImages: MutableList<RNMBXImages>
-    public val pointAnnotations: RNMBXPointAnnotationCoordinator by lazy {
-        val gesturesPlugin: GesturesPlugin = mapView.gestures
+    val pointAnnotationCoordinators = mutableListOf<RNMBXPointAnnotationCoordinator>()
+    private var pointAnnotationGesturesInited = false
+
+    var defaultPointAnnotationManagerView: RNMBXPointAnnotationManagerView? = null
+
+    private fun ensurePointAnnotationGestures() {
+        if (pointAnnotationGesturesInited) return
+        val gesturesPlugin: GesturesPlugin = mapPlugins.gestures
         gesturesPlugin.removeOnMapClickListener(this)
         gesturesPlugin.removeOnMapLongClickListener(this)
-
-        val result = RNMBXPointAnnotationCoordinator(mapView)
-
         gesturesPlugin.addOnMapClickListener(this)
         gesturesPlugin.addOnMapLongClickListener(this)
+        pointAnnotationGesturesInited = true
+    }
 
+    fun registerPointAnnotationCoordinator(coordinator: RNMBXPointAnnotationCoordinator) {
+        ensurePointAnnotationGestures()
+        if (!pointAnnotationCoordinators.contains(coordinator)) {
+            pointAnnotationCoordinators.add(coordinator)
+        }
+    }
+
+    fun unregisterPointAnnotationCoordinator(coordinator: RNMBXPointAnnotationCoordinator) {
+        pointAnnotationCoordinators.remove(coordinator)
+    }
+
+    private val cameraWillMoveMapListeners = CopyOnWriteArraySet<OnCameraWillMoveMapListener>()
+
+    /**
+     * Lets native code driving the same map, such as a navigation camera, yield when `<Camera>` moves it.
+     * The listener is held strongly until removed.
+     */
+    fun addOnCameraWillMoveMapListener(listener: OnCameraWillMoveMapListener): Cancelable {
+        cameraWillMoveMapListeners.add(listener)
+        return Cancelable { removeOnCameraWillMoveMapListener(listener) }
+    }
+
+    fun removeOnCameraWillMoveMapListener(listener: OnCameraWillMoveMapListener) {
+        cameraWillMoveMapListeners.remove(listener)
+    }
+
+    internal fun cameraWillMoveMap() {
+        cameraWillMoveMapListeners.forEach { it.onCameraWillMoveMap(this) }
+    }
+
+    public val pointAnnotations: RNMBXPointAnnotationCoordinator by lazy {
+        val result = RNMBXPointAnnotationCoordinator(mapPlugins)
+        registerPointAnnotationCoordinator(result)
         result
     }
     private var mProjection: ProjectionName = ProjectionName.MERCATOR
     private var mLocaleString: String? = null
     private var mLocaleLayerIds: List<String>? = null
+    private var languageRejectionSubscription: com.mapbox.common.Cancelable? = null
+    /** Rejection already warned about, so each map logs it once instead of once per failed source */
+    private var warnedLanguageRejection: String? = null
     private var mStyleURL: String? = null
     val isDestroyed = false
     private var mCamera: RNMBXCamera? = null
@@ -162,11 +261,25 @@ open class RNMBXMapView(private val mContext: Context, var mManager: RNMBXMapVie
     private lateinit var mMap: MapboxMap
 
     private lateinit var mMapView: MapView
+    private var mExternalMap: RNMBXExternalMap? = null
+    private var mapReleased = false
+    private var mapUnavailable = false
     val isInitialized: Boolean
-        get() = this::mMapView.isInitialized
+        get() = this::mMap.isInitialized
+
+    /** False if the map comes from an `ExternalMapFactory`. */
+    val ownsMap: Boolean
+        get() = mExternalMap == null
+
+    /** The map's plugins (gestures, location, viewport, annotations), with or without a `MapView`. */
+    val mapPlugins: MapPluginProviderDelegate
+        get() = mExternalMap?.plugins ?: mMapView
 
     var savedStyle: Style? = null
         private set
+
+    /** Whether `gestureSettings.pinchPanEnabled` is set, so it must not be overridden temporarily. */
+    var pinchPanEnabledSetByApp = false
 
     private var styleLoaded = false
 
@@ -177,14 +290,36 @@ open class RNMBXMapView(private val mContext: Context, var mManager: RNMBXMapVie
 
     private var wasGestureActive = false
     private var isGestureActive = false
+    private val startupCameraEvents = object {
+        private var isReady = false
+        private var hasPendingChange = false
+
+        fun onCameraChanged() {
+            if (!isReady) {
+                hasPendingChange = true
+                return
+            }
+            sendCameraChangedEvents()
+        }
+
+        fun markReady() {
+            if (isReady) return
+            isReady = true
+            if (hasPendingChange) {
+                hasPendingChange = false
+                sendCameraChangedEvents()
+            }
+        }
+    }
 
     var mapViewImpl: String? = null
 
-    val mapView: MapView
-        get() = this.mMapView
+    /** Null before the map is created, and for an external map that isn't drawn by a `MapView` (e.g. a car screen `MapSurface`). */
+    val mapView: MapView?
+        get() = if (mExternalMap != null) mExternalMap?.mapView else if (this::mMapView.isInitialized) mMapView else null
 
-    val viewAnnotationManager: ViewAnnotationManager
-        get() = mapView.viewAnnotationManager
+    val viewAnnotationManager: ViewAnnotationManager?
+        get() = mapView?.viewAnnotationManager
 
     var requestDisallowInterceptTouchEvent: Boolean = false
         set(value) {
@@ -196,7 +331,7 @@ open class RNMBXMapView(private val mContext: Context, var mManager: RNMBXMapVie
     var deselectAnnotationOnTap = false
 
     fun getMapboxMap(): MapboxMap {
-        return mapView.getMapboxMap()
+        return mMap
     }
 
     override fun setId(id: Int) {
@@ -207,10 +342,16 @@ open class RNMBXMapView(private val mContext: Context, var mManager: RNMBXMapVie
     private fun styleLoaded(style: Style) {
         savedStyle = style
         styleLoaded = true
-        setUpImage(style)
+        if (ownsMap) {
+            setUpImage(style)
+            mCompassImage?.let { name -> style.getStyleImage(name)?.let { setCompassImage(it) } }
+        }
         addFeaturesToMap(true)
-        applyLocalizeLabels()
-        style.setProjection(Projection(mProjection))
+        if (ownsMap) {
+            applyLocalizeLabels()
+            applyStyleGlyphURL()
+            style.setProjection(Projection(mProjection))
+        }
     }
 
     private fun setupEvents(map: MapboxMap) {
@@ -223,17 +364,22 @@ open class RNMBXMapView(private val mContext: Context, var mManager: RNMBXMapVie
        )
     }
 
+    // the map-loading-error subscription, cancelled when the view is dropped
+    private var mapLoadingErrorSubscription: com.mapbox.common.Cancelable? = null
+
     private fun onMapReady(map: MapboxMap) {
         map.getStyle(object : Style.OnStyleLoaded {
             override fun onStyleLoaded(style: Style) {
                 styleLoaded(style)
             }
         })
+        if (!ownsMap) {
+            map.addOnStyleLoadedListener(OnStyleLoadedListener { reAddFeaturesIfStyleReplaced() })
+        }
         val _this = this
 
         map.addOnCameraChangeListener(OnCameraChangeListener { cameraChangedEventData ->
-            handleMapChangedEvent(EventTypes.REGION_IS_CHANGING)
-            handleMapChangedEvent(EventTypes.CAMERA_CHANGED)
+            startupCameraEvents.onCameraChanged()
         })
 
         map.addOnMapIdleListener(OnMapIdleListener { mapIdleEventData ->
@@ -241,7 +387,7 @@ open class RNMBXMapView(private val mContext: Context, var mManager: RNMBXMapVie
             handleMapChangedEvent(EventTypes.MAP_IDLE);
         })
 
-        val gesturesPlugin: GesturesPlugin = mapView.gestures
+        val gesturesPlugin: GesturesPlugin = mapPlugins.gestures
         gesturesPlugin.addOnMapLongClickListener(_this)
         gesturesPlugin.addOnMapClickListener(_this)
 
@@ -303,15 +449,18 @@ open class RNMBXMapView(private val mContext: Context, var mManager: RNMBXMapVie
             }
         })
 
-        map.subscribe({ event ->
-            Logger.e(LOG_TAG, String.format("Map load failed: %s", event.data.toString()))
-            val errorMessage = event.getMapLoadingErrorEventData().message
-            val event = MapChangeEvent(this, EventTypes.MAP_LOADING_ERROR, writableMapOf(
-                    "error" to errorMessage
-            ))
+        // `MapboxMap.subscribe(observer, events)` is an empty shim in the v11 compat layer, so it never
+        // delivered MAP_LOADING_ERROR. The payload matches iOS: `{ error, type, tileId?, sourceId? }`,
+        // where `type` is the SDK's error kind (style | sprite | source | glyphs | tile).
+        mapLoadingErrorSubscription?.cancel()
+        mapLoadingErrorSubscription = map.subscribeMapLoadingError { error ->
+            Logger.e(LOG_TAG, String.format("Map load failed: %s", error.message))
+            val payload = writableMapOf("error" to error.message, "type" to error.type.name.lowercase())
+            error.sourceId?.let { payload.putString("sourceId", it) }
+            error.tileId?.let { payload.putString("tileId", String.format("x:%d y:%d z:%d", it.x, it.y, it.z.toInt())) }
+            val event = MapChangeEvent(this, EventTypes.MAP_LOADING_ERROR, payload)
             mManager.handleEvent(event)
-
-                      }, Arrays.asList(MapEvents.MAP_LOADING_ERROR))
+        }
     }
 
     fun<T> mapGestureBegin(type:MapGestureType, gesture: T) {
@@ -356,6 +505,8 @@ open class RNMBXMapView(private val mContext: Context, var mManager: RNMBXMapVie
             feature = childView as AbstractMapFeature?
         } else if (childView is RNMBXNativeUserLocation) {
             feature = childView
+        } else if ((childView is RNMBXPointAnnotation || childView is RNMBXMarkerView) && mapView == null) {
+            Logger.w(LOG_TAG, "${childView.javaClass.simpleName} needs a MapView, the ${mapViewImpl} map has none; it isn't shown")
         } else if (childView is RNMBXPointAnnotation) {
             val annotation = childView
             pointAnnotations.add(annotation)
@@ -377,7 +528,7 @@ open class RNMBXMapView(private val mContext: Context, var mManager: RNMBXMapVie
             //}
         }
 
-        val addToMap = styleLoaded || (feature?.requiresStyleLoad == false)
+        val addToMap = !mapReleased && (styleLoaded || (feature?.requiresStyleLoad == false))
 
         var entry = FeatureEntry(feature, childView, false)
         if (addToMap) {
@@ -434,6 +585,23 @@ open class RNMBXMapView(private val mContext: Context, var mManager: RNMBXMapVie
             if (it.feature?.removeFromMap(this, reason) == true) {
                 it.addedToMap = false
             }
+        }
+    }
+
+    /** The owner of an external map can load another style, which drops the sources and layers added to it. */
+    private fun reAddFeaturesIfStyleReplaced() {
+        if (!styleLoaded) return
+        val style = mMap.getStyle() ?: return
+        val replaced = mFeatures.any {
+            it.addedToMap && when (val feature = it.feature) {
+                is RNMBXSource<*> -> feature.iD?.let { id -> !style.styleSourceExists(id) } ?: false
+                is RNMBXLayer<*> -> feature.iD?.let { id -> !style.styleLayerExists(id) } ?: false
+                else -> false
+            }
+        }
+        if (replaced) {
+            removeAllFeaturesFromMap(RemovalReason.STYLE_CHANGE)
+            styleLoaded(style)
         }
     }
 
@@ -504,6 +672,7 @@ open class RNMBXMapView(private val mContext: Context, var mManager: RNMBXMapVie
 
     // region properties
     var surfaceView: Boolean? = null
+    var transparent: Boolean = false
 
     enum class Property(val _apply: (RNMBXMapView) -> Unit) : PropertyUpdaterWithName<RNMBXMapView> {
         PROJECTION(RNMBXMapView::applyProjection),
@@ -514,7 +683,10 @@ open class RNMBXMapView(private val mContext: Context, var mManager: RNMBXMapVie
         SCALEBAR(RNMBXMapView::applyScaleBar),
         COMPASS(RNMBXMapView::applyCompass),
         MAX_PITCH(RNMBXMapView::applyMaxPitch),
-        MIN_PITCH(RNMBXMapView::applyMinPitch),;
+        MIN_PITCH(RNMBXMapView::applyMinPitch),
+        SYMBOL_SCALE_BEHAVIOR(RNMBXMapView::applySymbolScaleBehavior),
+        STYLE_GLYPH_URL(RNMBXMapView::applyStyleGlyphURL),
+        DEBUG_OPTIONS(RNMBXMapView::applyDebugOptions),;
 
         override fun apply(mapView: RNMBXMapView) {
            _apply(mapView)
@@ -523,28 +695,39 @@ open class RNMBXMapView(private val mContext: Context, var mManager: RNMBXMapVie
 
     val changes = PropertyChanges<RNMBXMapView>();
 
-    var withMapWaiters = mutableListOf<(map: MapView)->Unit>();
+    var withMapWaiters = mutableListOf<()->Unit>();
     fun withMap(callback: (map: MapboxMap) -> Unit) {
+        if (mapUnavailable) return
         if (! this::mMap.isInitialized) {
-            withMapWaiters.add { it -> callback(it.getMapboxMap()) }
+            withMapWaiters.add { callback(mMap) }
         } else {
             callback(mMap)
         }
     }
+
+    /** Not called for an external map without a `MapView`. */
     fun withMapView(callback: (map: MapView) -> Unit) {
-        if (! this::mMapView.isInitialized) {
-            withMapWaiters.add(callback)
+        if (mapUnavailable) return
+        if (! this::mMap.isInitialized) {
+            withMapWaiters.add { mapView?.let(callback) }
         } else {
-            callback(mMapView)
+            mapView?.let(callback)
         }
     }
     fun applyAllChanges() {
-        if (! this::mMapView.isInitialized) {
-            createMapView()
-            withMapWaiters.forEach { it(mMapView) }
+        if (! this::mMap.isInitialized && !mapUnavailable) {
+            createMap()
+            if (!mapUnavailable) withMapWaiters.forEach { it() }
             withMapWaiters.clear()
         }
-        changes.apply(this)
+        if (mapUnavailable) {
+            changes.changes.clear()
+        } else if (ownsMap) {
+            changes.apply(this)
+        } else {
+            // The owner styles the map; props like styleURL and the ornaments don't apply.
+            changes.changes.clear()
+        }
     }
 
 
@@ -564,23 +747,85 @@ open class RNMBXMapView(private val mContext: Context, var mManager: RNMBXMapVie
     fun applyLocalizeLabels() {
         val localeStr = mLocaleString
         if (localeStr != null) {
-            val locale = if (localeStr == "current") Locale.getDefault() else Locale.Builder()
-                .setLanguageTag(localeStr).build()
-            savedStyle?.localizeLabels(locale, mLocaleLayerIds)
+            // The localization extension throws for the Standard style and Locale.Builder for a malformed tag
+            try {
+                val locale = if (localeStr == "current") Locale.getDefault() else Locale.Builder()
+                    .setLanguageTag(localeStr).build()
+                savedStyle?.localizeLabels(locale, mLocaleLayerIds)
+            } catch (e: RuntimeException) {
+                Logger.w(LOG_TAG, "localizeLabels: ${e.message} Use Mapbox.setLanguage to localize all styles.")
+            }
         }
     }
-    fun setReactLocalizeLabels(localeStr: String?, layerIds: List<String>?) {
-        if (localeStr != null) {
-            mLocaleString = localeStr
-            mLocaleLayerIds = layerIds
+    /** The tile API answers HTTP 400 to a language set by `Mapbox.setLanguage` that it can't parse, and then no tiles load */
+    private fun warnIfLanguageRejected(error: MapLoadingError) {
+        if ((error.type != MapLoadingErrorType.SOURCE && error.type != MapLoadingErrorType.TILE) ||
+            !error.message.contains("status code 400") ||
+            SettingsServiceFactory.getInstance(SettingsServiceStorageType.PERSISTENT).has(MapboxCommonSettings.LANGUAGE).value != true ||
+            warnedLanguageRejection == error.message) {
+            return
         }
+        warnedLanguageRejection = error.message
+        Logger.w(LOG_TAG, "Mapbox rejected the language set with Mapbox.setLanguage: ${error.message}")
+    }
+
+    fun setReactLocalizeLabels(localeStr: String?, layerIds: List<String>?) {
+        mLocaleString = localeStr
+        mLocaleLayerIds = layerIds
         changes.add(Property.LOCALIZE_LABELS)
     }
 
+    private var mStyleGlyphURL: String? = null
+
+    fun setReactStyleGlyphURL(url: String?) {
+        mStyleGlyphURL = url
+        changes.add(Property.STYLE_GLYPH_URL)
+    }
+
+    @OptIn(MapboxExperimental::class)
+    fun applyStyleGlyphURL() {
+        val url = mStyleGlyphURL ?: return
+        savedStyle?.setStyleGlyphURL(url)
+    }
+
+    private var mDebugOptions: Set<MapViewDebugOptions> = emptySet()
+
+    fun setReactDebugOptions(names: List<String>) {
+        mDebugOptions = names.mapNotNull { name ->
+            val option = debugOptionsByName[name]
+            if (option == null) {
+                Logger.w(LOG_TAG, "debugOptions: unknown option $name, ignored")
+            }
+            option
+        }.toSet()
+        changes.add(Property.DEBUG_OPTIONS)
+    }
+
+    private fun applyDebugOptions() {
+        mapView?.debugOptions = mDebugOptions
+        // The camera and padding options add views to the MapView
+        workaroundToRelayoutChildOfMapView()
+    }
+
     fun setReactPreferredFramesPerSecond(preferredFramesPerSecond: Int) {
-        if (this::mMapView.isInitialized) {
+        if (ownsMap && this::mMapView.isInitialized) {
             mMapView.setMaximumFps(preferredFramesPerSecond)
         }
+    }
+
+    private var mSymbolScaleBehavior: SymbolScaleBehavior? = null
+
+    fun setReactSymbolScaleBehavior(behavior: SymbolScaleBehavior?) {
+        mSymbolScaleBehavior = behavior
+        changes.add(Property.SYMBOL_SCALE_BEHAVIOR)
+    }
+
+    @OptIn(MapboxExperimental::class)
+    private fun applySymbolScaleBehavior() {
+        if (!this::mMap.isInitialized) {
+            return
+        }
+        mMap.symbolScaleBehavior = mSymbolScaleBehavior ?: SymbolScaleBehavior.fixed(1.0f)
     }
 
     fun setReactMaxPitch(maxPitch: Double?) {
@@ -678,8 +923,9 @@ open class RNMBXMapView(private val mContext: Context, var mManager: RNMBXMapVie
         val source = sources.removeFirst()
         val hitbox = source.touchHitbox
         if (hitbox != null) {
-            val halfWidth = (hitbox["width"]!!.toFloat() / 2.0f).toDouble()
-            val halfHeight = (hitbox["height"]!!.toFloat() / 2.0f).toDouble()
+            val density = getDisplayDensity()
+            val halfWidth = hitbox["width"]!! / 2.0 * density
+            val halfHeight = hitbox["height"]!! / 2.0 * density
             val screenBox = ScreenBox(
                     ScreenCoordinate(screenPoint.x - halfWidth,
                             screenPoint.y - halfHeight
@@ -687,7 +933,7 @@ open class RNMBXMapView(private val mContext: Context, var mManager: RNMBXMapVie
                     ScreenCoordinate(screenPoint.x + halfWidth,
                             screenPoint.y + halfHeight)
             )
-            mapView.getMapboxMap().queryRenderedFeatures(RenderedQueryGeometry(screenBox),
+            mMap.queryRenderedFeatures(RenderedQueryGeometry(screenBox),
                     RenderedQueryOptions(
                             source.layerIDs,
                             null
@@ -714,15 +960,27 @@ open class RNMBXMapView(private val mContext: Context, var mManager: RNMBXMapVie
 
     override fun onMapClick(point: Point): Boolean {
         val _this = this
-        if (pointAnnotations.getAndClearAnnotationClicked()) {
+        if (pointAnnotationCoordinators.any { it.getAndClearAnnotationClicked() }) {
             return true
         }
         if (deselectAnnotationOnTap) {
-            if (pointAnnotations.deselectSelectedAnnotation()) {
+            var deselected = false
+            for (coordinator in pointAnnotationCoordinators) {
+                if (coordinator.deselectSelectedAnnotation()) {
+                    deselected = true
+                }
+            }
+            if (deselected) {
                 return true
             }
         }
         val screenPointPx = mMap?.pixelForCoordinate(point)
+        // A tap that reaches the map but lands within a MarkerView (e.g. on a non-interactive
+        // part of it) should be absorbed by the marker, not fall through to touchable sources
+        // (symbol/shape layers) or pins underneath it. See #4255 discussion.
+        if (screenPointPx != null && isPointOnMarkerView(screenPointPx)) {
+            return true
+        }
         val touchableSources = allTouchableSources
         val hits = HashMap<String?, List<Feature?>?>()
         if (screenPointPx != null) {
@@ -750,9 +1008,27 @@ open class RNMBXMapView(private val mContext: Context, var mManager: RNMBXMapVie
         return false
     }
 
+    /**
+     * Whether the given map-surface coordinate (physical pixels, from `pixelForCoordinate`) lands
+     * within any `MarkerView` currently on the map. Converts to absolute screen coordinates so it
+     * can be compared against each marker view's `getLocationOnScreen` bounds.
+     */
+    private fun isPointOnMarkerView(screenPointPx: ScreenCoordinate): Boolean {
+        val markerViews = mFeatures.mapNotNull { it.feature as? RNMBXMarkerView }
+        if (markerViews.isEmpty()) {
+            return false
+        }
+        val mapLoc = IntArray(2)
+        val mapView = mapView ?: return false
+        mapView.getLocationOnScreen(mapLoc)
+        val absX = mapLoc[0] + screenPointPx.x.toFloat()
+        val absY = mapLoc[1] + screenPointPx.y.toFloat()
+        return markerViews.any { it.containsScreenPoint(absX, absY) }
+    }
+
     override fun onMapLongClick(point: Point): Boolean {
         val _this = this
-        if (pointAnnotations.getAndClearAnnotationDragged()) {
+        if (pointAnnotationCoordinators.any { it.getAndClearAnnotationDragged() }) {
             return true
         }
         val screenPointPx = mMap?.pixelForCoordinate(point)
@@ -802,6 +1078,11 @@ open class RNMBXMapView(private val mContext: Context, var mManager: RNMBXMapVie
     }
 
     // region Events
+
+    private fun sendCameraChangedEvents() {
+        handleMapChangedEvent(EventTypes.REGION_IS_CHANGING)
+        handleMapChangedEvent(EventTypes.CAMERA_CHANGED)
+    }
 
     fun sendRegionDidChangeEvent() {
         handleMapChangedEvent(EventTypes.REGION_DID_CHANGE)
@@ -901,7 +1182,7 @@ open class RNMBXMapView(private val mContext: Context, var mManager: RNMBXMapVie
         }
 
     fun getMapAsync(mapReady: OnMapReadyCallback) {
-        mapReady.onMapReady(mapView.getMapboxMap())
+        mapReady.onMapReady(mMap)
     }
 
     //fun setTintColor(color: Int) {
@@ -1062,6 +1343,7 @@ open class RNMBXMapView(private val mContext: Context, var mManager: RNMBXMapVie
     }
 
     fun takeSnap(writeToDisk: Boolean, response: CommandResponse) {
+        val mapView = mapView ?: return response.error("takeSnap: the ${mapViewImpl} map has no MapView")
         mapView.snapshot { snapshot ->
             if (snapshot == null) {
                 response.error("snapshot failed")
@@ -1093,7 +1375,7 @@ open class RNMBXMapView(private val mContext: Context, var mManager: RNMBXMapVie
     }
 
     fun clearData(response: CommandResponse) {
-        mapView.getMapboxMap().clearData { expected ->
+        mMap.clearData { expected ->
             if (expected.isError()) {
                 response.error(expected.error!!.toString())
             } else {
@@ -1109,7 +1391,7 @@ open class RNMBXMapView(private val mContext: Context, var mManager: RNMBXMapVie
       sourceLayerId: String?,
       response: CommandResponse
     ) {
-        mapView.getMapboxMap().setFeatureStateCompat(
+        mMap.setFeatureStateCompat(
             sourceId,
             sourceLayerId,
             featureId,
@@ -1129,7 +1411,7 @@ open class RNMBXMapView(private val mContext: Context, var mManager: RNMBXMapVie
       sourceLayerId: String?,
       response: CommandResponse
     ) {
-        mapView.getMapboxMap().getFeatureState(sourceId, sourceLayerId, featureId) { expected ->
+        mMap.getFeatureState(sourceId, sourceLayerId, featureId) { expected ->
             if (expected.isValue) {
                 response.success {
                     val state = expected.value?.contents;
@@ -1152,7 +1434,7 @@ open class RNMBXMapView(private val mContext: Context, var mManager: RNMBXMapVie
       sourceLayerId: String?,
       response: CommandResponse
     ) {
-        mapView.getMapboxMap().removeFeatureStateCompat(
+        mMap.removeFeatureStateCompat(
             sourceId,
             sourceLayerId,
             featureId,
@@ -1219,6 +1501,43 @@ open class RNMBXMapView(private val mContext: Context, var mManager: RNMBXMapVie
 
     companion object {
         const val LOG_TAG = "RNMBXMapView"
+
+        private val debugOptionsByName = mapOf(
+            "tileBorders" to MapViewDebugOptions.TILE_BORDERS,
+            "parseStatus" to MapViewDebugOptions.PARSE_STATUS,
+            "timestamps" to MapViewDebugOptions.TIMESTAMPS,
+            "collision" to MapViewDebugOptions.COLLISION,
+            "overdraw" to MapViewDebugOptions.OVERDRAW,
+            "stencilClip" to MapViewDebugOptions.STENCIL_CLIP,
+            "depthBuffer" to MapViewDebugOptions.DEPTH_BUFFER,
+            "modelBounds" to MapViewDebugOptions.MODEL_BOUNDS,
+            "light" to MapViewDebugOptions.LIGHT,
+            "camera" to MapViewDebugOptions.CAMERA,
+            "padding" to MapViewDebugOptions.PADDING,
+            "terrainWireframe" to MapViewDebugOptions.TERRAIN_WIREFRAME,
+            "layers2DWireframe" to MapViewDebugOptions.LAYERS2_DWIREFRAME,
+            "layers3DWireframe" to MapViewDebugOptions.LAYERS3_DWIREFRAME,
+        )
+    }
+
+    private fun createMap() {
+        val impl = mapViewImpl
+        val externalMapFactory = impl?.let { RNMBXMapViewFactory.getExternalMap(it) }
+        if (impl != null && externalMapFactory != null) {
+            val external = externalMapFactory(impl, this)
+            if (external == null) {
+                Logger.w(LOG_TAG, "The ${impl} factory has no map for this MapView, it stays empty")
+                mapUnavailable = true
+                mapReleased = true
+                return
+            }
+            mExternalMap = external
+            external.attach(this)
+            mMap = external.mapboxMap
+            setUpMap(mMap)
+            return
+        }
+        createMapView()
     }
 
     fun createAndAddMapView(mapViewImpl: String): MapView? {
@@ -1238,7 +1557,10 @@ open class RNMBXMapView(private val mContext: Context, var mManager: RNMBXMapVie
         }
         if (!created) {
             var options: MapInitOptions? = null
-            if (surfaceView == false) {
+            if (transparent && surfaceView == true) {
+                Logger.w(LOG_TAG, "surfaceView is ignored with transparent, a SurfaceView cannot be transparent so TextureView is used")
+            }
+            if (surfaceView == false || transparent) {
                 options = MapInitOptions(context = mContext, textureView = true)
             }
             val mapView = if (options != null) MapView(mContext, options) else MapView(mContext)
@@ -1254,9 +1576,13 @@ open class RNMBXMapView(private val mContext: Context, var mManager: RNMBXMapVie
         }
         this.addOnLayoutChangeListener(this)
 
-        val map = mapView.getMapboxMap()
+        val map = mMapView.getMapboxMap()
         mMap = map
+        setUpMap(map)
+        return mMapView
+    }
 
+    private fun setUpMap(map: MapboxMap) {
         val _this = this
 
         onMapReady(map)
@@ -1274,10 +1600,10 @@ open class RNMBXMapView(private val mContext: Context, var mManager: RNMBXMapVie
             }
         })
 
-        RNMBXMarkerViewManager.markerViewContainerSizeFixer(this, mapView.viewAnnotationManager)
+        mapView?.let { RNMBXMarkerViewManager.markerViewContainerSizeFixer(this, it.viewAnnotationManager) }
 
         this.setupEvents(map)
-        return mapView
+        languageRejectionSubscription = map.subscribeMapLoadingError { warnIfLanguageRejected(it) }
     }
 
     init {
@@ -1372,15 +1698,40 @@ open class RNMBXMapView(private val mContext: Context, var mManager: RNMBXMapVie
         changes.add(Property.COMPASS)
     }
 
+    var mCompassImage: String? = null
+    private var mCompassImageSubscription: Subscription? = null
+
+    fun setReactCompassImage(compassImage: String?) {
+        mCompassImage = compassImage?.ifEmpty { null }
+        changes.add(Property.COMPASS)
+    }
+
     private fun applyCompass() {
-        mapView.compass.updateSettings {
+        mapView?.compass?.updateSettings {
             fadeWhenFacingNorth = mCompassFadeWhenNorth
             updateOrnament("compass", mCompassSettings, this.toGenericOrnamentSettings())
         }
+        applyCompassImage()
         workaroundToRelayoutChildOfMapView()
     }
 
+    private fun applyCompassImage() {
+        mCompassImageSubscription?.cancel()
+        // Images from <Images> can be added (or finish downloading) later, and again on style reload.
+        mCompassImageSubscription = mCompassImage?.let { name ->
+            imageManager.subscribe(name) { _, image -> setCompassImage(image) }
+        }
+        setCompassImage(mCompassImage?.let { savedStyle?.getStyleImage(it) })
+    }
+
+    private fun setCompassImage(image: Image?) {
+        mapView?.compass?.updateSettings {
+            this.image = image?.toImageHolder() ?: ImageHolder.from(CR.drawable.mapbox_compass_icon)
+        }
+    }
+
     var mScaleBarSettings = OrnamentSettings(enabled = false)
+    var mScaleBarUnits: String? = null
 
     fun setReactScaleBarEnabled(scaleBarEnabled: Boolean) {
         mScaleBarSettings.enabled = scaleBarEnabled
@@ -1402,14 +1753,27 @@ open class RNMBXMapView(private val mContext: Context, var mManager: RNMBXMapVie
         changes.add(Property.SCALEBAR)
     }
 
+    fun setReactScaleBarUnits(units: String?) {
+        mScaleBarUnits = units
+        changes.add(Property.SCALEBAR)
+    }
+
     private fun applyScaleBar() {
-        mapView.scalebar.updateSettings {
+        mapView?.scalebar?.updateSettings {
             updateOrnament("scaleBar", mScaleBarSettings, this.toGenericOrnamentSettings())
+            mScaleBarUnits?.let { units ->
+                distanceUnits = when (units) {
+                    "imperial" -> com.mapbox.maps.plugin.DistanceUnits.IMPERIAL
+                    "nautical" -> com.mapbox.maps.plugin.DistanceUnits.NAUTICAL
+                    else -> com.mapbox.maps.plugin.DistanceUnits.METRIC
+                }
+            }
         }
         workaroundToRelayoutChildOfMapView()
     }
 
     fun workaroundToRelayoutChildOfMapView() {
+        val mapView = mapView ?: return
         if (mapView.width == 0 && mapView.height == 0) {
             return
         }
@@ -1474,7 +1838,7 @@ open class RNMBXMapView(private val mContext: Context, var mManager: RNMBXMapVie
     }
 
     private fun applyAttribution() {
-        mapView.attribution.updateSettings {
+        mapView?.attribution?.updateSettings {
             updateOrnament("attribution", mAttributionSettings, this.toGenericOrnamentSettings())
         }
         workaroundToRelayoutChildOfMapView()
@@ -1509,7 +1873,7 @@ open class RNMBXMapView(private val mContext: Context, var mManager: RNMBXMapVie
     }
 
     private fun applyLogo() {
-        mapView.logo.updateSettings {
+        mapView?.logo?.updateSettings {
             updateOrnament("logo", mLogoSettings, this.toGenericOrnamentSettings())
         }
         workaroundToRelayoutChildOfMapView()
@@ -1524,6 +1888,7 @@ open class RNMBXMapView(private val mContext: Context, var mManager: RNMBXMapVie
     }
 
     override fun onDetachedFromWindow() {
+        mLocationComponentManager?.onDetachedFromWindow()
         lifecycle.onDetachedFromWindow()
         super.onDetachedFromWindow();
     }
@@ -1541,9 +1906,21 @@ open class RNMBXMapView(private val mContext: Context, var mManager: RNMBXMapVie
      */
 
     fun onDropViewInstance() {
-        removeAllFeaturesFromMap(RemovalReason.ON_DESTROY)
-        mapView.viewAnnotationManager.removeAllViewAnnotations()
+        mExternalMap?.detach(this)
+        releaseMap()
         lifecycle.onDestroy()
+    }
+
+    internal fun releaseMap() {
+        if (mapReleased) return
+        mapReleased = true
+        languageRejectionSubscription?.cancel()
+        languageRejectionSubscription = null
+        mapLoadingErrorSubscription?.cancel()
+        mapLoadingErrorSubscription = null
+        removeAllFeaturesFromMap(RemovalReason.ON_DESTROY)
+        mapView?.viewAnnotationManager?.removeAllViewAnnotations()
+        mLocationComponentManager?.onDestroy()
     }
 
     override fun onAttachedToWindow() {
@@ -1551,11 +1928,25 @@ open class RNMBXMapView(private val mContext: Context, var mManager: RNMBXMapVie
         super.onAttachedToWindow()
         Handler(Looper.getMainLooper()).post {
             lifecycle.afterAttachFromLooper()
+            // Camera.addToMap applies defaultSettings in the attach callbacks (#4213).
+            startupCameraEvents.markReady()
         }
     }
 
     fun callIfAttachedToWindow(callback: () -> Unit) {
        lifecycle.callIfAttachedToWindow(callback)
+    }
+
+    // The SurfaceView adds the map to the window's transparent-region hint, which is only recomputed on layout, so on
+    // translucent (edge-to-edge) windows SurfaceFlinger skips view annotations moved by translation; keep the map out.
+    override fun gatherTransparentRegion(region: Region?): Boolean {
+        val opaque = super.gatherTransparentRegion(region)
+        if (region != null) {
+            val location = IntArray(2)
+            getLocationInWindow(location)
+            region.op(location[0], location[1], location[0] + width, location[1] + height, Region.Op.DIFFERENCE)
+        }
+        return opaque
     }
 
     override fun onLayoutChange(
@@ -1569,6 +1960,7 @@ open class RNMBXMapView(private val mContext: Context, var mManager: RNMBXMapVie
         oldRight: Int,
         oldBottom: Int
     ) {
+        val mapView = mapView?.takeIf { ownsMap } ?: return
         mapView.post {
             mapView.measure(
                 MeasureSpec.makeMeasureSpec(width, MeasureSpec.EXACTLY),
@@ -1591,14 +1983,14 @@ fun RNMBXMapView.updateRequestDisallowInterceptTouchEvent(oldValue: Boolean, val
         withMapView {
             it.setOnTouchListener { view, event ->
                 this.requestDisallowInterceptTouchEvent(true)
-                mapView.onTouchEvent(event)
+                view.onTouchEvent(event)
                 true
             }
         }
     } else {
         withMapView {
             it.setOnTouchListener { view, event ->
-                mapView.onTouchEvent(event)
+                view.onTouchEvent(event)
             }
         }
     }

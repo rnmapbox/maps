@@ -1,10 +1,12 @@
 ## Debugging
 
+The lint rejects local files in the code example, except `../assets/example.png` and `../assets/example.glb` (both in `example/src/assets`).
+
 
 
 ```sh
 npm install
-node ./fetch-issue.js
+node ./fetch-issue-for-testing.js 2871
 GITHUB_EVENT_PATH=./test-issue.json node lint-code-example-in-issues.js
 ```
 

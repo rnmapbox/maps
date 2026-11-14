@@ -193,8 +193,6 @@ object RNMBXStyleFactory {
                 setLineCrossSlope(layer, styleValue)
               "lineElevationGroundScale" ->
                 setLineElevationGroundScale(layer, styleValue)
-                "lineElevationGroundScaleTransition" ->
-                setLineElevationGroundScaleTransition(layer, styleValue)
               "linePatternCrossFade" ->
                 style.addImage(styleValue!!, styleKey, object : OnAllImagesLoaded {
                     override fun onAllImagesLoaded() {
@@ -215,6 +213,8 @@ object RNMBXStyleFactory {
                 setLineEmissiveStrength(layer, styleValue)
                 "lineEmissiveStrengthTransition" ->
                 setLineEmissiveStrengthTransition(layer, styleValue)
+              "lineBorderGradient" ->
+                setLineBorderGradient(layer, styleValue)
               "lineOcclusionOpacity" ->
                 setLineOcclusionOpacity(layer, styleValue)
                 "lineOcclusionOpacityTransition" ->
@@ -413,6 +413,12 @@ object RNMBXStyleFactory {
                 setTextOcclusionOpacityTransition(layer, styleValue)
               "iconColorSaturation" ->
                 setIconColorSaturation(layer, styleValue)
+              "iconColorContrast" ->
+                setIconColorContrast(layer, styleValue)
+              "iconColorBrightnessMin" ->
+                setIconColorBrightnessMin(layer, styleValue)
+              "iconColorBrightnessMax" ->
+                setIconColorBrightnessMax(layer, styleValue)
               "symbolZOffset" ->
                 setSymbolZOffset(layer, styleValue)
                 "symbolZOffsetTransition" ->
@@ -645,6 +651,8 @@ object RNMBXStyleFactory {
                 setFillExtrusionLineWidth(layer, styleValue)
                 "fillExtrusionLineWidthTransition" ->
                 setFillExtrusionLineWidthTransition(layer, styleValue)
+              "fillExtrusionCastShadows" ->
+                setFillExtrusionCastShadows(layer, styleValue)
           }
         } catch (e: MapboxStyleException) {
           Logger.e(LOG_TAG, "Failed to update: $styleKey ${e.message}")
@@ -703,6 +711,8 @@ object RNMBXStyleFactory {
                 setRasterColorRange(layer, styleValue)
                 "rasterColorRangeTransition" ->
                 setRasterColorRangeTransition(layer, styleValue)
+              "rasterColorScale" ->
+                setRasterColorScale(layer, styleValue)
               "rasterEmissiveStrength" ->
                 setRasterEmissiveStrength(layer, styleValue)
                 "rasterEmissiveStrengthTransition" ->
@@ -791,6 +801,10 @@ object RNMBXStyleFactory {
                 setHillshadeAccentColor(layer, styleValue)
                 "hillshadeAccentColorTransition" ->
                 setHillshadeAccentColorTransition(layer, styleValue)
+              "hillshadeEmissiveStrength" ->
+                setHillshadeEmissiveStrength(layer, styleValue)
+                "hillshadeEmissiveStrengthTransition" ->
+                setHillshadeEmissiveStrengthTransition(layer, styleValue)
           }
         } catch (e: MapboxStyleException) {
           Logger.e(LOG_TAG, "Failed to update: $styleKey ${e.message}")
@@ -809,12 +823,12 @@ object RNMBXStyleFactory {
           val styleValue = style.getStyleValueForKey(styleKey)
 
           when (styleKey) {
-              "modelAllowDensityReduction" ->
-                setModelAllowDensityReduction(layer, styleValue)
               "visibility" ->
                 setVisibility(layer, styleValue)
               "modelId" ->
                 setModelId(layer, styleValue)
+              "modelAllowDensityReduction" ->
+                setModelAllowDensityReduction(layer, styleValue)
               "modelOpacity" ->
                 setModelOpacity(layer, styleValue)
                 "modelOpacityTransition" ->
@@ -1868,14 +1882,6 @@ object RNMBXStyleFactory {
       }
     }
 
-
-    fun setLineElevationGroundScaleTransition(layer: LineLayer, styleValue: RNMBXStyleValue) {
-      val transition = styleValue.transition
-      if (transition != null) {
-        layer.lineElevationGroundScaleTransition(transition);
-      }
-    }
-
     fun setLinePatternCrossFade(layer: LineLayer, styleValue: RNMBXStyleValue ) {
       if (styleValue.isExpression()) {
         val expression = styleValue.getExpression()
@@ -1961,6 +1967,19 @@ object RNMBXStyleFactory {
       val transition = styleValue.transition
       if (transition != null) {
         layer.lineEmissiveStrengthTransition(transition);
+      }
+    }
+
+    fun setLineBorderGradient(layer: LineLayer, styleValue: RNMBXStyleValue ) {
+      if (styleValue.isExpression()) {
+        val expression = styleValue.getExpression()
+        if (expression != null) {
+          layer.lineBorderGradient(expression)
+        } else {
+          Logger.e("RNMBXLine", "Expression for lineBorderGradient is null")
+        }
+      } else {
+          layer.lineBorderGradient(styleValue.getIntExpression(VALUE_KEY))
       }
     }
 
@@ -3195,6 +3214,60 @@ object RNMBXStyleFactory {
       }
     }
 
+    fun setIconColorContrast(layer: SymbolLayer, styleValue: RNMBXStyleValue ) {
+      if (styleValue.isExpression()) {
+        val expression = styleValue.getExpression()
+        if (expression != null) {
+          layer.iconColorContrast(expression)
+        } else {
+          Logger.e("RNMBXSymbol", "Expression for iconColorContrast is null")
+        }
+      } else {
+          val value = styleValue.getDouble(VALUE_KEY)
+          if (value != null) {
+            layer.iconColorContrast(value)
+          } else {
+            Logger.e("RNMBXSymbol", "value for iconColorContrast is null")
+          }
+      }
+    }
+
+    fun setIconColorBrightnessMin(layer: SymbolLayer, styleValue: RNMBXStyleValue ) {
+      if (styleValue.isExpression()) {
+        val expression = styleValue.getExpression()
+        if (expression != null) {
+          layer.iconColorBrightnessMin(expression)
+        } else {
+          Logger.e("RNMBXSymbol", "Expression for iconColorBrightnessMin is null")
+        }
+      } else {
+          val value = styleValue.getDouble(VALUE_KEY)
+          if (value != null) {
+            layer.iconColorBrightnessMin(value)
+          } else {
+            Logger.e("RNMBXSymbol", "value for iconColorBrightnessMin is null")
+          }
+      }
+    }
+
+    fun setIconColorBrightnessMax(layer: SymbolLayer, styleValue: RNMBXStyleValue ) {
+      if (styleValue.isExpression()) {
+        val expression = styleValue.getExpression()
+        if (expression != null) {
+          layer.iconColorBrightnessMax(expression)
+        } else {
+          Logger.e("RNMBXSymbol", "Expression for iconColorBrightnessMax is null")
+        }
+      } else {
+          val value = styleValue.getDouble(VALUE_KEY)
+          if (value != null) {
+            layer.iconColorBrightnessMax(value)
+          } else {
+            Logger.e("RNMBXSymbol", "value for iconColorBrightnessMax is null")
+          }
+      }
+    }
+
     fun setSymbolZOffset(layer: SymbolLayer, styleValue: RNMBXStyleValue ) {
       if (styleValue.isExpression()) {
         val expression = styleValue.getExpression()
@@ -4270,6 +4343,24 @@ object RNMBXStyleFactory {
       }
     }
 
+    fun setFillExtrusionCastShadows(layer: FillExtrusionLayer, styleValue: RNMBXStyleValue ) {
+      if (styleValue.isExpression()) {
+        val expression = styleValue.getExpression()
+        if (expression != null) {
+          layer.fillExtrusionCastShadows(expression)
+        } else {
+          Logger.e("RNMBXFillExtrusion", "Expression for fillExtrusionCastShadows is null")
+        }
+      } else {
+          val value = styleValue.getBoolean(VALUE_KEY)
+          if (value != null) {
+            layer.fillExtrusionCastShadows(value)
+          } else {
+            Logger.e("RNMBXFillExtrusion", "value for fillExtrusionCastShadows is null")
+          }
+      }
+    }
+
     fun setVisibility(layer: RasterLayer, styleValue: RNMBXStyleValue ) {
         layer.visibility(Visibility.valueOf(styleValue.getEnumName()));
     }
@@ -4528,6 +4619,19 @@ object RNMBXStyleFactory {
       val transition = styleValue.transition
       if (transition != null) {
         layer.rasterColorRangeTransition(transition);
+      }
+    }
+
+    fun setRasterColorScale(layer: RasterLayer, styleValue: RNMBXStyleValue ) {
+      if (styleValue.isExpression()) {
+        val expression = styleValue.getExpression()
+        if (expression != null) {
+          layer.rasterColorScale(expression)
+        } else {
+          Logger.e("RNMBXRaster", "Expression for rasterColorScale is null")
+        }
+      } else {
+          layer.rasterColorScale(RasterColorScale.valueOf(styleValue.getEnumName()))
       }
     }
 
@@ -4881,21 +4985,29 @@ object RNMBXStyleFactory {
       }
     }
 
-    fun setModelAllowDensityReduction(layer: ModelLayer, styleValue: RNMBXStyleValue ) {
+    fun setHillshadeEmissiveStrength(layer: HillshadeLayer, styleValue: RNMBXStyleValue ) {
       if (styleValue.isExpression()) {
         val expression = styleValue.getExpression()
         if (expression != null) {
-          layer.modelAllowDensityReduction(expression)
+          layer.hillshadeEmissiveStrength(expression)
         } else {
-          Logger.e("RNMBXModel", "Expression for modelAllowDensityReduction is null")
+          Logger.e("RNMBXHillshade", "Expression for hillshadeEmissiveStrength is null")
         }
       } else {
-          val value = styleValue.getBoolean(VALUE_KEY)
+          val value = styleValue.getDouble(VALUE_KEY)
           if (value != null) {
-            layer.modelAllowDensityReduction(value)
+            layer.hillshadeEmissiveStrength(value)
           } else {
-            Logger.e("RNMBXModel", "value for modelAllowDensityReduction is null")
+            Logger.e("RNMBXHillshade", "value for hillshadeEmissiveStrength is null")
           }
+      }
+    }
+
+
+    fun setHillshadeEmissiveStrengthTransition(layer: HillshadeLayer, styleValue: RNMBXStyleValue) {
+      val transition = styleValue.transition
+      if (transition != null) {
+        layer.hillshadeEmissiveStrengthTransition(transition);
       }
     }
 
@@ -4917,6 +5029,24 @@ object RNMBXStyleFactory {
             layer.modelId(value)
           } else {
             Logger.e("RNMBXModel", "value for modelId is null")
+          }
+      }
+    }
+
+    fun setModelAllowDensityReduction(layer: ModelLayer, styleValue: RNMBXStyleValue ) {
+      if (styleValue.isExpression()) {
+        val expression = styleValue.getExpression()
+        if (expression != null) {
+          layer.modelAllowDensityReduction(expression)
+        } else {
+          Logger.e("RNMBXModel", "Expression for modelAllowDensityReduction is null")
+        }
+      } else {
+          val value = styleValue.getBoolean(VALUE_KEY)
+          if (value != null) {
+            layer.modelAllowDensityReduction(value)
+          } else {
+            Logger.e("RNMBXModel", "value for modelAllowDensityReduction is null")
           }
       }
     }

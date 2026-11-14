@@ -36,18 +36,21 @@ open class ViewTagResolver(val context: ReactApplicationContext) {
     // to be called from view.setId
     fun tagAssigned(viewTag: Int) {
         createdViews.add(viewTag)
+        if (!viewWaiters.containsKey(viewTag)) return
 
-        val list = viewWaiters[viewTag]
-        if (list != null) {
-            context.runOnUiQueueThread {
-                try {
-                    val view = manager.resolveView(viewTag)
-
-                    list.forEach { it.fn(view) }
-                } catch (err: IllegalViewOperationException) {
-                    list.forEach { it.reject?.reject(err) }
-                }
-                viewWaiters.remove(viewTag)
+        context.runOnUiQueueThread {
+            val list = viewWaiters.remove(viewTag) ?: return@runOnUiQueueThread
+            val manager = manager
+            if (manager == null) {
+                val err = managerUnavailableError(viewTag)
+                list.forEach { it.reject?.reject(err) }
+                return@runOnUiQueueThread
+            }
+            try {
+                val view = manager.resolveView(viewTag)
+                list.forEach { it.fn(view) }
+            } catch (err: IllegalViewOperationException) {
+                list.forEach { it.reject?.reject(err) }
             }
         }
     }
@@ -57,12 +60,22 @@ open class ViewTagResolver(val context: ReactApplicationContext) {
         createdViews.remove(viewTag)
     }
 
-    private val manager : UIManager
-        get() = UIManagerHelper.getUIManager(context, UIManagerType.FABRIC)!!
+    // Null while the React instance is reloading or destroyed (dev reload, expo-updates reloadAsync, fatal error), see #3343.
+    // The call came from the old JS runtime, so reject it instead of waiting for the new instance, whose views have different tags.
+    private val manager : UIManager?
+        get() = UIManagerHelper.getUIManager(context, UIManagerType.FABRIC)
+
+    private fun managerUnavailableError(viewTag: Int) =
+        IllegalStateException("Cannot resolve view: $viewTag, the React instance is reloading or destroyed")
 
     // calls on UiQueueThread with resolved view
     fun <V>withViewResolved(viewTag: Int, reject: Promise? = null, fn: (V) -> Unit) {
         context.runOnUiQueueThread() {
+            val manager = manager
+            if (manager == null) {
+                reject?.reject(managerUnavailableError(viewTag))
+                return@runOnUiQueueThread
+            }
             try {
                 val resolvedView: View? = manager.resolveView(viewTag)
                 val view = resolvedView as? V

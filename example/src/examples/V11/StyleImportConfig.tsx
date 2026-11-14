@@ -3,7 +3,7 @@ import { useState } from 'react';
 import { MapView, Camera, StyleImport } from '@rnmapbox/maps';
 
 const StyleImportConfig = () => {
-  const [lightPreset, setLightPreset] = useState('night');
+  const [lightPreset, setLightPreset] = useState<'day' | 'night'>('night');
   const nextLightPreset = lightPreset === 'night' ? 'day' : 'night';
   return (
     <>

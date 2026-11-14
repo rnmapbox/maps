@@ -93,6 +93,11 @@ public class RNMBXImage : UIView {
     }
   }
 
+  @objc
+  public func refresh() {
+    setImage()
+  }
+
   func _createViewSnapshot() -> UIImage? {
     let useDummyImage = false
     if useDummyImage {

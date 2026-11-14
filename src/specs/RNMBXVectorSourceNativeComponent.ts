@@ -1,8 +1,8 @@
 import type { HostComponent, ViewProps } from 'react-native';
 import codegenNativeComponent from 'react-native/Libraries/Utilities/codegenNativeComponent';
 import {
-  DirectEventHandler,
-  Double,
+  type DirectEventHandler,
+  type Double,
   // @ts-ignore - CI environment type resolution issue for CodegenTypes
 } from 'react-native/Libraries/Types/CodegenTypes';
 
@@ -21,6 +21,7 @@ export interface NativeProps extends ViewProps {
   tms: UnsafeMixed<boolean>;
   hasPressListener: UnsafeMixed<boolean>;
   hitbox: UnsafeMixed<any>;
+  promoteId?: UnsafeMixed<any>;
   onMapboxVectorSourcePress: DirectEventHandler<OnMapboxVectorSourcePressEventType>;
 }
 

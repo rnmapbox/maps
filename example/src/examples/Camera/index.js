@@ -10,6 +10,7 @@ export { default as SetUserTrackingModes } from './SetUserTrackingModes';
 export { default as TakeSnapshot } from './TakeSnapshot';
 export { default as TakeSnapshotWithMap } from './TakeSnapshotWithMap';
 export { default as Viewport } from './Viewport';
+export { default as ViewportGestures } from './ViewportGestures';
 export { default as YoYo } from './YoYo';
 
 export const metadata = {

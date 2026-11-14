@@ -211,6 +211,9 @@ This is now deprecated, use Image component instead.
 * <a href="#texttranslate">textTranslate</a><br/>
 * <a href="#texttranslateanchor">textTranslateAnchor</a><br/>
 * <a href="#iconcolorsaturation">iconColorSaturation</a><br/>
+* <a href="#iconcolorcontrast">iconColorContrast</a><br/>
+* <a href="#iconcolorbrightnessmin">iconColorBrightnessMin</a><br/>
+* <a href="#iconcolorbrightnessmax">iconColorBrightnessMax</a><br/>
 * <a href="#symbolzoffset">symbolZOffset</a><br/>
 
 ___
@@ -1014,7 +1017,7 @@ Name: `textVariableAnchor`
 Mapbox spec: [text-variable-anchor](https://docs.mapbox.com/style-spec/reference/layers/#layout-symbol-text-variable-anchor)
 
 #### Description
-To increase the chance of placing highPriority labels on the map, you can provide an array of `textAnchor` locations: the renderer will attempt to place the label at each location, in order, before moving onto the next label. Use `textJustify: auto` to choose justification based on anchor position. To apply an offset, use the `textRadialOffset` or the twoDimensional `textOffset`.
+To increase the chance of placing highPriority labels on the map, you can provide an array of `textAnchor` locations: the renderer will attempt to place the label at each location, in order, before moving onto the next label. Use `textJustify: auto` to choose justification based on anchor position. To apply an offset, use the `textRadialOffset` or the twoDimensional `textOffset`. Known issue: at the moment having both `appearances` and `textVariableAnchor` in the same layer doesn't work correctly.
 
 #### Type
 `array<enum>`
@@ -2190,18 +2193,99 @@ Parameters: ``
 
 ___
 
+### iconColorContrast
+Name: `iconColorContrast`
+
+Mapbox spec: [icon-color-contrast](https://docs.mapbox.com/style-spec/reference/layers/#paint-symbol-icon-color-contrast)
+
+#### Description
+Increase or reduce the contrast of the symbol icon.
+
+#### Type
+`number`
+#### Default Value
+`0`
+
+#### Minimum
+`-1`
+
+
+#### Maximum
+`1`
+
+#### Expression
+
+Parameters: ``
+
+___
+
+### iconColorBrightnessMin
+Name: `iconColorBrightnessMin`
+
+Mapbox spec: [icon-color-brightness-min](https://docs.mapbox.com/style-spec/reference/layers/#paint-symbol-icon-color-brightness-min)
+
+#### Description
+Increase or reduce the brightness of the symbols. The value is the minimum brightness.
+
+#### Type
+`number`
+#### Default Value
+`0`
+
+#### Minimum
+`0`
+
+
+#### Maximum
+`1`
+
+#### Expression
+
+Parameters: ``
+
+___
+
+### iconColorBrightnessMax
+Name: `iconColorBrightnessMax`
+
+Mapbox spec: [icon-color-brightness-max](https://docs.mapbox.com/style-spec/reference/layers/#paint-symbol-icon-color-brightness-max)
+
+#### Description
+Increase or reduce the brightness of the symbols. The value is the maximum brightness.
+
+#### Type
+`number`
+#### Default Value
+`1`
+
+#### Minimum
+`0`
+
+
+#### Maximum
+`1`
+
+#### Expression
+
+Parameters: ``
+
+___
+
 ### symbolZOffset
 Name: `symbolZOffset`
 
 Mapbox spec: [symbol-z-offset](https://docs.mapbox.com/style-spec/reference/layers/#paint-symbol-symbol-z-offset)
 
 #### Description
-Specifies an uniform elevation from the ground, in meters.
+Specifies an uniform elevation from the ground.
 
 #### Type
 `number`
 #### Default Value
 `0`
+
+#### Units
+`meters`
 
 #### Minimum
 `0`

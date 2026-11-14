@@ -5,7 +5,7 @@ import type {
   FilterExpression,
   FillExtrusionLayerStyleProps,
 } from '../utils/MapboxStyles';
-import { StyleValue } from '../utils/StyleValue';
+import { type StyleValue } from '../utils/StyleValue';
 import RNMBXFillExtrusionLayerNativeComponent from '../specs/RNMBXFillExtrusionLayerNativeComponent';
 
 import AbstractLayer from './AbstractLayer';

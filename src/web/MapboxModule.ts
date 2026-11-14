@@ -1,5 +1,8 @@
 import mapboxgl from 'mapbox-gl';
 
+import { warnUnimplemented } from './UnimplementedComponent';
+import { normalizeLanguageTag } from '../utils/normalizeLanguageTag';
+
 export const LineJoin = {
   Bevel: 'bevel',
   Round: 'round',
@@ -8,17 +11,110 @@ export const LineJoin = {
 
 export const StyleURL = {
   Street: 'mapbox://styles/mapbox/streets-v11',
+  Dark: 'mapbox://styles/mapbox/dark-v10',
+  Light: 'mapbox://styles/mapbox/light-v10',
+  Outdoors: 'mapbox://styles/mapbox/outdoors-v11',
   Satellite: 'mapbox://styles/mapbox/satellite-v9',
+  SatelliteStreet: 'mapbox://styles/mapbox/satellite-streets-v11',
+  TrafficDay: 'mapbox://styles/mapbox/navigation-preview-day-v4',
+  TrafficNight: 'mapbox://styles/mapbox/navigation-preview-night-v4',
 };
+
+export const StyleSource = {
+  DefaultSourceID: 'composite',
+};
+
+export const OfflinePackDownloadState = {
+  Inactive: 0,
+  Active: 1,
+  Complete: 2,
+  Unknown: 3,
+};
+
+export const TileServers = {
+  Mapbox: 'mapbox',
+};
+
+export enum UserTrackingMode {
+  Follow = 'normal',
+  FollowWithHeading = 'compass',
+  FollowWithCourse = 'course',
+}
+
+/** @deprecated UserTrackingModes is deprecated use UserTrackingMode */
+export const UserTrackingModes = UserTrackingMode;
+
+export enum UserLocationRenderMode {
+  Native = 'native',
+  Normal = 'normal',
+}
 
 export const setAccessToken = (token: string) => {
   mapboxgl.accessToken = token;
 };
 
+export const getAccessToken = async () => mapboxgl.accessToken;
+
+export const setWorkerUrl = (url: string) => {
+  mapboxgl.workerUrl = url;
+  // Newer mapbox-gl starts workerUrl as a module worker, where the CSP
+  // worker's importScripts() throws; workerClass takes precedence.
+  mapboxgl.workerClass = class {
+    constructor() {
+      return new Worker(url);
+    }
+  } as unknown as new () => Worker;
+};
+
+// Custom headers would need transformRequest, and extra headers on
+// cross-origin tile requests trigger CORS preflights that api.mapbox.com
+// rejects, so these are no-ops on web for now.
+export const addCustomHeader = (
+  _headerName: string,
+  _headerValue: string,
+  _options?: { urlRegexp?: string },
+) => {
+  warnUnimplemented('addCustomHeader');
+};
+
+export const removeCustomHeader = (_headerName: string) => {
+  warnUnimplemented('removeCustomHeader');
+};
+
+export const setTelemetryEnabled = (_telemetryEnabled: boolean) => {};
+
+export const setConnected = (_connected: boolean) => {};
+
+export { normalizeLanguageTag };
+
+export const setLanguage = async (_language: string | string[] | null) => {
+  warnUnimplemented('setLanguage');
+};
+
+export const setWellKnownTileServer = (_tileServer: string) => {};
+
+export const clearData = async () => {};
+
 const MapboxModule = {
   LineJoin,
   StyleURL,
+  StyleSource,
+  OfflinePackDownloadState,
+  TileServers,
+  UserTrackingMode,
+  UserTrackingModes,
+  UserLocationRenderMode,
   setAccessToken,
+  getAccessToken,
+  setWorkerUrl,
+  addCustomHeader,
+  removeCustomHeader,
+  setTelemetryEnabled,
+  setConnected,
+  setLanguage,
+  normalizeLanguageTag,
+  setWellKnownTileServer,
+  clearData,
 };
 
 export default MapboxModule;

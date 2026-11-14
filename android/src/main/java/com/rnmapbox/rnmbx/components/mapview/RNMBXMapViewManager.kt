@@ -13,6 +13,9 @@ import com.rnmapbox.rnmbx.events.constants.EventKeys
 import com.facebook.react.uimanager.ViewManagerDelegate
 import com.facebook.react.viewmanagers.RNMBXMapViewManagerDelegate
 import com.facebook.react.viewmanagers.RNMBXMapViewManagerInterface
+import com.mapbox.maps.ScreenCoordinate
+import com.mapbox.maps.MapboxExperimental
+import com.mapbox.maps.SymbolScaleBehavior
 import com.mapbox.maps.extension.style.layers.properties.generated.ProjectionName
 import com.mapbox.maps.plugin.gestures.gestures
 import com.rnmapbox.rnmbx.events.constants.eventMapOf
@@ -20,6 +23,7 @@ import com.rnmapbox.rnmbx.utils.Logger
 import com.rnmapbox.rnmbx.utils.ViewTagResolver
 import com.rnmapbox.rnmbx.utils.extensions.getAndLogIfNotBoolean
 import com.rnmapbox.rnmbx.utils.extensions.getAndLogIfNotDouble
+import com.rnmapbox.rnmbx.utils.extensions.getAndLogIfNotMap
 import java.lang.Exception
 import java.util.HashMap
 
@@ -130,9 +134,9 @@ open class RNMBXMapViewManager(context: ReactApplicationContext, val viewTagReso
 
     @ReactProp(name = "localizeLabels")
     override fun setLocalizeLabels(mapView: RNMBXMapView, localeMap: Dynamic) {
-        val mapValue = localeMap.asMap()
+        val mapValue = if (localeMap.isNull) null else localeMap.asMap()
         if (mapValue == null) {
-            Logger.e(LOG_TAG, "localizeLabels map is null")
+            mapView.setReactLocalizeLabels(null, null)
             return
         }
         val locale = mapValue.getString("locale")
@@ -142,12 +146,25 @@ open class RNMBXMapViewManager(context: ReactApplicationContext, val viewTagReso
 
     @ReactProp(name = "surfaceView")
     override fun setSurfaceView(mapView: RNMBXMapView, value: Dynamic) {
+        val surfaceView = if (value.isNull) null else value.asBoolean()
         if (mapView.isInitialized) {
-            if (mapView.surfaceView != value.asBoolean()) {
+            if (mapView.surfaceView != surfaceView) {
                 Logger.d(LOG_TAG, "surafaceView cannot be changed on existing map")
             }
         } else {
-            mapView.surfaceView = value.asBoolean()
+            mapView.surfaceView = surfaceView
+        }
+    }
+
+    @ReactProp(name = "transparent")
+    override fun setTransparent(mapView: RNMBXMapView, value: Dynamic) {
+        val transparent = !value.isNull && value.asBoolean()
+        if (mapView.isInitialized) {
+            if (mapView.transparent != transparent) {
+                Logger.w(LOG_TAG, "transparent cannot be changed on existing map, it only applies when the map is created")
+            }
+        } else {
+            mapView.transparent = transparent
         }
     }
 
@@ -155,12 +172,24 @@ open class RNMBXMapViewManager(context: ReactApplicationContext, val viewTagReso
     override fun setGestureSettings(mapView: RNMBXMapView, settings: Dynamic) {
         mapView.withMap {
            it.gesturesPlugin {
-               val map = settings.asMap()
+               val map = if (settings.type == ReadableType.Map) settings.asMap() else null
                if (map == null) {
-                   Logger.e(LOG_TAG, "gestureSettings map is null")
+                   mapView.pinchPanEnabledSetByApp = false
+                   this.updateSettings { this.focalPoint = null }
                    return@gesturesPlugin Unit
                }
+               mapView.pinchPanEnabledSetByApp = map.hasKey("pinchPanEnabled") && !map.isNull("pinchPanEnabled")
                this.updateSettings {
+                   val focalPoint = map.takeIf { it.hasKey("focalPoint") && !it.isNull("focalPoint") }
+                       ?.getAndLogIfNotMap("focalPoint", LOG_TAG)
+                   val x = focalPoint?.getAndLogIfNotDouble("x", LOG_TAG)
+                   val y = focalPoint?.getAndLogIfNotDouble("y", LOG_TAG)
+                   this.focalPoint = if (x != null && y != null) {
+                       val density = mapView.resources.displayMetrics.density
+                       ScreenCoordinate(x * density, y * density)
+                   } else {
+                       null
+                   }
                    map.getAndLogIfNotBoolean("doubleTapToZoomInEnabled", LOG_TAG)?.let {
                        this.doubleTapToZoomInEnabled = it
                    }
@@ -241,6 +270,31 @@ open class RNMBXMapViewManager(context: ReactApplicationContext, val viewTagReso
         map.withMapView {
             it.gestures.pitchEnabled = pitchEnabled.asBoolean()
         }
+    }
+
+    @OptIn(MapboxExperimental::class)
+    @ReactProp(name = "symbolScaleBehavior")
+    override fun setSymbolScaleBehavior(map: RNMBXMapView, value: Dynamic) {
+        map.setReactSymbolScaleBehavior(
+            when (value.type) {
+                ReadableType.String -> if (value.asString() == "system") SymbolScaleBehavior.system else null
+                ReadableType.Map -> value.asMap()?.takeIf { it.hasKey("fixed") }?.let {
+                    SymbolScaleBehavior.fixed(it.getDouble("fixed").toFloat())
+                }
+                else -> null
+            }
+        )
+    }
+
+    @ReactProp(name = "styleGlyphURL")
+    override fun setStyleGlyphURL(map: RNMBXMapView, value: Dynamic) {
+        map.setReactStyleGlyphURL(if (value.type == ReadableType.String) value.asString() else null)
+    }
+
+    @ReactProp(name = "debugOptions")
+    override fun setDebugOptions(map: RNMBXMapView, value: Dynamic) {
+        val names = if (value.type == ReadableType.Array) value.asArray()?.toArrayList()?.map { "$it" } else null
+        map.setReactDebugOptions(names ?: emptyList())
     }
 
     @ReactProp(name = "maxPitch")
@@ -332,6 +386,11 @@ open class RNMBXMapViewManager(context: ReactApplicationContext, val viewTagReso
         mapView.setReactScaleBarPosition(mapValue)
     }
 
+    @ReactProp(name = "scaleBarUnits")
+    override fun setScaleBarUnits(mapView: RNMBXMapView, scaleBarUnits: Dynamic) {
+        mapView.setReactScaleBarUnits(scaleBarUnits.asString())
+    }
+
     @ReactProp(name = "compassEnabled")
     override fun setCompassEnabled(mapView: RNMBXMapView, compassEnabled: Dynamic) {
         mapView.setReactCompassEnabled(compassEnabled.asBoolean())
@@ -399,7 +458,7 @@ open class RNMBXMapViewManager(context: ReactApplicationContext, val viewTagReso
     }
 
     override fun setCompassImage(view: RNMBXMapView, value: Dynamic?) {
-        // TODO: No-op on Android?
+        view.setReactCompassImage(if (value == null || value.isNull) null else value.asString())
     }
 
     //endregion
@@ -434,7 +493,7 @@ open class RNMBXMapViewManager(context: ReactApplicationContext, val viewTagReso
          * onDropViewInstance.
          */
         private fun diposeNativeMapView() {
-            val mapView = mViewManager.getByReactTag(reactTag)
+            val mapView = mViewManager.getByReactTag(getReactTag())
             if (mapView != null) {
                 UiThreadUtil.runOnUiThread {
                     try {
