@@ -20,7 +20,7 @@ After installing this package, add the [config plugin](https://docs.expo.io/guid
       [
         "@rnmapbox/maps",
         {
-          "RNMapboxMapsVersion": "11.13.4"
+          "RNMapboxMapsVersion": "11.33.0"
         }
       ]
     ]
@@ -49,7 +49,7 @@ Next, rebuild your app as described in the ["Adding custom native code"](https:/
 
 ### Advanced Configuration
 
-It's possible to overwrite the native SDK version with `RNMapboxMapsVersion`:
+It's possible to overwrite the native SDK version with `RNMapboxMapsVersion`. @rnmapbox/maps 10.3.12 and later need Mapbox Maps SDK 11.33.0 or newer:
 
 ```json
 {
@@ -58,7 +58,7 @@ It's possible to overwrite the native SDK version with `RNMapboxMapsVersion`:
       [
         "@rnmapbox/maps",
         {
-          "RNMapboxMapsVersion": "11.16.0"
+          "RNMapboxMapsVersion": "11.33.0"
         }
       ]
     ]
@@ -66,7 +66,7 @@ It's possible to overwrite the native SDK version with `RNMapboxMapsVersion`:
 }
 ```
 
-To use V11 just set the version to a 11 version, see [the ios guide](/ios/install.md):
+To get the Mapbox SDK through Swift Package Manager on iOS, set `RNMapboxMapsSwiftPackageManager` to `true`, or to the options described in the [iOS guide](/ios/install.md#using-swift-package-manager-experimental):
 
 ```json
 {
@@ -75,7 +75,7 @@ To use V11 just set the version to a 11 version, see [the ios guide](/ios/instal
       [
         "@rnmapbox/maps",
         {
-          "RNMapboxMapsVersion": "11.13.4"
+          "RNMapboxMapsSwiftPackageManager": true
         }
       ]
     ]

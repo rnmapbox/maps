@@ -6,23 +6,23 @@ import com.mapbox.maps.extension.style.sources.addSource
 import com.rnmapbox.rnmbx.components.AbstractMapFeature
 import com.rnmapbox.rnmbx.components.mapview.RNMBXMapView
 import com.mapbox.maps.MapboxMap
-import com.rnmapbox.rnmbx.components.styles.sources.AbstractSourceConsumer
 import com.facebook.react.bridge.ReadableMap
-import com.rnmapbox.rnmbx.components.styles.sources.RNMBXSource
-import android.graphics.PointF
 import android.view.View
 import com.facebook.react.common.MapBuilder
 import com.mapbox.geojson.Feature
+import com.mapbox.maps.ScreenCoordinate
 import com.mapbox.maps.Style
 import com.mapbox.maps.extension.style.StyleContract
 import com.mapbox.maps.extension.style.sources.Source
 import com.rnmapbox.rnmbx.components.RemovalReason
-import com.rnmapbox.rnmbx.components.styles.sources.RNMBXSource.OnPressEvent
 import com.rnmapbox.rnmbx.utils.LatLng
 import com.rnmapbox.rnmbx.utils.Logger
 import java.lang.ClassCastException
-import java.util.ArrayList
 import java.util.HashMap
+import com.facebook.react.bridge.Dynamic
+import com.facebook.react.bridge.ReadableType
+import com.mapbox.maps.extension.style.types.PromoteId
+import com.rnmapbox.rnmbx.utils.ExpressionParser
 
 data class FeatureInfo(val feature: AbstractMapFeature?, var added: Boolean) {
 }
@@ -51,6 +51,7 @@ abstract class RNMBXSource<T : Source?>(context: Context?) : AbstractMapFeature(
     abstract fun hasNoDataSoRefersToExisting(): Boolean;
 
     public var mExisting: Boolean? = null
+    var promoteId: PromoteId? = null
 
     val existing: Boolean
         get() {
@@ -108,7 +109,7 @@ abstract class RNMBXSource<T : Source?>(context: Context?) : AbstractMapFeature(
             } else mTouchHitbox
         }
 
-    fun addToMap(existings: Boolean, style: Style, mapView: RNMBXMapView) {
+    open fun addToMap(existings: Boolean, style: Style, mapView: RNMBXMapView) {
         mSource = null
         val existingSource = getSourceAs(style, iD)
         if (existingSource != null) {
@@ -221,7 +222,7 @@ abstract class RNMBXSource<T : Source?>(context: Context?) : AbstractMapFeature(
 
 
     abstract fun makeSource(): T
-    class OnPressEvent(var features: List<Feature>, var latLng: LatLng, var screenPoint: PointF)
+    class OnPressEvent(var features: List<Feature>, var latLng: LatLng, var screenPoint: ScreenCoordinate)
 
     abstract fun onPress(event: OnPressEvent?)
 
@@ -238,4 +239,10 @@ abstract class RNMBXSource<T : Source?>(context: Context?) : AbstractMapFeature(
 
     init {
     }
+}
+
+fun promoteIdFrom(value: Dynamic): PromoteId? = when (value.type) {
+    ReadableType.String -> PromoteId(value.asString()!!)
+    ReadableType.Array -> ExpressionParser.from(value.asArray())?.let { PromoteId(it) }
+    else -> null
 }

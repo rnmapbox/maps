@@ -107,6 +107,10 @@ export function getLayerType(layer, platform) {
       return isIOS ? 'MGLSkyLayer' : 'SkyLayer';
     case 'atmosphere':
       return isIOS ? 'MGLAtmosphere' : 'Atmosphere';
+    case 'snow':
+      return isIOS ? 'Snow' : 'Snow';
+    case 'rain':
+      return isIOS ? 'Rain' : 'Rain';
     case 'terrain':
       return isIOS ? 'MGLTerrain' : 'Terrain';
     case 'model':

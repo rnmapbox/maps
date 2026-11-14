@@ -16,23 +16,22 @@ Some notes about example app:
 
 ### Example app configurations:
 
-- V10: this build with V10 of mapbox
-  To build example in this mode on ios run:
-  ```
-  cd example/ios ; RNMBX10=1 pod update MapboxMaps
-  ```
-  To build example in this mode on android:
-  Change `RNMBX10=true` in `example/android/gradle.properties`
-- NewArchitecture/Fabric:
-  ```
-  cd example/ios ; RCT_NEW_ARCH_ENABLED=1 pod update MapboxMaps
-  ```
-  On android change `newArchEnabled=true` in `example/android/gradle.properties`
+The project uses Mapbox Maps SDK v11 and React Native's New Architecture (Fabric/TurboModules) exclusively.
 
 ### Running example app for Web
 
 ```
 npx expo start -c --web
+```
+
+### E2E tests and visual snapshots
+
+CI runs `example/e2e/firstTest.e2e.js` with Detox on an iOS simulator. It also runs `example/e2e/visual.e2e.js`, which opens the `E2E > Screenshot *` scenes (local style and local data only) and writes one PNG per scene to `example/e2e/artifacts/visual/`. The `visual-snapshots` artifact has them, and on `main` and same-repo PRs they are uploaded to Percy to show differences against `main`. The visual snapshots are informational and never fail CI. To add a scene, add it to `example/src/examples/E2E/` and to `SCENES` in `visual.e2e.js`.
+
+```
+cd example
+yarn detox build --configuration ios.debug.ci
+yarn detox test --configuration ios.debug.ci e2e/firstTest.e2e.js e2e/visual.e2e.js
 ```
 
 
@@ -41,6 +40,7 @@ npx expo start -c --web
 - If you add a feature, make sure you add it to the documentation
 - Use meaningful commit messages, use semantic commit messages
 - If you add a new feature make sure to add a scene in `/example` for others to see/ test it
+- If you fix a bug, reproduce it first and verify your fix against the reproducer — see [.github/REPRODUCING.md](.github/REPRODUCING.md). This applies to everyone, and especially to AI coding agents: a reproducer is worth 100x more than a speculative fix.
 
 ## Generated code/documentation
 
@@ -49,7 +49,7 @@ Run `yarn generate` to update generated code/documentation.
 We use the following code generators, but check yarn generate for more:
 - `style-spec/v8.json` download from mapbox.com describes properties of layers/sources etc. We generate the following files from it:
   - `MapboxStyles.d.ts` - typescript definitions for different Layer styles
-  - `RNMBXStyle.swift.ejs`/`RNMBXStyleFactoryV10.kt` - ios/android native style setters
+  - `RNMBXStyle.swift.ejs`/`RNMBXStyleFactory.kt` - ios/android native style setters
   - `docs.json` is generated both from style-spec and documentation in our typescript files
 - Document generation:
   - `docs/MapView.md` is generated from `src/components/MapView.tsx` with `react-docgen`
@@ -101,11 +101,13 @@ The full documentation generation process looks like this:
   We use detox tests to capture screenshots of examples
   ```
   cd example
-  yarn detox build --configuration ios.debug
+  RNMBX_E2E_MAPS_IDLE=1 yarn detox build --configuration ios.debug
   yarn detox test --configuration ios.debug ./e2e/docScreenshots.e2e.js
   ```
 
-  This step is run manually for now
+  `RNMBX_E2E_MAPS_IDLE=1` bundles the examples with a `MapView` that reports when the maps are idle, so the screenshots wait for them instead of a fixed delay.
+
+  This step is run manually for now, locally or with the `iOS e2e (manual)` workflow in `doc-screenshots` mode (artifact `doc-screenshots`)
 
 4.) `<doc-site>/docs/components` Generate component/api documentation (into the docosaurus site)
 
@@ -120,6 +122,8 @@ The full documentation generation process looks like this:
   ```
   bun scripts/example-docs.ts
   ```
+
+  The doc page shows the example source up to `/* end-example-doc */`, so metadata and test-only code go after it. Lines ending with `// exclude-from-example-doc`, and lines between `/* exclude-from-example-doc:start */` and `/* exclude-from-example-doc:end */`, are left out too.
 
   Runs when `main` is changed by `update-docs` gh action workflow
 

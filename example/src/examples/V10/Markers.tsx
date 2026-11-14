@@ -2,9 +2,9 @@ import { useCallback, useEffect, useState } from 'react';
 import { StyleSheet, Pressable, Text, View } from 'react-native';
 import { Button, Divider } from '@rneui/base';
 import { Camera, Logger, MapView, MarkerView } from '@rnmapbox/maps';
-import { Position } from 'geojson';
+import { type Position } from 'geojson';
 
-import { ExampleWithMetadata } from '../common/ExampleMetadata'; // exclude-from-doc
+import { type ExampleWithMetadata } from '../common/ExampleMetadata'; // exclude-from-doc
 
 Logger.setLogLevel('verbose');
 
@@ -228,5 +228,7 @@ const metadata: ExampleWithMetadata['metadata'] = {
   docs: `
 Test view for MarkerViews
 `,
+  excludeFromPercy: true,
+  webSupported: true,
 };
 Markers.metadata = metadata;

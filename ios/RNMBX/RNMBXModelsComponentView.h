@@ -1,4 +1,4 @@
-#ifdef RCT_NEW_ARCH_ENABLED
+#ifdef __cplusplus
 
 #import <UIKit/UIKit.h>
 
@@ -13,5 +13,4 @@ NS_ASSUME_NONNULL_BEGIN
 @end
 
 NS_ASSUME_NONNULL_END
-
-#endif // RCT_NEW_ARCH_ENABLED
+#endif // __cplusplus

@@ -4,8 +4,7 @@ import android.content.Context
 import com.facebook.react.bridge.ReadableMap
 import com.mapbox.maps.MapboxMap
 import com.mapbox.maps.extension.style.atmosphere.generated.Atmosphere
-import com.mapbox.maps.extension.style.terrain.generated.Terrain
-import com.mapbox.maps.extension.style.terrain.generated.removeTerrain
+import com.mapbox.maps.extension.style.atmosphere.generated.removeAtmosphere
 import com.rnmapbox.rnmbx.components.RemovalReason
 import com.rnmapbox.rnmbx.components.mapview.RNMBXMapView
 import com.rnmapbox.rnmbx.components.styles.RNMBXStyle
@@ -42,7 +41,8 @@ class RNMBXAtmosphere(context: Context?) : AbstractSourceConsumer(context) {
     }
 
     override fun removeFromMap(mapView: RNMBXMapView, reason: RemovalReason): Boolean {
-        mapView.savedStyle?.let { it.removeTerrain() }
+        mapView.savedStyle?.let { it.removeAtmosphere() }
+        mAtmosphere = null
         mMap = null
         return super.removeFromMap(mapView, reason)
     }
@@ -55,7 +55,7 @@ class RNMBXAtmosphere(context: Context?) : AbstractSourceConsumer(context) {
         mAtmosphere?.also {
             RNMBXStyleFactory.setAtmosphereLayerStyle(
                 it, RNMBXStyle(
-                    context, mReactStyle!!,
+                    context, mReactStyle,
                     mMap!!
                 )
             )

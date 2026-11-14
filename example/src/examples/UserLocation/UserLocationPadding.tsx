@@ -8,7 +8,7 @@ import {
 import { ButtonGroup } from '@rneui/base';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
-import { ExampleWithMetadata } from '../common/ExampleMetadata'; // exclude-from-example-doc
+import { type ExampleWithMetadata } from '../common/ExampleMetadata'; // exclude-from-example-doc
 
 enum Alignment {
   Top = 'TOP',
@@ -54,5 +54,6 @@ Demonstrates Scalable images.
 
 You can use stretchX, stretchY and content to scale a bitmap image - keep parts of it fixed while only scale specific parts.
 `,
+  waitForMapIdle: false,
 };
 UserLocationPadding.metadata = metadata;

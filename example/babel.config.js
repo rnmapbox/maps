@@ -10,20 +10,11 @@ module.exports = getConfig(
   {
     presets: ['babel-preset-expo'],
     plugins: [
+      'react-native-reanimated/plugin',
       [
         'babel-plugin-react-compiler',
         {
-          // Log what the compiler is doing (set to false to disable logging)
-          // When enabled, you'll see "React Compiler: compiled X functions" in Metro logs
-          compilationMode: 'infer', // 'annotation' | 'all' | 'infer'
-
-          /*
-            panicThreshold: 'all_errors', // Show all compilation errors/warnings
-            logger: {
-            logEvent(filename, event) {
-                console.log(`[React Compiler] ${filename}: ${event}`);
-            },
-          }*/
+          compilationMode: 'infer',
         },
       ],
     ],

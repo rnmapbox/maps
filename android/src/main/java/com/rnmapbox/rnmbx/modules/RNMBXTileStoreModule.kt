@@ -8,6 +8,7 @@ import com.facebook.react.bridge.ReadableMap
 import com.facebook.react.module.annotations.ReactModule
 import com.mapbox.common.TileDataDomain
 import com.mapbox.common.TileStore
+import com.rnmapbox.rnmbx.utils.Logger
 import com.rnmapbox.rnmbx.utils.extensions.toValue
 import com.rnmapbox.rnmbx.utils.writableMapOf
 
@@ -20,11 +21,12 @@ class RNMBXTileStoreModule(private val mReactContext: ReactApplicationContext) :
   ) {
 
   fun shared(path: String?): TileStore {
-    return if (path != null) {
-      TileStore.create(path)
-    } else {
-      TileStore.create()
+    if (path != null) {
+      TileStore.setRootPath(path).error?.let {
+        Logger.w(REACT_CLASS, "Failed to set tile store root path to $path: $it")
+      }
     }
+    return TileStore.create()
   }
 
   @ReactMethod

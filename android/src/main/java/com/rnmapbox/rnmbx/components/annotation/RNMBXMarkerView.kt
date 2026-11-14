@@ -11,6 +11,7 @@ import com.mapbox.geojson.Point
 import com.mapbox.maps.ViewAnnotationAnchor
 import com.mapbox.maps.ViewAnnotationOptions
 import com.mapbox.maps.viewannotation.viewAnnotationOptions
+import com.facebook.react.uimanager.PointerEvents
 import com.rnmapbox.rnmbx.components.AbstractMapFeature
 import com.rnmapbox.rnmbx.components.RemovalReason
 import com.rnmapbox.rnmbx.components.mapview.RNMBXMapView
@@ -33,6 +34,12 @@ class RNMBXMarkerView(context: Context?, private val mManager: RNMBXMarkerViewMa
     private var mAllowOverlap = false
     private var mAllowOverlapWithPuck = false
     private var mIsSelected = false
+    private var mAllowZElevate: Boolean? = null
+    private var mPriority: Long? = null
+    private var mMinZoom: Double? = null
+    private var mMaxZoom: Double? = null
+    private var mPointerEvents: PointerEvents = PointerEvents.AUTO
+    private var mStopGesturePropagation = false
 
     fun setCoordinate(point: Point?) {
         mCoordinate = point
@@ -59,12 +66,44 @@ class RNMBXMarkerView(context: Context?, private val mManager: RNMBXMarkerViewMa
         update()
     }
 
+    fun setAllowZElevate(allowZElevate: Boolean?) {
+        mAllowZElevate = allowZElevate
+        update()
+    }
+
+    fun setPriority(priority: Long?) {
+        mPriority = priority
+        update()
+    }
+
+    fun setMinZoom(minZoom: Double?) {
+        mMinZoom = minZoom
+        update()
+    }
+
+    fun setMaxZoom(maxZoom: Double?) {
+        mMaxZoom = maxZoom
+        update()
+    }
+
     // endregion
 
     // region View methods
 
+    fun setContentPointerEvents(pointerEvents: PointerEvents) {
+        mPointerEvents = pointerEvents
+        (mView as? RNMBXMarkerViewContent)?.setExternalPointerEvents(pointerEvents)
+    }
+
+    fun setStopGesturePropagation(stop: Boolean) {
+        mStopGesturePropagation = stop
+        (mView as? RNMBXMarkerViewContent)?.setStopGesturePropagation(stop)
+    }
+
     override fun addView(childView: View, childPosition: Int) {
         mView = childView
+        (childView as? RNMBXMarkerViewContent)?.setExternalPointerEvents(mPointerEvents)
+        (childView as? RNMBXMarkerViewContent)?.setStopGesturePropagation(mStopGesturePropagation)
         // Note: Do not call this method on `super`. The view is added manually.
     }
 
@@ -119,7 +158,11 @@ class RNMBXMarkerView(context: Context?, private val mManager: RNMBXMarkerViewMa
             mMapView?.offscreenAnnotationViewContainer?.addView(view)
             mMapView?.offscreenAnnotationViewContainer?.removeView(view)
         }
-
+        
+        if (view.width == 0 || view.height == 0) {
+            return
+        }
+        
         val options = getOptions()
 
         val content = view as? RNMBXMarkerViewContent;
@@ -168,6 +211,34 @@ class RNMBXMarkerView(context: Context?, private val mManager: RNMBXMarkerViewMa
 
     // endregion
 
+    // region Hit testing
+
+    /**
+     * Whether the given absolute screen coordinate (physical pixels, as from
+     * `View.getLocationOnScreen`) falls within this marker's on-screen content view. Used by the
+     * map's tap handling to stop a tap on a marker from selecting features/pins underneath it.
+     * Returns false for `pointerEvents="none"`/`"box-none"` markers, whose container is meant to
+     * be transparent to touches (taps on box-none children never reach the map anyway).
+     */
+    fun containsScreenPoint(screenX: Float, screenY: Float): Boolean {
+        if (!didAddToMap ||
+            mPointerEvents == PointerEvents.NONE ||
+            mPointerEvents == PointerEvents.BOX_NONE
+        ) {
+            return false
+        }
+        val view = mView ?: return false
+        if (view.visibility != View.VISIBLE || view.width == 0 || view.height == 0) {
+            return false
+        }
+        val loc = IntArray(2)
+        view.getLocationOnScreen(loc)
+        return screenX >= loc[0] && screenX <= loc[0] + view.width &&
+            screenY >= loc[1] && screenY <= loc[1] + view.height
+    }
+
+    // endregion
+
     // region Helper functions
 
     private fun getOptions(): ViewAnnotationOptions {
@@ -186,6 +257,10 @@ class RNMBXMarkerView(context: Context?, private val mManager: RNMBXMarkerViewMa
             allowOverlapWithPuck(mAllowOverlapWithPuck)
             offsets(offset.dx, offset.dy)
             selected(mIsSelected)
+            mAllowZElevate?.let { allowZElevate(it) }
+            mPriority?.let { priority(it) }
+            mMinZoom?.let { minZoom(it.toFloat()) }
+            mMaxZoom?.let { maxZoom(it.toFloat()) }
             ignoreCameraPadding(true)
         }
         return options

@@ -1,4 +1,3 @@
-#ifdef RCT_NEW_ARCH_ENABLED
 
 #import "RNMBXVectorSourceComponentView.h"
 #import "RNMBXFabricHelpers.h"
@@ -130,6 +129,10 @@ using namespace facebook::react;
     if (hitbox != nil) {
         _view.hitbox = hitbox;
     }
+    id promoteId = RNMBXConvertFollyDynamicToId(newProps.promoteId);
+    if (promoteId != nil) {
+        _view.promoteId = promoteId;
+    }
     
   [super updateProps:props oldProps:oldProps];
 }
@@ -141,4 +144,3 @@ Class<RCTComponentViewProtocol> RNMBXVectorSourceCls(void)
   return RNMBXVectorSourceComponentView.class;
 }
 
-#endif // RCT_NEW_ARCH_ENABLED

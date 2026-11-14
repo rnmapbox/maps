@@ -232,5 +232,7 @@ const metadata = {
   docs: `
 This is a fairly complex example demonstrating the use of AnimatedShape, Camera animation, queryTerrainElevation and AnimatedMarkerView
 `,
+  excludeFromPercy: true,
+  webSupported: true,
 };
 QueryTerrainElevation.metadata = metadata;

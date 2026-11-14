@@ -13,9 +13,15 @@ export { default as SourceLayerVisibility } from './SourceLayerVisibility';
 export { default as StyleLayerProperty } from './StyleLayerProperty';
 export { default as StyleJson } from './StyleJson';
 export { default as TwoByTwo } from './TwoByTwo';
+export { default as TransparentMap } from './TransparentMap';
 export { default as MapAndRNNavigation } from './MapAndRNNavigation';
 export { default as DynamicUrl } from './DynamicUrl';
 export { default as LocalizeLabels } from './LocalizeLabels';
+export { default as SymbolScaleBehavior } from './SymbolScaleBehavior';
+export { default as SetLanguage } from './SetLanguage';
+export { default as ScreenCoordinates} from './ScreenCoordinates';
+export { default as GestureFocalPoint } from './GestureFocalPoint';
+export { default as DebugOptions } from './DebugOptions';
 
 export const metadata = {
   title: 'Map',

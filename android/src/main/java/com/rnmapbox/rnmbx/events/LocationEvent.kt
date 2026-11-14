@@ -10,14 +10,18 @@ import java.util.*
 
 import com.rnmapbox.rnmbx.v11compat.location.*
 
-class LocationEvent(private val location: Location, private val mapView: RNMBXMapView?) : IEvent {
+class LocationEvent(
+    private val location: Location,
+    private val mapView: RNMBXMapView?,
+    private val heading: Double? = null
+) : IEvent {
     val uUID: UUID
 
     init {
         uUID = UUID.randomUUID()
     }
 
-    constructor(location: Location) : this(location, null) {}
+    constructor(location: Location, heading: Double? = null) : this(location, null, heading)
 
     override val iD
         get() =  mapView?.id ?: -1
@@ -50,11 +54,11 @@ class LocationEvent(private val location: Location, private val mapView: RNMBXMa
             coords.putDouble("altitude", it)
         }
         coords.putDouble("accuracy", location.accuracy.toDouble())
-        // A better solution will be to pull the heading from the compass engine,
-        // unfortunately the api is not publicly available in the mapbox sdk
         location.bearing?.let {
-            coords.putDouble("heading", it.toDouble())
             coords.putDouble("course", it.toDouble())
+        }
+        heading?.let {
+            coords.putDouble("heading", it)
         }
         location.speed?.let {
             coords.putDouble("speed", it.toDouble())

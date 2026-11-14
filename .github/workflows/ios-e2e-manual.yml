@@ -1,0 +1,35 @@
+name: iOS e2e (manual)
+
+on:
+  workflow_dispatch:
+    inputs:
+      mode:
+        description: "doc-screenshots: capture the doc site example screenshots (artifact doc-screenshots), test: e2e tests and visual snapshots"
+        type: choice
+        options:
+          - doc-screenshots
+          - test
+
+jobs:
+  nvmrc:
+    runs-on: ubuntu-latest
+    outputs:
+      NVMRC: ${{ steps.nvm.outputs.NVMRC }}
+    steps:
+      - uses: actions/checkout@v4
+      - id: nvm
+        run: echo "NVMRC=$(cat .nvmrc)" >> "$GITHUB_OUTPUT"
+
+  ios:
+    name: "iOS/Mapbox11/Fabric"
+    needs: nvmrc
+    uses: ./.github/workflows/ios-actions.yml
+    with:
+      NVMRC: ${{ needs.nvmrc.outputs.NVMRC }}
+      env_name: default
+      MAP_IMPL: mapbox11
+      NEW_ARCH: true
+      E2E_MODE: ${{ inputs.mode }}
+    secrets:
+      MAPBOX_ACCESS_TOKEN: ${{ secrets.MAPBOX_ACCESS_TOKEN }}
+      PERCY_TOKEN: ${{ secrets.PERCY_TOKEN }}

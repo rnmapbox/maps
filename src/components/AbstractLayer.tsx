@@ -1,12 +1,12 @@
 import React from 'react';
-import { NativeMethods, processColor } from 'react-native';
+import { type NativeMethods, processColor } from 'react-native';
 
 import { getFilter } from '../utils/filterUtils';
 import type {
   AllLayerStyleProps,
   FilterExpression,
 } from '../utils/MapboxStyles';
-import { StyleValue, transformStyle } from '../utils/StyleValue';
+import { type StyleValue, transformStyle } from '../utils/StyleValue';
 import type { BaseProps } from '../types/BaseProps';
 
 type PropsBase = BaseProps & {

@@ -5,7 +5,7 @@ import {
   isNumber,
   resolveImagePath,
 } from '../utils';
-import { BaseProps } from '../types/BaseProps';
+import { type BaseProps } from '../types/BaseProps';
 import RNMBXImageSourceNativeComponent from '../specs/RNMBXImageSourceNativeComponent';
 
 import AbstractSource from './AbstractSource';

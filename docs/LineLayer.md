@@ -145,6 +145,7 @@ Customizable style attributes
 * <a href="#lineelevationreference">lineElevationReference</a><br/>
 * <a href="#linecrossslope">lineCrossSlope</a><br/>
 * <a href="#visibility">visibility</a><br/>
+* <a href="#lineelevationgroundscale">lineElevationGroundScale</a><br/>
 * <a href="#lineopacity">lineOpacity</a><br/>
 * <a href="#linecolor">lineColor</a><br/>
 * <a href="#linetranslate">lineTranslate</a><br/>
@@ -161,6 +162,9 @@ Customizable style attributes
 * <a href="#linetrimfaderange">lineTrimFadeRange</a><br/>
 * <a href="#linetrimcolor">lineTrimColor</a><br/>
 * <a href="#lineemissivestrength">lineEmissiveStrength</a><br/>
+* <a href="#lineborderwidth">lineBorderWidth</a><br/>
+* <a href="#linebordercolor">lineBorderColor</a><br/>
+* <a href="#linebordergradient">lineBorderGradient</a><br/>
 * <a href="#lineocclusionopacity">lineOcclusionOpacity</a><br/>
 
 ___
@@ -282,19 +286,15 @@ Name: `lineZOffset`
 Mapbox spec: [line-z-offset](https://docs.mapbox.com/style-spec/reference/layers/#layout-line-line-z-offset)
 
 #### Description
-Vertical offset from ground, in meters. Defaults to 0. This is an experimental property with some known issues:
- * Not supported for globe projection at the moment 
- * Elevated line discontinuity is possible on tile borders with terrain enabled 
- * Rendering artifacts can happen near line joins and line caps depending on the line styling 
- * Rendering artifacts relating to `lineOpacity` and `lineBlur` 
- * Elevated line visibility is determined by layer order 
- * ZFighting issues can happen with intersecting elevated lines 
- * Elevated lines don't cast shadows
+Vertical offset from ground. Not supported for globe projection at the moment.
 
 #### Type
 `number`
 #### Default Value
 `0`
+
+#### Units
+`meters`
 
 
 #### Requires
@@ -376,6 +376,35 @@ Whether this layer is displayed.
 #### Expression
 
 Parameters: ``
+
+___
+
+### lineElevationGroundScale
+Name: `lineElevationGroundScale`
+
+Mapbox spec: [line-elevation-ground-scale](https://docs.mapbox.com/style-spec/reference/layers/#layout-line-line-elevation-ground-scale)
+
+#### Description
+Controls how much the elevation of lines with `lineElevationReference` set to `sea` scales with terrain exaggeration. A value of 0 keeps the line at a fixed altitude above sea level. A value of 1 scales the elevation proportionally with terrain exaggeration.
+
+#### Type
+`number`
+#### Default Value
+`0`
+
+#### Minimum
+`0`
+
+
+#### Maximum
+`1`
+
+#### Requires
+`lineZOffset`
+
+#### Expression
+
+Parameters: `zoom, feature, line-progress`
 
 ___
 
@@ -675,7 +704,7 @@ Name: `lineBlur`
 Mapbox spec: [line-blur](https://docs.mapbox.com/style-spec/reference/layers/#paint-line-line-blur)
 
 #### Description
-Blur applied to the line, in pixels.
+Blur applied to the line.
 
 #### Type
 `number`
@@ -928,7 +957,7 @@ Controls the intensity of light emitted on the source features.
 
 #### Expression
 
-Parameters: `zoom, measure-light`
+Parameters: `zoom, measure-light, line-progress`
 ___
 
 ### lineEmissiveStrengthTransition
@@ -948,6 +977,111 @@ The transition affecting any changes to this layer’s lineEmissiveStrength prop
 #### Default Value
 `{duration: 300, delay: 0}`
 
+
+___
+
+### lineBorderWidth
+Name: `lineBorderWidth`
+
+Mapbox spec: [line-border-width](https://docs.mapbox.com/style-spec/reference/layers/#paint-line-line-border-width)
+
+#### Description
+The width of the line border. A value of zero means no border.
+
+#### Type
+`number`
+#### Default Value
+`0`
+
+#### Units
+`pixels`
+
+#### Minimum
+`0`
+
+
+#### Expression
+
+Parameters: `zoom, feature, feature-state`
+___
+
+### lineBorderWidthTransition
+Name: `lineBorderWidthTransition`
+
+#### Description
+
+The transition affecting any changes to this layer’s lineBorderWidth property.
+
+#### Type
+
+`{ duration, delay }`
+
+#### Units
+`milliseconds`
+
+#### Default Value
+`{duration: 300, delay: 0}`
+
+
+___
+
+### lineBorderColor
+Name: `lineBorderColor`
+
+Mapbox spec: [line-border-color](https://docs.mapbox.com/style-spec/reference/layers/#paint-line-line-border-color)
+
+#### Description
+The color of the line border. If lineBorderWidth is greater than zero and the alpha value of this color is 0 (default), the color for the border will be selected automatically based on the line color.
+
+#### Type
+`color`
+#### Default Value
+`rgba(0, 0, 0, 0)`
+
+
+#### Expression
+
+Parameters: `zoom, feature, feature-state`
+___
+
+### lineBorderColorTransition
+Name: `lineBorderColorTransition`
+
+#### Description
+
+The transition affecting any changes to this layer’s lineBorderColor property.
+
+#### Type
+
+`{ duration, delay }`
+
+#### Units
+`milliseconds`
+
+#### Default Value
+`{duration: 300, delay: 0}`
+
+
+___
+
+### lineBorderGradient
+Name: `lineBorderGradient`
+
+Mapbox spec: [line-border-gradient](https://docs.mapbox.com/style-spec/reference/layers/#paint-line-line-border-gradient)
+
+#### Description
+A gradient used to color the border of a line feature at various distances along its length. Defined using a `step` or `interpolate` expression which outputs a color for each corresponding `lineProgress` input value. `lineProgress` is a percentage of the line feature's total length as measured on the webmercator projected coordinate plane (a `number` between `0` and `1`). Takes precedence over `lineBorderColor`. Has no effect unless `lineBorderWidth` is greater than zero. Can only be used with GeoJSON sources that specify `"lineMetrics": true`.
+
+#### Type
+`color`
+
+
+#### Disabled By
+`linePattern`
+
+#### Expression
+
+Parameters: `line-progress`
 
 ___
 

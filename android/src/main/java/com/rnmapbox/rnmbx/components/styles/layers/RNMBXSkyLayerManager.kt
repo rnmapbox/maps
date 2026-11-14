@@ -5,9 +5,16 @@ import com.facebook.react.uimanager.ThemedReactContext
 import com.facebook.react.uimanager.ViewGroupManager
 import com.facebook.react.uimanager.annotations.ReactProp
 import com.facebook.react.viewmanagers.RNMBXSkyLayerManagerInterface
+import com.facebook.react.uimanager.ViewManagerDelegate
+import com.facebook.react.viewmanagers.RNMBXSkyLayerManagerDelegate
+import com.rnmapbox.rnmbx.utils.extensions.asStringOrNull
 
 class RNMBXSkyLayerManager : ViewGroupManager<RNMBXSkyLayer>(),
     RNMBXSkyLayerManagerInterface<RNMBXSkyLayer> {
+
+    private val delegate = RNMBXSkyLayerManagerDelegate<RNMBXSkyLayer, RNMBXSkyLayerManager>(this)
+
+    override fun getDelegate(): ViewManagerDelegate<RNMBXSkyLayer> = delegate
     override fun getName(): String {
         return REACT_CLASS
     }
@@ -33,12 +40,12 @@ class RNMBXSkyLayerManager : ViewGroupManager<RNMBXSkyLayer>(),
 
     @ReactProp(name = "aboveLayerID")
     override fun setAboveLayerID(layer: RNMBXSkyLayer, aboveLayerID: Dynamic) {
-        layer.setAboveLayerID(aboveLayerID.asString())
+        layer.setAboveLayerID(aboveLayerID.asStringOrNull())
     }
 
     @ReactProp(name = "belowLayerID")
     override fun setBelowLayerID(layer: RNMBXSkyLayer, belowLayerID: Dynamic) {
-        layer.setBelowLayerID(belowLayerID.asString())
+        layer.setBelowLayerID(belowLayerID.asStringOrNull())
     }
 
     @ReactProp(name = "layerIndex")

@@ -7,9 +7,15 @@ import com.facebook.react.uimanager.ViewGroupManager
 import com.facebook.react.uimanager.annotations.ReactProp
 import com.facebook.react.viewmanagers.RNMBXImageSourceManagerInterface
 import com.rnmapbox.rnmbx.utils.GeoJSONUtils.toLatLngQuad
+import com.facebook.react.uimanager.ViewManagerDelegate
+import com.facebook.react.viewmanagers.RNMBXImageSourceManagerDelegate
 
 class RNMBXImageSourceManager : ViewGroupManager<RNMBXImageSource>(),
     RNMBXImageSourceManagerInterface<RNMBXImageSource> {
+
+    private val delegate = RNMBXImageSourceManagerDelegate<RNMBXImageSource, RNMBXImageSourceManager>(this)
+
+    override fun getDelegate(): ViewManagerDelegate<RNMBXImageSource> = delegate
     override fun getName(): String {
         return REACT_CLASS
     }

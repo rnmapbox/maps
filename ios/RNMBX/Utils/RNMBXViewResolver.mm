@@ -1,7 +1,7 @@
 //
 //  RNMBXViewResolver.mm
 //
-//  Implementation of cross-architecture view resolver utility
+//  Implementation of view resolver utility
 //
 
 #import "RNMBXViewResolver.h"
@@ -36,7 +36,6 @@ static const int64_t DELAY_ON_FURTHER_ATTEMPTS = 200 * NSEC_PER_MSEC; // 200ms
         return;
     }
 
-#ifdef RCT_NEW_ARCH_ENABLED
     [delegate.viewRegistry_DEPRECATED addUIBlock:^(RCTViewRegistry *viewRegistry) {
         [self resolveViewWithPolling:viewRef
                             delegate:delegate
@@ -47,18 +46,6 @@ static const int64_t DELAY_ON_FURTHER_ATTEMPTS = 200 * NSEC_PER_MSEC; // 200ms
                          attemptCount:0
                            startTime:nil];
     }];
-#else
-    [delegate.bridge.uiManager addUIBlock:^(RCTUIManager *uiManager, NSDictionary<NSNumber *, UIView *> *viewRegistry) {
-        [self resolveViewWithPolling:viewRef
-                            delegate:delegate
-                       expectedClass:expectedClass
-                               block:block
-                              reject:reject
-                          methodName:methodName
-                         attemptCount:0
-                           startTime:nil];
-    }];
-#endif
 }
 
 + (void)resolveViewWithPolling:(NSNumber *)viewRef
@@ -121,7 +108,6 @@ static const int64_t DELAY_ON_FURTHER_ATTEMPTS = 200 * NSEC_PER_MSEC; // 200ms
 #pragma mark - Private Methods
 
 + (UIView *)resolveView:(NSNumber *)viewRef delegate:(id<RNMBXViewResolverDelegate>)delegate {
-#ifdef RCT_NEW_ARCH_ENABLED
     if (delegate.viewRegistry_DEPRECATED) {
         UIView *componentView = [delegate.viewRegistry_DEPRECATED viewForReactTag:viewRef];
         if (componentView) {
@@ -135,11 +121,6 @@ static const int64_t DELAY_ON_FURTHER_ATTEMPTS = 200 * NSEC_PER_MSEC; // 200ms
     if (delegate.bridge) {
         return [delegate.bridge.uiManager viewForReactTag:viewRef];
     }
-#else
-    if (delegate.bridge) {
-        return [delegate.bridge.uiManager viewForReactTag:viewRef];
-    }
-#endif
 
     return nil;
 }

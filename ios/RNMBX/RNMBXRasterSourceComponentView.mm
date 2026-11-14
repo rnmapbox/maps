@@ -1,4 +1,3 @@
-#ifdef RCT_NEW_ARCH_ENABLED
 
 #import "RNMBXRasterSourceComponentView.h"
 #import "RNMBXFabricHelpers.h"
@@ -105,6 +104,14 @@ using namespace facebook::react;
     if (tileSize != nil) {
         _view.tileSize = tileSize;
     }
+    id prefetchZoomDelta = RNMBXConvertFollyDynamicToId(newProps.prefetchZoomDelta);
+    if (prefetchZoomDelta != nil) {
+        _view.prefetchZoomDelta = prefetchZoomDelta;
+    }
+    id tileNetworkRequestsDelay = RNMBXConvertFollyDynamicToId(newProps.tileNetworkRequestsDelay);
+    if (tileNetworkRequestsDelay != nil) {
+        _view.tileNetworkRequestsDelay = tileNetworkRequestsDelay;
+    }
     id tms = RNMBXConvertFollyDynamicToId(newProps.tms);
     if (tms != nil) {
         _view.tms = tms;
@@ -128,4 +135,3 @@ Class<RCTComponentViewProtocol> RNMBXRasterSourceCls(void)
   return RNMBXRasterSourceComponentView.class;
 }
 
-#endif // RCT_NEW_ARCH_ENABLED

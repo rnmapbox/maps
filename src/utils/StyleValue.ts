@@ -4,7 +4,7 @@ import BridgeValue, {
   type RawValueType,
   type StyleValueJSON,
 } from './BridgeValue';
-import { AllLayerStyleProps } from './MapboxStyles';
+import { type AllLayerStyleProps } from './MapboxStyles';
 import { getStyleType } from './styleMap';
 
 export type StyleValue = {

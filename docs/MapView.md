@@ -8,7 +8,8 @@ import { MapView } from '@rnmapbox/maps';
 MapView
 
 ```
-MapView backed by Mapbox Native GL
+MapView renders an interactive Mapbox map in a React Native app on iOS and Android.
+It is the root component of a map: add a Camera, sources, layers, annotations and the user location as its children.
 
 ## props
 
@@ -223,7 +224,7 @@ Add margins to the compass with x and y values
 ```tsx
 string
 ```
-[iOS, `mapbox` (v10) implementation only] A string referencing an image key. Requires an `Images` component.
+[`mapbox` (v10) implementation only] A string referencing an image key. Requires an `Images` component.
 
 [Ornaments](../examples/Map/Ornaments)
   
@@ -246,15 +247,40 @@ OrnamentPositonProp
 
 [Ornaments](../examples/Map/Ornaments)
   
+### scaleBarUnits
+
+```tsx
+'metric' | 'imperial' | 'nautical'
+```
+Set the scale bar distance units. Defaults to metric.
+
+
+  
 ### surfaceView
 
 ```tsx
 boolean
 ```
-[Android only] Enable/Disable use of GLSurfaceView instead of TextureView.
+[Android only] Enable/Disable use of GLSurfaceView instead of TextureView. Defaults to `true`, or to `false` when `transparent` is set.
+Only applies when the map is created.
 
-  _defaults to:_ `RNMBXModule.MapboxV10 ? true : false`
 
+  
+### transparent
+
+```tsx
+boolean
+```
+Renders the map with a transparent background, so views behind the map show through wherever the style's background is transparent or semi-transparent.
+The style must provide that background itself, e.g. a `background` layer with `background-color: rgba(0,0,0,0)`; maps with regular Mapbox styles stay opaque.
+Snapshots taken with `takeSnap` keep the transparency.
+
+On Android this uses a TextureView, which is slower, uses more memory and lags one frame behind the rest of the UI. It only applies when the map is created and
+overrides `surfaceView={true}`.
+
+Globe fog and atmosphere may not composite correctly over a transparent background.
+
+[Transparent Map](../examples/Map/TransparentMap)
   
 ### requestDisallowInterceptTouchEvent
 
@@ -273,15 +299,67 @@ when embedded into a scroll view
 | {
     /** locale code like `es` or `current` for the device's current locale */
     locale: string;
-    /** layer id to localize. If not specified, all layers will be localized */
+    /** layer ids to localize. If not specified, all layers will be localized */
     layerIds?: string[];
   }
 | true
 ```
-[`mapbox` (v10) implementation only]
 Set map's label locale, e.g. `{ "locale": "es" }` will localize labels to Spanish, `{ "locale": "current" }` will localize labels to system locale.
+Labels are localized on the device for this map only, into `ar`, `de`, `en`, `es`, `fr`, `it`, `ja`, `ko`, `pt`, `ru`, `vi`, `zh-Hans` or `zh-Hant`, and not on the Standard style.
+For any language Mapbox supports and for the Standard style, use the app-wide `Mapbox.setLanguage`.
+Removing the prop stops localizing labels from the next style load.
 
 [Localize Labels](../examples/Map/LocalizeLabels)
+  
+### symbolScaleBehavior
+
+```tsx
+'system' | { fixed: number }
+```
+How map symbols (icons and text) scale with the system text size setting.
+`'system'` follows the device's text size, from 0.8x up to 2.0x for accessibility sizes.
+`{ fixed: number }` uses a constant scale factor, recommended range 0.8–2.0.
+Defaults to `{ fixed: 1.0 }`.
+
+@experimental Uses an experimental Mapbox API that may change in a future SDK release.
+
+[Symbol Scale Behavior](../examples/Map/SymbolScaleBehavior)
+  
+### styleGlyphURL
+
+```tsx
+string
+```
+Overrides the glyph URL of the style, so labels use fonts from another glyph server, e.g.
+`https://example.com/fonts/{fontstack}/{range}.pbf`. It is re-applied on every style load.
+Removing the prop restores the style's own glyphs from the next style load.
+
+@experimental Uses an experimental Mapbox API that may change in a future SDK release.
+
+
+  
+### debugOptions
+
+```tsx
+Array
+```
+Debug drawings of the native map, e.g. `['tileBorders', 'collision']`:
+- `tileBorders`: tile boundaries as red lines
+- `parseStatus`: tile coordinates (x/y/z) in the corner of each tile
+- `timestamps`: when each tile was loaded
+- `collision`: symbol collision boxes, for diagnosing label placement
+- `overdraw`: each draw as a translucent fill, so overdrawn areas stand out
+- `stencilClip`: the stencil buffer instead of the color buffer
+- `depthBuffer`: the depth buffer instead of the color buffer
+- `modelBounds`: bounding boxes of 3D models
+- `light`: the light conditions of each tile
+- `camera`: a view with the camera's center, zoom, bearing and pitch
+- `padding`: the camera padding frame
+- `terrainWireframe`, `layers2DWireframe`, `layers3DWireframe`: Android only, wireframes of terrain and of 2D and 3D layers
+
+Options a platform doesn't support are ignored there with a warning. An empty array or removing the prop turns all of them off.
+
+[Debug Options](../examples/Map/DebugOptions)
   
 ### gestureSettings
 
@@ -289,6 +367,12 @@ Set map's label locale, e.g. `{ "locale": "es" }` will localize labels to Spanis
 type GestureSettings = {
   doubleTapToZoomInEnabled: boolean; /* Whether double tapping the map with one touch results in a zoom-in animation. */
   doubleTouchToZoomOutEnabled: boolean; /* Whether single tapping the map with two touches results in a zoom-out animation. */
+  focalPoint: {x: number, y: number}; /* By default, gestures rotate and zoom around the center of the gesture. Set
+this property to rotate and zoom around a fixed point instead, given in
+points (iOS) / dp (Android) relative to the top-left of the map view.
+Applies to pinch, rotate, double-tap and two-finger tap zoom.
+On iOS, pinch ignores the focal point while `pinchPanEnabled` is `true` (the default),
+so set `pinchPanEnabled: false` to keep pinch anchored to it. */
   pinchPanEnabled: boolean; /* Whether pan/scroll is enabled for the pinch gesture. */
   pinchZoomEnabled: boolean; /* Whether zoom is enabled for the pinch gesture. */
   pinchZoomDecelerationEnabled: boolean; /* Whether a deceleration animation following a pinch-zoom gesture is enabled. True by default.
@@ -310,27 +394,29 @@ On android set to 0 to disable deceleration, and non zero to enabled it. */
 ```
 Gesture configuration allows to control the user touch interaction.
 
-
+[Gesture Focal Point](../examples/Map/GestureFocalPoint)
   
 ### onPress
 
 ```tsx
 func
 ```
-Map press listener, gets called when a user presses the map
+Map press listener, called when a user presses the map.
+Single taps are reported only after the map rules out a double tap, so `onPress` fires a few hundred milliseconds after the touch.
+On iOS, setting both `doubleTapToZoomInEnabled` and `quickZoomEnabled` to `false` in `gestureSettings` removes most of this delay; on Android it doesn't.
 *signature:*`(feature:GeoJSON.Feature) =&gt; void`
 
-[Show Click](../examples/Map/ShowClick)
+[Screen Coordinates](../examples/Map/ScreenCoordinates), [Show Click](../examples/Map/ShowClick)
   
 ### onLongPress
 
 ```tsx
 func
 ```
-Map long press listener, gets called when a user long presses the map
+Map long press listener, called when a user long presses the map.
 *signature:*`(feature:GeoJSON.Feature) =&gt; void`
 
-
+[Screen Coordinates](../examples/Map/ScreenCoordinates)
   
 ### onRegionWillChange
 
@@ -352,6 +438,7 @@ This event is triggered whenever the currently displayed map region is about to 
 func
 ```
 This event is triggered whenever the currently displayed map region is changing.
+`properties.isUserInteraction` is deprecated, use CameraGestureObserver#onCameraChanged to tell user gestures from programmatic camera changes.
 
 - `feature`: `PointFeature`  - The geojson point feature at the camera center, properties contains zoomLevel, visibleBounds
 *signature:*`(feature:GeoJSON.Feature) =&gt; void`
@@ -427,7 +514,7 @@ This event is triggered when the map has failed to load a new map style. On v10 
 func
 ```
 This event is tiggered when there is an error during map load. V10 only, replaces onDidFailLoadingMap, might be called multiple times and not exclusive with onDidFinishLoadingMap.
-*signature:*`() =&gt; void`
+*signature:*`(payload:{error: string, type: union, tileId: string, sourceId: string}) =&gt; void`
 
 
   
@@ -549,39 +636,42 @@ the onPress event for the taps that deselect the annotation. Default is false.
 ## methods
 ### getPointInView(coordinate)
 
-Converts a geographic coordinate to a point in the given view’s coordinate system.
+Converts a geographic coordinate to a screen coordinate relative to the map view.
 
 #### arguments
 | Name | Type | Required | Description  |
 | ---- | :--: | :------: | :----------: |
-| `coordinate` | `Position` | `Yes` | A point expressed in the map view's coordinate system. |
+| `coordinate` | `Position` | `Yes` | A point expressed in the map view's coordinate system `[longitude, latitude]`. |
 
 
 
 ```javascript
-const pointInView = await this._map.getPointInView([-37.817070, 144.949901]);
+const longitude = 144.949901;
+const latitude = -37.817070;
+const [x, y] = await this._map.getPointInView([longitude, latitude]);
 ```
 
 
-### getCoordinateFromView(point)
+[Screen Coordinates](../examples/Map/ScreenCoordinates)### getCoordinateFromView(point)
 
-Converts a point in the given view’s coordinate system to a geographic coordinate.
+Converts a screen coordinate relative to the map view to a geographic coordinate.
 
 #### arguments
 | Name | Type | Required | Description  |
 | ---- | :--: | :------: | :----------: |
-| `point` | `Position` | `Yes` | A point expressed in the given view’s coordinate system. |
+| `point` | `Position` | `Yes` | A point expressed in screen coordinates relative to the map view `[x, y]`. |
 
 
 
 ```javascript
-const coordinate = await this._map.getCoordinateFromView([100, 100]);
+const x = 100; const y = 100;
+const [longitude, latitude] = await this._map.getCoordinateFromView([x, y]);
 ```
 
 
-### getVisibleBounds()
+[Screen Coordinates](../examples/Map/ScreenCoordinates)### getVisibleBounds()
 
-The coordinate bounds (ne, sw) visible in the user’s viewport.
+The coordinate bounds of the map viewport.
 
 #### arguments
 | Name | Type | Required | Description  |
@@ -591,7 +681,7 @@ The coordinate bounds (ne, sw) visible in the user’s viewport.
 
 
 ```javascript
-const visibleBounds = await this._map.getVisibleBounds();
+const [[rightLon, topLat], [leftLon, bottomLat]] = await this._map.getVisibleBounds();
 ```
 
 
@@ -602,36 +692,39 @@ Returns an array of rendered map features that intersect with a given point.
 #### arguments
 | Name | Type | Required | Description  |
 | ---- | :--: | :------: | :----------: |
-| `coordinate` | `Position` | `Yes` | A point expressed in the map view’s coordinate system. |
-| `filter` | `Array` | `No` | A set of strings that correspond to the names of layers defined in the current style. Only the features contained in these layers are included in the returned array. |
-| `layerIDs` | `Array` | `No` | A array of layer id's to filter the features by |
+| `coordinate` | `Position` | `Yes` | A point expressed in the map view’s coordinate system `[x, y]`; |
+| `filter` | `FilterExpression \| tuple` | `No` | A set of strings that correspond to the names of layers defined in the current style. Only the features contained in these layers are included in the returned array. |
+| `layerIDs` | `Array` | `No` | A array of layer IDs by which to filter the features. |
 
 
 
 ```javascript
-this._map.queryRenderedFeaturesAtPoint([30, 40], ['==', 'type', 'Point'], ['id1', 'id2'])
+const x = 30; const y = 40;
+this._map.queryRenderedFeaturesAtPoint([x, y], ['==', 'type', 'Point'], ['id1', 'id2'])
 ```
 
 
-### queryRenderedFeaturesInRect(bbox[, filter][, layerIDs])
+[Screen Coordinates](../examples/Map/ScreenCoordinates)### queryRenderedFeaturesInRect(bbox[, filter][, layerIDs])
 
 Returns an array of rendered map features that intersect with the given rectangle,<br/>restricted to the given style layers and filtered by the given predicate. In v10,<br/>passing an empty array will query the entire visible bounds of the map.
 
 #### arguments
 | Name | Type | Required | Description  |
 | ---- | :--: | :------: | :----------: |
-| `bbox` | `BBox \| []` | `Yes` | A rectangle expressed in the map view’s coordinate system, density independent pixels and not map coordinates. This can be an empty array to query the visible map area. |
-| `filter` | `Array` | `No` | A set of strings that correspond to the names of layers defined in the current style. Only the features contained in these layers are included in the returned array. |
-| `layerIDs` | `Array` | `No` |  A array of layer id's to filter the features by |
+| `bbox` | `BBox \| []` | `Yes` | A rectangle expressed in density-independent screen coordinates relative to the map view `[top, left, bottom, right]` or `[minY, minX, maxY, maxX]` (not geographic coordinates). An empty array queries the visible map area. |
+| `filter` | `FilterExpression` | `No` | An array of strings that correspond to the names of layers defined in the current style. Only the features contained in these layers are included in the returned array. |
+| `layerIDs` | `Array` | `No` |  A array of layer IDs by which to filter the features. |
 
 
 
 ```javascript
-this._map.queryRenderedFeaturesInRect([30, 40, 20, 10], ['==', 'type', 'Point'], ['id1', 'id2'])
+const left = 40; const top = 30;
+const right = 10; const bottom = 20;
+this._map.queryRenderedFeaturesInRect([top, left, bottom, right], ['==', 'type', 'Point'], ['id1', 'id2'])
 ```
 
 
-### querySourceFeatures(sourceId[, filter][, sourceLayerIDs])
+[Screen Coordinates](../examples/Map/ScreenCoordinates)### querySourceFeatures(sourceId[, filter][, sourceLayerIDs])
 
 Returns an array of GeoJSON Feature objects representing features within the specified vector tile or GeoJSON source that satisfy the query parameters.
 
@@ -639,7 +732,7 @@ Returns an array of GeoJSON Feature objects representing features within the spe
 | Name | Type | Required | Description  |
 | ---- | :--: | :------: | :----------: |
 | `sourceId` | `string` | `Yes` | Style source identifier used to query for source features. |
-| `filter` | `Array` | `No` | A filter to limit query results. |
+| `filter` | `FilterExpression \| tuple` | `No` | A filter to limit query results. |
 | `sourceLayerIDs` | `Array` | `No` | The name of the source layers to query. For vector tile sources, this parameter is required. For GeoJSON sources, it is ignored. |
 
 
@@ -661,12 +754,12 @@ Map camera will perform updates based on provided config. Deprecated use Camera#
 
 ### takeSnap([writeToDisk])
 
-Takes snapshot of map with current tiles and returns a URI to the image
+Takes snapshot of map with current tiles and returns a Base64-encoded PNG image,<br/>or an file-system URI to a temporary PNG file if `writeToDisk` is `true`.
 
 #### arguments
 | Name | Type | Required | Description  |
 | ---- | :--: | :------: | :----------: |
-| `writeToDisk` | `Boolean` | `No` | If true will create a temp file, otherwise it is in base64 |
+| `writeToDisk` | `boolean` | `No` | If `true`, creates a temporary PNG file and returns a file-system URI, otherwise returns a Base64-encoded PNG image. (Defaults to `false`) |
 
 
 ### getZoom()
@@ -687,7 +780,7 @@ const zoom = await this._map.getZoom();
 
 ### getCenter()
 
-Returns the map's geographical centerpoint
+Returns the map's center point expressed as geographic coordinates `[longitude, latitude]`.
 
 #### arguments
 | Name | Type | Required | Description  |
@@ -718,7 +811,7 @@ Queries the currently loaded data for elevation at a geographical location.<br/>
 #### arguments
 | Name | Type | Required | Description  |
 | ---- | :--: | :------: | :----------: |
-| `coordinate` | `Position` | `Yes` | the coordinates to query elevation at |
+| `coordinate` | `Position` | `Yes` | The geographic coordinates `[longitude, latitude]` at which to query elevation. |
 
 
 [Query Terrain Elevation](../examples/V10/QueryTerrainElevation)### setSourceVisibility(visible, sourceId[, sourceLayerId])
@@ -729,8 +822,8 @@ Sets the visibility of all the layers referencing the specified `sourceLayerId` 
 | Name | Type | Required | Description  |
 | ---- | :--: | :------: | :----------: |
 | `visible` | `boolean` | `Yes` | Visibility of the layers |
-| `sourceId` | `string` | `Yes` | Identifier of the target source (e.g. 'composite') |
-| `sourceLayerId` | `String` | `No` | Identifier of the target source-layer (e.g. 'building') |
+| `sourceId` | `string` | `Yes` | Target source identifier (e.g. 'composite') |
+| `sourceLayerId` | `string` | `No` | Target source-layer identifier (e.g. 'building'). If `null`, the change affects all layers in the target source. |
 
 
 

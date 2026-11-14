@@ -1,5 +1,5 @@
 import {
-  EmitterSubscription,
+  type EmitterSubscription,
   NativeEventEmitter,
   NativeModules,
 } from 'react-native';

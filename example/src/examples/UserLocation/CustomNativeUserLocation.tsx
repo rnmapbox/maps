@@ -9,7 +9,7 @@ import {
   Image,
 } from '@rnmapbox/maps';
 
-import { ExampleWithMetadata } from '../common/ExampleMetadata';
+import { type ExampleWithMetadata } from '../common/ExampleMetadata';
 
 const styles = { matchParent: { flex: 1 } };
 
@@ -63,5 +63,7 @@ const metadata: ExampleWithMetadata['metadata'] = {
   docs: `
   Demonstrates use of images to customize LocationPuck
   `,
+  excludeFromPercy: true,
+  waitForMapIdle: false,
 };
 UserLocationNativeAnimated.metadata = metadata;

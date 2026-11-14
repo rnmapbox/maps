@@ -2,17 +2,16 @@
 #import <UIKit/UIKit.h>
 #import "RNMBXViewResolver.h"
 
-#ifdef RCT_NEW_ARCH_ENABLED
+#ifdef __cplusplus
 #import "rnmapbox_maps_specs.h"
+
+@interface RNMBXImageModule : NSObject <NativeRNMBXImageModuleSpec, RNMBXViewResolverDelegate>
+@end
+
 #else
-#import <React/RCTBridge.h>
-#endif
 
 @interface RNMBXImageModule : NSObject
-#ifdef RCT_NEW_ARCH_ENABLED
-<NativeRNMBXImageModuleSpec, RNMBXViewResolverDelegate>
-#else
-<RCTBridgeModule, RNMBXViewResolverDelegate>
+@end
+
 #endif
 
-@end

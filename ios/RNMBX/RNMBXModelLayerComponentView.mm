@@ -1,4 +1,3 @@
-#ifdef RCT_NEW_ARCH_ENABLED
 
 #import "RNMBXModelLayerComponentView.h"
 #import "RNMBXFabricHelpers.h"
@@ -6,6 +5,7 @@
 #import <React/RCTConversions.h>
 #import <React/RCTFabricComponentsPlugins.h>
 #import <React/RCTBridge+Private.h>
+#import "RNMBXBridgeManager.h"
 
 #import <react/renderer/components/rnmapbox_maps_specs/ComponentDescriptors.h>
 #import <react/renderer/components/rnmapbox_maps_specs/EventEmitters.h>
@@ -41,7 +41,7 @@ using namespace facebook::react;
 - (void)prepareView
 {
   _view =  [[RNMBXModelLayer alloc] init];
-  _view.bridge = [RCTBridge currentBridge];
+  _view.bridge = [RNMBXBridgeManager currentBridge];
   self.contentView = _view;
 }
 
@@ -73,4 +73,3 @@ Class<RCTComponentViewProtocol> RNMBXModelLayerCls(void)
   return RNMBXModelLayerComponentView.class;
 }
 
-#endif // RCT_NEW_ARCH_ENABLED

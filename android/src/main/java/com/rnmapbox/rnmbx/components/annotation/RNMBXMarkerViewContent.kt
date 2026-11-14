@@ -1,12 +1,27 @@
 package com.rnmapbox.rnmbx.components.annotation
 
 import android.content.Context
+import android.view.MotionEvent
+import android.view.View
 import android.view.View.MeasureSpec
 import android.view.ViewGroup
+import com.facebook.react.uimanager.PixelUtil
+import com.facebook.react.uimanager.PointerEvents
+import com.facebook.react.uimanager.ThemedReactContext
 import com.facebook.react.views.view.ReactViewGroup
 
 class RNMBXMarkerViewContent(context: Context): ReactViewGroup(context) {
     var inAdd: Boolean = false
+    private var externalPointerEvents: PointerEvents = PointerEvents.AUTO
+    private var stopGesturePropagation: Boolean = false
+
+    fun setExternalPointerEvents(pointerEvents: PointerEvents) {
+        externalPointerEvents = pointerEvents
+    }
+
+    fun setStopGesturePropagation(stop: Boolean) {
+        stopGesturePropagation = stop
+    }
 
     init {
         allowRenderingOutside()
@@ -15,6 +30,108 @@ class RNMBXMarkerViewContent(context: Context): ReactViewGroup(context) {
     override fun onAttachedToWindow() {
         super.onAttachedToWindow()
         configureParentClipping()
+    }
+
+    override fun dispatchTouchEvent(ev: MotionEvent): Boolean {
+        if (externalPointerEvents == PointerEvents.NONE) {
+            return false
+        }
+        // Decide, at the start of each gesture, who owns it:
+        //
+        // - If the touch lands on a scrollable descendant (ScrollView, FlatList, ViewPager, …),
+        //   ask the map not to intercept so the child keeps the whole gesture and can scroll.
+        //   The map is an ancestor, so its onInterceptTouchEvent runs before the child's — without
+        //   this the map would steal the drag on its own touch slop before the child could claim it.
+        // - Otherwise we leave interception alone. Taps still reach child Pressables (Mapbox uses
+        //   its own touch slop, so a tap is not intercepted), while a pan/pinch that merely starts
+        //   on the marker reaches the map — instead of the marker being a dead zone (issue #4255).
+        //
+        // Note: scrollable detection cannot help children that handle drags purely in JS
+        // (PanResponder, e.g. some sliders); they never claim the native gesture, so the map takes
+        // over once the drag passes its slop. For those, set `stopGesturePropagation` on the
+        // MarkerView to keep every gesture inside the marker. Android resets the disallow flag on
+        // each new ACTION_DOWN.
+        if (ev.actionMasked == MotionEvent.ACTION_DOWN &&
+            (stopGesturePropagation || touchStartsOnScrollableChild(ev.rawX, ev.rawY))
+        ) {
+            parent?.requestDisallowInterceptTouchEvent(true)
+        }
+        return super.dispatchTouchEvent(ev)
+    }
+
+    private fun touchStartsOnScrollableChild(rawX: Float, rawY: Float): Boolean =
+        anyScrollableContains(this, rawX, rawY)
+
+    private fun anyScrollableContains(view: View, rawX: Float, rawY: Float): Boolean {
+        if (view.visibility != View.VISIBLE) {
+            return false
+        }
+        val loc = IntArray(2)
+        view.getLocationOnScreen(loc)
+        val inside = rawX >= loc[0] && rawX <= loc[0] + view.width &&
+            rawY >= loc[1] && rawY <= loc[1] + view.height
+        if (!inside) {
+            return false
+        }
+        if (view !== this && view.isScrollable()) {
+            return true
+        }
+        if (view is ViewGroup) {
+            for (i in 0 until view.childCount) {
+                if (anyScrollableContains(view.getChildAt(i), rawX, rawY)) {
+                    return true
+                }
+            }
+        }
+        return false
+    }
+
+    private fun View.isScrollable(): Boolean =
+        canScrollHorizontally(1) || canScrollHorizontally(-1) ||
+            canScrollVertically(1) || canScrollVertically(-1)
+
+    private var publishedSurfaceId = View.NO_ID
+    private var publishedTag = View.NO_ID
+    private var publishedX = Float.NaN
+    private var publishedY = Float.NaN
+    private var dropped = false
+
+    // Mapbox always sets translationX then translationY, so publishing on Y alone avoids a
+    // transient (new x, old y) entry.
+    override fun setTranslationY(translationY: Float) {
+        super.setTranslationY(translationY)
+        publishTranslation()
+    }
+
+    // Mapbox positions the view with translationX/Y, which the shadow tree doesn't see, so measure()
+    // (Pressable's press rect) would be off. The shadow node reads it from this table (#3832).
+    private fun publishTranslation() {
+        if (dropped) return
+        val surfaceId = (context as? ThemedReactContext)?.surfaceId ?: return
+        if (id == View.NO_ID) return
+        val x = PixelUtil.toDIPFromPixel(translationX)
+        val y = PixelUtil.toDIPFromPixel(translationY)
+        if (surfaceId == publishedSurfaceId && id == publishedTag && x == publishedX && y == publishedY) return
+        if (surfaceId != publishedSurfaceId || id != publishedTag) clearTranslation()
+        publishedSurfaceId = surfaceId
+        publishedTag = id
+        publishedX = x
+        publishedY = y
+        RNMBXMarkerViewContentTranslations.set(surfaceId, id, x, y)
+    }
+
+    private fun clearTranslation() {
+        if (publishedTag == View.NO_ID) return
+        RNMBXMarkerViewContentTranslations.remove(publishedSurfaceId, publishedTag)
+        publishedSurfaceId = View.NO_ID
+        publishedTag = View.NO_ID
+        publishedX = Float.NaN
+        publishedY = Float.NaN
+    }
+
+    fun onDropViewInstance() {
+        dropped = true
+        clearTranslation()
     }
 
     private fun configureParentClipping() {
@@ -48,4 +165,3 @@ private fun ViewGroup.allowRenderingOutside() {
     this.clipChildren = false
     this.clipToPadding = false
 }
-

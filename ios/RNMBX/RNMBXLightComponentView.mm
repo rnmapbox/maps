@@ -1,9 +1,9 @@
-#ifdef RCT_NEW_ARCH_ENABLED
 
 #import "RNMBXLightComponentView.h"
 #import "RNMBXFabricHelpers.h"
 
 #import <React/RCTBridge+Private.h>
+#import "RNMBXBridgeManager.h"
 #import <React/RCTConversions.h>
 #import <React/RCTFabricComponentsPlugins.h>
 
@@ -41,7 +41,7 @@ using namespace facebook::react;
 - (void)prepareView
 {
   _view = [[RNMBXLight alloc] init];
-  _view.bridge = [RCTBridge currentBridge];
+  _view.bridge = [RNMBXBridgeManager currentBridge];
   self.contentView = _view;
 }
 
@@ -71,4 +71,3 @@ Class<RCTComponentViewProtocol> RNMBXLightCls(void)
   return RNMBXLightComponentView.class;
 }
 
-#endif // RCT_NEW_ARCH_ENABLED

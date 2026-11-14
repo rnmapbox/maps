@@ -1,9 +1,9 @@
-#ifdef RCT_NEW_ARCH_ENABLED
 
 #import "RNMBXTerrainComponentView.h"
 #import "RNMBXFabricHelpers.h"
 
 #import <React/RCTBridge+Private.h>
+#import "RNMBXBridgeManager.h"
 #import <React/RCTConversions.h>
 #import <React/RCTFabricComponentsPlugins.h>
 
@@ -41,7 +41,7 @@ using namespace facebook::react;
 - (void)prepareView
 {
   _view =  [[RNMBXTerrain alloc] init];
-  _view.bridge = [RCTBridge currentBridge];
+  _view.bridge = [RNMBXBridgeManager currentBridge];
   self.contentView = _view;
 }
 
@@ -81,4 +81,3 @@ Class<RCTComponentViewProtocol> RNMBXTerrainCls(void)
   return RNMBXTerrainComponentView.class;
 }
 
-#endif // RCT_NEW_ARCH_ENABLED

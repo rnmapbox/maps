@@ -26,6 +26,7 @@ public class RNMBXShapeSource : RNMBXSource {
 
   var shapeAnimator: ShapeAnimator? = nil
   var shapeObject: GeoJSONObject? = nil
+  var shapeString: String? = nil
 
   @objc public var shape : String? {
     didSet {
@@ -40,16 +41,10 @@ public class RNMBXShapeSource : RNMBXSource {
           let shape = shapeAnimator.getShape()
           shapeUpdated(shape: shape)
         }
-      } else {        
+      } else {
+        // Hand Mapbox the raw string so its GeoJSON parsing queue decodes it off the main thread.
         logged(LOG_TAG, "updateShape") {
-          let obj : GeoJSONObject = try parse(shape)
-          shapeObject = obj
-          
-          doUpdate { (style) in
-            logged(LOG_TAG, "setShape") {
-              try style.updateGeoJSONSource(withId: id, geoJSON: obj)
-            }
-          }
+          setShapeSourceData(shape)
         }
       }
     }
@@ -82,9 +77,11 @@ public class RNMBXShapeSource : RNMBXSource {
       }
     }
   }
+  @objc public var clusterMinPoints : NSNumber?
   @objc public var clusterProperties : [String: [Any]]?;
 
   @objc public var maxZoomLevel : NSNumber?
+  @objc public var minZoomLevel : NSNumber?
   @objc public var buffer : NSNumber?
   @objc public var tolerance : NSNumber?
   @objc public var lineMetrics : Bool = false
@@ -97,11 +94,7 @@ public class RNMBXShapeSource : RNMBXSource {
   {
     var result =  GeoJSONSource(id: id)
 
-    if let shapeObject = shapeObject {
-      result.data = toGeoJSONSourceData(shapeObject)
-    } else {
-      result.data = emptyShape()
-    }
+    result.data = shapeSourceData()
 
     if let url = url {
       result.data = .url(URL(string: url)!)
@@ -117,6 +110,10 @@ public class RNMBXShapeSource : RNMBXSource {
 
     if let clusterMaxZoomLevel = clusterMaxZoomLevel {
       result.clusterMaxZoom = clusterMaxZoomLevel.doubleValue
+    }
+
+    if let clusterMinPoints = clusterMinPoints {
+      result.clusterMinPoints = clusterMinPoints.doubleValue
     }
 
     do {
@@ -136,6 +133,10 @@ public class RNMBXShapeSource : RNMBXSource {
       result.maxzoom = maxZoomLevel.doubleValue
     }
 
+    if let minZoomLevel = minZoomLevel {
+      result.minzoom = minZoomLevel.doubleValue
+    }
+
     if let buffer = buffer {
       result.buffer = buffer.doubleValue
     }
@@ -145,6 +146,10 @@ public class RNMBXShapeSource : RNMBXSource {
     }
 
     result.lineMetrics = lineMetrics
+
+    if let promoteId = promoteIdValue() {
+      result.promoteId2 = promoteId
+    }
 
     return result
   }
@@ -175,6 +180,36 @@ public class RNMBXShapeSource : RNMBXSource {
 
 extension RNMBXShapeSource
 {
+  func setShapeSourceData(_ shape: String?) {
+    shapeObject = nil
+    shapeString = shape
+    applyShapeSourceData()
+  }
+
+  func setShapeSourceData(_ shape: GeoJSONObject) {
+    shapeString = nil
+    shapeObject = shape
+    applyShapeSourceData()
+  }
+
+  private func applyShapeSourceData() {
+    doUpdate { (style) in
+      logged(LOG_TAG, "setShape") {
+        style.updateGeoJSONSource(withId: id, data: shapeSourceData())
+      }
+    }
+  }
+
+  func shapeSourceData() -> GeoJSONSourceData {
+    if let shapeObject = shapeObject {
+      return toGeoJSONSourceData(shapeObject)
+    }
+    if let shapeString = shapeString {
+      return .string(shapeString)
+    }
+    return emptyShape()
+  }
+
   func toGeoJSONSourceData(_ shape: GeoJSONObject) -> GeoJSONSourceData {
     switch shape {
     case .geometry(let geometry):
@@ -364,17 +399,71 @@ extension RNMBXShapeSource
       }
     }
   }
+
+  @objc public func getClusterChildren(
+    featureJSON: String,
+    resolver: @escaping RCTPromiseResolveBlock,
+    rejecter: @escaping RCTPromiseRejectBlock
+  ) {
+    getClusterChildren(featureJSON) { result in
+      switch result {
+      case .success(let features):
+        logged("getClusterChildren", rejecter: rejecter) {
+          let featuresJSON: Any = try features.features.toJSON()
+          resolver([
+            "data": ["type": "FeatureCollection", "features": featuresJSON]
+          ])
+        }
+      case .failure(let error):
+        rejecter(error.localizedDescription, "Error.getClusterChildren", error)
+      }
+    }
+  }
+
+  @objc public func getClusterLeaves(
+    featureJSON: String,
+    number: uint,
+    offset: uint,
+    resolver: @escaping RCTPromiseResolveBlock,
+    rejecter: @escaping RCTPromiseRejectBlock
+  ) {
+    getClusterLeaves(featureJSON, number: number, offset: offset) { result in
+      switch result {
+      case .success(let features):
+        logged("getClusterLeaves", rejecter: rejecter) {
+          let featuresJSON: Any = try features.features.toJSON()
+          resolver([
+            "data": ["type": "FeatureCollection", "features": featuresJSON]
+          ])
+        }
+      case .failure(let error):
+        rejecter(error.localizedDescription, "Error.getClusterLeaves", error)
+      }
+    }
+  }
+
+  @objc public func getClusterExpansionZoom(
+    featureJSON: String,
+    resolver: @escaping RCTPromiseResolveBlock,
+    rejecter: @escaping RCTPromiseRejectBlock
+  ) {
+    getClusterExpansionZoom(featureJSON) { result in
+      switch result {
+      case .success(let zoom):
+        resolver([
+          "data": NSNumber(value: zoom)
+        ])
+      case .failure(let error):
+        rejecter(error.localizedDescription, "Error.getClusterExpansionZoom", error)
+      }
+    }
+  }
 }
 
 // MARK: shape animation
 
 extension RNMBXShapeSource: ShapeAnimationConsumer {
   func shapeUpdated(shape: Turf.GeoJSONObject) {
-    shapeObject = shape
-    doUpdate { (style) in
-      logged("RCTMGLShapeSource.setShape") {
-        try style.updateGeoJSONSource(withId: id, geoJSON: shape)
-      }
-    }
+    setShapeSourceData(shape)
   }
 }

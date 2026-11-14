@@ -67,5 +67,6 @@ const metadata = {
   docs: `
 Shows heatmap layer
 `,
+  webSupported: true,
 };
 Heatmap.metadata = metadata;

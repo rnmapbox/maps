@@ -65,5 +65,6 @@ const metadata = {
   docs: `
 Demonstrates various ways to embed map via (Navigation, Page, modal, etc)
 `,
+  waitForMapIdle: false,
 };
 MapAndNavigation.metadata = metadata;

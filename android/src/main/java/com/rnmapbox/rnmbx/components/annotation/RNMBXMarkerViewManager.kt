@@ -8,8 +8,11 @@ import com.facebook.react.bridge.ReactApplicationContext
 import com.rnmapbox.rnmbx.components.AbstractEventEmitter
 import com.facebook.react.uimanager.annotations.ReactProp
 import com.facebook.react.common.MapBuilder
+import com.facebook.react.uimanager.PointerEvents
+import com.facebook.react.uimanager.ReactStylesDiffMap
 import com.facebook.react.uimanager.ThemedReactContext
 import com.facebook.react.uimanager.ViewManagerDelegate
+import com.facebook.react.uimanager.ViewProps
 import com.facebook.react.viewmanagers.RNMBXMarkerViewManagerDelegate
 import com.facebook.react.viewmanagers.RNMBXMarkerViewManagerInterface
 import com.mapbox.maps.ScreenCoordinate
@@ -72,6 +75,42 @@ class RNMBXMarkerViewManager(reactApplicationContext: ReactApplicationContext) :
         markerView.setIsSelected(isSelected.asBoolean())
     }
 
+    @ReactProp(name = "allowZElevate")
+    override fun setAllowZElevate(markerView: RNMBXMarkerView, value: Dynamic) {
+        markerView.setAllowZElevate(if (value.isNull) null else value.asBoolean())
+    }
+
+    @ReactProp(name = "priority")
+    override fun setPriority(markerView: RNMBXMarkerView, value: Dynamic) {
+        markerView.setPriority(if (value.isNull) null else value.asInt().toLong())
+    }
+
+    @ReactProp(name = "minZoom")
+    override fun setMinZoom(markerView: RNMBXMarkerView, value: Dynamic) {
+        markerView.setMinZoom(if (value.isNull) null else value.asDouble())
+    }
+
+    @ReactProp(name = "maxZoom")
+    override fun setMaxZoom(markerView: RNMBXMarkerView, value: Dynamic) {
+        markerView.setMaxZoom(if (value.isNull) null else value.asDouble())
+    }
+
+    @ReactProp(name = "stopGesturePropagation")
+    override fun setStopGesturePropagation(markerView: RNMBXMarkerView, value: Dynamic) {
+        markerView.setStopGesturePropagation(!value.isNull && value.asBoolean())
+    }
+
+    override fun updateProperties(viewToUpdate: RNMBXMarkerView, props: ReactStylesDiffMap) {
+        super.updateProperties(viewToUpdate, props)
+        // The codegen delegate does not forward the standard `pointerEvents` ViewProp — it falls
+        // to BaseViewManagerDelegate which ignores it. Intercept it here so the marker content
+        // view (which lives in a separate Mapbox view hierarchy) can honour it.
+        if (props.hasKey(ViewProps.POINTER_EVENTS)) {
+            val pe = PointerEvents.parsePointerEvents(props.getString(ViewProps.POINTER_EVENTS))
+            viewToUpdate.setContentPointerEvents(pe)
+        }
+    }
+
     override fun createViewInstance(reactContext: ThemedReactContext): RNMBXMarkerView {
         return RNMBXMarkerView(reactContext, this)
     }
@@ -96,8 +135,6 @@ class RNMBXMarkerViewManager(reactApplicationContext: ReactApplicationContext) :
                         }
                     }
                 }
-
-
             })
         }
     }

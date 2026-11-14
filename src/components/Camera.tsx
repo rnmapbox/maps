@@ -9,7 +9,7 @@ import React, {
 } from 'react';
 import { NativeModules } from 'react-native';
 
-import { MapboxGLEvent } from '../types';
+import { type MapboxGLEvent } from '../types';
 import { type Position } from '../types/Position';
 import { makeLatLngBounds, makePoint } from '../utils/geoUtils';
 import { type NativeRefType } from '../utils/nativeRef';
@@ -141,14 +141,23 @@ export type CameraStop = {
   /** The corners of a box around which the map should bound. Contains padding props for backwards
    * compatibility; the root `padding` prop should be used instead. */
   bounds?: CameraBoundsWithPadding;
-  /** The heading (orientation) of the map. */
+  /** Heading (bearing, orientation) of the map, measured in degrees clockwise from true north. */
   heading?: number;
-  /** The pitch of the map. */
+  /** The pitch toward the horizon measured in degrees, with 0 degrees resulting in a top-down view for a two-dimensional map. */
   pitch?: number;
   /** The zoom level of the map. */
   zoomLevel?: number;
-  /** The viewport padding in points. */
-  padding?: CameraPadding;
+  /** The viewport padding in points. An omitted edge keeps its current padding. */
+  padding?: {
+    /** Left padding in points */
+    paddingLeft?: number;
+    /** Right padding in points */
+    paddingRight?: number;
+    /** Top padding in points */
+    paddingTop?: number;
+    /** Bottom padding in points */
+    paddingBottom?: number;
+  };
   /** The duration the map takes to animate to a new configuration. */
   animationDuration?: number;
   /** The easing or path the camera uses to animate to a new configuration. */

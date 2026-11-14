@@ -7,6 +7,7 @@
  * const auto &newViewProps = static_cast<const RNMBXNativeUserLocationProps &>(*props);
  *
  * 2. OPTION_PROPS are not set when the prop is undefined/null
+ * 3. Non-OPTIONAL props are set on every change, including to undefined/null
  */
 
 NSNumber* RNMBXPropConvert_Optional_BOOL_NSNumber(const folly::dynamic &dyn, NSString* propertyName);
@@ -58,6 +59,11 @@ NSDictionary* RNMBXPropConvert_Optional_NSDictionary(const folly::dynamic &dyn, 
 #define RNMBX_PROP_BOOL(name) \
   if ((!oldProps.get() || oldViewProps.name != newViewProps.name)) { \
     _view.name = RNMBXPropConvert_BOOL(newViewProps.name, @#name); \
+  }
+
+#define RNMBX_PROP_NSString(name) \
+  if ((!oldProps.get() || oldViewProps.name != newViewProps.name)) { \
+    _view.name = RNMBXPropConvert_Optional_NSString(newViewProps.name, @#name); \
   }
 
 #define RNMBX_OPTIONAL_PROP_NSDictionary(name) RNMBX_REMAP_OPTIONAL_PROP_NSDictionary(name, name)

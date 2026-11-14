@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react';
 import { Button } from 'react-native';
 
 import sheet from '../../styles/sheet';
-import { ExampleWithMetadata } from '../common/ExampleMetadata'; // exclude-from-doc
+import { type ExampleWithMetadata } from '../common/ExampleMetadata'; // exclude-from-doc
 
 const MapUnMount = () => {
   const [isMounted, setIsMounted] = useState(true);
@@ -47,5 +47,7 @@ const metadata: ExampleWithMetadata['metadata'] = {
   docs: `
 Showing and hiding the the map should not lead to increased memory consumption, use this example to check it on the profiler.
 `,
+  webSupported: true,
+  waitForMapIdle: false,
 };
 MapUnMount.metadata = metadata;

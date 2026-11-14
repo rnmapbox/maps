@@ -7,6 +7,8 @@ import com.facebook.react.uimanager.ThemedReactContext
 import com.facebook.react.uimanager.annotations.ReactProp
 import com.facebook.react.viewmanagers.RNMBXRasterDemSourceManagerInterface
 import com.rnmapbox.rnmbx.utils.Logger
+import com.facebook.react.uimanager.ViewManagerDelegate
+import com.facebook.react.viewmanagers.RNMBXRasterDemSourceManagerDelegate
 
 // import com.rnmapbox.rnmbx.components.annotation.RNMBXCallout;
 // import com.rnmapbox.rnmbx.utils.ResourceUtils;
@@ -14,6 +16,10 @@ class RNMBXRasterDemSourceManager(private val mContext: ReactApplicationContext)
     RNMBXTileSourceManager<RNMBXRasterDemSource>(
         mContext
     ), RNMBXRasterDemSourceManagerInterface<RNMBXRasterDemSource> {
+
+    private val delegate = RNMBXRasterDemSourceManagerDelegate<RNMBXRasterDemSource, RNMBXRasterDemSourceManager>(this)
+
+    override fun getDelegate(): ViewManagerDelegate<RNMBXRasterDemSource> = delegate
     override fun customEvents(): Map<String, String>? {
         return MapBuilder.builder<String, String>()
             .build()

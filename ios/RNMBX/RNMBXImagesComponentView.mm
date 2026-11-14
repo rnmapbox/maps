@@ -1,4 +1,3 @@
-#ifdef RCT_NEW_ARCH_ENABLED
 
 #import "RNMBXImagesComponentView.h"
 #import "RNMBXFabricHelpers.h"
@@ -6,6 +5,7 @@
 #include "RNMBXImageComponentView.h"
 
 #import <React/RCTBridge+Private.h>
+#import "RNMBXBridgeManager.h"
 #import <React/RCTConversions.h>
 #import <React/RCTFabricComponentsPlugins.h>
 
@@ -43,7 +43,7 @@ using namespace facebook::react;
 - (void)prepareView
 {
     _view = [[RNMBXImages alloc] init];
-    _view.bridge = [RCTBridge currentBridge];
+    _view.bridge = [RNMBXBridgeManager currentBridge];
 
       // capture weak self reference to prevent retain cycle
       __weak __typeof__(self) weakSelf = self;
@@ -112,4 +112,3 @@ Class<RCTComponentViewProtocol> RNMBXImagesCls(void)
   return RNMBXImagesComponentView.class;
 }
 
-#endif // RCT_NEW_ARCH_ENABLED

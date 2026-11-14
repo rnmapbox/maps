@@ -21,6 +21,8 @@ import com.mapbox.maps.extension.style.layers.generated.SymbolLayer
 import com.mapbox.maps.extension.style.layers.generated.HeatmapLayer
 import com.mapbox.maps.extension.style.layers.generated.HillshadeLayer
 import com.mapbox.maps.extension.style.atmosphere.generated.Atmosphere
+import com.mapbox.maps.extension.style.precipitations.generated.Snow
+import com.mapbox.maps.extension.style.precipitations.generated.Rain
 import com.mapbox.maps.extension.style.terrain.generated.Terrain
 import com.mapbox.maps.extension.style.layers.generated.ModelLayer
 // import com.mapbox.maps.extension.style.layers.properties.generated.Visibility
@@ -124,7 +126,7 @@ object RNMBXStyleFactory {
       } else {
         <%_ if (prop.type === 'enum') { _%>
           layer.<%- prop.name -%>(<%- pascelCase(prop.name) %>.valueOf(styleValue.getEnumName()))
-        <%_ } else if (prop.name === 'lineGradient' || prop.name === 'heatmapColor' || prop.name === 'skyGradient' || prop.name === 'rasterParticleColor') { _%>
+        <%_ } else if (prop.name === 'lineGradient' || prop.name === 'lineBorderGradient' || prop.name === 'heatmapColor' || prop.name === 'skyGradient' || prop.name === 'rasterParticleColor') { _%>
           layer.<%- prop.name -%>(styleValue.getIntExpression(VALUE_KEY))
         <%_ } else if (prop.name === 'position') { _%>
           layer.<%- prop.name -%>(styleValue.getLightPosition())

@@ -1,5 +1,6 @@
 package com.rnmapbox.rnmbx.components.images
 
+import android.view.View
 import com.facebook.react.bridge.Dynamic
 import com.facebook.react.bridge.ReactApplicationContext
 import com.facebook.react.bridge.ReadableArray
@@ -9,10 +10,16 @@ import com.facebook.react.viewmanagers.RNMBXImageManagerInterface
 import com.rnmapbox.rnmbx.components.AbstractEventEmitter
 import com.rnmapbox.rnmbx.components.styles.sources.RNMBXShapeSource
 import com.rnmapbox.rnmbx.utils.ViewTagResolver
+import com.facebook.react.uimanager.ViewManagerDelegate
+import com.facebook.react.viewmanagers.RNMBXImageManagerDelegate
 
 class RNMBXImageManager(private val mContext: ReactApplicationContext, val viewTagResolver: ViewTagResolver) : AbstractEventEmitter<RNMBXImage>(
 mContext
 ), RNMBXImageManagerInterface<RNMBXImage> {
+
+    private val delegate = RNMBXImageManagerDelegate<RNMBXImage, RNMBXImageManager>(this)
+
+    override fun getDelegate(): ViewManagerDelegate<RNMBXImage> = delegate
     override fun getName(): String {
         return "RNMBXImage"
     }
@@ -29,8 +36,26 @@ mContext
         val reactTag = view.id
 
         viewTagResolver.viewRemoved(reactTag)
+        view.removeChildView()
+        view.removeFromMap()
         super.onDropViewInstance(view)
     }
+
+    // region RNMBXImage child
+    override fun getChildCount(parent: RNMBXImage): Int {
+        return if (parent.mChildView != null) 1 else 0
+    }
+
+    override fun getChildAt(parent: RNMBXImage, index: Int): View? {
+        return if (index == 0) parent.mChildView else null
+    }
+
+    override fun removeViewAt(parent: RNMBXImage, index: Int) {
+        if (index == 0) {
+            parent.removeChildView()
+        }
+    }
+    // endregion
 
     fun tagAssigned(reactTag: Int) {
         return viewTagResolver.tagAssigned(reactTag)

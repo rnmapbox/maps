@@ -3,6 +3,7 @@
 @objc(RNMBXStyleImport)
 open class RNMBXStyleImport: UIView, RNMBXMapComponent {
   var mapView: MapView? = nil
+  var styleDataLoadedObserver: AnyCancelable? = nil
 
   // MARK: React properties
   @objc
@@ -20,22 +21,35 @@ open class RNMBXStyleImport: UIView, RNMBXMapComponent {
     }
   }
 
+  /// Config is applied once the style root is parsed (styleDataLoaded `.style`), so the first frame already uses it.
   public func waitForStyleLoad() -> Bool {
-    true
+    false
   }
 
   public func addToMap(_ map: RNMBXMapView, style: Style) {
-    mapView = map.mapView
-    apply(mapView: map.mapView)
+    let mapView: MapView = map.mapView
+    self.mapView = mapView
+    if styleDataLoadedObserver == nil {
+      styleDataLoadedObserver = mapView.mapboxMap.onStyleDataLoaded.observe { [weak self] event in
+        if event.type == .style, let mapView = self?.mapView {
+          self?.apply(mapView: mapView)
+        }
+      }
+    }
+    apply(mapView: mapView)
   }
 
   public func removeFromMap(_ map: RNMBXMapView, reason: RemovalReason) -> Bool {
-    self.mapView = nil
+    if reason != .StyleChange {
+      styleDataLoadedObserver?.cancel()
+      styleDataLoadedObserver = nil
+      self.mapView = nil
+    }
     return true
   }
 
   func apply(mapView: MapView) {
-    if let config = config, let id = id {
+    if let config = config, let id = id, mapView.mapboxMap.styleImports.contains(where: { $0.id == id }) {
       logged("RNMBXStyleImport.setStyleImportConfigProperties id=\(id)") {
         try mapView.mapboxMap.setStyleImportConfigProperties(for: id, configs: config)
       }

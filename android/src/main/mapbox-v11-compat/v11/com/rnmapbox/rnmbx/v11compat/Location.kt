@@ -8,6 +8,7 @@ import com.mapbox.common.location.IntervalSettings
 import com.mapbox.common.location.LocationObserver
 import com.mapbox.common.location.Location as _Location
 import com.mapbox.maps.MapView
+import com.mapbox.maps.plugin.delegates.MapPluginProviderDelegate
 import com.mapbox.maps.plugin.PuckBearing as _PuckBearing
 import com.mapbox.maps.plugin.locationcomponent.LocationComponentPlugin
 import com.mapbox.maps.plugin.locationcomponent.location
@@ -24,7 +25,7 @@ typealias PuckBearing = _PuckBearing
 const val DEFAULT_FASTEST_INTERVAL_MILLIS: Long = 1000
 const val DEFAULT_INTERVAL_MILLIS: Long = 1000
 
-val MapView.location2 : LocationComponentPlugin
+val MapPluginProviderDelegate.location2 : LocationComponentPlugin
   get() = location
 
 var LocationComponentPlugin.puckBearingSource : PuckBearing

@@ -1,7 +1,7 @@
-#ifdef RCT_NEW_ARCH_ENABLED
 
 #import "RNMBXCameraComponentView.h"
 #import "RNMBXFabricHelpers.h"
+#import "RNMBXFabricPropConvert.h"
 
 #import <React/RCTConversions.h>
 #import <React/RCTFabricComponentsPlugins.h>
@@ -77,10 +77,7 @@ using namespace facebook::react;
 {
     const auto &oldViewProps = static_cast<const RNMBXCameraProps &>(*oldProps);
     const auto &newViewProps = static_cast<const RNMBXCameraProps &>(*props);
-    id maxBounds = RNMBXConvertFollyDynamicToId(newViewProps.maxBounds);
-    if (maxBounds != nil) {
-        _view.maxBounds = maxBounds;
-    }
+    RNMBX_PROP_NSString(maxBounds)
     id animationDuration = RNMBXConvertFollyDynamicToId(newViewProps.animationDuration);
     if (animationDuration != nil) {
         _view.animationDuration = animationDuration;
@@ -148,4 +145,3 @@ Class<RCTComponentViewProtocol> RNMBXCameraCls(void)
   return RNMBXCameraComponentView.class;
 }
 
-#endif // RCT_NEW_ARCH_ENABLED

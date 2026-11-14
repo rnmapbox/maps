@@ -11,6 +11,7 @@ import com.rnmapbox.rnmbx.components.annotation.RNMBXCalloutManager
 import com.rnmapbox.rnmbx.components.annotation.RNMBXMarkerViewContentManager
 import com.rnmapbox.rnmbx.components.annotation.RNMBXMarkerViewManager
 import com.rnmapbox.rnmbx.components.annotation.RNMBXPointAnnotationManager
+import com.rnmapbox.rnmbx.components.annotation.RNMBXPointAnnotationManagerViewManager
 import com.rnmapbox.rnmbx.components.annotation.RNMBXPointAnnotationModule
 import com.rnmapbox.rnmbx.components.camera.RNMBXCameraManager
 import com.rnmapbox.rnmbx.components.camera.RNMBXCameraModule
@@ -26,11 +27,14 @@ import com.rnmapbox.rnmbx.components.mapview.NativeMapViewModule
 import com.rnmapbox.rnmbx.components.mapview.RNMBXMapViewManager
 import com.rnmapbox.rnmbx.components.styles.RNMBXStyleImportManager
 import com.rnmapbox.rnmbx.components.styles.atmosphere.RNMBXAtmosphereManager
+import com.rnmapbox.rnmbx.components.styles.snow.RNMBXSnowManager
+import com.rnmapbox.rnmbx.components.styles.rain.RNMBXRainManager
 import com.rnmapbox.rnmbx.components.styles.layers.RNMBXBackgroundLayerManager
 import com.rnmapbox.rnmbx.components.styles.layers.RNMBXCircleLayerManager
 import com.rnmapbox.rnmbx.components.styles.layers.RNMBXFillExtrusionLayerManager
 import com.rnmapbox.rnmbx.components.styles.layers.RNMBXFillLayerManager
 import com.rnmapbox.rnmbx.components.styles.layers.RNMBXHeatmapLayerManager
+import com.rnmapbox.rnmbx.components.styles.layers.RNMBXHillshadeLayerManager
 import com.rnmapbox.rnmbx.components.styles.layers.RNMBXLineLayerManager
 import com.rnmapbox.rnmbx.components.styles.layers.RNMBXModelLayerManager
 import com.rnmapbox.rnmbx.components.styles.layers.RNMBXRasterLayerManager
@@ -132,6 +136,7 @@ class RNMBXPackage : TurboReactPackage() {
         managers.add(RNMBXMarkerViewManager(reactApplicationContext))
         managers.add(RNMBXMarkerViewContentManager(reactApplicationContext))
         managers.add(RNMBXPointAnnotationManager(reactApplicationContext, getViewTagResolver(reactApplicationContext, "RNMBXPointAnnotationManager")))
+        managers.add(RNMBXPointAnnotationManagerViewManager(reactApplicationContext))
         managers.add(RNMBXCalloutManager())
         managers.add(RNMBXNativeUserLocationManager())
         managers.add(RNMBXCustomLocationProviderManager())
@@ -161,12 +166,15 @@ class RNMBXPackage : TurboReactPackage() {
         managers.add(RNMBXCircleLayerManager())
         managers.add(RNMBXSymbolLayerManager())
         managers.add(RNMBXRasterLayerManager())
+        managers.add(RNMBXHillshadeLayerManager())
         if (RNMBXRasterParticleLayerManager.isImplemented) {
             managers.add(RNMBXRasterParticleLayerManager())
         }
         managers.add(RNMBXSkyLayerManager())
         managers.add(RNMBXTerrainManager())
         managers.add(RNMBXAtmosphereManager())
+        managers.add(RNMBXSnowManager())
+        managers.add(RNMBXRainManager())
         managers.add(RNMBXBackgroundLayerManager())
         managers.add(RNMBXLightManager())
         managers.add(RNMBXModelLayerManager())

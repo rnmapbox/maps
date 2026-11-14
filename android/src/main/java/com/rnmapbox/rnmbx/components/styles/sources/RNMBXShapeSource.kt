@@ -1,6 +1,8 @@
 package com.rnmapbox.rnmbx.components.styles.sources
 
 import android.content.Context
+import android.os.Handler
+import android.os.HandlerThread
 import com.facebook.react.bridge.Promise
 import com.facebook.react.bridge.WritableMap
 import com.facebook.react.bridge.WritableNativeMap
@@ -24,6 +26,12 @@ import java.net.URL
 
 private const val LOG_TAG = "RNMBXShapeSource"
 
+// Passing a large shape to the SDK takes ~100ms, so it can't run on the main thread. Unlike
+// GeoJsonSource.data(), work posted here keeps its order with later changes to the source.
+private val sourceDataHandler by lazy {
+    Handler(HandlerThread("RNMBXShapeSourceData").apply { start() }.looper)
+}
+
 class RNMBXShapeSource(context: Context, private val mManager: RNMBXShapeSourceManager) :
     RNMBXSource<GeoJsonSource>(context), ShapeAnimationConsumer {
     private var mURL: URL? = null
@@ -32,8 +40,10 @@ class RNMBXShapeSource(context: Context, private val mManager: RNMBXShapeSourceM
     private var mCluster: Boolean? = null
     private var mClusterRadius: Long? = null
     private var mClusterMaxZoom: Long? = null
+    private var mClusterMinPoints: Long? = null
     private var mClusterProperties: HashMap<String, Any>? = null
     private var mMaxZoom: Long? = null
+    private var mMinZoom: Long? = null
     private var mBuffer: Long? = null
     private var mTolerance: Double? = null
     private var mLineMetrics: Boolean? = null
@@ -48,6 +58,14 @@ class RNMBXShapeSource(context: Context, private val mManager: RNMBXShapeSourceM
         mapView.getMapboxMap().getStyle {
             val map = mapView.getMapboxMap()
             super@RNMBXShapeSource.addToMap(mapView)
+        }
+    }
+
+    override fun addToMap(existings: Boolean, style: Style, mapView: RNMBXMapView) {
+        val created = !style.styleSourceExists(iD!!)
+        super.addToMap(existings, style, mapView)
+        if (created) {
+            (mShape ?: mURL?.toString())?.let { applySourceData(style, it) }
         }
     }
 
@@ -67,16 +85,22 @@ class RNMBXShapeSource(context: Context, private val mManager: RNMBXShapeSourceM
     override fun makeSource(): GeoJsonSource {
         val builder = GeoJsonSource.Builder(iD.toString())
         getOptions(builder)
-
-        builder.data(mShape ?: mURL.toString())
-
         return builder.build()
+    }
+
+    private fun applySourceData(style: Style, data: String) {
+        val sourceId = iD!!
+        sourceDataHandler.post {
+            style.setStyleGeoJSONSourceData(sourceId, "", GeoJSONSourceData.valueOf(data)).error?.let {
+                Logger.w(LOG_TAG, "Setting the data of source $sourceId failed: $it")
+            }
+        }
     }
 
     fun setURL(url: URL) {
         mURL = url
         if (mSource != null && mMapView != null && !mMapView!!.isDestroyed) {
-            mSource!!.data(mURL.toString())
+            mMap?.getStyle()?.let { applySourceData(it, url.toString()) }
         }
     }
 
@@ -96,9 +120,7 @@ class RNMBXShapeSource(context: Context, private val mManager: RNMBXShapeSourceM
         } else {
             mShape = geoJSONStr
             if (mSource != null && mMapView != null && !mMapView!!.isDestroyed) {
-                mSource!!.data(mShape!!)
-                val result = mMap!!.getStyle()!!
-                    .setStyleSourceProperty(iD!!, "data", Value.valueOf(mShape!!))
+                mMap?.getStyle()?.let { applySourceData(it, geoJSONStr) }
             }
         }
     }
@@ -150,12 +172,20 @@ class RNMBXShapeSource(context: Context, private val mManager: RNMBXShapeSourceM
         }
     }
 
+    fun setClusterMinPoints(clusterMinPoints: Long) {
+        mClusterMinPoints = clusterMinPoints
+    }
+
     fun setClusterProperties(clusterProperties: HashMap<String, Any>) {
         mClusterProperties = clusterProperties
     }
 
     fun setMaxZoom(maxZoom: Long) {
         mMaxZoom = maxZoom
+    }
+
+    fun setMinZoom(minZoom: Long) {
+        mMinZoom = minZoom
     }
 
     fun setBuffer(buffer: Long) {
@@ -175,6 +205,7 @@ class RNMBXShapeSource(context: Context, private val mManager: RNMBXShapeSourceM
     }
 
     private fun getOptions(builder: GeoJsonSource.Builder) {
+        promoteId?.let { builder.promoteId(it) }
         if (mCluster != null) {
             builder.cluster(mCluster!!)
         }
@@ -184,11 +215,17 @@ class RNMBXShapeSource(context: Context, private val mManager: RNMBXShapeSourceM
         if (mClusterMaxZoom != null) {
             builder.clusterMaxZoom(mClusterMaxZoom!!)
         }
+        if (mClusterMinPoints != null) {
+            builder.clusterMinPoints(mClusterMinPoints!!)
+        }
         if (mClusterProperties != null) {
             builder.clusterProperties(mClusterProperties!!)
         }
         if (mMaxZoom != null) {
             builder.maxzoom(mMaxZoom!!)
+        }
+        if (mMinZoom != null) {
+            builder.minzoom(mMinZoom!!)
         }
         if (mBuffer != null) {
             builder.buffer(mBuffer!!)

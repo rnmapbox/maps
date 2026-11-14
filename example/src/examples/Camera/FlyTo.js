@@ -117,5 +117,7 @@ const metadata = {
   docs: `
 Change camera via change of camera properties
 `,
+  excludeFromPercy: true,
+  webSupported: true,
 };
 FlyTo.metadata = metadata;

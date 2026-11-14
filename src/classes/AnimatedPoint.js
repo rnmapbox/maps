@@ -24,7 +24,12 @@ export class AnimatedPoint extends AnimatedWithChildren {
       this.latitude = new Animated.Value(this.latitude);
     }
 
-    this._listeners = {};
+    // React Native < 0.83 uses object, >= 0.83 uses Map
+    // We only initialize to object if super didn't initialize it (or initiated it to empty object/null)
+    // and we want to preserve the type if it is a Map.
+    if (!this._listeners) {
+      this._listeners = {};
+    }
   }
 
   setValue(point = DEFAULT_POINT) {
@@ -61,18 +66,36 @@ export class AnimatedPoint extends AnimatedWithChildren {
       }
     };
 
-    this._listeners[id] = {
+    const listener = {
       longitude: this.longitude.addListener(completeCB),
       latitude: this.latitude.addListener(completeCB),
     };
+
+    if (this._listeners instanceof Map) {
+      this._listeners.set(id, listener);
+    } else {
+      this._listeners[id] = listener;
+    }
 
     return id;
   }
 
   removeListener(id) {
-    this.longitude.removeListener(this._listeners[id].longitude);
-    this.latitude.removeListener(this._listeners[id].latitude);
-    delete this._listeners[id];
+    if (this._listeners instanceof Map) {
+      const listener = this._listeners.get(id);
+      if (listener) {
+        this.longitude.removeListener(listener.longitude);
+        this.latitude.removeListener(listener.latitude);
+        this._listeners.delete(id);
+      }
+    } else {
+      const listener = this._listeners[id];
+      if (listener) {
+        this.longitude.removeListener(listener.longitude);
+        this.latitude.removeListener(listener.latitude);
+        delete this._listeners[id];
+      }
+    }
   }
 
   spring(config = { coordinates: DEFAULT_COORD }) {

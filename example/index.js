@@ -1,4 +1,5 @@
 console.log('index.js');
+import './src/setup';
 import { AppRegistry } from 'react-native';
 
 import App from './src/App';

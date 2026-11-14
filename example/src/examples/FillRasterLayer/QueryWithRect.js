@@ -148,5 +148,6 @@ const metadata = {
   title: 'Query Features Bounding Box',
   tags: ['queryRenderedFeaturesInRect'],
   docs: '',
+  webSupported: true,
 };
 QueryWithRect.metadata = metadata;

@@ -1,6 +1,6 @@
-import { SyntheticEvent } from 'react';
+import { type SyntheticEvent } from 'react';
 import { Animated } from 'react-native';
-import { GeoJsonObject } from 'geojson';
+import { type GeoJsonObject } from 'geojson';
 
 // General.
 

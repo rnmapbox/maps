@@ -1,4 +1,3 @@
-#ifdef RCT_NEW_ARCH_ENABLED
 
 #import "RNMBXNativeUserLocationComponentView.h"
 #import "RNMBXFabricHelpers.h"
@@ -71,6 +70,7 @@ using namespace facebook::react;
   RNMBX_OPTIONAL_PROP_ExpressionDouble(scale)
   RNMBX_PROP_BOOL(visible)
   RNMBX_OPTIONAL_PROP_NSDictionary(pulsing)
+  RNMBX_OPTIONAL_PROP_NSDictionary(model)
 
   [super updateProps:props oldProps:oldProps];
 
@@ -84,4 +84,3 @@ Class<RCTComponentViewProtocol> RNMBXNativeUserLocationCls(void)
   return RNMBXNativeUserLocationComponentView.class;
 }
 
-#endif // RCT_NEW_ARCH_ENABLED

@@ -6,6 +6,13 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 This is the React Native Mapbox Maps SDK (@rnmapbox/maps) - a community-supported library for building maps with Mapbox Maps SDK for iOS and Android in React Native applications.
 
+### Design philosophy: a thin wrapper over the native SDKs
+
+- @rnmapbox/maps is a low-level wrapper over the Mapbox Maps SDKs for Android and iOS. Expose APIs that mirror the upstream ones (same concepts, scope and naming), so Mapbox's docs and guides map directly onto ours.
+- Don't build clever abstractions over upstream behavior, e.g. merging two upstream mechanisms into one prop or hiding that a setting is app-wide. Many users want full control, so every upstream capability should stay reachable at that level.
+- Keep upstream scope visible: per-map features are props/methods on components, app-wide upstream settings are app-wide functions on the `Mapbox` module (like `Mapbox.setAccessToken`).
+- Convenience belongs on top, not instead: JS components, helpers or examples can streamline common cases, as long as the low-level API stays available.
+
 ## Prerequisites
 
 - **Node.js**: This project requires Node.js v22.16.0 (see .nvmrc)
@@ -61,25 +68,7 @@ yarn generate
 
 ### Building for Different Configurations
 
-#### Mapbox v10 - deprecated
-```bash
-# iOS
-cd example/ios
-RNMBX10=1 pod update MapboxMaps
-
-# Android
-# Edit example/android/gradle.properties: RNMBX10=true
-```
-
-#### New Architecture/Fabric
-```bash
-# iOS
-cd example/ios
-RCT_NEW_ARCH_ENABLED=1 pod update MapboxMaps
-
-# Android
-# Edit example/android/gradle.properties: newArchEnabled=true
-```
+The project uses Mapbox Maps SDK v11 and React Native's New Architecture (Fabric/TurboModules) exclusively.
 
 ## Architecture Overview
 
@@ -91,7 +80,7 @@ RCT_NEW_ARCH_ENABLED=1 pod update MapboxMaps
   - Each component extends either `AbstractLayer` or `AbstractSource` for common functionality
 
 ### Native Bridge
-- **Specs** (`src/specs/`): TurboModule/Fabric component specs for new architecture
+- **Specs** (`src/specs/`): TurboModule/Fabric component specs
 - **Native Components**: Each component has corresponding native implementations:
   - iOS: `ios/RNMBX/RNMBX*.swift` and `RNMBX*ComponentView.mm`
   - Android: `android/src/main/java/` (generated from specs)
@@ -127,10 +116,25 @@ RCT_NEW_ARCH_ENABLED=1 pod update MapboxMaps
 - Example app serves as integration testing ground
 - Use `yarn test` before committing
 
+### E2E / Doc Screenshots (Detox)
+- Detox tests in `example/e2e/docScreenshots.e2e.js` capture screenshots of every example for documentation
+- Examples with JS timers or animations that block Detox sync should set `disableSync: true` in their metadata
+- Examples whose maps never go idle (following the user location, continuous animations) should set `waitForMapIdle: false` in their metadata, so the screenshot is taken after a fixed delay instead of the 20 s idle timeout
+- Examples whose screenshot isn't the same on every run (animations, label placement, random data) should set `excludeFromPercy: true` in their metadata to keep them out of the nightly Percy build
+- Examples that work in the web build of the example app should set `webSupported: true` in their metadata; their doc page then links to the example in the hosted web app (https://rnmapbox.github.io/example-app/). The "Edit in Snack" link follows `webSupported` too; set `snackSupported` only where Snack differs from the web example app
+- See CONTRIBUTING.md for build and run instructions
+
 ### Documentation
 - Component docs are auto-generated from JSDoc comments
 - Don't edit `.md` files in `docs/` directly - edit source files and run `yarn generate`
 - Examples in `example/src/examples/` are used for documentation
+- Example doc pages show the source up to `/* end-example-doc */` (keep metadata after it), without lines ending in `// exclude-from-example-doc` or between `/* exclude-from-example-doc:start */` and `/* exclude-from-example-doc:end */`
+
+### Fixing Bugs
+
+- Read and follow `.github/REPRODUCING.md` before writing a fix: reproduce the issue first, and verify the fix against the reproducer.
+- Make every effort to reproduce — build the example app, drive it on a simulator/device, capture logs and crash reports. Provoke bugs that don't fire on their own: tight loops, bursts, rapid create/destroy, background threads, delays/busy work, fast-failing inputs, temporary lifetime/thread instrumentation, sanitizers.
+- A reproducer is worth 100x more than a speculative fix; keep provocation code out of the final PR and attach it (with before/after evidence) to the issue/PR description instead.
 
 ## Important Notes
 
@@ -138,4 +142,4 @@ RCT_NEW_ARCH_ENABLED=1 pod update MapboxMaps
 - The example app is the primary way to test changes
 - Native changes require rebuilding the app
 - Web support is experimental and may have limited functionality
-- Support both old and new React Native architectures
+- Requires React Native 0.79+ with New Architecture (Fabric/TurboModules)

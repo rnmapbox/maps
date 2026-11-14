@@ -9,7 +9,7 @@ import {
 } from '@rnmapbox/maps';
 
 import Bubble from '../common/Bubble';
-import { ExampleWithMetadata } from '../common/ExampleMetadata'; // exclude-from-doc
+import { type ExampleWithMetadata } from '../common/ExampleMetadata'; // exclude-from-doc
 
 const randomCountries = [
   {
@@ -88,5 +88,6 @@ const metadata: ExampleWithMetadata['metadata'] = {
   docs: `
 Change shape source URL on press of the bubble.
 `,
+  webSupported: true,
 };
 DynamicUrl.metadata = metadata;

@@ -7,27 +7,16 @@
 
 #import "rnmapbox_maps-Swift.pre.h"
 
-#ifdef RCT_NEW_ARCH_ENABLED
 #import "rnmapbox_maps_specs.h"
-#else
-#import <React/RCTBridge.h>
-#endif
 
-@interface RNMBXMovePointShapeAnimatorModule: NSObject
-#ifdef RCT_NEW_ARCH_ENABLED
-<NativeRNMBXMovePointShapeAnimatorModuleSpec>
-#else
-<RCTBridgeModule>
-#endif
+@interface RNMBXMovePointShapeAnimatorModule: NSObject <NativeRNMBXMovePointShapeAnimatorModuleSpec>
 @end
 
 @implementation RNMBXMovePointShapeAnimatorModule
 
 RCT_EXPORT_MODULE();
 
-#ifdef RCT_NEW_ARCH_ENABLED
 @synthesize viewRegistry_DEPRECATED = _viewRegistry_DEPRECATED;
-#endif // RCT_NEW_ARCH_ENABLED
 @synthesize bridge = _bridge;
 
 - (dispatch_queue_t)methodQueue {
@@ -36,21 +25,37 @@ RCT_EXPORT_MODULE();
   return RCTGetUIManagerQueue();
 }
 
-RCT_EXPORT_METHOD(generate:(nonnull NSNumber*)tag startCoordinate: (nonnull NSArray*)startCoordinate resolve:(RCTPromiseResolveBlock)resolve reject:(RCTPromiseRejectBlock)reject) {
-  resolve([[MovePointShapeAnimator generateWithTag:tag startCoordinate:startCoordinate] getTag]);
+- (void)generate:(NSInteger)tag
+      coordinate:(NSArray *)coordinate
+         resolve:(RCTPromiseResolveBlock)resolve
+          reject:(RCTPromiseRejectBlock)reject
+{
+  MovePointShapeAnimator *animator =
+      [MovePointShapeAnimator generateWithTag:@(tag) startCoordinate:coordinate];
+  if (animator == nil) {
+    reject(@"RNMBXMovePointShapeAnimatorModule", @"Failed to generate animator", nil);
+    return;
+  }
+  resolve([animator getTag]);
 }
 
-RCT_EXPORT_METHOD(moveTo:(nonnull NSNumber*)tag coordinate: (nonnull NSArray*)coordinate durationMs: (nonnull NSNumber*)durationMs resolve:(RCTPromiseResolveBlock)resolve reject:(RCTPromiseRejectBlock)reject) {
-  [MovePointShapeAnimator moveToTag:tag coordinate:coordinate durationMs:durationMs resolve:resolve reject:reject];
+- (void)moveTo:(NSInteger)tag
+    coordinate:(NSArray *)coordinate
+      duration:(double)duration
+       resolve:(RCTPromiseResolveBlock)resolve
+        reject:(RCTPromiseRejectBlock)reject
+{
+  [MovePointShapeAnimator moveToTag:@(tag)
+                         coordinate:coordinate
+                         durationMs:@(duration)
+                            resolve:resolve
+                             reject:reject];
 }
 
-// Thanks to this guard, we won't compile this code when we build for the old architecture.
-#ifdef RCT_NEW_ARCH_ENABLED
 - (std::shared_ptr<facebook::react::TurboModule>)getTurboModule:
     (const facebook::react::ObjCTurboModule::InitParams &)params
 {
-    return std::make_shared<facebook::react::NativeRNMBXPointAnnotationModuleSpecJSI>(params);
+    return std::make_shared<facebook::react::NativeRNMBXMovePointShapeAnimatorModuleSpecJSI>(params);
 }
-#endif // RCT_NEW_ARCH_ENABLED
 
 @end

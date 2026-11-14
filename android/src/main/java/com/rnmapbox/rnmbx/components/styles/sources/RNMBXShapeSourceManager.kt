@@ -20,12 +20,18 @@ import java.net.MalformedURLException
 import java.net.URL
 import java.util.ArrayList
 import java.util.HashMap
+import com.facebook.react.uimanager.ViewManagerDelegate
+import com.facebook.react.viewmanagers.RNMBXShapeSourceManagerDelegate
 
 
 class RNMBXShapeSourceManager(private val mContext: ReactApplicationContext, val viewTagResolver: ViewTagResolver, val shapeAnimatorManager: ShapeAnimatorManager) :
     AbstractEventEmitter<RNMBXShapeSource>(
         mContext
     ), RNMBXShapeSourceManagerInterface<RNMBXShapeSource> {
+
+    private val delegate = RNMBXShapeSourceManagerDelegate<RNMBXShapeSource, RNMBXShapeSourceManager>(this)
+
+    override fun getDelegate(): ViewManagerDelegate<RNMBXShapeSource> = delegate
     override fun getName(): String {
         return REACT_CLASS
     }
@@ -105,6 +111,17 @@ class RNMBXShapeSourceManager(private val mContext: ReactApplicationContext, val
         source.setClusterMaxZoom(clusterMaxZoom.asInt().toLong())
     }
 
+    @ReactProp(name = "clusterMinPoints")
+    override fun setClusterMinPoints(source: RNMBXShapeSource, clusterMinPoints: Dynamic) {
+        if (clusterMinPoints.isNull) return
+        source.setClusterMinPoints(clusterMinPoints.asInt().toLong())
+    }
+
+    @ReactProp(name = "promoteId")
+    override fun setPromoteId(source: RNMBXShapeSource, value: Dynamic) {
+        source.promoteId = promoteIdFrom(value)
+    }
+
     @ReactProp(name = "clusterProperties")
     override fun setClusterProperties(source: RNMBXShapeSource, map: Dynamic) {
         val mapValue = map.asMap()
@@ -152,6 +169,11 @@ class RNMBXShapeSourceManager(private val mContext: ReactApplicationContext, val
     @ReactProp(name = "maxZoomLevel")
     override fun setMaxZoomLevel(source: RNMBXShapeSource, maxZoom: Dynamic) {
         source.setMaxZoom(maxZoom.asInt().toLong())
+    }
+
+    @ReactProp(name = "minZoomLevel")
+    override fun setMinZoomLevel(source: RNMBXShapeSource, minZoom: Dynamic) {
+        source.setMinZoom(minZoom.asInt().toLong())
     }
 
     @ReactProp(name = "buffer")

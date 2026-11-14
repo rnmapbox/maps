@@ -5,9 +5,16 @@ import com.facebook.react.uimanager.ThemedReactContext
 import com.facebook.react.uimanager.ViewGroupManager
 import com.facebook.react.uimanager.annotations.ReactProp
 import com.facebook.react.viewmanagers.RNMBXBackgroundLayerManagerInterface
+import com.facebook.react.uimanager.ViewManagerDelegate
+import com.facebook.react.viewmanagers.RNMBXBackgroundLayerManagerDelegate
+import com.rnmapbox.rnmbx.utils.extensions.asStringOrNull
 
 class RNMBXBackgroundLayerManager : ViewGroupManager<RNMBXBackgroundLayer>(),
     RNMBXBackgroundLayerManagerInterface<RNMBXBackgroundLayer> {
+
+    private val delegate = RNMBXBackgroundLayerManagerDelegate<RNMBXBackgroundLayer, RNMBXBackgroundLayerManager>(this)
+
+    override fun getDelegate(): ViewManagerDelegate<RNMBXBackgroundLayer> = delegate
     override fun getName(): String {
         return REACT_CLASS
     }
@@ -33,12 +40,12 @@ class RNMBXBackgroundLayerManager : ViewGroupManager<RNMBXBackgroundLayer>(),
 
     @ReactProp(name = "aboveLayerID")
     override fun setAboveLayerID(layer: RNMBXBackgroundLayer, aboveLayerID: Dynamic) {
-        layer.setAboveLayerID(aboveLayerID.asString())
+        layer.setAboveLayerID(aboveLayerID.asStringOrNull())
     }
 
     @ReactProp(name = "belowLayerID")
     override fun setBelowLayerID(layer: RNMBXBackgroundLayer, belowLayerID: Dynamic) {
-        layer.setBelowLayerID(belowLayerID.asString())
+        layer.setBelowLayerID(belowLayerID.asStringOrNull())
     }
 
     @ReactProp(name = "layerIndex")

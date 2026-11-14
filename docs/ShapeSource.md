@@ -86,6 +86,17 @@ the shapes are not clustered.
 
 
   
+### clusterMinPoints
+
+```tsx
+number
+```
+Specifies the minimum number of points to form a cluster if clustering is enabled.
+The default value is 2. It is applied when the source is added to the map; changing it
+later requires remounting the ShapeSource.
+
+[Earthquakes](../examples/SymbolCircleLayer/Earthquakes)
+  
 ### clusterProperties
 
 ```tsx
@@ -104,6 +115,16 @@ Example: `{ "resultingSum": [["+", ["accumulated"], ["get", "resultingSum"]], ["
 
 
   
+### promoteId
+
+```tsx
+string | Expression
+```
+A feature property to use as the feature id, for example with `setFeatureState`.
+Either a property name or an expression that evaluates to the id.
+
+[Feature State](../examples/V10/FeatureState)
+  
 ### maxZoomLevel
 
 ```tsx
@@ -112,6 +133,16 @@ number
 Specifies the maximum zoom level at which to create vector tiles.
 A greater value produces greater detail at high zoom levels.
 The default value is 18.
+
+
+  
+### minZoomLevel
+
+```tsx
+number
+```
+Specifies the minimum zoom level at which to create vector tiles.
+The default value is 0.
 
 
   
@@ -174,7 +205,7 @@ type Hitbox = {
   height: number; /* `height` of hitbox */
 }
 ```
-Overrides the default touch hitbox(44x44 pixels) for the source layers
+Overrides the default touch hitbox (44x44 points) for the source layers
 
 
   
