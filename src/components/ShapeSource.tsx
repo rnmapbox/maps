@@ -259,6 +259,72 @@ export class ShapeSource extends NativeBridgeComponent(
     return res.data;
   }
 
+  /**
+   * Adds features to the source without resending its `shape`, using the Mapbox SDK's partial
+   * GeoJSON update. The source keeps the change until the next `shape`.
+   *
+   * Every feature of the source needs a unique `id`, or a `promoteId` property. The promise
+   * resolves once the map has the call, the map applies it later. If a feature id is refused, for
+   * example an added id that already exists, the map stops that call there and keeps the
+   * features before it. The error, naming that id, is reported by `MapView#onMapLoadingError`
+   * with type `source`. For changes to paint properties alone, `MapView#setFeatureState` is cheaper.
+   *
+   * @example
+   * await shapeSource.addFeatures([{ type: 'Feature', id: 'a', properties: {}, geometry }]);
+   *
+   * @param  {GeoJSON.Feature[]} features - The features to add.
+   * @param  {string} dataId - Optional id the map attaches to this update.
+   * @return {void}
+   */
+  async addFeatures(features: GeoJSON.Feature[], dataId = ''): Promise<void> {
+    await this._runNativeMethod('addFeatures', this._nativeRef, [
+      JSON.stringify({ type: 'FeatureCollection', features }),
+      dataId,
+    ]);
+  }
+
+  /**
+   * Replaces features of the source by id, without resending its `shape`. A missing id stops the
+   * call there. See `addFeatures` for the requirements and errors.
+   *
+   * @example
+   * await shapeSource.updateFeatures([{ type: 'Feature', id: 'a', properties: { v: 1 }, geometry }]);
+   *
+   * @param  {GeoJSON.Feature[]} features - The new features, the id selects the feature to replace.
+   * @param  {string} dataId - Optional id the map attaches to this update.
+   * @return {void}
+   */
+  async updateFeatures(
+    features: GeoJSON.Feature[],
+    dataId = '',
+  ): Promise<void> {
+    await this._runNativeMethod('updateFeatures', this._nativeRef, [
+      JSON.stringify({ type: 'FeatureCollection', features }),
+      dataId,
+    ]);
+  }
+
+  /**
+   * Removes features from the source by id, without resending its `shape`. A missing id stops the
+   * call there. See `addFeatures` for the requirements and errors.
+   *
+   * @example
+   * await shapeSource.removeFeatures(['a']);
+   *
+   * @param  {(string | number)[]} featureIds - The ids of the features to remove.
+   * @param  {string} dataId - Optional id the map attaches to this update.
+   * @return {void}
+   */
+  async removeFeatures(
+    featureIds: (string | number)[],
+    dataId = '',
+  ): Promise<void> {
+    await this._runNativeMethod('removeFeatures', this._nativeRef, [
+      featureIds.map(String),
+      dataId,
+    ]);
+  }
+
   setNativeProps(props: NativeProps) {
     const shallowProps = Object.assign({}, props);
 

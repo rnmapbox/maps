@@ -274,7 +274,58 @@ const collection = await shapeSource.getClusterChildren(clusterId);
 ```
 
 
-### onPress(event)
+### addFeatures(features[, dataId])
+
+Adds features to the source without resending its `shape`, using the Mapbox SDK's partial<br/>GeoJSON update. The source keeps the change until the next `shape`.<br/><br/>Every feature of the source needs a unique `id`, or a `promoteId` property. The promise<br/>resolves once the map has the call, the map applies it later. If a feature id is refused, for<br/>example an added id that already exists, the map stops that call there and keeps the<br/>features before it. The error, naming that id, is reported by `MapView#onMapLoadingError`<br/>with type `source`. For changes to paint properties alone, `MapView#setFeatureState` is cheaper.
+
+#### arguments
+| Name | Type | Required | Description  |
+| ---- | :--: | :------: | :----------: |
+| `features` | `Array` | `Yes` | The features to add. |
+| `dataId` | `string` | `No` | Optional id the map attaches to this update. |
+
+
+
+```javascript
+await shapeSource.addFeatures([{ type: 'Feature', id: 'a', properties: {}, geometry }]);
+```
+
+
+[Partial feature updates](../examples/SymbolCircleLayer/PartialFeatureUpdates)### updateFeatures(features[, dataId])
+
+Replaces features of the source by id, without resending its `shape`. A missing id stops the<br/>call there. See `addFeatures` for the requirements and errors.
+
+#### arguments
+| Name | Type | Required | Description  |
+| ---- | :--: | :------: | :----------: |
+| `features` | `Array` | `Yes` | The new features, the id selects the feature to replace. |
+| `dataId` | `string` | `No` | Optional id the map attaches to this update. |
+
+
+
+```javascript
+await shapeSource.updateFeatures([{ type: 'Feature', id: 'a', properties: { v: 1 }, geometry }]);
+```
+
+
+[Partial feature updates](../examples/SymbolCircleLayer/PartialFeatureUpdates)### removeFeatures(featureIds[, dataId])
+
+Removes features from the source by id, without resending its `shape`. A missing id stops the<br/>call there. See `addFeatures` for the requirements and errors.
+
+#### arguments
+| Name | Type | Required | Description  |
+| ---- | :--: | :------: | :----------: |
+| `featureIds` | `Array` | `Yes` | The ids of the features to remove. |
+| `dataId` | `string` | `No` | Optional id the map attaches to this update. |
+
+
+
+```javascript
+await shapeSource.removeFeatures(['a']);
+```
+
+
+[Partial feature updates](../examples/SymbolCircleLayer/PartialFeatureUpdates)### onPress(event)
 
 
 

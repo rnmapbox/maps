@@ -7894,6 +7894,126 @@
         ]
       },
       {
+        "name": "addFeatures",
+        "docblock": "Adds features to the source without resending its `shape`, using the Mapbox SDK's partial\nGeoJSON update. The source keeps the change until the next `shape`.\n\nEvery feature of the source needs a unique `id`, or a `promoteId` property. The promise\nresolves once the map has the call, the map applies it later. If a feature id is refused, for\nexample an added id that already exists, the map stops that call there and keeps the\nfeatures before it. The error, naming that id, is reported by `MapView#onMapLoadingError`\nwith type `source`. For changes to paint properties alone, `MapView#setFeatureState` is cheaper.\n\n@example\nawait shapeSource.addFeatures([{ type: 'Feature', id: 'a', properties: {}, geometry }]);\n\n@param  {GeoJSON.Feature[]} features - The features to add.\n@param  {string} dataId - Optional id the map attaches to this update.\n@return {void}",
+        "modifiers": [
+          "async"
+        ],
+        "params": [
+          {
+            "name": "features",
+            "description": "The features to add.",
+            "type": {
+              "name": "Array"
+            },
+            "optional": false
+          },
+          {
+            "name": "dataId",
+            "description": "Optional id the map attaches to this update.",
+            "type": {
+              "name": "string"
+            },
+            "optional": true
+          }
+        ],
+        "returns": {
+          "type": {
+            "name": "Promise",
+            "elements": [
+              {
+                "name": "void"
+              }
+            ],
+            "raw": "Promise<void>"
+          }
+        },
+        "description": "Adds features to the source without resending its `shape`, using the Mapbox SDK's partial\nGeoJSON update. The source keeps the change until the next `shape`.\n\nEvery feature of the source needs a unique `id`, or a `promoteId` property. The promise\nresolves once the map has the call, the map applies it later. If a feature id is refused, for\nexample an added id that already exists, the map stops that call there and keeps the\nfeatures before it. The error, naming that id, is reported by `MapView#onMapLoadingError`\nwith type `source`. For changes to paint properties alone, `MapView#setFeatureState` is cheaper.",
+        "examples": [
+          "\nawait shapeSource.addFeatures([{ type: 'Feature', id: 'a', properties: {}, geometry }]);\n\n"
+        ]
+      },
+      {
+        "name": "updateFeatures",
+        "docblock": "Replaces features of the source by id, without resending its `shape`. A missing id stops the\ncall there. See `addFeatures` for the requirements and errors.\n\n@example\nawait shapeSource.updateFeatures([{ type: 'Feature', id: 'a', properties: { v: 1 }, geometry }]);\n\n@param  {GeoJSON.Feature[]} features - The new features, the id selects the feature to replace.\n@param  {string} dataId - Optional id the map attaches to this update.\n@return {void}",
+        "modifiers": [
+          "async"
+        ],
+        "params": [
+          {
+            "name": "features",
+            "description": "The new features, the id selects the feature to replace.",
+            "type": {
+              "name": "Array"
+            },
+            "optional": false
+          },
+          {
+            "name": "dataId",
+            "description": "Optional id the map attaches to this update.",
+            "type": {
+              "name": "string"
+            },
+            "optional": true
+          }
+        ],
+        "returns": {
+          "type": {
+            "name": "Promise",
+            "elements": [
+              {
+                "name": "void"
+              }
+            ],
+            "raw": "Promise<void>"
+          }
+        },
+        "description": "Replaces features of the source by id, without resending its `shape`. A missing id stops the\ncall there. See `addFeatures` for the requirements and errors.",
+        "examples": [
+          "\nawait shapeSource.updateFeatures([{ type: 'Feature', id: 'a', properties: { v: 1 }, geometry }]);\n\n"
+        ]
+      },
+      {
+        "name": "removeFeatures",
+        "docblock": "Removes features from the source by id, without resending its `shape`. A missing id stops the\ncall there. See `addFeatures` for the requirements and errors.\n\n@example\nawait shapeSource.removeFeatures(['a']);\n\n@param  {(string | number)[]} featureIds - The ids of the features to remove.\n@param  {string} dataId - Optional id the map attaches to this update.\n@return {void}",
+        "modifiers": [
+          "async"
+        ],
+        "params": [
+          {
+            "name": "featureIds",
+            "description": "The ids of the features to remove.",
+            "type": {
+              "name": "Array"
+            },
+            "optional": false
+          },
+          {
+            "name": "dataId",
+            "description": "Optional id the map attaches to this update.",
+            "type": {
+              "name": "string"
+            },
+            "optional": true
+          }
+        ],
+        "returns": {
+          "type": {
+            "name": "Promise",
+            "elements": [
+              {
+                "name": "void"
+              }
+            ],
+            "raw": "Promise<void>"
+          }
+        },
+        "description": "Removes features from the source by id, without resending its `shape`. A missing id stops the\ncall there. See `addFeatures` for the requirements and errors.",
+        "examples": [
+          "\nawait shapeSource.removeFeatures(['a']);\n\n"
+        ]
+      },
+      {
         "name": "onPress",
         "docblock": null,
         "modifiers": [],

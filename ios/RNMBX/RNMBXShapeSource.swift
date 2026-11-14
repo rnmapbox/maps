@@ -467,3 +467,64 @@ extension RNMBXShapeSource: ShapeAnimationConsumer {
     setShapeSourceData(shape)
   }
 }
+
+// MARK: - partial updates
+
+extension RNMBXShapeSource
+{
+  private func withSourceStyle(
+    _ methodName: String,
+    resolver: @escaping RCTPromiseResolveBlock,
+    rejecter: @escaping RCTPromiseRejectBlock,
+    _ update: (Style) throws -> Void
+  ) {
+    guard let map = map, source != nil, map.mapboxMap.style.sourceExists(withId: id) else {
+      rejecter(methodName, "source \(id) is not on the map", nil)
+      return
+    }
+    logged(LOG_TAG, methodName, rejecter: rejecter) {
+      try update(map.mapboxMap.style)
+      resolver(nil)
+    }
+  }
+
+  private func parseFeatures(_ featuresJSON: String) throws -> [Feature] {
+    guard let data = featuresJSON.data(using: .utf8) else {
+      throw RNMBXError.parseError("features are not utf8")
+    }
+    return try JSONDecoder().decode(FeatureCollection.self, from: data).features
+  }
+
+  @objc public func addFeatures(
+    featuresJSON: String,
+    dataId: String,
+    resolver: @escaping RCTPromiseResolveBlock,
+    rejecter: @escaping RCTPromiseRejectBlock
+  ) {
+    withSourceStyle("addFeatures", resolver: resolver, rejecter: rejecter) { style in
+      style.addGeoJSONSourceFeatures(forSourceId: id, features: try parseFeatures(featuresJSON), dataId: dataId)
+    }
+  }
+
+  @objc public func updateFeatures(
+    featuresJSON: String,
+    dataId: String,
+    resolver: @escaping RCTPromiseResolveBlock,
+    rejecter: @escaping RCTPromiseRejectBlock
+  ) {
+    withSourceStyle("updateFeatures", resolver: resolver, rejecter: rejecter) { style in
+      style.updateGeoJSONSourceFeatures(forSourceId: id, features: try parseFeatures(featuresJSON), dataId: dataId)
+    }
+  }
+
+  @objc public func removeFeatures(
+    featureIds: [String],
+    dataId: String,
+    resolver: @escaping RCTPromiseResolveBlock,
+    rejecter: @escaping RCTPromiseRejectBlock
+  ) {
+    withSourceStyle("removeFeatures", resolver: resolver, rejecter: rejecter) { style in
+      style.removeGeoJSONSourceFeatures(forSourceId: id, featureIds: featureIds, dataId: dataId)
+    }
+  }
+}

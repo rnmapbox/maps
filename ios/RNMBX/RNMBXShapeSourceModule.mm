@@ -55,6 +55,27 @@ RCT_EXPORT_METHOD(getClusterExpansionZoom:(nonnull NSNumber *)viewRef featureJSO
  } reject:reject methodName:@"getClusterExpansionZoom"];
 }
 
+RCT_EXPORT_METHOD(addFeatures:(nonnull NSNumber *)viewRef featuresJSON:(NSString *)featuresJSON dataId:(NSString *)dataId resolve:(RCTPromiseResolveBlock)resolve reject:(RCTPromiseRejectBlock)reject)
+{
+ [self withShapeSource:viewRef block:^(RNMBXShapeSource *view) {
+     [view addFeaturesWithFeaturesJSON:featuresJSON dataId:dataId resolver:resolve rejecter:reject];
+ } reject:reject methodName:@"addFeatures"];
+}
+
+RCT_EXPORT_METHOD(updateFeatures:(nonnull NSNumber *)viewRef featuresJSON:(NSString *)featuresJSON dataId:(NSString *)dataId resolve:(RCTPromiseResolveBlock)resolve reject:(RCTPromiseRejectBlock)reject)
+{
+ [self withShapeSource:viewRef block:^(RNMBXShapeSource *view) {
+     [view updateFeaturesWithFeaturesJSON:featuresJSON dataId:dataId resolver:resolve rejecter:reject];
+ } reject:reject methodName:@"updateFeatures"];
+}
+
+RCT_EXPORT_METHOD(removeFeatures:(nonnull NSNumber *)viewRef featureIds:(NSArray *)featureIds dataId:(NSString *)dataId resolve:(RCTPromiseResolveBlock)resolve reject:(RCTPromiseRejectBlock)reject)
+{
+ [self withShapeSource:viewRef block:^(RNMBXShapeSource *view) {
+     [view removeFeaturesWithFeatureIds:featureIds dataId:dataId resolver:resolve rejecter:reject];
+ } reject:reject methodName:@"removeFeatures"];
+}
+
 - (std::shared_ptr<facebook::react::TurboModule>)getTurboModule:
     (const facebook::react::ObjCTurboModule::InitParams &)params
 {
