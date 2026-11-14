@@ -105,6 +105,7 @@ jobs:
       contents: read
     env:
       BRANCH: auto/example-screenshots
+      FLAKY_BRANCH: auto/example-screenshots-flaky
     steps:
       - uses: actions/download-artifact@v4
         id: download
@@ -136,6 +137,8 @@ jobs:
             if gh run download "$RUN" --repo "$GITHUB_REPOSITORY" --name doc-screenshots --dir previous; then
               echo "Comparing with the capture of $GITHUB_SERVER_URL/$GITHUB_REPOSITORY/actions/runs/$RUN"
               echo "PREVIOUS_CAPTURE=previous" >> "$GITHUB_ENV"
+              gh run download "$RUN" --repo "$GITHUB_REPOSITORY" --name doc-screenshot-history --dir flaky \
+                || echo "No flaky screenshot history in that run, starting a new one"
               exit 0
             fi
             rm -rf previous
@@ -150,12 +153,20 @@ jobs:
       - name: Update changed screenshots
         if: steps.download.outcome == 'success'
         run: |
+          mkdir -p flaky
           npm install --no-save --prefix "$RUNNER_TEMP/deps" pngjs@7.0.0
           NODE_PATH="$RUNNER_TEMP/deps/node_modules" node maps/scripts/ci/update-doc-screenshots.js \
             captured maps-docs/examples-screenshots maps/docs/examples.json "$RUNNER_TEMP/summary.md" \
             ${PREVIOUS_CAPTURE:+"$PREVIOUS_CAPTURE"}
         env:
           REFRESH_UNSTABLE: ${{ inputs.refresh_unstable }}
+          FLAKY_DIR: flaky
+
+      - uses: actions/upload-artifact@v4
+        if: steps.download.outcome == 'success'
+        with:
+          name: doc-screenshot-history
+          path: flaky/history.json
 
       # Rebuilt on top of maps-docs main every time, so it never conflicts with the docs pushed
       # to main by update-docs.yml. maps-docs opens the PR from it. Only examples-screenshots is
@@ -186,3 +197,41 @@ jobs:
             exit 0
           fi
           git push --force origin "HEAD:$BRANCH"
+
+      # Screenshots that stayed unstable for 5 nights go to their own PR, so they can be checked or
+      # closed without holding up the stable changes. While that PR is open, its earlier screenshots
+      # are carried over; once it's closed, the next flaky update starts a new one.
+      - name: Push the flaky screenshots branch
+        if: steps.download.outcome == 'success'
+        working-directory: maps-docs
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          if [ ! -s ../flaky/summary.md ]; then
+            echo "No flaky screenshots to update"
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git checkout -q -f -B "$FLAKY_BRANCH" origin/main
+          cp ../flaky/summary.md "$RUNNER_TEMP/flaky.md"
+          OPEN_PR=$(gh pr list --repo rnmapbox/maps-docs --head "$FLAKY_BRANCH" --state open --json number --jq '.[0].number')
+          if [ -n "$OPEN_PR" ] && git fetch -q --depth=2 origin "$FLAKY_BRANCH"; then
+            git diff --name-only FETCH_HEAD~1 FETCH_HEAD -- examples-screenshots \
+              | xargs -r git checkout FETCH_HEAD --
+            git log -1 --format=%b FETCH_HEAD | grep '^- ' >> "$RUNNER_TEMP/flaky.md" || true
+          fi
+          cp -R ../flaky/examples-screenshots/. examples-screenshots/
+          git add examples-screenshots
+          {
+            echo "Update flaky example screenshots from rnmapbox/maps@${GITHUB_SHA::7}"
+            echo
+            echo "Captured by $GITHUB_SERVER_URL/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID"
+            echo
+            echo "These screenshots differed from the docs and from the previous night's capture for 5 nights in a row, so they may hide a real change. Check each one by hand: merge if the new screenshots are right, close otherwise. A closed screenshot is offered again after another 5 unstable nights."
+            echo
+            awk '!seen[$2]++' "$RUNNER_TEMP/flaky.md"
+          } > "$RUNNER_TEMP/flaky-message.txt"
+          git commit -q -F "$RUNNER_TEMP/flaky-message.txt"
+          cat "$RUNNER_TEMP/flaky-message.txt" >> "$GITHUB_STEP_SUMMARY"
+          git push --force origin "HEAD:$FLAKY_BRANCH"
