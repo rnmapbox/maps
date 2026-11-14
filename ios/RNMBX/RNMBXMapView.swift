@@ -669,6 +669,10 @@ open class RNMBXMapView: UIView, RCTInvalidating {
     self.mapboxMap.symbolScaleBehavior = symbolScaleBehavior ?? .fixed(scaleFactor: 1.0)
   }
 
+  // Mapbox SDK defaults, restored when the prop is removed.
+  static let defaultMinPitch = 0.0
+  static let defaultMaxPitch = 85.0
+
   var maxPitch: Double? = nil
 
   @objc public func setReactMaxPitch(_ value: NSNumber?) {
@@ -677,7 +681,7 @@ open class RNMBXMapView: UIView, RCTInvalidating {
   }
 
   func applyMaxPitch() {
-    guard let maxPitch = maxPitch else { return }
+    let maxPitch = maxPitch ?? RNMBXMapView.defaultMaxPitch
 
     withMapboxMap { mapboxMap in
       logged("RNMBXMapView.applyMaxPitch") {
@@ -701,7 +705,7 @@ open class RNMBXMapView: UIView, RCTInvalidating {
   }
 
   func applyMinPitch() {
-    guard let minPitch = minPitch else { return }
+    let minPitch = minPitch ?? RNMBXMapView.defaultMinPitch
 
     withMapboxMap { mapboxMap in
       logged("RNMBXMapView.applyMinPitch") {

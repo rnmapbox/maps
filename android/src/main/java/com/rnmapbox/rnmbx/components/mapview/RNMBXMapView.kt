@@ -834,7 +834,7 @@ open class RNMBXMapView(private val mContext: Context, var mManager: RNMBXMapVie
     }
 
     private fun applyMaxPitch() {
-        val maxPitch = mMaxPitch ?: return
+        val maxPitch = mMaxPitch ?: DEFAULT_MAX_PITCH
         if (!this::mMap.isInitialized) {
             return
         }
@@ -856,7 +856,7 @@ open class RNMBXMapView(private val mContext: Context, var mManager: RNMBXMapVie
     }
 
     private fun applyMinPitch() {
-        val minPitch = mMinPitch ?: return
+        val minPitch = mMinPitch ?: DEFAULT_MIN_PITCH
         if (!this::mMap.isInitialized) {
             return
         }
@@ -1501,6 +1501,10 @@ open class RNMBXMapView(private val mContext: Context, var mManager: RNMBXMapVie
 
     companion object {
         const val LOG_TAG = "RNMBXMapView"
+
+        // Mapbox SDK defaults, restored when the prop is removed.
+        private const val DEFAULT_MIN_PITCH = 0.0
+        private const val DEFAULT_MAX_PITCH = 85.0
 
         private val debugOptionsByName = mapOf(
             "tileBorders" to MapViewDebugOptions.TILE_BORDERS,

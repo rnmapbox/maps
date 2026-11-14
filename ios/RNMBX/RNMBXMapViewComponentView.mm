@@ -201,6 +201,15 @@ using namespace facebook::react;
     id maxPitch = RNMBXConvertFollyDynamicToId(newViewProps.maxPitch);
     if (maxPitch != nil) {
         _view.reactMaxPitch = maxPitch;
+    } else if (oldProps && RNMBXConvertFollyDynamicToId(oldViewProps.maxPitch) != nil) {
+        _view.reactMaxPitch = nil;
+    }
+
+    id minPitch = RNMBXConvertFollyDynamicToId(newViewProps.minPitch);
+    if (minPitch != nil) {
+        _view.reactMinPitch = minPitch;
+    } else if (oldProps && RNMBXConvertFollyDynamicToId(oldViewProps.minPitch) != nil) {
+        _view.reactMinPitch = nil;
     }
   
     RNMBX_REMAP_OPTIONAL_PROP_NSDictionary(gestureSettings, reactGestureSettings)
