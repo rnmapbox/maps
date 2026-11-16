@@ -264,10 +264,12 @@ export class ShapeSource extends NativeBridgeComponent(
    * GeoJSON update. The source keeps the change until the next `shape`.
    *
    * Every feature of the source needs a unique `id`, or a `promoteId` property. The promise
-   * resolves once the map has the call, the map applies it later. If a feature id is refused, for
-   * example an added id that already exists, the map stops that call there and keeps the
-   * features before it. The error, naming that id, is reported by `MapView#onMapLoadingError`
-   * with type `source`. For changes to paint properties alone, `MapView#setFeatureState` is cheaper.
+   * resolves once the map has the call; the map applies it later. If a feature id is refused, for
+   * example an added id that already exists, the map stops that call there: it keeps the features
+   * before that id, but shows them only with the next accepted change. The error, naming that id,
+   * is reported by `MapView#onMapLoadingError` with type `source`. On Android, a call made right
+   * after a new `shape` can reach the map first, and that `shape` then replaces it. For changes to
+   * paint properties alone, `MapView#setFeatureState` is cheaper.
    *
    * @example
    * await shapeSource.addFeatures([{ type: 'Feature', id: 'a', properties: {}, geometry }]);

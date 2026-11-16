@@ -276,7 +276,7 @@ const collection = await shapeSource.getClusterChildren(clusterId);
 
 ### addFeatures(features[, dataId])
 
-Adds features to the source without resending its `shape`, using the Mapbox SDK's partial<br/>GeoJSON update. The source keeps the change until the next `shape`.<br/><br/>Every feature of the source needs a unique `id`, or a `promoteId` property. The promise<br/>resolves once the map has the call, the map applies it later. If a feature id is refused, for<br/>example an added id that already exists, the map stops that call there and keeps the<br/>features before it. The error, naming that id, is reported by `MapView#onMapLoadingError`<br/>with type `source`. For changes to paint properties alone, `MapView#setFeatureState` is cheaper.
+Adds features to the source without resending its `shape`, using the Mapbox SDK's partial<br/>GeoJSON update. The source keeps the change until the next `shape`.<br/><br/>Every feature of the source needs a unique `id`, or a `promoteId` property. The promise<br/>resolves once the map has the call; the map applies it later. If a feature id is refused, for<br/>example an added id that already exists, the map stops that call there: it keeps the features<br/>before that id, but shows them only with the next accepted change. The error, naming that id,<br/>is reported by `MapView#onMapLoadingError` with type `source`. On Android, a call made right<br/>after a new `shape` can reach the map first, and that `shape` then replaces it. For changes to<br/>paint properties alone, `MapView#setFeatureState` is cheaper.
 
 #### arguments
 | Name | Type | Required | Description  |
