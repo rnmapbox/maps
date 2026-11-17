@@ -1928,6 +1928,23 @@ extension RNMBXMapView {
     resolver(nil)
   }
 
+  @objc public func setStyleLayerPropertyWithLayerId(
+    _ layerId: String,
+    property: String,
+    value: [String: Any],
+    resolver: @escaping RCTPromiseResolveBlock,
+    rejecter: @escaping RCTPromiseRejectBlock
+  ) {
+    self.withMapboxMap { map in
+      do {
+        try map.setLayerProperty(for: layerId, property: property, value: value["value"] ?? NSNull())
+        resolver(nil)
+      } catch {
+        rejecter("setStyleLayerProperty", "failed to set \(property) on layer \(layerId): \(error.localizedDescription)", error)
+      }
+    }
+  }
+
   @objc public func getCenterWithResolver(
     _ resolver: @escaping RCTPromiseResolveBlock,
     rejecter: @escaping RCTPromiseRejectBlock

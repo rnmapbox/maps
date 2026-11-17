@@ -832,7 +832,25 @@ await this._map.setSourceVisibility(false, 'composite', 'building')
 ```
 
 
-### setFeatureState(featureId, state, sourceId[, sourceLayerId])
+### setStyleLayerProperty(layerId, property, value)
+
+Sets a property of a style layer, e.g. one coming from `styleURL`.<br/>Mirrors the Mapbox SDK's `setStyleLayerProperty`; rejects if the layer or property is invalid.
+
+#### arguments
+| Name | Type | Required | Description  |
+| ---- | :--: | :------: | :----------: |
+| `layerId` | `string` | `Yes` | Style layer identifier. |
+| `property` | `string` | `Yes` | Layout or paint property name, e.g. `visibility` or `fill-color`. |
+| `value` | `NativeArg` | `Yes` | Property value, which can be an expression. |
+
+
+
+```javascript
+await this._map.setStyleLayerProperty('building', 'visibility', 'none')
+```
+
+
+[Style Layer Property](../examples/Map/StyleLayerProperty)### setFeatureState(featureId, state, sourceId[, sourceLayerId])
 
 Updates the state map of a feature within a style source.<br/><br/>Updates entries in the state map of a given feature within a style source.<br/>Only entries listed in the `state` will be updated.<br/>An entry in the feature state map that is not listed in `state` will retain its previous value.
 

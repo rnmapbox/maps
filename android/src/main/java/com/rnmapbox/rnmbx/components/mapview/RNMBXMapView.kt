@@ -1360,6 +1360,20 @@ open class RNMBXMapView(private val mContext: Context, var mManager: RNMBXMapVie
         }
     }
 
+    fun setStyleLayerProperty(
+      layerId: String,
+      property: String,
+      value: Value,
+      response: CommandResponse
+    ) {
+        val expected = mMap.setStyleLayerProperty(layerId, property, value)
+        if (expected.isError) {
+            response.error(expected.error!!)
+        } else {
+            response.success { }
+        }
+    }
+
     fun setFeatureState(
       featureId: String,
       state: HashMap<String, Value>,

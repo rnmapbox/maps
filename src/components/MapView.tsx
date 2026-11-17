@@ -1043,6 +1043,29 @@ class MapView extends NativeBridgeComponent(
   }
 
   /**
+   * Sets a property of a style layer, e.g. one coming from `styleURL`.
+   * Mirrors the Mapbox SDK's `setStyleLayerProperty`; rejects if the layer or property is invalid.
+   *
+   * @example
+   * await this._map.setStyleLayerProperty('building', 'visibility', 'none')
+   *
+   * @param {string} layerId Style layer identifier.
+   * @param {string} property Layout or paint property name, e.g. `visibility` or `fill-color`.
+   * @param {NativeArg} value Property value, which can be an expression.
+   */
+  async setStyleLayerProperty(
+    layerId: string,
+    property: string,
+    value: NativeArg,
+  ): Promise<void> {
+    await this._runNative<void>('setStyleLayerProperty', [
+      layerId,
+      property,
+      { value },
+    ]);
+  }
+
+  /**
    * Updates the state map of a feature within a style source.
    *
    * Updates entries in the state map of a given feature within a style source.

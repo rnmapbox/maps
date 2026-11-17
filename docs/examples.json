@@ -571,6 +571,18 @@
       },
       {
         "metadata": {
+          "title": "Style Layer Property",
+          "tags": [
+            "MapView#setStyleLayerProperty"
+          ],
+          "docs": "Toggles the visibility of the `building` layer of the default style with `setStyleLayerProperty`."
+        },
+        "fullPath": "example/src/examples/Map/StyleLayerProperty.tsx",
+        "relPath": "Map/StyleLayerProperty.tsx",
+        "name": "StyleLayerProperty"
+      },
+      {
+        "metadata": {
           "title": "Symbol Scale Behavior",
           "tags": [
             "MapView#symbolScaleBehavior"

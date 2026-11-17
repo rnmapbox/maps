@@ -5144,6 +5144,54 @@
         ]
       },
       {
+        "name": "setStyleLayerProperty",
+        "docblock": "Sets a property of a style layer, e.g. one coming from `styleURL`.\nMirrors the Mapbox SDK's `setStyleLayerProperty`; rejects if the layer or property is invalid.\n\n@example\nawait this._map.setStyleLayerProperty('building', 'visibility', 'none')\n\n@param {string} layerId Style layer identifier.\n@param {string} property Layout or paint property name, e.g. `visibility` or `fill-color`.\n@param {NativeArg} value Property value, which can be an expression.",
+        "modifiers": [
+          "async"
+        ],
+        "params": [
+          {
+            "name": "layerId",
+            "description": "Style layer identifier.",
+            "type": {
+              "name": "string"
+            },
+            "optional": false
+          },
+          {
+            "name": "property",
+            "description": "Layout or paint property name, e.g. `visibility` or `fill-color`.",
+            "type": {
+              "name": "string"
+            },
+            "optional": false
+          },
+          {
+            "name": "value",
+            "description": "Property value, which can be an expression.",
+            "type": {
+              "name": "NativeArg"
+            },
+            "optional": false
+          }
+        ],
+        "returns": {
+          "type": {
+            "name": "Promise",
+            "elements": [
+              {
+                "name": "void"
+              }
+            ],
+            "raw": "Promise<void>"
+          }
+        },
+        "description": "Sets a property of a style layer, e.g. one coming from `styleURL`.\nMirrors the Mapbox SDK's `setStyleLayerProperty`; rejects if the layer or property is invalid.",
+        "examples": [
+          "\nawait this._map.setStyleLayerProperty('building', 'visibility', 'none')\n\n"
+        ]
+      },
+      {
         "name": "setFeatureState",
         "docblock": "Updates the state map of a feature within a style source.\n\nUpdates entries in the state map of a given feature within a style source.\nOnly entries listed in the `state` will be updated.\nAn entry in the feature state map that is not listed in `state` will retain its previous value.\n\n@param {string} featureId Identifier of the feature whose state should be updated.\n@param {[k: string]: NativeArg} state Map of entries to update with their respective new values.\n@param {string} sourceId Style source identifier.\n@param {string | null} sourceLayerId Style source layer identifier (for multi-layer sources such as vector sources).",
         "modifiers": [

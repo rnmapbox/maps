@@ -6,6 +6,7 @@ import com.facebook.react.bridge.ReadableArray
 import com.facebook.react.bridge.ReadableMap
 import com.facebook.react.bridge.WritableMap
 import com.facebook.react.bridge.WritableNativeMap
+import com.mapbox.bindgen.Value
 import com.rnmapbox.rnmbx.NativeMapViewModuleSpec
 import com.rnmapbox.rnmbx.utils.ConvertUtils
 import com.rnmapbox.rnmbx.utils.ExpressionParser
@@ -75,6 +76,18 @@ class NativeMapViewModule(context: ReactApplicationContext, val viewTagResolver:
             it.setSourceVisibility(visible, sourceId, sourceLayerId)
 
             promise.resolve(null)
+        }
+    }
+
+    override fun setStyleLayerProperty(
+        viewRef: ViewRefTag?,
+        layerId: String,
+        property: String,
+        value: ReadableMap,
+        promise: Promise
+    ) {
+        withMapViewOnUIThread(viewRef, promise) {
+            it.setStyleLayerProperty(layerId, property, value.toValueHashMap()["value"] ?: Value.nullValue(), createCommandResponse(promise))
         }
     }
 
