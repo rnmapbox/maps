@@ -109,11 +109,12 @@ class RNMBXModule : NSObject {
       }
     }
     
-    CustomHttpHeaders.shared.customHeaders[headerName] = CustomHttpHeadersMapValue(headerValue: headerValue, options: CustomHttpHeadersOptions(urlRegexp: urlRegexp))
+    CustomHttpHeaders.shared.addCustomHeader(headerName, value: CustomHttpHeadersMapValue(headerValue: headerValue, options: CustomHttpHeadersOptions(urlRegexp: urlRegexp)))
+    RNMBXHttpInterceptor.shared.install()
   }
 
   @objc func removeCustomHeader(_ headerName: String) {
-    CustomHttpHeaders.shared.customHeaders[headerName] = nil
+    CustomHttpHeaders.shared.removeCustomHeader(headerName)
   }
   
   @objc func setTelemetryEnabled(_ telemetryEnabled: Bool) {
