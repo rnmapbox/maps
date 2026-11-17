@@ -274,7 +274,7 @@ const collection = await shapeSource.getClusterChildren(clusterId);
 ```
 
 
-### addFeatures(features[, dataId])
+### addFeatures(features)
 
 Adds features to the source without resending its `shape`, using the Mapbox SDK's partial<br/>GeoJSON update. The source keeps the change until the next `shape`.<br/><br/>Every feature of the source needs a unique `id`, or a `promoteId` property. The promise<br/>resolves once the map has the call; the map applies it later. If a feature id is refused, for<br/>example an added id that already exists, the map stops that call there: it keeps the features<br/>before that id, but shows them only with the next accepted change. The error, naming that id,<br/>is reported by `MapView#onMapLoadingError` with type `source`. On Android, a call made right<br/>after a new `shape` can reach the map first, and that `shape` then replaces it. For changes to<br/>paint properties alone, `MapView#setFeatureState` is cheaper.
 
@@ -282,7 +282,6 @@ Adds features to the source without resending its `shape`, using the Mapbox SDK'
 | Name | Type | Required | Description  |
 | ---- | :--: | :------: | :----------: |
 | `features` | `Array` | `Yes` | The features to add. |
-| `dataId` | `string` | `No` | Optional id the map attaches to this update. |
 
 
 
@@ -291,7 +290,7 @@ await shapeSource.addFeatures([{ type: 'Feature', id: 'a', properties: {}, geome
 ```
 
 
-[Partial feature updates](../examples/SymbolCircleLayer/PartialFeatureUpdates)### updateFeatures(features[, dataId])
+[Partial feature updates](../examples/SymbolCircleLayer/PartialFeatureUpdates)### updateFeatures(features)
 
 Replaces features of the source by id, without resending its `shape`. A missing id stops the<br/>call there. See `addFeatures` for the requirements and errors.
 
@@ -299,7 +298,6 @@ Replaces features of the source by id, without resending its `shape`. A missing 
 | Name | Type | Required | Description  |
 | ---- | :--: | :------: | :----------: |
 | `features` | `Array` | `Yes` | The new features, the id selects the feature to replace. |
-| `dataId` | `string` | `No` | Optional id the map attaches to this update. |
 
 
 
@@ -308,7 +306,7 @@ await shapeSource.updateFeatures([{ type: 'Feature', id: 'a', properties: { v: 1
 ```
 
 
-[Partial feature updates](../examples/SymbolCircleLayer/PartialFeatureUpdates)### removeFeatures(featureIds[, dataId])
+[Partial feature updates](../examples/SymbolCircleLayer/PartialFeatureUpdates)### removeFeatures(featureIds)
 
 Removes features from the source by id, without resending its `shape`. A missing id stops the<br/>call there. See `addFeatures` for the requirements and errors.
 
@@ -316,7 +314,6 @@ Removes features from the source by id, without resending its `shape`. A missing
 | Name | Type | Required | Description  |
 | ---- | :--: | :------: | :----------: |
 | `featureIds` | `Array` | `Yes` | The ids of the features to remove. |
-| `dataId` | `string` | `No` | Optional id the map attaches to this update. |
 
 
 

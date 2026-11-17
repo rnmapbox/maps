@@ -275,13 +275,11 @@ export class ShapeSource extends NativeBridgeComponent(
    * await shapeSource.addFeatures([{ type: 'Feature', id: 'a', properties: {}, geometry }]);
    *
    * @param  {GeoJSON.Feature[]} features - The features to add.
-   * @param  {string} dataId - Optional id the map attaches to this update.
    * @return {void}
    */
-  async addFeatures(features: GeoJSON.Feature[], dataId = ''): Promise<void> {
+  async addFeatures(features: GeoJSON.Feature[]): Promise<void> {
     await this._runNativeMethod('addFeatures', this._nativeRef, [
       JSON.stringify({ type: 'FeatureCollection', features }),
-      dataId,
     ]);
   }
 
@@ -293,16 +291,11 @@ export class ShapeSource extends NativeBridgeComponent(
    * await shapeSource.updateFeatures([{ type: 'Feature', id: 'a', properties: { v: 1 }, geometry }]);
    *
    * @param  {GeoJSON.Feature[]} features - The new features, the id selects the feature to replace.
-   * @param  {string} dataId - Optional id the map attaches to this update.
    * @return {void}
    */
-  async updateFeatures(
-    features: GeoJSON.Feature[],
-    dataId = '',
-  ): Promise<void> {
+  async updateFeatures(features: GeoJSON.Feature[]): Promise<void> {
     await this._runNativeMethod('updateFeatures', this._nativeRef, [
       JSON.stringify({ type: 'FeatureCollection', features }),
-      dataId,
     ]);
   }
 
@@ -314,16 +307,11 @@ export class ShapeSource extends NativeBridgeComponent(
    * await shapeSource.removeFeatures(['a']);
    *
    * @param  {(string | number)[]} featureIds - The ids of the features to remove.
-   * @param  {string} dataId - Optional id the map attaches to this update.
    * @return {void}
    */
-  async removeFeatures(
-    featureIds: (string | number)[],
-    dataId = '',
-  ): Promise<void> {
+  async removeFeatures(featureIds: (string | number)[]): Promise<void> {
     await this._runNativeMethod('removeFeatures', this._nativeRef, [
       featureIds.map(String),
-      dataId,
     ]);
   }
 

@@ -292,19 +292,19 @@ class RNMBXShapeSource(context: Context, private val mManager: RNMBXShapeSourceM
         }
     }
 
-    fun addFeatures(features: List<Feature>, dataId: String, promise: Promise) =
+    fun addFeatures(features: List<Feature>, promise: Promise) =
         changeFeatures("addFeatures", promise) { style, sourceId ->
-            style.addGeoJSONSourceFeatures(sourceId, dataId, features)
+            style.addGeoJSONSourceFeatures(sourceId, "", features)
         }
 
-    fun updateFeatures(features: List<Feature>, dataId: String, promise: Promise) =
+    fun updateFeatures(features: List<Feature>, promise: Promise) =
         changeFeatures("updateFeatures", promise) { style, sourceId ->
-            style.updateGeoJSONSourceFeatures(sourceId, dataId, features)
+            style.updateGeoJSONSourceFeatures(sourceId, "", features)
         }
 
-    fun removeFeatures(featureIds: List<String>, dataId: String, promise: Promise) =
+    fun removeFeatures(featureIds: List<String>, promise: Promise) =
         changeFeatures("removeFeatures", promise) { style, sourceId ->
-            style.removeGeoJSONSourceFeatures(sourceId, dataId, featureIds)
+            style.removeGeoJSONSourceFeatures(sourceId, "", featureIds)
         }
 
     private fun callbackSuccess(payload: WritableMap, promise: Promise) {

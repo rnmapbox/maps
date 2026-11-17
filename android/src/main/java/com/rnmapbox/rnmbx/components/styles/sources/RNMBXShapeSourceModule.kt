@@ -68,26 +68,26 @@ class RNMBXShapeSourceModule(reactContext: ReactApplicationContext?, private val
         }
 
     @ReactMethod
-    override fun addFeatures(viewRef: ViewRefTag?, featuresJSON: String, dataId: String, promise: Promise) {
+    override fun addFeatures(viewRef: ViewRefTag?, featuresJSON: String, promise: Promise) {
         val features = parseFeatures(featuresJSON, promise) ?: return
         withShapeSourceOnUIThread(viewRef, promise) {
-            it.addFeatures(features, dataId, promise)
+            it.addFeatures(features, promise)
         }
     }
 
     @ReactMethod
-    override fun updateFeatures(viewRef: ViewRefTag?, featuresJSON: String, dataId: String, promise: Promise) {
+    override fun updateFeatures(viewRef: ViewRefTag?, featuresJSON: String, promise: Promise) {
         val features = parseFeatures(featuresJSON, promise) ?: return
         withShapeSourceOnUIThread(viewRef, promise) {
-            it.updateFeatures(features, dataId, promise)
+            it.updateFeatures(features, promise)
         }
     }
 
     @ReactMethod
-    override fun removeFeatures(viewRef: ViewRefTag?, featureIds: ReadableArray, dataId: String, promise: Promise) {
+    override fun removeFeatures(viewRef: ViewRefTag?, featureIds: ReadableArray, promise: Promise) {
         val ids = featureIds.toArrayList().map { it as String }
         withShapeSourceOnUIThread(viewRef, promise) {
-            it.removeFeatures(ids, dataId, promise)
+            it.removeFeatures(ids, promise)
         }
     }
 }
