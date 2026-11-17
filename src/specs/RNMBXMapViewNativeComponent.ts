@@ -56,6 +56,7 @@ export interface NativeProps extends ViewProps {
   rotateEnabled?: OptionalProp<boolean>;
   pitchEnabled?: OptionalProp<boolean>;
   maxPitch?: OptionalProp<Double>;
+  minPitch?: OptionalProp<Double>;
 
   deselectAnnotationOnTap?: OptionalProp<boolean>;
 

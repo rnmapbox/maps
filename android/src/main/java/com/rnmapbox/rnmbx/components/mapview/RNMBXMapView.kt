@@ -257,6 +257,7 @@ open class RNMBXMapView(private val mContext: Context, var mManager: RNMBXMapVie
     private val mCameraChangeTracker = CameraChangeTracker()
     private var mPreferredFrameRate: Int? = null
     private var mMaxPitch: Double? = null
+    private var mMinPitch: Double? = null
     private lateinit var mMap: MapboxMap
 
     private lateinit var mMapView: MapView
@@ -682,6 +683,7 @@ open class RNMBXMapView(private val mContext: Context, var mManager: RNMBXMapVie
         SCALEBAR(RNMBXMapView::applyScaleBar),
         COMPASS(RNMBXMapView::applyCompass),
         MAX_PITCH(RNMBXMapView::applyMaxPitch),
+        MIN_PITCH(RNMBXMapView::applyMinPitch),
         SYMBOL_SCALE_BEHAVIOR(RNMBXMapView::applySymbolScaleBehavior),
         STYLE_GLYPH_URL(RNMBXMapView::applyStyleGlyphURL),
         DEBUG_OPTIONS(RNMBXMapView::applyDebugOptions),;
@@ -832,7 +834,7 @@ open class RNMBXMapView(private val mContext: Context, var mManager: RNMBXMapVie
     }
 
     private fun applyMaxPitch() {
-        val maxPitch = mMaxPitch ?: return
+        val maxPitch = mMaxPitch ?: DEFAULT_MAX_PITCH
         if (!this::mMap.isInitialized) {
             return
         }
@@ -844,6 +846,28 @@ open class RNMBXMapView(private val mContext: Context, var mManager: RNMBXMapVie
             .minZoom(currentBounds.minZoom)
             .minPitch(currentBounds.minPitch)
             .maxPitch(maxPitch)
+
+        mMap.setBounds(builder.build())
+    }
+
+    fun setReactMinPitch(minPitch: Double?) {
+        mMinPitch = minPitch
+        changes.add(Property.MIN_PITCH)
+    }
+
+    private fun applyMinPitch() {
+        val minPitch = mMinPitch ?: DEFAULT_MIN_PITCH
+        if (!this::mMap.isInitialized) {
+            return
+        }
+
+        val currentBounds = mMap.getBounds()
+        val builder = CameraBoundsOptions.Builder()
+            .bounds(currentBounds.bounds)
+            .maxZoom(currentBounds.maxZoom)
+            .minZoom(currentBounds.minZoom)
+            .minPitch(minPitch)
+            .maxPitch(currentBounds.maxPitch)
 
         mMap.setBounds(builder.build())
     }
@@ -1491,6 +1515,10 @@ open class RNMBXMapView(private val mContext: Context, var mManager: RNMBXMapVie
 
     companion object {
         const val LOG_TAG = "RNMBXMapView"
+
+        // Mapbox SDK defaults, restored when the prop is removed.
+        private const val DEFAULT_MIN_PITCH = 0.0
+        private const val DEFAULT_MAX_PITCH = 85.0
 
         private val debugOptionsByName = mapOf(
             "tileBorders" to MapViewDebugOptions.TILE_BORDERS,

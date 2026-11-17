@@ -515,6 +515,7 @@ open class RNMBXMapView: UIView, RCTInvalidating {
     case rotateEnabled
     case pitchEnabled
     case maxPitch
+    case minPitch
     case onMapChange
     case styleURL
     case gestureSettings
@@ -564,6 +565,8 @@ open class RNMBXMapView: UIView, RCTInvalidating {
         map.applyPitchEnabled()
       case .maxPitch:
         map.applyMaxPitch()
+      case .minPitch:
+        map.applyMinPitch()
       case .gestureSettings:
         map.applyGestureSettings()
       case .preferredFramesPerSecond:
@@ -666,6 +669,10 @@ open class RNMBXMapView: UIView, RCTInvalidating {
     self.mapboxMap.symbolScaleBehavior = symbolScaleBehavior ?? .fixed(scaleFactor: 1.0)
   }
 
+  // Mapbox SDK defaults, restored when the prop is removed.
+  static let defaultMinPitch = 0.0
+  static let defaultMaxPitch = 85.0
+
   var maxPitch: Double? = nil
 
   @objc public func setReactMaxPitch(_ value: NSNumber?) {
@@ -674,7 +681,7 @@ open class RNMBXMapView: UIView, RCTInvalidating {
   }
 
   func applyMaxPitch() {
-    guard let maxPitch = maxPitch else { return }
+    let maxPitch = maxPitch ?? RNMBXMapView.defaultMaxPitch
 
     withMapboxMap { mapboxMap in
       logged("RNMBXMapView.applyMaxPitch") {
@@ -685,6 +692,30 @@ open class RNMBXMapView: UIView, RCTInvalidating {
         options.minZoom = current.minZoom
         options.minPitch = current.minPitch
         options.maxPitch = maxPitch
+        try mapboxMap.setCameraBounds(with: options)
+      }
+    }
+  }
+
+  var minPitch: Double? = nil
+
+  @objc public func setReactMinPitch(_ value: NSNumber?) {
+    minPitch = value?.doubleValue
+    changed(.minPitch)
+  }
+
+  func applyMinPitch() {
+    let minPitch = minPitch ?? RNMBXMapView.defaultMinPitch
+
+    withMapboxMap { mapboxMap in
+      logged("RNMBXMapView.applyMinPitch") {
+        let current = mapboxMap.cameraBounds
+        var options = CameraBoundsOptions()
+        options.bounds = current.bounds
+        options.maxZoom = current.maxZoom
+        options.minZoom = current.minZoom
+        options.minPitch = minPitch
+        options.maxPitch = current.maxPitch
         try mapboxMap.setCameraBounds(with: options)
       }
     }
