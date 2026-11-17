@@ -22,6 +22,8 @@ class CameraChangedEvent(
 
     override fun toJSON(): WritableMap = payload
 
+    override fun canCoalesce(): Boolean = true
+
     companion object {
         fun make(
             view: View,
