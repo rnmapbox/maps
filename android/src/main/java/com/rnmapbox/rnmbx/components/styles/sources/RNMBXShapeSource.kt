@@ -6,6 +6,8 @@ import android.os.HandlerThread
 import com.facebook.react.bridge.Promise
 import com.facebook.react.bridge.WritableMap
 import com.facebook.react.bridge.WritableNativeMap
+import com.mapbox.bindgen.Expected
+import com.mapbox.bindgen.None
 import com.mapbox.bindgen.Value
 import com.mapbox.geojson.Feature
 import com.mapbox.geojson.FeatureCollection
@@ -272,6 +274,38 @@ class RNMBXShapeSource(context: Context, private val mManager: RNMBXShapeSourceM
             }
         }
     }
+
+    private fun changeFeatures(
+        methodName: String,
+        promise: Promise,
+        change: (Style, String) -> Expected<String, None>
+    ) {
+        val sourceId = iD!!
+        val style = mMap?.getStyle()
+        if (mSource == null || style == null || !style.styleSourceExists(sourceId)) {
+            promise.reject(methodName, "source $sourceId is not on the map")
+            return
+        }
+        sourceDataHandler.post {
+            val error = change(style, sourceId).error
+            if (error != null) promise.reject(methodName, error) else promise.resolve(null)
+        }
+    }
+
+    fun addFeatures(features: List<Feature>, promise: Promise) =
+        changeFeatures("addFeatures", promise) { style, sourceId ->
+            style.addGeoJSONSourceFeatures(sourceId, "", features)
+        }
+
+    fun updateFeatures(features: List<Feature>, promise: Promise) =
+        changeFeatures("updateFeatures", promise) { style, sourceId ->
+            style.updateGeoJSONSourceFeatures(sourceId, "", features)
+        }
+
+    fun removeFeatures(featureIds: List<String>, promise: Promise) =
+        changeFeatures("removeFeatures", promise) { style, sourceId ->
+            style.removeGeoJSONSourceFeatures(sourceId, "", featureIds)
+        }
 
     private fun callbackSuccess(payload: WritableMap, promise: Promise) {
         promise.resolve(payload)
