@@ -46,6 +46,20 @@ describe('offlineManagerLegacy', () => {
     expect(offlinePack).toBeFalsy();
   });
 
+  it('should refresh the pack list from native storage', async () => {
+    await Mapbox.offlineManagerLegacy.createPack(packOptions);
+
+    const getPacksSpy = jest
+      .spyOn(NativeModules.RNMBXOfflineModuleLegacy, 'getPacks')
+      .mockResolvedValue([]);
+
+    try {
+      expect(await Mapbox.offlineManagerLegacy.getPacks()).toEqual([]);
+    } finally {
+      getPacksSpy.mockRestore();
+    }
+  });
+
   it('should migrate offline cache', async () => {
     const spy = jest.spyOn(
       NativeModules.RNMBXOfflineModuleLegacy,
