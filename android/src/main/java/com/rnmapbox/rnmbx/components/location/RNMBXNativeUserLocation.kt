@@ -135,6 +135,7 @@ class RNMBXNativeUserLocation(context: Context) : AbstractMapFeature(context), O
     }
 
     private fun _apply(mapView: MapView) {
+        mMapView?.locationComponentManager?.showNativeUserLocation(mEnabled, visible)
         val location2 = mapView.location2;
 
         val locationPuck3D = model?.let { makeLocationPuck3D(it) }
@@ -202,6 +203,9 @@ class RNMBXNativeUserLocation(context: Context) : AbstractMapFeature(context), O
                 }
             }
         }
+        if (!visible) {
+            location2.pulsingEnabled = false
+        }
     }
 
     private fun makeLocationPuck3D(model: ReadableMap): LocationPuck3D? {
@@ -227,7 +231,6 @@ class RNMBXNativeUserLocation(context: Context) : AbstractMapFeature(context), O
         mEnabled = true
         mapView.getMapboxMap()
         mapView.getMapAsync(this)
-        mMapView?.locationComponentManager?.showNativeUserLocation(true)
         mMBXMapView = mapView
         _fetchImages(mapView)
         _apply()
@@ -235,7 +238,7 @@ class RNMBXNativeUserLocation(context: Context) : AbstractMapFeature(context), O
 
     override fun removeFromMap(mapView: RNMBXMapView, reason: RemovalReason): Boolean {
         mEnabled = false
-        mMapView?.locationComponentManager?.showNativeUserLocation(false)
+        mMapView?.locationComponentManager?.showNativeUserLocation(false, visible)
         mMap?.getStyle(this)
         mMBXMapView = null
         return super.removeFromMap(mapView, reason)
@@ -256,7 +259,7 @@ class RNMBXNativeUserLocation(context: Context) : AbstractMapFeature(context), O
         }
 
         mMapView?.locationComponentManager?.update()
-        mMapView?.locationComponentManager?.showNativeUserLocation(mEnabled)
+        mMapView?.locationComponentManager?.showNativeUserLocation(mEnabled, visible)
     }
 
     // region fetch images and subscribe on updates
