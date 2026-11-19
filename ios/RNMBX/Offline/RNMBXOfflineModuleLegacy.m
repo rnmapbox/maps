@@ -16,6 +16,10 @@ RCT_EXTERN_METHOD(pausePackDownload:(NSString *)name
 
 RCT_EXTERN_METHOD(setTileCountLimit:(nonnull NSNumber *)limit)
 
+RCT_EXTERN_METHOD(setProgressEventThrottle:(nonnull NSNumber *)throttleValue)
+
+RCT_EXTERN_METHOD(setTimeout:(nonnull NSNumber *)seconds)
+
 RCT_EXTERN_METHOD(getPackStatus:(NSString *)name
                  resolver:(RCTPromiseResolveBlock)resolve
                  rejecter:(RCTPromiseRejectBlock)reject)
