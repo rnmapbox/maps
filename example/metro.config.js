@@ -50,6 +50,6 @@ if (process.env.RNMBX_E2E_MAPS_IDLE === '1') {
 if (config.resolver.assetExts == null) {
   config.resolver.assetExts = [];
 }
-config.resolver.assetExts.push('gltf', 'glb', 'png');
+config.resolver.assetExts.push('gltf', 'glb', 'png', 'mbtiles');
 
 module.exports = config;
