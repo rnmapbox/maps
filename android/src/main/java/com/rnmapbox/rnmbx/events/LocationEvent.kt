@@ -6,7 +6,6 @@ import com.rnmapbox.rnmbx.events.constants.EventKeys
 import com.rnmapbox.rnmbx.events.constants.EventTypes
 import com.facebook.react.bridge.WritableMap
 import com.facebook.react.bridge.WritableNativeMap
-import java.util.*
 
 import com.rnmapbox.rnmbx.v11compat.location.*
 
@@ -15,12 +14,6 @@ class LocationEvent(
     private val mapView: RNMBXMapView?,
     private val heading: Double? = null
 ) : IEvent {
-    val uUID: UUID
-
-    init {
-        uUID = UUID.randomUUID()
-    }
-
     constructor(location: Location, heading: Double? = null) : this(location, null, heading)
 
     override val iD
@@ -31,18 +24,6 @@ class LocationEvent(
 
     override val type
         get() = EventTypes.USER_LOCATION_UPDATED
-
-    override val timestamp
-        get() =  System.currentTimeMillis()
-
-    override fun equals(event: IEvent): Boolean {
-        val other = event as LocationEvent
-        return uUID == other.uUID
-    }
-
-    fun equals(event: LocationEvent): Boolean {
-        return uUID == event.uUID
-    }
 
     override val payload: WritableMap
     get() {
@@ -77,6 +58,6 @@ class LocationEvent(
     }
 
     override fun canCoalesce(): Boolean {
-        return true
+        return false
     }
 }
