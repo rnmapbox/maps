@@ -5,8 +5,6 @@ import com.facebook.react.bridge.ReactApplicationContext
 import com.facebook.react.bridge.ReactMethod
 import com.facebook.react.bridge.ReadableArray
 import com.facebook.react.module.annotations.ReactModule
-import com.mapbox.geojson.Feature
-import com.mapbox.geojson.FeatureCollection
 import com.rnmapbox.rnmbx.NativeRNMBXShapeSourceModuleSpec
 import com.rnmapbox.rnmbx.utils.ViewRefTag
 import com.rnmapbox.rnmbx.utils.ViewTagResolver
@@ -59,27 +57,17 @@ class RNMBXShapeSourceModule(reactContext: ReactApplicationContext?, private val
         }
     }
 
-    private fun parseFeatures(featuresJSON: String, promise: Promise): List<Feature>? =
-        try {
-            FeatureCollection.fromJson(featuresJSON).features() ?: listOf()
-        } catch (e: RuntimeException) {
-            promise.reject(e)
-            null
-        }
-
     @ReactMethod
     override fun addFeatures(viewRef: ViewRefTag?, featuresJSON: String, promise: Promise) {
-        val features = parseFeatures(featuresJSON, promise) ?: return
         withShapeSourceOnUIThread(viewRef, promise) {
-            it.addFeatures(features, promise)
+            it.addFeatures(featuresJSON, promise)
         }
     }
 
     @ReactMethod
     override fun updateFeatures(viewRef: ViewRefTag?, featuresJSON: String, promise: Promise) {
-        val features = parseFeatures(featuresJSON, promise) ?: return
         withShapeSourceOnUIThread(viewRef, promise) {
-            it.updateFeatures(features, promise)
+            it.updateFeatures(featuresJSON, promise)
         }
     }
 

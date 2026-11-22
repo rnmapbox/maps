@@ -287,19 +287,27 @@ class RNMBXShapeSource(context: Context, private val mManager: RNMBXShapeSourceM
             return
         }
         sourceDataHandler.post {
-            val error = change(style, sourceId).error
+            val error = try {
+                change(style, sourceId).error
+            } catch (e: RuntimeException) {
+                promise.reject(methodName, e)
+                return@post
+            }
             if (error != null) promise.reject(methodName, error) else promise.resolve(null)
         }
     }
 
-    fun addFeatures(features: List<Feature>, promise: Promise) =
+    private fun parseFeatures(featuresJSON: String): List<Feature> =
+        FeatureCollection.fromJson(featuresJSON).features() ?: listOf()
+
+    fun addFeatures(featuresJSON: String, promise: Promise) =
         changeFeatures("addFeatures", promise) { style, sourceId ->
-            style.addGeoJSONSourceFeatures(sourceId, "", features)
+            style.addGeoJSONSourceFeatures(sourceId, "", parseFeatures(featuresJSON))
         }
 
-    fun updateFeatures(features: List<Feature>, promise: Promise) =
+    fun updateFeatures(featuresJSON: String, promise: Promise) =
         changeFeatures("updateFeatures", promise) { style, sourceId ->
-            style.updateGeoJSONSourceFeatures(sourceId, "", features)
+            style.updateGeoJSONSourceFeatures(sourceId, "", parseFeatures(featuresJSON))
         }
 
     fun removeFeatures(featureIds: List<String>, promise: Promise) =
