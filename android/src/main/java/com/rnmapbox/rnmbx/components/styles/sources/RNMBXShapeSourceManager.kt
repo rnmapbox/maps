@@ -104,12 +104,12 @@ class RNMBXShapeSourceManager(private val mContext: ReactApplicationContext, val
 
     @ReactProp(name = "clusterRadius")
     override fun setClusterRadius(source: RNMBXShapeSource, radius: Dynamic) {
-        source.setClusterRadius(radius.asDoubleOrNull()?.toLong())
+        source.setClusterRadius(if (radius.isNull) null else radius.asInt().toLong())
     }
 
     @ReactProp(name = "clusterMaxZoomLevel")
     override fun setClusterMaxZoomLevel(source: RNMBXShapeSource, clusterMaxZoom: Dynamic) {
-        source.setClusterMaxZoom(clusterMaxZoom.asDoubleOrNull()?.toLong())
+        source.setClusterMaxZoom(if (clusterMaxZoom.isNull) null else clusterMaxZoom.asInt().toLong())
     }
 
     @ReactProp(name = "clusterMinPoints")
@@ -169,17 +169,17 @@ class RNMBXShapeSourceManager(private val mContext: ReactApplicationContext, val
 
     @ReactProp(name = "maxZoomLevel")
     override fun setMaxZoomLevel(source: RNMBXShapeSource, maxZoom: Dynamic) {
-        source.setMaxZoom(maxZoom.asDoubleOrNull()?.toLong())
+        source.setMaxZoom(if (maxZoom.isNull) null else maxZoom.asInt().toLong())
     }
 
     @ReactProp(name = "minZoomLevel")
     override fun setMinZoomLevel(source: RNMBXShapeSource, minZoom: Dynamic) {
-        source.setMinZoom(minZoom.asDoubleOrNull()?.toLong())
+        source.setMinZoom(if (minZoom.isNull) null else minZoom.asInt().toLong())
     }
 
     @ReactProp(name = "buffer")
     override fun setBuffer(source: RNMBXShapeSource, buffer: Dynamic) {
-        source.setBuffer(buffer.asDoubleOrNull()?.toLong())
+        source.setBuffer(if (buffer.isNull) null else buffer.asInt().toLong())
     }
 
     @ReactProp(name = "tolerance")
