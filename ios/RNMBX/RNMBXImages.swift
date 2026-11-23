@@ -113,6 +113,8 @@ open class RNMBXImages : UIView, RNMBXMapComponent {
   func sameImage(oldValue: Any?, newValue: Any?) -> Bool {
     if let oldS = oldValue as? String, let newS = newValue as? String {
       return oldS == newS
+    } else if let oldD = oldValue as? NSDictionary, let newD = newValue as? NSDictionary {
+      return oldD.isEqual(newD)
     } else {
       return false
     }
@@ -136,20 +138,16 @@ open class RNMBXImages : UIView, RNMBXMapComponent {
     // See also: https://github.com/mapbox/mapbox-gl-native/pull/14253#issuecomment-478827792
     
     for name in images.keys {
-      let newImage = oldImages[name] == nil
-      if oldImages[name] == nil || loadedImages.contains(name) || !sameImage(oldValue: oldImages[name], newValue: images[name]) {
-        let addPlaceholder = oldImages[name] == nil
-        if !sameImage(oldValue: oldImages[name], newValue: images[name]) {
-          missingImages[name] = images[name]
-        } else {
-          if !hasImage(style: style, name: name) {
-            logged("RNMBXImages.addImagePlaceholder") {
-              try style.addImage(placeholderImage, id: name, stretchX: [], stretchY: [])
-              missingImages[name] = images[name]
-            }
-          }
+      let changed = !sameImage(oldValue: oldImages[name], newValue: images[name])
+      let reloadNeeded = changed || (loadedImages.contains(name) && !hasImage(style: style, name: name))
+      guard reloadNeeded else { continue }
+
+      if !hasImage(style: style, name: name) {
+        logged("RNMBXImages.addImagePlaceholder") {
+          try style.addImage(placeholderImage, id: name, stretchX: [], stretchY: [])
         }
       }
+      missingImages[name] = images[name]
     }
     
     if missingImages.count > 0 {
