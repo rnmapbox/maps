@@ -16,6 +16,7 @@ import com.rnmapbox.rnmbx.shapeAnimators.ShapeAnimatorManager
 import com.rnmapbox.rnmbx.utils.ExpressionParser
 import com.rnmapbox.rnmbx.utils.Logger
 import com.rnmapbox.rnmbx.utils.ViewTagResolver
+import com.rnmapbox.rnmbx.utils.extensions.asDoubleOrNull
 import java.net.MalformedURLException
 import java.net.URL
 import java.util.ArrayList
@@ -103,12 +104,12 @@ class RNMBXShapeSourceManager(private val mContext: ReactApplicationContext, val
 
     @ReactProp(name = "clusterRadius")
     override fun setClusterRadius(source: RNMBXShapeSource, radius: Dynamic) {
-        source.setClusterRadius(radius.asInt().toLong())
+        source.setClusterRadius(if (radius.isNull) null else radius.asInt().toLong())
     }
 
     @ReactProp(name = "clusterMaxZoomLevel")
     override fun setClusterMaxZoomLevel(source: RNMBXShapeSource, clusterMaxZoom: Dynamic) {
-        source.setClusterMaxZoom(clusterMaxZoom.asInt().toLong())
+        source.setClusterMaxZoom(if (clusterMaxZoom.isNull) null else clusterMaxZoom.asInt().toLong())
     }
 
     @ReactProp(name = "clusterMinPoints")
@@ -168,22 +169,22 @@ class RNMBXShapeSourceManager(private val mContext: ReactApplicationContext, val
 
     @ReactProp(name = "maxZoomLevel")
     override fun setMaxZoomLevel(source: RNMBXShapeSource, maxZoom: Dynamic) {
-        source.setMaxZoom(maxZoom.asInt().toLong())
+        source.setMaxZoom(if (maxZoom.isNull) null else maxZoom.asInt().toLong())
     }
 
     @ReactProp(name = "minZoomLevel")
     override fun setMinZoomLevel(source: RNMBXShapeSource, minZoom: Dynamic) {
-        source.setMinZoom(minZoom.asInt().toLong())
+        source.setMinZoom(if (minZoom.isNull) null else minZoom.asInt().toLong())
     }
 
     @ReactProp(name = "buffer")
     override fun setBuffer(source: RNMBXShapeSource, buffer: Dynamic) {
-        source.setBuffer(buffer.asInt().toLong())
+        source.setBuffer(if (buffer.isNull) null else buffer.asInt().toLong())
     }
 
     @ReactProp(name = "tolerance")
     override fun setTolerance(source: RNMBXShapeSource, tolerance: Dynamic) {
-        source.setTolerance(tolerance.asDouble())
+        source.setTolerance(tolerance.asDoubleOrNull())
     }
 
     @ReactProp(name = "lineMetrics")

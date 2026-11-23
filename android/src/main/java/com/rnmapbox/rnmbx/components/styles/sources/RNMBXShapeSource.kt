@@ -160,13 +160,13 @@ class RNMBXShapeSource(context: Context, private val mManager: RNMBXShapeSourceM
         mCluster = cluster
     }
 
-    fun setClusterRadius(clusterRadius: Long) {
+    fun setClusterRadius(clusterRadius: Long?) {
         mClusterRadius = clusterRadius
     }
 
-    fun setClusterMaxZoom(clusterMaxZoom: Long) {
+    fun setClusterMaxZoom(clusterMaxZoom: Long?) {
         mClusterMaxZoom = clusterMaxZoom
-        if (mSource != null && mMapView != null && !mMapView!!.isDestroyed) {
+        if (clusterMaxZoom != null && mSource != null && mMapView != null && !mMapView!!.isDestroyed) {
             val result = mMap!!.getStyle()!!
                 .setStyleSourceProperty(iD!!, "clusterMaxZoom", Value.valueOf(clusterMaxZoom))
         }
@@ -180,19 +180,19 @@ class RNMBXShapeSource(context: Context, private val mManager: RNMBXShapeSourceM
         mClusterProperties = clusterProperties
     }
 
-    fun setMaxZoom(maxZoom: Long) {
+    fun setMaxZoom(maxZoom: Long?) {
         mMaxZoom = maxZoom
     }
 
-    fun setMinZoom(minZoom: Long) {
+    fun setMinZoom(minZoom: Long?) {
         mMinZoom = minZoom
     }
 
-    fun setBuffer(buffer: Long) {
+    fun setBuffer(buffer: Long?) {
         mBuffer = buffer
     }
 
-    fun setTolerance(tolerance: Double) {
+    fun setTolerance(tolerance: Double?) {
         mTolerance = tolerance
     }
 
