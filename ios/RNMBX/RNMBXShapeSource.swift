@@ -3,6 +3,8 @@ import Turf
 
 private let LOG_TAG = "RNMBXShapeSource"
 
+private let featureChangeQueue = DispatchQueue(label: "com.rnmapbox.shapesource.features", qos: .userInitiated)
+
 @objc
 public class RNMBXShapeSource : RNMBXSource {
   @objc public var url : String? {
@@ -27,6 +29,7 @@ public class RNMBXShapeSource : RNMBXSource {
   var shapeAnimator: ShapeAnimator? = nil
   var shapeObject: GeoJSONObject? = nil
   var shapeString: String? = nil
+  var pendingFeatureChanges = 0
 
   @objc public var shape : String? {
     didSet {
@@ -193,9 +196,18 @@ extension RNMBXShapeSource
   }
 
   private func applyShapeSourceData() {
+    let data = shapeSourceData()
+    if pendingFeatureChanges > 0 {
+      enqueueFeatureChange({ data }) { [weak self] data in self?.updateShapeSource(data) }
+    } else {
+      updateShapeSource(data)
+    }
+  }
+
+  private func updateShapeSource(_ data: GeoJSONSourceData) {
     doUpdate { (style) in
       logged(LOG_TAG, "setShape") {
-        style.updateGeoJSONSource(withId: id, data: shapeSourceData())
+        style.updateGeoJSONSource(withId: id, data: data)
       }
     }
   }
@@ -465,5 +477,83 @@ extension RNMBXShapeSource
 extension RNMBXShapeSource: ShapeAnimationConsumer {
   func shapeUpdated(shape: Turf.GeoJSONObject) {
     setShapeSourceData(shape)
+  }
+}
+
+// MARK: - partial updates
+
+extension RNMBXShapeSource
+{
+  /// Runs `prepare` on a background queue, then `apply` on the main thread, in call order with
+  /// other feature changes and with `shape` updates made while one is pending.
+  func enqueueFeatureChange<T>(_ prepare: @escaping () -> T, apply: @escaping (T) -> Void) {
+    pendingFeatureChanges += 1
+    featureChangeQueue.async {
+      let prepared = prepare()
+      DispatchQueue.main.async {
+        self.pendingFeatureChanges -= 1
+        apply(prepared)
+      }
+    }
+  }
+
+  private func changeFeatures<T>(
+    _ methodName: String,
+    resolver: @escaping RCTPromiseResolveBlock,
+    rejecter: @escaping RCTPromiseRejectBlock,
+    prepare: @escaping () throws -> T,
+    change: @escaping (Style, String, T) -> Void
+  ) {
+    enqueueFeatureChange({ Result { try prepare() } }) { [weak self] prepared in
+      guard let self, let map = self.map, self.source != nil,
+            map.mapboxMap.style.sourceExists(withId: self.id) else {
+        rejecter(methodName, "source \(self?.id ?? "") is not on the map", nil)
+        return
+      }
+      logged(LOG_TAG, methodName, rejecter: rejecter) {
+        change(map.mapboxMap.style, self.id, try prepared.get())
+        resolver(nil)
+      }
+    }
+  }
+
+  private static func parseFeatures(_ featuresJSON: String) throws -> [Feature] {
+    guard let data = featuresJSON.data(using: .utf8) else {
+      throw RNMBXError.parseError("features are not utf8")
+    }
+    return try JSONDecoder().decode(FeatureCollection.self, from: data).features
+  }
+
+  @objc public func addFeatures(
+    featuresJSON: String,
+    resolver: @escaping RCTPromiseResolveBlock,
+    rejecter: @escaping RCTPromiseRejectBlock
+  ) {
+    changeFeatures("addFeatures", resolver: resolver, rejecter: rejecter,
+                   prepare: { try Self.parseFeatures(featuresJSON) }) { style, id, features in
+      style.addGeoJSONSourceFeatures(forSourceId: id, features: features)
+    }
+  }
+
+  @objc public func updateFeatures(
+    featuresJSON: String,
+    resolver: @escaping RCTPromiseResolveBlock,
+    rejecter: @escaping RCTPromiseRejectBlock
+  ) {
+    changeFeatures("updateFeatures", resolver: resolver, rejecter: rejecter,
+                   prepare: { try Self.parseFeatures(featuresJSON) }) { style, id, features in
+      style.updateGeoJSONSourceFeatures(forSourceId: id, features: features)
+    }
+  }
+
+  @objc public func removeFeatures(
+    featureIds: [String],
+    resolver: @escaping RCTPromiseResolveBlock,
+    rejecter: @escaping RCTPromiseRejectBlock
+  ) {
+    changeFeatures("removeFeatures", resolver: resolver, rejecter: rejecter,
+                   prepare: { featureIds }) { style, id, featureIds in
+      style.removeGeoJSONSourceFeatures(forSourceId: id, featureIds: featureIds)
+    }
   }
 }

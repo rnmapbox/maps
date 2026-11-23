@@ -138,6 +138,22 @@
       },
       {
         "metadata": {
+          "title": "Partial feature updates",
+          "tags": [
+            "ShapeSource",
+            "ShapeSource#addFeatures",
+            "ShapeSource#updateFeatures",
+            "ShapeSource#removeFeatures",
+            "CircleLayer"
+          ],
+          "docs": "\nChanges a few features of a large ShapeSource without resending its whole shape.\n\nEvery feature has an `id`, which `updateFeatures` and `removeFeatures` use to find it.\n"
+        },
+        "fullPath": "example/src/examples/SymbolCircleLayer/PartialFeatureUpdates.tsx",
+        "relPath": "SymbolCircleLayer/PartialFeatureUpdates.tsx",
+        "name": "PartialFeatureUpdates"
+      },
+      {
+        "metadata": {
           "title": "Scaleable images",
           "tags": [
             "Images",

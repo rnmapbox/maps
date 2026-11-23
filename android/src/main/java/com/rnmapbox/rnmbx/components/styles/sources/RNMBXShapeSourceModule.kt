@@ -3,6 +3,7 @@ package com.rnmapbox.rnmbx.components.styles.sources
 import com.facebook.react.bridge.Promise
 import com.facebook.react.bridge.ReactApplicationContext
 import com.facebook.react.bridge.ReactMethod
+import com.facebook.react.bridge.ReadableArray
 import com.facebook.react.module.annotations.ReactModule
 import com.rnmapbox.rnmbx.NativeRNMBXShapeSourceModuleSpec
 import com.rnmapbox.rnmbx.utils.ViewRefTag
@@ -53,6 +54,28 @@ class RNMBXShapeSourceModule(reactContext: ReactApplicationContext?, private val
     override fun getClusterChildren(viewRef: ViewRefTag?, featureJSON: String, promise: Promise) {
         withShapeSourceOnUIThread(viewRef, promise) {
             it.getClusterChildren(featureJSON, promise)
+        }
+    }
+
+    @ReactMethod
+    override fun addFeatures(viewRef: ViewRefTag?, featuresJSON: String, promise: Promise) {
+        withShapeSourceOnUIThread(viewRef, promise) {
+            it.addFeatures(featuresJSON, promise)
+        }
+    }
+
+    @ReactMethod
+    override fun updateFeatures(viewRef: ViewRefTag?, featuresJSON: String, promise: Promise) {
+        withShapeSourceOnUIThread(viewRef, promise) {
+            it.updateFeatures(featuresJSON, promise)
+        }
+    }
+
+    @ReactMethod
+    override fun removeFeatures(viewRef: ViewRefTag?, featureIds: ReadableArray, promise: Promise) {
+        val ids = featureIds.toArrayList().map { it as String }
+        withShapeSourceOnUIThread(viewRef, promise) {
+            it.removeFeatures(ids, promise)
         }
     }
 }

@@ -18,6 +18,15 @@ export interface Spec extends TurboModule {
     viewRef: Int32 | null,
     featureJSON: string,
   ) => Promise<Object>;
+  addFeatures: (viewRef: Int32 | null, featuresJSON: string) => Promise<void>;
+  updateFeatures: (
+    viewRef: Int32 | null,
+    featuresJSON: string,
+  ) => Promise<void>;
+  removeFeatures: (
+    viewRef: Int32 | null,
+    featureIds: ReadonlyArray<string>,
+  ) => Promise<void>;
 }
 
 export default TurboModuleRegistry.getEnforcing<Spec>('RNMBXShapeSourceModule');

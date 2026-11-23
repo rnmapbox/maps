@@ -55,6 +55,27 @@ RCT_EXPORT_METHOD(getClusterExpansionZoom:(nonnull NSNumber *)viewRef featureJSO
  } reject:reject methodName:@"getClusterExpansionZoom"];
 }
 
+RCT_EXPORT_METHOD(addFeatures:(nonnull NSNumber *)viewRef featuresJSON:(NSString *)featuresJSON resolve:(RCTPromiseResolveBlock)resolve reject:(RCTPromiseRejectBlock)reject)
+{
+ [self withShapeSource:viewRef block:^(RNMBXShapeSource *view) {
+     [view addFeaturesWithFeaturesJSON:featuresJSON resolver:resolve rejecter:reject];
+ } reject:reject methodName:@"addFeatures"];
+}
+
+RCT_EXPORT_METHOD(updateFeatures:(nonnull NSNumber *)viewRef featuresJSON:(NSString *)featuresJSON resolve:(RCTPromiseResolveBlock)resolve reject:(RCTPromiseRejectBlock)reject)
+{
+ [self withShapeSource:viewRef block:^(RNMBXShapeSource *view) {
+     [view updateFeaturesWithFeaturesJSON:featuresJSON resolver:resolve rejecter:reject];
+ } reject:reject methodName:@"updateFeatures"];
+}
+
+RCT_EXPORT_METHOD(removeFeatures:(nonnull NSNumber *)viewRef featureIds:(NSArray *)featureIds resolve:(RCTPromiseResolveBlock)resolve reject:(RCTPromiseRejectBlock)reject)
+{
+ [self withShapeSource:viewRef block:^(RNMBXShapeSource *view) {
+     [view removeFeaturesWithFeatureIds:featureIds resolver:resolve rejecter:reject];
+ } reject:reject methodName:@"removeFeatures"];
+}
+
 - (std::shared_ptr<facebook::react::TurboModule>)getTurboModule:
     (const facebook::react::ObjCTurboModule::InitParams &)params
 {
