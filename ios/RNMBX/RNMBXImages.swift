@@ -102,6 +102,7 @@ open class RNMBXImages : UIView, RNMBXMapComponent {
 
   // Another RNMBXImages providing the same name re-adds it via addMissingImageToStyle.
   private func removeImages(style: Style, names: [String]) {
+    names.forEach { imageManager?.remove(name: $0) }
     for name in names where hasImage(style: style, name: name) {
       logged("RNMBXImages.removeImage: \(name)") {
         try style.removeImage(withId: name)
@@ -313,6 +314,7 @@ extension RNMBXImages : RNMBXImageSetter {
                             stretchY: RNMBXImages.convert(stretch: stretchY, scale: image.scale),
                             content: RNMBXImages.convert(content: content, scale: image.scale)
          )
+         imageManager?.resolve(name: name, image: image)
          return true
        } else {
          return false
