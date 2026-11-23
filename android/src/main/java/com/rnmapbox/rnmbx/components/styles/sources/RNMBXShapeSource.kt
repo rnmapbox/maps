@@ -178,7 +178,7 @@ class RNMBXShapeSource(context: Context, private val mManager: RNMBXShapeSourceM
         mClusterMinPoints = clusterMinPoints
     }
 
-    fun setClusterProperties(clusterProperties: HashMap<String, Any>) {
+    fun setClusterProperties(clusterProperties: HashMap<String, Any>?) {
         mClusterProperties = clusterProperties
     }
 
@@ -198,7 +198,7 @@ class RNMBXShapeSource(context: Context, private val mManager: RNMBXShapeSourceM
         mTolerance = tolerance
     }
 
-    fun setLineMetrics(lineMetrics: Boolean) {
+    fun setLineMetrics(lineMetrics: Boolean?) {
         mLineMetrics = lineMetrics
     }
 

@@ -125,6 +125,10 @@ class RNMBXShapeSourceManager(private val mContext: ReactApplicationContext, val
 
     @ReactProp(name = "clusterProperties")
     override fun setClusterProperties(source: RNMBXShapeSource, map: Dynamic) {
+        if (map.isNull) {
+            source.setClusterProperties(null)
+            return
+        }
         val mapValue = map.asMap()
         if (mapValue == null) {
             Logger.e(LOG_TAG, "clusterProperties map is null")
@@ -189,7 +193,7 @@ class RNMBXShapeSourceManager(private val mContext: ReactApplicationContext, val
 
     @ReactProp(name = "lineMetrics")
     override fun setLineMetrics(source: RNMBXShapeSource, lineMetrics: Dynamic) {
-        source.setLineMetrics(lineMetrics.asBoolean())
+        source.setLineMetrics(if (lineMetrics.isNull) null else lineMetrics.asBoolean())
     }
 
     @ReactProp(name = "hasPressListener")
@@ -199,6 +203,10 @@ class RNMBXShapeSourceManager(private val mContext: ReactApplicationContext, val
 
     @ReactProp(name = "hitbox")
     override fun setHitbox(source: RNMBXShapeSource, map: Dynamic) {
+        if (map.isNull) {
+            source.setHitbox(null)
+            return
+        }
         val mapValue = map.asMap()
         if (mapValue == null) {
             Logger.e(LOG_TAG, "hitbox map is null")
