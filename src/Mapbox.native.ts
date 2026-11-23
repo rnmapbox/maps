@@ -6,6 +6,7 @@ export {
   type CameraPadding,
   type CameraAnimationMode,
   type CameraBounds,
+  type CameraBoundsWithPadding,
   type CameraStop,
 } from './components/Camera';
 export { Atmosphere } from './components/Atmosphere';
@@ -14,6 +15,7 @@ export { Rain } from './components/Rain';
 export {
   default as MapView,
   type MapState,
+  type RegionPayload,
   type ScreenPointPayload,
   type DebugOption,
 } from './components/MapView';
@@ -46,7 +48,10 @@ export { default as LineLayer } from './components/LineLayer';
 export { default as CircleLayer } from './components/CircleLayer';
 export { default as SkyLayer } from './components/SkyLayer';
 export { default as ModelLayer } from './components/ModelLayer';
-export { SymbolLayer } from './components/SymbolLayer';
+export {
+  SymbolLayer,
+  type Props as SymbolLayerProps,
+} from './components/SymbolLayer';
 export { default as RasterLayer } from './components/RasterLayer';
 export { default as RasterParticleLayer } from './components/RasterParticleLayer';
 export { default as HillshadeLayer } from './components/HillshadeLayer';
@@ -86,6 +91,7 @@ export { default as Logger, type LogLevel } from './utils/Logger';
 export { requestAndroidLocationPermissions } from './requestAndroidLocationPermissions';
 export { getAnnotationsLayerID } from './utils/getAnnotationsLayerID';
 export { normalizeLanguageTag } from './utils/normalizeLanguageTag';
+export type { OnPressEvent } from './types/OnPressEvent';
 export type {
   FillLayerStyleProps as FillLayerStyle,
   LineLayerStyleProps as LineLayerStyle,
