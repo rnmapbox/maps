@@ -89,7 +89,11 @@ abstract class RNMBXSource<T : Source?>(context: Context?) : AbstractMapFeature(
         mHasPressListener = hasPressListener
     }
 
-    fun setHitbox(map: ReadableMap) {
+    fun setHitbox(map: ReadableMap?) {
+        if (map == null) {
+            mTouchHitbox = null
+            return
+        }
         val hitbox: MutableMap<String, Double> = HashMap()
         hitbox["width"] = map.getDouble("width")
         hitbox["height"] = map.getDouble("height")
