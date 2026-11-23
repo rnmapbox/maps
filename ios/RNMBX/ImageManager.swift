@@ -5,6 +5,7 @@ import MapboxMaps
 class ImageManager {
   typealias Resolver = (String, UIImage) -> Void
   var subscriptions: [String: [Subscription]] = [:]
+  var resolvedImages: [String: UIImage] = [:]
   
   class Subscription : Cancelable {
     var name: String
@@ -35,7 +36,16 @@ class ImageManager {
     subscriptions[subscription.name] = list
   }
 
+  func image(name: String) -> UIImage? {
+    return resolvedImages[name]
+  }
+
   func resolve(name: String, image: UIImage) {
+    resolvedImages[name] = image
     subscriptions[name]?.forEach { $0.resolved(name, image) }
+  }
+
+  func remove(name: String) {
+    resolvedImages.removeValue(forKey: name)
   }
 }

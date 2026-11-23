@@ -277,7 +277,9 @@ extension RNMBXNativeUserLocation {
     if let style = map.mapView?.mapboxMap?.style {
       imageNames.forEach { (part, name) in
         if let name = name {
-          if style.imageExists(withId: name), let image = style.image(withId: name) {
+          if let image = map.imageManager.image(name: name) {
+            images[part] = image
+          } else if style.imageExists(withId: name), let image = style.image(withId: name) {
             images[part] = image
           } else {
             images.removeValue(forKey: part)

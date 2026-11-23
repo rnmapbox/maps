@@ -1040,7 +1040,7 @@ open class RNMBXMapView: UIView, RCTInvalidating {
 
     if let compassImage = compassImage {
       onMapStyleLoaded { map in
-        let img = map.style.image(withId: compassImage)
+        let img = self.imageManager.image(name: compassImage) ?? map.style.image(withId: compassImage)
         self.mapView.ornaments.options.compass.image = img
       }
     } else {
