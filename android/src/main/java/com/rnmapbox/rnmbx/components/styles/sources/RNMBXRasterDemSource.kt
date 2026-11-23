@@ -88,7 +88,7 @@ class RNMBXRasterDemSource(context: Context?, private val mManager: RNMBXRasterD
         return uRL == null && tileUrlTemplates.isEmpty()
     }
 
-    fun setTileSize(tileSize: Int) {
-        this.tileSize = tileSize.toLong()
+    fun setTileSize(tileSize: Int?) {
+        this.tileSize = tileSize?.toLong()
     }
 }

@@ -80,6 +80,8 @@ class RNMBXShapeSourceManager(private val mContext: ReactApplicationContext, val
 
     @ReactProp(name = "url")
     override fun setUrl(source: RNMBXShapeSource, urlStr: Dynamic) {
+        // unset: nothing to load, the shape prop (if any) provides the data
+        if (urlStr.isNull) return
         try {
             source.setURL(URL(urlStr.asString()))
         } catch (e: MalformedURLException) {

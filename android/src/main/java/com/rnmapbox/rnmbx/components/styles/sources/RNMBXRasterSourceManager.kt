@@ -32,7 +32,7 @@ class RNMBXRasterSourceManager(reactApplicationContext: ReactApplicationContext)
 
     @ReactProp(name = "tileSize")
     override fun setTileSize(source: RNMBXRasterSource, tileSize: Dynamic) {
-        source.setTileSize(tileSize.asInt())
+        source.setTileSize(if (tileSize.isNull) null else tileSize.asInt())
     }
 
     @ReactProp(name = "prefetchZoomDelta")
@@ -63,6 +63,8 @@ class RNMBXRasterSourceManager(reactApplicationContext: ReactApplicationContext)
 
     @ReactProp(name = "sourceBounds")
     override fun setSourceBounds(source: RNMBXRasterSource, value: Dynamic) {
+        // unset: keep the current bounds, like other source properties they only apply when the source is created
+        if (value.isNull) return
         val array = value.asArray()
         if (value.type != ReadableType.Array || array == null || array.size() != 4) {
            Logger.e(REACT_CLASS, "source bounds must be an array with left, bottom, top, and right values")

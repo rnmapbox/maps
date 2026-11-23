@@ -9,6 +9,8 @@ import com.rnmapbox.rnmbx.utils.Logger
 import com.facebook.react.uimanager.ViewManagerDelegate
 import com.facebook.react.viewmanagers.RNMBXModelLayerManagerDelegate
 import com.rnmapbox.rnmbx.utils.extensions.asStringOrNull
+import com.rnmapbox.rnmbx.utils.extensions.asMapOrNull
+import com.rnmapbox.rnmbx.utils.extensions.asDoubleOrNull
 
 
 class RNMBXModelLayerManager : ViewGroupManager<RNMBXModelLayer>(),
@@ -53,22 +55,22 @@ class RNMBXModelLayerManager : ViewGroupManager<RNMBXModelLayer>(),
 
     @ReactProp(name = "layerIndex")
     override fun setLayerIndex(layer: RNMBXModelLayer, layerIndex: Dynamic) {
-        layer.setLayerIndex(layerIndex.asInt())
+        layer.setLayerIndex(if (layerIndex.isNull) null else layerIndex.asInt())
     }
 
     @ReactProp(name = "minZoomLevel")
     override fun setMinZoomLevel(layer: RNMBXModelLayer, minZoomLevel: Dynamic) {
-        layer.setMinZoomLevel(minZoomLevel.asDouble())
+        layer.setMinZoomLevel(minZoomLevel.asDoubleOrNull())
     }
 
     @ReactProp(name = "maxZoomLevel")
     override fun setMaxZoomLevel(layer: RNMBXModelLayer, maxZoomLevel: Dynamic) {
-        layer.setMaxZoomLevel(maxZoomLevel.asDouble())
+        layer.setMaxZoomLevel(maxZoomLevel.asDoubleOrNull())
     }
 
     @ReactProp(name = "reactStyle")
     override fun setReactStyle(layer: RNMBXModelLayer, style: Dynamic) {
-        layer.setReactStyle(style.asMap())
+        layer.setReactStyle(style.asMapOrNull())
     }
 
     @ReactProp(name = "sourceLayerID")

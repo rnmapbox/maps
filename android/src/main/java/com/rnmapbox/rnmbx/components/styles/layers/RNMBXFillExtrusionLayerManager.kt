@@ -8,6 +8,8 @@ import com.facebook.react.viewmanagers.RNMBXFillExtrusionLayerManagerInterface
 import com.facebook.react.uimanager.ViewManagerDelegate
 import com.facebook.react.viewmanagers.RNMBXFillExtrusionLayerManagerDelegate
 import com.rnmapbox.rnmbx.utils.extensions.asStringOrNull
+import com.rnmapbox.rnmbx.utils.extensions.asMapOrNull
+import com.rnmapbox.rnmbx.utils.extensions.asDoubleOrNull
 
 class RNMBXFillExtrusionLayerManager : ViewGroupManager<RNMBXFillExtrusionLayer>(),
     RNMBXFillExtrusionLayerManagerInterface<RNMBXFillExtrusionLayer> {

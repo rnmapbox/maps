@@ -159,14 +159,14 @@ class RNMBXCamera(private val mContext: Context, private val mManager: RNMBXCame
         _updateViewportState();
     }
 
-    fun setFollowPadding(padding: ReadableMap) {
+    fun setFollowPadding(padding: ReadableMap?) {
         // scale padding by pixel ratio
         val metrics = context.resources.displayMetrics
         val edgeInsets = EdgeInsets(
-            if (padding.hasKey("paddingTop")) padding.getDouble("paddingTop") * metrics.density else 0.0,
-            if (padding.hasKey("paddingLeft")) padding.getDouble("paddingLeft") * metrics.density else 0.0,
-            if (padding.hasKey("paddingBottom")) padding.getDouble("paddingBottom") * metrics.density else 0.0,
-            if (padding.hasKey("paddingRight")) padding.getDouble("paddingRight") * metrics.density else 0.0,
+            if (padding?.hasKey("paddingTop") == true) padding.getDouble("paddingTop") * metrics.density else 0.0,
+            if (padding?.hasKey("paddingLeft") == true) padding.getDouble("paddingLeft") * metrics.density else 0.0,
+            if (padding?.hasKey("paddingBottom") == true) padding.getDouble("paddingBottom") * metrics.density else 0.0,
+            if (padding?.hasKey("paddingRight") == true) padding.getDouble("paddingRight") * metrics.density else 0.0,
         )
 
         mFollowPadding = edgeInsets

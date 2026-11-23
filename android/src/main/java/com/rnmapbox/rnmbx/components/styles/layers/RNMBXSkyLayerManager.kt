@@ -8,6 +8,8 @@ import com.facebook.react.viewmanagers.RNMBXSkyLayerManagerInterface
 import com.facebook.react.uimanager.ViewManagerDelegate
 import com.facebook.react.viewmanagers.RNMBXSkyLayerManagerDelegate
 import com.rnmapbox.rnmbx.utils.extensions.asStringOrNull
+import com.rnmapbox.rnmbx.utils.extensions.asMapOrNull
+import com.rnmapbox.rnmbx.utils.extensions.asDoubleOrNull
 
 class RNMBXSkyLayerManager : ViewGroupManager<RNMBXSkyLayer>(),
     RNMBXSkyLayerManagerInterface<RNMBXSkyLayer> {

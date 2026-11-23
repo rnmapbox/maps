@@ -24,6 +24,9 @@ import com.rnmapbox.rnmbx.utils.ViewTagResolver
 import com.rnmapbox.rnmbx.utils.extensions.getAndLogIfNotBoolean
 import com.rnmapbox.rnmbx.utils.extensions.getAndLogIfNotDouble
 import com.rnmapbox.rnmbx.utils.extensions.getAndLogIfNotMap
+import com.rnmapbox.rnmbx.utils.extensions.asBooleanOrNull
+import com.rnmapbox.rnmbx.utils.extensions.asMapOrNull
+import com.rnmapbox.rnmbx.utils.extensions.asStringOrNull
 import java.lang.Exception
 import java.util.HashMap
 
@@ -129,7 +132,7 @@ open class RNMBXMapViewManager(context: ReactApplicationContext, val viewTagReso
     // region React Props
     @ReactProp(name = "projection")
     override fun setProjection(mapView: RNMBXMapView, projection: Dynamic) {
-        mapView.setReactProjection( if (projection.asString() == "globe") ProjectionName.GLOBE else ProjectionName.MERCATOR )
+        mapView.setReactProjection( if (projection.asStringOrNull() == "globe") ProjectionName.GLOBE else ProjectionName.MERCATOR )
     }
 
     @ReactProp(name = "localizeLabels")
@@ -246,15 +249,19 @@ open class RNMBXMapViewManager(context: ReactApplicationContext, val viewTagReso
 
     @ReactProp(name = "preferredFramesPerSecond")
     override fun setPreferredFramesPerSecond(mapView: RNMBXMapView, preferredFramesPerSecond: Dynamic) {
+        // unset: Android has no way to restore the uncapped default, keep the current cap
+        if (preferredFramesPerSecond.isNull) return
         mapView.setReactPreferredFramesPerSecond(preferredFramesPerSecond.asInt())
     }
 
     @ReactProp(name = "zoomEnabled")
     override fun setZoomEnabled(map: RNMBXMapView, zoomEnabled: Dynamic) {
+        // unset: back to the Mapbox default, enabled
+        val enabled = zoomEnabled.asBooleanOrNull() ?: true
         map.withMapView {
-            it.gestures.pinchToZoomEnabled = zoomEnabled.asBoolean()
-            it.gestures.doubleTouchToZoomOutEnabled = zoomEnabled.asBoolean()
-            it.gestures.doubleTapToZoomInEnabled = zoomEnabled.asBoolean()
+            it.gestures.pinchToZoomEnabled = enabled
+            it.gestures.doubleTouchToZoomOutEnabled = enabled
+            it.gestures.doubleTapToZoomInEnabled = enabled
         }
     }
 
@@ -323,11 +330,8 @@ open class RNMBXMapViewManager(context: ReactApplicationContext, val viewTagReso
 
     @ReactProp(name = "attributionPosition")
     override fun setAttributionPosition(mapView: RNMBXMapView, attributionPosition: Dynamic) {
-        val mapValue = attributionPosition.asMap()
-        if (mapValue == null) {
-            Logger.e(LOG_TAG, "attributionPosition map is null")
-            return
-        }
+        // unset: keep the current position, the setters have no "default" to go back to
+        val mapValue = attributionPosition.asMapOrNull() ?: return
         mapView.setReactAttributionPosition(mapValue)
     }
 
@@ -353,11 +357,8 @@ open class RNMBXMapViewManager(context: ReactApplicationContext, val viewTagReso
 
     @ReactProp(name = "logoPosition")
     override fun setLogoPosition(mapView: RNMBXMapView, logoPosition: Dynamic) {
-        val mapValue = logoPosition.asMap()
-        if (mapValue == null) {
-            Logger.e(LOG_TAG, "logoPosition map is null")
-            return
-        }
+        // unset: keep the current position, the setters have no "default" to go back to
+        val mapValue = logoPosition.asMapOrNull() ?: return
         mapView.setReactLogoPosition(mapValue)
     }
 
@@ -378,17 +379,14 @@ open class RNMBXMapViewManager(context: ReactApplicationContext, val viewTagReso
 
     @ReactProp(name = "scaleBarPosition")
     override fun setScaleBarPosition(mapView: RNMBXMapView, scaleBarPosition: Dynamic) {
-        val mapValue = scaleBarPosition.asMap()
-        if (mapValue == null) {
-            Logger.e(LOG_TAG, "scaleBarPosition map is null")
-            return
-        }
+        // unset: keep the current position, the setters have no "default" to go back to
+        val mapValue = scaleBarPosition.asMapOrNull() ?: return
         mapView.setReactScaleBarPosition(mapValue)
     }
 
     @ReactProp(name = "scaleBarUnits")
     override fun setScaleBarUnits(mapView: RNMBXMapView, scaleBarUnits: Dynamic) {
-        mapView.setReactScaleBarUnits(scaleBarUnits.asString())
+        mapView.setReactScaleBarUnits(scaleBarUnits.asStringOrNull())
     }
 
     @ReactProp(name = "compassEnabled")
@@ -403,26 +401,20 @@ open class RNMBXMapViewManager(context: ReactApplicationContext, val viewTagReso
 
     @ReactProp(name = "compassViewMargins")
     override fun setCompassViewMargins(mapView: RNMBXMapView, compassViewMargins: Dynamic) {
-        val mapValue = compassViewMargins.asMap()
-        if (mapValue == null) {
-            Logger.e(LOG_TAG, "compassViewMargins map is null")
-            return
-        }
+        // unset: keep the current position, the setters have no "default" to go back to
+        val mapValue = compassViewMargins.asMapOrNull() ?: return
         mapView.setReactCompassViewMargins(mapValue)
     }
 
     @ReactProp(name = "compassViewPosition")
     override fun setCompassViewPosition(mapView: RNMBXMapView, compassViewPosition: Dynamic) {
-        mapView.setReactCompassViewPosition(compassViewPosition.asInt())
+        mapView.setReactCompassViewPosition(if (compassViewPosition.isNull) -1 else compassViewPosition.asInt())
     }
 
     @ReactProp(name = "compassPosition")
     override fun setCompassPosition(mapView: RNMBXMapView, compassMargins: Dynamic) {
-        val mapValue = compassMargins.asMap()
-        if (mapValue == null) {
-            Logger.e(LOG_TAG, "compassPosition map is null")
-            return
-        }
+        // unset: keep the current position, the setters have no "default" to go back to
+        val mapValue = compassMargins.asMapOrNull() ?: return
         mapView.setReactCompassPosition(mapValue)
     }
 
