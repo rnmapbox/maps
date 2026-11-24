@@ -1080,7 +1080,15 @@ open class RNMBXMapView(private val mContext: Context, var mManager: RNMBXMapVie
     }
 
     fun setHandledMapChangedEvents(events: Array<String>) {
+        // Camera changes before JS registers for them are never sent, so send the current camera when
+        // it first does. A null set sends every event, the startup camera among them.
+        val cameraChangedAdded = mHandledMapChangedEvents?.contains(EventTypes.CAMERA_CHANGED) == false
+            && events.contains(EventTypes.CAMERA_CHANGED)
+            && !events.contains(EventTypes.REGION_IS_CHANGING)
         mHandledMapChangedEvents = HashSet<String>(events.asList())
+        if (cameraChangedAdded) {
+            handleMapChangedEvent(EventTypes.CAMERA_CHANGED)
+        }
     }
 
     private fun canHandleEvent(event: String): Boolean {
