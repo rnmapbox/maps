@@ -176,8 +176,8 @@ class RNMBXOfflineModuleLegacy(private val mReactContext: ReactApplicationContex
         map.putInt("state", downloadState)
         map.putDouble("percentage", percentage)
         map.putInt("completedResourceCount", status.completedResourceCount.toInt())
-        map.putInt("completedResourceSize", status.completedResourceSize.toInt())
-        map.putInt("completedTileSize", status.completedTileSize.toInt())
+        map.putDouble("completedResourceSize", status.completedResourceSize.toDouble())
+        map.putDouble("completedTileSize", status.completedTileSize.toDouble())
         map.putInt("completedTileCount", status.completedTileCount.toInt())
         map.putInt("requiredResourceCount", status.requiredResourceCount.toInt())
         return map
