@@ -1328,8 +1328,7 @@ extension RNMBXMapView {
         let event = RNMBXEvent(type:.regionIsChanging, payload: self.buildRegionObject())
         self.fireEvent(event: event, callback: self.reactOnMapChange)
       } else if self.handleMapChangedEvents.contains(.cameraChanged) {
-        let event = RNMBXCameraChanged(type:.cameraChanged, payload: self.buildStateObject(), reactTag: self.reactTag)
-        self.eventDispatcher.send(event)
+        self.sendCameraChanged()
       }
     })
 
@@ -1344,6 +1343,11 @@ extension RNMBXMapView {
 
       self.wasGestureActive = false
     })
+  }
+
+  private func sendCameraChanged() {
+    let event = RNMBXCameraChanged(type:.cameraChanged, payload: self.buildStateObject(), reactTag: self.reactTag)
+    self.eventDispatcher.send(event)
   }
 
   private func fireEvent(event: RNMBXEvent, callback: RCTBubblingEventBlock?) {
@@ -2019,10 +2023,19 @@ extension RNMBXMapView {
     resolver: @escaping RCTPromiseResolveBlock,
     rejecter: @escaping RCTPromiseRejectBlock
   ) {
-    self.handleMapChangedEvents = Set(
+    let handledEvents = Set(
       events.compactMap {
         RNMBXEvent.EventType(rawValue: $0)
       })
+    // Camera changes before JS registers for them are never sent, so send the current camera when it first does.
+    let cameraChangedAdded =
+      handledEvents.contains(.cameraChanged)
+      && !self.handleMapChangedEvents.contains(.cameraChanged)
+      && !handledEvents.contains(.regionIsChanging)
+    self.handleMapChangedEvents = handledEvents
+    if cameraChangedAdded {
+      sendCameraChanged()
+    }
     resolver(nil)
   }
 
