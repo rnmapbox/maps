@@ -1709,7 +1709,7 @@ open class RNMBXMapView(private val mContext: Context, var mManager: RNMBXMapVie
         changes.add(Property.COMPASS)
     }
 
-    fun setReactCompassViewMargins(compassViewMargins: ReadableMap) {
+    fun setReactCompassViewMargins(compassViewMargins: ReadableMap?) {
         mCompassSettings.margins = compassViewMargins
         changes.add(Property.COMPASS)
     }
@@ -1719,7 +1719,7 @@ open class RNMBXMapView(private val mContext: Context, var mManager: RNMBXMapVie
         changes.add(Property.COMPASS)
     }
 
-    fun setReactCompassPosition(compassPosition: ReadableMap) {
+    fun setReactCompassPosition(compassPosition: ReadableMap?) {
         mCompassSettings.setPosAndMargins(compassPosition)
         changes.add(Property.COMPASS)
     }
@@ -1774,7 +1774,7 @@ open class RNMBXMapView(private val mContext: Context, var mManager: RNMBXMapVie
         changes.add(Property.SCALEBAR)
     }
 
-    fun setReactScaleBarPosition(scaleBarPosition: ReadableMap) {
+    fun setReactScaleBarPosition(scaleBarPosition: ReadableMap?) {
         mScaleBarSettings.setPosAndMargins(scaleBarPosition)
         changes.add(Property.SCALEBAR)
     }

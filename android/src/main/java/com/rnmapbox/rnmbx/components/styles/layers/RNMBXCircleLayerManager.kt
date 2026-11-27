@@ -8,6 +8,8 @@ import com.facebook.react.viewmanagers.RNMBXCircleLayerManagerInterface
 import com.facebook.react.uimanager.ViewManagerDelegate
 import com.facebook.react.viewmanagers.RNMBXCircleLayerManagerDelegate
 import com.rnmapbox.rnmbx.utils.extensions.asStringOrNull
+import com.rnmapbox.rnmbx.utils.extensions.asMapOrNull
+import com.rnmapbox.rnmbx.utils.extensions.asDoubleOrNull
 
 class RNMBXCircleLayerManager : ViewGroupManager<RNMBXCircleLayer>(),
     RNMBXCircleLayerManagerInterface<RNMBXCircleLayer> {
@@ -52,22 +54,22 @@ class RNMBXCircleLayerManager : ViewGroupManager<RNMBXCircleLayer>(),
 
     @ReactProp(name = "layerIndex")
     override fun setLayerIndex(layer: RNMBXCircleLayer, layerIndex: Dynamic) {
-        layer.setLayerIndex(layerIndex.asInt())
+        layer.setLayerIndex(if (layerIndex.isNull) null else layerIndex.asInt())
     }
 
     @ReactProp(name = "minZoomLevel")
     override fun setMinZoomLevel(layer: RNMBXCircleLayer, minZoomLevel: Dynamic) {
-        layer.setMinZoomLevel(minZoomLevel.asDouble())
+        layer.setMinZoomLevel(minZoomLevel.asDoubleOrNull())
     }
 
     @ReactProp(name = "maxZoomLevel")
     override fun setMaxZoomLevel(layer: RNMBXCircleLayer, maxZoomLevel: Dynamic) {
-        layer.setMaxZoomLevel(maxZoomLevel.asDouble())
+        layer.setMaxZoomLevel(maxZoomLevel.asDoubleOrNull())
     }
 
     @ReactProp(name = "reactStyle")
     override fun setReactStyle(layer: RNMBXCircleLayer, style: Dynamic) {
-        layer.setReactStyle(style.asMap())
+        layer.setReactStyle(style.asMapOrNull())
     }
 
     @ReactProp(name = "sourceLayerID")

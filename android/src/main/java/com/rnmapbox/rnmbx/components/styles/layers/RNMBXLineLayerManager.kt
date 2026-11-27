@@ -8,6 +8,8 @@ import com.facebook.react.viewmanagers.RNMBXLineLayerManagerInterface
 import com.facebook.react.uimanager.ViewManagerDelegate
 import com.facebook.react.viewmanagers.RNMBXLineLayerManagerDelegate
 import com.rnmapbox.rnmbx.utils.extensions.asStringOrNull
+import com.rnmapbox.rnmbx.utils.extensions.asMapOrNull
+import com.rnmapbox.rnmbx.utils.extensions.asDoubleOrNull
 
 class RNMBXLineLayerManager : ViewGroupManager<RNMBXLineLayer>(),
     RNMBXLineLayerManagerInterface<RNMBXLineLayer> {
@@ -51,22 +53,22 @@ class RNMBXLineLayerManager : ViewGroupManager<RNMBXLineLayer>(),
 
     @ReactProp(name = "layerIndex")
     override fun setLayerIndex(layer: RNMBXLineLayer, layerIndex: Dynamic) {
-        layer.setLayerIndex(layerIndex.asInt())
+        layer.setLayerIndex(if (layerIndex.isNull) null else layerIndex.asInt())
     }
 
     @ReactProp(name = "minZoomLevel")
     override fun setMinZoomLevel(layer: RNMBXLineLayer, minZoomLevel: Dynamic) {
-        layer.setMinZoomLevel(minZoomLevel.asDouble())
+        layer.setMinZoomLevel(minZoomLevel.asDoubleOrNull())
     }
 
     @ReactProp(name = "maxZoomLevel")
     override fun setMaxZoomLevel(layer: RNMBXLineLayer, maxZoomLevel: Dynamic) {
-        layer.setMaxZoomLevel(maxZoomLevel.asDouble())
+        layer.setMaxZoomLevel(maxZoomLevel.asDoubleOrNull())
     }
 
     @ReactProp(name = "reactStyle")
     override fun setReactStyle(layer: RNMBXLineLayer, style: Dynamic) {
-        layer.setReactStyle(style.asMap())
+        layer.setReactStyle(style.asMapOrNull())
     }
 
     @ReactProp(name = "sourceLayerID")

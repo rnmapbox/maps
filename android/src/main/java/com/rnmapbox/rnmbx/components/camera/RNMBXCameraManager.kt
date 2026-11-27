@@ -112,12 +112,8 @@ class RNMBXCameraManager(private val mContext: ReactApplicationContext, val view
 
     @ReactProp(name = "followPadding")
     override fun setFollowPadding(camera: RNMBXCamera, value: Dynamic) {
-        val mapValue = value.asMap()
-        if (mapValue == null) {
-            Logger.e("RNMBXCameraManager", "followPadding map is null")
-            return
-        }
-        camera.setFollowPadding(mapValue)
+        // unset: no padding
+        camera.setFollowPadding(if (value.isNull) null else value.asMap())
     }
 
     @ReactProp(name = "maxBounds")

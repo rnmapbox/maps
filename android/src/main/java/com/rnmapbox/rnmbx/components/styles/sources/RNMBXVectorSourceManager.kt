@@ -37,12 +37,8 @@ class RNMBXVectorSourceManager(reactApplicationContext: ReactApplicationContext)
 
     @ReactProp(name = "hitbox")
     override fun setHitbox(source: RNMBXVectorSource, map: Dynamic) {
-        val mapValue = map.asMap()
-        if (mapValue == null) {
-            Logger.e("RNMBXVectorSourceManager", "hitbox map is null")
-            return
-        }
-        source.setHitbox(mapValue)
+        // unset: back to the default hitbox
+        source.setHitbox(if (map.isNull) null else map.asMap())
     }
 
     @ReactProp(name = "promoteId")

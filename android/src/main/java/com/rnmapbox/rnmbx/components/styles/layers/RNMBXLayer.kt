@@ -18,7 +18,6 @@ import com.rnmapbox.rnmbx.components.RemovalReason
 import com.rnmapbox.rnmbx.utils.ExpressionParser
 import java.lang.ClassCastException
 import com.rnmapbox.rnmbx.utils.Logger
-import com.rnmapbox.rnmbx.v11compat.layer.*
 
 abstract class RNMBXLayer<T : Layer?>(protected var mContext: Context) : AbstractSourceConsumer(
     mContext
@@ -81,12 +80,13 @@ abstract class RNMBXLayer<T : Layer?>(protected var mContext: Context) : Abstrac
         }
     }
 
-    fun setLayerIndex(layerIndex: Int) {
+    fun setLayerIndex(layerIndex: Int?) {
         if (mLayerIndex != null && mLayerIndex == layerIndex) {
             return
         }
         mLayerIndex = layerIndex
-        if (mLayer != null) {
+        // unset: keep the layer where it is, the index only applies when it's (re)added
+        if (layerIndex != null && mLayer != null) {
             removeFromMap(mMapView!!,RemovalReason.REORDER)
             addAtIndex(layerIndex)
         }
@@ -99,17 +99,17 @@ abstract class RNMBXLayer<T : Layer?>(protected var mContext: Context) : Abstrac
         }
     }
 
-    fun setMinZoomLevel(minZoomLevel: Double) {
+    fun setMinZoomLevel(minZoomLevel: Double?) {
         mMinZoomLevel = minZoomLevel
         if (mLayer != null) {
-            mLayer!!.minZoom(minZoomLevel.toFloat().toDouble())
+            mLayer!!.minZoom((minZoomLevel ?: DEFAULT_MIN_ZOOM).toFloat().toDouble())
         }
     }
 
-    fun setMaxZoomLevel(maxZoomLevel: Double) {
+    fun setMaxZoomLevel(maxZoomLevel: Double?) {
         mMaxZoomLevel = maxZoomLevel
         mLayer?.let {
-           it.maxZoom(maxZoomLevel.toFloat().toDouble())
+           it.maxZoom((maxZoomLevel ?: DEFAULT_MAX_ZOOM).toFloat().toDouble())
         }
     }
 
@@ -333,5 +333,9 @@ abstract class RNMBXLayer<T : Layer?>(protected var mContext: Context) : Abstrac
 
     companion object {
         const val LOG_TAG = "RNMBXLayer"
+
+        // style-spec defaults for a layer's minzoom/maxzoom, applied when the prop is unset
+        const val DEFAULT_MIN_ZOOM = 0.0
+        const val DEFAULT_MAX_ZOOM = 24.0
     }
 }
