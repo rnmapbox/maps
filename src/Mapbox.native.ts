@@ -1,5 +1,6 @@
 export * from './RNMBXModule';
 
+export type { OnPressEvent } from './types';
 export {
   Camera,
   UserTrackingMode,
