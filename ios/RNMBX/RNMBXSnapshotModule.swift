@@ -96,7 +96,7 @@ class RNMBXSnapshotModule : NSObject {
     let showsLogo = jsOptions["withLogo"] as? Bool ?? true
     var mapSnapshotOptions = MapSnapshotOptions(
       size: CGSize(width: width.doubleValue, height: height.doubleValue),
-      pixelRatio: 1.0
+      pixelRatio: UIScreen.main.scale
     )
     mapSnapshotOptions.showsLogo = showsLogo
 
