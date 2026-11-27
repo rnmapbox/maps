@@ -47,7 +47,8 @@ class RNMBXSnapshotModule(private val mContext: ReactApplicationContext) :
         mContext.runOnUiQueueThread {
             val snapshotterID = UUID.randomUUID().toString()
             val showLogo = if (jsOptions.hasKey("withLogo")) jsOptions.getBoolean("withLogo") else true
-            val overlayOptions = SnapshotOverlayOptions(showLogo = showLogo)
+            val showAttributes = if (jsOptions.hasKey("withAttribution")) jsOptions.getBoolean("withAttribution") else true
+            val overlayOptions = SnapshotOverlayOptions(showLogo = showLogo, showAttributes = showAttributes)
             val snapshotter = Snapshotter(mContext, getOptions(jsOptions), overlayOptions)
             snapshotter.setStyleUri(jsOptions.getString("styleURL")!!)
             try {
