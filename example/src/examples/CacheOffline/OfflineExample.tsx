@@ -77,6 +77,15 @@ const OfflineExample = () => {
         }}
       />
       <Button
+        title="Pause pack"
+        onPress={async () => {
+          const pack = await offlineManager.getPack(packName);
+          if (pack) {
+            await pack.pause();
+          }
+        }}
+      />
+      <Button
         title="Resume pack"
         onPress={async () => {
           const pack = await offlineManager.getPack(packName);
