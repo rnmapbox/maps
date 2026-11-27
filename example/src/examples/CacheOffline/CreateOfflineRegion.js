@@ -206,7 +206,11 @@ class CreateOfflineRegion extends React.Component {
               </View>
             </View>
           </Bubble>
-        ) : null}
+        ) : (
+          <Bubble>
+            <Button title="Create" onPress={this.onCreate} />
+          </Bubble>
+        )}
       </>
     );
   }
