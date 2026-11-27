@@ -12,6 +12,7 @@ import com.rnmapbox.rnmbx.components.styles.sources.RNMBXShapeSource
 import com.rnmapbox.rnmbx.utils.ViewTagResolver
 import com.facebook.react.uimanager.ViewManagerDelegate
 import com.facebook.react.viewmanagers.RNMBXImageManagerDelegate
+import com.rnmapbox.rnmbx.utils.extensions.asBooleanOrNull
 
 class RNMBXImageManager(private val mContext: ReactApplicationContext, val viewTagResolver: ViewTagResolver) : AbstractEventEmitter<RNMBXImage>(
 mContext
@@ -69,7 +70,7 @@ mContext
 
     @ReactProp(name="sdf")
     override fun setSdf(image: RNMBXImage, value: Dynamic) {
-        image.sdf = value.asBoolean()
+        image.sdf = value.asBooleanOrNull() ?: false
     }
 
     @ReactProp(name="stretchX")

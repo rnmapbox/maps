@@ -37,7 +37,6 @@ class RNMBXVectorSourceManager(reactApplicationContext: ReactApplicationContext)
 
     @ReactProp(name = "hitbox")
     override fun setHitbox(source: RNMBXVectorSource, map: Dynamic) {
-        // unset: back to the default hitbox
         source.setHitbox(if (map.isNull) null else map.asMap())
     }
 

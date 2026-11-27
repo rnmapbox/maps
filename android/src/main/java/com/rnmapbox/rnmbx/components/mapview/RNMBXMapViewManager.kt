@@ -249,14 +249,13 @@ open class RNMBXMapViewManager(context: ReactApplicationContext, val viewTagReso
 
     @ReactProp(name = "preferredFramesPerSecond")
     override fun setPreferredFramesPerSecond(mapView: RNMBXMapView, preferredFramesPerSecond: Dynamic) {
-        // unset: Android has no way to restore the uncapped default, keep the current cap
+        // The Maps SDK has no way to restore the uncapped default, so keep the current cap.
         if (preferredFramesPerSecond.isNull) return
         mapView.setReactPreferredFramesPerSecond(preferredFramesPerSecond.asInt())
     }
 
     @ReactProp(name = "zoomEnabled")
     override fun setZoomEnabled(map: RNMBXMapView, zoomEnabled: Dynamic) {
-        // unset: back to the Mapbox default, enabled
         val enabled = zoomEnabled.asBooleanOrNull() ?: true
         map.withMapView {
             it.gestures.pinchToZoomEnabled = enabled
@@ -330,7 +329,6 @@ open class RNMBXMapViewManager(context: ReactApplicationContext, val viewTagReso
 
     @ReactProp(name = "attributionPosition")
     override fun setAttributionPosition(mapView: RNMBXMapView, attributionPosition: Dynamic) {
-        // unset: keep the current position, the setters have no "default" to go back to
         val mapValue = attributionPosition.asMapOrNull() ?: return
         mapView.setReactAttributionPosition(mapValue)
     }
@@ -357,7 +355,6 @@ open class RNMBXMapViewManager(context: ReactApplicationContext, val viewTagReso
 
     @ReactProp(name = "logoPosition")
     override fun setLogoPosition(mapView: RNMBXMapView, logoPosition: Dynamic) {
-        // unset: keep the current position, the setters have no "default" to go back to
         val mapValue = logoPosition.asMapOrNull() ?: return
         mapView.setReactLogoPosition(mapValue)
     }
@@ -379,7 +376,6 @@ open class RNMBXMapViewManager(context: ReactApplicationContext, val viewTagReso
 
     @ReactProp(name = "scaleBarPosition")
     override fun setScaleBarPosition(mapView: RNMBXMapView, scaleBarPosition: Dynamic) {
-        // unset: keep the current position, the setters have no "default" to go back to
         val mapValue = scaleBarPosition.asMapOrNull() ?: return
         mapView.setReactScaleBarPosition(mapValue)
     }
@@ -401,7 +397,6 @@ open class RNMBXMapViewManager(context: ReactApplicationContext, val viewTagReso
 
     @ReactProp(name = "compassViewMargins")
     override fun setCompassViewMargins(mapView: RNMBXMapView, compassViewMargins: Dynamic) {
-        // unset: keep the current position, the setters have no "default" to go back to
         val mapValue = compassViewMargins.asMapOrNull() ?: return
         mapView.setReactCompassViewMargins(mapValue)
     }
@@ -413,7 +408,6 @@ open class RNMBXMapViewManager(context: ReactApplicationContext, val viewTagReso
 
     @ReactProp(name = "compassPosition")
     override fun setCompassPosition(mapView: RNMBXMapView, compassMargins: Dynamic) {
-        // unset: keep the current position, the setters have no "default" to go back to
         val mapValue = compassMargins.asMapOrNull() ?: return
         mapView.setReactCompassPosition(mapValue)
     }

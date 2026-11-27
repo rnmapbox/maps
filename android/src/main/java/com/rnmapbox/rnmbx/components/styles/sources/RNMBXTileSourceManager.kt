@@ -7,6 +7,7 @@ import com.facebook.react.bridge.ReadableType
 import com.facebook.react.uimanager.annotations.ReactProp
 import com.rnmapbox.rnmbx.components.AbstractEventEmitter
 import com.rnmapbox.rnmbx.utils.Logger
+import com.rnmapbox.rnmbx.utils.extensions.asBooleanOrNull
 
 abstract class RNMBXTileSourceManager<T : RNMBXTileSource<*>> internal constructor(
     reactApplicationContext: ReactApplicationContext
@@ -60,16 +61,16 @@ abstract class RNMBXTileSourceManager<T : RNMBXTileSource<*>> internal construct
 
     @ReactProp(name = "minZoomLevel")
     fun setMinZoomLevel(source: T, minZoomLevel: Dynamic) {
-        source!!.minZoomLevel = minZoomLevel.asInt()
+        source!!.minZoomLevel = if (minZoomLevel.isNull) null else minZoomLevel.asInt()
     }
 
     @ReactProp(name = "maxZoomLevel")
     fun setMaxZoomLevel(source: T, maxZoomLevel: Dynamic) {
-        source!!.maxZoomLevel = maxZoomLevel.asInt()
+        source!!.maxZoomLevel = if (maxZoomLevel.isNull) null else maxZoomLevel.asInt()
     }
 
     @ReactProp(name = "tms")
     fun setTms(source: T, tms: Dynamic) {
-        source!!.tMS = tms.asBoolean()
+        source!!.tMS = tms.asBooleanOrNull() ?: false
     }
 }
