@@ -20,10 +20,8 @@ import com.mapbox.bindgen.Value
 import com.facebook.react.common.MapBuilder
 import com.mapbox.bindgen.None
 import com.mapbox.common.*
-import com.mapbox.maps.MapView
 import com.mapbox.maps.MapboxMap
 import com.mapbox.maps.Style
-import com.mapbox.maps.plugin.attribution.attribution
 import com.rnmapbox.rnmbx.components.camera.constants.CameraMode
 import com.rnmapbox.rnmbx.utils.Logger
 import java.util.HashMap
@@ -134,10 +132,10 @@ class RNMBXModule(private val mReactContext: ReactApplicationContext) : ReactCon
 
     @ReactMethod
     fun setTelemetryEnabled(telemetryEnabled: Boolean) {
-        mReactContext.runOnUiQueueThread {
-            val dummyView = MapView(mReactContext)
-            val telemetry = dummyView.attribution.getMapAttributionDelegate().telemetry()
-            telemetry.userTelemetryRequestState = telemetryEnabled
+        TelemetryUtils.setEventsCollectionState(telemetryEnabled) { response ->
+            if (response.isError) {
+                Logger.e(LOG_TAG, "setTelemetryEnabled failed: ${response.error}")
+            }
         }
     }
 
