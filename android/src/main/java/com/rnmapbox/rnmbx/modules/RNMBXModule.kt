@@ -25,6 +25,7 @@ import com.mapbox.maps.MapboxMap
 import com.mapbox.maps.Style
 import com.mapbox.maps.plugin.attribution.attribution
 import com.rnmapbox.rnmbx.components.camera.constants.CameraMode
+import com.rnmapbox.rnmbx.http.RNMBXHttpInterceptor
 import com.rnmapbox.rnmbx.utils.Logger
 import java.util.HashMap
 
@@ -204,6 +205,7 @@ class RNMBXModule(private val mReactContext: ReactApplicationContext) : ReactCon
         try {
             val urlRegexp = options?.getString("urlRegexp")?.toRegex()
             CustomHttpHeaders.addCustomHeader(headerName, headerValue, CustomHttpHeadersOptions(urlRegexp = urlRegexp))
+            RNMBXHttpInterceptor.install()
         } catch (e: PatternSyntaxException) {
             Logger.e(CustomHttpHeaders.LOG_TAG, e.localizedMessage ?: "Error converting ${options?.getString("urlRegexp")} to regex")
         }
@@ -217,7 +219,6 @@ class RNMBXModule(private val mReactContext: ReactApplicationContext) : ReactCon
     companion object {
         const val REACT_CLASS = "RNMBXModule"
         const val LOG_TAG = "RNMBXModule"
-        private val customHeaderInterceptorAdded = false
         @JvmStatic
         fun getAccessToken(reactContext: ReactApplicationContext?): String {
             return getMapboxAccessToken(reactContext)
