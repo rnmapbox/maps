@@ -23,6 +23,18 @@ describe('SnapshotOptions', () => {
       writeToDisk: false,
       centerCoordinate: JSON.stringify(makePoint(centerCoordinate)),
       withLogo: true,
+      withAttribution: true,
+    });
+  });
+
+  it('should send withAttribution: false to native', () => {
+    const options = new SnapshotOptions({
+      centerCoordinate: [1, 2],
+      withAttribution: false,
+    });
+
+    expect(options.toJSON()).toMatchObject({
+      withAttribution: false,
     });
   });
 
@@ -36,6 +48,7 @@ describe('SnapshotOptions', () => {
       height: 600,
       writeToDisk: true,
       withLogo: true,
+      withAttribution: true,
       styleURL: NativeModules.RNMBXModule.StyleURL.Dark,
     };
 
@@ -59,6 +72,7 @@ describe('SnapshotOptions', () => {
       styleURL: NativeModules.RNMBXModule.StyleURL.Light,
       writeToDisk: false,
       withLogo: true,
+      withAttribution: true,
     };
 
     const geoJSONBounds = JSON.stringify(

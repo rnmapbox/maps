@@ -57,6 +57,7 @@ class TakeSnapshot extends React.Component {
     this.state = {
       withLogoURI: null,
       withoutLogoURI: null,
+      withoutAttributionURI: null,
       boundsURI: null,
       loading: true,
     };
@@ -98,6 +99,19 @@ class TakeSnapshot extends React.Component {
         withLogo: false,
       });
 
+      const withoutAttributionURI = await snapshotManager.takeSnap({
+        centerCoordinate: [-74.12641, 40.797968],
+        width: snapshotWidth,
+        height: snapshotHeight,
+        zoomLevel: 12,
+        pitch: 30,
+        heading: 20,
+        styleURL: StyleURL.Dark,
+        writeToDisk: true,
+        withLogo: false,
+        withAttribution: false,
+      });
+
       // Snapshot using bounds instead of centerCoordinate
       const boundsURI = await snapshotManager.takeSnap({
         bounds: [
@@ -117,6 +131,7 @@ class TakeSnapshot extends React.Component {
       this.setState({
         withLogoURI,
         withoutLogoURI,
+        withoutAttributionURI,
         boundsURI,
         loading: false,
       });
@@ -127,7 +142,13 @@ class TakeSnapshot extends React.Component {
   }
 
   render() {
-    const { loading, withLogoURI, withoutLogoURI, boundsURI } = this.state;
+    const {
+      loading,
+      withLogoURI,
+      withoutLogoURI,
+      withoutAttributionURI,
+      boundsURI,
+    } = this.state;
 
     if (loading) {
       return (
@@ -156,6 +177,19 @@ class TakeSnapshot extends React.Component {
           {withoutLogoURI && (
             <Image
               source={{ uri: withoutLogoURI }}
+              resizeMode="contain"
+              style={styles.snapshot}
+            />
+          )}
+        </View>
+
+        <View style={styles.section}>
+          <Text style={styles.label}>
+            Without Logo or Attribution (withAttribution: false)
+          </Text>
+          {withoutAttributionURI && (
+            <Image
+              source={{ uri: withoutAttributionURI }}
               resizeMode="contain"
               style={styles.snapshot}
             />

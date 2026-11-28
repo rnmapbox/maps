@@ -16,6 +16,7 @@ export type SnapshotOptionsArgs = {
   writeToDisk?: boolean;
   bounds?: number[][];
   withLogo?: boolean;
+  withAttribution?: boolean;
 };
 
 class SnapshotOptions {
@@ -27,6 +28,7 @@ class SnapshotOptions {
   public readonly height: number;
   public readonly writeToDisk: boolean;
   public readonly withLogo: boolean;
+  public readonly withAttribution: boolean;
   public readonly centerCoordinate: string | undefined;
   public readonly bounds: string | undefined;
 
@@ -45,6 +47,8 @@ class SnapshotOptions {
     this.height = options.height || 50.0;
     this.writeToDisk = options.writeToDisk || false;
     this.withLogo = options.withLogo === undefined ? true : options.withLogo;
+    this.withAttribution =
+      options.withAttribution === undefined ? true : options.withAttribution;
 
     if (options.centerCoordinate) {
       this.centerCoordinate = this._createCenterCoordPoint(
@@ -69,6 +73,7 @@ class SnapshotOptions {
       centerCoordinate: this.centerCoordinate,
       bounds: this.bounds,
       withLogo: this.withLogo,
+      withAttribution: this.withAttribution,
     };
   }
 
