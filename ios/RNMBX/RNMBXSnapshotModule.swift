@@ -94,9 +94,10 @@ class RNMBXSnapshotModule : NSObject {
       throw RNMBXError.paramError("width, height: is not a number")
     }
     let showsLogo = jsOptions["withLogo"] as? Bool ?? true
+    let pixelRatio = max(1, min(UIScreen.main.scale, 8192 / max(width.doubleValue, height.doubleValue)))
     var mapSnapshotOptions = MapSnapshotOptions(
       size: CGSize(width: width.doubleValue, height: height.doubleValue),
-      pixelRatio: 1.0
+      pixelRatio: pixelRatio
     )
     mapSnapshotOptions.showsLogo = showsLogo
 
