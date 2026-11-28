@@ -1453,8 +1453,8 @@ extension RNMBXMapView {
     self.onEvery(event: .styleImageMissing) { (self, event) in
       let imageName = event.payload.id
 
-      self.images.forEach {
-        if $0.addMissingImageToStyle(style: self.mapboxMap.style, imageName: imageName) {
+      for images in self.images {
+        if images.addMissingImageToStyle(style: self.mapboxMap.style, imageName: imageName) {
           return
         }
       }
