@@ -85,7 +85,6 @@ abstract class RNMBXLayer<T : Layer?>(protected var mContext: Context) : Abstrac
             return
         }
         mLayerIndex = layerIndex
-        // unset: keep the layer where it is, the index only applies when it's (re)added
         if (layerIndex != null && mLayer != null) {
             removeFromMap(mMapView!!,RemovalReason.REORDER)
             addAtIndex(layerIndex)
@@ -334,7 +333,6 @@ abstract class RNMBXLayer<T : Layer?>(protected var mContext: Context) : Abstrac
     companion object {
         const val LOG_TAG = "RNMBXLayer"
 
-        // style-spec defaults for a layer's minzoom/maxzoom, applied when the prop is unset
         const val DEFAULT_MIN_ZOOM = 0.0
         const val DEFAULT_MAX_ZOOM = 24.0
     }
